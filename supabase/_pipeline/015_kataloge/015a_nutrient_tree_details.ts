@@ -7,7 +7,8 @@ import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: 015a_nutrient_tree_details.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const DETAILS_SOURCE = 'referenz/lumeos-2026/apps/app/modules/nutrition/data/nutrientDetails.ts'
 
 type Detail = {

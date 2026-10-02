@@ -3,7 +3,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const container = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const database = process.env.LUMEOS_C493_DATABASE ?? 'postgres'
+const database = process.env.PGDATABASE
+if (!database || database === 'postgres') throw new Error('A-88: training-c493-seed-sitzungen.test.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 
 function scalar(sql: string): string {
   return execFileSync('docker', [

@@ -6,7 +6,8 @@ import crypto from 'node:crypto'
 import { KONTEN } from '../../../tools/konten.mjs'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: testdaten-einspielen.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const ALLOWED_ARGS = new Set(['--start', '--next-start', '--days', '--today'])
 
 for (let index = 2; index < process.argv.length; index += 1) {

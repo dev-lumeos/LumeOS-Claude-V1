@@ -36,7 +36,8 @@ import { execFileSync } from 'node:child_process'
 import { buildFoodSearchGroups } from '../../../apps/web/src/lib/nutrition/food-search'
 
 const C = 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: mealcam-zutaten-messen.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 
 // [Zutat wie getippt, erwarteter BLS-Code, Begruendung]
 // Der Code steht hier und nicht der Name, weil Namen sich aendern koennen

@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const container = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const db = process.env.LUMEOS_G463_DATABASE
+const db = process.env.PGDATABASE
 if (!db || db === 'postgres') throw new Error('G-463 braucht eine Wegwerf-Datenbank.')
 
 function one<T>(sql: string): T {

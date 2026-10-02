@@ -14,6 +14,8 @@ import fs from 'node:fs'
 import { buildFoodSearchGroups } from '../../../apps/web/src/lib/nutrition/food-search'
 
 const C = 'supabase_db_LumeOS-Claude-V1'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: anzeigenamen-arbeitsblatt.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 
 // Was ein Kraftsportler taeglich isst und tippt. `[read]` Grundlage:
 // Recherche 2026-08-14 zu Meal-Prep-Praxis, ergaenzt um die Sorten, die
@@ -64,7 +66,7 @@ const GRUPPEN: Record<string, string[]> = {
 
 function suche(q: string, n = 3) {
   const g = JSON.stringify(buildFoodSearchGroups(q)).replace(/'/g, "''")
-  const aus = execFileSync('docker', ['exec', C, 'psql', '-U', 'postgres', '-d', 'postgres',
+  const aus = execFileSync('docker', ['exec', C, 'psql', '-U', 'postgres', '-d', DB,
     '-t', '-A', '-F', '\u0001', '-c',
     `select coalesce(x->>'bls_code',''), left(coalesce(x->>'name_display_de',''),46)
      from (select (nutrition.food_search('${q}','${q}',ARRAY[]::text[],NULL,NULL,NULL,NULL,NULL,${n},0,NULL,NULL,NULL,'${g}'::jsonb))::jsonb j) t,
@@ -77,7 +79,7 @@ function suche(q: string, n = 3) {
 // damit auch sichtbar wird, was die Suche NICHT findet.
 function bestand(stich: string) {
   const s = stich.replace(/'/g, "''")
-  const aus = execFileSync('docker', ['exec', C, 'psql', '-U', 'postgres', '-d', 'postgres',
+  const aus = execFileSync('docker', ['exec', C, 'psql', '-U', 'postgres', '-d', DB,
     '-t', '-A', '-F', '\u0001', '-c',
     `select bls_code, sort_weight, substring(bls_code,5,3), left(name_de,50)
      from nutrition.foods where nutrition.search_fold(name_de) like '%${s}%'

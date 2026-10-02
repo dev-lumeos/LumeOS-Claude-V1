@@ -5,7 +5,8 @@ function option(name: string): string | undefined {
   return index === -1 ? undefined : process.argv[index + 1]
 }
 
-const DB = option('--database') ?? process.env.PGDATABASE ?? 'postgres'
+const DB = option('--database') ?? process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: c283_medication_catalog_pruefen.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const expectedAtcValue = option('--expected-atc')
 const expectedAtc = expectedAtcValue === undefined ? 490 : Number(expectedAtcValue)
 

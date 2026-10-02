@@ -3,8 +3,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const container = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const db = process.env.LUMEOS_C491_DATABASE
-if (!db) throw new Error('C-491 braucht LUMEOS_C491_DATABASE.')
+const db = process.env.PGDATABASE
+if (!db || db === 'postgres') throw new Error('C-491 braucht PGDATABASE.')
 
 function one<T>(sql: string): T {
   const output = execFileSync('docker', [

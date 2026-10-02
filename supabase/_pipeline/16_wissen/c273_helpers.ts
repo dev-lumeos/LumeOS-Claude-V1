@@ -5,7 +5,8 @@ import path from 'node:path'
 export type Json = Record<string, any>
 
 export const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-export const DB = process.env.PGDATABASE ?? 'postgres'
+export const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: c273_helpers.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 export const BASE = 'docs/kimi_research/supplement_performance_database/data'
 
 export function readJson(file: string): any {

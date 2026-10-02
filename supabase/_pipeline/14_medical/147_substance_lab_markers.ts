@@ -10,7 +10,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: 147_substance_lab_markers.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const KIMI_BASE = 'backup/kimi-research/Kimi_Agent/supplement_performance_database/data'
 const MARKERS_FILE = path.join(KIMI_BASE, 'platform', 'lab_markers.json')
 const SUBSTANCE_FILES = [

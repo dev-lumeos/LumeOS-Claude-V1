@@ -3,7 +3,8 @@ import { existsSync } from 'node:fs'
 
 const script = 'supabase/_pipeline/13_supplements/512_dsld_serving_size_backfill.py'
 const source = 'docs/ssot/daten/DSLD-full-database-XLSX'
-const database = process.env.PGDATABASE ?? 'postgres'
+const database = process.env.PGDATABASE
+if (!database || database === 'postgres') throw new Error('A-88: 512_dsld_serving_size_backfill.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 
 if (!existsSync(script) || !existsSync(source)) throw new Error('C-512: DSLD-Quelle oder Backfill-Helfer fehlt')
 const result = spawnSync('python', [script, '--database', database, '--source', source], {

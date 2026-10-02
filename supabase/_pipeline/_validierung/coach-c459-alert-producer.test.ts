@@ -2,8 +2,8 @@ import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
-const DB = process.env.LUMEOS_C459_DATABASE
-if (!DB || DB === 'postgres') throw new Error('C-459 braucht LUMEOS_C459_DATABASE als Wegwerf-Datenbank.')
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('C-459 braucht PGDATABASE als Wegwerf-Datenbank.')
 function sql<T>(s: string): T {
   const out = execFileSync('docker', ['exec', 'supabase_db_LumeOS-Claude-V1', 'psql', '-X', '-q', '-v', 'ON_ERROR_STOP=1', '-U', 'postgres', '-d', DB, '-t', '-A', '-c', s], { encoding: 'utf8' }).trim()
   return JSON.parse(out.slice(out.indexOf('{'))) as T

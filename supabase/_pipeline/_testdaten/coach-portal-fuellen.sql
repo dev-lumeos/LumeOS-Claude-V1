@@ -1,7 +1,7 @@
 -- F-07: Das Coach-Portal bekommt einen anmeldbaren Coach und Arbeitsdaten.
 --
 -- Aufruf:
---   docker exec -i supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres \
+--   docker exec -i supabase_db_LumeOS-Claude-V1 psql -U postgres -d "$PGDATABASE" \
 --     < supabase/_pipeline/_testdaten/coach-portal-fuellen.sql
 --
 -- REIHENFOLGE: nach eigenes-konto-fuellen.sql. Dessen Aufraeumteil

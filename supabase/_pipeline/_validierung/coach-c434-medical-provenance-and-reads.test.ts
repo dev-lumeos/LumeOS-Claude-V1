@@ -5,8 +5,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.LUMEOS_C434_DATABASE
-if (!DB || DB === 'postgres') throw new Error('C-434-Test braucht LUMEOS_C434_DATABASE als explizite Wegwerf-Datenbank, nie postgres.')
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('C-434-Test braucht PGDATABASE als explizite Wegwerf-Datenbank, nie postgres.')
 
 const CLIENT = 'c434f000-0000-0000-0000-000000000001'
 const FULL_COACH = 'c434f000-0000-0000-0000-000000000002'

@@ -8,7 +8,8 @@ import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: 144_biomarker_spec_enrichment.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const SPEC = 'docs/specs/Medical/SPEC_05_BIOMARKER_CATALOG.md'
 const SPEC_SOURCE = 'docs/specs/Medical/SPEC_05_BIOMARKER_CATALOG.md'
 const EXPECTED_SPEC_MARKERS = 47

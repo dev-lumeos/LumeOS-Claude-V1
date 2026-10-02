@@ -30,7 +30,8 @@ type Treffer = {
 }
 
 const C = 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: phonetische-varianten-messen.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const DATA_PATH = path.join('supabase', '_pipeline', 'daten', 'phonetische-varianten.json')
 
 function sqlString(value: string) {

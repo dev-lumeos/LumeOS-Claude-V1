@@ -10,9 +10,11 @@ import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 
 const C = 'supabase_db_LumeOS-Claude-V1'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: abdeckung-sollwerte-erzeugen.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const SEP = ''
 const sql = (q: string) => execFileSync('docker',
-  ['exec', C, 'psql', '-U', 'postgres', '-d', 'postgres', '-t', '-A', '-F', SEP, '-c', q],
+  ['exec', C, 'psql', '-U', 'postgres', '-d', DB, '-t', '-A', '-F', SEP, '-c', q],
   { encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 })
   .split('\n').map(z => z.trim()).filter(Boolean).map(z => z.split(SEP))
 

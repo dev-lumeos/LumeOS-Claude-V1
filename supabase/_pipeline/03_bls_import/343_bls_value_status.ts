@@ -5,7 +5,8 @@
 import { spawnSync } from 'node:child_process'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: 343_bls_value_status.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const XLSX = 'docs/BrainstormDocs/Nutrition/BLS_4_0_Daten_2025_DE.xlsx'
 const SOURCE = 'bls_4_0_xlsx_status_import'
 

@@ -18,7 +18,8 @@ import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 
 const C = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: sortweight-berechnen.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const SEP = ''
 
 function sql(text: string): string[][] {

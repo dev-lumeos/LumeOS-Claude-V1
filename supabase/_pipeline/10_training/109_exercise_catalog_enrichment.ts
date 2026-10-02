@@ -7,7 +7,8 @@
 import { spawnSync } from 'node:child_process'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: 109_exercise_catalog_enrichment.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const XLSX = 'media/exercises/katalog/1500+ exercise data.xlsx'
 const SHEET = 'Sheet1'
 

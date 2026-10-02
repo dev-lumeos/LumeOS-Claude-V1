@@ -8,7 +8,8 @@ import fs from 'node:fs'
 import { foodsImBestand } from './anzeigenamen-erwartung'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: 027_lebensmittel-tags.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const INPUT = 'supabase/_pipeline/daten/lebensmittel-tags.jsonl'
 // `[cmd]` 2026-08-15: Hier stand `7140` fest. Derselbe Defekt wie in 025
 // und 026, ein Schritt spaeter — er haette beim naechsten

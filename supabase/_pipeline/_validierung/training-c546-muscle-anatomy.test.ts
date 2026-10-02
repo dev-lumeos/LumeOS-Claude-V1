@@ -3,8 +3,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const container = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const db = process.env.LUMEOS_C546_DATABASE
-if (!db) throw new Error('C-546 braucht LUMEOS_C546_DATABASE.')
+const db = process.env.PGDATABASE
+if (!db || db === 'postgres') throw new Error('C-546 braucht PGDATABASE.')
 const expectedCheckins = process.env.LUMEOS_C546_EXPECTED_CHECKINS
 
 function one<T>(sql: string): T {

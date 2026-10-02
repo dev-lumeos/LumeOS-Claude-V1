@@ -18,7 +18,8 @@ const C = 'supabase_db_LumeOS-Claude-V1'
 // Wie in den Pruefskripten: PGDATABASE entscheidet, Vorgabe ist die
 // laufende Datenbank. Dieses Skript LIEST nur (foods, search_synonyms)
 // und schreibt ausschliesslich in apps/web/.../generated/.
-const DB = process.env.PGDATABASE || 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: wortschatz-bauen.mjs braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const sql = q => execFileSync('docker',
   ['exec', '-i', C, 'psql', '-U', 'postgres', '-d', DB, '-q', '-t', '-A', '-c', q],
   { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })

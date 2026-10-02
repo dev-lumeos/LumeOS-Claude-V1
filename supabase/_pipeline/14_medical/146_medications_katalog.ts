@@ -8,7 +8,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: 146_medications_katalog.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const SOURCE_DIR =
   'backup/kimi-research/Kimi_Agent/supplement_performance_database/data/medications'
 const TRAIT_MAPPING_FILE =

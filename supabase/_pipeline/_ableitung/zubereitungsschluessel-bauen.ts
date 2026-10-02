@@ -9,7 +9,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 const C = 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: zubereitungsschluessel-bauen.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const SEP = ''
 const sql = (t: string) => execFileSync('docker',
   ['exec', C, 'psql', '-U', 'postgres', '-d', DB, '-t', '-A', '-F', SEP, '-c', t],

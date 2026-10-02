@@ -7,7 +7,8 @@ import path from 'node:path'
 
 const script = 'supabase/_pipeline/13_supplements/485_dsld_import.py'
 const source = 'docs/ssot/daten/DSLD-full-database-XLSX'
-const database = process.env.PGDATABASE ?? 'postgres'
+const database = process.env.PGDATABASE
+if (!database || database === 'postgres') throw new Error('A-88: 485_dsld_import.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 
 if (!existsSync(script)) throw new Error(`C-485: Importhelfer fehlt: ${script}`)
 if (!existsSync(source)) throw new Error(`C-485: DSLD-Quelle fehlt: ${source}`)

@@ -5,7 +5,7 @@ import test from 'node:test'
 // Bewusst nutzerweit: Pro abgefragtem Stichtag ist genau eine Testphase aktiv;
 // geprueft werden Katalogdefaults und Overrides, nicht die Zielauswahl.
 const container = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const db = process.env.LUMEOS_G536_DATABASE
+const db = process.env.PGDATABASE
 if (!db || db === 'postgres') throw new Error('G-536 braucht eine Wegwerf-Datenbank, nie postgres.')
 
 function one<T>(sql: string): T {

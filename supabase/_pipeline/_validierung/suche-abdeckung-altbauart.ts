@@ -10,9 +10,11 @@ import { execFileSync } from 'node:child_process'
 import { buildFoodSearchGroups } from '../../../apps/web/src/lib/nutrition/food-search'
 
 const C = 'supabase_db_LumeOS-Claude-V1'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: suche-abdeckung-altbauart.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const SEP = ''
 const sql = (q: string) => execFileSync('docker',
-  ['exec', C, 'psql', '-U', 'postgres', '-d', 'postgres', '-t', '-A', '-F', SEP, '-c', q],
+  ['exec', C, 'psql', '-U', 'postgres', '-d', DB, '-t', '-A', '-F', SEP, '-c', q],
   { encoding: 'utf8', maxBuffer: 256 * 1024 * 1024, timeout: 30_000 })
   .split('\n').map(z => z.trim()).filter(Boolean).map(z => z.split(SEP))
 

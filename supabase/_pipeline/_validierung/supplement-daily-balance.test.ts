@@ -5,7 +5,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: supplement-daily-balance.test.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const USER_ID = '10000000-0000-0000-0000-000000000101'
 
 function one<T>(sql: string): T {

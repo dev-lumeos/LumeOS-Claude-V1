@@ -21,7 +21,8 @@
 import { execFileSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 
-const DB = process.env.PGDATABASE || 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: normalisierung-pruefen.mjs braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER || 'supabase_db_LumeOS-Claude-V1'
 
 // --- Die Anwendungsregel, aus der Quelldatei GELESEN statt kopiert ---

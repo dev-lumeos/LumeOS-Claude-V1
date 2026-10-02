@@ -41,7 +41,8 @@ import {
   normalizeFoodSearchText,
 } from '../../../apps/web/src/lib/nutrition/food-search.ts'
 
-const DB = process.env.PGDATABASE || 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: suche-wortschatz-pruefen.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER || 'supabase_db_LumeOS-Claude-V1'
 
 // erwartung: Zeichenfolge, die im Namen des ersten Treffers vorkommen muss

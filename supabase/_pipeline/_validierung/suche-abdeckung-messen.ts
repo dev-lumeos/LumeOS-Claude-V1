@@ -47,7 +47,8 @@ import fs from 'node:fs'
 import { buildFoodSearchGroups } from '../../../apps/web/src/lib/nutrition/food-search'
 
 const C = 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: suche-abdeckung-messen.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const SEP = ''
 const ZWISCHEN = 'supabase/_pipeline/daten/_abdeckung-zwischenstand.json'
 

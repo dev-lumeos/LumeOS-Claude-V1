@@ -4,7 +4,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: coach-g324-write-path.test.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 // A-87/A-86: eigene Fixture-IDs statt der inzwischen eingespielten Seednutzer.
 const CLIENT_ID = 'b3240000-0000-0000-0000-000000000001'
 const COACH_ID = 'b3240000-0000-0000-0000-000000000002'

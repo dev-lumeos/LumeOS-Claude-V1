@@ -5,7 +5,7 @@ import test from 'node:test'
 // Bewusst nutzerweit: Die Faelle pruefen keinen Zielvergleich, sondern jeweils
 // keinen oder genau einen gueltigen Phasenbezug am abgefragten Stichtag.
 const container = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const db = process.env.LUMEOS_G511_DATABASE
+const db = process.env.PGDATABASE
 if (!db || db === 'postgres') throw new Error('G-511 braucht eine Wegwerf-Datenbank, nie postgres.')
 
 const NO_PHASE_USER = '51100000-0000-0000-0000-000000000001'

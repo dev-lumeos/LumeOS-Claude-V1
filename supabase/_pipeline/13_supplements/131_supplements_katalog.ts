@@ -5,7 +5,8 @@ import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: 131_supplements_katalog.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const INPUT = 'supabase/_pipeline/daten/supplement-katalog.json'
 
 type SupplementRow = {

@@ -8,7 +8,8 @@ import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: 028_kuratierte-aliase.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const INPUT = 'supabase/_pipeline/daten/reis-alias-kuration.json'
 const SOURCE = 'curated_suchbegriff'
 

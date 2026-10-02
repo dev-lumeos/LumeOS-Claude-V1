@@ -4,8 +4,8 @@ import { readFileSync } from 'node:fs'
 import test from 'node:test'
 
 const container = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const db = process.env.LUMEOS_C529_DATABASE
-if (!db || db === 'postgres') throw new Error('C-529 braucht LUMEOS_C529_DATABASE als Wegwerf-Datenbank.')
+const db = process.env.PGDATABASE
+if (!db || db === 'postgres') throw new Error('C-529 braucht PGDATABASE als Wegwerf-Datenbank.')
 
 const owner = '52900000-0000-0000-0000-000000000001'
 const stack = '52900000-0000-0000-0000-000000000002'

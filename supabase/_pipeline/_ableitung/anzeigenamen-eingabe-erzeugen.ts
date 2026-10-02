@@ -11,7 +11,8 @@ import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 
 const C = 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: anzeigenamen-eingabe-erzeugen.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const DATEN = 'supabase/_pipeline/daten'
 const GERICHTE = new Set(['X', 'Y'])
 

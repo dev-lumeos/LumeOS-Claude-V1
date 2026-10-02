@@ -5,7 +5,7 @@
 --   docker exec -i supabase_db_LumeOS-Claude-V1 psql -U postgres -d lumeos_f07 \
 --     < supabase/_pipeline/_validierung/coach-lesepfad-pruefen.sql
 -- Live (angelegtes Portal-Konto):
---   ... -d postgres -v coach_email="'coach@lumeos.app'" -v voll_email="'dev@lumeos.app'" ...
+--   ... -d "$PGDATABASE" -v coach_email="'coach@lumeos.app'" -v voll_email="'dev@lumeos.app'" ...
 --
 -- Erwartete Rechtelage (C-147/F-07-Seeds):
 --   voll  (tom.seed bzw. dev):  nutrition full, training full,

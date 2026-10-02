@@ -3,7 +3,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: quer-c412-activity-stream.test.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 
 function one<T>(sql: string): T {
   return JSON.parse(execFileSync('docker', [

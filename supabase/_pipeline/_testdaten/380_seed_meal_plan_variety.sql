@@ -1,7 +1,7 @@
 -- C-380: Drei explizite Dev-Seed-Pläne, getrennt vom C-150-Aufbauplan.
 --
 -- Aufruf nach eigenes-konto-fuellen.sql (oder allein zur Wiederherstellung):
---   docker exec -i supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres \
+--   docker exec -i supabase_db_LumeOS-Claude-V1 psql -U postgres -d "$PGDATABASE" \
 --     < supabase/_pipeline/_testdaten/380_seed_meal_plan_variety.sql
 --
 -- Idempotent. Berührt ausschließlich die Einträge der drei benannten

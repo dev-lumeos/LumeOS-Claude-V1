@@ -1,7 +1,7 @@
 -- Ein ECHTES Anmeldekonto bekommt die Tage und Modul-Seeds eines Seed-Nutzers.
 --
 -- Aufruf (Standard: dev@lumeos.app aus tom.seed@example.com):
---   docker exec -i supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres \
+--   docker exec -i supabase_db_LumeOS-Claude-V1 psql -U postgres -d "$PGDATABASE" \
 --     < supabase/_pipeline/_testdaten/eigenes-konto-fuellen.sql
 --
 -- Anderes Zielkonto: -v ziel_email="'jemand@example.com'" voranstellen.

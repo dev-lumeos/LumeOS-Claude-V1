@@ -4,7 +4,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: nutrient-details-legacy-map.test.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 
 function rows(sql: string): Array<{ nutrient_code: string; source_key: string; function_de: string }> {
   return JSON.parse(execFileSync('docker', [

@@ -4,7 +4,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: food-search-general-exclusions.test.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const GENERAL_USER = 'c3470000-0000-0000-0000-000000000001'
 const ALLERGY_USER = 'c3470000-0000-0000-0000-000000000002'
 const CLEAN_USER = 'c3470000-0000-0000-0000-000000000003'

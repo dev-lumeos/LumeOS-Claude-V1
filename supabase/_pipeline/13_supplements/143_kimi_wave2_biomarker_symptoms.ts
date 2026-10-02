@@ -4,7 +4,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: 143_kimi_wave2_biomarker_symptoms.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const BASE = 'backup/kimi-research/Kimi_Agent/supplement_performance_database'
 
 function readJsonl(rel: string): Record<string, any>[] {

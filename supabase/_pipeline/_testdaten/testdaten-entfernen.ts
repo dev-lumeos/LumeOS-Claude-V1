@@ -2,7 +2,8 @@
 import { spawnSync } from 'node:child_process'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: testdaten-entfernen.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const IDS = [
   '10000000-0000-0000-0000-000000000101',
   '10000000-0000-0000-0000-000000000102',

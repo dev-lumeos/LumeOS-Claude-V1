@@ -6,7 +6,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: coach-c381-action-executor.test.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const CLIENT_ID = '10000000-0000-0000-0000-000000000101'
 const FOREIGN_CLIENT_ID = 'd15fb34f-62e6-43e5-9d1c-ec8bab6ae1a6'
 const COACH_ID = '10000000-0000-0000-0000-000000000901'

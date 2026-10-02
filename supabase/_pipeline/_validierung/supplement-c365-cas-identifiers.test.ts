@@ -5,7 +5,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: supplement-c365-cas-identifiers.test.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 
 const expected = [
   ['sub_dcb8ab1209', '137525-51-0'],

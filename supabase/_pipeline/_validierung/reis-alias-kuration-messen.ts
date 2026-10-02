@@ -29,7 +29,8 @@ type Kuration = {
 }
 
 const C = 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: reis-alias-kuration-messen.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const DATA_PATH = path.join('supabase', '_pipeline', 'daten', 'reis-alias-kuration.json')
 
 function sqlString(value: string) {

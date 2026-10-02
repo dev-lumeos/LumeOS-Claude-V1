@@ -14,7 +14,8 @@ import { execFileSync } from 'node:child_process'
 import { buildFoodSearchGroups } from '../../../apps/web/src/lib/nutrition/food-search'
 
 const C = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('A-88: suche-laufzeit-messen.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const LAEUFE = Number(process.env.LAEUFE ?? '5')
 
 const ANFRAGEN = [

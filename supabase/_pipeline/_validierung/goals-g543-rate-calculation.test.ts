@@ -5,7 +5,7 @@ import test from 'node:test'
 // Bewusst nutzerweit: Jede Rechnung hat am jeweiligen Stichtag hoechstens
 // eine aktive Phase; genau dieser Einziel-/Kein-Ziel-Vertrag wird hier geprueft.
 const container = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const db = process.env.LUMEOS_G543_DATABASE
+const db = process.env.PGDATABASE
 if (!db || db === 'postgres') throw new Error('G-543 braucht eine Wegwerf-Datenbank, nie postgres.')
 
 const testUser = `(SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local')`

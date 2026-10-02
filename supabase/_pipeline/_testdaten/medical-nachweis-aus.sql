@@ -2,7 +2,7 @@
 -- `medical-nachweis-an.sql`.
 --
 -- Aufruf (Standard: test-user@lumeos.local):
---   docker exec -i supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres \
+--   docker exec -i supabase_db_LumeOS-Claude-V1 psql -U postgres -d "$PGDATABASE" \
 --     -v ON_ERROR_STOP=1 \
 --     < supabase/_pipeline/_testdaten/medical-nachweis-aus.sql
 --
