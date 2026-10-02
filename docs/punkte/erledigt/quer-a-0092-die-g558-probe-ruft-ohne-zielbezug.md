@@ -13,7 +13,7 @@ braucht: [G-563, A-91]
 kind_von: A-87
 
 quellen:
-  - docs/punkte/laufend_codex/quer-a-0087-46-zeugen-nach-ursache-gestaffelt.md
+  - docs/punkte/erledigt/quer-a-0087-46-zeugen-nach-ursache-gestaffelt.md
   - docs/punkte/laufend_codex/quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md
 
 beruehrt:

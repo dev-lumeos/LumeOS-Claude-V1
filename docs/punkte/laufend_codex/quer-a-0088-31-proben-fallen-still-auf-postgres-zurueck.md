@@ -4,6 +4,8 @@ typ: fehler
 modul: quer
 schwere: hoch
 angelegt: 2026-10-01
+beauftragt: 2026-10-02
+agent: codex
 
 braucht: []
 kind_von: A-77
@@ -128,3 +130,48 @@ Meldung · `pnpm gate` gruen mit Testzahl · nichts committen.
 `[read]` **Kein voller Kettenlauf als Nachweis** (00-LIESMICH.md). Was
 die Kette betrifft, belegst du mit dem Standardlauf-Restore, nicht mit
 `kette-voll.json`.
+
+---
+
+## Nachtrag 2026-10-02, nach A-87 — und A-91/A5 haengt dran
+
+`[cmd]` **Heute nachgezaehlt, nach A-87:** 83 Dateien mit
+`?? 'postgres'`, davon 42 unter `_validierung/` — **unveraendert**, A-87
+hat die Zaehlung nicht verkleinert. `kette.json` fuehrt jetzt 339
+Schritte, 263 gedeckt, **76 laufen**.
+
+`[cmd]` **A3 ist erledigt, bevor dieser Auftrag anfaengt:** die drei
+echten `-d postgres`-Ausfuehrer waren
+`nutrition-c366-curated-food-tags`, `nutrition-c396-meal-plan-slots` und
+`nutrition-c409-reorder-frequent-curation`. Sie nehmen jetzt
+ausschliesslich `PGDATABASE` und brechen ohne Wegwerf-Datenbank ab.
+**Streich A3 und belege stattdessen, dass es bei den drei so bleibt.**
+
+`[read]` **Und der wichtigste Zusatz: der Vollauf am Ende dieses
+Auftrags ist ZUGLEICH der Nachweis fuer A-91/A5.** Drei Vollaeufe sind
+heute und gestern an je einer veralteten Erwartung gestorben:
+
+    A-91   1.347,9 s   G-558
+    A-92   1.291,7 s   G-545
+    A-87   1.404,9 s   C-391 (16 Tags erwartet, der Vollimport fuehrt
+                       korrekt zusaetzlich gluten_free)
+
+`[cmd]` **C-391 ist nachgezogen und gruen**, die restlichen 17 Dateien
+liefen danach in 81,065 s. **Es fehlt genau ein Lauf.**
+
+`[read]` **Keinen Vollauf von Hand starten.** Der Tageslauf laeuft
+naechtlich ueber `kette-voll.json` und veroeffentlicht bei gruen von
+selbst — genau dafuer ist A-91 gebaut. **Dein Nachweis bleibt je Stapel
+gegen eine Wegwerf-Datenbank.** Findest du eine veraltete Erwartung,
+ziehst du sie nach und meldest sie; den Vollauf macht die Nacht.
+
+`[cmd]` **A-91/A5 wird vom naechtlichen Lauf belegt**, nicht von einem
+Lauf in Toms Arbeitszeit. **Drei Vollaeufe haben gestern und heute 67
+Minuten gekostet und keinen Dump erzeugt** — ein vierter von Hand waere
+der vierte Fehler derselben Art.
+
+`[cmd]` **Stand des Dumps, gegen den der naechtliche Lauf zu vergleichen
+ist:**
+
+    434.525.275 Bytes · 19 Quellen · 2026-10-01T07:48:38.367Z
+    SHA-256 274438cb44260e892ede093470f0bf8e4da79354e153e71d56acc4477e135163

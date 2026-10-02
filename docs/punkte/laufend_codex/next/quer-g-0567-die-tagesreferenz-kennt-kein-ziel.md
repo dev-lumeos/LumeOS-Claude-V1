@@ -100,3 +100,77 @@ Betrifft `micronutrient_snapshot`,
 `micronutrient_snapshot_with_supplements` und die davon abhaengige
 `micronutrient_below_threshold`. Was sich bei Defizit aendert, ist die
 Luecke — und die wird sichtbar statt wegdefiniert.
+
+---
+
+## Auftrag — Kopf, 2026-10-02 (entschieden durch E-87)
+
+    AUFTRAG FUER Codex - G-567: die Tagesreferenz rechnet zielfrei
+    Bereich: supabase/_pipeline/_ableitung/030_mikro-uebersicht.ts
+             supabase/_pipeline/_validierung/
+    Fremd:   apps/ gehoert Claude Code (G-582 laeuft dort). docs/
+             gehoert dem Orchestrator, auch diese Punktdatei.
+    Stand:   2026-10-02
+
+**Zuerst lesen, vollstaendig:** diese Datei und
+`docs/entscheidungen/E-87-die-tagesreferenz-ist-zielfrei.md`.
+
+### Die Entscheidung liegt vor — du baust, du waehlst nicht
+
+`[cmd]` **E-87, Tom, 2026-10-01:** die Referenz rechnet **zielfrei** —
+Alter, Geschlecht, Gewicht, TDEE, **kein Phasenfaktor, keine `goal_id`,
+auch fuer Nutzer ohne Ziel.** Die Deckung geht gegen die tatsaechliche
+Zufuhr; bei einem Defizit aendert sich die **Luecke**, nicht die
+Referenz.
+
+`[cmd]` **Belegt mit EFSA:** Thiamin PRI **0,1 mg/MJ** (energiebezogen,
+weil das Verhaeltnis Bedarf zu Energiebedarf in allen Gruppen gleich
+ist), Riboflavin PRI **1,6 mg/Tag** absolut, ohne Energiebezug. **Der
+energieabhaengige Teil haengt am Energie-BEDARF, nicht am Energie-ZIEL.**
+
+### Was heute dasteht, gemessen
+
+`[cmd]` **`_ableitung/030_mikro-uebersicht.ts:161-162`:** die Funktion
+`nutrition.micronutrient_snapshot(UUID, DATE)` verbindet
+
+    LEFT JOIN LATERAL goals.zielwerte_am(p_user_id, p_entry_date)
+    LEFT JOIN LATERAL goals.berechne_zielwerte(p_user_id, p_entry_date)
+
+**beide nutzerweit, beide ohne `goal_id`** — genau die Mehrdeutigkeit,
+die seit G-538 entstehen kann.
+
+`[cmd]` **Betroffen ist EIN Naehrstoff von acht:**
+`value_source = 'goals_alpha_linolenic_acid'` rechnet ALA gegen den
+Goals-Zielwert (`:189`, `:193`, `:201`, `:205`, Luecke `missing_goal`).
+Die uebrigen sieben sind Referenzwerte.
+
+## Auftrag
+
+**A1 — ALA auf dieselbe Grundlage stellen** wie die anderen sieben:
+zielfrei, aus Bedarf statt Ziel. `[read]` **Melde, welche Groesse den
+Referenzwert dann traegt** — und wenn es fuer ALA keine zielfreie Quelle
+gibt, ist **das** der Befund, und `missing_goal` wird zu einer Luecke mit
+ehrlichem Namen.
+
+**A2 — die beiden `LATERAL`-Verbindungen fallen**, wenn A1 sie nicht
+mehr braucht. `[cmd]` **Dann kann die Funktion auch nicht mehr an
+mehreren aktiven Phasen scheitern** — das ist der eigentliche Gewinn.
+
+**A3 — eine Probe, die beide Richtungen zaehlt:** ein Nutzer mit zwei
+aktiven Zielphasen bekommt denselben Referenzwert wie einer mit keinem
+Ziel. `[read]` **Mit wiederhergestelltem Zielbezug muss sie rot
+werden.**
+
+**Nicht Teil:** die Zufuhrseite, die Deckungsrechnung und die acht
+kuratierten Naehrstoffe selbst. **Und die Oberflaeche nicht** —
+`mikro-read.ts`, `mikro-kacheln.tsx` und `mikro-trend.tsx` liegen bei
+Claude Code; wenn sich die Rueckgabe aendert, **melde es, aender es
+nicht.**
+
+**Zu belegen:** der geaenderte Schritt und seine Probe gegen eine
+Wegwerf-Datenbank, mit Laufzeit · die Zahl der Aufrufe von
+`berechne_zielwerte` in diesem Schritt vorher und nachher · Sabotage in
+beide Richtungen · Wegwerf-Datenbank verworfen mit Zaehler · kein
+`db push` · nichts committen.
+
+`[read]` **Kein Vollauf von Hand** — den macht die Nacht (A-91).

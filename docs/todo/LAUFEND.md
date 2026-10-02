@@ -6,10 +6,10 @@
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
 | Claude Code | G-582 | Der Coach-Alarm hat keinen Aufrufer | **laeuft**, raus 02.10. |
-| Codex | A-87 | 46 Zeugen, nach Ursache gestaffelt verdrahten | **laeuft**, raus 02.10. |
+| Codex | A-88 | 31 Proben fallen still auf postgres zurueck | **laeuft**, raus 02.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
-| Codex | A-88 | 31 Proben fallen still auf postgres zurueck | **bereit in `next/`** |
+| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 `[read]` **Die Tabelle wird erzeugt, nicht gepflegt** —

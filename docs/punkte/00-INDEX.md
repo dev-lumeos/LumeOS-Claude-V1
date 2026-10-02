@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 271 |
+| `todos` | 270 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 623 |
+| `erledigt` | 624 |
 | **gesamt** | **898** |
 
 ## medical — 50
@@ -800,8 +800,8 @@
 | `A-84` | fehler | hoch | [Der Pruefumfang haengt am Staging, nicht am Repo](erledigt/quer-a-0084-der-pruefumfang-haengt-am-staging.md) | erledigt | — | — |
 | `A-85` | fehler | mittel | [Der Zyklus wird geprueft, aber nichts fuehrt ihn aus](erledigt/quer-a-0085-der-zyklus-wird-geprueft-aber-nicht-ausgefuehrt.md) | erledigt | — | A-89 |
 | `A-86` | fehler | hoch | [Die Kette spielt die Testdaten nicht ein](erledigt/quer-a-0086-die-kette-spielt-die-testdaten-nicht-ein.md) | erledigt | — | — |
-| `A-87` | fehler | hoch | [46 Zeugen, nach Ursache gestaffelt verdrahten](laufend_codex/quer-a-0087-46-zeugen-nach-ursache-gestaffelt.md) | laeuft (codex) | — | A-92 |
-| `A-88` | fehler | hoch | [31 Proben fallen still auf postgres zurueck](laufend_codex/quer-a-0088-31-proben-fallen-still-auf-postgres-zurueck.md) | vorbereitet (codex) | — | — |
+| `A-87` | fehler | hoch | [46 Zeugen, nach Ursache gestaffelt verdrahten](erledigt/quer-a-0087-46-zeugen-nach-ursache-gestaffelt.md) | erledigt | — | A-92 |
+| `A-88` | fehler | hoch | [31 Proben fallen still auf postgres zurueck](laufend_codex/quer-a-0088-31-proben-fallen-still-auf-postgres-zurueck.md) | laeuft (codex) | — | — |
 | `A-89` | fehler | mittel | [zyklus-fahren scheitert an EPERM, wenn ein Agent die Datei offen hat](todos/quer-a-0089-zyklus-fahren-scheitert-an-eperm.md) | offen | — | — |
 | `A-90` | fehler | hoch | [Grunddaten als Dump, nicht als Import bei jedem Lauf](erledigt/quer-a-0090-grunddaten-als-dump-statt-als-import.md) | erledigt | — | A-91 |
 | `A-91` | fehler | hoch | [Der taegliche Lauf erzeugt bei gruen einen neuen Dump](laufend_codex/quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md) | laeuft (codex) | — | — |
@@ -977,7 +977,7 @@
 | `G-551` | befund | hoch | [Cardio fehlt als Modul ganz — und damit die Hälfte der Steuerung](todos/quer-g-0551-cardio-fehlt-als-modul-ganz.md) | offen | — | — |
 | `G-552` | befund | mittel | [Training und Erholung kennen die Phase nicht](todos/quer-g-0552-phasenparameter-fuer-training-und-erholung.md) | offen | — | — |
 | `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](erledigt/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | erledigt | — | — |
-| `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](todos/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | offen | — | — |
+| `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](laufend_codex/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | vorbereitet (codex) | — | — |
 | `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | offen | — | G-577, G-578, G-579, G-582 |
 
 ### wartet auf Blocker — 1

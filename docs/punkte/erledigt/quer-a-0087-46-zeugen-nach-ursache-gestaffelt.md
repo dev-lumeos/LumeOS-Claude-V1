@@ -4,6 +4,8 @@ typ: fehler
 modul: quer
 schwere: hoch
 angelegt: 2026-10-01
+commit: 9abc2b8d
+erledigt: 2026-10-02
 agent: codex
 beauftragt: 2026-10-02
 
@@ -150,3 +152,45 @@ mit ihrer Laufzeit · die Zahl der Zeugen vorher und nachher · die
 Schrittzahl aus `kette.json` gelesen · der eine Vollauf am Ende ·
 Wegwerf-Datenbanken verworfen mit Zaehler · kein `db push` · nichts
 committen.
+
+---
+
+## Abnahme — 2026-10-02, Commit `9abc2b8d`
+
+`[cmd]` **Im Diff und in `kette.json` nachgezählt, nicht im Bericht
+gelesen:** 27 Dateien, +377/−141, ausschliesslich
+`supabase/_pipeline/_validierung/` und `kette.json` — **kein
+Produktcode, keine Apps, keine Docs.** Schritte 320 → **339**,
+Validierungsschritte 12 → **31**, 19 Zeugen verdrahtet.
+
+`[cmd]` **A3 ist erledigt und strenger als verlangt:** die drei echten
+`-d postgres`-Ausführer lesen `PGDATABASE` und brechen fail-closed ab —
+`if (!DB || DB === 'postgres') throw` verweigert den Namen `postgres`
+auch dann, wenn er gesetzt ist. Das war in A-88 nur als „kein
+Rückfall" gefordert.
+
+`[read]` **A1 ist die Arbeit, die zählt, und sie steht je Datei:** G-559
+fünf statt drei Seedphasen · G-560 `duration_ratio_pct` · C-541
+`experience_level` · G-531/G-535 pluraler JWT-Claim · C-465
+`delivery_results` · C-275/C-516 aktuelle Katalogzahlen · G-561 ein
+isolierter Transaktionsnutzer, **weil der echte Seed die Prioritäten 1/2
+absichtlich belegt** · C-419 keine fachlich zugesicherte
+UUID-Reihenfolge, Beträge und Atomizität bleiben geprüft.
+
+`[cmd]` **Was NICHT still umgeschrieben wurde, und das ist der Teil, den
+ein Agent am leichtesten verdeckt hätte:** 27 Dateien bleiben rot und
+unverdrahtet — die Meal-Plan-Fachlichkeit (C-392, C-396, C-397,
+Lifecycle) und neun ältere Goals-Proben (G-357, G-511, G-523, G-529,
+G-531, G-533, G-536, G-538, G-543). Inventur: 107 Dateien in 859,4 s, 64
+grün, 43 rot; von 48 roten sind 21 erledigt.
+
+`[cmd]` **A5 ist nicht erfüllt, und der Grund ist der vierte seiner
+Art:** der Vollauf kam 1.404,9 s weit und fiel an C-391 (16 Tags
+erwartet, der Vollimport führt korrekt `gluten_free` mit). Nachgezogen,
+grün, die restlichen 17 Dateien in 81,065 s.
+
+`[read]` **Drei Vollläufe, 67 Minuten, kein Dump** — A-91 1.347,9 s
+(G-558), A-92 1.291,7 s (G-545), A-87 1.404,9 s (C-391). **Der vierte
+Lauf gehört deshalb der Nacht**, nicht Toms Arbeitszeit: `A-91` hat den
+nächtlichen Lauf genau dafür gebaut. Das steht so im A-88-Auftrag, und
+A-91/A5 wird dort belegt.
