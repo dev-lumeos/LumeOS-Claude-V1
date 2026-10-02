@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 269 |
+| `todos` | 271 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 620 |
-| **gesamt** | **894** |
+| `erledigt` | 621 |
+| **gesamt** | **897** |
 
 ## medical — 50
 
@@ -73,9 +73,9 @@
 |---|---|---|---|---|---|---|
 | `G-578` | fehler | hoch | [Der Laborimport hat drei Datenbankfunktionen und keine Oberflaeche](erledigt/medical-g-0578-der-laborimport-hat-keine-oberflaeche.md) | erledigt | G-571 | — |
 
-## nutrition — 263
+## nutrition — 265
 
-### beauftragbar — 262
+### beauftragbar — 264
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -340,13 +340,15 @@
 | `G-488` | fehler | mittel | [drei Zahlen zum Plan, keine zwei passen](erledigt/nutrition-g-0488-drei-zahlen-zum-plan.md) | erledigt | — | E-87 |
 | `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](erledigt/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | erledigt | — | — |
 | `G-497` | feature | hoch | [die Suche zeigt Gruppen statt Zeilen](todos/nutrition-g-0497-suche-zeigt-gruppen.md) | offen | — | — |
+| `G-580` | fehler | mittel | [Die Plankette darf einen Ring schliessen](todos/nutrition-g-0580-die-plankette-darf-einen-ring-schliessen.md) | offen | — | — |
+| `G-581` | fehler | mittel | [Ein Modal ohne Aufrufer, mit eigener Wahrheit ueber den Lebenszyklus](laufend_claudecode/nutrition-g-0581-ein-modal-ohne-aufrufer-mit-eigener-wahrheit.md) | vorbereitet (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-579` | fehler | mittel | [Der Plansprung existiert in der Datenbank und wird von nichts benutzt](laufend_claudecode/nutrition-g-0579-der-plansprung-hat-keinen-aufrufer.md) | laeuft (claudecode) | G-571 | — |
+| `G-579` | fehler | mittel | [Der Plansprung existiert in der Datenbank und wird von nichts benutzt](erledigt/nutrition-g-0579-der-plansprung-hat-keinen-aufrufer.md) | erledigt | G-571 | G-580, G-581 |
 
 ## supplements — 127
 
@@ -655,7 +657,7 @@
 | `G-568` | fehler | hoch | [Die Zielwerte brauchen ihr Ziel](erledigt/goals-g-0568-die-zielwerte-brauchen-ihr-ziel.md) | erledigt | — | G-570 |
 | `G-569` | fehler | hoch | [G-520 prueft Kilogramm in der Anwendung](erledigt/goals-g-0569-g520-prueft-kilogramm-in-der-anwendung.md) | erledigt | — | — |
 | `G-570` | fehler | mittel | [Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg](todos/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md) | offen | — | — |
-| `G-572` | fehler | mittel | [Der Dateikopf nennt Phase engine als Attrappe, und das ist seit Tagen falsch](laufend_claudecode/goals-g-0572-der-dateikopf-nennt-phase-engine-als-attrappe.md) | vorbereitet (claudecode) | — | — |
+| `G-572` | fehler | mittel | [Der Dateikopf nennt Phase engine als Attrappe, und das ist seit Tagen falsch](laufend_claudecode/goals-g-0572-der-dateikopf-nennt-phase-engine-als-attrappe.md) | laeuft (claudecode) | — | — |
 | `G-573` | fehler | hoch | [rateAusKcal gibt es zweimal, mit verschiedener Rundung](erledigt/goals-g-0573-rateauskcal-gibt-es-zweimal-mit-verschiedener-rundung.md) | erledigt | — | — |
 | `G-574` | fehler | hoch | [Die Waechter rechnen, und niemand sieht sie](todos/goals-g-0574-die-waechter-rechnen-und-niemand-sieht-sie.md) | offen | — | — |
 | `G-575` | fehler | hoch | [Ein Ziel traegt genau eine Messgroesse](todos/goals-g-0575-ein-ziel-traegt-genau-eine-messgroesse.md) | offen | — | — |
@@ -735,9 +737,9 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 228
+## quer — 229
 
-### beauftragbar — 227
+### beauftragbar — 228
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -785,7 +787,7 @@
 | `A-78` | befund | mittel | [ein neuer Punkt wird nicht gegen den Bestand geprueft](todos/quer-a-0078-punkte-werden-nicht-gegen-den-bestand-geprueft.md) | offen | — | — |
 | `A-79` | befund | mittel | [jeder Auftrag legt 452 MiB ab, auch wenn nichts eingespielt wird](todos/quer-a-0079-jeder-auftrag-legt-452-mib-ab.md) | offen | — | — |
 | `A-80` | befund | mittel | [150 Wegwerf-Datenbanken, und 49 davon heissen "final"](todos/quer-a-0080-hundertfuenfzig-wegwerf-datenbanken.md) | offen | — | — |
-| `A-81` | befund | hoch | [der Zyklus steht seit dem 30.08. geschrieben und laeuft nicht](erledigt/quer-a-0081-der-dokumentierte-zyklus-laeuft-nicht.md) | erledigt | — | A-85 |
+| `A-81` | befund | hoch | [der Zyklus steht seit dem 30.08. geschrieben und laeuft nicht](erledigt/quer-a-0081-der-dokumentierte-zyklus-laeuft-nicht.md) | erledigt | — | A-85, A-93 |
 | `A-82` | befund | mittel | [Die Migrationskette prueft den Arbeitsbaum, nicht das Staging](erledigt/quer-a-0082-die-migrationskette-prueft-den-arbeitsbaum.md) | erledigt | — | A-84 |
 | `A-84` | fehler | hoch | [Der Pruefumfang haengt am Staging, nicht am Repo](erledigt/quer-a-0084-der-pruefumfang-haengt-am-staging.md) | erledigt | — | — |
 | `A-85` | fehler | mittel | [Der Zyklus wird geprueft, aber nichts fuehrt ihn aus](erledigt/quer-a-0085-der-zyklus-wird-geprueft-aber-nicht-ausgefuehrt.md) | erledigt | — | A-89 |
@@ -795,6 +797,7 @@
 | `A-89` | fehler | mittel | [zyklus-fahren scheitert an EPERM, wenn ein Agent die Datei offen hat](todos/quer-a-0089-zyklus-fahren-scheitert-an-eperm.md) | offen | — | — |
 | `A-90` | fehler | hoch | [Grunddaten als Dump, nicht als Import bei jedem Lauf](erledigt/quer-a-0090-grunddaten-als-dump-statt-als-import.md) | erledigt | — | A-91 |
 | `A-91` | fehler | hoch | [Der taegliche Lauf erzeugt bei gruen einen neuen Dump](laufend_codex/quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md) | laeuft (codex) | — | — |
+| `A-93` | fehler | hoch | [Zwei Agenten in einem Arbeitsbaum, und der Commit zahlt dafuer](todos/quer-a-0093-zwei-agenten-in-einem-arbeitsbaum.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |

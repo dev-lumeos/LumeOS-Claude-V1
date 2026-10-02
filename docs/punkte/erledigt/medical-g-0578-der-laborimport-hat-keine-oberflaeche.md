@@ -213,3 +213,22 @@ beim zweiten Mal:** ein `assert.match` ueber eine Datei mit mehreren
 erwarteten Vorkommen bleibt gruen, solange ein Geschwister ueberlebt.
 **Jetzt wird auf 3 gezaehlt, und der doppelte Hinweis wird an beiden
 Stellen einzeln geprueft.**
+
+### Berichtigung — 2026-10-02: der Commit traegt sechs fremde Zeilen
+
+`[cmd]` **`31ebb74e` enthaelt sechs Zeilen, die zu G-579 gehoeren** — die
+drei Plansprung-Fachtexte in `lib/fehler/ladefehler.ts` (Kommentarzeile
+`G-579: der Plansprung` und die drei `merkmal:`-Eintraege mit ihren
+Saetzen). **Nicht der Agent hat sie hineingelegt, ich habe sie
+mitgestagt:** ich habe die Datei als ganzen Pfad gestagt, waehrend
+G-579 schon daran schrieb.
+
+`[read]` **Die sieben medical-Texte dieses Punktes sind davon
+unberuehrt** und stehen vollstaendig in diesem Commit. Was verschoben
+ist, ist die Zuordnung dreier fremder Texte — **kein Code ist falsch,
+keine Zeile fehlt.** Die Geschichte wird nicht umgeschrieben, solange
+`dev` nicht gepusht ist und Tom nichts anderes sagt.
+
+`[read]` **Ursache und Gegenmassnahme stehen in A-93:** zwei Agenten in
+einem Arbeitsbaum, und eine geteilte Datei darf nicht per Pfad gestagt
+werden.

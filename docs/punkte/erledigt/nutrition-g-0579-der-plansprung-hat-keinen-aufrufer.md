@@ -4,6 +4,8 @@ typ: fehler
 modul: nutrition
 schwere: mittel
 angelegt: 2026-10-02
+commit: d8008745
+erledigt: 2026-10-02
 agent: claudecode
 beauftragt: 2026-10-02
 
@@ -116,3 +118,55 @@ Testzahl · nichts committen.
 
 `[read]` **Kein voller Kettenlauf als Nachweis** (00-LIESMICH.md) — die
 Funktion ist gebaut und live, du rufst sie auf.
+
+---
+
+## Abnahme — 2026-10-02, Commit `d8008745`
+
+`[cmd]` **Gezaehlt am Ergebnis:**
+
+| Merkmal | gezaehlt |
+| --- | --- |
+| `.rpc('meal_plan_set_next_plan', …)` | genau 1 — `lib/nutrition/plansprung-write.ts:69` |
+| Waechter | `lib/nutrition/__tests__/g579-plansprung.test.ts:76` haelt genau diese Zeile als Text |
+| neue Dateien | `plansprung.ts`, `plansprung-write.ts`, `app/v2/nutrition/plansprung-aktionen.ts` |
+| `ZYKLUS_WAEHLBAR` in `plan-werkbank.ts:450` | zwei Werte; `sequence` kommt bedingt dazu (`plan-werkbank-ui.tsx:245`) |
+| Fachtexte in `lib/fehler/ladefehler.ts:181-200` | 3 — Selbstbezug, Quellplan fehlt, Folgeplan fehlt |
+| Bilder | 4 in `docs/bilder/g579/` |
+| Gate beim Commit | **gruen**, 18 von 18 Tasks — der erste saubere Gate-Commit des Tages |
+| Commit | `d8008745`, 12 Dateien, +629/−18 |
+
+`[read]` **A1 ist die wertvollste Antwort des Berichts, und sie ist
+gemessen:** die Funktion aktiviert nichts, sie verknuepft — setzt dabei
+aber `lifecycle_type = 'sequence'` und `next_plan_id` **in einem Zug**,
+weil `meal_plans_sequence_target_check` beide koppelt. `[cmd]` **Ein
+PATCH mit `lifecycle_type` allein ergibt `23514`.** Daraus folgt der
+einzige Bauentscheid: bei `sequence` schickt der Aktivierungsweg
+`lifecycle_type` nicht mit. **Zwei Schreiber fuer eine gekoppelte Regel
+waeren zwei Wahrheiten** — ein Waechter haelt das fest.
+
+`[cmd]` **A2 hat eine Falle vermieden, die ich im Auftrag nur geahnt
+habe:** `MealPlanActivationModal` sieht wie der richtige Ort aus, ist
+aber **seit G-319 toter Code ohne Aufrufer**. Der Aufruf steht in
+`AktivierenFrage`, die zwei lebende Aufrufer hat. **„Technisch passend"
+haette den Griff an eine unerreichbare Stelle gelegt** — das ist der
+zweite Fund dieser Klasse an zwei Tagen und wird G-581.
+
+`[read]` **A4: der Vermerk war diesmal RICHTIG.** Drei Stellen sagten,
+`sequence` sei nicht speicherbar, und `23514` belegt es. **Anders als bei
+G-577 und G-578 fehlte nicht die Messung, sondern der Griff** — gebaut
+war nur die Gegenseite, mit null Aufrufern. Das ist der Unterschied
+zwischen einem falschen Vermerk und einem eingeloesten.
+
+`[cmd]` **Mein Fehler, und er steht im Commit:** die drei Fachtexte
+liegen nicht in `d8008745`, sondern im vorigen Commit `31ebb74e`
+(G-578). Ich habe `lib/fehler/ladefehler.ts` als **ganze Datei** gestagt,
+waehrend dieser Punkt schon daran schrieb. **Der Code ist richtig, die
+Zuordnung in der Geschichte ist um einen Commit verschoben.** Ursache und
+Gegenmassnahme stehen in A-93.
+
+`[read]` **Ein Befund zum Entscheiden, nicht gebaut:** die Datenbank
+erlaubt einen Ringschluss (A → B und B → A, beide CHECKs zufrieden). Der
+Agent hat **keine Regel erfunden** — `moeglicheFolgeplaene` schliesst nur
+den Plan selbst aus, weil der Rumpf das verlangt. **Ob ein Zyklus
+unterbunden gehoert, ist eine Schemafrage: G-580.**
