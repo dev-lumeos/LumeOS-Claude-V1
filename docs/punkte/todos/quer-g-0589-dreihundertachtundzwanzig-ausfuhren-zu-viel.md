@@ -77,3 +77,52 @@ Werkzeugen namentlich stehen.
 
 `[cmd]` **Rohdaten:** `g585-roh2.json`, erzeugt von
 `g585-inventur2.mjs` — beide liegen beim Agenten, nicht im Repo.
+
+---
+
+## Zurueckgestellt — 2026-10-02, und zwar mit Begruendung
+
+**Tom:** *„brauche ich mehr fakten sagt mir nichts"*
+
+`[read]` **Es sagt dir nichts, weil es fast nichts ist.** Ich habe eine
+Zahl zu einem Punkt gemacht, ohne den Preis zu nennen — hier ist er, am
+konkreten Fall.
+
+`[cmd]` **Der Fall, den der Agent als Beispiel gemessen hat:**
+
+    apps/web/src/app/v2/goals/daten.ts:456  export function calcBMR(...)
+    apps/web/src/app/v2/goals/daten.ts:468  const bmr = calcBMR(p)
+
+**Ein Aufrufer, zwoelf Zeilen tiefer, in derselben Datei. Kein Test, kein
+fremdes Modul.** Das `export` ist die einzige Zeile, die diese Funktion
+oeffentlich macht.
+
+`[read]` **Was es kostet, wenn `export` dort steht:**
+
+1. **Beim Umbenennen oder Aendern muss man alle sechs App-Baeume
+   pruefen** — bei einer internen Funktion reicht die Datei. Kostet ein
+   `rg`, also Sekunden.
+2. **Die Autovervollstaendigung bietet sie an**, und der naechste
+   importiert sie aus Versehen von aussen. **Dann ist sie wirklich
+   oeffentlich** — und das merkt niemand.
+3. **Eine Inventur wie G-585 muss sie jedes Mal einsortieren.** Genau
+   daran ist der erste Lauf gescheitert: 385 statt 56.
+
+`[read]` **Was es NICHT kostet:** keine Laufzeit, keine Bundlegroesse (es
+wird ohnehin nicht importiert), keinen Fehler, keine Sicherheitsluecke.
+**Es ist Hygiene, nicht Schaden.**
+
+`[cmd]` **Der Aufwand gegen den Nutzen:** 328 Stellen in Dateien, an denen
+gerade zwei Agenten arbeiten. Jede Aenderung ist eine Kollisionsflaeche —
+und heute haben zwei Agenten sich dreimal gegenseitig das Gate rot
+gemacht (A-93).
+
+**Entscheidung des Orchestrators: nicht verfolgen.** `[read]` **Die Zahl
+bleibt hier stehen, damit die naechste Inventur sie nicht neu erhebt**,
+und Punkt 2 der Liste oben ist der Weg: **wenn ein Auftrag eine Datei
+sowieso anfasst, nimmt er das `export` mit.** Das steht ab jetzt in den
+Auftraegen dieser Klasse und kostet dort nichts.
+
+`[read]` **Wenn du es anders willst, sag es** — dann wird daraus ein
+Auftrag je Modul. Ich halte das fuer zu teuer fuer das, was es bringt,
+und das ist meine Einschaetzung, nicht eine Messung.

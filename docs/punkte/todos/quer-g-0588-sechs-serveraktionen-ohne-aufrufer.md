@@ -64,3 +64,34 @@ messen, was die Aktion tut, dann den Aufrufer bauen.**
 **Nicht Teil:** die uebrigen 50 toten Ausfuhren,
 `createServiceClient` (G-587) und die 328 ueberzaehligen Ausfuhren
 (eigener Punkt).
+
+---
+
+## Entschieden — 2026-10-02, Tom
+
+**Tom:** *„ja auch die kriegen eine oberflaeche"*
+
+`[read]` **Damit ist dieselbe Entscheidung gefallen wie bei G-571:** kein
+Weg ist aufgegeben, alle sechs bekommen einen Aufrufer.
+
+`[cmd]` **Drei Module, drei Lesepfade — also drei Auftraege, nicht einer:**
+
+    Goals      prioritaetenSpeichern
+    Recovery   messungAendernAktion · modalitaetAnlegenAktion ·
+               modalitaetAendernAktion · checkinAktion
+    Nutrition  getHydrationSummary
+
+`[read]` **Die Reihenfolge folgt der Zahl**, nicht der Vorliebe: Recovery
+traegt vier der sechs und wird der erste Auftrag. Goals und Nutrition je
+einen.
+
+`[cmd]` **Was in jeden der drei Auftraege gehoert, dreimal belegt aus
+G-578, G-579 und G-582:** **erst messen, was die Aktion tut, dann den
+Aufrufer bauen.** Bei den Datenbankfunktionen hat genau das dreimal einen
+falschen Aufrufer verhindert — eine Funktion legte den Datensatz selbst
+an, eine setzte zwei gekoppelte Spalten, eine entdoppelte innerhalb 24
+Stunden.
+
+`[cmd]` **Und die Stelle muss leben:** bei G-579 sah
+`MealPlanActivationModal` wie der richtige Ort aus und war seit G-319
+toter Code. **Aufrufer zaehlen, bevor der Griff dort landet.**
