@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 270 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 1 |
+| `laufend_claudecode` | 2 |
 | `erledigt` | 624 |
-| **gesamt** | **898** |
+| **gesamt** | **899** |
 
 ## medical — 50
 
@@ -341,7 +341,7 @@
 | `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](erledigt/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | erledigt | — | — |
 | `G-497` | feature | hoch | [die Suche zeigt Gruppen statt Zeilen](todos/nutrition-g-0497-suche-zeigt-gruppen.md) | offen | — | — |
 | `G-580` | fehler | mittel | [Die Plankette darf einen Ring schliessen](todos/nutrition-g-0580-die-plankette-darf-einen-ring-schliessen.md) | offen | — | — |
-| `G-581` | fehler | mittel | [Ein Modal ohne Aufrufer, mit eigener Wahrheit ueber den Lebenszyklus](erledigt/nutrition-g-0581-ein-modal-ohne-aufrufer-mit-eigener-wahrheit.md) | erledigt | — | — |
+| `G-581` | fehler | mittel | [Ein Modal ohne Aufrufer, mit eigener Wahrheit ueber den Lebenszyklus](erledigt/nutrition-g-0581-ein-modal-ohne-aufrufer-mit-eigener-wahrheit.md) | erledigt | — | G-583 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -745,9 +745,9 @@
 |---|---|---|---|---|---|---|
 | `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](laufend_claudecode/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | laeuft (claudecode) | G-571 | — |
 
-## quer — 229
+## quer — 230
 
-### beauftragbar — 228
+### beauftragbar — 229
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -979,6 +979,7 @@
 | `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](erledigt/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | erledigt | — | — |
 | `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](laufend_codex/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | vorbereitet (codex) | — | — |
 | `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | offen | — | G-577, G-578, G-579, G-582 |
+| `G-583` | fehler | niedrig | [Drei Reste ohne Aufrufer, nach demselben Verfahren wie G-581](laufend_claudecode/quer-g-0583-drei-reste-ohne-aufrufer.md) | vorbereitet (claudecode) | — | — |
 
 ### wartet auf Blocker — 1
 
