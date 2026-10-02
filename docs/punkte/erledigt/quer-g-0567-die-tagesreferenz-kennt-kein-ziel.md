@@ -4,6 +4,8 @@ typ: entscheidung
 modul: quer
 schwere: hoch
 angelegt: 2026-10-01
+commit: 8c591000
+erledigt: 2026-10-02
 beauftragt: 2026-10-02
 agent: codex
 
@@ -18,6 +20,11 @@ beruehrt:
     - nutrition.micronutrient_snapshot
     - nutrition.micronutrient_snapshot_with_supplements
     - goals.berechne_zielwerte
+  tabellen: []
+  dateien:
+    - supabase/_pipeline/_ableitung/030_mikro-uebersicht.ts
+    - supabase/_pipeline/daten/mikro-uebersicht.json
+    - supabase/_pipeline/_validierung/quer-g567-goal-free-daily-reference.test.ts
 ---
 
 # Die Tagesreferenz kennt kein Ziel
@@ -176,3 +183,34 @@ beide Richtungen · Wegwerf-Datenbank verworfen mit Zaehler · kein
 `db push` · nichts committen.
 
 `[read]` **Kein Vollauf von Hand** — den macht die Nacht (A-91).
+
+---
+
+## Abnahme — 2026-10-02, Commit `8c591000`
+
+`[cmd]` **Selbst nachgesehen:** `goals.tdee_basis_am` steht in
+`030_mikro-uebersicht.ts:167`, `berechne_zielwerte` und `zielwerte_am`
+kommen in der Datei **nicht mehr vor** — 1 → 0 und 1 → 0. Die Referenz
+rechnet `tdee * 0.005 / 9` (`:194`), `reference_kind` ist `'AI'`
+(`:206`), die Lücke heisst `missing_profile` (`:214`). 5 Dateien,
++380/−46.
+
+`[read]` **E-87 ist damit gebaut, wie entschieden:** die Referenz hängt
+am Energie-**Bedarf**, nicht am Energie-**Ziel** — zwei aktive Zielphasen
+und kein Ziel liefern dieselben 1,2 g ALA.
+
+`[cmd]` **Den zweiten Weg hat erst die rote Gegenprobe sichtbar
+gemacht:** `micronutrient_snapshot_with_supplements` und
+`micronutrient_below_threshold` holten ihre Referenz unabhängig.
+**Ohne diese Probe wäre nur die Grundfunktion zielfrei gewesen** — das
+ist TDD, das etwas gefunden hat, nicht TDD als Formalie.
+
+`[cmd]` **Gebaut, nicht live eingespielt.** Damit steht G-567 auf der
+Einspielliste neben G-559, G-563 und G-514.
+
+`[cmd]` **Mein Fehler in diesem Commit, zum dritten Mal derselbe:** die
+Punktdatei zu C-295 ist mitgewandert, weil `git mv` sofort stagt und mein
+`git add <pfade>` sie nicht wieder herausnimmt. **Inhaltlich eine
+100-%-Umbenennung einer Datei, die mir gehört** — kein fremder
+Arbeitsstand. **Die Gegenmassnahme ist keine Mechanik, sondern eine
+Reihenfolge:** Punktdateien wandern erst NACH dem Code-Commit der Runde.

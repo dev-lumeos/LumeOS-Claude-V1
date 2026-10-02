@@ -4,6 +4,8 @@ typ: feature
 modul: quer
 schwere: mittel
 angelegt: 2026-08-27
+beauftragt: 2026-10-02
+agent: codex
 braucht: []
 kind_von: null
 kinder: []
@@ -39,3 +41,76 @@ zahlen: null
   **Zu tun:** die elf Schritte auf den neuen Pfad umstellen, je Schritt
   mit gemessenem Vorher/Nachher der Zeilenzahl. **Nicht in einem
   Zug mit einem Import** — ein logischer Change.
+
+---
+
+## Auftrag — Kopf, 2026-10-02
+
+    AUFTRAG FUER Codex - C-295: ein Kimi-Pfad, nicht zwei
+    Bereich: supabase/_pipeline/13_supplements/
+             supabase/_pipeline/14_medical/
+             supabase/_pipeline/_validierung/
+             supabase/_pipeline/daten/ (Manifest, siehe A4)
+    Fremd:   apps/ gehoert Claude Code (G-585). docs/ gehoert dem
+             Orchestrator, auch diese Punktdatei und supabase/README.md
+             - melde, was dort zu aendern ist, aender es nicht.
+    Stand:   2026-10-02
+
+### Die Zahlen von heute, nicht die vom 27.08.
+
+`[cmd]` **Gezaehlt am 2026-10-02 in `supabase/` und `tools/`:**
+
+    backup/kimi-research   15 Dateien nennen den alten Pfad
+      davon Kettenschritte  13_supplements/132, 133, 134, 142, 143,
+                            144, 145 · 14_medical/146, 147, 286
+      dazu                  _validierung/kimi-rule-input-audit.ts
+                            daten/schema-sollstand.json
+                            daten/grunddaten-dump.manifest.json
+                            supabase/README.md
+                            tools/evidenz-registry-generieren.py
+    docs/kimi_research     11 Dateien nennen den neuen Pfad
+
+`[read]` **Der Punkt sprach von elf alten und sieben neuen Schritten** —
+das war der 27.08. **Zaehl selbst nach**, bevor du anfaengst, und nenne
+die Zahl im Bericht.
+
+`[cmd]` **`kette.json` selbst nennt keinen der beiden Pfade** — die Pfade
+stehen in den Schritt-Dateien.
+
+### Auftrag
+
+**A1 — die Schritte auf den neuen Pfad umstellen**, je Schritt mit
+gemessener Zeilenzahl vorher und nachher. `[read]` **Wo die Datei im
+neuen Pfad groesser ist, ist das C-275 und kein Fehler** — melde die
+Differenz, aender den Inhalt nicht.
+
+**A2 — die drei Dateien, die nur Hinweise tragen** (`schema-sollstand`,
+`kimi-rule-input-audit`, das Python-Werkzeug), **mitziehen oder melden,
+warum nicht.**
+
+**A3 — nichts loeschen.** `[read]` **`backup/kimi-research` bleibt
+stehen**, auch wenn danach niemand mehr daraus liest: **kein untracked
+Verzeichnis wird dem Namen nach geloescht**, und 1.831 Dateien liegen nur
+dort. **Der Orchestrator legt vor, Tom entsorgt.**
+
+**A4 — das Manifest ist betroffen, und du hast das Werkzeug dafuer
+selbst gebaut.** `[cmd]` `daten/grunddaten-dump.manifest.json` nennt den
+alten Pfad, und die umgestellten Schritte sind **datenproduzierend** —
+der Herkunftshash wandert also. **Nimm `grunddaten-erneuern.ts rehash`
+mit einem `--reason`, der diesen Punkt nennt** (A-94), und belege, dass
+der Dump byteidentisch bleibt.
+
+`[cmd]` **Der kurze Standardlauf steht heute nach dem Restore an C-391**
+— der Dump fuehrt 16 Tagdefinitionen, erwartet werden 17. **Das ist
+nicht dein Problem und du behebst es nicht:** wenn dein Nachweis daran
+haengt, sag es und lass den Teil offen, bis der naechtliche Lauf einen
+neuen Dump veroeffentlicht.
+
+**Nicht Teil:** der Inhaltsunterschied der drei Substanzdateien (C-275),
+das Raeumen von `backup/` (A-79, Toms Entscheidung) und `supabase/README.md`.
+
+**Zu belegen:** die Zahl der Dateien je Pfad vorher und nachher · je
+umgestelltem Schritt die Zeilenzahl der gelesenen Quelle vorher und
+nachher · 0 Treffer auf `backup/kimi-research` in `supabase/_pipeline/`
+am Ende, oder die Liste der begruendeten Ausnahmen · `rehash` mit Grund,
+Dump byteidentisch · kein `db push` · nichts committen.

@@ -5,9 +5,9 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-582 | Der Coach-Alarm hat keinen Aufrufer | **laeuft**, raus 02.10. |
+| Claude Code | G-585 | Die Inventur der Ausfuhren ohne Aufrufer | **laeuft**, raus 02.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
-| Codex | G-567 | Die Tagesreferenz kennt kein Ziel | **laeuft**, raus 02.10. |
+| Codex | C-295 | die Kette liest aus zwei Kimi-Pfaden | **laeuft**, raus 02.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->

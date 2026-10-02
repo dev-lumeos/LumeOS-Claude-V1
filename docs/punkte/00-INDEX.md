@@ -5,15 +5,13 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 271 |
+| `todos` | 269 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 627 |
-| **gesamt** | **901** |
+| `erledigt` | 630 |
+| **gesamt** | **902** |
 
 ## medical — 50
-
-### beauftragbar — 49
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -66,16 +64,9 @@
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
-
-### wartet auf Blocker — 1
-
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `G-578` | fehler | hoch | [Der Laborimport hat drei Datenbankfunktionen und keine Oberflaeche](erledigt/medical-g-0578-der-laborimport-hat-keine-oberflaeche.md) | erledigt | G-571 | — |
+| `G-578` | fehler | hoch | [Der Laborimport hat drei Datenbankfunktionen und keine Oberflaeche](erledigt/medical-g-0578-der-laborimport-hat-keine-oberflaeche.md) | erledigt | — | — |
 
 ## nutrition — 265
-
-### beauftragbar — 264
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -340,15 +331,10 @@
 | `G-488` | fehler | mittel | [drei Zahlen zum Plan, keine zwei passen](erledigt/nutrition-g-0488-drei-zahlen-zum-plan.md) | erledigt | — | E-87 |
 | `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](erledigt/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | erledigt | — | — |
 | `G-497` | feature | hoch | [die Suche zeigt Gruppen statt Zeilen](todos/nutrition-g-0497-suche-zeigt-gruppen.md) | offen | — | — |
+| `G-579` | fehler | mittel | [Der Plansprung existiert in der Datenbank und wird von nichts benutzt](erledigt/nutrition-g-0579-der-plansprung-hat-keinen-aufrufer.md) | erledigt | — | G-580, G-581 |
 | `G-580` | fehler | mittel | [Die Plankette darf einen Ring schliessen](todos/nutrition-g-0580-die-plankette-darf-einen-ring-schliessen.md) | offen | — | — |
 | `G-581` | fehler | mittel | [Ein Modal ohne Aufrufer, mit eigener Wahrheit ueber den Lebenszyklus](erledigt/nutrition-g-0581-ein-modal-ohne-aufrufer-mit-eigener-wahrheit.md) | erledigt | — | G-583 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
-
-### wartet auf Blocker — 1
-
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `G-579` | fehler | mittel | [Der Plansprung existiert in der Datenbank und wird von nichts benutzt](erledigt/nutrition-g-0579-der-plansprung-hat-keinen-aufrufer.md) | erledigt | G-571 | G-580, G-581 |
 
 ## supplements — 127
 
@@ -594,7 +580,7 @@
 
 ## goals — 72
 
-### beauftragbar — 65
+### beauftragbar — 66
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -663,8 +649,9 @@
 | `G-574` | fehler | hoch | [Die Waechter rechnen, und niemand sieht sie](todos/goals-g-0574-die-waechter-rechnen-und-niemand-sieht-sie.md) | offen | — | — |
 | `G-575` | fehler | hoch | [Ein Ziel traegt genau eine Messgroesse](todos/goals-g-0575-ein-ziel-traegt-genau-eine-messgroesse.md) | offen | — | — |
 | `G-576` | fehler | niedrig | [weight wird ein Untertyp, Eigenes bleibt ohne](erledigt/goals-g-0576-weight-als-untertyp-eigenes-ohne.md) | erledigt | — | — |
+| `G-577` | fehler | hoch | [Die Umfangserfassung hat keinen Schreibweg](erledigt/goals-g-0577-die-umfangserfassung-hat-keinen-schreibweg.md) | erledigt | — | — |
 
-### wartet auf Blocker — 7
+### wartet auf Blocker — 6
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -674,11 +661,8 @@
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
-| `G-577` | fehler | hoch | [Die Umfangserfassung hat keinen Schreibweg](erledigt/goals-g-0577-die-umfangserfassung-hat-keinen-schreibweg.md) | erledigt | G-571 | — |
 
 ## coach — 58
-
-### beauftragbar — 57
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -739,16 +723,11 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
+| `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](erledigt/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | erledigt | — | — |
 
-### wartet auf Blocker — 1
+## quer — 232
 
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](laufend_claudecode/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | laeuft (claudecode) | G-571 | — |
-
-## quer — 231
-
-### beauftragbar — 229
+### beauftragbar — 230
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -824,7 +803,7 @@
 | `C-259` | feature | mittel | [Kimis Bestand ist weit groesser als angenommen — und der Orchestrator hat den Statusbericht nie gelesen](todos/quer-c-0259-kimis-bestand-ist-weit-groesser-als-angenommen-und-der-orchestrator-hat-.md) | offen | — | C-262 |
 | `C-271` | befund | mittel | [`rule_catalog` laedt immer — jeder Rueckfallzweig daran ist tot](todos/quer-c-0271-rule-catalog-laedt-immer-jeder-rueckfallzweig-daran-ist-tot.md) | offen | — | — |
 | `C-279` | befund | mittel | [Das Kreuzprodukt in `rule_assessment` skaliert mit den Einnahmen](todos/quer-c-0279-das-kreuzprodukt-in-rule-assessment-skaliert-mit-den-einnahmen.md) | offen | — | — |
-| `C-295` | feature | mittel | [die Kette liest aus zwei Kimi-Pfaden](todos/quer-c-0295-die-kette-liest-aus-zwei-kimi-pfaden.md) | offen | — | — |
+| `C-295` | feature | mittel | [die Kette liest aus zwei Kimi-Pfaden](laufend_codex/quer-c-0295-die-kette-liest-aus-zwei-kimi-pfaden.md) | laeuft (codex) | — | — |
 | `C-297` | messung | mittel | [drei Wege, an dem Datenlogik-Waechter vorbei](todos/quer-c-0297-drei-wege-an-dem-datenlogik-waechter-vorbei.md) | offen | — | — |
 | `C-298` | feature | mittel | [der Datenlogik-Waechter meldet zwei harmlose Muster rot](todos/quer-c-0298-der-datenlogik-waechter-meldet-zwei-harmlose-muster-rot.md) | offen | — | — |
 | `C-354` | feature | hoch | [eine Lesefunktion fuer offene Coach-Aktionen](erledigt/quer-c-0354-eine-lesefunktion-fuer-offene-coach-aktionen.md) | erledigt | — | C-358 |
@@ -978,9 +957,10 @@
 | `G-551` | befund | hoch | [Cardio fehlt als Modul ganz — und damit die Hälfte der Steuerung](todos/quer-g-0551-cardio-fehlt-als-modul-ganz.md) | offen | — | — |
 | `G-552` | befund | mittel | [Training und Erholung kennen die Phase nicht](todos/quer-g-0552-phasenparameter-fuer-training-und-erholung.md) | offen | — | — |
 | `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](erledigt/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | erledigt | — | — |
-| `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](laufend_codex/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | laeuft (codex) | — | — |
-| `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | offen | — | G-577, G-578, G-579, G-582 |
-| `G-583` | fehler | niedrig | [Drei Reste ohne Aufrufer, nach demselben Verfahren wie G-581](erledigt/quer-g-0583-drei-reste-ohne-aufrufer.md) | erledigt | — | G-584 |
+| `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](erledigt/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | erledigt | — | — |
+| `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](erledigt/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | erledigt | — | G-577, G-578, G-579, G-582 |
+| `G-583` | fehler | niedrig | [Drei Reste ohne Aufrufer, nach demselben Verfahren wie G-581](erledigt/quer-g-0583-drei-reste-ohne-aufrufer.md) | erledigt | — | G-584, G-585 |
+| `G-585` | befund | mittel | [Die Inventur der Ausfuhren ohne Aufrufer](laufend_claudecode/quer-g-0585-die-inventur-der-ausfuhren-ohne-aufrufer.md) | laeuft (claudecode) | — | — |
 
 ### wartet auf Blocker — 2
 

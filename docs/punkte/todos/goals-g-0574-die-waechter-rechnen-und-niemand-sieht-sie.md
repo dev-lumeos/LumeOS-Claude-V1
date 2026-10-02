@@ -10,7 +10,7 @@ kind_von: G-520
 
 quellen:
   - docs/punkte/erledigt/goals-g-0569-g520-prueft-kilogramm-in-der-anwendung.md
-  - docs/punkte/todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md
+  - docs/punkte/erledigt/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md
 
 beruehrt:
   dateien:

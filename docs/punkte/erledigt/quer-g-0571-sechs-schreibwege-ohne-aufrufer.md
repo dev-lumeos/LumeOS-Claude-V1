@@ -4,6 +4,8 @@ typ: fehler
 modul: quer
 schwere: mittel
 angelegt: 2026-10-01
+commit: fd2a086c
+erledigt: 2026-10-02
 
 braucht: [G-535]
 kind_von: G-535
@@ -119,3 +121,36 @@ wird.
 Fehlercodes zu Texten liegt unter `goals/`
 (`apps/web/src/lib/fehler/ladefehler.ts`), nicht querliegend. **G-555
 raeumt das**, und der medical-Weg braucht es. Die anderen drei nicht.
+
+---
+
+## Geschlossen — 2026-10-02
+
+`[cmd]` **Alle sechs Funktionen haben genau einen Aufrufer**, je mit
+Bild, Schirmnachweis und Wächter:
+
+    body_circumference_write      G-577  a640e7af
+    import_lab_report_rows        G-578  31ebb74e
+    start_lab_report_ocr          G-578  31ebb74e
+    store_lab_report_ocr_result   G-578  31ebb74e
+    meal_plan_set_next_plan       G-579  d8008745
+    raise_alert                   G-582  fd2a086c
+
+`[read]` **Die Entscheidung von Tom am 2026-10-01 war richtig:** keine
+der sechs war aufgegeben, alle vier Bereiche haben jetzt eine
+Oberfläche. **Fünf Tage Arbeit an Funktionen, die niemand erreichen
+konnte, sind damit nutzbar.**
+
+`[cmd]` **Zwei Dinge bleiben, beide als Befund gemeldet und nicht
+verdeckt:** `store_lab_report_ocr_result` hat einen Weg, **aber keine
+Quelle** — es gibt nichts, das ein Erkennungsergebnis erzeugt (G-578).
+Und der `alertGenerator`, der Coach-Alarme selbst auslösen würde, ist
+nicht gebaut; Alarme entstehen von Hand (G-582).
+
+`[read]` **Die Lehre, die über diesen Punkt hinausgeht, steht dreimal in
+den Abnahmen:** in G-578, G-579 und G-582 arbeitete die Datenbankfunktion
+**anders, als eine Annahme erwartet hätte** — sie legte den Bericht selbst
+an, sie setzte zwei gekoppelte Spalten in einem Zug, sie entdoppelte
+innerhalb 24 Stunden. **Dreimal hat „erst `pg_proc`, dann schreiben"
+einen falschen Aufrufer verhindert.** Das steht seit G-579 in jedem
+Auftrag dieser Klasse.

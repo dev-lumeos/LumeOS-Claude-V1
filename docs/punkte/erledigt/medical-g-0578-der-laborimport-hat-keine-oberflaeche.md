@@ -13,7 +13,7 @@ braucht: [G-535, G-555, G-571]
 kind_von: G-571
 
 quellen:
-  - docs/punkte/todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md
+  - docs/punkte/erledigt/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md
   - docs/punkte/erledigt/quer-g-0535-sechs-funktionen-lesen-den-alten-sitzungsnamen.md
   - docs/punkte/erledigt/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md
 
@@ -47,7 +47,7 @@ zahlen:
     Stand:   2026-10-01
 
 **Zuerst lesen, vollstaendig:** diese Datei,
-`docs/punkte/todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md` (die
+`docs/punkte/erledigt/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md` (die
 Entscheidung steht unten in jener Datei) und
 `supabase/_pipeline/00_querschnitt/535_auth_uid_legacy_readers.sql` ab
 Zeile 135 — dort stehen die Signaturen, gegen die du schreibst.

@@ -13,7 +13,7 @@ braucht: [G-535, G-555, G-571, G-578]
 kind_von: G-571
 
 quellen:
-  - docs/punkte/todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md
+  - docs/punkte/erledigt/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md
   - docs/punkte/erledigt/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md
 
 beruehrt:
@@ -46,7 +46,7 @@ zahlen:
     Stand:   2026-10-02
 
 **Zuerst lesen, vollstaendig:** diese Datei und
-`docs/punkte/todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md`.
+`docs/punkte/erledigt/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md`.
 
 ## Der Befund
 

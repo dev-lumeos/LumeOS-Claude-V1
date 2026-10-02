@@ -13,7 +13,7 @@ braucht: [G-571]
 kind_von: G-571
 
 quellen:
-  - docs/punkte/todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md
+  - docs/punkte/erledigt/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md
   - docs/punkte/erledigt/quer-g-0535-sechs-funktionen-lesen-den-alten-sitzungsnamen.md
 
 beruehrt:
@@ -40,7 +40,7 @@ beruehrt:
     Stand:   2026-10-01
 
 **Zuerst lesen, vollstaendig:** diese Datei und
-`docs/punkte/todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md`.
+`docs/punkte/erledigt/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md`.
 
 ## Der Befund
 
