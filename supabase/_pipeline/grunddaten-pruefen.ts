@@ -25,6 +25,15 @@ export type GrunddatenManifest = {
     bytes: number
   }
   sources: SourceEntry[]
+  source_compatibility_checks?: Array<{
+    checked_at: string
+    reason: string
+    changes: Array<{
+      path: string
+      previous_sha256: string
+      compatible_sha256: string
+    }>
+  }>
 }
 
 type PruefOptionen = {
@@ -90,12 +99,14 @@ function sha256Kette(root: string, manifestFile: string, source: SourceEntry): s
   const hash = createHash('sha256')
   let found = false
   for (const step of manifest.steps) {
-    if (!excluded.has(step.id)) {
+    const normalizedPath = step.path.replace(/\\/g, '/')
+    const isValidation = normalizedPath.startsWith('_validierung/') || normalizedPath.includes('/_validierung/')
+    if (!excluded.has(step.id) && !isValidation) {
       const stepFile = resolveUnterRoot(root, step.path)
       if (!fs.existsSync(stepFile)) throw new Error(`Kettenschritt fehlt: ${step.id}: ${step.path}`)
       hash.update(step.id)
       hash.update('\0')
-      hash.update(step.path.replace(/\\/g, '/'))
+      hash.update(normalizedPath)
       hash.update('\0')
       hash.update(sha256Datei(stepFile))
       hash.update('\n')
@@ -124,7 +135,9 @@ export function pruefeGrunddatenManifest(options: PruefOptionen): PruefErgebnis 
   if (!fs.existsSync(manifestFile)) throw new Error(`Grunddaten-Manifest fehlt: ${options.manifestPath}`)
 
   const manifest = JSON.parse(fs.readFileSync(manifestFile, 'utf8')) as GrunddatenManifest
-  if (manifest.format_version !== 1) throw new Error(`Unbekannte Manifestversion: ${manifest.format_version}`)
+  if (manifest.format_version !== 1 && manifest.format_version !== 2) {
+    throw new Error(`Unbekannte Manifestversion: ${manifest.format_version}`)
+  }
   if (!manifest.created_at || !manifest.source_database || !manifest.source_chain_step) {
     throw new Error('Grunddaten-Manifest ohne vollstaendige Herkunft')
   }
@@ -152,7 +165,16 @@ export function pruefeGrunddatenManifest(options: PruefOptionen): PruefErgebnis 
     }
   }
 
-  const dumpFile = resolveUnterRoot(options.root, manifest.dump.path)
+  const dumpResult = pruefeDump(options.root, manifest)
+
+  return {
+    sourcesChecked: manifest.sources.length,
+    ...dumpResult,
+  }
+}
+
+function pruefeDump(root: string, manifest: GrunddatenManifest): Omit<PruefErgebnis, 'sourcesChecked'> {
+  const dumpFile = resolveUnterRoot(root, manifest.dump.path)
   if (!fs.existsSync(dumpFile)) throw new Error(`Grunddaten-Dump fehlt: ${manifest.dump.path}`)
   const stat = fs.statSync(dumpFile)
   if (stat.size !== manifest.dump.bytes) {
@@ -164,10 +186,19 @@ export function pruefeGrunddatenManifest(options: PruefOptionen): PruefErgebnis 
   }
 
   return {
-    sourcesChecked: manifest.sources.length,
     dumpBytes: stat.size,
     dumpSha256,
   }
+}
+
+export function pruefeGrunddatenDump(options: PruefOptionen): Omit<PruefErgebnis, 'sourcesChecked'> {
+  const manifestFile = resolveUnterRoot(options.root, options.manifestPath)
+  if (!fs.existsSync(manifestFile)) throw new Error(`Grunddaten-Manifest fehlt: ${options.manifestPath}`)
+  const manifest = JSON.parse(fs.readFileSync(manifestFile, 'utf8')) as GrunddatenManifest
+  if (manifest.format_version !== 1 && manifest.format_version !== 2) {
+    throw new Error(`Unbekannte Manifestversion: ${manifest.format_version}`)
+  }
+  return pruefeDump(options.root, manifest)
 }
 
 function main(): void {

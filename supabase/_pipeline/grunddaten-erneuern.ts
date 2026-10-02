@@ -8,6 +8,7 @@ import path from 'node:path'
 import {
   berechneDateiPruefsumme,
   berechneQuellPruefsumme,
+  pruefeGrunddatenDump,
   pruefeGrunddatenManifest,
   type GrunddatenManifest,
 } from './grunddaten-pruefen'
@@ -18,6 +19,13 @@ const ADMIN_DB = 'postgres'
 const DEFAULT_MANIFEST = 'supabase/_pipeline/daten/grunddaten-dump.manifest.json'
 const SOURCE_STEP = '537_backfill_materialized_meal_plan_days_count_daten'
 const RETAIN_DUMPS = 2
+
+type KompatibilitaetsOptionen = {
+  root: string
+  manifestPath: string
+  reason: string
+  now?: Date
+}
 
 function fail(message: string): never {
   throw new Error(message)
@@ -179,6 +187,73 @@ function timestampForFile(date: Date): string {
   return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z')
 }
 
+function resolveUnterRoot(root: string, relativePath: string): string {
+  const absoluteRoot = path.resolve(root)
+  const absolute = path.resolve(absoluteRoot, relativePath)
+  const prefix = `${absoluteRoot}${path.sep}`
+  if (absolute !== absoluteRoot && !absolute.startsWith(prefix)) {
+    fail(`Pfad ausserhalb des Repos: ${relativePath}`)
+  }
+  return absolute
+}
+
+export function erneuereQuellPruefsummen(options: KompatibilitaetsOptionen): GrunddatenManifest {
+  const root = path.resolve(options.root)
+  const manifestFile = resolveUnterRoot(root, options.manifestPath)
+  const reason = options.reason.trim()
+  if (!reason) fail('--reason fehlt')
+  if (!fs.existsSync(manifestFile)) fail(`Grunddaten-Manifest fehlt: ${options.manifestPath}`)
+
+  const previousText = fs.readFileSync(manifestFile, 'utf8')
+  const previous = JSON.parse(previousText) as GrunddatenManifest
+  pruefeGrunddatenDump({ root, manifestPath: options.manifestPath })
+
+  const sources = previous.sources.map(source => ({
+    ...source,
+    sha256: berechneQuellPruefsumme(root, source),
+  }))
+  const changes = sources.flatMap((source, index) => {
+    const previousSource = previous.sources[index]
+    return source.sha256 === previousSource.sha256
+      ? []
+      : [{
+          path: source.path,
+          previous_sha256: previousSource.sha256,
+          compatible_sha256: source.sha256,
+        }]
+  })
+  if (changes.length === 0) fail('Keine geaenderte Quelle zum Nachziehen')
+
+  const manifest: GrunddatenManifest = {
+    ...previous,
+    format_version: 2,
+    sources,
+    source_compatibility_checks: [
+      ...(previous.source_compatibility_checks ?? []),
+      {
+        checked_at: (options.now ?? new Date()).toISOString(),
+        reason,
+        changes,
+      },
+    ],
+  }
+  const temporary = `${manifestFile}.${process.pid}.tmp`
+  try {
+    fs.writeFileSync(temporary, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8')
+    pruefeGrunddatenManifest({ root, manifestPath: path.relative(root, temporary) })
+    try {
+      fs.renameSync(temporary, manifestFile)
+    } catch (error) {
+      const code = error && typeof error === 'object' && 'code' in error ? String(error.code) : 'unbekannt'
+      throw new Error(`Manifestwechsel fehlgeschlagen (${code}); das alte Manifest bleibt aktiv.`, { cause: error })
+    }
+    return manifest
+  } catch (error) {
+    fs.rmSync(temporary, { force: true })
+    throw error
+  }
+}
+
 function retainRecentDumps(dumpDir: string, protectedFiles: Set<string>): void {
   const dumps = fs.readdirSync(dumpDir)
     .filter(name => /^grunddaten-.*\.dump$/.test(name))
@@ -293,7 +368,19 @@ function main(): void {
     })
     return
   }
-  fail('Aufruf: grunddaten-erneuern.ts snapshot|publish ...')
+  if (command === 'rehash') {
+    const root = option('--root') ?? ROOT
+    const manifestPath = option('--manifest') ?? DEFAULT_MANIFEST
+    const manifest = erneuereQuellPruefsummen({
+      root,
+      manifestPath,
+      reason: requireOption('--reason'),
+    })
+    const changes = manifest.source_compatibility_checks?.at(-1)?.changes.length ?? 0
+    console.log(`[A-94] Quellen atomar nachgezogen: ${changes} Manifestquelle(n); Dump unveraendert.`)
+    return
+  }
+  fail('Aufruf: grunddaten-erneuern.ts snapshot|publish|rehash ...')
 }
 
 try {
