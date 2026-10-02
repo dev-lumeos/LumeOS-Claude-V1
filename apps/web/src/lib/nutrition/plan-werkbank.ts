@@ -449,9 +449,28 @@ export function pausiertSatz(name: string): string {
  */
 export const ZYKLUS_WAEHLBAR = ['once', 'rollover'] as const
 
-export const ZYKLUS_FEHLT_SATZ =
-  '„Geht in einen Folgeplan über" braucht einen Folgeplan — die Auswahl '
-  + 'dafür ist noch nicht gebaut.'
+// ══ G-579: `sequence` kommt dazu, wenn es einen zweiten Plan gibt ══
+//
+// `[cmd]` **Der Kommentar oben sagte: *„Solange es keinen Planpicker
+// gibt (Flow 3, Schritt 6), waere die Wahl nicht speicherbar"*** —
+// **nachgemessen am 2026-10-02 und richtig:** `lifecycle_type:
+// 'sequence'` allein ergibt `23514`.
+//
+// `[cmd]` **Gebaut war die Gegenseite trotzdem:**
+// `nutrition.meal_plan_set_next_plan` setzt `lifecycle_type` UND
+// `next_plan_id` in einer Anweisung — **mit null Aufrufern** (G-571).
+//
+// `[read]` **`ZYKLUS_WAEHLBAR` bleibt bei zwei Werten**, weil die
+// dritte Wahl eine Bedingung hat: **sie braucht einen zweiten Plan.**
+// `AktivierenFrage` haengt sie an, wenn es einen gibt — eine feste
+// Dreierliste waere eine Zusage, die bei einem einzigen Plan bricht.
+
+/** Die Wahl in `AktivierenFrage` — zwei feste, `sequence` bedingt. */
+export type Zyklusauswahl = (typeof ZYKLUS_WAEHLBAR)[number] | 'sequence'
+
+export const ZYKLUS_BRAUCHT_ZWEITEN_SATZ =
+  '„Geht in einen Folgeplan über" steht zur Wahl, sobald es einen '
+  + 'zweiten Plan gibt — ein Plan kann nicht auf sich selbst folgen.'
 
 function deutschesDatum(iso: string): string {
   const [j, m, t] = iso.split('-')

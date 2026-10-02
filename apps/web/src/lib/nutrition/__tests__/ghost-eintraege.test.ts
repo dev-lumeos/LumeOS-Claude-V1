@@ -15,7 +15,7 @@ import {
 } from '../plan-lage'
 import {
   startVorgabe, startGrenze, startErlaubt, startFehler, pausiertSatz,
-  START_MAX_TAGE, ZYKLUS_WAEHLBAR, ZYKLUS_FEHLT_SATZ, AKTIVIEREN_TITEL,
+  START_MAX_TAGE, ZYKLUS_WAEHLBAR, ZYKLUS_BRAUCHT_ZWEITEN_SATZ, AKTIVIEREN_TITEL,
 } from '../plan-werkbank'
 
 // `[cmd]` **Pfad aus der Lage DIESER Datei** — mit `process.cwd()`
@@ -204,8 +204,21 @@ test('G-309: Flow 3 Schritte 5+6 — Startdatum und Lebenszyklus', () => {
   // `next_plan_id NOT NULL`.** `[read]` **Ohne Planpicker waere die
   // Wahl nicht speicherbar** — eine Wahl, die beim Speichern
   // scheitert, ist schlimmer als eine, die fehlt.
+  //
+  // ══ G-579: die feste Liste bleibt bei zwei ════════════════════
+  //
+  // `[cmd]` **`sequence` ist seit G-579 waehlbar — aber BEDINGT:**
+  // `AktivierenFrage` haengt es an, sobald ein zweiter Plan
+  // existiert. `[read]` **Eine feste Dreierliste waere eine Zusage,
+  // die bei einem einzigen Plan bricht.**
   assert.deepEqual([...ZYKLUS_WAEHLBAR], ['once', 'rollover'])
-  assert.match(ZYKLUS_FEHLT_SATZ, /Folgeplan/,
+  // `[read]` **Die Frage dieses Waechters bleibt:** der Satz muss
+  // sagen, woran es haengt. **Nur der Grund hat gewechselt** — von
+  // „die Auswahl ist nicht gebaut" zu „es braucht einen zweiten
+  // Plan".
+  assert.match(ZYKLUS_BRAUCHT_ZWEITEN_SATZ, /Folgeplan/,
+    'der Satz sagt nicht, worum es geht')
+  assert.match(ZYKLUS_BRAUCHT_ZWEITEN_SATZ, /zweiten Plan/,
     'der Satz sagt nicht, was fehlt')
 
   // Und der Hinweis nennt den Plan, der ruhen wird.

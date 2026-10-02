@@ -19,6 +19,11 @@
 //
 // `[read]` **A-30:** nur Typen aus dem Leseweg, kein Wertimport.
 import * as React from 'react'
+
+// `[cmd]` **G-579: der Plansprung bekommt seinen Aufrufer.**
+import { folgeplanSetzenAktion } from './plansprung-aktionen'
+import { moeglicheFolgeplaene, pruefeSprung }
+  from '../../../lib/nutrition/plansprung'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Card, Pill, Icon, Empty } from '@lumeos/ui'
 
@@ -31,7 +36,8 @@ import {
   type AblaufWeg,
   // G-309: Flow 3, Schritte 5-7 — aktivieren.
   AKTIVIEREN_TITEL, startVorgabe, startGrenze, startErlaubt, startFehler,
-  pausiertSatz, ZYKLUS_WAEHLBAR, ZYKLUS_FEHLT_SATZ,
+  pausiertSatz, ZYKLUS_WAEHLBAR, ZYKLUS_BRAUCHT_ZWEITEN_SATZ,
+  type Zyklusauswahl,
 } from '../../../lib/nutrition/plan-werkbank'
 import { ZYKLUS_TEXT, ZYKLUS_ERKLAERUNG, zyklusVon }
   from '../../../lib/nutrition/plan-lage'
@@ -205,18 +211,39 @@ export function NeuerPlanForm({ heute, onFertig, onAbbruch }: {
 // aktiven Plan gibt es keine Ghost Entries, also auch nichts zu
 // bestaetigen. **Das war die Wurzel des leeren `meal_plan_logs`.**
 
-export function AktivierenFrage({ plan, laufender, heute, onFertig, onAbbruch }: {
+export function AktivierenFrage({
+  plan, laufender, heute, onFertig, onAbbruch, alle = [],
+}: {
   plan: PlanKurz
   /** Der Plan, der gerade laeuft — oder `null`. */
   laufender: PlanKurz | null
   heute: string
   onFertig: () => void
   onAbbruch: () => void
+  /**
+   * G-579: alle Plaene des Nutzers — fuer die Folgeplanwahl.
+   *
+   * `[read]` **Leer heisst: keine Wahl moeglich**, und dann steht
+   * `sequence` nicht zur Verfuegung. **Der Aufrufer hat die Liste
+   * ohnehin** (beide iterieren sie), er reicht sie nur durch.
+   */
+  alle?: readonly PlanKurz[]
 }) {
   const [start, setStart] = React.useState(() => startVorgabe(heute))
-  const [zyklus, setZyklus] = React.useState<'once' | 'rollover'>('once')
+  const [zyklus, setZyklus] = React.useState<Zyklusauswahl>('once')
+  const [folgeplan, setFolgeplan] = React.useState<string>('')
   const [laeuft, setLaeuft] = React.useState(false)
   const [fehler, setFehler] = React.useState<string | null>(null)
+
+  // `[cmd]` **Der Rumpf verbietet `p_plan_id = p_next_plan_id`**
+  // (`22023`) — der Plan selbst steht deshalb nicht zur Wahl.
+  const kandidaten = React.useMemo(
+    () => moeglicheFolgeplaene(plan, alle), [plan, alle])
+  // `[read]` **Ohne Kandidaten keine Wahl** — ein `sequence`-Knopf,
+  // der garantiert scheitert, waere schlimmer als keiner.
+  const zyklenHier = kandidaten.length
+    ? ([...ZYKLUS_WAEHLBAR, 'sequence'] as const)
+    : ZYKLUS_WAEHLBAR
 
   async function aktivieren() {
     // `[read]` **Erst pruefen, dann senden** — der Serverweg pruefte
@@ -226,17 +253,41 @@ export function AktivierenFrage({ plan, laufender, heute, onFertig, onAbbruch }:
       setFehler(startFehler(heute))
       return
     }
+    // ══ G-579: der Plansprung ═══════════════════════════════════
+    //
+    // `[cmd]` **`meal_plans_sequence_target_check` koppelt beide
+    // Spalten** — `sequence` ohne `next_plan_id` ergibt `23514`
+    // (gemessen 2026-10-02). `[read]` **Deshalb hier abgefangen,
+    // bevor gesendet wird.**
+    if (zyklus === 'sequence') {
+      const f = pruefeSprung(plan.id, folgeplan)
+      if (f.length) { setFehler(f[0].text); return }
+    }
     setLaeuft(true); setFehler(null)
     // `[cmd]` **EIN Aufruf, nicht drei** — `plan_aendern` traegt
     // `status`, `start_date` und `lifecycle_type` zugleich. **Das
     // Pausieren des laufenden Plans macht der Schreibweg** (G-309),
     // nicht die Anzeige.
+    //
+    // `[read]` **Bei `sequence` wird `lifecycle_type` NICHT hier
+    // gesetzt** — die Datenbankfunktion setzt es zusammen mit
+    // `next_plan_id`. **Zwei Schreiber fuer eine gekoppelte Regel
+    // waeren zwei Wahrheiten.**
     const r = await senden({
       art: 'plan_aendern', id: plan.id,
-      status: 'active', start_date: start, lifecycle_type: zyklus,
+      status: 'active', start_date: start,
+      ...(zyklus === 'sequence' ? {} : { lifecycle_type: zyklus }),
     })
+    if (!r.ok) { setLaeuft(false); setFehler(r.fehler ?? 'Fehler'); return }
+
+    if (zyklus === 'sequence') {
+      const s = await folgeplanSetzenAktion(plan.id, folgeplan)
+      setLaeuft(false)
+      if (!s.ok) { setFehler(s.text); return }
+      onFertig()
+      return
+    }
     setLaeuft(false)
-    if (!r.ok) { setFehler(r.fehler ?? 'Fehler'); return }
     onFertig()
   }
 
@@ -271,7 +322,7 @@ export function AktivierenFrage({ plan, laufender, heute, onFertig, onAbbruch }:
       {/* Flow 3, Schritt 6: Lifecycle. */}
       <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Lebenszyklus</div>
       <div className="v2-col-gap" style={{ gap: 4, marginBottom: 8 }}>
-        {ZYKLUS_WAEHLBAR.map(w => (
+        {zyklenHier.map(w => (
           <button
             key={w}
             type="button"
@@ -295,13 +346,44 @@ export function AktivierenFrage({ plan, laufender, heute, onFertig, onAbbruch }:
         ))}
       </div>
 
-      {/* `[cmd]` **`sequence` fehlt, und der Satz sagt warum** — der
-          CHECK verlangt `next_plan_id`, und den Planpicker aus
-          Schritt 6 gibt es nicht. `[read]` **Eine Wahl, die beim
-          Speichern scheitert, ist schlimmer als eine, die fehlt.** */}
-      <p className="v2-dim" style={{ fontSize: 10, margin: '0 0 8px', lineHeight: 1.45 }}>
-        {ZYKLUS_FEHLT_SATZ}
-      </p>
+      {/* ══ G-579: der Planpicker aus Flow 3, Schritt 6 ═══════════
+          `[cmd]` **Hier stand der Satz *„die Auswahl dafuer ist noch
+          nicht gebaut"*** — und `sequence` fehlte in der Liste.
+          **Der Satz war richtig gemessen:** ein `PATCH` mit
+          `lifecycle_type: 'sequence'` allein ergibt `23514`
+          (`meal_plans_sequence_target_check`, nachgemessen
+          2026-10-02).
+
+          `[cmd]` **Gebaut war aber die Gegenseite schon:**
+          `nutrition.meal_plan_set_next_plan` setzt beide Spalten in
+          einem Zug — **mit null Aufrufern** (G-571). **Es fehlte der
+          Griff, nicht die Mechanik.** */}
+      {zyklus === 'sequence' && (
+        <label style={{ fontSize: 10, display: 'block', marginBottom: 8 }}>
+          <span className="v2-eyebrow">Folgeplan</span>
+          <select className="v2-feld" value={folgeplan}
+                  aria-label="Folgeplan" data-folgeplan
+                  style={{ width: '100%' }}
+                  onChange={e => setFolgeplan(e.target.value)}>
+            {/* `[read]` **Die leere Vorgabe ist kein Plan** — sie
+                zwingt zur Wahl, statt still den ersten zu nehmen. */}
+            <option value="">— waehlen —</option>
+            {kandidaten.map(k => (
+              <option key={k.id} value={k.id}>{k.name}</option>
+            ))}
+          </select>
+        </label>
+      )}
+
+      {/* `[read]` **Ohne zweiten Plan gibt es nichts zu waehlen** —
+          und dann steht `sequence` nicht zur Verfuegung. **Der Satz
+          sagt warum**, statt die Wahl wortlos fehlen zu lassen. */}
+      {kandidaten.length === 0 && (
+        <p className="v2-dim" data-kein-folgeplan
+           style={{ fontSize: 10, margin: '0 0 8px', lineHeight: 1.45 }}>
+          {ZYKLUS_BRAUCHT_ZWEITEN_SATZ}
+        </p>
+      )}
 
       {fehler && (
         <p style={{ fontSize: 10.5, color: 'var(--neg)', margin: '0 0 6px' }}>{fehler}</p>
@@ -596,6 +678,7 @@ export function PlanListe({ plaene, heute, aktiv, onWaehlen }: {
                 <AktivierenFrage
                   plan={p}
                   laufender={laufender}
+                  alle={plaene}
                   heute={heute}
                   onFertig={() => { setAktiviert(null); neuLaden() }}
                   onAbbruch={() => setAktiviert(null)}

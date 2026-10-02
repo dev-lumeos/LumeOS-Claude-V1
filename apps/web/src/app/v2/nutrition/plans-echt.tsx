@@ -916,6 +916,7 @@ export function PlanBibliothekEcht({
                 <AktivierenFrage
                   plan={p}
                   laufender={laufender}
+                  alle={plaene}
                   heute={heute}
                   onFertig={() => { setAktiviert(null); onGeaendert?.() }}
                   onAbbruch={() => setAktiviert(null)}
