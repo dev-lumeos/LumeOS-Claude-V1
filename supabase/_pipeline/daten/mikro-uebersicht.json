@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "beschreibung": "Kuratierte Auswahl fuer das Micronutrient-Snapshot-Netzdiagramm.",
   "eintraege": [
     {
@@ -63,8 +63,8 @@
       "label_de": "Omega-3 (ALA)",
       "label_en": "omega-3 (ALA)",
       "order": 8,
-      "source": "goals_alpha_linolenic_acid",
-      "begruendung": "Vorlage nennt Omega-3. Gesamt-Omega-3 hat keinen Zielwert; ALA ist die belegte essenzielle Omega-3-Fettsaeure mit Goals-Zielwert."
+      "source": "tdee_alpha_linolenic_acid",
+      "begruendung": "E-87: EFSA ALA 0,5 E% wird aus dem zielfreien TDEE-Bedarf abgeleitet; Gesamt-Omega-3 hat keinen gemeinsamen Zielwert."
     }
   ]
 }

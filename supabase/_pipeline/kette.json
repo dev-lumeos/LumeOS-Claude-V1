@@ -3234,6 +3234,26 @@
       ]
     },
     {
+      "id": "567_goal_free_daily_reference",
+      "path": "supabase/_pipeline/_ableitung/030_mikro-uebersicht.ts",
+      "kind": "tsx",
+      "creates": "G-567/E-87: Snapshot, Supplement-Snapshot und Schwellenpruefung beziehen ALA zielfrei aus der TDEE-Basis.",
+      "depends_on": [
+        "513_supplement_product_meals",
+        "524_tdee_history_schema",
+        "535_auth_uid_legacy_readers"
+      ]
+    },
+    {
+      "id": "567_goal_free_daily_reference_probe",
+      "path": "supabase/_pipeline/_validierung/quer-g567-goal-free-daily-reference.test.ts",
+      "kind": "tsx",
+      "creates": "G-567: zwei Zielphasen und kein Ziel liefern denselben TDEE-basierten ALA-AI, auch mit Supplements.",
+      "depends_on": [
+        "567_goal_free_daily_reference"
+      ]
+    },
+    {
       "id": "a86_testdaten_einspielen",
       "path": "supabase/_pipeline/_testdaten/testdaten-einspielen.ts",
       "kind": "tsx",

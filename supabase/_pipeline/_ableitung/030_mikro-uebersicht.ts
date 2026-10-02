@@ -13,7 +13,7 @@ type OverviewEntry = {
   label_de: string
   label_en: string
   order: number
-  source: 'daily_reference_assessment' | 'goals_alpha_linolenic_acid'
+  source: 'daily_reference_assessment' | 'tdee_alpha_linolenic_acid'
   begruendung: string
 }
 
@@ -43,7 +43,7 @@ function readEntries(): OverviewEntry[] {
     if (typeof entry.label_de !== 'string' || !entry.label_de.trim()) fail(`${INPUT}: eintraege[${index}].label_de fehlt`)
     if (typeof entry.label_en !== 'string' || !entry.label_en.trim()) fail(`${INPUT}: eintraege[${index}].label_en fehlt`)
     if (!Number.isInteger(entry.order) || entry.order < 1) fail(`${INPUT}: eintraege[${index}].order ungueltig`)
-    if (!['daily_reference_assessment', 'goals_alpha_linolenic_acid'].includes(entry.source)) {
+    if (!['daily_reference_assessment', 'tdee_alpha_linolenic_acid'].includes(entry.source)) {
       fail(`${INPUT}: eintraege[${index}].source ungueltig`)
     }
     if (typeof entry.begruendung !== 'string' || !entry.begruendung.trim()) fail(`${INPUT}: eintraege[${index}].begruendung fehlt`)
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS nutrition.micronutrient_overview_items (
   label_de TEXT NOT NULL,
   label_en TEXT NOT NULL,
   display_order INTEGER NOT NULL UNIQUE CHECK (display_order > 0),
-  value_source TEXT NOT NULL CHECK (value_source IN ('daily_reference_assessment','goals_alpha_linolenic_acid')),
+  value_source TEXT NOT NULL CHECK (value_source IN ('daily_reference_assessment','tdee_alpha_linolenic_acid')),
   source_note TEXT NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
@@ -117,6 +117,12 @@ END $$;
 
 TRUNCATE nutrition.micronutrient_overview_items;
 
+ALTER TABLE nutrition.micronutrient_overview_items
+  DROP CONSTRAINT IF EXISTS micronutrient_overview_items_value_source_check;
+ALTER TABLE nutrition.micronutrient_overview_items
+  ADD CONSTRAINT micronutrient_overview_items_value_source_check
+  CHECK (value_source IN ('daily_reference_assessment','tdee_alpha_linolenic_acid'));
+
 INSERT INTO nutrition.micronutrient_overview_items (
   nutrient_code, label_de, label_en, display_order, value_source, source_note
 )
@@ -155,12 +161,10 @@ STABLE
 SECURITY INVOKER
 SET search_path = ''
 AS $function$
-WITH goals_target AS (
-  SELECT
-    COALESCE(z.alpha_linolenic_acid_g, b.alpha_linolenic_acid_g) AS alpha_linolenic_acid_g
+WITH tdee_basis AS (
+  SELECT b.tdee
   FROM (SELECT 1) seed
-  LEFT JOIN LATERAL goals.zielwerte_am(p_user_id, p_entry_date) z ON true
-  LEFT JOIN LATERAL goals.berechne_zielwerte(p_user_id, p_entry_date) b ON true
+  LEFT JOIN LATERAL goals.tdee_basis_am(p_user_id, p_entry_date) b ON true
 ),
 assessment AS (
   SELECT
@@ -187,27 +191,27 @@ SELECT
   nd.unit,
   a.actual_value,
   CASE
-    WHEN i.value_source = 'goals_alpha_linolenic_acid' THEN g.alpha_linolenic_acid_g
+    WHEN i.value_source = 'tdee_alpha_linolenic_acid' THEN ROUND(t.tdee * 0.005 / 9, 1)
     ELSE a.reference_value_min
   END AS reference_value,
   CASE
-    WHEN i.value_source = 'goals_alpha_linolenic_acid' THEN
+    WHEN i.value_source = 'tdee_alpha_linolenic_acid' THEN
       CASE
-        WHEN a.actual_value IS NULL OR a.missing_count > 0 OR g.alpha_linolenic_acid_g IS NULL OR g.alpha_linolenic_acid_g = 0 THEN NULL
-        ELSE ROUND(a.actual_value / g.alpha_linolenic_acid_g * 100, 1)
+        WHEN a.actual_value IS NULL OR a.missing_count > 0 OR t.tdee IS NULL OR t.tdee = 0 THEN NULL
+        ELSE ROUND(a.actual_value / ROUND(t.tdee * 0.005 / 9, 1) * 100, 1)
       END
     ELSE a.reference_pct
   END AS reference_pct,
   CASE
-    WHEN i.value_source = 'goals_alpha_linolenic_acid' THEN 'GOAL'
+    WHEN i.value_source = 'tdee_alpha_linolenic_acid' THEN 'AI'
     ELSE a.reference_kind
   END AS reference_kind,
   CASE
-    WHEN i.value_source = 'goals_alpha_linolenic_acid' THEN
+    WHEN i.value_source = 'tdee_alpha_linolenic_acid' THEN
       CASE
         WHEN a.missing_count > 0 THEN 'incomplete'
         WHEN a.actual_value IS NULL THEN 'no_value'
-        WHEN g.alpha_linolenic_acid_g IS NULL THEN 'missing_goal'
+        WHEN t.tdee IS NULL THEN 'missing_profile'
         ELSE 'complete'
       END
     ELSE a.reference_status
@@ -217,9 +221,104 @@ SELECT
 FROM nutrition.micronutrient_overview_items i
 JOIN nutrition.nutrient_defs nd ON nd.code = i.nutrient_code
 LEFT JOIN assessment a ON a.nutrient_code = i.nutrient_code AND a.rn = 1
-CROSS JOIN goals_target g
+CROSS JOIN tdee_basis t
 ORDER BY i.display_order;
 $function$;
+
+-- C-466/C-513 legen die Supplement-Aufschluesselung spaeter in der Kette
+-- an. Der fruehe 059a-Lauf baut deshalb nur die Grundfunktion; der
+-- G-567-Nachzug nach C-513 bindet auch diese Fassung an dieselbe Referenz.
+DO $g567$
+BEGIN
+  IF to_regprocedure(
+    'nutrition.nutrient_intake_source_breakdown_for_day(uuid,date)'
+  ) IS NOT NULL THEN
+    EXECUTE $definition$
+      CREATE OR REPLACE FUNCTION nutrition.micronutrient_snapshot_with_supplements(
+        p_user_id uuid,
+        p_entry_date date
+      )
+      RETURNS TABLE (
+        display_order integer,
+        nutrient_code text,
+        label_de text,
+        label_en text,
+        nutrient_name_de text,
+        unit text,
+        food_amount numeric,
+        supplement_amount numeric,
+        reference_value numeric,
+        reference_pct numeric,
+        reference_kind text,
+        reference_status text,
+        supplement_status text,
+        source_note text
+      )
+      LANGUAGE sql
+      STABLE
+      SECURITY INVOKER
+      SET search_path = ''
+      AS $function$
+        WITH base AS (
+          SELECT *
+          FROM nutrition.micronutrient_snapshot(p_user_id, p_entry_date)
+        ),
+        totals AS (
+          SELECT *
+          FROM nutrition.nutrient_intake_source_breakdown_for_day(
+            p_user_id, p_entry_date
+          )
+        )
+        SELECT
+          b.display_order,
+          b.nutrient_code,
+          b.label_de,
+          b.label_en,
+          b.nutrient_name_de,
+          b.unit,
+          t.food_amount,
+          t.supplement_amount,
+          b.reference_value,
+          CASE
+            WHEN b.reference_status = 'complete'
+              AND t.stack_unmapped_taken_log_count = 0
+              AND t.meal_supplement_missing_count = 0
+            THEN round(
+              (t.food_amount + coalesce(t.supplement_amount, 0))
+              / nullif(b.reference_value, 0) * 100,
+              1
+            )
+            ELSE NULL
+          END AS reference_pct,
+          b.reference_kind,
+          CASE
+            WHEN b.reference_status IS DISTINCT FROM 'complete'
+              THEN coalesce(b.reference_status, 'no_food_value')
+            WHEN t.stack_unmapped_taken_log_count > 0
+              OR t.meal_supplement_missing_count > 0
+              THEN 'incomplete_supplements'
+            ELSE 'complete'
+          END AS reference_status,
+          CASE
+            WHEN t.stack_taken_log_count = 0
+              AND t.meal_supplement_item_count = 0
+              THEN 'no_intake'
+            WHEN t.stack_unmapped_taken_log_count > 0
+              OR t.meal_supplement_missing_count > 0
+              THEN 'incomplete'
+            WHEN t.supplement_amount IS NULL
+              THEN 'no_mapping_for_nutrient'
+            ELSE 'complete'
+          END AS supplement_status,
+          b.source_note
+        FROM base b
+        JOIN totals t ON t.nutrient_code = b.nutrient_code
+        ORDER BY b.display_order
+      $function$
+    $definition$;
+  END IF;
+END
+$g567$;
 
 DROP FUNCTION IF EXISTS nutrition.micronutrient_below_threshold(UUID, DATE, NUMERIC);
 CREATE FUNCTION nutrition.micronutrient_below_threshold(
@@ -240,32 +339,19 @@ SET search_path = ''
 AS $function$
 WITH assessed AS (
   SELECT
-    a.nutrient_code,
-    a.nutrient_name_de,
-    a.nutrient_unit,
-    a.actual_value,
-    a.reference_value_min,
-    a.reference_pct,
-    a.reference_kind,
-    ROW_NUMBER() OVER (
-      PARTITION BY a.nutrient_code
-      ORDER BY CASE a.reference_kind
-        WHEN 'PRI' THEN 1
-        WHEN 'AI' THEN 2
-        WHEN 'FORMULA' THEN 3
-        WHEN 'RI' THEN 4
-        ELSE 9
-      END
-    ) AS rn
-  FROM nutrition.daily_reference_assessment(p_user_id, p_entry_date) a
-  WHERE a.reference_direction = 'target'
-    AND a.reference_status = 'complete'
-    AND a.reference_pct IS NOT NULL
+    s.nutrient_code,
+    s.nutrient_name_de,
+    s.unit AS nutrient_unit,
+    s.actual_value,
+    s.reference_value AS reference_value_min,
+    s.reference_pct,
+    s.reference_kind
+  FROM nutrition.micronutrient_snapshot(p_user_id, p_entry_date) s
+  WHERE s.reference_status = 'complete'
+    AND s.reference_pct IS NOT NULL
 ),
 selected AS (
-  SELECT *
-  FROM assessed
-  WHERE rn = 1
+  SELECT * FROM assessed
 ),
 below AS (
   SELECT *
@@ -291,9 +377,9 @@ SELECT
 $function$;
 
 COMMENT ON FUNCTION nutrition.micronutrient_snapshot(UUID, DATE) IS
-  'Acht kuratierte Naehrstoffe fuer das Micronutrient-Snapshot-Netzdiagramm. Omega-3 wird als ALA gegen Goals-Zielwert gerechnet; Gesamt-Omega-3, EPA und DHA werden nicht ungestuetzt addiert.';
+  'Acht kuratierte Naehrstoffe fuer das Micronutrient-Snapshot-Netzdiagramm. G-567: ALA folgt zielfrei dem TDEE-Bedarf mit EFSA 0,5 E%; Gesamt-Omega-3, EPA und DHA werden nicht ungestuetzt addiert.';
 COMMENT ON FUNCTION nutrition.micronutrient_below_threshold(UUID, DATE, NUMERIC) IS
-  'Sortierliste der vollstaendig bewerteten target-Referenzen unter einer Prozent-Schwelle. Keine Warnung und keine Wortbewertung.';
+  'G-567: Sortierliste der vollstaendig bewerteten zielfreien Snapshot-Referenzen unter einer Prozent-Schwelle. Keine Warnung und keine Wortbewertung.';
 
 REVOKE ALL ON FUNCTION nutrition.micronutrient_snapshot(UUID, DATE) FROM PUBLIC, anon;
 REVOKE ALL ON FUNCTION nutrition.micronutrient_below_threshold(UUID, DATE, NUMERIC) FROM PUBLIC, anon;
@@ -308,7 +394,7 @@ BEGIN
   IF v_count <> ${entries.length} THEN
     RAISE EXCEPTION 'micronutrient_overview_items: % Zeilen, erwartet ${entries.length}', v_count;
   END IF;
-  RAISE NOTICE 'OK: % Micronutrient-Overview-Eintraege und 2 Lesefunktionen', v_count;
+  RAISE NOTICE 'OK: % Micronutrient-Overview-Eintraege und 3 zielfreie Lesefunktionen', v_count;
 END $$;
 
 COMMIT;
