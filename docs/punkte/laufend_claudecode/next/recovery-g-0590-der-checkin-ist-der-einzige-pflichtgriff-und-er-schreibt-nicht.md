@@ -1,0 +1,169 @@
+---
+nr: G-590
+typ: fehler
+modul: recovery
+schwere: hoch
+angelegt: 2026-10-02
+
+braucht: [G-588, G-122]
+kind_von: G-588
+
+quellen:
+  - docs/punkte/todos/quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md
+  - docs/punkte/erledigt/quer-g-0585-die-inventur-der-ausfuhren-ohne-aufrufer.md
+  - docs/punkte/erledigt/goals-g-0577-die-umfangserfassung-hat-keinen-schreibweg.md
+
+beruehrt:
+  tabellen:
+    - recovery.checkins
+    - recovery.modality_log
+  dateien:
+    - apps/web/src/app/v2/recovery/tab-checkin.tsx
+    - apps/web/src/app/v2/recovery/modale.tsx
+    - apps/web/src/app/v2/recovery/erfassen-aktionen.ts
+---
+
+# Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht
+
+## Auftrag — Kopf
+
+    AUFTRAG FUER Claude Code - G-590: drei Serveraktionen bekommen
+                                     ihren Aufrufer
+    Bereich: apps/web/src/app/v2/recovery/
+             apps/web/src/lib/recovery/
+    Fremd:   supabase/ gehoert Codex - er arbeitet gerade an A-95 und
+             spielt dabei LIVE ein. docs/ gehoert dem Orchestrator,
+             auch diese Punktdatei. packages/shared/src/supabase/
+             haengt an G-586 - wenn der noch laeuft, nicht anfassen.
+    Stand:   2026-10-02
+
+## Der Befund
+
+`[cmd]` **Aus der Inventur G-585, von Tom entschieden (G-588):** sechs
+Serveraktionen haben keinen Aufrufer, **alle sechs bekommen eine
+Oberflaeche.** `[cmd]` **Drei davon liegen in Recovery**, in einer
+Datei:
+
+    apps/web/src/app/v2/recovery/erfassen-aktionen.ts:44  checkinAktion
+    ...                                              :52  modalitaetAnlegenAktion
+    ...                                              :62  modalitaetAendernAktion
+
+`[read]` **Berichtigung zu G-588:** der Punkt zaehlte vier Aktionen fuer
+Recovery und nannte `messungAendernAktion` mit. **Gemessen liegt die in
+Goals** (`apps/web/src/app/v2/goals/koerpermass-aktionen.ts:41`) und
+gehoert zu G-591. **Recovery traegt drei, nicht vier.**
+
+### Der Weg ist vollstaendig gebaut — bis auf den letzten Griff
+
+`[cmd]` **`apps/web/src/lib/recovery/checkin-write.ts` ist die eine
+Schreibstelle** (G-122, 286 Zeilen): `checkinSchreiben`,
+`modalitaetAnlegen`, `modalitaetAendern`, Fehlerklasse
+`RecoverySchreibFehler` mit vier Codes, Pruefregeln in
+`checkin-regeln.ts`. **Die Serveraktionen wickeln sie und uebersetzen
+Fehler in Feldfehler.** Es fehlt genau einer: der Aufruf aus dem
+Formular.
+
+`[cmd]` **Beide Tabellen liegen live, gemessen 2026-10-02:**
+
+    recovery.checkins       29 Spalten   370 Zeilen   RLS an, 5 Policies
+                            UNIQUE (user_id, entry_date)
+    recovery.modality_log   17 Spalten   178 Zeilen   RLS an, 5 Policies
+                            kein eindeutiger Schluessel je Tag
+
+`[read]` **Daraus folgt die Form, nicht aus einer Annahme:** ein
+Check-in je Nutzer und Tag — also `upsert`, und ein zweiter Besuch am
+selben Tag aendert den Eintrag statt einen zweiten anzulegen. Eine
+Anwendung dagegen darf mehrfach am Tag vorkommen — `insert`.
+**`checkin-write.ts` macht das schon so.**
+
+### Zwei Begruendungen am Schirm, die beide nicht mehr stimmen
+
+`[cmd]` **`tab-checkin.tsx:13-14`, im Dateikopf:**
+
+    Der Speichern-Knopf oeffnet `InEntwicklung` - es gibt keine
+    Tabelle, in die er schreiben koennte.
+
+**Falsch:** `recovery.checkins` traegt 370 Zeilen. `[cmd]` Und
+`tab-checkin.tsx:16` sagt `[cmd] ALLES IST ATTRAPPE` fuer einen Tab, den
+die Vorlage selbst *„the one required interaction"* nennt.
+
+`[cmd]` **`modale.tsx:453`, am Log-Knopf:**
+
+    `recovery.modality_log` gibt es (17 Spalten, 178 Zeilen live) und
+    die Kachel liest sie. Was fehlt, ist der Schreibweg.
+
+**Der Schreibweg existiert seit G-122.** `[read]` **Das ist dieselbe
+Klasse wie der Vermerk in G-577** — eine Begruendung, die stimmte, als
+sie geschrieben wurde, und die seither verhindert, dass jemand
+nachsieht. Dort stand sie zwei Monate.
+
+## Auftrag
+
+**A1 — erst messen, was die Schreibstelle tut, dann den Griff bauen.**
+`[read]` **Bei G-577, G-578, G-579 und G-582 hat genau das viermal einen
+falschen Aufrufer verhindert** — eine Funktion legte den Datensatz selbst
+an, eine setzte zwei gekoppelte Spalten, eine entdoppelte innerhalb 24
+Stunden. `[cmd]` **Zu messen:** die Pflichtfelder aus `checkin-regeln.ts`
+gegen die CHECKs der beiden Tabellen, die vier Fehlercodes, und was beim
+zweiten Check-in am selben Tag passiert. **Nicht aus dem Formular
+ableiten, sondern aus Regel und Schema.**
+
+**A2 — der Check-in-Knopf schreibt.** `[cmd]` Der
+`InEntwicklungKnopf` in `tab-checkin.tsx` wird der echte Speicherknopf
+ueber `checkinAktion`. `[read]` **Die Vorschau links rechnet schon live
+mit** (`vorschauScore`, G-82) — die bleibt, sie ist nicht die Attrappe.
+**Was gespeichert wird, ist der Zustand des Formulars, nicht der
+Vorschauwert.**
+
+**A3 — der Log-Knopf schreibt**, ueber `modalitaetAnlegenAktion`
+(`modale.tsx:452`). `[cmd]` **Und `modalitaetAendernAktion` braucht
+seinen Ort:** such ihn, statt ihn zu erfinden — `modalitaeten-kachel.tsx`
+liest die Tabelle, aber ob dort ein Bearbeiten-Griff vorgesehen ist, ist
+zu messen. `[read]` **Wenn es keinen gibt, ist das ein Befund und kein
+Grund, einen zu bauen** — dann melde, wo er hingehoerte, und lass die
+Aktion mit einer Nummer am Export stehen.
+
+**A4 — die Stelle muss leben.** `[cmd]` **Bei G-579 sah
+`MealPlanActivationModal` wie der richtige Ort aus und war seit G-319
+toter Code.** **Vor dem Einbau die Aufrufer der Zielstelle zaehlen**,
+ohne Kommentare, und die Zahl in den Bericht.
+
+**A5 — die beiden falschen Begruendungen richtigstellen**, nicht
+loeschen: der Dateikopf von `tab-checkin.tsx` (die Tabelle gibt es, 370
+Zeilen) und `[cmd] ALLES IST ATTRAPPE`, das nach A2 nicht mehr gilt.
+`[read]` **Ein Vermerk, der eine Aussage aufhebt, wird an der Aussage
+vermerkt** — nicht 200 Zeilen spaeter.
+
+**A6 — was ausdruecklich STEHEN bleibt**, und zwar begruendet gemessen:
+
+    modale.tsx:327   HRV        recovery.hrv_readings existiert nicht
+    modale.tsx:1012  Protokolle recovery.protocols existiert nicht
+
+`[cmd]` **Beide Tabellennamen sind live nicht vorhanden** (0 in
+`information_schema.tables`). **Diese zwei Knoepfe bleiben Attrappe** —
+sie gehoeren nicht zu diesem Punkt. `[read]` **Zum Protokoll-Knopf gibt
+es allerdings einen Nebenfund (G-593): `recovery.recovery_protocols`
+existiert mit 12 Spalten.** **Nicht hier aufloesen** — nur nicht
+behaupten, es gaebe nichts.
+
+**Nicht Teil:** `messungAendernAktion` und `prioritaetenSpeichern`
+(G-591), `getHydrationSummary` (G-592), HRV und Protokolle (A6), die
+uebrigen 50 toten Ausfuhren und die 328 ueberzaehligen (G-589).
+
+**Zu belegen:** die gemessenen Pflichtfelder und Fehlercodes aus A1 ·
+die Aufruferzahl der Zielstelle vor dem Einbau, ohne Kommentare · ein
+Check-in durch die echte Oberflaeche geschrieben und zurueckgelesen, auf
+`test-user@lumeos.local` · der zweite Check-in am selben Tag aendert,
+statt zu doppeln, mit Zeilenzahl vorher/nachher · eine Anwendung
+geschrieben, Zeilenzahl in `modality_log` vorher/nachher · Bilder vorher
+und nachher, Attrappenzahl je Reiter vorher/nachher, keine
+Konsolenfehler · Sabotage je Zusicherung in beide Richtungen, **je
+Fundstelle gezaehlt, nicht gesucht** (die Klasse aus G-578, G-581 und
+G-583) · `pnpm gate` gruen mit Testzahl · Testzeilen danach entfernt,
+Bestand wieder 370 und 178 · nichts committen.
+
+`[read]` **Zum Zeitpunkt:** Codex spielt unter A-95 live ein, darunter
+`nutrition.micronutrient_snapshot` und `goals.goal_contributions`.
+**Recovery ist davon nicht betroffen** — aber wenn dir eine Abfrage
+unterwegs mit `PGRST202` oder einem fehlenden Objekt antwortet, ist das
+sein Lauf und nicht dein Fehler. **Melde es, warte es ab, rate nicht.**

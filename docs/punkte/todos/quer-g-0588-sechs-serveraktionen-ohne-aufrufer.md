@@ -63,7 +63,7 @@ messen, was die Aktion tut, dann den Aufrufer bauen.**
 
 **Nicht Teil:** die uebrigen 50 toten Ausfuhren,
 `createServiceClient` (G-587) und die 328 ueberzaehligen Ausfuhren
-(eigener Punkt).
+(G-589).
 
 ---
 
@@ -74,16 +74,10 @@ messen, was die Aktion tut, dann den Aufrufer bauen.**
 `[read]` **Damit ist dieselbe Entscheidung gefallen wie bei G-571:** kein
 Weg ist aufgegeben, alle sechs bekommen einen Aufrufer.
 
-`[cmd]` **Drei Module, drei Lesepfade — also drei Auftraege, nicht einer:**
-
-    Goals      prioritaetenSpeichern
-    Recovery   messungAendernAktion · modalitaetAnlegenAktion ·
-               modalitaetAendernAktion · checkinAktion
-    Nutrition  getHydrationSummary
-
-`[read]` **Die Reihenfolge folgt der Zahl**, nicht der Vorliebe: Recovery
-traegt vier der sechs und wird der erste Auftrag. Goals und Nutrition je
-einen.
+`[cmd]` **Drei Module, drei Lesepfade — also drei Auftraege, nicht einer.**
+**Die Aufteilung, die hier zuerst stand (Recovery vier, Goals eine,
+Nutrition eine), war falsch** — die Berichtigung unten nennt die
+gemessene.
 
 `[cmd]` **Was in jeden der drei Auftraege gehoert, dreimal belegt aus
 G-578, G-579 und G-582:** **erst messen, was die Aktion tut, dann den
@@ -95,3 +89,36 @@ Stunden.
 `[cmd]` **Und die Stelle muss leben:** bei G-579 sah
 `MealPlanActivationModal` wie der richtige Ort aus und war seit G-319
 toter Code. **Aufrufer zaehlen, bevor der Griff dort landet.**
+
+---
+
+## Berichtigung — 2026-10-02, gemessen beim Schreiben der Auftraege
+
+`[cmd]` **Gemessen ist die Aufteilung anders:**
+
+    Recovery   3   erfassen-aktionen.ts:44/52/62
+                   checkinAktion · modalitaetAnlegenAktion ·
+                   modalitaetAendernAktion                     G-590
+    Goals      2   koerpermass-aktionen.ts:41 messungAendernAktion
+                   ziel-aktionen.ts:58 prioritaetenSpeichern    G-591
+    Nutrition  1   water-write.ts:131 getHydrationSummary       G-592
+
+`[cmd]` **`messungAendernAktion` liegt in Goals**, nicht in Recovery —
+`apps/web/src/app/v2/goals/koerpermass-aktionen.ts:41`, sie ruft
+`messungAendern`. **Die Zuordnung „vier fuer Recovery" stand auf dem
+Namen, nicht auf einer Messung.**
+
+`[cmd]` **`getHydrationSummary` ist keine Serveraktion**, sondern eine
+Leseabfrage in einem Schreibmodul (`water-write.ts:131`, liest
+`nutrition.hydration_summary`). **Damit fehlt dort keine Schreibnaht,
+sondern eine Anzeige** — ein anderer Auftrag als die anderen fuenf.
+
+`[read]` **Die Reihenfolge bleibt, obwohl die Zahl kleiner ist:**
+Recovery traegt mit drei weiter die meisten und ist der erste Auftrag.
+**Und Recovery ist zusaetzlich der dringendste** — der Check-in ist laut
+Vorlage *„the one required interaction"*, und sein Speichern-Knopf ist
+heute eine Attrappe mit einer Begruendung, die nicht mehr stimmt (G-590).
+
+`[cmd]` **Ein Nebenfund aus derselben Messung wurde eigener Punkt:**
+G-593 — eine Attrappe nennt `recovery.protocols` als fehlend, waehrend
+`recovery.recovery_protocols` mit 12 Spalten existiert.

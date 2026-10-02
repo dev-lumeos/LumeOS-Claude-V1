@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 272 |
+| `todos` | 275 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 632 |
-| **gesamt** | **907** |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 633 |
+| **gesamt** | **912** |
 
 ## medical — 50
 
@@ -66,7 +66,9 @@
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 | `G-578` | fehler | hoch | [Der Laborimport hat drei Datenbankfunktionen und keine Oberflaeche](erledigt/medical-g-0578-der-laborimport-hat-keine-oberflaeche.md) | erledigt | — | — |
 
-## nutrition — 265
+## nutrition — 266
+
+### beauftragbar — 265
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -336,6 +338,12 @@
 | `G-581` | fehler | mittel | [Ein Modal ohne Aufrufer, mit eigener Wahrheit ueber den Lebenszyklus](erledigt/nutrition-g-0581-ein-modal-ohne-aufrufer-mit-eigener-wahrheit.md) | erledigt | — | G-583 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-592` | fehler | mittel | [Die Hydration-Zusammenfassung hat keinen Leser](todos/nutrition-g-0592-die-hydration-zusammenfassung-hat-keinen-leser.md) | offen | G-588 | — |
+
 ## supplements — 128
 
 ### beauftragbar — 127
@@ -415,7 +423,7 @@
 | `C-549` | befund | mittel | [3.273 gegen 2.760 Produkte mit mehreren Portionen](todos/supplements-c-0549-3273-gegen-2760.md) | offen | — | — |
 | `C-552` | feature | hoch | [wofuer ist eine Substanz gut?](todos/supplements-c-0552-wofuer-ist-eine-substanz-gut.md) | offen | — | — |
 | `C-553` | befund | mittel | [135 von 617 Beschreibungen sind Schablonen](todos/supplements-c-0553-schablonen-statt-beschreibungen.md) | offen | — | — |
-| `C-556` | fehler | hoch | [Zwei fachliche Folgen des neuen Kimi-Bestands](laufend_codex/supplements-c-0556-zwei-fachliche-folgen-des-neuen-kimi-bestands.md) | laeuft (codex) | — | — |
+| `C-556` | fehler | hoch | [Zwei fachliche Folgen des neuen Kimi-Bestands](erledigt/supplements-c-0556-zwei-fachliche-folgen-des-neuen-kimi-bestands.md) | erledigt | — | — |
 | `E-85` | entscheidung | hoch | [kein Zwischenspeicher fuer die DSLD-Bilder](erledigt/supplements-e-0085-kein-zwischenspeicher-dsld-bilder.md) | erledigt | — | — |
 | `E-88` | entscheidung | hoch | [die Entwurfsreferenz zeigt PED-Protokolle ohne Gradpruefung](erledigt/supplements-e-0088-entwurfsreferenz-zeigt-ped.md) | erledigt | — | G-499 |
 | `E-89` | entscheidung | hoch | [Wissen ist offen, das Protokoll ist gesperrt](erledigt/supplements-e-0089-wissen-offen-protokoll-gesperrt.md) | erledigt | — | — |
@@ -533,7 +541,9 @@
 | `G-509` | feature | hoch | [der Workoutplaner von aussen nach innen](todos/training-g-0509-workoutplaner-von-aussen-nach-innen.md) | offen | — | — |
 | `G-584` | befund | mittel | [Drei Anzeigen ohne Quelle, aus dem LiveWorkout-Entwurf gerettet](todos/training-g-0584-drei-anzeigen-ohne-quelle-aus-dem-liveworkout-entwurf.md) | offen | — | — |
 
-## recovery — 41
+## recovery — 43
+
+### beauftragbar — 41
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -579,7 +589,14 @@
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 
-## goals — 72
+### wartet auf Blocker — 2
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-590` | fehler | hoch | [Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht](laufend_claudecode/recovery-g-0590-der-checkin-ist-der-einzige-pflichtgriff-und-er-schreibt-nicht.md) | vorbereitet (claudecode) | G-588 | — |
+| `G-593` | befund | mittel | [Die Attrappe nennt eine Tabelle, die es unter anderem Namen gibt](todos/recovery-g-0593-die-attrappe-nennt-eine-tabelle-die-es-unter-anderem-namen-gibt.md) | offen | G-590 | — |
+
+## goals — 73
 
 ### beauftragbar — 66
 
@@ -652,7 +669,7 @@
 | `G-576` | fehler | niedrig | [weight wird ein Untertyp, Eigenes bleibt ohne](erledigt/goals-g-0576-weight-als-untertyp-eigenes-ohne.md) | erledigt | — | — |
 | `G-577` | fehler | hoch | [Die Umfangserfassung hat keinen Schreibweg](erledigt/goals-g-0577-die-umfangserfassung-hat-keinen-schreibweg.md) | erledigt | — | — |
 
-### wartet auf Blocker — 6
+### wartet auf Blocker — 7
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -662,6 +679,7 @@
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
+| `G-591` | fehler | mittel | [Zwei Goals-Aktionen ohne Aufrufer — eine Messung aendern, die Reihenfolge speichern](todos/goals-g-0591-zwei-goals-aktionen-ohne-aufrufer.md) | offen | G-588 | — |
 
 ## coach — 58
 
@@ -726,9 +744,9 @@
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 | `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](erledigt/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | erledigt | — | — |
 
-## quer — 236
+## quer — 237
 
-### beauftragbar — 234
+### beauftragbar — 235
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -787,6 +805,7 @@
 | `A-90` | fehler | hoch | [Grunddaten als Dump, nicht als Import bei jedem Lauf](erledigt/quer-a-0090-grunddaten-als-dump-statt-als-import.md) | erledigt | — | A-91, A-94 |
 | `A-91` | fehler | hoch | [Der taegliche Lauf erzeugt bei gruen einen neuen Dump](laufend_codex/quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md) | laeuft (codex) | — | — |
 | `A-93` | fehler | hoch | [Zwei Agenten in einem Arbeitsbaum, und der Commit zahlt dafuer](todos/quer-a-0093-zwei-agenten-in-einem-arbeitsbaum.md) | offen | — | — |
+| `A-95` | feature | hoch | [Zwei fehlen, eine steht doppelt, der Seed fehlt](laufend_codex/quer-a-0095-zwei-fehlen-eine-steht-doppelt-der-seed-fehlt.md) | laeuft (codex) | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
@@ -964,7 +983,7 @@
 | `G-585` | befund | mittel | [Die Inventur der Ausfuhren ohne Aufrufer](erledigt/quer-g-0585-die-inventur-der-ausfuhren-ohne-aufrufer.md) | erledigt | — | G-587, G-588, G-589 |
 | `G-586` | fehler | hoch | [Ein Uhrensprung wirft den Nutzer raus, statt die Sitzung zu erneuern](laufend_claudecode/quer-g-0586-ein-uhrensprung-wirft-den-nutzer-raus.md) | laeuft (claudecode) | — | — |
 | `G-587` | fehler | hoch | [Ein Service-Client ohne Aufrufer umgeht die Zeilensicherheit](todos/quer-g-0587-ein-service-client-ohne-aufrufer-umgeht-die-rls.md) | offen | — | — |
-| `G-588` | befund | hoch | [Sechs Serveraktionen ohne Aufrufer — dieselbe Klasse wie G-571, eine Ebene hoeher](todos/quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md) | offen | — | — |
+| `G-588` | befund | hoch | [Sechs Serveraktionen ohne Aufrufer — dieselbe Klasse wie G-571, eine Ebene hoeher](todos/quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md) | offen | — | G-590, G-591, G-592 |
 | `G-589` | befund | niedrig | [328 Ausfuhren zu viel — und wie die Zahl 385 zu 56 wurde](todos/quer-g-0589-dreihundertachtundzwanzig-ausfuhren-zu-viel.md) | offen | — | — |
 
 ### wartet auf Blocker — 2

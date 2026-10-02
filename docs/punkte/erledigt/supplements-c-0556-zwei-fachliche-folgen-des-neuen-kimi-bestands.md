@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-02
 agent: codex
 beauftragt: 2026-10-02
+erledigt: 2026-10-02
+commit: 16fd9c9c
 
 braucht: [C-295, C-275]
 kind_von: C-295
@@ -18,6 +20,7 @@ beruehrt:
   dateien:
     - supabase/_pipeline/13_supplements/134_substance_catalog.ts
     - supabase/_pipeline/14_medical/147_substance_lab_markers.ts
+    - supabase/_pipeline/_validierung/quer-c295-ein-kimi-pfad.test.ts
 ---
 
 # Zwei fachliche Folgen des neuen Kimi-Bestands
@@ -105,3 +108,57 @@ Wegwerf-Datenbank · die Zahl der 148 nach deiner Zuordnung · die
 Zeilenzahl mit `detection_marker` · die betroffenen Schritte einzeln
 gruen, mit Laufzeit · Wegwerf-Datenbank verworfen mit Zaehler · kein
 `db push` · nichts committen.
+
+---
+
+## Abnahme — 2026-10-02, Commit `16fd9c9c`
+
+`[cmd]` **A1 eingeloest, und die Antwort war die dritte Form:** keine
+neue Produktgruppe, sondern feinere Quellklassen innerhalb der
+bestehenden neun Filter. **Ohne Filter 148 → 0, Zeilen mit Filter
+424/572 → 572/572**, Gruppen 297 / 90 / 185 unveraendert. Der
+Filterzwang bleibt — und `fail()` nennt jetzt die Datensaetze, die ihn
+verfehlen, statt nur die Zahl.
+
+`[cmd]` **A2 eingeloest:** `detection_marker` ist zehnmal das
+T/E-Verhaeltnis im Urin zum Dopingnachweis — weder physiologische
+Wirkung noch Messstoerung, also ein eigener Wert derselben Aufzaehlung.
+`lab_interference` (2 Zeilen, Vitamin C) wird auf das bestehende
+`assay_interference` normalisiert. **Der Abbruch steht**, und die
+C-295-Probe zaehlt genau diese Zeile nach.
+
+`[cmd]` **Vom Orchestrator nachgemessen, nicht geglaubt** — gegen die
+Rohquellen in `docs/kimi_research/.../data/substances/`, ohne Datenbank:
+
+    supplements 243 · peptides 79 · performance_compounds 124   = 446
+    Substanzen mit Laboreffekten                                = 182
+    rohe Effekte                                                = 403
+    davon physiological 324 · monitoring 54 · assay 13
+          detection_marker 10 · lab_interference 2
+
+**Alle fuenf Sollwerte des Berichts getroffen.** Die Filterzaehlung
+summiert sich auf 297 / 90 / 185 = 572 — handnachgerechnet ueber alle 23
+Eintraege, keine Abweichung.
+
+`[cmd]` **Ein Fund, der nicht im Auftrag stand und im Bericht steht:**
+`wada_status = restricted` (Albuterol) war vorher verdeckt. Codex hat den
+CHECK nicht per `IF NOT EXISTS` ergaenzt, sondern **unbedingt ersetzt**
+(`DROP CONSTRAINT IF EXISTS` + `ADD CONSTRAINT`) — bei beiden CHECKs.
+`[read]` **Das ist der Unterschied zwischen einer frischen Kette und
+einer bestehenden Datenbank:** ein `IF NOT EXISTS` haette den alten CHECK
+stehen gelassen und den neuen Wert live abgelehnt.
+
+`[cmd]` **A4 wie verlangt:** kein Vollauf von Hand. Einzellaeufe auf
+`lumeos_c556_20261002` gruen (134: 4,414 s, Nachlauf 4,831 s; 147:
+4,968 s, Nachlauf 6,507 s), Wegwerf-Datenbank verworfen (152 → 153 →
+152, Resttreffer 0). **Der naechtliche Lauf prueft die beiden Schritte
+erstmals im Zusammenhang; erst dann veroeffentlicht A-91 den Dump.**
+
+`[cmd]` **Commit `16fd9c9c`**, 3 Dateien, +195/−41, `pnpm gate` gruen,
+18/18 Turbo-Aufgaben. **Claude Codes laufende G-586-Arbeit blieb
+ausserhalb des Staging** — `packages/shared/src/supabase/session.ts` und
+zwei untracked Dateien stehen unveraendert im Arbeitsbaum.
+
+`[read]` **Offen und nicht Teil dieses Punkts:** `supabase/README.md`
+nennt weiter den alten Kimi-Pfad — der einzige verbliebene Treffer aus
+C-295, und er gehoert dem Orchestrator.

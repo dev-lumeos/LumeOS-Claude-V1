@@ -1,14 +1,14 @@
 # Laufende Auftraege
 
-**Stand: 2026-10-01, 11:45**
+**Stand: 2026-10-02, 17:00**
 
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
 | Claude Code | G-586 | Ein Uhrensprung wirft den Nutzer raus, statt die Sitzung zu erneuern | **laeuft**, raus 02.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
-| Codex | C-556 | Zwei fachliche Folgen des neuen Kimi-Bestands | **laeuft**, raus 02.10. |
-| Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
+| Codex | A-95 | Zwei fehlen, eine steht doppelt, der Seed fehlt | **laeuft**, raus 02.10. |
+| Claude Code | G-590 | Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht | **bereit in `next/`** |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
@@ -85,15 +85,37 @@ was sie kosten: `encoding-pruefen` 15,6 s ueber 21.692 Dateien,
 belegt, nicht eingespielt. **Die Warteschlange steht hier, nicht in der
 Tabelle oben:** ein Punkt, der auf Tom wartet, ist kein laufender Auftrag.
 
-    G-559   phase_am liefert alle Phasen, phase_eines_ziels_am eine
-            Anwendung: G-564  (6ae14c93)   FERTIG
-    G-563   berechne_zielwerte(p_user_id, p_goal_id, p_stichtag)
-            Anwendung: G-568  (57b88381)   FERTIG
-    G-535   sechs Funktionen lesen auth.uid() statt des Singulars
-            Anwendung: keine noetig - es gibt keinen Aufrufer (G-571)
-    G-514   goals.goal_contributions, die Modulverrechnung
-            Anwendung: offen - G-532/A2 wartet genau darauf
+    G-559   LIVE und richtig. phase_am ohne LIMIT 1, als TABLE mit
+            14 Spalten; phase_eines_ziels_am daneben. Nichts zu tun.
+    G-535   LIVE seit G-577 - sechs Funktionen auf auth.uid(),
+            Sicherung in backup/g577-535-vorher.sql / -nachher.sql
+    G-563   HALB. Die Dreiparameter-Fassung steht live (6674 Bytes)
+            UND die alte Zweiparameter-Fassung daneben (1027 Bytes),
+            und zwei Datenbankobjekte rufen die alte weiter:
+            goals.nutrition_target_assign_phase und
+            nutrition.micronutrient_snapshot. Nicht eingespielt,
+            sondern verdoppelt.
+    G-567   NICHT live. nutrition.micronutrient_snapshot traegt den
+            alten Rumpf (2485 Bytes): zielwerte_am JA,
+            berechne_zielwerte JA, tdee_basis_am NEIN. Es ist eine
+            FUNKTION, keine Sicht - wer ueber pg_views sucht, misst
+            null und haelt es fuer eingespielt.
+    G-514   NICHT live. goals.goal_contributions: 0 in
+            information_schema.tables. G-532/A2 wartet genau darauf.
             (Code kam unter dem Betreff goals(G-531) herein: 309db7e1)
+
+`[cmd]` **Gemessen am 2026-10-02 vom Orchestrator, gegen pg_proc mit
+`prokind = 'f'` und `information_schema`.** `[read]` **Drei der vier
+Angaben, die hier vorher standen, waren veraltet** — G-559 und G-535 sind
+laengst live, dafuer fehlt G-567, das hier gar nicht stand. **Die Liste
+war eine Erinnerung, keine Messung.**
+
+`[cmd]` **Tom hat das Einspielen am 2026-10-02 freigegeben**
+(*„ok erlaubnis erteilt"*). **Das ist A-95 bei Codex**, nach der Form von
+G-577: Wegwerf-Probe zuerst, Sicherung nach `backup/`, die ganze Datei
+statt des Ausschnitts, Zaehlung vorher und nachher. **Die Regel „nie
+gegen die laufende Datenbank testen" bleibt in Kraft** — freigegeben ist
+das Einspielen, nicht das Proben.
 
 `[cmd]` **Am 01.10. ist die Goals-Seite daran ausgefallen.** G-568 reicht
 bei genau einer offenen Phase ein `p_goal_id` durch; live steht nur die
@@ -119,9 +141,21 @@ entsteht. **Nach dem Einspielen ist es sichtbar richtig** — die Achse
 zaehlt die Tabelle, und ein Nutzer mit zwei offenen Phasen bekommt je
 Ziel seine Zahl statt einer beliebigen.
 
-`[cmd]` **Der Seed gehoert mit eingespielt:**
-`testdaten-einspielen.ts:1149` gibt `test-user` zwei offene Phasen an
-zwei Zielen — der Fall, der die ganze Kette beweist.
+`[cmd]` **Der Seed gehoert mit eingespielt** — er liegt in
+`supabase/_pipeline/_testdaten/testdaten-einspielen.ts`, die Phasenwerte
+bei `:2641`, der Schreibvorgang bei `:3691-3703`.
+
+`[read]` **Berichtigung:** hier stand `testdaten-einspielen.ts:1149`.
+**Diese Datei gibt es nicht** — der Punktwaechter hat es am 02.10. an
+A-95 gefangen. Damit ist auch die Behauptung „der Seed gibt `test-user`
+zwei offene Phasen an zwei Zielen" **unbelegt**, bis sie am Seed selbst
+gezaehlt ist.
+
+`[cmd]` **Und live ist der Fall nicht da:** offene Phasen
+(`actual_end_date IS NULL`) gibt es genau eine, bei
+`tom.seed@example.com`. **`test-user@lumeos.local` traegt null Ziele und
+null Phasen** — der Nutzer, auf dem laut Projektregel jeder Nachweis zu
+fuehren ist. **Fuer Goals ist dieser Nachweis heute nicht fuehrbar.**
 
 `[cmd]` **Und der Zaehler aus A-80 ist gewachsen:** 151 Datenbanken in
 `pg_database`, gemessen am 01.10. nach dem Verwerfen von drei
@@ -194,11 +228,13 @@ sagt, aus welcher Quelle `current_value` kommt.
 
 ## Was auf Tom wartet
 
-    EINSPIELEN  G-559, G-563, G-535 und G-514 - vier gebaute, nicht
-                eingespielte Aenderungen. G-559/G-563 sind die, an denen
-                die Goals-Seite am 01.10. sichtbar ausgefallen ist.
-                Danach G-570: die Bruecke wieder weg.
-    Tobias      G-542  ist die Rate pro Woche oder pro Monat
+    EINSPIELEN  ERLEDIGT als Frage - freigegeben am 02.10., laeuft
+                als A-95 bei Codex. Danach G-570: die Bruecke in
+                zielwerte-read.ts wieder weg (sie ist schon toter Code,
+                weil PGRST202 nicht mehr entstehen kann).
+    Tobias      MORGEN im Office - Tom, 02.10.: "tobias ist morgen im
+                office, frag das morgen wenn er da ist"
+                G-542  ist die Rate pro Woche oder pro Monat
                 G-548  moderate_cut 12 oder 20 Wochen (vorlaeufig 20)
                 G-549  Protein und Fett in der Ladewoche
                 G-566  ist 0,25 %/Woche fuer einen fortgeschrittenen
@@ -207,10 +243,13 @@ sagt, aus welcher Quelle `current_value` kommt.
                        Spielraum ist gemessen: aggressive_bulk 0,146 pp,
                        aggressive_cut 0,194 pp
                 Alle stehen in 00-FRAGEN.md.
-    G-575       NEU: traegt ein Ziel eine Messgroesse oder mehrere?
-                Drei Formen im Punkt. Mitzuentscheiden: welche Quelle
-                `current_value` nachzieht, und was `progress_pct`
-                bedeutet, wenn ein Ziel mehrere Groessen fuehrt
+    G-575       Der Orchestrator schreibt ihn auf FORM 1 - eine
+                fuehrende Groesse (weight, E-89) plus Nebenbedingungen
+                daneben. Form 2 waere eine neue Zeilentabelle plus eine
+                Fortschrittsformel, die niemand entschieden hat.
+                Tom am 02.10.: wenn Form 2, sagt er es vorher.
+                Mitzuentscheiden bleibt: welche Quelle `current_value`
+                nachzieht, und was `progress_pct` bedeutet
     A-77        laeuft bei Codex seit dem 01.10.
     C-554 A3    der Registerumtrag fuer die 70 unregistrierten Dateien
     A-80        151 Datenbanken in pg_database (29.09.: 116). Die mit
@@ -248,6 +287,24 @@ sagt, aus welcher Quelle `current_value` kommt.
     G-555   derselbe Ladefehler in medical und nutrition (Kind von G-553)
     G-570   die Bruecke in zielwerte-read.ts gehoert nach dem
             Einspielen weg
+    G-587   ein Service-Client ohne Aufrufer umgeht die RLS - und die
+            groessere Haelfte ist der LEBENDE Weg in
+            substanz-read.ts:817 samt .env-Lesen zur Laufzeit (E-10)
+    G-588   sechs Serveraktionen ohne Aufrufer - entschieden, alle
+            bekommen eine Oberflaeche. Aufteilung berichtigt:
+            Recovery 3 (G-590) · Goals 2 (G-591) · Nutrition 1 (G-592)
+    G-589   328 Ausfuhren zu viel - zurueckgestellt
+    G-590   der Check-in ist der einzige Pflichtgriff und schreibt
+            nicht. Zwei Attrappenbegruendungen stimmen nicht mehr:
+            "es gibt keine Tabelle" (checkins: 370 Zeilen) und
+            "was fehlt, ist der Schreibweg" (existiert seit G-122)
+    G-591   messungAendernAktion (liegt in Goals, nicht Recovery) und
+            prioritaetenSpeichern
+    G-592   getHydrationSummary ist keine Aktion, sondern eine
+            Leseabfrage ohne Anzeige - ein leerer Tag ist null, nicht 0
+    G-593   eine Attrappe nennt recovery.protocols als fehlend -
+            recovery.recovery_protocols existiert mit 12 Spalten
+    A-95    den Live-Stand nachziehen, Freigabe von Tom (Codex)
 
 ## Was ausdruecklich wartet
 
