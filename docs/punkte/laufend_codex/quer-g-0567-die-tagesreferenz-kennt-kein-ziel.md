@@ -4,6 +4,8 @@ typ: entscheidung
 modul: quer
 schwere: hoch
 angelegt: 2026-10-01
+beauftragt: 2026-10-02
+agent: codex
 
 braucht: [G-538, G-563]
 kind_von: G-563

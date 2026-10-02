@@ -7,9 +7,9 @@
 |---|---|---|---|
 | Claude Code | G-582 | Der Coach-Alarm hat keinen Aufrufer | **laeuft**, raus 02.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
-| Codex | A-94 | Die Pruefsumme sperrt den Standardlauf, und niemand hat es gemerkt | **laeuft**, raus 02.10. |
+| Codex | G-567 | Die Tagesreferenz kennt kein Ziel | **laeuft**, raus 02.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
-| Codex | G-567 | Die Tagesreferenz kennt kein Ziel | **bereit in `next/`** |
+| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 `[read]` **Die Tabelle wird erzeugt, nicht gepflegt** —

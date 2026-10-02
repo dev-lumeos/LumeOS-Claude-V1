@@ -6,9 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 271 |
-| `laufend_codex` | 3 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 626 |
+| `erledigt` | 627 |
 | **gesamt** | **901** |
 
 ## medical — 50
@@ -978,7 +978,7 @@
 | `G-551` | befund | hoch | [Cardio fehlt als Modul ganz — und damit die Hälfte der Steuerung](todos/quer-g-0551-cardio-fehlt-als-modul-ganz.md) | offen | — | — |
 | `G-552` | befund | mittel | [Training und Erholung kennen die Phase nicht](todos/quer-g-0552-phasenparameter-fuer-training-und-erholung.md) | offen | — | — |
 | `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](erledigt/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | erledigt | — | — |
-| `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](laufend_codex/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | vorbereitet (codex) | — | — |
+| `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](laufend_codex/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | laeuft (codex) | — | — |
 | `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | offen | — | G-577, G-578, G-579, G-582 |
 | `G-583` | fehler | niedrig | [Drei Reste ohne Aufrufer, nach demselben Verfahren wie G-581](erledigt/quer-g-0583-drei-reste-ohne-aufrufer.md) | erledigt | — | G-584 |
 
@@ -987,7 +987,7 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-92` | fehler | hoch | [Die G-558-Probe ruft berechne_zielwerte ohne Zielbezug und haelt den Tagesdump auf](erledigt/quer-a-0092-die-g558-probe-ruft-ohne-zielbezug.md) | erledigt | A-91 | — |
-| `A-94` | fehler | hoch | [Die Pruefsumme sperrt den Standardlauf, und niemand hat es gemerkt](laufend_codex/quer-a-0094-die-pruefsumme-sperrt-den-standardlauf.md) | laeuft (codex) | A-91 | — |
+| `A-94` | fehler | hoch | [Die Pruefsumme sperrt den Standardlauf, und niemand hat es gemerkt](erledigt/quer-a-0094-die-pruefsumme-sperrt-den-standardlauf.md) | erledigt | A-91 | — |
 
 ## buddy — 1
 

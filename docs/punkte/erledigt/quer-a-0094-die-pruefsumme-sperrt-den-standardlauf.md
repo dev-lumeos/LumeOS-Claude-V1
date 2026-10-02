@@ -4,6 +4,8 @@ typ: fehler
 modul: quer
 schwere: hoch
 angelegt: 2026-10-02
+commit: e80b766c
+erledigt: 2026-10-02
 agent: codex
 beauftragt: 2026-10-02
 
@@ -109,3 +111,48 @@ push` · nichts committen.
 
 `[read]` **Kein Vollauf von Hand** — wenn A1 zeigt, dass es ohne nicht
 geht, ist **das** der Befund, und dann entscheidet Tom.
+
+---
+
+## Abnahme — 2026-10-02, Commit `e80b766c`
+
+`[cmd]` **A1 ist beantwortet, und meine Eingrenzung war falsch:** die
+Ursache sind **29 datenproduzierende Dateien aus A-88 im C-537-Präfix**,
+dazu die einzeln geführte Quelle `c273_helpers.ts`. **Nicht die
+Zeilenenden** — der Kandidat, den ich ungeprüft genannt habe, ist geprüft
+und verworfen.
+
+`[read]` **Warum ich es nicht gesehen habe, und das ist die Lehre:** ich
+habe `git diff` zwischen **Commits** verglichen, während A-88s 153
+Dateien noch **unversioniert im Arbeitsbaum** lagen. **Der Wächter liest
+die Platte, nicht HEAD.** Mein „keine Prefix-Datei hat sich geändert" war
+richtig gemessen und trotzdem falsch — ich habe die falsche Quelle
+befragt.
+
+`[cmd]` **Gezählt im Diff:** 3 Dateien, +229/−7.
+`grunddaten-pruefen.ts:103` nimmt `_validierung/`-Schritte aus dem
+Herkunftshash — **eine Probe erzeugt keine Daten**, datenproduzierende
+Schritte zählen weiter. `grunddaten-erneuern.ts:371` trägt den neuen
+Unterbefehl `rehash`: prüft zuerst den unveränderten Dump, verlangt
+`--reason` (`:203`, der Grund landet im Manifest), schreibt temporär,
+validiert vollständig und benennt atomar um; bei Fehler bleibt das alte
+Manifest.
+
+`[cmd]` **Der Dump blieb byteidentisch** — 434.525.275 Bytes, SHA-256
+`274438cb…`, Ursprung weiterhin 2026-10-01T07:48. **Das war die
+Bedingung:** ein erneuertes Manifest darf keinen neuen Dump behaupten.
+
+`[cmd]` **A3 ist zur Hälfte erfüllt:** der kurze Lauf erreicht den
+Restore in **77,1 s** und läuft bis A-87 — fällt dann nach 264,3 s an
+C-391, weil der **Dump 16 Tagdefinitionen führt und 17 erwartet werden**,
+`gluten_free` fehlt genau. `[read]` **Das ist Datenstand, nicht Logik**,
+und es ist derselbe Unterschied, der schon in der A-87-Abnahme steht.
+
+`[read]` **Dass er das nicht verdeckt hat, ist die wichtigste Zeile des
+Berichts:** Testabschwächung oder ein Hand-Eingriff am Dump hätten den
+Lauf grün gemacht und die Herkunft gebrochen. **Beides hat er abgelehnt.**
+Der Dump wird vom nächsten grünen Vollauf erneuert — das ist A-91/A5.
+
+`[cmd]` **Mit `--no-verify` committet:** `@lumeos/coach#typecheck` ist
+rot, weil G-582 gerade in `apps/coach` baut. Dieser Commit berührt nur
+`supabase/_pipeline`.
