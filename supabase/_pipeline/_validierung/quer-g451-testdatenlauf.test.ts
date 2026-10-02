@@ -111,8 +111,10 @@ test('G-556: jede erzeugte Seedphase traegt ihren Strategiekatalog-Code', () => 
 
   assert.equal(
     [...phaseRows.matchAll(/strategyCode:/g)].length,
-    3,
-    'alle drei Basisphasen brauchen den Katalogcode',
+    5,
+    // A-87: G-559 ergaenzte zwei zielgebundene Seedphasen; die alte
+    // Dreierzahl war ein Zeuge des vorherigen Testbestands.
+    'alle fuenf Seedphasen brauchen den Katalogcode',
   )
   assert.match(seed, /phase\.strategyCode/)
   assert.match(seed, /transition_reason text,\s*strategie_code text/)

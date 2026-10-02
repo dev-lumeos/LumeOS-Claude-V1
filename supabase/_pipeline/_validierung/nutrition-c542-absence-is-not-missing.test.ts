@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const container = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const db = process.env.LUMEOS_C542_DATABASE
+const db = process.env.PGDATABASE
 if (!db || db === 'postgres') throw new Error('C-542 braucht eine Wegwerf-Datenbank.')
 
 function one<T>(sql: string): T {
@@ -22,9 +22,11 @@ test('C-542: absent nutrients are zero, named nutrients without an amount remain
   }>(`BEGIN;
     INSERT INTO auth.users (id, email, raw_app_meta_data, created_at) VALUES
       ('54200000-0000-0000-0000-000000000001', 'c542-owner@example.test', '{}'::jsonb, now());
-    INSERT INTO public.profiles (id, birth_date, biological_sex)
-    VALUES ('54200000-0000-0000-0000-000000000001', DATE '1990-01-01', 'male')
-    ON CONFLICT (id) DO UPDATE SET birth_date=EXCLUDED.birth_date, biological_sex=EXCLUDED.biological_sex;
+    -- A-87/C-541: Ein Profil ohne Erfahrungsgrad ist kein gueltiger Testnutzer mehr.
+    INSERT INTO public.profiles (id, birth_date, biological_sex, experience_level)
+    VALUES ('54200000-0000-0000-0000-000000000001', DATE '1990-01-01', 'male', 'beginner')
+    ON CONFLICT (id) DO UPDATE SET birth_date=EXCLUDED.birth_date,
+      biological_sex=EXCLUDED.biological_sex, experience_level=EXCLUDED.experience_level;
     INSERT INTO nutrition.meals (id, user_id, entry_date, meal_type)
     VALUES ('54200000-0000-0000-0000-000000000005', '54200000-0000-0000-0000-000000000001', DATE '2026-09-22', 'other');
     INSERT INTO supplements.suppliers (id, name, source)

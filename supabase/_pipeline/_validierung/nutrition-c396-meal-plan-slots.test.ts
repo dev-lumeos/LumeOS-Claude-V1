@@ -3,10 +3,14 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
+// A-87: Die Probe war zuvor fest an die Basisdatenbank "postgres" gebunden.
+// Sie muss denselben expliziten Wegwerfbestand wie der Kettenlauf messen.
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('C-396 braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 
 function one<T>(sql: string): T {
   return JSON.parse(execFileSync('docker', [
-    'exec', CONTAINER, 'psql', '-X', '-q', '-U', 'postgres', '-d', 'postgres',
+    'exec', CONTAINER, 'psql', '-X', '-q', '-U', 'postgres', '-d', DB,
     '-t', '-A', '-c', sql,
   ], { encoding: 'utf8' }).trim()) as T
 }

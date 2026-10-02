@@ -5,24 +5,26 @@ import { execFileSync, spawnSync } from 'node:child_process'
 import test from 'node:test'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.LUMEOS_C385_DATABASE
-if (!DB || DB === 'postgres') throw new Error('C-385-Test braucht LUMEOS_C385_DATABASE als Wegwerf-Datenbank, nie postgres.')
-const OWNER_ID = '10000000-0000-0000-0000-000000000101'
-const OTHER_ID = '10000000-0000-0000-0000-000000000102'
-const TEST_USER_EMAIL = 'test-user@lumeos.local'
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('C-385-Test braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
+// A-87/A-86: eigene Fixture-IDs; die Seednutzer stehen im Kettenbestand bereits.
+const OWNER_ID = 'b3850000-0000-0000-0000-000000000001'
+const OTHER_ID = 'b3850000-0000-0000-0000-000000000002'
+const TEST_USER_EMAIL = 'c385-fallback@example.test'
 const FIXTURE_SQL = `
   INSERT INTO auth.users (id, email, raw_app_meta_data, created_at) VALUES
     ('${OWNER_ID}'::uuid, 'c385-owner@example.test', '{"provider":"email"}'::jsonb, now()),
     ('${OTHER_ID}'::uuid, 'c385-other@example.test', '{"provider":"email"}'::jsonb, now()),
-    ('10000000-0000-0000-0000-000000000103'::uuid, '${TEST_USER_EMAIL}', '{"provider":"email"}'::jsonb, now());
-  INSERT INTO public.profiles (id, biological_sex, height_cm, body_weight_kg) VALUES
-    ('${OWNER_ID}'::uuid, 'male', 178, 80),
-    ('${OTHER_ID}'::uuid, 'male', 178, 80),
-    ('10000000-0000-0000-0000-000000000103'::uuid, 'male', 180, 80)
+    ('b3850000-0000-0000-0000-000000000003'::uuid, '${TEST_USER_EMAIL}', '{"provider":"email"}'::jsonb, now());
+  INSERT INTO public.profiles (id, biological_sex, height_cm, body_weight_kg, experience_level) VALUES
+    ('${OWNER_ID}'::uuid, 'male', 178, 80, 'beginner'),
+    ('${OTHER_ID}'::uuid, 'male', 178, 80, 'beginner'),
+    ('b3850000-0000-0000-0000-000000000003'::uuid, 'male', 180, 80, 'beginner')
   ON CONFLICT (id) DO UPDATE SET
     biological_sex = EXCLUDED.biological_sex,
     height_cm = EXCLUDED.height_cm,
-    body_weight_kg = EXCLUDED.body_weight_kg;
+    body_weight_kg = EXCLUDED.body_weight_kg,
+    experience_level = EXCLUDED.experience_level;
 `
 
 function one<T>(sql: string): T {
@@ -179,11 +181,12 @@ test('C-385: Quellenvarianten, Rotation und Gewebezustand bleiben getrennt und R
     BEGIN;
     ${FIXTURE_SQL}
     SET LOCAL ROLE authenticated;
-    SELECT set_config('request.jwt.claim.sub', '${OWNER_ID}', true);
-    INSERT INTO medical.injection_logs (user_id, injection_site_id, injected_at)
-    VALUES ('${OWNER_ID}'::uuid, 'delt_l', now());
+    SELECT set_config('request.jwt.claims', jsonb_build_object('sub', '${OWNER_ID}')::text, true);
+    -- A-87/C-544: Jede Injektion traegt ihren verpflichtenden Koerperort.
+    INSERT INTO medical.injection_logs (user_id, injection_site_id, body_area_code, injected_at)
+    VALUES ('${OWNER_ID}'::uuid, 'delt_l', 'deltoids', now());
     SELECT count(*) AS own_logs FROM medical.injection_logs WHERE user_id = '${OWNER_ID}'::uuid;
-    SELECT set_config('request.jwt.claim.sub', '${OTHER_ID}', true);
+    SELECT set_config('request.jwt.claims', jsonb_build_object('sub', '${OTHER_ID}')::text, true);
     SELECT count(*) AS foreign_logs_visible FROM medical.injection_logs WHERE user_id = '${OWNER_ID}'::uuid;
     WITH changed AS (
       UPDATE medical.injection_logs SET injected_at = now()
@@ -200,9 +203,9 @@ test('C-385: Quellenvarianten, Rotation und Gewebezustand bleiben getrennt und R
     BEGIN;
     ${FIXTURE_SQL}
     SET LOCAL ROLE authenticated;
-    SELECT set_config('request.jwt.claim.sub', '${OTHER_ID}', true);
-    INSERT INTO medical.injection_logs (user_id, injection_site_id, injected_at)
-    VALUES ('${OWNER_ID}'::uuid, 'delt_l', now());
+    SELECT set_config('request.jwt.claims', jsonb_build_object('sub', '${OTHER_ID}')::text, true);
+    INSERT INTO medical.injection_logs (user_id, injection_site_id, body_area_code, injected_at)
+    VALUES ('${OWNER_ID}'::uuid, 'delt_l', 'deltoids', now());
     ROLLBACK;
   `)
   assert.notEqual(foreignInsert.status, 0, 'ein Nutzer darf kein fremdes Injektionsprotokoll anlegen')

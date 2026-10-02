@@ -2,15 +2,17 @@ import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
-const DB = process.env.LUMEOS_C461_DATABASE
-if (!DB || DB === 'postgres') throw new Error('C-461 braucht LUMEOS_C461_DATABASE als Wegwerf-Datenbank.')
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('C-461 braucht PGDATABASE als Wegwerf-Datenbank.')
 
 function sql<T>(statement: string): T {
   const out = execFileSync('docker', [
     'exec', 'supabase_db_LumeOS-Claude-V1', 'psql', '-X', '-q', '-v', 'ON_ERROR_STOP=1',
     '-U', 'postgres', '-d', DB, '-t', '-A', '-c', statement,
   ], { encoding: 'utf8' }).trim()
-  return JSON.parse(out.slice(out.indexOf('{'))) as T
+  // A-87: request.jwt.claims selbst ist JSON und erzeugt bei psql eine
+  // weitere Ausgabezeile; allein das letzte Ergebnis ist die Probe.
+  return JSON.parse(out.split(/\r?\n/).at(-1) ?? '') as T
 }
 
 test('C-461: Programm, Zuweisung und Programmtag gehoeren nur dem zugewiesenen Nutzer', () => {
@@ -33,10 +35,13 @@ test('C-461: Programm, Zuweisung und Programmtag gehoeren nur dem zugewiesenen N
     INSERT INTO auth.users(id, email, raw_app_meta_data, created_at) VALUES
       ('c4610000-0000-0000-0000-000000000001', 'owner@example.test', '{}', now()),
       ('c4610000-0000-0000-0000-000000000002', 'other@example.test', '{}', now());
-    SET LOCAL ROLE authenticated;
-    SELECT set_config('request.jwt.claim.sub', 'c4610000-0000-0000-0000-000000000001', true);
+    -- A-87/A-86: Der unveraenderte Altbestand wird global vor dem
+    -- Rollenwechsel gezaehlt; ein nutzergefilterter RLS-Wert waere 0.
     CREATE TEMP TABLE baseline(unlinked_sessions integer);
     INSERT INTO baseline SELECT count(*) FROM training.workout_sessions WHERE program_assignment_id IS NULL AND program_day_id IS NULL;
+    SET LOCAL ROLE authenticated;
+    -- A-87/G-535: auth.uid() liest den modernen pluralen JWT-Claim.
+    SELECT set_config('request.jwt.claims', '{"sub":"c4610000-0000-0000-0000-000000000001"}', true);
     INSERT INTO training.routines(id, user_id, source, name, days_per_week)
     VALUES ('c4610000-0000-0000-0000-000000000010', 'c4610000-0000-0000-0000-000000000001', 'self', 'PPL Push', 3);
     INSERT INTO training.programs(id, user_id, source, name, duration_weeks)
@@ -60,12 +65,12 @@ test('C-461: Programm, Zuweisung und Programmtag gehoeren nur dem zugewiesenen N
     )
     VALUES ('c4610000-0000-0000-0000-000000000001', current_date, current_time, 'completed',
            0, 0, 0, 'manual', 'c4610000-0000-0000-0000-000000000060', 'c4610000-0000-0000-0000-000000000040');
-    SELECT set_config('request.jwt.claim.sub', 'c4610000-0000-0000-0000-000000000002', true);
+    SELECT set_config('request.jwt.claims', '{"sub":"c4610000-0000-0000-0000-000000000002"}', true);
     INSERT INTO training.routines(id, user_id, source, name)
     VALUES ('c4610000-0000-0000-0000-000000000070', 'c4610000-0000-0000-0000-000000000002', 'self', 'Fremde Routine');
     CREATE TEMP TABLE foreign_read(programs integer, assignments integer);
     INSERT INTO foreign_read SELECT (SELECT count(*) FROM training.programs), (SELECT count(*) FROM training.program_assignments);
-    SELECT set_config('request.jwt.claim.sub', 'c4610000-0000-0000-0000-000000000001', true);
+    SELECT set_config('request.jwt.claims', '{"sub":"c4610000-0000-0000-0000-000000000001"}', true);
     CREATE TEMP TABLE cross_link(denied boolean NOT NULL DEFAULT false);
     INSERT INTO cross_link DEFAULT VALUES;
     GRANT SELECT, UPDATE ON cross_link TO authenticated;

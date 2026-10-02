@@ -3357,6 +3357,139 @@
       "depends_on": [
         "a86_testdaten_einspielen"
       ]
+    },
+    {
+      "id": "a87_c342_reference_metadata_probe",
+      "path": "supabase/_pipeline/_validierung/nutrition-c342-reference-metadata.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Katalog/Nutrition: formgebundene Referenzen, Planherkunft und unveraenderte Coach-Grenze gegen den eingespielten Bestand.",
+      "depends_on": ["342", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_c352_german_nomenclature_probe",
+      "path": "supabase/_pipeline/_validierung/supplement-c352-deutsche-nomenklatur.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Katalog/Supplements: belegte deutsche Namen einschliesslich der spaeteren Katalogerweiterungen.",
+      "depends_on": ["141y", "516_additional_supplier_product_nutrients_daten", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_c391_food_search_reason_probe",
+      "path": "supabase/_pipeline/_validierung/nutrition-c391-food-search-match-reason.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Katalog/Nutrition: Suchtreffergrund und heutige Tag-Filtergruppen einschliesslich Soja und high_fat.",
+      "depends_on": ["391", "502_allergen_aliases_daten", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_c407_shopping_inventory_probe",
+      "path": "supabase/_pipeline/_validierung/nutrition-c407-shopping-lists-and-c408-inventory.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Nutrition: Einkaufslisten und Vorrat nutzen einen vorhandenen Seednutzer sowie den modernen JWT-Claim.",
+      "depends_on": ["407", "535_auth_uid_legacy_readers", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_c419_marketplace_wallet_probe",
+      "path": "supabase/_pipeline/_validierung/marketplace-c419-wallet.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Marketplace: Wallet-Vertrag einschliesslich C-465 delivery_results, atomare Buchung und RLS.",
+      "depends_on": ["465_marketplace_training_delivery", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_c465_marketplace_delivery_probe",
+      "path": "supabase/_pipeline/_validierung/marketplace-c465-delivery.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Marketplace/Training: idempotente Lieferung misst nur ihre eigene Zuweisung und nicht den Seed-Sitzungsbestand.",
+      "depends_on": ["465_marketplace_training_delivery", "535_auth_uid_legacy_readers", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_c453_peptide_routes_probe",
+      "path": "supabase/_pipeline/_validierung/supplements-c453-peptide-routes.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Supplements: Peptidroute und Katalogverteilung nach den spaeteren Stofferweiterungen.",
+      "depends_on": ["453_supplement_routes", "516_additional_supplier_product_nutrients_daten", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_c466_supplement_sources_probe",
+      "path": "supabase/_pipeline/_validierung/nutrition-c466-supplement-nutrients.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Nutrition/Supplements: Nahrung, Intake-Snapshot, Obergrenzen und RLS bleiben getrennt.",
+      "depends_on": ["c542_absence_is_not_missing_schema", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_c467_supplier_products_probe",
+      "path": "supabase/_pipeline/_validierung/supplements-c467-supplier-products.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Supplements: test-eigenes Lieferantenprodukt ohne globales LIMIT-1-Orakel.",
+      "depends_on": ["467_supplier_products", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_c510_nutrient_mapping_probe",
+      "path": "supabase/_pipeline/_validierung/supplements-c510-exact-nutrient-mapping.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Supplements: eindeutige Naehrstoffwurzeln und alle 54 heute belegten Schreibweisen.",
+      "depends_on": ["516_additional_supplier_product_nutrients_daten", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_c516_additional_nutrients_probe",
+      "path": "supabase/_pipeline/_validierung/supplements-c516-additional-nutrients.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Supplements: zusaetzliche Naehrstoffcodes bleiben im heutigen Intake-Snapshot erhalten.",
+      "depends_on": ["c542_absence_is_not_missing_schema", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_c540_animal_species_probe",
+      "path": "supabase/_pipeline/_validierung/nutrition-c540-animal-species.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Nutrition: kanonische mehrwertige Tierartenrelation und Haselnuss-Gegenprobe.",
+      "depends_on": ["c540_data", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_c542_absence_probe",
+      "path": "supabase/_pipeline/_validierung/nutrition-c542-absence-is-not-missing.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Nutrition/Supplements: nicht aufgefuehrt ist Null, ausdruecklich ohne Menge bleibt eine Luecke.",
+      "depends_on": ["c542_backfill_unmeasured_nutrient_codes", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_g324_coach_write_probe",
+      "path": "supabase/_pipeline/_validierung/coach-g324-write-path.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Coach: Ablehnung und Ruecknahme mit test-eigenen Nutzern und modernem JWT-Claim.",
+      "depends_on": ["155", "381", "535_auth_uid_legacy_readers", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_c385_injection_model_probe",
+      "path": "supabase/_pipeline/_validierung/medical-c385-injection-sites.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Medical: Injektionsmodell, Koerperortpflicht, Messkontext und RLS.",
+      "depends_on": ["544_injection_site_location_required_schema", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_c441_injection_catalog_probe",
+      "path": "supabase/_pipeline/_validierung/medical-c441-injection-sites.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Medical: 16 Spec-Orte, verpflichtender Koerperort und moderne Sitzung bei Log-RLS.",
+      "depends_on": ["544_injection_site_location_required_schema", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_c445_injection_protocol_probe",
+      "path": "supabase/_pipeline/_validierung/medical-c445-injection-log-protocol.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Medical: Protokollgrenzen werden hinter der C-544-Koerperortpflicht erreicht.",
+      "depends_on": ["544_injection_site_location_required_schema", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_c461_training_programs_probe",
+      "path": "supabase/_pipeline/_validierung/training-c461-programs-plans.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Training: Programme, Zuweisungen und Altbestand unter modernem JWT-Claim.",
+      "depends_on": ["461_program_day_owner_guard", "535_auth_uid_legacy_readers", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "a87_g526_macro_rule_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g526-macro-rule-structure.test.ts",
+      "kind": "tsx",
+      "creates": "A-87 Goals: Makroregelstruktur und der dauerhafte Fiber-Feldbeleg nach der zielbezogenen Funktionsueberschreibung.",
+      "depends_on": ["526_goals_macro_rule_structure", "563_target_scoped_calculation", "a86_testdaten_einspielen"]
     }
   ]
 }

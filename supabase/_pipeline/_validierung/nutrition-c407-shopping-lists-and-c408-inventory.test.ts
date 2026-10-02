@@ -28,7 +28,8 @@ test('C-407: eine Planwoche wird je food_id aggregiert und bleibt nach Archivier
     BEGIN;
     CREATE TEMP TABLE c407_context ON COMMIT DROP AS
       SELECT
-        (SELECT id FROM auth.users WHERE email = 'dev@lumeos.app') AS user_id,
+        -- A-87/A-86: Der Kettenbestand fuehrt tom.seed statt des Live-dev-Kontos.
+        (SELECT id FROM auth.users WHERE email = 'tom.seed@example.com') AS user_id,
         (SELECT id FROM nutrition.foods ORDER BY bls_code LIMIT 1) AS food_id;
     CREATE TEMP TABLE c407_plan(id uuid, week_id uuid, user_id uuid) ON COMMIT DROP;
     WITH plan AS (
@@ -54,7 +55,7 @@ test('C-407: eine Planwoche wird je food_id aggregiert und bleibt nach Archivier
     GRANT SELECT ON c407_context, c407_plan TO authenticated;
     GRANT SELECT, INSERT ON c407_list TO authenticated;
     CREATE TEMP TABLE c407_auth ON COMMIT DROP AS
-      SELECT set_config('request.jwt.claim.sub', user_id::text, true) FROM c407_context;
+      SELECT set_config('request.jwt.claims', jsonb_build_object('sub', user_id)::text, true) FROM c407_context;
     SET LOCAL ROLE authenticated;
     INSERT INTO c407_list
       SELECT nutrition.shopping_list_from_meal_plan_week(week_id) FROM c407_plan;
@@ -106,10 +107,10 @@ test('C-408: Nutrition-Vorrat ist RLS-geschuetzt, editierbar und wird bei neuem 
     BEGIN;
     CREATE TEMP TABLE c408_context ON COMMIT DROP AS
       SELECT
-        (SELECT id FROM auth.users WHERE email = 'dev@lumeos.app') AS owner_id,
+        (SELECT id FROM auth.users WHERE email = 'tom.seed@example.com') AS owner_id,
         (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local') AS other_id,
         (SELECT id FROM nutrition.foods ORDER BY bls_code LIMIT 1) AS food_id,
-        (SELECT id FROM nutrition.meals WHERE user_id = (SELECT id FROM auth.users WHERE email = 'dev@lumeos.app') ORDER BY created_at LIMIT 1) AS meal_id;
+        (SELECT id FROM nutrition.meals WHERE user_id = (SELECT id FROM auth.users WHERE email = 'tom.seed@example.com') ORDER BY created_at LIMIT 1) AS meal_id;
     INSERT INTO nutrition.user_inventory (user_id, food_id, menge_g, schwelle_g)
     SELECT owner_id, food_id, 500, 450 FROM c408_context;
     INSERT INTO nutrition.meal_items (
@@ -136,7 +137,7 @@ test('C-408: Nutrition-Vorrat ist RLS-geschuetzt, editierbar und wird bei neuem 
         AND food_id = (SELECT food_id FROM c408_context);
     GRANT SELECT ON c408_context, c408_after_first, c408_after_second TO authenticated;
     CREATE TEMP TABLE c408_auth ON COMMIT DROP AS
-      SELECT set_config('request.jwt.claim.sub', other_id::text, true) FROM c408_context;
+      SELECT set_config('request.jwt.claims', jsonb_build_object('sub', other_id)::text, true) FROM c408_context;
     SET LOCAL ROLE authenticated;
     SELECT json_build_object(
       'table', to_regclass('nutrition.user_inventory') IS NOT NULL,

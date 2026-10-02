@@ -3,8 +3,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.LUMEOS_C465_DATABASE
-if (!DB || DB === 'postgres') throw new Error('C-465-Test braucht eine Wegwerf-Datenbank, nie postgres.')
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('C-465-Test braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const BUYER = 'c4650000-0000-0000-0000-000000000001'
 const CREATOR = 'c4650000-0000-0000-0000-000000000002'
 const OTHER = 'c4650000-0000-0000-0000-000000000003'
@@ -25,9 +25,9 @@ test('C-465: Kauf liefert genau eine referenzielle Training-Zuweisung und Widerr
     CREATE TEMP TABLE c465_visibility(subject text PRIMARY KEY, row_count integer NOT NULL) ON COMMIT DROP;
     GRANT SELECT, INSERT ON c465_visibility TO authenticated;
     SET LOCAL ROLE authenticated;
-    SELECT set_config('request.jwt.claim.sub','${OTHER}',true);
+    SELECT set_config('request.jwt.claims','{"sub":"${OTHER}"}',true);
     INSERT INTO c465_visibility VALUES ('other',(SELECT count(*) FROM marketplace.delivery_results));
-    SELECT set_config('request.jwt.claim.sub','${BUYER}',true);
+    SELECT set_config('request.jwt.claims','{"sub":"${BUYER}"}',true);
     INSERT INTO c465_visibility VALUES ('owner',(SELECT count(*) FROM marketplace.delivery_results));
     RESET ROLE;
     SELECT marketplace.revoke_training_program_license((SELECT license_id FROM c465_purchase));
@@ -36,7 +36,9 @@ test('C-465: Kauf liefert genau eine referenzielle Training-Zuweisung und Widerr
       'assignments',(SELECT count(*) FROM training.program_assignments), 'same',(SELECT assignment_id FROM c465_first)=(SELECT assignment_id FROM c465_second),
       'reference',(SELECT program_assignment_id FROM marketplace.delivery_results)=(SELECT assignment_id FROM c465_first),
       'licenseActive',(SELECT is_active FROM marketplace.product_licenses), 'assignmentStatus',(SELECT status FROM training.program_assignments),
-      'sessions',(SELECT count(*) FROM training.workout_sessions),
+      -- A-87/A-86: Vorhandene Seed-Sitzungen sind nicht Teil dieser Lieferung.
+      'sessions',(SELECT count(*) FROM training.workout_sessions
+                  WHERE program_assignment_id=(SELECT assignment_id FROM c465_first)),
       'walletTransactions',(SELECT count(*) FROM marketplace.wallet_transactions),
       'walletCall',position('book_wallet_purchase' IN pg_get_functiondef('marketplace.create_training_program_purchase(uuid,uuid,integer)'::regprocedure)) > 0,
       'anonExec',has_function_privilege('anon','marketplace.deliver_training_program(uuid)','EXECUTE'),

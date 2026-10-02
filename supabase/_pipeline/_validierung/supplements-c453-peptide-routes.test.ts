@@ -6,8 +6,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.LUMEOS_C453_DATABASE
-if (!DB || DB === 'postgres') throw new Error('C-453-Test braucht LUMEOS_C453_DATABASE als Wegwerf-Datenbank, nie postgres.')
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('C-453-Test braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 
 function sql<T>(statement: string): T {
   const output = execFileSync('docker', [
@@ -91,7 +91,8 @@ test('C-453: Route ist skalar, spec-konform und alle 93 Peptide sind SubQ', () =
   `)
 
   assert.deepEqual(result.distribution, {
-    '<NULL>': 289,
+    // A-87: C-516 erweiterte den Katalog um 21 Stoffe ohne erfundene Route.
+    '<NULL>': 310,
     injection_im: 10,
     injection_subq: 93,
     oral: 204,

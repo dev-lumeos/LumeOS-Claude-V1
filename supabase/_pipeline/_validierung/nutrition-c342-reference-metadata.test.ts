@@ -24,7 +24,7 @@ test('C-342: Faktoren bleiben formgebunden, UL 0 ist unzulaessig und Planursprun
     mealPlanLogs: boolean
     scope: Record<string, string[]>
     zeroUlRejected: boolean
-    legacyOriginMissing: boolean
+    everyPlanHasOrigin: boolean
   }>(`
     BEGIN;
     CREATE TEMP TABLE c342_result (zero_ul_rejected boolean NOT NULL);
@@ -69,7 +69,8 @@ test('C-342: Faktoren bleiben formgebunden, UL 0 ist unzulaessig und Planursprun
         FROM nutrition.nutrient_reference_values
         WHERE reference_kind = 'UL' AND nutrient_code IN ('MG', 'NIA', 'FOLAC')),
       'zeroUlRejected', (SELECT bool_and(zero_ul_rejected) FROM c342_result),
-      'legacyOriginMissing', (SELECT bool_and(plan_origin IS NULL) FROM nutrition.meal_plans)
+      -- A-87/A-86: Der eingespielte Planbestand traegt seine Herkunft bereits.
+      'everyPlanHasOrigin', (SELECT bool_and(plan_origin IS NOT NULL) FROM nutrition.meal_plans)
     );
     ROLLBACK;
   `)
@@ -93,7 +94,7 @@ test('C-342: Faktoren bleiben formgebunden, UL 0 ist unzulaessig und Planursprun
     NIA: ['fortified_foods', 'supplements'],
   })
   assert.equal(result.zeroUlRejected, true)
-  assert.equal(result.legacyOriginMissing, true)
+  assert.equal(result.everyPlanHasOrigin, true)
 })
 
 test('C-342: Nutrition-Stufe 3 erlaubt dem Coach keine direkte Planbearbeitung', () => {

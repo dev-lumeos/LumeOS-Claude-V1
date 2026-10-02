@@ -58,7 +58,8 @@ test('C-419: alle SPEC-06-Tabellen, zwei Guthaben, neun Buchungsarten und die Pr
   `)
 
   assert.deepEqual(result.tables, [
-    'creators', 'fee_schedules', 'order_items', 'orders', 'product_bundles', 'product_licenses',
+    // A-87/C-465: Zustellergebnisse sind seit C-465 Teil des Marketplace-Vertrags.
+    'creators', 'delivery_results', 'fee_schedules', 'order_items', 'orders', 'product_bundles', 'product_licenses',
     'product_reviews', 'products', 'promotion_slot_catalog', 'promotion_slots', 'subscription_plans',
     'wallet_transactions', 'wallets',
   ])
@@ -91,7 +92,13 @@ test('C-419: eine Kaufbuchung verbraucht Voucher vor Revenue und schreibt die dr
       'booking', (SELECT json_build_object('voucher', voucher_debit_cents, 'revenue', revenue_debit_cents, 'fee', fee_cents, 'sellerRevenue', seller_revenue_cents) FROM c419_booking),
       'buyer', (SELECT json_build_object('voucher', voucher_balance_cents, 'revenue', revenue_balance_cents) FROM marketplace.wallets WHERE id = '${BUYER_WALLET}'),
       'seller', (SELECT revenue_balance_cents FROM marketplace.wallets WHERE id = '${SELLER_WALLET}'),
-      'journal', (SELECT json_agg(json_build_object('source', from_balance_type, 'gross', gross_amount_cents, 'fee', fee_cents, 'net', net_amount_cents) ORDER BY created_at, id) FROM marketplace.wallet_transactions),
+      -- A-87: created_at ist fuer beide atomar geschriebenen Zeilen gleich und
+      -- UUID-Reihenfolge ist kein Fachvertrag. Der Booking-Rueckgabewert prueft
+      -- den Verbrauch Voucher vor Revenue; das Journal prueft beide Teilzeilen.
+      'journal', (SELECT json_agg(
+        json_build_object('source', from_balance_type, 'gross', gross_amount_cents, 'fee', fee_cents, 'net', net_amount_cents)
+        ORDER BY CASE from_balance_type WHEN 'voucher' THEN 0 ELSE 1 END
+      ) FROM marketplace.wallet_transactions),
       'noDirectAuthenticatedWrite', (SELECT NOT has_table_privilege('authenticated', 'marketplace.wallets', 'INSERT') AND NOT has_table_privilege('authenticated', 'marketplace.wallet_transactions', 'INSERT'))
     );
     ROLLBACK;

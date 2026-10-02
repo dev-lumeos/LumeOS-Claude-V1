@@ -108,7 +108,7 @@ test('G-561 A2/A3: die aktuelle Schwelle skaliert mit dem Gewicht, die 83,74-kg-
   ])
 })
 
-test('G-561 A5: test-user mit zwei Zielphasen behaelt je Strategie den relativen Waechter', () => {
+test('G-561 A5: isolierter Testnutzer mit zwei Zielphasen behaelt je Strategie den relativen Waechter', () => {
   const result = one<{
     openPhases: number
     goalReferences: number
@@ -116,31 +116,37 @@ test('G-561 A5: test-user mit zwei Zielphasen behaelt je Strategie den relativen
   }>(`
     BEGIN;
     INSERT INTO auth.users (id, email, raw_app_meta_data, created_at)
-    SELECT
+    VALUES (
       '56100000-0000-0000-0000-000000000001',
-      'test-user@lumeos.local',
+      'g561-test-user@lumeos.local',
       '{"provider":"email","providers":["email"]}'::jsonb,
       now()
-    WHERE NOT EXISTS (
-      SELECT 1 FROM auth.users WHERE email = 'test-user@lumeos.local'
     );
 
     INSERT INTO public.profiles (
       id, birth_date, biological_sex, height_cm, body_weight_kg,
       activity_level, experience_level
     ) VALUES (
-      (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'),
+      '56100000-0000-0000-0000-000000000001',
       DATE '1990-05-17', 'male', 182, 60, 'moderate', 'pro'
-    ) ON CONFLICT (id) DO UPDATE SET body_weight_kg = EXCLUDED.body_weight_kg;
+    ) ON CONFLICT (id) DO UPDATE SET
+      birth_date = EXCLUDED.birth_date,
+      biological_sex = EXCLUDED.biological_sex,
+      height_cm = EXCLUDED.height_cm,
+      body_weight_kg = EXCLUDED.body_weight_kg,
+      activity_level = EXCLUDED.activity_level,
+      experience_level = EXCLUDED.experience_level;
 
     INSERT INTO goals.user_goals (
       id, user_id, goal_type, title, gueltig_ab, priority
     ) VALUES
       ('56100000-0000-0000-0000-000000000101',
-       (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'),
+       '56100000-0000-0000-0000-000000000001',
+       -- G-559 belegt am echten Seed bereits die aktiven Plaetze 1 und 2;
+       -- die transaktionale G-561-Probe darf diese Seedwahrheit nicht umraeumen.
        'body_composition', 'G-561 Abbauziel', DATE '2099-01-01', 1),
       ('56100000-0000-0000-0000-000000000102',
-       (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'),
+       '56100000-0000-0000-0000-000000000001',
        'body_composition', 'G-561 Aufbauziel', DATE '2099-01-01', 2);
 
     INSERT INTO goals.goal_phases (
@@ -148,12 +154,12 @@ test('G-561 A5: test-user mit zwei Zielphasen behaelt je Strategie den relativen
       created_at, strategie_code, zielrate_pct_kg_woche
     ) VALUES
       ('56100000-0000-0000-0000-000000000201',
-       (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'),
+       '56100000-0000-0000-0000-000000000001',
        '56100000-0000-0000-0000-000000000101',
        'fat_loss', '{}'::jsonb, DATE '2099-01-01',
        TIMESTAMPTZ '2099-01-01 08:00:00+00', 'moderate_cut', -0.750),
       ('56100000-0000-0000-0000-000000000202',
-       (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'),
+       '56100000-0000-0000-0000-000000000001',
        '56100000-0000-0000-0000-000000000102',
        'lean_bulk', '{}'::jsonb, DATE '2099-01-01',
        TIMESTAMPTZ '2099-01-01 09:00:00+00', 'lean_bulk', 0.250);
@@ -169,7 +175,7 @@ test('G-561 A5: test-user mit zwei Zielphasen behaelt je Strategie den relativen
       )
     )
     FROM goals.phase_am(
-      (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'),
+      '56100000-0000-0000-0000-000000000001',
       DATE '2099-01-15'
     ) p
     JOIN goals.goal_phases gp ON gp.id = p.phase_id

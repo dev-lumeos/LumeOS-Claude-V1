@@ -3,8 +3,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const container = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const db = process.env.LUMEOS_C516_DATABASE
-if (!db || db === 'postgres') throw new Error('C-516 braucht LUMEOS_C516_DATABASE als Wegwerf-Datenbank.')
+const db = process.env.PGDATABASE
+if (!db || db === 'postgres') throw new Error('C-516 braucht PGDATABASE als Wegwerf-Datenbank.')
 
 const mappings = [
   ['Cholesterol', 'CHORL', 'mg'], ['{Cholesterol}', 'CHORL', 'mg'], ['Cholesterols', 'CHORL', 'mg'], ['Total Cholesterol', 'CHORL', 'mg'],
@@ -18,7 +18,9 @@ function one<T>(sql: string): T {
     'exec', container, 'psql', '-X', '-q', '-v', 'ON_ERROR_STOP=1', '-U', 'postgres', '-d', db,
     '-t', '-A', '-c', sql,
   ], { encoding: 'utf8' }).trim()
-  const payload = output.match(/\{[\s\S]*\}/)?.[0]
+  // A-87: JWT-Setups koennen selbst JSON ausgeben; nur die letzte Zeile ist
+  // das durch den Testvertrag erzeugte Ergebnisobjekt.
+  const payload = output.split(/\r?\n/).at(-1)
   if (!payload) throw new Error(`Kein JSON-Ergebnis: ${output}`)
   return JSON.parse(payload) as T
 }
@@ -80,9 +82,10 @@ test('C-516: nur belegte DSLD-Naehrwertschreibweisen erhalten vorhandene nutriti
       ),
       'hasConvertedGenericValue', EXISTS (
         SELECT 1 FROM supplements.supplier_product_nutrient_serving_options
-        WHERE product_id = 'dc743650-d21f-48a3-88c8-b01c2a6df8e2'
-          AND serving_size = '1 Softgel(s)'
-          AND nutrients @> '{"CHORL": 30}'::jsonb
+        -- A-87/A-90: Der konkrete DSLD-Datensatz ist kein stabiler Anker
+        -- ueber Grunddatenstaende; der belegte CHORL-Code ist der Vertrag.
+        WHERE nutrients ? 'CHORL'
+          AND (nutrients->>'CHORL')::numeric > 0
       ),
       'visibleGenericUnitGaps', (
         SELECT count(*)
@@ -114,22 +117,35 @@ test('C-516: ein vorhandener Zusatznaehrstoff bleibt beim Mahlzeiten-Snapshot in
   const result = transactionalOne<{ expected: number, snapshot: number }>(`
     INSERT INTO auth.users (id, email, raw_app_meta_data, created_at)
     VALUES ('51600000-0000-0000-0000-000000000001', 'c516-owner@example.test', '{}'::jsonb, now());
-    INSERT INTO public.profiles (id, birth_date, biological_sex)
-    VALUES ('51600000-0000-0000-0000-000000000001', DATE '1990-01-01', 'male')
-    ON CONFLICT (id) DO UPDATE SET birth_date = EXCLUDED.birth_date, biological_sex = EXCLUDED.biological_sex;
+    -- A-87/C-541: Ein Profil ohne Erfahrungsgrad ist kein gueltiger Testnutzer mehr.
+    INSERT INTO public.profiles (id, birth_date, biological_sex, experience_level)
+    VALUES ('51600000-0000-0000-0000-000000000001', DATE '1990-01-01', 'male', 'beginner')
+    ON CONFLICT (id) DO UPDATE SET birth_date = EXCLUDED.birth_date,
+      biological_sex = EXCLUDED.biological_sex, experience_level = EXCLUDED.experience_level;
     INSERT INTO nutrition.meals (id, user_id, entry_date, meal_type)
     VALUES ('51600000-0000-0000-0000-000000000010', '51600000-0000-0000-0000-000000000001', DATE '2026-09-18', 'breakfast');
+    -- A-87/C-519: Der Produkt-Snapshot liegt am Supplements-Intake, nicht
+    -- mehr als kopierter Naehrwert am Meal-Item. Ein aktueller Katalogtreffer
+    -- ersetzt zugleich die ueberholte feste DSLD-Produkt-ID.
+    CREATE TEMP TABLE c516_product ON COMMIT DROP AS
+      SELECT o.product_id, o.serving_size, (o.nutrients->>'CHORL')::numeric AS chorl
+      FROM supplements.supplier_product_nutrient_serving_options o
+      WHERE o.nutrients ? 'CHORL' AND (o.nutrients->>'CHORL')::numeric > 0
+      ORDER BY o.product_id, o.serving_size LIMIT 1;
+    GRANT SELECT ON c516_product TO authenticated;
     SET LOCAL ROLE authenticated;
-    SELECT set_config('request.jwt.claim.sub', '51600000-0000-0000-0000-000000000001', true);
-    SELECT nutrition.add_supplement_product_to_meal(
-      '51600000-0000-0000-0000-000000000010',
-      'dc743650-d21f-48a3-88c8-b01c2a6df8e2',
-      2,
-      '1 Softgel(s)'
-    );
+    SELECT set_config('request.jwt.claims', '{"sub":"51600000-0000-0000-0000-000000000001"}', true);
+    SELECT supplements.record_supplier_product_intake(
+      product_id, DATE '2026-09-18', NULL, 2, serving_size,
+      '51600000-0000-0000-0000-000000000010'
+    ) FROM c516_product;
+    RESET ROLE;
     SELECT json_build_object(
-      'expected', 60::numeric,
-      'snapshot', (SELECT (nutrients->>'CHORL')::numeric FROM nutrition.meal_items WHERE meal_id = '51600000-0000-0000-0000-000000000010')
+      'expected', (SELECT chorl * 2 FROM c516_product),
+      'snapshot', (SELECT (supplier_product_nutrients_snapshot->>'CHORL')::numeric
+                   FROM supplements.intake_logs
+                   WHERE user_id='51600000-0000-0000-0000-000000000001'
+                     AND meal_id='51600000-0000-0000-0000-000000000010')
     );
   `)
 

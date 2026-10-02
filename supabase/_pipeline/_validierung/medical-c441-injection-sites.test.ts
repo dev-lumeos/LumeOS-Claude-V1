@@ -5,8 +5,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.LUMEOS_C441_DATABASE
-if (!DB || DB === 'postgres') throw new Error('C-441-Test braucht LUMEOS_C441_DATABASE als Wegwerf-Datenbank, nie postgres.')
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('C-441-Test braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 
 const OWNER = 'c4410000-0000-0000-0000-000000000001'
 const OTHER = 'c4410000-0000-0000-0000-000000000002'
@@ -78,12 +78,13 @@ test('C-441: Katalog-RLS bleibt lesbar, Injektionslogs bleiben eigene Zeilen', (
       ('${OTHER}'::uuid, 'c441-other@example.test', '{"provider":"email"}'::jsonb, now());
 
     SET LOCAL ROLE authenticated;
-    SELECT set_config('request.jwt.claim.sub', '${OWNER}', true);
-    INSERT INTO medical.injection_logs (user_id, injection_site_id, injected_at)
-    VALUES ('${OWNER}'::uuid, 'delt_l', now());
+    SELECT set_config('request.jwt.claims', jsonb_build_object('sub', '${OWNER}')::text, true);
+    -- A-87/C-544: Der Log traegt den verpflichtenden Koerperort des Katalogorts.
+    INSERT INTO medical.injection_logs (user_id, injection_site_id, body_area_code, injected_at)
+    VALUES ('${OWNER}'::uuid, 'delt_l', 'deltoids', now());
     CREATE TEMP TABLE c441_rls AS
       SELECT count(*)::integer AS authenticated_catalog_rows FROM medical.injection_sites;
-    SELECT set_config('request.jwt.claim.sub', '${OTHER}', true);
+    SELECT set_config('request.jwt.claims', jsonb_build_object('sub', '${OTHER}')::text, true);
     CREATE TEMP TABLE c441_foreign AS
       SELECT count(*)::integer AS foreign_logs_visible
       FROM medical.injection_logs WHERE user_id = '${OWNER}'::uuid;
@@ -106,10 +107,10 @@ test('C-441: Katalog-RLS bleibt lesbar, Injektionslogs bleiben eigene Zeilen', (
       RESET ROLE;
 
       SET LOCAL ROLE authenticated;
-      PERFORM set_config('request.jwt.claim.sub', '${OTHER}', true);
+      PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', '${OTHER}')::text, true);
       BEGIN
-        INSERT INTO medical.injection_logs (user_id, injection_site_id, injected_at)
-        VALUES ('${OWNER}'::uuid, 'delt_l', now());
+        INSERT INTO medical.injection_logs (user_id, injection_site_id, body_area_code, injected_at)
+        VALUES ('${OWNER}'::uuid, 'delt_l', 'deltoids', now());
       EXCEPTION WHEN insufficient_privilege THEN
         RESET ROLE;
         UPDATE c441_refusals SET foreign_log_insert_denied = true;

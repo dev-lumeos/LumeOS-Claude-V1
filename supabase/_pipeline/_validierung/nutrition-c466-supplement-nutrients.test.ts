@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const container = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const db = process.env.LUMEOS_C466_DATABASE
+const db = process.env.PGDATABASE
 if (!db || db === 'postgres') throw new Error('C-466 braucht eine Wegwerf-Datenbank.')
 
 function one<T>(sql: string): T {
@@ -19,9 +19,11 @@ test('C-466: Nahrung und genommene Praeparate bleiben getrennt, mit Herkunft und
     INSERT INTO auth.users (id, email, raw_app_meta_data, created_at) VALUES
       ('46600000-0000-0000-0000-000000000010', 'c466-owner@example.test', '{}'::jsonb, now()),
       ('46600000-0000-0000-0000-000000000011', 'c466-other@example.test', '{}'::jsonb, now());
-    INSERT INTO public.profiles (id, birth_date, biological_sex)
-    VALUES ('46600000-0000-0000-0000-000000000010', DATE '1990-01-01', 'male')
-    ON CONFLICT (id) DO UPDATE SET birth_date = EXCLUDED.birth_date, biological_sex = EXCLUDED.biological_sex;
+    -- A-87/C-541: Ein Profil ohne Erfahrungsgrad ist kein gueltiger Testnutzer mehr.
+    INSERT INTO public.profiles (id, birth_date, biological_sex, experience_level)
+    VALUES ('46600000-0000-0000-0000-000000000010', DATE '1990-01-01', 'male', 'beginner')
+    ON CONFLICT (id) DO UPDATE SET birth_date = EXCLUDED.birth_date,
+      biological_sex = EXCLUDED.biological_sex, experience_level = EXCLUDED.experience_level;
     INSERT INTO nutrition.meals (id, user_id, entry_date, meal_type)
     VALUES ('46600000-0000-0000-0000-000000000001', '46600000-0000-0000-0000-000000000010', DATE '2026-09-10', 'other');
     INSERT INTO nutrition.meal_items (id, meal_id, user_id, food_source, food_name, amount_g, nutrients)
@@ -41,10 +43,17 @@ test('C-466: Nahrung und genommene Praeparate bleiben getrennt, mit Herkunft und
     INSERT INTO supplements.stack_items (id, stack_id, supplement_id, dose, dose_unit, frequency, timing)
     SELECT '46600000-0000-0000-0000-000000000007', '46600000-0000-0000-0000-000000000003', id, 400, 'mg', 'daily', 'evening'
     FROM supplements.supplements WHERE slug = 'magnesium';
-    INSERT INTO supplements.intake_logs (id, user_id, stack_item_id, intake_date, status, supplement_name_snapshot, dose_snapshot, dose_unit_snapshot, supplier_product_id)
+    INSERT INTO supplements.intake_logs (
+      id, user_id, stack_item_id, intake_date, status, supplement_name_snapshot,
+      dose_snapshot, dose_unit_snapshot, supplier_product_id,
+      supplier_product_serving_size, supplier_product_serving_quantity,
+      supplier_product_nutrient_status, supplier_product_nutrients_snapshot
+    )
     VALUES
-      ('46600000-0000-0000-0000-000000000008', '46600000-0000-0000-0000-000000000010', '46600000-0000-0000-0000-000000000006', DATE '2026-09-10', 'taken', 'Vitamin D3', 5000, 'IU', '46600000-0000-0000-0000-000000000005'),
-      ('46600000-0000-0000-0000-000000000009', '46600000-0000-0000-0000-000000000010', '46600000-0000-0000-0000-000000000007', DATE '2026-09-10', 'taken', 'C466 Magnesium', 400, 'mg', NULL);
+      -- A-87/C-519: Eine Produkteinnahme friert ihre Portion und Naehrwerte ein;
+      -- nur die alte Produkt-ID neben dem Stackwert ist kein gueltiger Beleg mehr.
+      ('46600000-0000-0000-0000-000000000008', '46600000-0000-0000-0000-000000000010', '46600000-0000-0000-0000-000000000006', DATE '2026-09-10', 'taken', 'Vitamin D3', 5000, 'IU', '46600000-0000-0000-0000-000000000005', '1 capsule', 1, 'available', '{"VITD":125}'::jsonb),
+      ('46600000-0000-0000-0000-000000000009', '46600000-0000-0000-0000-000000000010', '46600000-0000-0000-0000-000000000007', DATE '2026-09-10', 'taken', 'C466 Magnesium', 400, 'mg', NULL, NULL, NULL, NULL, NULL);
     CREATE TEMP TABLE c466_seen (subject text primary key, rows integer, payload jsonb) ON COMMIT DROP;
     GRANT SELECT, INSERT ON c466_seen TO authenticated;
     SET LOCAL ROLE authenticated;
@@ -82,11 +91,12 @@ test('C-466: Nahrung und genommene Praeparate bleiben getrennt, mit Herkunft und
   assert.equal(Number(values.MG.supplement), 400)
   assert.deepEqual(r.own.detail, [
     { kind: 'food', name: 'C466 Lebensmittel', amount: 10, product: null, dose: 100, unit: 'g', scope: 'all_recorded_intake_sources', referenceAmount: 135 },
-    { kind: 'supplement', name: 'Vitamin D3', amount: 125, product: 'C466 Vitamin D3 5000 IU', dose: 5000, unit: 'IU', scope: 'all_recorded_intake_sources', referenceAmount: 135 },
+    { kind: 'supplement', name: 'Vitamin D3', amount: 125, product: 'Vitamin D3', dose: 1, unit: '1 capsule', scope: 'all_recorded_intake_sources', referenceAmount: 135 },
   ])
   assert.deepEqual(r.own.mg, { scope: 'supplements_only', amount: 400, above: true })
   assert.deepEqual(r.own.mgDetail, [
-    { kind: 'supplement', name: 'C466 Magnesium', product: null, dose: 400, unit: 'mg' },
+    // C-519 vereinheitlicht die sichtbare Einnahmebezeichnung auch ohne Produkt-ID.
+    { kind: 'supplement', name: 'C466 Magnesium', product: 'C466 Magnesium', dose: 400, unit: 'mg' },
   ])
   assert.deepEqual(r.own.nia, { scope: 'supplements_plus_fortified_foods_unresolved', status: 'unresolved_fortified_food' })
   assert.equal(r.foreignRows, 0)

@@ -5,7 +5,8 @@ import test from 'node:test'
 // Kein Rechenaufruf: Der einzelne Treffer liest bewusst den Kommentar des
 // nutzerweiten Altvertrags, an dem die bestehende Faser-Annahme dokumentiert ist.
 const container = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const db = process.env.LUMEOS_G526_DATABASE
+// A-87: Kettenproben erhalten ihren gemeinsamen Wegwerfbestand als PGDATABASE.
+const db = process.env.PGDATABASE
 if (!db || db === 'postgres') throw new Error('G-526 braucht eine Wegwerf-Datenbank, nie postgres.')
 
 function one<T>(sql: string): T {
@@ -127,14 +128,21 @@ test('G-526: Katalogregeln sind lesbar, aber nicht clientseitig schreibbar', () 
   })
 })
 
-test('G-526: die bestehende Faser-30 ist sichtbar als Annahme markiert', () => {
+test('G-526: die bestehende Faser-30 bleibt an ihrem dauerhaften Zielwert-Feld erklaert', () => {
   const result = one<{ comment: string }>(`
     SELECT json_build_object(
-      'comment', obj_description('goals.berechne_zielwerte(uuid,date)'::regprocedure)
+      -- A-87/G-563: Funktionskommentare beschreiben jetzt den Zielbezug und
+      -- werden bei jeder Vertragsfassung ersetzt; der Feldkommentar bleibt.
+      'comment', col_description(
+        'goals.nutrition_targets'::regclass,
+        (SELECT ordinal_position FROM information_schema.columns
+         WHERE table_schema = 'goals' AND table_name = 'nutrition_targets'
+           AND column_name = 'fiber_g')
+      )
     );
   `)
 
-  assert.match(result.comment, /Faser 30 g\/Tag ist \[annahme\]/)
+  assert.match(result.comment, /Fallback 30 g\/Tag/)
 })
 
 test('G-526 A11: updated_at folgt einer Aenderung und bleibt nicht auf dem Default stehen', () => {

@@ -87,8 +87,13 @@ test('C-391/C-390: Suchtreffer erklären ihren Weg, Tagdefinitionen ihre Filterg
     contains_gluten: 'allergen',
     contains_lactose: 'allergen',
     contains_nuts: 'allergen',
+    // A-87: Der Vollimport erzeugt zusaetzlich den weiterhin gueltigen
+    // gluten_free-Filter; C-502 ergaenzte Soja, C-275 den Fettfilter.
+    contains_soy: 'allergen',
+    gluten_free: 'dietary_pattern',
     halal: 'dietary_pattern',
     high_fiber: 'nutrient',
+    high_fat: 'nutrient',
     high_protein: 'nutrient',
     kosher: 'dietary_pattern',
     low_carb: 'nutrient',

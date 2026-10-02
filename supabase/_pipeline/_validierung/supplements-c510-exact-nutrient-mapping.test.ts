@@ -3,8 +3,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const container = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const db = process.env.LUMEOS_C510_DATABASE
-if (!db || db === 'postgres') throw new Error('C-510 braucht LUMEOS_C510_DATABASE als Wegwerf-Datenbank.')
+const db = process.env.PGDATABASE
+if (!db || db === 'postgres') throw new Error('C-510 braucht PGDATABASE als Wegwerf-Datenbank.')
 
 function one<T>(sql: string): T {
   const output = execFileSync('docker', [
@@ -58,7 +58,8 @@ test('C-510: Thiamin ist Naehrstoffschreibvariante und Nährstoffzeilen erhalten
     );
   `)
 
-  assert.equal(result.mappingCount, 40)
+  // A-87: C-516 ergaenzte 14 weitere eindeutig belegte Schreibweisen.
+  assert.equal(result.mappingCount, 54)
   assert.equal(result.thiamin, true)
   assert.ok(result.linkedNutrients > 0)
   assert.equal(result.requiredRowsLinked, true)

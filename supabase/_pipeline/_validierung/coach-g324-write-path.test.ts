@@ -5,9 +5,10 @@ import test from 'node:test'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE ?? 'postgres'
-const CLIENT_ID = '10000000-0000-0000-0000-000000000101'
-const COACH_ID = '10000000-0000-0000-0000-000000000901'
-const FOREIGN_ID = 'd15fb34f-62e6-43e5-9d1c-ec8bab6ae1a6'
+// A-87/A-86: eigene Fixture-IDs statt der inzwischen eingespielten Seednutzer.
+const CLIENT_ID = 'b3240000-0000-0000-0000-000000000001'
+const COACH_ID = 'b3240000-0000-0000-0000-000000000002'
+const FOREIGN_ID = 'b3240000-0000-0000-0000-000000000004'
 const OUTSIDER_ID = 'b3240000-0000-0000-0000-000000000003'
 
 function one<T>(sql: string): T {
@@ -53,24 +54,24 @@ test('G-324/C-269: sicher ablehnen und Einladung als withdrawn protokollieren', 
     );
 
     SET LOCAL ROLE authenticated;
-    DO $$ BEGIN PERFORM set_config('request.jwt.claim.sub', '${CLIENT_ID}', true); END $$;
+    DO $$ BEGIN PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', '${CLIENT_ID}')::text, true); END $$;
     CREATE TEMP TABLE g324_client AS
       SELECT exists(SELECT 1 FROM coach.pending_actions WHERE id = '03240000-0000-0000-0000-000000000001'::uuid) AS can_read_pending;
     CREATE TEMP TABLE g324_reject AS
       SELECT coach.lehne_aktion_ab('03240000-0000-0000-0000-000000000001'::uuid);
 
-    DO $$ BEGIN PERFORM set_config('request.jwt.claim.sub', '${FOREIGN_ID}', true); END $$;
+    DO $$ BEGIN PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', '${FOREIGN_ID}')::text, true); END $$;
     CREATE TEMP TABLE g324_foreign AS
       SELECT coach.withdraw_relationship_invite('03240000-0000-0000-0000-000000000002'::uuid, 'nicht mein Invite') AS changed;
 
-    DO $$ BEGIN PERFORM set_config('request.jwt.claim.sub', '${OUTSIDER_ID}', true); END $$;
+    DO $$ BEGIN PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', '${OUTSIDER_ID}')::text, true); END $$;
     CREATE TEMP TABLE g324_outsider AS
       SELECT
         exists(SELECT 1 FROM coach.pending_actions WHERE id = '03240000-0000-0000-0000-000000000001'::uuid) AS can_read_pending,
         exists(SELECT 1 FROM coach.relationships WHERE id = '03240000-0000-0000-0000-000000000002'::uuid) AS can_read_relationship,
         exists(SELECT 1 FROM coach.relationship_change_log WHERE relationship_id = '03240000-0000-0000-0000-000000000002'::uuid) AS can_read_log;
 
-    DO $$ BEGIN PERFORM set_config('request.jwt.claim.sub', '${COACH_ID}', true); END $$;
+    DO $$ BEGIN PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', '${COACH_ID}')::text, true); END $$;
     CREATE TEMP TABLE g324_coach AS
       SELECT exists(SELECT 1 FROM coach.relationships WHERE id = '03240000-0000-0000-0000-000000000002'::uuid) AS can_read_relationship;
     CREATE TEMP TABLE g324_log_before AS

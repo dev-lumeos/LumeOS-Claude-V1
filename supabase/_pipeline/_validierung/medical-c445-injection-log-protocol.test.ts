@@ -5,8 +5,8 @@ import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.LUMEOS_C445_DATABASE
-if (!DB || DB === 'postgres') throw new Error('C-445-Test braucht LUMEOS_C445_DATABASE als Wegwerf-Datenbank, nie postgres.')
+const DB = process.env.PGDATABASE
+if (!DB || DB === 'postgres') throw new Error('C-445-Test braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 
 const OWNER = 'c4450000-0000-0000-0000-000000000001'
 
@@ -67,12 +67,12 @@ test('C-445: ein vollstaendiges eigenes Protokoll akzeptiert nur gueltige Skalen
     INSERT INTO auth.users (id, email, raw_app_meta_data, created_at)
     VALUES ('${OWNER}'::uuid, 'c445-owner@example.test', '{"provider":"email"}'::jsonb, now());
     SET LOCAL ROLE authenticated;
-    SELECT set_config('request.jwt.claim.sub', '${OWNER}', true);
+    SELECT set_config('request.jwt.claims', jsonb_build_object('sub', '${OWNER}')::text, true);
     INSERT INTO medical.injection_logs (
-      user_id, injection_site_id, injected_at, volume_ml, substance_name, route,
+      user_id, injection_site_id, body_area_code, injected_at, volume_ml, substance_name, route,
       pain_score, complication, override_reason
     ) VALUES (
-      '${OWNER}'::uuid, 'delt_l', now(), 1.00, 'Fixture substance', 'im',
+      '${OWNER}'::uuid, 'delt_l', 'deltoids', now(), 1.00, 'Fixture substance', 'im',
       2, ARRAY['bleeding', 'swelling']::text[], 'volume_limit confirmed by clinician'
     );
     RESET ROLE;
@@ -87,42 +87,42 @@ test('C-445: ein vollstaendiges eigenes Protokoll akzeptiert nur gueltige Skalen
     DO \$\$
     BEGIN
       SET LOCAL ROLE authenticated;
-      PERFORM set_config('request.jwt.claim.sub', '${OWNER}', true);
+      PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', '${OWNER}')::text, true);
       BEGIN
-        INSERT INTO medical.injection_logs (user_id, injection_site_id, injected_at, volume_ml)
-        VALUES ('${OWNER}'::uuid, 'delt_l', now(), 0);
+        INSERT INTO medical.injection_logs (user_id, injection_site_id, body_area_code, injected_at, volume_ml)
+        VALUES ('${OWNER}'::uuid, 'delt_l', 'deltoids', now(), 0);
       EXCEPTION WHEN check_violation THEN
         RESET ROLE;
         UPDATE c445_refusals SET invalid_volume_denied = true;
         SET LOCAL ROLE authenticated;
-        PERFORM set_config('request.jwt.claim.sub', '${OWNER}', true);
+        PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', '${OWNER}')::text, true);
       END;
       BEGIN
-        INSERT INTO medical.injection_logs (user_id, injection_site_id, injected_at, pain_score)
-        VALUES ('${OWNER}'::uuid, 'delt_l', now(), 4);
+        INSERT INTO medical.injection_logs (user_id, injection_site_id, body_area_code, injected_at, pain_score)
+        VALUES ('${OWNER}'::uuid, 'delt_l', 'deltoids', now(), 4);
       EXCEPTION WHEN check_violation THEN
         RESET ROLE;
         UPDATE c445_refusals SET invalid_pain_denied = true;
         SET LOCAL ROLE authenticated;
-        PERFORM set_config('request.jwt.claim.sub', '${OWNER}', true);
+        PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', '${OWNER}')::text, true);
       END;
       BEGIN
-        INSERT INTO medical.injection_logs (user_id, injection_site_id, injected_at, complication)
-        VALUES ('${OWNER}'::uuid, 'delt_l', now(), ARRAY['not_listed']::text[]);
+        INSERT INTO medical.injection_logs (user_id, injection_site_id, body_area_code, injected_at, complication)
+        VALUES ('${OWNER}'::uuid, 'delt_l', 'deltoids', now(), ARRAY['not_listed']::text[]);
       EXCEPTION WHEN check_violation THEN
         RESET ROLE;
         UPDATE c445_refusals SET invalid_complication_denied = true;
         SET LOCAL ROLE authenticated;
-        PERFORM set_config('request.jwt.claim.sub', '${OWNER}', true);
+        PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', '${OWNER}')::text, true);
       END;
       BEGIN
-        INSERT INTO medical.injection_logs (user_id, injection_site_id, injected_at, override_reason)
-        VALUES ('${OWNER}'::uuid, 'delt_l', now(), '   ');
+        INSERT INTO medical.injection_logs (user_id, injection_site_id, body_area_code, injected_at, override_reason)
+        VALUES ('${OWNER}'::uuid, 'delt_l', 'deltoids', now(), '   ');
       EXCEPTION WHEN check_violation THEN
         RESET ROLE;
         UPDATE c445_refusals SET blank_override_denied = true;
         SET LOCAL ROLE authenticated;
-        PERFORM set_config('request.jwt.claim.sub', '${OWNER}', true);
+        PERFORM set_config('request.jwt.claims', jsonb_build_object('sub', '${OWNER}')::text, true);
       END;
       RESET ROLE;
     END \$\$;

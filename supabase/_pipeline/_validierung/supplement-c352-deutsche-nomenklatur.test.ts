@@ -59,5 +59,6 @@ test('C-352: alle anderen sichtbaren Katalogeintraege bleiben beim EN-Rueckfall'
     WHERE im_katalog AND name_de IS NOT NULL;
   `)
 
-  assert.equal(count, 20)
+  // A-87: C-275/C-516 haben 21 weitere belegte deutsche Namen kuratiert.
+  assert.equal(count, 41)
 })
