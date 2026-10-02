@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 270 |
+| `todos` | 271 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 624 |
-| **gesamt** | **899** |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 626 |
+| **gesamt** | **901** |
 
 ## medical — 50
 
@@ -489,7 +489,7 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 51
+## training — 52
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -544,6 +544,7 @@
 | `G-507` | befund | niedrig | [die Kachel ,,Pending actions" zeigt auf ein fremdes Schema](todos/training-g-0507-offene-punkte-liegen-in-coach.md) | offen | — | — |
 | `G-508` | befund | mittel | [die Volumengrenzen haben keine belegte Quelle](todos/training-g-0508-volumengrenzen-ohne-belegte-quelle.md) | offen | — | — |
 | `G-509` | feature | hoch | [der Workoutplaner von aussen nach innen](todos/training-g-0509-workoutplaner-von-aussen-nach-innen.md) | offen | — | — |
+| `G-584` | befund | mittel | [Drei Anzeigen ohne Quelle, aus dem LiveWorkout-Entwurf gerettet](todos/training-g-0584-drei-anzeigen-ohne-quelle-aus-dem-liveworkout-entwurf.md) | offen | — | — |
 
 ## recovery — 41
 
@@ -745,7 +746,7 @@
 |---|---|---|---|---|---|---|
 | `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](laufend_claudecode/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | laeuft (claudecode) | G-571 | — |
 
-## quer — 230
+## quer — 231
 
 ### beauftragbar — 229
 
@@ -801,9 +802,9 @@
 | `A-85` | fehler | mittel | [Der Zyklus wird geprueft, aber nichts fuehrt ihn aus](erledigt/quer-a-0085-der-zyklus-wird-geprueft-aber-nicht-ausgefuehrt.md) | erledigt | — | A-89 |
 | `A-86` | fehler | hoch | [Die Kette spielt die Testdaten nicht ein](erledigt/quer-a-0086-die-kette-spielt-die-testdaten-nicht-ein.md) | erledigt | — | — |
 | `A-87` | fehler | hoch | [46 Zeugen, nach Ursache gestaffelt verdrahten](erledigt/quer-a-0087-46-zeugen-nach-ursache-gestaffelt.md) | erledigt | — | A-92 |
-| `A-88` | fehler | hoch | [31 Proben fallen still auf postgres zurueck](laufend_codex/quer-a-0088-31-proben-fallen-still-auf-postgres-zurueck.md) | laeuft (codex) | — | — |
+| `A-88` | fehler | hoch | [31 Proben fallen still auf postgres zurueck](erledigt/quer-a-0088-31-proben-fallen-still-auf-postgres-zurueck.md) | erledigt | — | — |
 | `A-89` | fehler | mittel | [zyklus-fahren scheitert an EPERM, wenn ein Agent die Datei offen hat](todos/quer-a-0089-zyklus-fahren-scheitert-an-eperm.md) | offen | — | — |
-| `A-90` | fehler | hoch | [Grunddaten als Dump, nicht als Import bei jedem Lauf](erledigt/quer-a-0090-grunddaten-als-dump-statt-als-import.md) | erledigt | — | A-91 |
+| `A-90` | fehler | hoch | [Grunddaten als Dump, nicht als Import bei jedem Lauf](erledigt/quer-a-0090-grunddaten-als-dump-statt-als-import.md) | erledigt | — | A-91, A-94 |
 | `A-91` | fehler | hoch | [Der taegliche Lauf erzeugt bei gruen einen neuen Dump](laufend_codex/quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md) | laeuft (codex) | — | — |
 | `A-93` | fehler | hoch | [Zwei Agenten in einem Arbeitsbaum, und der Commit zahlt dafuer](todos/quer-a-0093-zwei-agenten-in-einem-arbeitsbaum.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
@@ -979,13 +980,14 @@
 | `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](erledigt/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | erledigt | — | — |
 | `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](laufend_codex/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | vorbereitet (codex) | — | — |
 | `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | offen | — | G-577, G-578, G-579, G-582 |
-| `G-583` | fehler | niedrig | [Drei Reste ohne Aufrufer, nach demselben Verfahren wie G-581](laufend_claudecode/quer-g-0583-drei-reste-ohne-aufrufer.md) | vorbereitet (claudecode) | — | — |
+| `G-583` | fehler | niedrig | [Drei Reste ohne Aufrufer, nach demselben Verfahren wie G-581](erledigt/quer-g-0583-drei-reste-ohne-aufrufer.md) | erledigt | — | G-584 |
 
-### wartet auf Blocker — 1
+### wartet auf Blocker — 2
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-92` | fehler | hoch | [Die G-558-Probe ruft berechne_zielwerte ohne Zielbezug und haelt den Tagesdump auf](erledigt/quer-a-0092-die-g558-probe-ruft-ohne-zielbezug.md) | erledigt | A-91 | — |
+| `A-94` | fehler | hoch | [Die Pruefsumme sperrt den Standardlauf, und niemand hat es gemerkt](laufend_codex/quer-a-0094-die-pruefsumme-sperrt-den-standardlauf.md) | laeuft (codex) | A-91 | — |
 
 ## buddy — 1
 

@@ -4,6 +4,8 @@ typ: fehler
 modul: quer
 schwere: hoch
 angelegt: 2026-10-01
+commit: 6b3f1c2c
+erledigt: 2026-10-02
 beauftragt: 2026-10-02
 agent: codex
 
@@ -175,3 +177,29 @@ ist:**
 
     434.525.275 Bytes · 19 Quellen · 2026-10-01T07:48:38.367Z
     SHA-256 274438cb44260e892ede093470f0bf8e4da79354e153e71d56acc4477e135163
+
+---
+
+## Abnahme — 2026-10-02, Commit `6b3f1c2c`
+
+`[cmd]` **Selbst nachgezählt in `supabase/_pipeline/`, nicht im Bericht
+gelesen:** `?? 'postgres'` und `|| 'postgres'` **0** (vorher 86, drei mehr
+als der Punkt sagte), `LUMEOS_*DATABASE` **0** (vorher 57 beim Start),
+`-d postgres` **0** — auch in Kommentaren. 153 Dateien, +454/−193.
+
+`[cmd]` **Fail-closed ist belegt und strenger als gefordert:**
+`if (!DB || DB === 'postgres') throw` — der Vertrag verweigert den Namen
+`postgres` auch dann, wenn er gesetzt ist. Der Wächter liegt in
+`tools/pipeline-database-vertrag.mjs`, seine drei Sabotagen laufen im
+Gate mit (Rückfall, eigener Variablenname, festes `-d postgres`, je rot).
+
+`[read]` **Zwei Zahlen waren größer als mein Auftrag sagte, beide vom
+Agenten gefunden:** drei weitere Rückfälle über `|| 'postgres'` und
+**fünf ausführende Festverdrahtungen in vier Dateien**, die A-87 nicht
+gesehen hatte.
+
+`[cmd]` **A5 bleibt offen, und der Grund ist ein eigener Befund:** der
+Standard-Restore wird vom A-90-Prüfsummenwächter **vor** dem Restore
+gestoppt — Manifest erwartet `c899…`, aktuell gilt `8e5f…`. **Er hat das
+nicht umgangen.** Das ist A-94, und es war die richtige Entscheidung: ein
+umgangener Herkunftswächter wäre schlimmer als ein blockierter Lauf.

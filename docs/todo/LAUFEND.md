@@ -6,9 +6,9 @@
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
 | Claude Code | G-582 | Der Coach-Alarm hat keinen Aufrufer | **laeuft**, raus 02.10. |
-| Codex | A-88 | 31 Proben fallen still auf postgres zurueck | **laeuft**, raus 02.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
-| Claude Code | G-583 | Drei Reste ohne Aufrufer, nach demselben Verfahren wie G-581 | **bereit in `next/`** |
+| Codex | A-94 | Die Pruefsumme sperrt den Standardlauf, und niemand hat es gemerkt | **laeuft**, raus 02.10. |
+| Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | G-567 | Die Tagesreferenz kennt kein Ziel | **bereit in `next/`** |
 <!-- /ERZEUGT:laufend-tabelle -->
 

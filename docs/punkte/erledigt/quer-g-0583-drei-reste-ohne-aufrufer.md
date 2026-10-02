@@ -4,6 +4,10 @@ typ: fehler
 modul: quer
 schwere: niedrig
 angelegt: 2026-10-02
+beauftragt: 2026-10-02
+agent: claudecode
+commit: 63332192
+erledigt: 2026-10-02
 
 braucht: [G-581]
 kind_von: G-581
@@ -89,3 +93,36 @@ Waechter in beide Richtungen · `pnpm gate` gruen mit Testzahl · nichts
 committen.
 
 `[read]` **Keine Datenbank, kein Kettenlauf.**
+
+---
+
+## Abnahme — 2026-10-02, Commit `63332192`
+
+`[cmd]` **Selbst nachgesehen, nicht im Bericht gelesen:** beide
+Definitionen sind weg — `export function wertKommtVonGruppe` und
+`function LiveWorkout` ergeben 0 Treffer. Was bleibt, sind
+Entfernungsvermerke (`schluessel-gruppe.ts:99`,
+`training/ansicht.tsx:301`) und die Ankündigung in
+`placeholder-page.tsx` — dort ist der Name eine Zeichenkette in einer
+Liste künftiger Bereiche, **kein Aufrufer, und sie bleibt mit Recht
+stehen.** 5 Dateien, +309/−179, Gate grün, Wächter mit 28 Zusicherungen.
+
+`[read]` **A3 ist der Teil, der diesen Punkt von einem Löschauftrag
+unterscheidet, und er hat es richtig gedreht:** G-217 hatte den Zweig
+absichtlich stehen gelassen, weil er die Zielgestalt trug — **die
+Begründung trägt nicht mehr, weil sie unvollständig war:** ein toter
+Zweig als einziger Träger einer Idee ist kein Archiv, er verschwindet
+beim nächsten Aufräumen. Also erst die Idee aufschreiben, dann die 147
+Zeilen.
+
+`[cmd]` **Vier Präsens-Zeilen, nicht drei** — `tab-plans.tsx:299` sagte
+ebenfalls, die Datei sei dorthin gewandert. **Mein Auftrag nannte drei,
+weil ich nur `plans-echt.tsx` gegrept hatte** — dieselbe Teilmessung wie
+bei den zehn Trennern in G-572.
+
+`[read]` **Dieselbe Sabotage-Klasse zum dritten Mal in Folge** (G-578,
+G-581, G-583): `assert.match` ist zufrieden, sobald ein Vorkommen übrig
+bleibt. Jetzt wird je Stelle geprüft. **Drei Mal dieselbe Falle heißt:
+sie gehört in die Auftragssprache**, nicht in jede Nachbesserung — bei
+Zusicherungen über mehrfach vorkommende Zeichenketten wird gezählt, nicht
+gesucht.
