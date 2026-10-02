@@ -96,20 +96,22 @@ export const OHNE_GRUPPE: Array<{ slug: string; grund: string }> = [
   },
 ]
 
-/**
- * Kommt der Wert dieser Flaeche von einer GRUPPE statt von ihr
- * selbst?
- *
- * `[read]` **Genau dann, wenn der gezeichnete Muskel ein anderer
- * ist als die Gruppe, an der die Messung haengt.** `[cmd]` **Beim
- * Trizeps: die Flaeche zeigt `Triceps Brachii Long Head`, die
- * Messung haengt an `Triceps`** — also geerbt.
- */
-export function wertKommtVonGruppe(
-  flaechenName: string | null, slug: string | null,
-): string | null {
-  if (!slug || !flaechenName) return null
-  const gruppe = SCHLUESSEL_ZU_GRUPPE[slug]
-  if (!gruppe) return null
-  return gruppe.toLowerCase() === flaechenName.toLowerCase() ? null : gruppe
-}
+// ══ G-583: `wertKommtVonGruppe` ist entfernt ══════════════════════
+//
+// `[cmd]` **Hier stand sie, mit null Aufrufern** — gezaehlt am
+// 2026-10-02 ueber 701 Dateien, **ohne Kommentare**: nur die eigene
+// Definition. (Mit Kommentaren waren es drei Dateien — genau die
+// Falle, an der der Waechter in G-446 blind war.)
+//
+// `[cmd]` **G-446 hat sie ausgetragen, und die Begruendung traegt
+// heute:** sie entschied die Herkunft eines geliehenen Werts **aus
+// der KARTENflaeche** — *„eine Vermutung"*. **Sie traf nur die
+// Muskeln, die gezeichnet sind:** die drei Trizepskoepfe haben eine
+// Flaeche, `Vastus Medialis` lieh trotzdem nicht, weil die Zuordnung
+// ueber den Slug lief. **Die Entscheidung trifft jetzt `muskelLage`
+// ueber die Sippe** (`tab-messwerte.tsx`, G-446).
+//
+// `[read]` **A-59: entfernt, nicht auskommentiert.** git holt sie
+// zurueck. `[read]` **`SCHLUESSEL_ZU_GRUPPE` und `OHNE_GRUPPE`
+// bleiben** — die Karte braucht weiter den Weg vom Kuerzel zur
+// Muskelgruppe.

@@ -401,8 +401,14 @@ export function PlanEinstellungenEcht({ d }: { d: PlanDaten }) {
 // die gar nichts sagt, nichtmal anschaubar ist oder editierbar."*
 //
 // `[cmd]` **Ersetzt durch `MealPlanCard` + `MealPlanDetail`** in
-// `plan-detail.tsx` — die Karte traegt Quelle, Status und kcal/Tag
+// `plan-detail.tsx` — die Karte trug Quelle, Status und kcal/Tag
 // (SPEC_10), das Akkordeon die Tage mit ihren Eintraegen.
+//
+// `[cmd]` **G-581 hat `plan-detail.tsx` entfernt** (2026-10-02):
+// beide Bauteile hatten seit G-319 null Aufrufer — sie zeigten den
+// aktiven Plan ein drittes Mal. **Was sie zeigten, steht in dieser
+// Datei:** der Kopf in `PlanKopfEcht`, die uebrigen Plaene in der
+// Bibliothek weiter unten.
 //
 // `[read]` **A-59: geloescht, nicht auskommentiert** — was keinen
 // Aufrufer hat, gilt beim naechsten Auftrag sonst als gebaut. git
@@ -956,12 +962,18 @@ const SLOT_TEXT = KATEGORIE_TEXT
 // `[cmd]` **In der Vorlage steht die Herkunft als BADGE an der
 // Plankarte** (`MealPlansView.js` Z. 89; `SPEC_03` Flow 3 Schritt 2
 // nennt die Beschriftungen je Quelle). **Dorthin ist sie gewandert**
-// — `plan-detail.tsx`, `MealPlanCard`, mit `HERKUNFT_BADGE` und
-// `HERKUNFT_FARBE`.
+// — damals nach `plan-detail.tsx`, `MealPlanCard`, mit
+// `HERKUNFT_BADGE` und `HERKUNFT_FARBE`.
+//
+// `[cmd]` **G-581 hat jene Datei entfernt** (2026-10-02, null
+// Aufrufer seit G-319). `[cmd]` **Das Badge steht seither HIER**, in
+// der Bibliothek weiter unten: `const badge = HERKUNFT_BADGE[h]`,
+// bedingt gerendert und mit `HERKUNFT_FARBE[h]` eingefaerbt — **ein
+// Waechter haelt genau das fest** (`plan-reiter-mockup.test.ts`,
+// nachgezogen in G-581).
 //
 // `[read]` **Der Satz zur unbekannten Herkunft ist mitgegangen** —
-// `plan-detail.tsx` zeigt ihn bereits; er traegt Information, die kein
-// Badge fasst.
+// er traegt Information, die kein Badge fasst.
 //
 // `[read]` **A-59: geloescht, nicht auskommentiert** — was keinen
 // Aufrufer hat, gilt beim naechsten Auftrag sonst als gebaut. git holt

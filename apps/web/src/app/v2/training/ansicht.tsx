@@ -298,19 +298,40 @@ export function TrainingAnsicht({
         </>
       )}
 
-      {/* ══ G-217: hier stand `LiveWorkout`, der Entwurf ════════════
+      {/* ══ G-217/G-583: `LiveWorkout` ist entfernt ════════════════
           `[read]` **Der Entwurf zeigte fuenf fest verdrahtete Saetze
           an einer erfundenen Uebung** — nichts davon wurde
           gespeichert. `SitzungFormular` erfasst dieselbe Sache
           echt, ueber die Naht aus G-216.
-          `[cmd]` **`LiveWorkout` hat damit KEINEN Aufrufer mehr.**
-          Er bleibt als Vorlage stehen, weil er die Zielgestalt
-          zeigt, die das Formular noch nicht hat — Pausenuhr,
-          PR-Marke, Zielvorgabe je Satz. **Das ist ein toter Zweig
-          mit Absicht, und er ist hier benannt**, damit ihn niemand
-          fuer erreichbar haelt (G-186: ein entfernter Zweig darf
-          nichts still mitnehmen, ein bleibender nichts still
-          vortaeuschen). */}
+
+          `[cmd]` **G-217 liess ihn stehen**, weil er die Zielgestalt
+          zeigte, die das Formular noch nicht hat. `[cmd]` **G-583
+          hat ihn entfernt (145 Zeilen, 1138-1282), nachdem die drei
+          Sachen aufgeschrieben waren** — ein toter Zweig als
+          einziger Traeger einer Idee ist kein Archiv, sondern eine
+          Idee, die beim naechsten Aufraeumen verschwindet.
+
+          ── Was der Entwurf trug, als Befund ──────────────────────
+
+          `[cmd]` **1. Pausenuhr.** `restTime` in Sekunden,
+          Start/Pause/Reset, Beschriftung *„target 3:00 · auto-start
+          after log"* — **die Uhr lief nach dem Protokollieren von
+          selbst an.** `SitzungFormular` hat nichts davon.
+
+          `[cmd]` **2. PR-Marke.** Eine Pille `PR attempt` am Satz,
+          wenn der Versuch ueber dem Bestwert liegt. **Der Bestwert
+          lag im Entwurf als Zeichenkette vor** (`BW+34kg`,
+          `+30kg x5`) — **woher er echt kaeme, sagt er nicht.**
+
+          `[cmd]` **3. Zielvorgabe je Satz.** *„Target: 5x5 @ 117.5kg
+          · RIR 2 · Last: …"* — Gewicht, Wiederholungen und RIR als
+          Vorgabe, daneben der letzte Stand.
+
+          `[read]` **Alle drei sind Anzeige ohne Quelle:** die
+          Pausenuhr braeuchte keine, die PR-Marke eine
+          Bestwertabfrage, die Zielvorgabe einen Trainingsplan je
+          Satz. **Der Orchestrator legt daraus einen Punkt an**
+          (G-583/A3). */}
       {liveOpen && <SitzungFormular onClose={() => setLiveOpen(false)} />}
       <TrainingModale modal={modal} onClose={kontext.close} />
     </TrainingKontext.Provider>
@@ -1133,150 +1154,3 @@ function TrainingLibrary() {
   )
 }
 
-// --- LIVE WORKOUT MODAL ------------------------------------------
-// [cmd] module-training.jsx:511-627.
-function LiveWorkout({ onClose }: { onClose: () => void }) {
-  const t = React.useContext(TrainingKontext)
-  const [restTime, setRestTime] = React.useState(0)
-  const [running, setRunning] = React.useState(false)
-  const [sets, setSets] = React.useState([
-    { weight: 115, reps: 5, rir: 2, done: true },
-    { weight: 117.5, reps: 5, rir: 2, done: true },
-    { weight: 117.5, reps: 5, rir: 1, done: true },
-    { weight: 117.5, reps: 0, rir: 0, done: false },
-    { weight: 117.5, reps: 0, rir: 0, done: false },
-  ])
-
-  React.useEffect(() => {
-    if (!running) return
-    const id = setInterval(() => setRestTime(x => x + 1), 1000)
-    return () => clearInterval(id)
-  }, [running])
-
-  // Escape schliesst — wie in `InEntwicklung`, sonst ist das Modal per
-  // Tastatur eine Sackgasse. Die Vorlage hat das nicht.
-  React.useEffect(() => {
-    const auf = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', auf)
-    return () => window.removeEventListener('keydown', auf)
-  }, [onClose])
-
-  const ex = {
-    name: 'Bench Press · Barbell',
-    target: '5×5 @ 117.5kg · RIR 2',
-    last: 'Tue May 13 — 5,5,5,5,4 @ 115kg',
-  }
-  const fmt = (x: number) => `${Math.floor(x / 60)}:${(x % 60).toString().padStart(2, '0')}`
-  const naechster = sets.findIndex(x => !x.done)
-
-  return (
-    <div className="v2-modal-veil" onClick={onClose} role="presentation">
-      <div className="v2-modal" style={{ width: 640, maxWidth: '92vw' }}
-           role="dialog" aria-modal="true" aria-label="Live · Push B"
-           onClick={e => e.stopPropagation()}>
-        <div className="v2-modal-h" style={{ background: 'color-mix(in oklch, var(--acc-train) 12%, var(--bg-elev))' }}>
-          <div style={{
-            width: 28, height: 28, borderRadius: 6,
-            background: 'color-mix(in oklch, var(--acc-train) 22%, transparent)',
-            display: 'grid', placeItems: 'center', color: 'var(--acc-train)', flexShrink: 0,
-          }}>
-            <Icon name="training" className="v2-ic" />
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 600, fontSize: 14 }}>Live · Push B</div>
-            <div className="v2-dim" style={{ fontSize: 11 }}>
-              <Icon name="wifi_off" className="v2-ic v2-ic-sm"
-                    style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />
-              Offline · synced when online · 04:18 elapsed
-            </div>
-          </div>
-          <Pill variant="acc">Exercise 1 of 7</Pill>
-          <button type="button" className="v2-icon-btn" onClick={onClose} aria-label="Schliessen">
-            <Icon name="x" className="v2-ic" />
-          </button>
-        </div>
-        <div className="v2-modal-body" style={{ padding: 0 }}>
-          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8, flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 16, fontWeight: 600 }}>{ex.name}</span>
-              <Pill variant="pos"><Icon name="trend_up" className="v2-ic v2-ic-sm" />PR attempt</Pill>
-            </div>
-            <div className="v2-num v2-muted" style={{ fontSize: 11, marginBottom: 12 }}>
-              Target: <span style={{ color: 'var(--fg)' }}>{ex.target}</span> · Last: {ex.last}
-            </div>
-            <div className="v2-tbl-wrap">
-              <table className="v2-tbl">
-                <thead>
-                  <tr>
-                    <th style={{ width: 30 }}>Set</th>
-                    <th style={{ textAlign: 'right' }}>Weight</th>
-                    <th style={{ textAlign: 'right' }}>Reps</th>
-                    <th style={{ textAlign: 'right' }}>RIR</th>
-                    <th style={{ width: 40 }} />
-                  </tr>
-                </thead>
-                <tbody>
-                  {sets.map((s, i) => (
-                    <tr key={i} style={{ opacity: s.done || i === naechster ? 1 : 0.5 }}>
-                      <td className="v2-num">{i + 1}</td>
-                      <td className="v2-num" style={{ textAlign: 'right' }}>
-                        {s.weight}<span className="v2-dim" style={{ fontSize: 10 }}> kg</span>
-                      </td>
-                      <td className="v2-num" style={{ textAlign: 'right' }}>{s.reps || '—'}</td>
-                      <td className="v2-num v2-muted" style={{ textAlign: 'right' }}>{s.done ? s.rir : '—'}</td>
-                      <td>
-                        {s.done ? (
-                          <Icon name="check" className="v2-ic v2-ic-sm" style={{ color: 'var(--pos)' }} />
-                        ) : i === naechster ? (
-                          <button
-                            type="button" className="v2-btn v2-btn-accent"
-                            style={{ height: 22, fontSize: 10, padding: '0 6px' }}
-                            onClick={() => {
-                              setSets(prev => prev.map((x, j) => j === i ? { ...x, reps: 5, rir: 1, done: true } : x))
-                              setRestTime(0)
-                              setRunning(true)
-                            }}
-                          >Log</button>
-                        ) : (
-                          <span className="v2-dim">—</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="v2-train-rest">
-            <div style={{ flex: 1 }}>
-              <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Rest timer</div>
-              <div className="v2-num" style={{ fontSize: 36, lineHeight: 1, fontWeight: 500 }}>{fmt(restTime)}</div>
-              <div className="v2-dim" style={{ fontSize: 11, marginTop: 4 }}>target 3:00 · auto-start after log</div>
-            </div>
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-              <button type="button" className="v2-btn" onClick={() => setRunning(r => !r)}>
-                <Icon name={running ? 'pause' : 'play'} className="v2-ic v2-ic-sm" /> {running ? 'Pause' : 'Start'}
-              </button>
-              <button type="button" className="v2-btn v2-btn-ghost" onClick={() => setRestTime(0)}>Reset</button>
-              <button type="button" className="v2-btn v2-btn-ghost" onClick={() => t?.open('warmup')}>
-                <Icon name="flame" className="v2-ic v2-ic-sm" />Warm-up
-              </button>
-            </div>
-          </div>
-          {/* Die Vorlage zeigt hier `window.HeartRateWidget`. Die
-              Komponente gibt es in keiner der vier Dateien — der HR-Teil
-              steht als eigener Tab („HR zones"). */}
-        </div>
-        <div className="v2-modal-f">
-          <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Save &amp; exit</button>
-          <div className="v2-spacer" />
-          <InEntwicklungKnopf titel="Previous" className="v2-btn">Previous</InEntwicklungKnopf>
-          <InEntwicklungKnopf titel="Next exercise" className="v2-btn v2-btn-primary">
-            Next exercise <Icon name="arrow_right" className="v2-ic v2-ic-sm" />
-          </InEntwicklungKnopf>
-        </div>
-      </div>
-    </div>
-  )
-}

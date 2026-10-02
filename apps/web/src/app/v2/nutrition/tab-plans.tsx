@@ -296,7 +296,13 @@ export function MealPlansTab({
                 `[cmd]` **In der Vorlage steht die Herkunft als BADGE
                 an der Plankarte** (`MealPlansView.js` Z. 89,
                 `SPEC_03` Flow 3 Schritt 2). **Dorthin ist sie
-                gewandert** — `plan-detail.tsx`, `MealPlanCard`.
+                gewandert** — damals nach `plan-detail.tsx`,
+                `MealPlanCard`.
+
+                `[cmd]` **G-581 hat jene Datei entfernt**
+                (2026-10-02, null Aufrufer seit G-319). **Das Badge
+                steht seither in `plans-echt.tsx`**, in der
+                Bibliothek.
 
                 `[read]` **Und der Knopf *Plan bearbeiten* gehoerte
                 ohnehin nicht hierher.** Tom: *,,irgend einen
