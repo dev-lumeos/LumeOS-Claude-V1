@@ -27,7 +27,60 @@
 // NICHT geaendert: keine Kachel weggelassen, keine Zahl ersetzt, keine
 // Anordnung angepasst. Die Texte bleiben englisch wie in der Vorlage.
 //
-// **SEIT GO-16 SIND FUENF TABS ECHT** und liegen in eigenen Dateien:
+// ══ WAS ECHT IST UND WAS ATTRAPPE — G-572, Stand 2026-10-02 ════════
+//
+// `[read]` **Die Gruende je Kachel stehen in
+// `docs/ssot/116-goals-anbindung.md`** — dort, nicht hier. `[cmd]`
+// **Jene Datei traegt den Stand 2026-08-18 (GO-16);** seither sind
+// acht Punkte durch diese Ansicht gegangen (G-79, G-365, G-539,
+// G-544, G-553, G-555, G-565, G-577). **Was hier steht, ist die
+// Zaehlung von heute, nicht ihre Wiederholung.**
+//
+// `[cmd]` **Am 2026-10-02 je Reiter am SCHIRM gezaehlt**
+// (`dev@lumeos.app`, Attrappenmarken ueber und unter dem Trenner):
+//
+//     Reiter            oben  unten   was oben steht
+//     ----------------------------------------------------------------
+//     Goals                2      7   Zielkarten + Meilensteine echt
+//     Phase engine         7      5   PhaseEcht, Editor, Zeitachse,
+//                                     Einheitenschalter — alles echt
+//     Adaptive TDEE        4      6   Kopfkachel echt, Kurve Entwurf
+//     Cross-module         5      5   KEIN echter Teil
+//     Timeline             0      1   Zeitachse echt (G-79)
+//     Body metrics         0      6   ganz echt
+//     Measurements         0      3   ganz echt
+//     Composition          0      4   ganz echt
+//     Physique ratios      1      4   PhysiqueEcht aus den Umfaengen
+//     Pose sessions        3      3   KEIN echter Teil
+//
+// `[read]` **Attrappe OHNE echten Teil sind heute zwei Reiter:**
+// **Cross-module** und **Pose sessions**. `[cmd]` **Hier stand bis
+// G-572 eine Liste von fuenf** — Timeline, Phase engine, Cross-module,
+// Physique ratios, Pose sessions. **Drei davon sind seither
+// angebunden worden**, und der Kopf hat es nicht mitbekommen.
+//
+// `[read]` **Die uebrigen acht sind GEMISCHT** — echter Teil oben,
+// Mockup-Referenz unter dem Trenner (E-68). **Ein Reiter mit Attrappen
+// ist nicht dasselbe wie ein Attrappenreiter**, und genau diese
+// Verwechslung hat die erste Fassung von G-532 erzeugt.
+//
+// `[cmd]` **Zehn Trenner, nicht drei:** drei stehen in dieser Datei
+// (Phase engine, Physique, Timeline), **sieben in
+// `mockup-referenz.tsx`** (Goals, Body metrics, Measurements,
+// Composition, Adaptive TDEE, Cross-module, Pose sessions). **Jeder
+// Reiter hat genau einen.**
+//
+// `[read]` **Hier stehen bewusst KEINE Zeilennummern** — sie altern
+// mit jedem Punkt, der die Datei anfasst. **Genau daran ist der
+// Auftrag zu G-572 selbst gestolpert:** er nannte 616 fuer den
+// Phase-engine-Trenner, gemessen waren es 580, und nach diesem
+// Kopf sind es wieder andere. `[cmd]` **Nachzaehlen:**
+//
+//     grep -n 'ReferenzTrenner reiter=' apps/web/src/app/v2/goals/ansicht.tsx
+//     grep -rn 'ReferenzTrenner reiter=' apps/web/src/app/v2/goals/mockup-referenz.tsx
+//
+// **Die fuenf Reiter, die GO-16 angebunden hat** (Stand 2026-08-18,
+// unveraendert gueltig):
 //   Goals        `ziel-karten.tsx`     user_goals · goal_progress_at
 //                                      goal_milestones · _status
 //   Adaptive TDEE `tdee-kopf.tsx`      adaptive_tdee (nur die Kopfkachel)
@@ -36,17 +89,29 @@
 //   Composition  `tab-composition.tsx` body_composition_navy ·
 //                                      berechne_zielwerte · profiles
 //
-// `[cmd]` Was hier bleibt, ist Attrappe: Timeline, Phase engine,
-// Cross-module, Physique ratios, Pose sessions — und der groessere
-// Teil des Adaptive-TDEE-Tabs. Gruende je Kachel in
-// docs/ssot/116-goals-anbindung.md.
+// **Dazu seither** (je mit dem Punkt, der es gebaut hat):
+//   Timeline        G-79    `tab-timeline.tsx` — Ziele, Phasen,
+//                           Meilensteine mit Datum
+//   Phase engine    G-539   Editor · G-544 Zeitachse · G-565
+//                           Einheitenschalter · G-513 Schreibwege
+//   Physique ratios G-87    `physique-echt.tsx` aus `body_circumferences`
+//
+// `[read]` **Nachzuzaehlen mit dem Skript aus G-572:** je Reiter die
+// Marken ueber und unter `[data-referenz-trenner]`.
 import * as React from 'react'
 import { useTabParam } from '../../../lib/tab-url'
 import { Card, Pill, Icon, Tabs, type TabItem } from '@lumeos/ui'
 
-// `[cmd]` Von den neun Importen aus `daten.ts` sind seit GO-16 zwei
-// uebrig: der Timeline-Tab braucht sie, weil er weiter Attrappe ist.
-// Die uebrigen sieben hingen an den vier geloeschten Tabs.
+// `[cmd]` **Von den neun Importen aus `daten.ts` sind zwei uebrig**
+// — gezaehlt GO-16 (2026-08-18), **nachgeprueft G-572 (2026-10-02):
+// gilt weiter.** Die uebrigen sieben hingen an den vier geloeschten
+// Tabs.
+//
+// `[read]` **Sie gehoeren dem `TimelineTab` UNTER dem Trenner**, nicht
+// dem Reiter: **die echte Zeitachse ist `ZeitachseTab`** aus
+// `tab-timeline.tsx` (G-79) und liest `echt.ziele`, `echt.phasen`,
+// `echt.meilensteine`. **Der Kopf sagte „weil er weiter Attrappe
+// ist" — das stimmt fuer die Mockup-Fassung, nicht fuer den Reiter.**
 import { ACTIVE_GOALS, COMPLETED_GOALS } from './daten'
 import { GoalsKontext, type ModalZustand } from './kontext'
 import { GoalsModale } from './modale'
