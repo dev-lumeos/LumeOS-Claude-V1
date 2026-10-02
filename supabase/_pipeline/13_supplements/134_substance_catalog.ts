@@ -560,6 +560,98 @@ function filterFromGroupCategory(gruppe: string | null, kategorie: string | null
   return null
 }
 
+// C-556: Der groessere Kimi-Bestand verwendet fuer die neu hinzugekommenen
+// Zeilen feinere Stoffklassen statt der bisherigen Produktbuendel. Die
+// C-230-Filter bleiben bewusst grob (Zweck statt Wirkmechanismus); hier wird
+// deshalb nur die neue Quelltaxonomie auf die vorhandenen Filter abgebildet.
+const KIMI_SUPPLEMENT_FILTER_BY_NAME = new Map<string, string>([
+  ['ashwagandha ksm 66', 'adaptogene'],
+  ['tongkat ali', 'adaptogene'],
+  ['maca root', 'adaptogene'],
+  ['black maca', 'adaptogene'],
+  ['cistanche', 'adaptogene'],
+  ['fadogia agrestis', 'adaptogene'],
+  ['cordyceps mushroom', 'adaptogene'],
+  ['holy basil tulsi', 'adaptogene'],
+  ['gynostemma jiaogulan', 'adaptogene'],
+  ['lion s mane', 'nootropika'],
+  ['mucuna pruriens l dopa', 'nootropika'],
+  ['gotu kola', 'nootropika'],
+  ['polygala tenuifolia', 'nootropika'],
+  ['neuromaster coffee fruit', 'nootropika'],
+  ['mitochondrial support complex', 'uebrige'],
+])
+
+function filterFromKimiSource(
+  row: KimiSubstance,
+  gruppe: string | null,
+  kategorie: string | null,
+): string | null {
+  const existing = filterFromGroupCategory(gruppe, kategorie)
+  if (existing) return existing
+
+  const sourceClass = fold(row.compound_type)
+  const sourceDetail = fold(row.subcategory)
+
+  if (gruppe === 'supplement' && fold(row.category) === 'supplement') {
+    const curated = KIMI_SUPPLEMENT_FILTER_BY_NAME.get(fold(row.canonical_name))
+    if (curated) return curated
+    if (sourceClass === 'herb botanical' || sourceClass === 'medicinal mushroom' || sourceClass === 'mushroom fungal') return 'botanicals'
+    if (sourceClass === 'vitamin') return 'vitamine'
+    if (sourceClass === 'mineral' || sourceClass === 'mineral electrolyte') return 'mineralstoffe'
+    if (['amino acid blend', 'protein amino acid', 'endogenous dipeptide'].includes(sourceClass)) return 'protein_aminos'
+    if (sourceClass === 'stimulant' || sourceClass === 'phytoecdysteroid') return 'sportnahrung'
+    if (['synthetic nootropic', 'experimental drug', 'experimental compound'].includes(sourceClass)) return 'nootropika'
+    if ([
+      'longevity', 'cofactor redox compound', 'endogenous coenzyme', 'endogenous cofactor',
+      'carotenoid', 'dietary amino acid derivative', 'synthetic coq10 analogue',
+      'thiazine dye approved drug', 'carbon nanomaterial',
+    ].includes(sourceClass)) return 'longevity'
+    if (['fiber', 'amino sugar', 'probiotic', 'whole food algae'].includes(sourceClass)) return 'uebrige'
+    if (sourceClass === 'hormonal') return 'adaptogene'
+  }
+
+  if (gruppe === 'peptide') {
+    if (sourceDetail.includes('insulin')) return 'stoffwechsel'
+    if (
+      sourceDetail.includes('wachstumshormon achse')
+      || sourceDetail.includes('gh secretagogue')
+      || sourceDetail.includes('myostatin pathway')
+    ) return 'wachstumshormon'
+  }
+
+  if (gruppe === 'enhanced') {
+    if (
+      sourceDetail.startsWith('injectable aas')
+      || sourceDetail.startsWith('endogenous androgen aas')
+      || sourceDetail.startsWith('unesterified testosterone')
+    ) return 'injizierbare_aas'
+    if (sourceDetail.startsWith('anabole androgene steroide aas')) {
+      const routes = textArray(objectValue(row.pharmacology).route_of_administration).map(fold)
+      const oral = routes.some(route => route.includes('oral'))
+      const intramuscular = routes.some(route => /\bi\s*m\b|intramuscular/.test(route))
+      if (oral && !intramuscular) return 'orale_aas'
+      if (intramuscular) return 'injizierbare_aas'
+      return null
+    }
+    if (sourceDetail.startsWith('sarm')) return 'sarm'
+    if ([
+      'serm', 'selective estrogen receptor degrader',
+      'ergot derived dopamine', 'urinary gonadotropin', 'gnrh agonist',
+      'thyroid hormone', 'antidiabetikum biguanid',
+      'flavone polyphenol marketed as natural aromatase inhibitor',
+    ].some(prefix => sourceDetail.startsWith(prefix)) || sourceDetail.includes('aromatase inhibitor')) return 'begleitmedikation'
+    if (
+      sourceDetail.includes('diuretic')
+      || sourceDetail.includes('aldosterone antagonist')
+      || sourceDetail.startsWith('beta 2 agonist')
+    ) return 'fatburner'
+    if (sourceDetail.startsWith('polyphenol extrakt standardisiert auf opc')) return 'sonstige'
+  }
+
+  return null
+}
+
 function emptyLiftedFields(): Pick<SubstanceRow,
   'safety' | 'interactions' | 'regulatory' | 'quality' | 'warning_triggers' | 'monitoring' | 'evidence_provenance' |
   'wada_status' | 'prescription_required' | 'dose_ceiling_value' | 'dose_ceiling_unit' |
@@ -743,7 +835,7 @@ for (const row of kimiRows) {
     subcategory,
     gruppe,
     kategorie,
-    filter: filterFromGroupCategory(gruppe, kategorie),
+    filter: filterFromKimiSource(row, gruppe, kategorie),
     description: nullableText(row.description),
     ...taxonomy,
     chemical_form: row.chemical_form ? String(row.chemical_form) : null,
@@ -971,29 +1063,29 @@ const expectedFilter = substanceRows.filter(row => row.filter !== null).length
 const expectedDescription = substanceRows.filter(row => row.description !== null).length
 const expectedMonitoring = substanceRows.filter(row => row.monitoring !== null).length
 const expectedFilterCounts = [
-  ['peptide', 'wachstumshormon', 25],
-  ['peptide', 'stoffwechsel', 10],
+  ['peptide', 'wachstumshormon', 29],
+  ['peptide', 'stoffwechsel', 17],
   ['peptide', 'muskel_gewebe', 10],
   ['peptide', 'neuro', 9],
   ['peptide', 'hormone', 7],
   ['peptide', 'longevity_immun', 11],
-  ['peptide', 'ohne_zuordnung', 10],
-  ['enhanced', 'injizierbare_aas', 36],
-  ['enhanced', 'orale_aas', 32],
-  ['enhanced', 'sarm', 22],
+  ['peptide', 'ohne_zuordnung', 7],
+  ['enhanced', 'injizierbare_aas', 39],
+  ['enhanced', 'orale_aas', 31],
+  ['enhanced', 'sarm', 20],
   ['enhanced', 'prohormone', 16],
-  ['enhanced', 'begleitmedikation', 41],
-  ['enhanced', 'fatburner', 25],
-  ['enhanced', 'sonstige', 5],
-  ['supplement', 'botanicals', 68],
+  ['enhanced', 'begleitmedikation', 46],
+  ['enhanced', 'fatburner', 27],
+  ['enhanced', 'sonstige', 6],
+  ['supplement', 'botanicals', 69],
   ['supplement', 'longevity', 40],
-  ['supplement', 'mineralstoffe', 36],
-  ['supplement', 'vitamine', 34],
-  ['supplement', 'nootropika', 31],
+  ['supplement', 'mineralstoffe', 32],
+  ['supplement', 'vitamine', 28],
+  ['supplement', 'nootropika', 33],
   ['supplement', 'sportnahrung', 26],
-  ['supplement', 'adaptogene', 22],
-  ['supplement', 'protein_aminos', 19],
-  ['supplement', 'uebrige', 31],
+  ['supplement', 'adaptogene', 19],
+  ['supplement', 'protein_aminos', 20],
+  ['supplement', 'uebrige', 30],
 ] as const
 const expectedFilterValuesSql = expectedFilterCounts
   .map(([gruppe, filter, count]) => `('${gruppe}', '${filter}', ${count})`)
@@ -1004,21 +1096,28 @@ for (const row of substanceRows) {
   const key = `${row.gruppe}|${row.filter}`
   actualFilterCounts.set(key, (actualFilterCounts.get(key) ?? 0) + 1)
 }
-if (expectedGroups.supplement !== 307 || expectedGroups.peptide !== 82 || expectedGroups.enhanced !== 177) {
-  fail(`C-228 Gruppen-Erwartung verfehlt: supplement ${expectedGroups.supplement}, peptide ${expectedGroups.peptide}, enhanced ${expectedGroups.enhanced}; erwartet 307/82/177`)
+if (expectedGroups.supplement !== 297 || expectedGroups.peptide !== 90 || expectedGroups.enhanced !== 185) {
+  fail(`C-228 Gruppen-Erwartung verfehlt: supplement ${expectedGroups.supplement}, peptide ${expectedGroups.peptide}, enhanced ${expectedGroups.enhanced}; erwartet 297/90/185`)
 }
 if (expectedKategorie !== substanceRows.length) {
   fail(`C-228 Kategorien: ${expectedKategorie}, erwartet ${substanceRows.length}`)
 }
 if (expectedFilter !== substanceRows.length) {
-  fail(`C-230 Filter: ${expectedFilter}, erwartet ${substanceRows.length}`)
+  const missing = substanceRows
+    .filter(row => row.filter === null)
+    .map(row => `${row.id} (${row.canonical_name}; ${row.gruppe}/${row.kategorie})`)
+    .join(', ')
+  fail(`C-230 Filter: ${expectedFilter}, erwartet ${substanceRows.length}; ohne Filter: ${missing}`)
 }
-for (const [gruppe, filter, count] of expectedFilterCounts) {
+const filterCountMismatches = expectedFilterCounts.flatMap(([gruppe, filter, count]) => {
   const actual = actualFilterCounts.get(`${gruppe}|${filter}`) ?? 0
-  if (actual !== count) fail(`C-230 Filter ${gruppe}/${filter}: ${actual}, erwartet ${count}`)
+  return actual === count ? [] : [`${gruppe}/${filter}: ${actual}, erwartet ${count}`]
+})
+if (filterCountMismatches.length > 0) {
+  fail(`C-230 Filter-Zaehlung: ${filterCountMismatches.join('; ')}`)
 }
-if (expectedDescription !== 290) fail(`C-228 description: ${expectedDescription}, erwartet 290`)
-if (expectedMonitoring !== 46) fail(`C-228 monitoring: ${expectedMonitoring}, erwartet 46`)
+if (expectedDescription !== 446) fail(`C-228 description: ${expectedDescription}, erwartet 446`)
+if (expectedMonitoring !== 169) fail(`C-228 monitoring: ${expectedMonitoring}, erwartet 169`)
 
 const expectedSubstanceRows = kimiRows.length + localOwn + f05Own
 const expectedSourceRows = kimiRows.length + local.supplements.length + f05.substances.length + crossLinks
@@ -1136,7 +1235,7 @@ CREATE TABLE IF NOT EXISTS supplements.substance_catalog (
   CHECK (confidence IS NULL OR (confidence >= 0 AND confidence <= 1)),
   CHECK (source_count IS NULL OR source_count >= 0),
   CHECK (primary_source_count IS NULL OR primary_source_count >= 0),
-  CHECK (wada_status IS NULL OR wada_status IN ('prohibited', 'monitored', 'not_prohibited')),
+  CHECK (wada_status IS NULL OR wada_status IN ('prohibited', 'monitored', 'not_prohibited', 'restricted')),
   CHECK (gruppe IS NULL OR gruppe IN ('supplement', 'peptide', 'enhanced')),
   CHECK (kategorie IS NULL OR btrim(kategorie) <> ''),
   CHECK (filter IS NULL OR btrim(filter) <> ''),
@@ -1181,6 +1280,12 @@ ALTER TABLE supplements.substance_catalog
   ADD COLUMN IF NOT EXISTS description TEXT,
   ADD COLUMN IF NOT EXISTS monitoring JSONB,
   ADD COLUMN IF NOT EXISTS filter TEXT;
+
+ALTER TABLE supplements.substance_catalog
+  DROP CONSTRAINT IF EXISTS substance_catalog_wada_status_check;
+ALTER TABLE supplements.substance_catalog
+  ADD CONSTRAINT substance_catalog_wada_status_check
+  CHECK (wada_status IS NULL OR wada_status IN ('prohibited', 'monitored', 'not_prohibited', 'restricted'));
 
 DO $$
 BEGIN
@@ -1248,11 +1353,6 @@ BEGIN
     ALTER TABLE supplements.substance_catalog
       ADD CONSTRAINT substance_catalog_primary_source_count_check
       CHECK (primary_source_count IS NULL OR primary_source_count >= 0);
-  END IF;
-  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_wada_status_check') THEN
-    ALTER TABLE supplements.substance_catalog
-      ADD CONSTRAINT substance_catalog_wada_status_check
-      CHECK (wada_status IS NULL OR wada_status IN ('prohibited', 'monitored', 'not_prohibited'));
   END IF;
   IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_gruppe_check') THEN
     ALTER TABLE supplements.substance_catalog

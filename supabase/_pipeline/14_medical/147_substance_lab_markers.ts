@@ -25,11 +25,11 @@ const EXPECTED_KIMI_CANDIDATE_MARKERS = 46
 const MIN_KIMI_SUBSTANCE_COUNT = 290
 const EXPECTED_REPO_RESOLVED_WITHOUT_CANDIDATE = 18
 const EXPECTED_UNRESOLVED_MARKERS = 2
-const EXPECTED_SUBSTANCES_WITH_EFFECTS = 90
-const EXPECTED_EFFECT_ENTRIES = 156
-const EXPECTED_EFFECT_ROWS = 222
-const EXPECTED_MARKER_LINK_ROWS = 203
-const EXPECTED_NO_MARKER_ROWS = 19
+const EXPECTED_SUBSTANCES_WITH_EFFECTS = 182
+const EXPECTED_EFFECT_ENTRIES = 403
+const EXPECTED_EFFECT_ROWS = 522
+const EXPECTED_MARKER_LINK_ROWS = 353
+const EXPECTED_NO_MARKER_ROWS = 169
 
 type JsonObject = Record<string, unknown>
 type KimiMarker = {
@@ -210,7 +210,15 @@ function objectValue(value: unknown): JsonObject {
 
 function normalizeEffectType(value: unknown): string {
   const text = String(value ?? 'physiological_lab_effect')
-  if (['physiological_lab_effect', 'monitoring_requirement', 'assay_interference'].includes(text)) return text
+  // C-556: Kimi nennt zwei Vitamin-C-Effekte "lab_interference"; sie
+  // beschreiben dieselbe analytische Stoerung wie der bestehende Typ.
+  if (text === 'lab_interference') return 'assay_interference'
+  if ([
+    'physiological_lab_effect',
+    'monitoring_requirement',
+    'assay_interference',
+    'detection_marker',
+  ].includes(text)) return text
   fail(`Unbekannter effect_type: ${text}`)
 }
 
@@ -427,7 +435,8 @@ CREATE TABLE IF NOT EXISTS supplements.substance_lab_effects (
   effect_type           TEXT NOT NULL CHECK (effect_type IN (
                           'physiological_lab_effect',
                           'monitoring_requirement',
-                          'assay_interference'
+                          'assay_interference',
+                          'detection_marker'
                         )),
   direction             TEXT,
   direction_enum        TEXT CHECK (direction_enum IN (
@@ -459,6 +468,17 @@ CREATE TABLE IF NOT EXISTS supplements.substance_lab_effects (
     OR (mapping_status = 'effect_without_marker_id' AND lab_marker_id IS NULL AND loinc_code IS NULL)
   )
 );
+
+ALTER TABLE supplements.substance_lab_effects
+  DROP CONSTRAINT IF EXISTS substance_lab_effects_effect_type_check;
+ALTER TABLE supplements.substance_lab_effects
+  ADD CONSTRAINT substance_lab_effects_effect_type_check
+  CHECK (effect_type IN (
+    'physiological_lab_effect',
+    'monitoring_requirement',
+    'assay_interference',
+    'detection_marker'
+  ));
 
 CREATE INDEX IF NOT EXISTS substance_lab_effects_substance_idx
   ON supplements.substance_lab_effects(substance_id);
@@ -553,7 +573,7 @@ FROM tmp_substance_lab_effects;
 COMMENT ON TABLE medical.lab_marker_catalog IS
   'C-162: Kimi crawl_024 lab_markers.json, gegen medical.biomarker_catalog repo-validiert. Ungeloeste Marker bleiben sichtbar.';
 COMMENT ON TABLE supplements.substance_lab_effects IS
-  'C-162: Katalogbruecke Substanz -> Lab-Marker -> LOINC. Physiologische Effekte, Monitoringanforderungen und Assay-Interferenzen bleiben getrennt; keine Bewertung.';
+  'C-162/C-556: Katalogbruecke Substanz -> Lab-Marker -> LOINC. Physiologische Effekte, Monitoringanforderungen, Assay-Interferenzen und Nachweismarker bleiben getrennt; keine Bewertung.';
 
 DO $$
 DECLARE
@@ -567,6 +587,7 @@ DECLARE
   v_phys integer;
   v_monitor integer;
   v_interference integer;
+  v_detection integer;
 BEGIN
   SELECT count(*) INTO v_markers FROM medical.lab_marker_catalog;
   SELECT count(*) INTO v_candidates FROM medical.lab_marker_catalog
@@ -586,6 +607,8 @@ BEGIN
     WHERE effect_type = 'monitoring_requirement';
   SELECT count(*) INTO v_interference FROM supplements.substance_lab_effects
     WHERE effect_type = 'assay_interference';
+  SELECT count(*) INTO v_detection FROM supplements.substance_lab_effects
+    WHERE effect_type = 'detection_marker';
 
   IF v_markers <> ${markerRows.length} THEN
     RAISE EXCEPTION 'lab_marker_catalog: %, erwartet ${markerRows.length}', v_markers;
@@ -608,9 +631,9 @@ BEGIN
   IF v_no_marker <> ${EXPECTED_NO_MARKER_ROWS} THEN
     RAISE EXCEPTION 'Effekte ohne Marker-ID: %, erwartet ${EXPECTED_NO_MARKER_ROWS}', v_no_marker;
   END IF;
-  IF v_phys <> 161 OR v_monitor <> 42 OR v_interference <> 19 THEN
-    RAISE EXCEPTION 'Effect-Type-Verteilung falsch: phys %, monitor %, interference %',
-      v_phys, v_monitor, v_interference;
+  IF v_phys <> 416 OR v_monitor <> 75 OR v_interference <> 21 OR v_detection <> 10 THEN
+    RAISE EXCEPTION 'Effect-Type-Verteilung falsch: phys %, monitor %, interference %, detection %',
+      v_phys, v_monitor, v_interference, v_detection;
   END IF;
 
   RAISE NOTICE 'OK C-162: % Marker (% Kimi, % repo-only, % offen), % Effektzeilen, % Markerlinks',

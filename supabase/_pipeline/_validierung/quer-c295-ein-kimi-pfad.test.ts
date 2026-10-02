@@ -42,3 +42,34 @@ test('C-295: die Pipeline und das Evidenzwerkzeug lesen aus genau einem Kimi-Pfa
     'kanonischer Kimi-Datenpfad fehlt',
   )
 })
+
+function jsonl(file: string): Array<Record<string, unknown>> {
+  return fs.readFileSync(file, 'utf8')
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map(line => JSON.parse(line) as Record<string, unknown>)
+}
+
+test('C-556: der kanonische Bestand traegt 243/79/124 Zeilen und zehn Nachweismarker', () => {
+  const substances = path.join(repo, neuerPfad, 'data', 'substances')
+  const files = [
+    ['supplements.jsonl', 243],
+    ['peptides.jsonl', 79],
+    ['performance_compounds.jsonl', 124],
+  ] as const
+  const rows = files.flatMap(([file, expected]) => {
+    const parsed = jsonl(path.join(substances, file))
+    assert.equal(parsed.length, expected, file)
+    return parsed
+  })
+  const effects = rows.flatMap(row => Array.isArray(row.lab_effects) ? row.lab_effects : []) as Array<Record<string, unknown>>
+
+  assert.equal(effects.filter(effect => effect.effect_type === 'detection_marker').length, 10)
+  assert.equal(effects.filter(effect => effect.effect_type === 'lab_interference').length, 2)
+
+  const importer = fs.readFileSync(
+    path.join(repo, 'supabase/_pipeline/14_medical/147_substance_lab_markers.ts'),
+    'utf8',
+  )
+  assert.match(importer, /fail\(`Unbekannter effect_type: \$\{text\}`\)/)
+})
