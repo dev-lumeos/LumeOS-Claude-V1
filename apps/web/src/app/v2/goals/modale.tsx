@@ -55,12 +55,35 @@ import { attrappeAus } from './ansicht'
 
 import { MEASUREMENTS, daysToDeadline, type Ziel } from './daten'
 import type { ModalZustand } from './kontext'
+// `[cmd]` **G-577: der Schreibweg fuer die Umfaenge.** Die Felder und
+// Grenzen kommen aus den CHECKs, nicht aus der Attrappe.
+import { umfangAnlegenAktion } from './umfang-aktionen'
+import {
+  UMFANGSSTELLEN, UMFANG_QUELLEN, LEERE_UMFANGSEINGABE,
+  type UmfangEingabe, type Umfangsfeld,
+} from '../../../lib/goals/umfang-rechnung'
 
 /** Heute als `YYYY-MM-DD`, in Ortszeit. */
 function heuteISO(): string {
   const d = new Date()
   const z = (n: number) => String(n).padStart(2, '0')
   return `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}`
+}
+
+/**
+ * Jetzt als `HH:MM`, in Ortszeit — G-577.
+ *
+ * `[cmd]` **`measurement_time` ist `NOT NULL` und Teil des
+ * Eindeutigkeitsschluessels** `(user_id, measurement_date,
+ * measurement_time)`. `[read]` **Vorbelegt, weil sie Pflicht ist** —
+ * ein leeres Pflichtfeld erzeugt einen Fehler, den der Nutzer nicht
+ * verursacht hat. **Er kann sie aendern**, und genau das braucht
+ * er fuer eine zweite Messung am selben Tag.
+ */
+function jetztHHMM(): string {
+  const d = new Date()
+  const z = (n: number) => String(n).padStart(2, '0')
+  return `${z(d.getHours())}:${z(d.getMinutes())}`
 }
 
 // ── Der Rahmen ──────────────────────────────────────────────────
@@ -921,30 +944,143 @@ function LogWeightModal({ onClose }: { onClose: () => void }) {
 
 // ── LOG MEASUREMENTS ────────────────────────────────────────────
 // [cmd] module-goals.jsx:849-862.
+// ══ G-577: DER VERMERK WAR FALSCH, UND ZWEIFACH ══════════════════
+//
+// `[cmd]` **Hier stand ein `InEntwicklungKnopf` mit diesem Grund:**
+// *„`goals.body_measurements` gibt es (17 Spalten, 362 Zeilen live)
+// und traegt auch die Umfaenge. Was fehlt, ist der Schreibweg."*
+//
+// `[cmd]` **Beide Haelften sind falsch.** `body_measurements` traegt
+// Gewicht und Koerperfett; **die Umfaenge liegen in
+// `goals.body_circumferences`** (22 Spalten, eigener
+// Eindeutigkeitsschluessel). `[cmd]` **Und der Schreibweg existiert
+// seit G-535:** `goals.body_circumference_write`, 18 Parameter,
+// `SECURITY INVOKER`, geprueft — **mit null Aufrufern in `apps/` und
+// `packages/`.**
+//
+// `[read]` **Ein Vermerk mit falschem Grund ist schlimmer als eine
+// fehlende Kachel** — er verhindert, dass jemand nachsieht. **Hier
+// hat er zwei Monate lang genau das getan** (G-571).
+//
+// `[cmd]` **Die Felder kommen aus `UMFANGSSTELLEN`**, also aus dem
+// CHECK — **vorher standen dort die zwoelf Attrappenzeilen mit
+// EINEM Unterarm** (`daten.ts:150`), **die Tabelle fuehrt dreizehn
+// Stellen mit zweien.**
 function LogMeasureModal({ onClose }: { onClose: () => void }) {
+  const [eingabe, setEingabe] = React.useState<UmfangEingabe>({
+    ...LEERE_UMFANGSEINGABE,
+    measurement_date: heuteISO(),
+    measurement_time: jetztHHMM(),
+  })
+  const [laeuft, setLaeuft] = React.useState(false)
+  const [fehler, setFehler] = React.useState<string | null>(null)
+  const [felder, setFelder] = React.useState<Array<{ feld: string; text: string }>>([])
+  const [fertig, setFertig] = React.useState(false)
+
+  const feldFehler = (f: string) => felder.find(x => x.feld === f)?.text
+  const setzWert = (feld: Umfangsfeld, v: string) =>
+    setEingabe(e => ({ ...e, werte: { ...e.werte, [feld]: v } }))
+
+  // `[read]` **Mindestens eine Stelle** — dieselbe Regel wie
+  // `body_circumferences_at_least_one_ck`, hier schon am Knopf.
+  const hatWert = UMFANGSSTELLEN.some(s => (eingabe.werte[s.feld] ?? '').trim())
+
+  async function speichern() {
+    setLaeuft(true)
+    setFehler(null)
+    setFelder([])
+    const r = await umfangAnlegenAktion(eingabe)
+    setLaeuft(false)
+    if (r.ok) {
+      setFertig(true)
+      // `[read]` **Erst schliessen, wenn die Zeile da ist** — sonst
+      // sieht ein Fehlschlag aus wie Erfolg (wie im Gewichtsmodal).
+      setTimeout(onClose, 900)
+    } else {
+      setFelder(r.felder)
+      if (r.felder.length === 0) setFehler(r.text)
+    }
+  }
+
   return (
     <GModal title="Update measurements" subtitle="All in cm · fill what you have"
             eyebrow="edit" onClose={onClose} width={620}
             footer={
               <>
                 <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
-                <InEntwicklungKnopf titel="Save measurements" className="v2-btn v2-btn-primary"
-                                    grund="`goals.body_measurements` gibt es (17 Spalten, 362 Zeilen live) und traegt auch die Umfaenge. Was fehlt, ist der Schreibweg.">
-                  <Icon name="check" className="v2-ic v2-ic-sm" />Save measurements
-                </InEntwicklungKnopf>
+                <button type="button" className="v2-btn v2-btn-primary"
+                        data-umfang-speichern
+                        disabled={laeuft || !hatWert}
+                        onClick={() => { void speichern() }}>
+                  <Icon name="check" className="v2-ic v2-ic-sm" />
+                  {laeuft ? 'Speichert …' : 'Save measurements'}
+                </button>
               </>
             }>
-      <GField label="Date"><GInput type="date" aria-label="Date" defaultValue="2026-05-16" /></GField>
+      {/* `[cmd]` **A4: Datum UND Uhrzeit sind Pflicht** — beide sind
+          `NOT NULL` und bilden mit `user_id` den
+          Eindeutigkeitsschluessel. `[read]` **Zwei Messungen am
+          selben Tag sind damit erlaubt**, zur selben Minute nicht. */}
+      <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
+        <GField label="Date" sub={feldFehler('measurement_date') ?? 'Ortstag'}>
+          <GInput type="date" aria-label="Date" data-umfangfeld="datum"
+                  value={eingabe.measurement_date}
+                  onChange={e => setEingabe(x => ({ ...x, measurement_date: e.target.value }))} />
+        </GField>
+        <GField label="Time" sub={feldFehler('measurement_time') ?? undefined}>
+          <GInput type="time" aria-label="Time" data-umfangfeld="zeit"
+                  value={eingabe.measurement_time}
+                  onChange={e => setEingabe(x => ({ ...x, measurement_time: e.target.value }))} />
+        </GField>
+      </div>
       <div className="v2-grid v2-g-cols-3" style={{ gap: 10 }}>
-        {MEASUREMENTS.map(m => (
-          <GField key={m.id} label={m.label} sub={`last ${m.current}`}>
-            <GInput type="number" aria-label={m.label} defaultValue={m.current} />
+        {UMFANGSSTELLEN.map(s => (
+          <GField key={s.feld} label={s.label}
+                  sub={feldFehler(s.feld) ?? `${s.min}–${s.max} cm`}>
+            <GInput type="number" aria-label={s.label} data-umfangstelle={s.feld}
+                    value={eingabe.werte[s.feld] ?? ''}
+                    onChange={e => setzWert(s.feld, e.target.value)} />
           </GField>
         ))}
       </div>
-      <GField label="Note (optional)">
-        <GInput aria-label="Note" placeholder="Time of day, pump state, etc." />
+      {/* `[cmd]` **Die vier Werte aus `body_circumferences_source_ck`**,
+          nicht die zehn aus `BF_METHODEN` — das ist ein anderer CHECK
+          an einer anderen Tabelle. */}
+      <GField label="Source" sub="aus body_circumferences_source_ck">
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          {UMFANG_QUELLEN.map(q => (
+            <button key={q} type="button" data-umfangquelle={q}
+                    className={`v2-btn${eingabe.measurement_source === q ? ' v2-btn-primary' : ''}`}
+                    onClick={() => setEingabe(x => ({ ...x, measurement_source: q }))}>
+              {q}
+            </button>
+          ))}
+        </div>
       </GField>
+      <GField label="Note (optional)">
+        <GInput aria-label="Note" data-umfangfeld="notiz" value={eingabe.notes}
+                placeholder="Time of day, pump state, etc."
+                onChange={e => setEingabe(x => ({ ...x, notes: e.target.value }))} />
+      </GField>
+
+      {/* `[read]` **Feldfehler stehen AM Feld** (oben im `sub`) —
+          hier bleibt, was keinem Feld zuzuordnen ist. */}
+      {(feldFehler('werte') || fehler) && (
+        <div data-umfang-fehler style={{
+          marginTop: 10, padding: '8px 10px', borderRadius: 5, fontSize: 11.5,
+          lineHeight: 1.5, color: 'var(--neg)',
+          background: 'color-mix(in oklch, var(--neg) 8%, var(--surface))',
+        }}>
+          {feldFehler('werte') ?? fehler}
+        </div>
+      )}
+      {fertig && (
+        <div data-umfang-fertig style={{
+          marginTop: 10, fontSize: 11.5, color: 'var(--pos)',
+        }}>
+          Gespeichert.
+        </div>
+      )}
     </GModal>
   )
 }
