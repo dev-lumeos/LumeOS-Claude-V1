@@ -2,6 +2,8 @@ import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
+// Bewusst nutzerweit: Die Faelle pruefen keinen Zielvergleich, sondern jeweils
+// keinen oder genau einen gueltigen Phasenbezug am abgefragten Stichtag.
 const container = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const db = process.env.LUMEOS_G511_DATABASE
 if (!db || db === 'postgres') throw new Error('G-511 braucht eine Wegwerf-Datenbank, nie postgres.')

@@ -2,6 +2,8 @@ import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
 import test from 'node:test'
 
+// Kein Rechenaufruf: Der einzelne Treffer liest bewusst den Kommentar des
+// nutzerweiten Altvertrags, an dem die bestehende Faser-Annahme dokumentiert ist.
 const container = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const db = process.env.LUMEOS_G526_DATABASE
 if (!db || db === 'postgres') throw new Error('G-526 braucht eine Wegwerf-Datenbank, nie postgres.')

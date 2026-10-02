@@ -131,10 +131,14 @@ test('G-558 A1/A2: Strategie, Katalograte und persoenlicher Override kommen atom
 
     RESET ROLE;
 
+    -- Beide Zielphasen sind am Stichtag aktiv. G-558 prueft bewusst den
+    -- persoenlichen Override des zweiten Ziels ueber den zielbezogenen Vertrag.
     WITH calculated AS (
       SELECT z.*
       FROM goals.berechne_zielwerte(
-        '55800000-0000-0000-0000-000000000001', DATE '2099-02-15'
+        '55800000-0000-0000-0000-000000000001',
+        '55800000-0000-0000-0000-000000000102',
+        DATE '2099-02-15'
       ) z
     ), phases AS (
       SELECT

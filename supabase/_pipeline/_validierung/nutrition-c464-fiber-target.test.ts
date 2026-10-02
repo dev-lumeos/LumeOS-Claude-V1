@@ -1,6 +1,8 @@
 // C-464: Fiber ist ein expliziter, formelbasiert gespeicherter Tageszielwert.
 // Der Test nutzt ausschliesslich eine explizite Wegwerf-Datenbank und rollt
 // seine Fixture vollstaendig zurueck.
+// Bewusst nutzerweit: Die Fixture besitzt am Stichtag genau eine Phase; der
+// Test prueft Fiber-Fortschreibung, nicht die Auswahl zwischen Zielen.
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
 import test from 'node:test'
