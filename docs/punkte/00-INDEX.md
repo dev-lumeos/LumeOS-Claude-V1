@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 269 |
+| `todos` | 272 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 630 |
-| **gesamt** | **902** |
+| `erledigt` | 632 |
+| **gesamt** | **907** |
 
 ## medical — 50
 
@@ -336,9 +336,9 @@
 | `G-581` | fehler | mittel | [Ein Modal ohne Aufrufer, mit eigener Wahrheit ueber den Lebenszyklus](erledigt/nutrition-g-0581-ein-modal-ohne-aufrufer-mit-eigener-wahrheit.md) | erledigt | — | G-583 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 127
+## supplements — 128
 
-### beauftragbar — 126
+### beauftragbar — 127
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -415,6 +415,7 @@
 | `C-549` | befund | mittel | [3.273 gegen 2.760 Produkte mit mehreren Portionen](todos/supplements-c-0549-3273-gegen-2760.md) | offen | — | — |
 | `C-552` | feature | hoch | [wofuer ist eine Substanz gut?](todos/supplements-c-0552-wofuer-ist-eine-substanz-gut.md) | offen | — | — |
 | `C-553` | befund | mittel | [135 von 617 Beschreibungen sind Schablonen](todos/supplements-c-0553-schablonen-statt-beschreibungen.md) | offen | — | — |
+| `C-556` | fehler | hoch | [Zwei fachliche Folgen des neuen Kimi-Bestands](laufend_codex/supplements-c-0556-zwei-fachliche-folgen-des-neuen-kimi-bestands.md) | laeuft (codex) | — | — |
 | `E-85` | entscheidung | hoch | [kein Zwischenspeicher fuer die DSLD-Bilder](erledigt/supplements-e-0085-kein-zwischenspeicher-dsld-bilder.md) | erledigt | — | — |
 | `E-88` | entscheidung | hoch | [die Entwurfsreferenz zeigt PED-Protokolle ohne Gradpruefung](erledigt/supplements-e-0088-entwurfsreferenz-zeigt-ped.md) | erledigt | — | G-499 |
 | `E-89` | entscheidung | hoch | [Wissen ist offen, das Protokoll ist gesperrt](erledigt/supplements-e-0089-wissen-offen-protokoll-gesperrt.md) | erledigt | — | — |
@@ -630,7 +631,7 @@
 | `G-548` | entscheidung | mittel | [Wie lange darf eine moderate Diaet laufen?](todos/goals-g-0548-hoechstdauer-moderate-cut.md) | offen | — | — |
 | `G-549` | entscheidung | mittel | [Wieviel Protein weicht in der Ladewoche?](todos/goals-g-0549-protein-in-der-ladewoche.md) | offen | — | — |
 | `G-550` | fehler | hoch | [Fett steht als Prozentsatz, gebraucht wird eine Menge](todos/goals-g-0550-fett-als-prozentsatz-statt-als-menge.md) | offen | — | — |
-| `G-553` | fehler | hoch | [Ein Tokenfehler sieht aus wie ein Datenfehler — und das Mockup fehlt](erledigt/goals-g-0553-ein-tokenfehler-sieht-aus-wie-ein-datenfehler.md) | erledigt | — | G-555 |
+| `G-553` | fehler | hoch | [Ein Tokenfehler sieht aus wie ein Datenfehler — und das Mockup fehlt](erledigt/goals-g-0553-ein-tokenfehler-sieht-aus-wie-ein-datenfehler.md) | erledigt | — | G-555, G-586 |
 | `G-554` | fehler | hoch | [Phasenziele sind nicht anlegbar, und der Reiter ist nicht nach Vorgabe](erledigt/goals-g-0554-phasenziele-sind-nicht-anlegbar.md) | erledigt | — | G-557 |
 | `G-556` | fehler | hoch | [Der Kettenlauf faellt, und er blockiert jeden Commit im Repo](erledigt/goals-g-0556-der-kettenlauf-faellt-am-eigenen-check.md) | erledigt | — | — |
 | `G-557` | fehler | hoch | [Die Zuordnung der sechs Arten erreicht die Datenbank nicht](erledigt/goals-g-0557-die-zuordnung-erreicht-die-datenbank-nicht.md) | erledigt | — | G-576 |
@@ -725,9 +726,9 @@
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 | `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](erledigt/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | erledigt | — | — |
 
-## quer — 232
+## quer — 236
 
-### beauftragbar — 230
+### beauftragbar — 234
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -803,7 +804,7 @@
 | `C-259` | feature | mittel | [Kimis Bestand ist weit groesser als angenommen — und der Orchestrator hat den Statusbericht nie gelesen](todos/quer-c-0259-kimis-bestand-ist-weit-groesser-als-angenommen-und-der-orchestrator-hat-.md) | offen | — | C-262 |
 | `C-271` | befund | mittel | [`rule_catalog` laedt immer — jeder Rueckfallzweig daran ist tot](todos/quer-c-0271-rule-catalog-laedt-immer-jeder-rueckfallzweig-daran-ist-tot.md) | offen | — | — |
 | `C-279` | befund | mittel | [Das Kreuzprodukt in `rule_assessment` skaliert mit den Einnahmen](todos/quer-c-0279-das-kreuzprodukt-in-rule-assessment-skaliert-mit-den-einnahmen.md) | offen | — | — |
-| `C-295` | feature | mittel | [die Kette liest aus zwei Kimi-Pfaden](laufend_codex/quer-c-0295-die-kette-liest-aus-zwei-kimi-pfaden.md) | laeuft (codex) | — | — |
+| `C-295` | feature | mittel | [die Kette liest aus zwei Kimi-Pfaden](erledigt/quer-c-0295-die-kette-liest-aus-zwei-kimi-pfaden.md) | erledigt | — | C-556 |
 | `C-297` | messung | mittel | [drei Wege, an dem Datenlogik-Waechter vorbei](todos/quer-c-0297-drei-wege-an-dem-datenlogik-waechter-vorbei.md) | offen | — | — |
 | `C-298` | feature | mittel | [der Datenlogik-Waechter meldet zwei harmlose Muster rot](todos/quer-c-0298-der-datenlogik-waechter-meldet-zwei-harmlose-muster-rot.md) | offen | — | — |
 | `C-354` | feature | hoch | [eine Lesefunktion fuer offene Coach-Aktionen](erledigt/quer-c-0354-eine-lesefunktion-fuer-offene-coach-aktionen.md) | erledigt | — | C-358 |
@@ -960,7 +961,11 @@
 | `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](erledigt/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | erledigt | — | — |
 | `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](erledigt/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | erledigt | — | G-577, G-578, G-579, G-582 |
 | `G-583` | fehler | niedrig | [Drei Reste ohne Aufrufer, nach demselben Verfahren wie G-581](erledigt/quer-g-0583-drei-reste-ohne-aufrufer.md) | erledigt | — | G-584, G-585 |
-| `G-585` | befund | mittel | [Die Inventur der Ausfuhren ohne Aufrufer](laufend_claudecode/quer-g-0585-die-inventur-der-ausfuhren-ohne-aufrufer.md) | laeuft (claudecode) | — | — |
+| `G-585` | befund | mittel | [Die Inventur der Ausfuhren ohne Aufrufer](erledigt/quer-g-0585-die-inventur-der-ausfuhren-ohne-aufrufer.md) | erledigt | — | G-587, G-588, G-589 |
+| `G-586` | fehler | hoch | [Ein Uhrensprung wirft den Nutzer raus, statt die Sitzung zu erneuern](laufend_claudecode/quer-g-0586-ein-uhrensprung-wirft-den-nutzer-raus.md) | laeuft (claudecode) | — | — |
+| `G-587` | fehler | hoch | [Ein Service-Client ohne Aufrufer umgeht die Zeilensicherheit](todos/quer-g-0587-ein-service-client-ohne-aufrufer-umgeht-die-rls.md) | offen | — | — |
+| `G-588` | befund | hoch | [Sechs Serveraktionen ohne Aufrufer — dieselbe Klasse wie G-571, eine Ebene hoeher](todos/quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md) | offen | — | — |
+| `G-589` | befund | niedrig | [328 Ausfuhren zu viel — und wie die Zahl 385 zu 56 wurde](todos/quer-g-0589-dreihundertachtundzwanzig-ausfuhren-zu-viel.md) | offen | — | — |
 
 ### wartet auf Blocker — 2
 
@@ -991,6 +996,6 @@
 
 ## Verweise ausserhalb von `docs/punkte/`
 
-61 Nummern werden genannt, liegen aber in keinem Punktordner — erledigte Punkte sind noch nicht migriert:
+62 Nummern werden genannt, liegen aber in keinem Punktordner — erledigte Punkte sind noch nicht migriert:
 
-`A-14` · `A-28` · `B-12` · `C-100` · `C-124` · `C-128` · `C-130` · `C-157` · `C-158` · `C-164` · `C-165` · `C-225` · `C-235` · `C-25` · `C-252` · `C-28` · `C-291` · `C-296` · `C-315` · `C-83` · `C-84` · `G-100` · `G-101` · `G-110` · `G-123` · `G-129` · `G-13` · `G-135` · `G-14` · `G-147` · `G-148` · `G-154` · `G-157` · `G-158` · `G-16` · `G-160` · `G-161` · `G-185` · `G-187` · `G-190` · `G-203` · `G-207` · `G-208` · `G-212` · `G-42` · `G-45` · `G-57` · `G-60` · `G-64` · `G-65` · `G-73` · `G-74` · `G-76` · `G-82` · `G-84` · `G-85` · `G-86` · `G-87` · `G-90` · `G-91` · `G-97`
+`A-14` · `A-28` · `B-12` · `C-100` · `C-124` · `C-128` · `C-130` · `C-157` · `C-158` · `C-164` · `C-165` · `C-225` · `C-235` · `C-25` · `C-252` · `C-275` · `C-28` · `C-291` · `C-296` · `C-315` · `C-83` · `C-84` · `G-100` · `G-101` · `G-110` · `G-123` · `G-129` · `G-13` · `G-135` · `G-14` · `G-147` · `G-148` · `G-154` · `G-157` · `G-158` · `G-16` · `G-160` · `G-161` · `G-185` · `G-187` · `G-190` · `G-203` · `G-207` · `G-208` · `G-212` · `G-42` · `G-45` · `G-57` · `G-60` · `G-64` · `G-65` · `G-73` · `G-74` · `G-76` · `G-82` · `G-84` · `G-85` · `G-86` · `G-87` · `G-90` · `G-91` · `G-97`

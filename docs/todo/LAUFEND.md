@@ -5,9 +5,9 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-585 | Die Inventur der Ausfuhren ohne Aufrufer | **laeuft**, raus 02.10. |
+| Claude Code | G-586 | Ein Uhrensprung wirft den Nutzer raus, statt die Sitzung zu erneuern | **laeuft**, raus 02.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
-| Codex | C-295 | die Kette liest aus zwei Kimi-Pfaden | **laeuft**, raus 02.10. |
+| Codex | C-556 | Zwei fachliche Folgen des neuen Kimi-Bestands | **laeuft**, raus 02.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->

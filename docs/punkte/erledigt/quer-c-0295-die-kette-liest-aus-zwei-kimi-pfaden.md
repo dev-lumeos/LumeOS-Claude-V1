@@ -4,6 +4,8 @@ typ: feature
 modul: quer
 schwere: mittel
 angelegt: 2026-08-27
+commit: f4be19e2
+erledigt: 2026-10-02
 beauftragt: 2026-10-02
 agent: codex
 braucht: []
@@ -12,7 +14,10 @@ kinder: []
 entscheidung: null
 beruehrt:
   tabellen: []
-  dateien: []
+  dateien:
+    - supabase/_pipeline/13_supplements/134_substance_catalog.ts
+    - supabase/_pipeline/14_medical/147_substance_lab_markers.ts
+    - supabase/_pipeline/_validierung/quer-c295-ein-kimi-pfad.test.ts
 zahlen: null
 ---
 
@@ -114,3 +119,37 @@ umgestelltem Schritt die Zeilenzahl der gelesenen Quelle vorher und
 nachher · 0 Treffer auf `backup/kimi-research` in `supabase/_pipeline/`
 am Ende, oder die Liste der begruendeten Ausnahmen · `rehash` mit Grund,
 Dump byteidentisch · kein `db push` · nichts committen.
+
+---
+
+## Abnahme — 2026-10-02, Commit `f4be19e2`
+
+`[cmd]` **Selbst nachgezählt:** `backup/kimi-research` kommt in
+`supabase/_pipeline/` **null** Mal vor; der einzige Rest im Repo ist
+`supabase/README.md`, und der gehört mir. 15 Dateien, +72/−21, plus die
+neue Pfadprobe `_validierung/quer-c295-ein-kimi-pfad.test.ts`, in beiden
+Kettenmodi verdrahtet.
+
+`[cmd]` **Nichts gelöscht**, wie verlangt: alter Datenbaum 10.030
+Dateien, neuer 8.419. **Der Orchestrator legt vor, Tom entsorgt.**
+
+`[read]` **Die stärkste Zeile des Berichts ist die Byte-Gleichheit:** von
+28 gelesenen Quelldateien sind **25 SHA-identisch**, verschieden sind
+genau die drei aus C-275. **Damit ist belegt, dass der Pfadwechsel keine
+Daten verändert hat** — und die drei Unterschiede sind bekannt und
+gewollt (154→243, 61→79, 75→124; Substanzen 290 → 446).
+
+`[cmd]` **Erster echter Gebrauch von `rehash`** aus A-94: zwei
+Manifestquellen nachgezogen, Grund vermerkt, **Dump byteidentisch**
+(`274438cb…`), Manifestprüfung grün mit 19 Quellen. **Das Werkzeug von
+heute Mittag hat heute Nachmittag seine Aufgabe erfüllt.**
+
+`[cmd]` **Zwei fachliche Folgen hat er gemeldet statt passend gemacht:**
+148 Datensätze ohne C-230-Filter (Gruppen 297/90/185 statt 307/82/177)
+und `Unbekannter effect_type: detection_marker` in Schritt 147. **Beides
+hält den nächtlichen Vollimport rot, und damit A-91/A5.** Das ist C-556
+und läuft bei ihm.
+
+`[read]` **Der Abbruch bei 147 bleibt stehen** — er ist die Zusicherung,
+die diesen Fund möglich gemacht hat. Ein Agent, der ihn entfernt hätte,
+hätte den Lauf grün und den Katalog falsch gemacht.

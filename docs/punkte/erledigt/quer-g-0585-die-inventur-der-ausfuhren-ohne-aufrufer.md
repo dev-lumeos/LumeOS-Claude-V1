@@ -4,6 +4,8 @@ typ: befund
 modul: quer
 schwere: mittel
 angelegt: 2026-10-02
+commit: f4be19e2
+erledigt: 2026-10-02
 agent: claudecode
 beauftragt: 2026-10-02
 
@@ -87,3 +89,55 @@ Eintrag der austragende Punkt oder der Hinweis, dass keiner existiert ·
 Wenn der Lauf dich zwingt, etwas zu aendern, ist das ein Befund.
 
 `[read]` **Keine Datenbank, kein Kettenlauf, kein Schirm.**
+
+---
+
+## Abnahme — 2026-10-02, kein Commit (A3: nichts geändert)
+
+`[cmd]` **Die Inventur steht und hat nichts angefasst** — `git status` auf
+`apps/`, `packages/` und `docs/` ist leer, Gate grün, 2.550 Tests.
+**A3 war die Bedingung, und sie ist eingehalten.**
+
+| Lage | Zahl |
+| --- | --- |
+| tot — 0 fremde Aufrufer, 0 Tests, auch intern ungenutzt | **56** |
+| nur intern — 0 fremde, in der eigenen Datei benutzt | 328 |
+| geliehen — nur von Tests gerufen | 279 |
+| einmalig — genau 1 fremder Aufrufer | 1.329 |
+| mehrfach | 957 |
+
+Heuhaufen: **796 Dateien**, 2.949 benannte Ausfuhren, Kommentare
+abgestreift (Block, Zeile und JSX) — die Falle aus G-446.
+
+`[cmd]` **Mein Auftrag nannte drei Bäume. Es sind sechs Apps.** Er hat es
+gemessen und korrigiert: `apps/admin` (11 Dateien) ruft
+`isCurrentUserAdmin` aus `packages/shared` — **mit nur drei Bäumen hätte
+die Liste eine lebende Ausfuhr als tot gemeldet.** Gezählt hat er über die
+drei des Auftrags, gesucht über vier. **Das ist die vierte Teilmessung von
+mir in zwei Tagen**, nach den zehn Trennern, den vier Präsens-Zeilen und
+den 86 Rückfällen.
+
+`[read]` **Der erste Lauf meldete 385 tot, und er hat seine eigene Zahl
+angezweifelt, weil sie unplausibel war.** Die Stichprobe zeigte: vier von
+fünf werden in der eigenen Datei benutzt. **385 wurde zu 56 — nicht durch
+eine Messung am Bestand, sondern durch Zweifel am Zähler.** Das ist die
+Lehre, die ich mitnehme.
+
+`[cmd]` **Drei Befunde sind daraus Punkte geworden:**
+
+    G-587  createServiceClient ohne Aufrufer, umgeht die RLS   next/
+    G-588  sechs Serveraktionen ohne Aufrufer                  todos/
+    G-589  328 Ausfuhren zu viel, und wie 385 zu 56 wurde      todos/
+
+`[cmd]` **Selbst nachgemessen bei G-587**, weil es das Einzige mit
+Sicherheitsbezug ist: `createServiceClient`
+(`packages/shared/src/supabase/server.ts:6`) nutzt
+`SUPABASE_SERVICE_ROLE_KEY` und hat **null Aufrufer** — die restlichen
+Treffer sind Werkzeugzwischenspeicher. **Eine unbenutzte Ausfuhr ist
+harmlos, diese nicht.**
+
+`[read]` **Und drei Einträge, die beim Entfernen Schaden machen würden:**
+`DashboardEntwurf`, `TrendBadge` und `Datumsnavigation` stehen als
+Zeichenkette in Vollständigkeitsprüfern. **Kein Aufrufer — aber wer sie
+löscht, macht einen Wächter rot, ohne es zu erwarten.** Das gehört in
+jeden Punkt, der sie anfasst.
