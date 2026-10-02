@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // C-130: importiert den Kimi-Medikamentenbestand in medical.
-// Quelle bleibt backup/kimi-research/...; der Schritt bricht ab, wenn
+// Quelle ist der kanonische Bestand unter docs/kimi_research; der Schritt bricht ab, wenn
 // der Quellordner fehlt. Es werden keine Regeln und keine Bewertungen
 // importiert.
 import { spawnSync } from 'node:child_process'
@@ -11,9 +11,9 @@ const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-
 const DB = process.env.PGDATABASE
 if (!DB || DB === 'postgres') throw new Error('A-88: 146_medications_katalog.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const SOURCE_DIR =
-  'backup/kimi-research/Kimi_Agent/supplement_performance_database/data/medications'
+  'docs/kimi_research/supplement_performance_database/data/medications'
 const TRAIT_MAPPING_FILE =
-  'backup/kimi-research/Kimi_Agent/supplement_performance_database/data/platform/rule_trait_mapping.json'
+  'docs/kimi_research/supplement_performance_database/data/platform/rule_trait_mapping.json'
 const ACTIVE_FILE = 'medication_active_substances.jsonl'
 const FORMULATIONS_FILE = 'medication_formulations.jsonl'
 const PRODUCTS_FILE = 'medication_products.jsonl'

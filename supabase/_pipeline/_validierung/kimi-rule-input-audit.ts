@@ -4,7 +4,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-const BASE = 'backup/kimi-research/Kimi_Agent/supplement_performance_database/data/platform'
+const BASE = 'docs/kimi_research/supplement_performance_database/data/platform'
 const FILES = ['warning_rules.jsonl', 'nutrient_gap_rules.jsonl', 'medication_rules.jsonl'] as const
 
 type JsonObject = Record<string, unknown>

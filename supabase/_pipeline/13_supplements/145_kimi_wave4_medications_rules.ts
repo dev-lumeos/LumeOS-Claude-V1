@@ -6,7 +6,7 @@ import path from 'node:path'
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE
 if (!DB || DB === 'postgres') throw new Error('A-88: 145_kimi_wave4_medications_rules.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
-const BASE = 'backup/kimi-research/Kimi_Agent/supplement_performance_database/data'
+const BASE = 'docs/kimi_research/supplement_performance_database/data'
 
 function readJsonl(rel: string): Record<string, any>[] {
   return fs.readFileSync(path.join(BASE, rel), 'utf8').split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line))

@@ -6,7 +6,7 @@ import path from 'node:path'
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE
 if (!DB || DB === 'postgres') throw new Error('A-88: 144_kimi_wave3_name_bridge.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
-const BASE = 'backup/kimi-research/Kimi_Agent/supplement_performance_database/data'
+const BASE = 'docs/kimi_research/supplement_performance_database/data'
 
 function run(sql: string): void {
   const result = spawnSync('docker', ['exec', '-i', CONTAINER, 'psql', '-U', 'postgres', '-d', DB, '-v', 'ON_ERROR_STOP=1', '-f', '-'], {

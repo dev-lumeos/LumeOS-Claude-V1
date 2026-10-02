@@ -6,7 +6,7 @@ import path from 'node:path'
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE
 if (!DB || DB === 'postgres') throw new Error('A-88: 142_kimi_wave1_pharmacology.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
-const BASE = 'backup/kimi-research/Kimi_Agent/supplement_performance_database/data'
+const BASE = 'docs/kimi_research/supplement_performance_database/data'
 
 type Json = Record<string, any>
 

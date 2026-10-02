@@ -10,7 +10,7 @@ import path from 'node:path'
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE
 if (!DB || DB === 'postgres') throw new Error('A-88: 133_kimi_rules.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
-const BASE = 'backup/kimi-research/Kimi_Agent/supplement_performance_database/data/platform'
+const BASE = 'docs/kimi_research/supplement_performance_database/data/platform'
 const FILES = ['warning_rules.jsonl', 'nutrient_gap_rules.jsonl', 'medication_rules.jsonl'] as const
 const EXPECTED_COUNTS: Record<string, number> = {
   warning: 29,

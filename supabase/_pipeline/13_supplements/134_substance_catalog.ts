@@ -11,7 +11,7 @@ const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-
 const DB = process.env.PGDATABASE
 if (!DB || DB === 'postgres') throw new Error('A-88: 134_substance_catalog.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 
-const KIMI_BASE = 'backup/kimi-research/Kimi_Agent/supplement_performance_database/data'
+const KIMI_BASE = 'docs/kimi_research/supplement_performance_database/data'
 const LOCAL_CATALOG = 'supabase/_pipeline/daten/supplement-katalog.json'
 const F05_CATALOG = 'supabase/_pipeline/daten/substanz-katalog.json'
 const CROSS_DOMAIN = path.join(KIMI_BASE, 'indexes', 'cross_domain_substance_mapping.json')
@@ -645,9 +645,9 @@ function liftedFields(row: KimiSubstance & { domain: string }): ReturnType<typeo
 
 function buildKimiRows(): Array<KimiSubstance & { domain: string; sourceFile: string }> {
   const specs = [
-    { domain: 'kimi_supplement', file: 'supplements.jsonl', expected: 154 },
-    { domain: 'kimi_peptide', file: 'peptides.jsonl', expected: 61 },
-    { domain: 'kimi_performance', file: 'performance_compounds.jsonl', expected: 75 },
+    { domain: 'kimi_supplement', file: 'supplements.jsonl', expected: 243 },
+    { domain: 'kimi_peptide', file: 'peptides.jsonl', expected: 79 },
+    { domain: 'kimi_performance', file: 'performance_compounds.jsonl', expected: 124 },
   ]
   const rows: Array<KimiSubstance & { domain: string; sourceFile: string }> = []
   for (const spec of specs) {

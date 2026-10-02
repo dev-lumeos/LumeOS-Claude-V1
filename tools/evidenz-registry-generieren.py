@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """C-180: Die Evidenz-Registry als nachschlagbares Modul generieren.
 
-Quelle:  backup/kimi-research/.../data/evidence/
+Quelle:  docs/kimi_research/.../data/evidence/
          constant_evidence_registry.json   (181 Records, crawl_025)
          recovery_modality_evidence.json   (32 Records — die C-124-IDs,
                                             die NICHT in der 181er stehen)
@@ -26,7 +26,7 @@ from collections import Counter
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
 REPO = r"D:\GitHub\LumeOS-Claude-V1"
-QUELLE = REPO + r"\backup\kimi-research\Kimi_Agent\supplement_performance_database\data\evidence"
+QUELLE = REPO + r"\docs\kimi_research\supplement_performance_database\data\evidence"
 ZIEL = REPO + r"\apps\web\src\lib\evidenz\registry.ts"
 
 HANDLINGS = (
@@ -141,7 +141,7 @@ def main() -> None:
 
     kopf = """// GENERIERT — NICHT VON HAND AENDERN.
 //
-// Quelle:   backup/kimi-research/Kimi_Agent/supplement_performance_database/
+// Quelle:   docs/kimi_research/supplement_performance_database/
 //           data/evidence/{constant_evidence_registry,recovery_modality_evidence}.json
 // Erzeuger: tools/evidenz-registry-generieren.py  (C-180)
 //

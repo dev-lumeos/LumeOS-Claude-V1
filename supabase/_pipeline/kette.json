@@ -29,6 +29,13 @@
       ]
     },
     {
+      "id": "c295_ein_kimi_pfad_probe",
+      "path": "supabase/_pipeline/_validierung/quer-c295-ein-kimi-pfad.test.ts",
+      "kind": "tsx",
+      "creates": "C-295: Pipeline und Evidenzwerkzeug lesen nur den kanonischen Kimi-Pfad unter docs/kimi_research.",
+      "depends_on": []
+    },
+    {
       "id": "B",
       "path": "supabase/migrations/20260805120000_baseline_structure.sql",
       "kind": "sql",
