@@ -4,6 +4,10 @@ typ: fehler
 modul: nutrition
 schwere: mittel
 angelegt: 2026-10-02
+commit: 7b37e6a2
+erledigt: 2026-10-02
+beauftragt: 2026-10-02
+agent: claudecode
 
 braucht: [G-579]
 kind_von: G-579
@@ -14,8 +18,8 @@ quellen:
 beruehrt:
   tabellen: []
   dateien:
-    - apps/web/src/app/v2/nutrition/plan-detail.tsx
-    - apps/web/src/lib/nutrition/plan-detail-lage.ts
+    - apps/web/src/app/v2/nutrition/tab-plans.tsx
+    - apps/web/src/lib/nutrition/plan-werkbank.ts
 ---
 
 # Ein Modal ohne Aufrufer, mit eigener Wahrheit ueber den Lebenszyklus
@@ -112,3 +116,43 @@ Beide lesen Code und zaehlen; keiner braucht die Datenbank.
 
 `[read]` **Die Entscheidung in A2 ist deine und soll begruendet sein, nicht
 gewaehlt** — zurueck oder weg. **Was nicht bleibt: beides.**
+
+---
+
+## Abnahme — 2026-10-02, Commit `7b37e6a2`
+
+`[cmd]` **Diff gelesen:** 6 Dateien, +202/−831. Die 822 gelöschten Zeilen
+stimmen (498 + 81 + 243), entfernt und nicht auskommentiert (A-59).
+`export const ZYKLUS_WAEHLBAR` steht jetzt **einmal** im Produkt
+(`plan-werkbank.ts:450`, zweiwertig) — die übrigen Treffer sind die
+Eichzeichenketten des neuen Wächters. Lebende Verweise auf den toten
+Pfad: 0, die restlichen sind Kommentare. Gate grün.
+
+`[cmd]` **Der Punkt sagte „totes Modal", gemessen war mehr:** die Datei
+lebte nur durch einen **leeren Import** — `import { } from
+'./plan-detail'` in `tab-plans.tsx:46`, übrig geblieben beim
+G-319-Ausbau. Er band nichts und hielt drei Bauteile am Leben.
+
+`[read]` **A2 war keine Wahl, und so hat er es begründet:** G-319 hat den
+Pfad ausgetragen, weil er falsch war — `MealPlanDetail` zeigte den
+aktiven Plan ein drittes Mal, `MealPlanActivationModal` bekam immer den
+aktiven Plan, ein Klick bei einem anderen öffnete den falschen Dialog.
+Drei bestehende Wächter verbieten die Rückkehr. Zurückholen hieße, beides
+zurückzuholen.
+
+`[cmd]` **Der Wächter zählt, statt zu suchen** (`=== 1`) — ein
+`assert.match` ist zufrieden, solange eine Definition existiert, und
+genau so konnten zwei nebeneinander leben. Sabotage: eine zweite Liste
+kehrt als **neue Datei** zurück → rot.
+
+`[read]` **Drei eigene Fehler hat er selbst gefunden, einer davon
+gefährlich:** `SRC` zeigte zwei Ebenen hoch auf `lib/` statt auf `src/`
+— damit sahen drei Zusicherungen `app/v2/` nie und waren grün, **ohne
+etwas gemessen zu haben.** Heuhaufen-Untergrenze von 100 auf 300
+angehoben. Das ist die Klasse „der Wächter kann nicht fallen", zweites
+Vorkommen nach G-578.
+
+`[cmd]` **Ein Rest, der liegen bleibt:** `plans-echt.tsx:404, 959, 963`
+nennen `plan-detail.tsx` in Kommentaren, einer im Präsens („zeigt ihn
+bereits"). **Drei Kommentarzeilen, kein Code** — sie gehen beim nächsten
+Punkt in dieser Datei mit.

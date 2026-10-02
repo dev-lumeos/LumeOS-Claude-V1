@@ -5,10 +5,10 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-572 | Der Dateikopf nennt Phase engine als Attrappe, und das ist seit Tagen falsch | **laeuft**, raus 02.10. |
+| Claude Code | G-582 | Der Coach-Alarm hat keinen Aufrufer | **laeuft**, raus 02.10. |
 | Codex | A-87 | 46 Zeugen, nach Ursache gestaffelt verdrahten | **laeuft**, raus 02.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
-| Claude Code | G-581 | Ein Modal ohne Aufrufer, mit eigener Wahrheit ueber den Lebenszyklus | **bereit in `next/`** |
+| Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | A-88 | 31 Proben fallen still auf postgres zurueck | **bereit in `next/`** |
 <!-- /ERZEUGT:laufend-tabelle -->
 

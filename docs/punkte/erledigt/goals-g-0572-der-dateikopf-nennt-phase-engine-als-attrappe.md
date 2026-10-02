@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: mittel
 angelegt: 2026-10-01
+commit: 8cbbd36d
+erledigt: 2026-10-02
 beauftragt: 2026-10-02
 agent: claudecode
 
@@ -134,3 +136,28 @@ sinken · `pnpm gate` gruen mit Testzahl · nichts committen.
 
 `[read]` **Kein voller Kettenlauf, keine Datenbank** — dieser Punkt liest
 eine Datei und zaehlt, was sie rendert.
+
+---
+
+## Abnahme — 2026-10-02, Commit `8cbbd36d`
+
+`[cmd]` **Diff gelesen, nicht die Zusammenfassung:** 103 Zeilen, **0
+Nicht-Kommentarzeilen** — also keine Verhaltensänderung, und damit sind
+die unveränderten Attrappenzahlen keine Behauptung, sondern eine Folge.
+Der Kopf trägt die Zählung je Reiter, 22 Zusicherungen halten ihn
+(`__tests__/g572-kopf-gegen-datei.test.ts`), Zeilennummern stehen keine
+drin — dafür die zwei `grep`-Zeilen.
+
+`[cmd]` **Drei von fünf waren falsch:** Timeline (G-79), Phase engine
+(G-539/G-544/G-565/G-513) und Physique ratios (G-87) sind angebunden.
+Attrappe ohne echten Teil sind zwei: Cross-module und Pose sessions. Und
+Goals trägt 2 Marken, wo die SSOT 0 sagt — in beide Richtungen falsch.
+
+`[cmd]` **Mein Auftrag war an zwei Stellen falsch, beide vom Agenten
+korrigiert:** die `daten.ts`-Behauptung steht in 47, nicht 48, und es
+sind **zehn** Trenner, nicht drei — ich hatte nur `ansicht.tsx` gegrept
+und daraus auf das Ganze geschlossen. `mockup-referenz.tsx` trägt sieben.
+
+`[cmd]` **Die SSOT ist nachgezogen:** `docs/ssot/116-goals-anbindung.md`
+trägt einen Nachtrag vom 2026-10-02 mit derselben Tabelle. Die Gründe von
+GO-16 bleiben als Geschichte stehen.

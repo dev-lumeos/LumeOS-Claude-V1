@@ -396,3 +396,33 @@ gefehlt.
 | Kein Seitenüberlauf 375–1440 | `scrollWidth > clientWidth` je Breite → nein |
 | `data-mode`-Warnung ist Bestand | dieselbe Meldung auf `/v2/medical` und `/v2/nutrition` |
 | Gate, Tests | `pnpm gate` 8/8 · 70/70 · 4/4 |
+
+---
+
+## Nachtrag 2026-10-02 — drei der fünf sind angebunden (G-572)
+
+`[cmd]` **Am 2026-10-02 je Reiter am Schirm nachgezählt** (`dev@lumeos.app`,
+Marken über und unter `[data-referenz-trenner]`). Der Abschnitt
+*„Nicht angebunden, mit Grund"* oben trägt den Stand 2026-08-18 und
+stimmt für drei Zeilen nicht mehr:
+
+| Tab | Stand 18.08. | heute | wodurch |
+|---|---|---|---|
+| **Timeline** | Attrappe | **angebunden** | G-79, `ZeitachseTab` liest Ziele, Phasen, Meilensteine |
+| **Phase engine** | Attrappe | **angebunden** | G-539 Editor · G-544 Zeitachse · G-565 Einheitenschalter · G-513 Schreibwege |
+| **Physique ratios** | Attrappe | **angebunden** | G-87, `physique-echt.tsx` aus `body_circumferences` |
+| **Cross-module** | Attrappe | Attrappe | kein echter Teil |
+| **Pose sessions** | Attrappe | Attrappe | kein echter Teil |
+| **Adaptive TDEE** (Rest) | Attrappe | gemischt | Kopfkachel echt, Kurve Entwurf |
+
+`[cmd]` **Und in die andere Richtung:** Abschnitt 2 nennt für **Goals**
+0 Marken. Heute sind es **2** — die Fehlende-Kacheln sind nach GO-16
+entstanden (E-68).
+
+`[read]` **Die Gründe oben bleiben als Geschichte stehen**, sie sind mit
+ihrem Stichtag richtig. Was heute gilt, steht hier und im Kopf von
+`apps/web/src/app/v2/goals/ansicht.tsx` — dort mit der Zählung je Reiter,
+ohne Zeilennummern, weil die mit jedem Punkt altern.
+
+`[cmd]` **Gezählt:** zehn Reiter, zehn Trenner, je genau einer — drei in
+`ansicht.tsx`, sieben in `mockup-referenz.tsx`.

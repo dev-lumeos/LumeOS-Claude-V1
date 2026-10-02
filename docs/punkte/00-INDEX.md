@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 271 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 621 |
-| **gesamt** | **897** |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 623 |
+| **gesamt** | **898** |
 
 ## medical — 50
 
@@ -341,7 +341,7 @@
 | `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](erledigt/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | erledigt | — | — |
 | `G-497` | feature | hoch | [die Suche zeigt Gruppen statt Zeilen](todos/nutrition-g-0497-suche-zeigt-gruppen.md) | offen | — | — |
 | `G-580` | fehler | mittel | [Die Plankette darf einen Ring schliessen](todos/nutrition-g-0580-die-plankette-darf-einen-ring-schliessen.md) | offen | — | — |
-| `G-581` | fehler | mittel | [Ein Modal ohne Aufrufer, mit eigener Wahrheit ueber den Lebenszyklus](laufend_claudecode/nutrition-g-0581-ein-modal-ohne-aufrufer-mit-eigener-wahrheit.md) | vorbereitet (claudecode) | — | — |
+| `G-581` | fehler | mittel | [Ein Modal ohne Aufrufer, mit eigener Wahrheit ueber den Lebenszyklus](erledigt/nutrition-g-0581-ein-modal-ohne-aufrufer-mit-eigener-wahrheit.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -657,7 +657,7 @@
 | `G-568` | fehler | hoch | [Die Zielwerte brauchen ihr Ziel](erledigt/goals-g-0568-die-zielwerte-brauchen-ihr-ziel.md) | erledigt | — | G-570 |
 | `G-569` | fehler | hoch | [G-520 prueft Kilogramm in der Anwendung](erledigt/goals-g-0569-g520-prueft-kilogramm-in-der-anwendung.md) | erledigt | — | — |
 | `G-570` | fehler | mittel | [Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg](todos/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md) | offen | — | — |
-| `G-572` | fehler | mittel | [Der Dateikopf nennt Phase engine als Attrappe, und das ist seit Tagen falsch](laufend_claudecode/goals-g-0572-der-dateikopf-nennt-phase-engine-als-attrappe.md) | laeuft (claudecode) | — | — |
+| `G-572` | fehler | mittel | [Der Dateikopf nennt Phase engine als Attrappe, und das ist seit Tagen falsch](erledigt/goals-g-0572-der-dateikopf-nennt-phase-engine-als-attrappe.md) | erledigt | — | — |
 | `G-573` | fehler | hoch | [rateAusKcal gibt es zweimal, mit verschiedener Rundung](erledigt/goals-g-0573-rateauskcal-gibt-es-zweimal-mit-verschiedener-rundung.md) | erledigt | — | — |
 | `G-574` | fehler | hoch | [Die Waechter rechnen, und niemand sieht sie](todos/goals-g-0574-die-waechter-rechnen-und-niemand-sieht-sie.md) | offen | — | — |
 | `G-575` | fehler | hoch | [Ein Ziel traegt genau eine Messgroesse](todos/goals-g-0575-ein-ziel-traegt-genau-eine-messgroesse.md) | offen | — | — |
@@ -675,7 +675,9 @@
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
 | `G-577` | fehler | hoch | [Die Umfangserfassung hat keinen Schreibweg](erledigt/goals-g-0577-die-umfangserfassung-hat-keinen-schreibweg.md) | erledigt | G-571 | — |
 
-## coach — 57
+## coach — 58
+
+### beauftragbar — 57
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -736,6 +738,12 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](laufend_claudecode/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | laeuft (claudecode) | G-571 | — |
 
 ## quer — 229
 
@@ -970,7 +978,7 @@
 | `G-552` | befund | mittel | [Training und Erholung kennen die Phase nicht](todos/quer-g-0552-phasenparameter-fuer-training-und-erholung.md) | offen | — | — |
 | `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](erledigt/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | erledigt | — | — |
 | `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](todos/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | offen | — | — |
-| `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | offen | — | G-577, G-578, G-579 |
+| `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | offen | — | G-577, G-578, G-579, G-582 |
 
 ### wartet auf Blocker — 1
 
