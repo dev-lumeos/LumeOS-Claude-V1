@@ -42,9 +42,21 @@ import {
 } from './plans-echt'
 import { PlanModal } from './plan-modal'
 import { PlanEintraegeEcht, type TagesEintrag } from './plan-eintraege'
-// G-286/G-287/G-290: Karte, Tages-Akkordeon und Aktivierungsdialog.
-import {
-} from './plan-detail'
+// ══ G-581: `plan-detail.tsx` ist entfernt ════════════════════════
+//
+// `[cmd]` **Hier stand ein LEERER Import** — `import { } from
+// './plan-detail'`, uebrig geblieben, als G-319 die drei Bauteile
+// austrug. **Er band nichts und hielt die Datei am Leben.**
+//
+// `[cmd]` **Gemessen 2026-10-02: alle drei Ausfuhren ohne Aufrufer**
+// — `MealPlanCard`, `MealPlanDetail` (G-319: der aktive Plan stand
+// dreimal) und `MealPlanActivationModal` (G-319: es bekam immer den
+// AKTIVEN Plan, ein Klick bei einem anderen oeffnete den falschen
+// Dialog). **Drei Waechter verbieten ihre Rueckkehr in diese Datei**
+// (`plan-vorlage-zeilen.test.ts`, `plan-bedienung.test.ts`).
+//
+// `[read]` **A-59: entfernt, nicht auskommentiert.** git holt sie
+// zurueck, wenn jemand sie braucht.
 
 const ATTRAPPE = 'Aus dem Entwurf uebernommen. Dieser Tab ist noch nicht an die vorhandenen Essensplaene angebunden - die Zahlen sind erfunden.'
 

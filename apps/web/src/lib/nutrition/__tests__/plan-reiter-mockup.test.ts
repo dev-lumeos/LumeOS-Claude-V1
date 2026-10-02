@@ -35,14 +35,16 @@ const ohneKommentare = (f: string) => lies(f)
 
 const TAB = 'apps/web/src/app/v2/nutrition/tab-plans.tsx'
 const ECHT = 'apps/web/src/app/v2/nutrition/plans-echt.tsx'
-const DETAIL = 'apps/web/src/app/v2/nutrition/plan-detail.tsx'
+// `[cmd]` **G-581: `plan-detail.tsx` ist entfernt** — alle drei
+// Ausfuhren hatten null Aufrufer, der Import in `tab-plans.tsx`
+// stand leer da. **Was sie zeigten, steht in `plans-echt.tsx`.**
 const PLANNER = 'apps/web/src/app/v2/nutrition/tab-planner-echt.tsx'
 const WERKBANK = 'apps/web/src/app/v2/nutrition/plan-werkbank-ui.tsx'
 const LESEN = 'apps/web/src/lib/nutrition/plan-lesen.ts'
 const EINTRAEGE = 'apps/web/src/app/v2/nutrition/plan-eintraege.tsx'
 
 test('die Dateiproben finden ihre Dateien — unabhaengig vom Startort', () => {
-  for (const f of [TAB, ECHT, DETAIL, PLANNER, WERKBANK, LESEN, EINTRAEGE]) {
+  for (const f of [TAB, ECHT, PLANNER, WERKBANK, LESEN, EINTRAEGE]) {
     assert.ok(fs.existsSync(path.join(WURZEL, f)), `${f} nicht gefunden`)
     assert.ok(lies(f).length > 500, `${f} ist verdaechtig kurz`)
   }
@@ -283,11 +285,22 @@ test('G-310/A-59: die Herkunfts-KACHEL ist entfernt', () => {
   assert.doesNotMatch(t, /(?<![a-zA-Z0-9_])HerkunftEcht(?![a-zA-Z0-9_])/,
     'HerkunftEcht wird noch gerendert')
 
-  // Das Badge steht in der Plankarte, und zwar bedingt.
-  const d = ohneKommentare(DETAIL)
-  assert.match(d, /HERKUNFT_BADGE\[herkunft\] && \(/,
+  // ══ G-581: das Badge steht jetzt in der Bibliothek ═════════════
+  //
+  // `[cmd]` **Hier wurde `plan-detail.tsx` geprueft** — die Datei ist
+  // seit G-581 entfernt: **alle drei Ausfuhren hatten null Aufrufer**
+  // (G-319 hatte sie ausgetragen, der Import blieb leer stehen).
+  //
+  // `[read]` **Die FRAGE bleibt dieselbe:** erscheint das Badge nur
+  // mit Beschriftung, und traegt es seine Farbe? `[cmd]` **Gemessen
+  // 2026-10-02: es steht in `plans-echt.tsx`**, in der Bibliothek —
+  // dort, wo die uebrigen Plaene als Karten liegen.
+  const d = ohneKommentare(ECHT)
+  assert.match(d, /const badge = HERKUNFT_BADGE\[h\]/,
+    'die Bibliothek liest das Badge nicht mehr')
+  assert.match(d, /\{badge && \(/,
     'das Badge erscheint auch ohne Beschriftung')
-  assert.match(d, /HERKUNFT_FARBE\[herkunft\]/, 'die Badge-Farbe fehlt')
+  assert.match(d, /HERKUNFT_FARBE\[h\]/, 'die Badge-Farbe fehlt')
 })
 
 // ══ WAS NICHT IN DER VORLAGE STEHT, IST WEG ═════════════════════════
