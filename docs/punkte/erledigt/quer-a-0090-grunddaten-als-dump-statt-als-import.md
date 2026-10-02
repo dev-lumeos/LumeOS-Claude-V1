@@ -4,6 +4,8 @@ typ: fehler
 modul: quer
 schwere: hoch
 angelegt: 2026-10-01
+commit: 3868434
+erledigt: 2026-10-02
 agent: codex
 beauftragt: 2026-10-01
 
@@ -117,3 +119,42 @@ committen.
 `[read]` **Kein voller Kettenlauf als Nachweis** (00-LIESMICH.md). Bei
 A-86 kostete die Arbeit 7,076 s und der verlangte Nachweis 1.300,7 s.
 **Dieser Auftrag ist genau dagegen.**
+
+---
+
+## Abnahme — 2026-10-02, Commit `3868434`
+
+`[cmd]` **In `kette.json` nachgezaehlt, nicht im Bericht gelesen:**
+
+| Merkmal | gezaehlt |
+| --- | --- |
+| Name und Version | `lumeos-lokale-kette-mit-grunddaten-dump`, Version 2 |
+| Eintraege | 320 — davon 263 `covered_by_dump`, **57 laufen wirklich** |
+| Arten | 261 `sql` · 58 `tsx` · 1 `dump` |
+| `grunddaten-pruefen.ts` | 190 Zeilen — Pruefsumme und Herkunft gegen alle eingefrorenen Quellen |
+| Gegenprobe | `_validierung/quer-a90-grunddaten-dump.test.ts`, 52 Zeilen: unveraenderte Quelle gruen, geaenderte rot |
+| `kette-voll.json` | `extends` auf `kette.json`, `mode: "full"`, eigene Schrittliste leer |
+| Commit | `3868434`, 8 Dateien, +1320/−280 (zusammen mit A-91) |
+
+`[cmd]` **Die Zahl 320 ist der Quercheck, dass die Kette stimmt:** Codex
+meldete 318 Eintraege und 55 laufende. Die Differenz sind **genau die
+zwei G-560-Schritte**, die zwischen seinem Bericht und diesem Commit
+hineinkamen. **Zwei unabhaengig entstandene Zahlen treffen sich** — das
+ist mehr wert als eine uebernommene.
+
+`[read]` **Der Kern des Punktes war Toms Wartezeit, und sie ist
+gemessen:** Restore 78,0 s statt 1.300,7 s Vollaufbau. **94 Prozent
+weniger** fuer jeden Nachweis, der eine Wegwerf-Datenbank braucht. Der
+Runner kennt `kind: "dump"`, setzt danach den Auth-Stub (der Snapshot
+traegt den historischen Stub, und `request.jwt.claims` darf nicht auf den
+Stand vor PostgREST 9 zurueckfallen) und ueberspringt jeden gedeckten
+Schritt mit einer Zeile Ausgabe.
+
+`[cmd]` **Der Dump selbst ist kein Quellcode** — Toms Entscheidung vom
+2026-10-01. `.gitignore` nimmt `grunddaten-*.dump` und
+`grunddaten-dump.manifest.json` auf; im Repo steht nur, wie er geprueft
+und wiederhergestellt wird.
+
+`[read]` **In einem Commit mit A-91**, und das war eine Entscheidung:
+A-91 erweitert diesen Runner in denselben Funktionen. Die Begruendung
+steht im Commit.

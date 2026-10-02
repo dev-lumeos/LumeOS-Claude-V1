@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 271 |
+| `todos` | 269 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 616 |
-| **gesamt** | **892** |
+| `erledigt` | 620 |
+| **gesamt** | **894** |
 
 ## medical — 50
 
@@ -71,9 +71,11 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-578` | fehler | hoch | [Der Laborimport hat drei Datenbankfunktionen und keine Oberflaeche](laufend_claudecode/medical-g-0578-der-laborimport-hat-keine-oberflaeche.md) | vorbereitet (claudecode) | G-571 | — |
+| `G-578` | fehler | hoch | [Der Laborimport hat drei Datenbankfunktionen und keine Oberflaeche](erledigt/medical-g-0578-der-laborimport-hat-keine-oberflaeche.md) | erledigt | G-571 | — |
 
-## nutrition — 262
+## nutrition — 263
+
+### beauftragbar — 262
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -339,6 +341,12 @@
 | `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](erledigt/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | erledigt | — | — |
 | `G-497` | feature | hoch | [die Suche zeigt Gruppen statt Zeilen](todos/nutrition-g-0497-suche-zeigt-gruppen.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-579` | fehler | mittel | [Der Plansprung existiert in der Datenbank und wird von nichts benutzt](laufend_claudecode/nutrition-g-0579-der-plansprung-hat-keinen-aufrufer.md) | laeuft (claudecode) | G-571 | — |
 
 ## supplements — 127
 
@@ -647,7 +655,7 @@
 | `G-568` | fehler | hoch | [Die Zielwerte brauchen ihr Ziel](erledigt/goals-g-0568-die-zielwerte-brauchen-ihr-ziel.md) | erledigt | — | G-570 |
 | `G-569` | fehler | hoch | [G-520 prueft Kilogramm in der Anwendung](erledigt/goals-g-0569-g520-prueft-kilogramm-in-der-anwendung.md) | erledigt | — | — |
 | `G-570` | fehler | mittel | [Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg](todos/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md) | offen | — | — |
-| `G-572` | fehler | mittel | [Der Dateikopf nennt Phase engine als Attrappe, und das ist seit Tagen falsch](todos/goals-g-0572-der-dateikopf-nennt-phase-engine-als-attrappe.md) | offen | — | — |
+| `G-572` | fehler | mittel | [Der Dateikopf nennt Phase engine als Attrappe, und das ist seit Tagen falsch](laufend_claudecode/goals-g-0572-der-dateikopf-nennt-phase-engine-als-attrappe.md) | vorbereitet (claudecode) | — | — |
 | `G-573` | fehler | hoch | [rateAusKcal gibt es zweimal, mit verschiedener Rundung](erledigt/goals-g-0573-rateauskcal-gibt-es-zweimal-mit-verschiedener-rundung.md) | erledigt | — | — |
 | `G-574` | fehler | hoch | [Die Waechter rechnen, und niemand sieht sie](todos/goals-g-0574-die-waechter-rechnen-und-niemand-sieht-sie.md) | offen | — | — |
 | `G-575` | fehler | hoch | [Ein Ziel traegt genau eine Messgroesse](todos/goals-g-0575-ein-ziel-traegt-genau-eine-messgroesse.md) | offen | — | — |
@@ -663,7 +671,7 @@
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
-| `G-577` | fehler | hoch | [Die Umfangserfassung hat keinen Schreibweg](laufend_claudecode/goals-g-0577-die-umfangserfassung-hat-keinen-schreibweg.md) | laeuft (claudecode) | G-571 | — |
+| `G-577` | fehler | hoch | [Die Umfangserfassung hat keinen Schreibweg](erledigt/goals-g-0577-die-umfangserfassung-hat-keinen-schreibweg.md) | erledigt | G-571 | — |
 
 ## coach — 57
 
@@ -727,9 +735,9 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 227
+## quer — 228
 
-### beauftragbar — 226
+### beauftragbar — 227
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -782,10 +790,11 @@
 | `A-84` | fehler | hoch | [Der Pruefumfang haengt am Staging, nicht am Repo](erledigt/quer-a-0084-der-pruefumfang-haengt-am-staging.md) | erledigt | — | — |
 | `A-85` | fehler | mittel | [Der Zyklus wird geprueft, aber nichts fuehrt ihn aus](erledigt/quer-a-0085-der-zyklus-wird-geprueft-aber-nicht-ausgefuehrt.md) | erledigt | — | A-89 |
 | `A-86` | fehler | hoch | [Die Kette spielt die Testdaten nicht ein](erledigt/quer-a-0086-die-kette-spielt-die-testdaten-nicht-ein.md) | erledigt | — | — |
-| `A-87` | fehler | hoch | [46 Zeugen, nach Ursache gestaffelt verdrahten](todos/quer-a-0087-46-zeugen-nach-ursache-gestaffelt.md) | offen | — | — |
+| `A-87` | fehler | hoch | [46 Zeugen, nach Ursache gestaffelt verdrahten](laufend_codex/quer-a-0087-46-zeugen-nach-ursache-gestaffelt.md) | laeuft (codex) | — | A-92 |
 | `A-88` | fehler | hoch | [31 Proben fallen still auf postgres zurueck](laufend_codex/quer-a-0088-31-proben-fallen-still-auf-postgres-zurueck.md) | vorbereitet (codex) | — | — |
 | `A-89` | fehler | mittel | [zyklus-fahren scheitert an EPERM, wenn ein Agent die Datei offen hat](todos/quer-a-0089-zyklus-fahren-scheitert-an-eperm.md) | offen | — | — |
-| `A-90` | fehler | hoch | [Grunddaten als Dump, nicht als Import bei jedem Lauf](laufend_codex/quer-a-0090-grunddaten-als-dump-statt-als-import.md) | laeuft (codex) | — | A-91 |
+| `A-90` | fehler | hoch | [Grunddaten als Dump, nicht als Import bei jedem Lauf](erledigt/quer-a-0090-grunddaten-als-dump-statt-als-import.md) | erledigt | — | A-91 |
+| `A-91` | fehler | hoch | [Der taegliche Lauf erzeugt bei gruen einen neuen Dump](laufend_codex/quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md) | laeuft (codex) | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
@@ -958,13 +967,13 @@
 | `G-552` | befund | mittel | [Training und Erholung kennen die Phase nicht](todos/quer-g-0552-phasenparameter-fuer-training-und-erholung.md) | offen | — | — |
 | `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](erledigt/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | erledigt | — | — |
 | `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](todos/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | offen | — | — |
-| `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | offen | — | G-577, G-578 |
+| `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | offen | — | G-577, G-578, G-579 |
 
 ### wartet auf Blocker — 1
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `A-91` | fehler | hoch | [Der taegliche Lauf erzeugt bei gruen einen neuen Dump](laufend_codex/quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md) | laeuft (codex) | A-90 | — |
+| `A-92` | fehler | hoch | [Die G-558-Probe ruft berechne_zielwerte ohne Zielbezug und haelt den Tagesdump auf](erledigt/quer-a-0092-die-g558-probe-ruft-ohne-zielbezug.md) | erledigt | A-91 | — |
 
 ## buddy — 1
 

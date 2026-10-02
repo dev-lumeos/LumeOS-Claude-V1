@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: hoch
 angelegt: 2026-10-01
+commit: a640e7af
+erledigt: 2026-10-02
 agent: claudecode
 beauftragt: 2026-10-01
 
@@ -95,3 +97,48 @@ entfernt · der fachliche Fehlerfall am Schirm (fremder Nutzer) ·
 Bild vorher und nachher · Sabotage je Waechter in beide Richtungen ·
 `pnpm gate` gruen mit Testzahl · nichts committen. **Kein Kettenlauf** —
 die Funktion ist gebaut, du rufst sie nur.
+
+---
+
+## Abnahme — 2026-10-02, Commit `a640e7af`
+
+`[cmd]` **Gezaehlt am Ergebnis:**
+
+| Merkmal | gezaehlt |
+| --- | --- |
+| `.rpc('body_circumference_write', …)` | genau 1 — `lib/goals/umfang-write.ts:91` |
+| der Waechter | `lib/goals/__tests__/g577-umfang-schreibweg.test.ts:87` haelt genau diese Zeile als Text — er zaehlt den Aufruf, nicht den Namen |
+| neue Dateien | `umfang-write.ts`, `umfang-rechnung.ts`, `app/v2/goals/umfang-aktionen.ts` |
+| Bilder | 5 in `docs/bilder/g577/` — Reiter und Modal vorher, ausgefuellt, Konflikt, nachher |
+| Commit | `a640e7af`, 10 Dateien, +837/−9 |
+
+`[read]` **Die Form war gegen die Erwartung, und das ist der wertvollste
+Teil des Berichts:** die Funktion nimmt **einen Satz mit dreizehn
+Umfangsspalten**, nicht eine Zeile je Stelle. Alle 13 abgeleiteten
+Parameternamen wurden gegen die echte Signatur geprueft, 0 Abweichungen.
+**Eine Annahme ueber die Form haette den ganzen Aufrufer falsch
+gebaut.**
+
+`[cmd]` **A4 hat die Datenbank entschieden, nicht der Agent:**
+`body_circumferences_user_date_time_uq` laeuft ueber
+`(user_id, measurement_date, measurement_time)` — zwei Messungen am
+selben Tag gehen, wenn die Uhrzeit abweicht. **Deshalb ist
+`measurement_time` Pflicht und vorbelegt**, und der Konflikt erscheint am
+Zeitfeld. Die Grenzen je Stelle kommen aus
+`body_circumferences_positive_ck`, die vier Quellen aus
+`body_circumferences_source_ck` — **nicht** aus `BF_METHODEN`, das ist
+ein anderer CHECK an einer anderen Tabelle.
+
+`[cmd]` **Der Griff in Codex' Bereich, auf meine Freigabe und als eigener
+Absatz gemeldet:** `535_auth_uid_legacy_readers.sql` ganz eingespielt,
+nicht als Ausschnitt. Alter GUC 6 → 0, `auth.uid()` 0 → 6, Sicherung in
+`backup/g577-535-vorher.sql` und `-nachher.sql`. **Damit ist der
+42501-Blocker fuer alle sechs Funktionen weg** — G-578 hat davon direkt
+profitiert.
+
+`[read]` **Der Vermerk war zweifach falsch:** er nannte
+`goals.body_measurements` (die Umfaenge liegen in `body_circumferences`)
+und einen fehlenden Schreibweg (der stand seit G-535). **Das ist dieselbe
+Klasse wie die falsche Praemisse in G-555** — zwei an einem Tag, beide
+vom Agenten gemessen statt uebernommen. Drei Sabotagen waren zuerst
+gruen, alle drei echte Luecken in seinen eigenen Waechtern, alle behoben.

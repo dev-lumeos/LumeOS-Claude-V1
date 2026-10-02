@@ -11,7 +11,7 @@ braucht: [A-90]
 kind_von: A-90
 
 quellen:
-  - docs/punkte/laufend_codex/quer-a-0090-grunddaten-als-dump-statt-als-import.md
+  - docs/punkte/erledigt/quer-a-0090-grunddaten-als-dump-statt-als-import.md
 
 beruehrt:
   dateien:
@@ -34,7 +34,7 @@ beruehrt:
     Stand:   2026-10-01
 
 **Zuerst lesen, vollstaendig:** diese Datei und deinen eigenen A-90 in
-`docs/punkte/laufend_codex/quer-a-0090-grunddaten-als-dump-statt-als-import.md`.
+`docs/punkte/erledigt/quer-a-0090-grunddaten-als-dump-statt-als-import.md`.
 
 ## Die Entscheidung
 
@@ -91,3 +91,38 @@ A-90/A4 weiter in beide Richtungen · die Laufzeit des Tagesbaus auf dem
 neuen Dump · Wegwerf-Datenbanken verworfen mit Zaehler · kein `db push` ·
 nichts committen. **Kein voller Kettenlauf als Nachweis** ausser dem
 einen, der hier der Gegenstand ist.
+
+---
+
+## Zwischenstand — 2026-10-02, Commit `3868434`, A5 offen
+
+`[cmd]` **Der Code ist committet, der Punkt bleibt offen.** Das ist kein
+Widerspruch: A1 bis A4 sind gebaut und gemessen, A5 verlangt einen
+gruenen Vollauf, und der stirbt seit zwei Tagen an fremden Zeugen.
+
+| Merkmal | gezaehlt |
+| --- | --- |
+| Tageslauf | `tools/kettenlauf-taeglich.mjs:9` — `DEFAULT_MANIFEST` ist `kette-voll.json` |
+| Veroeffentlichung | nur bei Exit 0; bei gruenem Lauf und rotem Dumpwechsel bleibt der alte Dump aktiv, mit eigenem Exitcode |
+| Kandidat | am C-537-Zwischenstand, `kette-ausfuehren.ts:379` |
+| Proben | 6 in `tools/__tests__/kettenlauf-status-pruefen.test.mjs`, **zwei davon neu fuer A-91**: roter Vollauf → kein Dump · gruener Vollauf → atomare Veroeffentlichung |
+| Aufbewahrung | aktueller plus vorheriger Stand, rund 828,8 MiB |
+| EPERM | altes Manifest bleibt bytegleich aktiv, Exit 1, kein Kandidat und kein unreferenzierter Dump |
+| Commit | `3868434`, 8 Dateien, +1320/−280 (zusammen mit A-90) |
+
+`[cmd]` **Warum A5 offen ist, mit Zahlen:**
+
+    A-91   1.347,9 s   Abbruch bei G-558 (Zielbezug fehlt)        -> A-92
+    A-92   1.291,7 s   G-558 gruen, Abbruch bei G-545
+                       (Erwartung ohne duration_ratio_pct)        -> A-87
+
+`[read]` **Zweimal hat der Lauf den Kandidaten korrekt erzeugt und
+korrekt NICHT veroeffentlicht.** Genau das verlangt A1 — insofern ist das
+Verhalten belegt, nur eben nicht mit einem veroeffentlichten Dump.
+
+`[cmd]` **Der alte Dump steht unveraendert:** 434.525.275 Bytes, Manifest
+mit 19 Quellen, 2026-10-01T07:48:38.367Z.
+
+`[read]` **A5 wird in A-87 belegt** — dort laeuft der Vollauf einmal am
+Ende der Zeugenstaffel. **Dieser Punkt schliesst, wenn ein Dump
+veroeffentlicht ist, nicht vorher.**

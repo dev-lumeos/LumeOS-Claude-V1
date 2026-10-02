@@ -5,10 +5,10 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-577 | Die Umfangserfassung hat keinen Schreibweg | **laeuft**, raus 01.10. |
-| Codex | A-90 | Grunddaten als Dump, nicht als Import bei jedem Lauf | **laeuft**, raus 01.10. |
+| Claude Code | G-579 | Der Plansprung existiert in der Datenbank und wird von nichts benutzt | **laeuft**, raus 02.10. |
+| Codex | A-87 | 46 Zeugen, nach Ursache gestaffelt verdrahten | **laeuft**, raus 02.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
-| Claude Code | G-578 | Der Laborimport hat drei Datenbankfunktionen und keine Oberflaeche | **bereit in `next/`** |
+| Claude Code | G-572 | Der Dateikopf nennt Phase engine als Attrappe, und das ist seit Tagen falsch | **bereit in `next/`** |
 | Codex | A-88 | 31 Proben fallen still auf postgres zurueck | **bereit in `next/`** |
 <!-- /ERZEUGT:laufend-tabelle -->
 
