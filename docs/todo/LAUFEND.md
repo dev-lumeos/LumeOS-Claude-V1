@@ -1,6 +1,6 @@
 # Laufende Auftraege
 
-**Stand: 2026-10-03, 11:50**
+**Stand: 2026-10-03, 12:15**
 
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
@@ -602,6 +602,16 @@ Signatur.
 Datenbank (A-77). **Die Seite ist das einzige Instrument**, und
 `schuss.mjs` nennt Titel, Attrappen, Konsolenfehler und Laufzeit in einem
 Aufruf. Es kostet 1,3 Sekunden.
+
+`[cmd]` **Und eine Funktion mit zwei Signaturen ist ein PAAR, kein
+Original mit Altlast.** `goals.berechne_zielwerte` hat zwei: die
+dreiparametrige rechnet, die zweiparametrige ist der Eingang fuer „kein
+Ziel bekannt" (G-568/A2). **Mein A-95/A5 nannte die zweite „die alte
+Fassung" und liess sie entfernen** — die Goals-Seite fiel aus, zweimal
+von Tom gesehen. **Wer eine Signatur entfernt, aendert eine
+Schnittstelle, und die Aufrufer stehen nicht nur in der Datenbank.**
+`[read]` **Vor jedem Entfernen: `rg` ueber `apps/` und `packages/`, nicht
+nur `pg_get_functiondef`.** Das ist G-595.
 
 `[read]` **Und eine Bruecke, die auf einen entfernten Weg zurueckfaellt,
 luegt.** Der Rueckfall aus G-570 griff bei `PGRST202`, rief die

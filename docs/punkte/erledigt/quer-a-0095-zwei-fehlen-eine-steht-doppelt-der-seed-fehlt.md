@@ -354,3 +354,39 @@ wieder auftaucht. `pnpm gate` gruen im Vorcommit-Haken. Commit
 
 `[cmd]` **Offen und bekannt:** C-557 haelt den Vollauf weiter rot, G-570
 (die Bruecke in `zielwerte-read.ts`) ist jetzt toter Code und gehoert weg.
+
+---
+
+## Berichtigung — 2026-10-03, G-595: A5 dieses Auftrags war falsch
+
+`[read]` **A5 verlangte, die Zweiparameter-Fassung von
+`goals.berechne_zielwerte` zu entfernen. Das war mein Fehler, nicht Codex'
+Ausfuehrung.**
+
+`[cmd]` **Sie ist kein Ueberrest.**
+`11_goals/563_target_scoped_calculation.sql:244` legt sie bewusst als
+Mantel neben die dreiparametrige Fassung, und
+`apps/web/src/lib/profile/zielwerte-read.ts:267` ruft genau sie, wo der
+Aufrufer **kein Ziel kennt** — G-568/A2, *„kein geratenes Ziel"*.
+
+`[cmd]` **Folge: die Goals-Seite fiel aus**, von Tom um 11:43 und 11:58
+gesehen, mit `PGRST202` auf die Zweiparameter-Signatur.
+
+`[read]` **Zwei Aussagen dieser Abnahme sind damit widerrufen:**
+
+1. *„`goals.nutrition_target_assign_phase` war ihr einziger Aufrufer"* —
+   sie hatte zwei, und der zweite stand in `apps/`. **Ich habe die
+   Aufrufer in der ANWENDUNG nie gezaehlt.**
+2. *„die Bruecke aus G-570 ist bereits toter Code, weil `PGRST202` nicht
+   mehr entstehen kann"* — `PGRST202` entsteht, sobald die Signatur fehlt
+   oder der Schema-Cache veraltet ist.
+
+`[cmd]` **Behoben unter G-595** (`c73a95c1`): Fassung live
+zurueckgespielt, der DROP aus `_ableitung/030_mikro-uebersicht.ts`
+entfernt, die Probe in `testdaten-pruefen.ts` umgedreht, Nachweis in drei
+Richtungen **und an der Seite**.
+
+`[read]` **Die Lehre steht in `docs/todo/LAUFEND.md`:** ein Einspielen
+ist nicht fertig, wenn SQL es bestaetigt — erst, wenn die Seite laedt.
+**Und eine Funktion mit zwei Signaturen ist ein Paar, kein Original mit
+Altlast.** Wer eine davon entfernt, aendert eine Schnittstelle.
