@@ -1841,6 +1841,24 @@
       "covered_by_dump": true
     },
     {
+      "id": "597_one_active_protocol",
+      "path": "supabase/_pipeline/12_recovery/597_one_active_protocol.sql",
+      "kind": "sql",
+      "creates": "G-597: hoechstens ein aktives Recovery-Protokoll je Nutzer",
+      "depends_on": [
+        "421_schema"
+      ]
+    },
+    {
+      "id": "597_one_active_protocol_probe",
+      "path": "supabase/_pipeline/_validierung/recovery-g597-one-active-protocol.test.ts",
+      "kind": "tsx",
+      "creates": "G-597: 23505 fuer ein zweites aktives Protokoll, Historie und zwei Nutzer bleiben erlaubt",
+      "depends_on": [
+        "597_one_active_protocol"
+      ]
+    },
+    {
       "id": "422_schema",
       "path": "supabase/_pipeline/00_querschnitt/422_recovery_card_reads_and_phase_proposals.sql",
       "kind": "sql",
