@@ -31,9 +31,11 @@ beruehrt:
     Bereich: supabase/_pipeline/13_supplements/
              supabase/_pipeline/daten/supplement-naehrstoffcodes.json
              supabase/_pipeline/_validierung/
-    Fremd:   apps/ und packages/ gehoeren Claude Code. docs/ gehoert dem
-             Orchestrator, auch diese Punktdatei. A-95 ist dein
-             laufender Auftrag und hat Vorrang.
+    Fremd:   apps/ und packages/ gehoeren Claude Code - er arbeitet
+             gerade an G-590 in apps/web/src/app/v2/recovery/.
+             docs/ gehoert dem Orchestrator, auch diese Punktdatei.
+             A-95 ist ABGENOMMEN (df9cd8aa) - dies ist dein einziger
+             laufender Auftrag.
     Stand:   2026-10-03
 
 ## Stand 2026-10-03 — lies das zuerst, du faengst ohne Kontext an
