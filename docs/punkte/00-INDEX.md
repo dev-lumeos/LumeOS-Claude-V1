@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 275 |
-| `laufend_codex` | 2 |
+| `todos` | 276 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 633 |
-| **gesamt** | **912** |
+| **gesamt** | **914** |
 
 ## medical — 50
 
@@ -344,7 +344,7 @@
 |---|---|---|---|---|---|---|
 | `G-592` | fehler | mittel | [Die Hydration-Zusammenfassung hat keinen Leser](todos/nutrition-g-0592-die-hydration-zusammenfassung-hat-keinen-leser.md) | offen | G-588 | — |
 
-## supplements — 128
+## supplements — 129
 
 ### beauftragbar — 127
 
@@ -478,11 +478,12 @@
 | `G-500` | fehler | hoch | [das Injektionsprotokoll ist der sechste Weg](erledigt/supplements-g-0500-injektionsprotokoll-sechster-weg.md) | erledigt | — | E-89 |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
-### wartet auf Blocker — 1
+### wartet auf Blocker — 2
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
+| `C-557` | fehler | hoch | [Vierzehn von siebzehn Naehrstoffzuordnungen finden ihre Substanz nicht](laufend_codex/supplements-c-0557-vierzehn-von-siebzehn-naehrstoffzuordnungen-finden-ihre-substanz-nicht.md) | vorbereitet (codex) | A-91 | — |
 
 ## training — 52
 
@@ -744,7 +745,7 @@
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 | `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](erledigt/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | erledigt | — | — |
 
-## quer — 237
+## quer — 238
 
 ### beauftragbar — 235
 
@@ -823,7 +824,7 @@
 | `C-259` | feature | mittel | [Kimis Bestand ist weit groesser als angenommen — und der Orchestrator hat den Statusbericht nie gelesen](todos/quer-c-0259-kimis-bestand-ist-weit-groesser-als-angenommen-und-der-orchestrator-hat-.md) | offen | — | C-262 |
 | `C-271` | befund | mittel | [`rule_catalog` laedt immer — jeder Rueckfallzweig daran ist tot](todos/quer-c-0271-rule-catalog-laedt-immer-jeder-rueckfallzweig-daran-ist-tot.md) | offen | — | — |
 | `C-279` | befund | mittel | [Das Kreuzprodukt in `rule_assessment` skaliert mit den Einnahmen](todos/quer-c-0279-das-kreuzprodukt-in-rule-assessment-skaliert-mit-den-einnahmen.md) | offen | — | — |
-| `C-295` | feature | mittel | [die Kette liest aus zwei Kimi-Pfaden](erledigt/quer-c-0295-die-kette-liest-aus-zwei-kimi-pfaden.md) | erledigt | — | C-556 |
+| `C-295` | feature | mittel | [die Kette liest aus zwei Kimi-Pfaden](erledigt/quer-c-0295-die-kette-liest-aus-zwei-kimi-pfaden.md) | erledigt | — | C-556, C-557 |
 | `C-297` | messung | mittel | [drei Wege, an dem Datenlogik-Waechter vorbei](todos/quer-c-0297-drei-wege-an-dem-datenlogik-waechter-vorbei.md) | offen | — | — |
 | `C-298` | feature | mittel | [der Datenlogik-Waechter meldet zwei harmlose Muster rot](todos/quer-c-0298-der-datenlogik-waechter-meldet-zwei-harmlose-muster-rot.md) | offen | — | — |
 | `C-354` | feature | hoch | [eine Lesefunktion fuer offene Coach-Aktionen](erledigt/quer-c-0354-eine-lesefunktion-fuer-offene-coach-aktionen.md) | erledigt | — | C-358 |
@@ -986,12 +987,13 @@
 | `G-588` | befund | hoch | [Sechs Serveraktionen ohne Aufrufer — dieselbe Klasse wie G-571, eine Ebene hoeher](todos/quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md) | offen | — | G-590, G-591, G-592 |
 | `G-589` | befund | niedrig | [328 Ausfuhren zu viel — und wie die Zahl 385 zu 56 wurde](todos/quer-g-0589-dreihundertachtundzwanzig-ausfuhren-zu-viel.md) | offen | — | — |
 
-### wartet auf Blocker — 2
+### wartet auf Blocker — 3
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-92` | fehler | hoch | [Die G-558-Probe ruft berechne_zielwerte ohne Zielbezug und haelt den Tagesdump auf](erledigt/quer-a-0092-die-g558-probe-ruft-ohne-zielbezug.md) | erledigt | A-91 | — |
 | `A-94` | fehler | hoch | [Die Pruefsumme sperrt den Standardlauf, und niemand hat es gemerkt](erledigt/quer-a-0094-die-pruefsumme-sperrt-den-standardlauf.md) | erledigt | A-91 | — |
+| `A-96` | fehler | hoch | [Der Nachtlauf verwirft seinen eigenen Grund](todos/quer-a-0096-der-nachtlauf-verwirft-seinen-eigenen-grund.md) | offen | A-91, A-80 | — |
 
 ## buddy — 1
 

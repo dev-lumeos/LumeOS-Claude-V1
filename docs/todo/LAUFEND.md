@@ -1,6 +1,6 @@
 # Laufende Auftraege
 
-**Stand: 2026-10-02, 17:00**
+**Stand: 2026-10-03, 08:20**
 
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
@@ -9,8 +9,46 @@
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
 | Codex | A-95 | Zwei fehlen, eine steht doppelt, der Seed fehlt | **laeuft**, raus 02.10. |
 | Claude Code | G-590 | Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht | **bereit in `next/`** |
-| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
+| Codex | C-557 | Vierzehn von siebzehn Naehrstoffzuordnungen finden ihre Substanz nicht | **bereit in `next/`** |
 <!-- /ERZEUGT:laufend-tabelle -->
+
+## Stromausfall in der Nacht zum 03.10. — der Wiederanlauf
+
+`[cmd]` **Hergang aus dem Windows-Ereignisprotokoll** (Id 6008/41):
+
+    05:59:22   unerwarteter Halt
+    07:38:19   System wieder oben
+
+`[cmd]` **Nichts verloren.** Das Repo traegt `16fd9c9c` und `2ebd51a1`;
+keine Datei war neuer als 02.10. 16:34. **Beide Agenten haben ueber Nacht
+nichts geschrieben.** Von A-95 existiert keine Datei in `backup/` —
+Codex war nicht bei A1, die Freigabe ist unverbraucht.
+
+`[cmd]` **Hochgefahren am 03.10.** Docker Desktop war ganz unten, das war
+die Wurzel; der Supabase-Stack kam mit. **Alle neun Container healthy.**
+Web 3200 (`/login` 5,8 s) und Coach 3220 (200, 5,6 s) laufen.
+**`server.py` fasst 3220 nie an** — Coach wird ueber
+`pnpm --filter @lumeos/coach dev` gestartet, Log `backup/coach-dev.log`.
+
+`[cmd]` **Der Wiederanlauf der Datenbank kostete 440 s** —
+`syncing data directory (fsync)` — bei einem `redo` von **0,00 s**. Das
+ist A-80 als Zahl, nicht als Platzbedarf. Siehe A-96.
+
+`[cmd]` **Der Live-Stand ist unveraendert**, nachgemessen: `checkins` 370,
+`modality_log` 178, `berechne_zielwerte` weiter ZWEIMAL (6674/1027),
+`goal_contributions` 0, `micronutrient_snapshot` 2485 Bytes alter Rumpf,
+letzter Schreibvorgang in `goals` am 15.09. **A-95 ist unangetastet und
+kann unveraendert neu rausgehen.**
+
+`[cmd]` **`pnpm gate` gruen:** 18/18, web 2569 Tests (02.10.: 2550),
+coach 80, scoring 36, admin 7, tools 61. `[read]` **Die 19 neuen Tests
+sind G-586** — Claude Codes Arbeit ist gebaut und gruen, **nur der
+Bericht ist nie angekommen.**
+
+`[cmd]` **Der Nachtlauf ist NICHT am Strom gestorben:** 04:00:02 bis
+04:03:35, Exit 1 nach 213,6 s, mit C-556 drin. Grund im
+Postgres-Containerlog: `supplement_nutrient_mappings: 3, erwartet 17`.
+**Das ist C-557**, und dass der Grund nur dort stand, ist **A-96**.
 
 `[read]` **Die Tabelle wird erzeugt, nicht gepflegt** —
 `node tools/zyklus-fahren.mjs tabelle --schreiben` (A-85). Sie ist
@@ -305,6 +343,12 @@ sagt, aus welcher Quelle `current_value` kommt.
     G-593   eine Attrappe nennt recovery.protocols als fehlend -
             recovery.recovery_protocols existiert mit 12 Spalten
     A-95    den Live-Stand nachziehen, Freigabe von Tom (Codex)
+    C-557   14 von 17 Naehrstoffzuordnungen finden ihre Substanz nicht:
+            nur die drei sub_-IDs loesen auf, die 14 local_-Substanzen
+            nicht. Haelt den Vollauf rot und damit A-91/A5 (vorbereitet)
+    A-96    der Nachtlauf verwirft seinen eigenen Grund - kein Log, und
+            ein roter Lauf laesst seine Wegwerf-Datenbank stehen
+            (sieben liegen da, 156 Datenbanken). Wartet auf Toms Wort
 
 ## Was ausdruecklich wartet
 
