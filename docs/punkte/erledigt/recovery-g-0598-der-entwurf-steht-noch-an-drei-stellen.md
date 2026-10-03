@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-03
 agent: claudecode
 beauftragt: 2026-10-03
+erledigt: 2026-10-04
+commit: a1a825b0
 
 braucht: [G-593]
 kind_von: G-593
@@ -115,3 +117,23 @@ steht in `00-FRAGEN.md`.
 
 **Nicht Teil:** G-596 (Bibliothek gegen Verlauf) · G-597 (der Index) ·
 die SSOT-Stellen, die gehoeren mir.
+
+## Abnahme — 2026-10-04, Commit `a1a825b0`
+
+`[cmd]` **Nachgemessen:** `ACTIVE_PROTOCOL` ausserhalb von Kommentaren 0x in
+`modale.tsx` und `tab-protokolle.tsx`; `End protocol` je 1x als
+`InEntwicklungKnopf`; `g598-leseweg.test.ts` 9 Tests, rendernd
+(`renderToStaticMarkup` 3x); die Wegwerf-Spalte `g598_wegwerf` ist aus
+`protokoll-read.ts` zurueckgeholt (0 Treffer).
+
+`[read]` **Er hat meine Punktdatei korrigiert, zu Recht:** `ansicht.tsx:347`
+reicht `protokolle` an `RecoveryModale`; `<RecProtocols />` stand ohne Stand
+und steht jetzt bei 335 mit `stand={protokolle}`.
+
+`[cmd]` **Berichtigung:** der Gate meldete bei diesem Commit gruen, waehrend
+`web:test` frisch gefahren rot war (`not ok 1277`, G-317). Ursache war nicht
+G-598, sondern ein uhrzeitabhaengiger Test und ein Testcache, der einen
+Fehlschlag als Erfolg abspielte. Beides behoben: `238b49e6`, `7a3875c7` (A-100).
+
+**Nebenbefunde:** `.test.tsx` erfasst der Test-Glob nie → A-100/A3.
+„Nicht geladen" fuer leere Daten (`ansicht.tsx:428/508`) → G-601.

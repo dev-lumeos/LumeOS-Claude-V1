@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-03
 agent: codex
 beauftragt: 2026-10-03
+erledigt: 2026-10-04
+commit: 459ad101
 
 braucht: [G-593]
 kind_von: G-593
@@ -98,3 +100,14 @@ Code sollte es wissen: **in den Bericht, ich gebe es weiter.**
 **Nicht Teil:** `End protocol` und die Reiterkacheln (G-598, Claude
 Code) · G-596 (Bibliothek gegen Verlauf) · die Frage, ob ein Protokoll
 automatisch endet — die ist offen und gehoert Tom.
+
+## Abnahme — 2026-10-04, Commit `459ad101`
+
+`[read]` **Der Index ist genau der verlangte:** `uq_recovery_protocols_one_active`
+auf `(user_id) WHERE status = 'active'`, als eigener Kettenschritt direkt nach
+`421_schema`, die Verhaltensprobe haengt an ihm. `[cmd]` Gate gruen im
+Vorcommit-Haken (seit `7a3875c7` ohne Testcache).
+
+`[read]` **Live ist der Index NICHT** — kein Live-Schreibzugriff, wie
+verlangt. Er kommt mit dem naechsten gruenen Gesamtlauf und dessen Dump
+(C-558).

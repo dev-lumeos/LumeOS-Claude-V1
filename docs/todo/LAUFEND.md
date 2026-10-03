@@ -5,9 +5,9 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-598 | Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt | **laeuft**, raus 03.10. |
+| Claude Code | G-600 | „Heute" ist an 32 Stellen der UTC-Vortag | **laeuft**, raus 04.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
-| Codex | G-597 | Zwei aktive Protokolle sind erlaubt — und im Nachweis sind sie entstanden | **laeuft**, raus 03.10. |
+| Codex | C-558 | Die Kette laeuft gruen — Schritt fuer Schritt, heute, nicht eine Nacht pro Fehler | **laeuft**, raus 04.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
