@@ -7,17 +7,14 @@ import { KONTEN } from '../../../tools/konten.mjs'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE
-const A95_GOALS_ONLY = process.argv.includes('--a95-goals-only')
-if (!DB || (DB === 'postgres' && !A95_GOALS_ONLY)) {
-  throw new Error('A-88: testdaten-einspielen.ts braucht PGDATABASE als Wegwerf-Datenbank; postgres nur mit --a95-goals-only.')
+if (!DB || DB === 'postgres') {
+  throw new Error('A-88: testdaten-einspielen.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 }
 const VALUE_ARGS = new Set(['--start', '--next-start', '--days', '--today'])
-const FLAG_ARGS = new Set(['--a95-goals-only'])
 
 for (let index = 2; index < process.argv.length; index += 1) {
   const arg = process.argv[index]!
   if (!arg.startsWith('--')) continue
-  if (FLAG_ARGS.has(arg)) continue
   if (!VALUE_ARGS.has(arg)) {
     throw new Error(`Unbekannter Parameter: ${arg}`)
   }
@@ -2659,47 +2656,6 @@ const goalPhaseValues = goalPhaseRows.map(phase => tuple([
   phase.transitionReason,
   phase.strategyCode,
 ])).join(',\n')
-const a95GoalValues = goalRows
-  .filter(goal => goal.userId === '20000000-0000-0000-0000-000000000901')
-  .map(goal => tuple([
-    goal.id,
-    goal.userId,
-    goal.goalType,
-    goal.subtype,
-    goal.title,
-    goal.description,
-    goal.targetValue,
-    goal.targetUnit,
-    goal.startValue,
-    goal.currentValue,
-    goal.gueltigAb,
-    goal.targetDate,
-    goal.status,
-    goal.priority,
-    goal.isPrimary,
-    goal.progressPct,
-    goal.motivationReason,
-    goal.difficultyLevel,
-    goal.achievementDate,
-  ])).join(',\n')
-const a95GoalPhaseValues = goalPhaseRows
-  .filter(phase => phase.userId === '20000000-0000-0000-0000-000000000901')
-  .map(phase => tuple([
-    phase.id,
-    phase.userId,
-    phase.goalId,
-    phase.phaseType,
-    phase.variant,
-    phase.zielRatePctKgWoche,
-    phase.parameters,
-    phase.gueltigAb,
-    phase.projectedEndDate,
-    phase.actualEndDate,
-    phase.transitionedFrom,
-    phase.recommendedNext,
-    phase.transitionReason,
-    phase.strategyCode,
-  ])).join(',\n')
 const goalMilestoneValues = goalMilestoneRows.map(milestone => tuple([
   milestone.id,
   milestone.goalId,
@@ -2899,166 +2855,7 @@ const mealPlanEntryValues = mealPlanEntryRows.map(entry => tuple([
   entry.note ?? null,
 ])).join(',\n')
 
-const sql = A95_GOALS_ONLY ? `
-BEGIN;
-
-SELECT set_config(
-  'app.test_user_id',
-  COALESCE(
-    (SELECT id::text FROM auth.users WHERE email = 'test-user@lumeos.local'),
-    ''
-  ),
-  true
-);
-
-DO $$
-BEGIN
-  IF current_setting('app.test_user_id') = '' THEN
-    RAISE EXCEPTION 'A-95: test-user@lumeos.local fehlt';
-  END IF;
-END $$;
-
-DELETE FROM goals.goal_phases
-WHERE id IN (
-  '31000000-0000-0000-0000-000000000901'::uuid,
-  '31000000-0000-0000-0000-000000000902'::uuid
-);
-DELETE FROM goals.user_goals
-WHERE id IN (
-  '30000000-0000-0000-0000-000000000901'::uuid,
-  '30000000-0000-0000-0000-000000000902'::uuid
-);
-
-INSERT INTO public.profiles (
-  id, birth_date, biological_sex, height_cm, body_weight_kg,
-  activity_level, experience_level, nutrition_goal
-)
-VALUES (
-  current_setting('app.test_user_id')::uuid,
-  DATE '1990-05-17', 'male', 182, 81.4,
-  'moderate', 'pro', 'gain_muscle'
-)
-ON CONFLICT (id) DO UPDATE SET
-  birth_date = EXCLUDED.birth_date,
-  biological_sex = EXCLUDED.biological_sex,
-  height_cm = EXCLUDED.height_cm,
-  body_weight_kg = EXCLUDED.body_weight_kg,
-  activity_level = EXCLUDED.activity_level,
-  experience_level = EXCLUDED.experience_level,
-  nutrition_goal = EXCLUDED.nutrition_goal,
-  updated_at = now();
-
-INSERT INTO goals.body_measurements (
-  user_id, measurement_date, measurement_time, weight_kg,
-  measurement_source, notes
-)
-VALUES (
-  current_setting('app.test_user_id')::uuid,
-  DATE '${relDate('2026-08-01')}', TIME '08:00', 81.4,
-  'admin', 'A-95: Zielraten-Gegenprobe fuer zwei offene Zielphasen'
-)
-ON CONFLICT (user_id, measurement_date, measurement_time) DO UPDATE SET
-  weight_kg = EXCLUDED.weight_kg,
-  measurement_source = EXCLUDED.measurement_source,
-  notes = EXCLUDED.notes,
-  updated_at = now();
-
-CREATE TEMP TABLE a95_goals (
-  id uuid PRIMARY KEY,
-  user_id uuid NOT NULL,
-  goal_type text NOT NULL,
-  subtype text,
-  title text NOT NULL,
-  description text,
-  target_value numeric,
-  target_unit text,
-  start_value numeric,
-  current_value numeric,
-  gueltig_ab date NOT NULL,
-  target_date date,
-  status text NOT NULL,
-  priority smallint NOT NULL,
-  is_primary boolean NOT NULL,
-  progress_pct numeric NOT NULL,
-  motivation_reason text,
-  difficulty_level text,
-  achievement_date date
-) ON COMMIT DROP;
-
-INSERT INTO a95_goals VALUES
-${a95GoalValues};
-
-INSERT INTO goals.user_goals (
-  id, user_id, goal_type, subtype, title, description,
-  target_value, target_unit, start_value, current_value,
-  gueltig_ab, target_date, status, priority, is_primary,
-  progress_pct, motivation_reason, difficulty_level, achievement_date
-)
-SELECT
-  id, current_setting('app.test_user_id')::uuid,
-  goal_type, subtype, title, description,
-  target_value, target_unit, start_value, current_value,
-  gueltig_ab, target_date, status, priority, is_primary,
-  progress_pct, motivation_reason, difficulty_level, achievement_date
-FROM a95_goals;
-
-CREATE TEMP TABLE a95_goal_phases (
-  id uuid PRIMARY KEY,
-  user_id uuid NOT NULL,
-  goal_id uuid NOT NULL,
-  phase_type text NOT NULL,
-  variant text,
-  zielrate_pct_kg_woche numeric(5,3),
-  parameters jsonb NOT NULL,
-  gueltig_ab date NOT NULL,
-  projected_end_date date,
-  actual_end_date date,
-  transitioned_from text,
-  recommended_next text,
-  transition_reason text,
-  strategie_code text
-) ON COMMIT DROP;
-
-INSERT INTO a95_goal_phases VALUES
-${a95GoalPhaseValues};
-
-INSERT INTO goals.goal_phases (
-  id, user_id, goal_id, phase_type, variant, zielrate_pct_kg_woche, parameters,
-  gueltig_ab, projected_end_date, actual_end_date,
-  transitioned_from, recommended_next, transition_reason, strategie_code
-)
-SELECT
-  id, current_setting('app.test_user_id')::uuid,
-  goal_id, phase_type, variant, zielrate_pct_kg_woche, parameters,
-  gueltig_ab, projected_end_date, actual_end_date,
-  transitioned_from, recommended_next, transition_reason, strategie_code
-FROM a95_goal_phases;
-
-DO $$
-DECLARE
-  v_goals integer;
-  v_phases integer;
-  v_phase_goals integer;
-BEGIN
-  SELECT count(*) INTO v_goals
-  FROM goals.user_goals
-  WHERE user_id = current_setting('app.test_user_id')::uuid;
-
-  SELECT count(*), count(DISTINCT goal_id)
-  INTO v_phases, v_phase_goals
-  FROM goals.goal_phases
-  WHERE user_id = current_setting('app.test_user_id')::uuid
-    AND actual_end_date IS NULL;
-
-  IF v_goals <> 2 OR v_phases <> 2 OR v_phase_goals <> 2 THEN
-    RAISE EXCEPTION
-      'A-95: test-user Ziele %, offene Phasen %, Phasenziele %, erwartet 2/2/2',
-      v_goals, v_phases, v_phase_goals;
-  END IF;
-END $$;
-
-COMMIT;
-` : `
+const sql = `
 BEGIN;
 
 -- Der Testdatenlauf besitzt nur seine festen Seedobjekte. Die lokale
@@ -5349,8 +5146,4 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1)
 }
 
-if (A95_GOALS_ONLY) {
-  console.log(`A-95 Ziel-Seed eingespielt in Datenbank ${DB}: 2 Ziele und 2 offene Phasen fuer test-user.`)
-} else {
-  console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer plus 1 Coach, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${recipeRows.length} Rezepte, ${recipeIngredientRows.length} Rezeptzutaten, ${mealPlanRows.length} Wochenplan, ${mealPlanWeekRows.length + 1} Planwochen, ${mealPlanEntryRows.length + c150MealPlanEntryRows.length} Planeintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${recoveryModalities.length} Recovery-Modalitaeten, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${goalMilestoneRows.length} Meilensteine, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen, ${medicalLabReports.length + 1} Medical-Befunde, ${medicalLabValues.length + medicalImportRows.length} Medical-Messwerte, 1 Medical-Medikation, 1 Medical-Condition, 1 Coach-Beziehung.`)
-}
+console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer plus 1 Coach, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${recipeRows.length} Rezepte, ${recipeIngredientRows.length} Rezeptzutaten, ${mealPlanRows.length} Wochenplan, ${mealPlanWeekRows.length + 1} Planwochen, ${mealPlanEntryRows.length + c150MealPlanEntryRows.length} Planeintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${recoveryModalities.length} Recovery-Modalitaeten, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${goalMilestoneRows.length} Meilensteine, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen, ${medicalLabReports.length + 1} Medical-Befunde, ${medicalLabValues.length + medicalImportRows.length} Medical-Messwerte, 1 Medical-Medikation, 1 Medical-Condition, 1 Coach-Beziehung.`)
