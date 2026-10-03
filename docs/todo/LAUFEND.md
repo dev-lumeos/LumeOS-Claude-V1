@@ -1,15 +1,15 @@
 # Laufende Auftraege
 
-**Stand: 2026-10-03, 08:45**
+**Stand: 2026-10-03, 10:10**
 
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
 | Claude Code | G-590 | Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht | **laeuft**, raus 03.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
-| Codex | A-95 | Zwei fehlen, eine steht doppelt, der Seed fehlt | **laeuft**, raus 02.10. |
-| Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
-| Codex | C-557 | Vierzehn von siebzehn Naehrstoffzuordnungen finden ihre Substanz nicht | **bereit in `next/`** |
+| Codex | C-557 | Vierzehn von siebzehn Naehrstoffzuordnungen finden ihre Substanz nicht | **laeuft**, raus 03.10. |
+| Claude Code | G-570 | Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg | **bereit in `next/`** |
+| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 ## Stromausfall in der Nacht zum 03.10. — der Wiederanlauf
@@ -56,6 +56,46 @@ sind es 30 Sekunden** (+30 → 200, +31 → 401). **Damit erklaeren die 0,75 s
 Uhrenversatz aus dem Auftrag Toms Fehler NICHT** — es braucht einen
 Ruecksprung von mehr als 30 s, und was driftet, ist die Docker-VM gegen
 den Host, nicht ein Dienst gegen den anderen.
+
+## Der Dev-Server stirbt mit meiner Bridge — und wie er es nicht tut
+
+`[cmd]` **Am 03.10. um 09:44 war 3200 wieder tot**, obwohl ich ihn um 08:15
+gestartet hatte und `/login` in 5,8 s antwortete. **Claude Code stand
+deshalb bei den Browsernachweisen zu G-590 still.**
+
+`[cmd]` **`server.py start` koppelt korrekt ab** —
+`DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP`. **Das reicht nicht:** die
+Bridge raeumt beim Beenden ihren ganzen Prozessbaum mit, und das greift
+ueber die Abkopplung hinweg.
+
+`[cmd]` **Der Weg, der traegt:** `server.py start` ueber den WMI-Dienst
+starten, dann haengt der Prozess in keinem Baum des Orchestrators:
+
+    Invoke-CimMethod -ClassName Win32_Process -MethodName Create
+      -Arguments @{ CommandLine = 'cmd.exe /c "... python
+      tools\server.py start ..."'; CurrentDirectory = <repo> }
+
+`[read]` **Weiter ueber `server.py`, nicht an ihm vorbei** — die
+Portpruefung aus A-36 muss greifen, sonst weicht Next stumm aus.
+**Skript: `.git/server-start-abgekoppelt.ps1`.**
+
+## G-586 hat im Betrieb gefeuert — der Nachweis, der bei der Abnahme fehlte
+
+`[cmd]` **`backup/dev-server.log`, 03.10. um 08:02 Ortszeit:**
+
+    [uhrensprung] gemessen=2026-10-03T01:02:29.238Z iat=...25.000Z
+                  vorsprung=-4.2s toleranz=30s erneuert=nein
+    [uhrensprung] gemessen=2026-10-03T01:02:29.341Z iat=...29.000Z
+                  vorsprung=-0.3s toleranz=30s erneuert=ja
+
+`[read]` **Die Erneuerung hat getragen.** Ohne G-586 haette Tom nach dem
+Hochfahren wieder „Sitzung abgelaufen" gesehen.
+
+`[cmd]` **Und die zwei Zahlen nennen die Ursache, die vorher Vermutung
+war:** der Vorsprung ist nach der Hostuhr **−4,2 s** — das Token liegt in
+der Vergangenheit — und PostgREST nennt es trotzdem `issued at future`.
+**Bei 30 s Toleranz heisst das: die Docker-VM lief mehr als 34 Sekunden
+hinter dem Host.** Der Stromausfall hat die VM-Uhr zurueckgeworfen.
 
 ## Die zwei Agenten nach dem Ausfall — beide ohne Kontext
 
@@ -148,7 +188,15 @@ was sie kosten: `encoding-pruefen` 15,6 s ueber 21.692 Dateien,
 
 ---
 
-## Die Einspielreihenfolge — vier Aenderungen, und eine ist heute ausgefallen
+## Die Einspielreihenfolge — ERLEDIGT am 2026-10-03 mit A-95 (`df9cd8aa`)
+
+`[cmd]` **Alles unten ist Geschichte.** G-567 und G-514 sind live, die
+alte Zweiparameter-Fassung von `berechne_zielwerte` ist entfernt, der Seed
+gibt test-user zwei Ziele und zwei offene Phasen, und A7 belegt den Zweck:
+2395,4 und 3111,8 kcal bei TDEE 2753,6, Abstand 716 kcal. **Der Abschnitt
+bleibt stehen, weil er die Lage erklaert, in der G-570 entstand.**
+
+## Die Einspielreihenfolge — der Stand bis zum 03.10.
 
 `[cmd]` **Vier Datenbankaenderungen sind gebaut und NICHT live.** `[read]`
 **Alle vier liegen in `erledigt/` mit Hash** — abgenommen heisst gebaut und
@@ -298,10 +346,19 @@ sagt, aus welcher Quelle `current_value` kommt.
 
 ## Was auf Tom wartet
 
-    EINSPIELEN  ERLEDIGT als Frage - freigegeben am 02.10., laeuft
-                als A-95 bei Codex. Danach G-570: die Bruecke in
-                zielwerte-read.ts wieder weg (sie ist schon toter Code,
-                weil PGRST202 nicht mehr entstehen kann).
+    EINSPIELEN  ERLEDIGT - A-95 abgenommen (df9cd8aa). G-570 liegt
+                vorbereitet bei Claude Code.
+    G-594       NEU und entscheidungsbeduerftig: nutrition_targets
+                traegt phase_id, aber keine goal_id. Der Trigger bricht
+                bei zwei offenen Phasen mit 23514 ab - und test-user hat
+                seit A-95 genau zwei. Drei Formen im Punkt.
+    A-97        NEU: die zwei --a95-*-Schalter gehoeren raus, und der
+                A-88-Waechter prueft Gestalt statt Verhalten. Wartet auf
+                Freigabe.
+    G-590/Score Claude Code fragt: soll ein gespeicherter Check-in den
+                Score neu rechnen? Der Knopf versprach es, es gibt aber
+                keinen Trigger und keinen Aufrufer von
+                refresh_scores_for_user.
     Tobias      MORGEN im Office - Tom, 02.10.: "tobias ist morgen im
                 office, frag das morgen wenn er da ist"
                 G-542  ist die Rate pro Woche oder pro Monat
@@ -355,8 +412,9 @@ sagt, aus welcher Quelle `current_value` kommt.
             der Zeitpunkt ist offen
     G-552   Trainings- und Erholungsphase
     G-555   derselbe Ladefehler in medical und nutrition (Kind von G-553)
-    G-570   die Bruecke in zielwerte-read.ts gehoert nach dem
-            Einspielen weg
+    G-570   die Bruecke in lib/profile/zielwerte-read.ts gehoert
+            nach dem Einspielen weg (NICHT lib/goals/ - der Pfad
+            stand hier falsch)
     G-587   ein Service-Client ohne Aufrufer umgeht die RLS - und die
             groessere Haelfte ist der LEBENDE Weg in
             substanz-read.ts:817 samt .env-Lesen zur Laufzeit (E-10)
@@ -381,6 +439,9 @@ sagt, aus welcher Quelle `current_value` kommt.
     A-96    der Nachtlauf verwirft seinen eigenen Grund - kein Log, und
             ein roter Lauf laesst seine Wegwerf-Datenbank stehen
             (sieben liegen da, 156 Datenbanken). Wartet auf Toms Wort
+    G-594   nutrition_targets kennt seine Phase, aber nicht sein Ziel
+    A-97    der A-88-Vertrag hat eine Tuer, und der Waechter sieht sie
+            nicht - hatFailClosed prueft zwei Muster, nicht den Wurf
 
 ## Was ausdruecklich wartet
 

@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 276 |
-| `laufend_codex` | 3 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 634 |
-| **gesamt** | **914** |
+| `todos` | 277 |
+| `laufend_codex` | 2 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 635 |
+| **gesamt** | **916** |
 
 ## medical — 50
 
@@ -483,7 +483,7 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
-| `C-557` | fehler | hoch | [Vierzehn von siebzehn Naehrstoffzuordnungen finden ihre Substanz nicht](laufend_codex/supplements-c-0557-vierzehn-von-siebzehn-naehrstoffzuordnungen-finden-ihre-substanz-nicht.md) | vorbereitet (codex) | A-91 | — |
+| `C-557` | fehler | hoch | [Vierzehn von siebzehn Naehrstoffzuordnungen finden ihre Substanz nicht](laufend_codex/supplements-c-0557-vierzehn-von-siebzehn-naehrstoffzuordnungen-finden-ihre-substanz-nicht.md) | laeuft (codex) | A-91 | — |
 
 ## training — 52
 
@@ -597,9 +597,9 @@
 | `G-590` | fehler | hoch | [Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht](laufend_claudecode/recovery-g-0590-der-checkin-ist-der-einzige-pflichtgriff-und-er-schreibt-nicht.md) | laeuft (claudecode) | G-588 | — |
 | `G-593` | befund | mittel | [Die Attrappe nennt eine Tabelle, die es unter anderem Namen gibt](todos/recovery-g-0593-die-attrappe-nennt-eine-tabelle-die-es-unter-anderem-namen-gibt.md) | offen | G-590 | — |
 
-## goals — 73
+## goals — 74
 
-### beauftragbar — 66
+### beauftragbar — 67
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -662,13 +662,14 @@
 | `G-565` | fehler | hoch | [Die Einheit ist eine Nutzerwahl, heute gibt es nur Prozent](erledigt/goals-g-0565-die-einheit-ist-eine-nutzerwahl.md) | erledigt | — | G-573 |
 | `G-568` | fehler | hoch | [Die Zielwerte brauchen ihr Ziel](erledigt/goals-g-0568-die-zielwerte-brauchen-ihr-ziel.md) | erledigt | — | G-570 |
 | `G-569` | fehler | hoch | [G-520 prueft Kilogramm in der Anwendung](erledigt/goals-g-0569-g520-prueft-kilogramm-in-der-anwendung.md) | erledigt | — | — |
-| `G-570` | fehler | mittel | [Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg](todos/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md) | offen | — | — |
+| `G-570` | fehler | mittel | [Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg](laufend_claudecode/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md) | vorbereitet (claudecode) | — | — |
 | `G-572` | fehler | mittel | [Der Dateikopf nennt Phase engine als Attrappe, und das ist seit Tagen falsch](erledigt/goals-g-0572-der-dateikopf-nennt-phase-engine-als-attrappe.md) | erledigt | — | — |
 | `G-573` | fehler | hoch | [rateAusKcal gibt es zweimal, mit verschiedener Rundung](erledigt/goals-g-0573-rateauskcal-gibt-es-zweimal-mit-verschiedener-rundung.md) | erledigt | — | — |
 | `G-574` | fehler | hoch | [Die Waechter rechnen, und niemand sieht sie](todos/goals-g-0574-die-waechter-rechnen-und-niemand-sieht-sie.md) | offen | — | — |
 | `G-575` | fehler | hoch | [Ein Ziel traegt genau eine Messgroesse](todos/goals-g-0575-ein-ziel-traegt-genau-eine-messgroesse.md) | offen | — | — |
 | `G-576` | fehler | niedrig | [weight wird ein Untertyp, Eigenes bleibt ohne](erledigt/goals-g-0576-weight-als-untertyp-eigenes-ohne.md) | erledigt | — | — |
 | `G-577` | fehler | hoch | [Die Umfangserfassung hat keinen Schreibweg](erledigt/goals-g-0577-die-umfangserfassung-hat-keinen-schreibweg.md) | erledigt | — | — |
+| `G-594` | fehler | hoch | [Ein Ernaehrungsziel kennt seine Phase, aber nicht sein Ziel](todos/goals-g-0594-ein-ernaehrungsziel-kennt-seine-phase-aber-nicht-sein-ziel.md) | offen | — | — |
 
 ### wartet auf Blocker — 7
 
@@ -745,9 +746,9 @@
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 | `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](erledigt/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | erledigt | — | — |
 
-## quer — 238
+## quer — 239
 
-### beauftragbar — 235
+### beauftragbar — 236
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -801,12 +802,13 @@
 | `A-85` | fehler | mittel | [Der Zyklus wird geprueft, aber nichts fuehrt ihn aus](erledigt/quer-a-0085-der-zyklus-wird-geprueft-aber-nicht-ausgefuehrt.md) | erledigt | — | A-89 |
 | `A-86` | fehler | hoch | [Die Kette spielt die Testdaten nicht ein](erledigt/quer-a-0086-die-kette-spielt-die-testdaten-nicht-ein.md) | erledigt | — | — |
 | `A-87` | fehler | hoch | [46 Zeugen, nach Ursache gestaffelt verdrahten](erledigt/quer-a-0087-46-zeugen-nach-ursache-gestaffelt.md) | erledigt | — | A-92 |
-| `A-88` | fehler | hoch | [31 Proben fallen still auf postgres zurueck](erledigt/quer-a-0088-31-proben-fallen-still-auf-postgres-zurueck.md) | erledigt | — | — |
+| `A-88` | fehler | hoch | [31 Proben fallen still auf postgres zurueck](erledigt/quer-a-0088-31-proben-fallen-still-auf-postgres-zurueck.md) | erledigt | — | A-97 |
 | `A-89` | fehler | mittel | [zyklus-fahren scheitert an EPERM, wenn ein Agent die Datei offen hat](todos/quer-a-0089-zyklus-fahren-scheitert-an-eperm.md) | offen | — | — |
 | `A-90` | fehler | hoch | [Grunddaten als Dump, nicht als Import bei jedem Lauf](erledigt/quer-a-0090-grunddaten-als-dump-statt-als-import.md) | erledigt | — | A-91, A-94 |
 | `A-91` | fehler | hoch | [Der taegliche Lauf erzeugt bei gruen einen neuen Dump](laufend_codex/quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md) | laeuft (codex) | — | — |
 | `A-93` | fehler | hoch | [Zwei Agenten in einem Arbeitsbaum, und der Commit zahlt dafuer](todos/quer-a-0093-zwei-agenten-in-einem-arbeitsbaum.md) | offen | — | — |
-| `A-95` | feature | hoch | [Zwei fehlen, eine steht doppelt, der Seed fehlt](laufend_codex/quer-a-0095-zwei-fehlen-eine-steht-doppelt-der-seed-fehlt.md) | laeuft (codex) | — | — |
+| `A-95` | feature | hoch | [Zwei fehlen, eine steht doppelt, der Seed fehlt](erledigt/quer-a-0095-zwei-fehlen-eine-steht-doppelt-der-seed-fehlt.md) | erledigt | — | G-594 |
+| `A-97` | fehler | hoch | [Der A-88-Vertrag hat eine Tuer, und der Waechter sieht sie nicht](todos/quer-a-0097-der-a88-vertrag-hat-eine-tuer-und-der-waechter-sieht-sie-nicht.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |

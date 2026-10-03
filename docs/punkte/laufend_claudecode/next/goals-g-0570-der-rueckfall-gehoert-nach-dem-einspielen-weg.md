@@ -20,6 +20,41 @@ beruehrt:
 
 # Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg
 
+## Auftrag — Kopf
+
+    AUFTRAG FUER Claude Code - G-570: die Bruecke ist toter Code und
+                                     gehoert weg
+    Bereich: apps/web/src/lib/profile/
+    Fremd:   supabase/ gehoert Codex - er arbeitet an C-557.
+             docs/ gehoert dem Orchestrator, auch diese Punktdatei.
+    Stand:   2026-10-03
+
+## Stand 2026-10-03 — die Voraussetzung ist da
+
+`[cmd]` **A-95 ist eingespielt und abgenommen** (`df9cd8aa`). **A1 dieses
+Auftrags ist damit schon gemessen**, vom Orchestrator, live:
+
+    goals.berechne_zielwerte(p_user_id uuid, p_goal_id uuid,
+                             p_stichtag date)     6674 Bytes
+    die Zweiparameter-Fassung ist ENTFERNT - einmal in pg_proc
+
+`[cmd]` **Und damit ist der Rueckfall nicht nur ueberfluessig, er ist
+unerreichbar:** er greift bei `PGRST202`, und die Dreiparameter-Fassung
+steht. **Faellt sie kuenftig weg, gibt es die alte Fassung nicht mehr, auf
+die er zurueckfallen koennte** — der Zweig kann nur noch verdecken, nie
+helfen.
+
+`[read]` **Zaehl A1 trotzdem selbst nach, bevor du entfernst.** Eine
+Messung aus einem anderen Lauf ist eine Angabe, kein Nachweis.
+
+`[cmd]` **Der Pfad im Punkt stimmt:**
+`apps/web/src/lib/profile/zielwerte-read.ts`. **`LAUFEND.md` nannte
+`lib/goals/zielwerte-read.ts` — das war falsch**, die Datei gibt es nur
+einmal, unter `lib/profile/`.
+
+`[read]` **Dein laufender Auftrag G-590 geht vor.** Dieser hier ist
+vorbereitet, nicht zugeteilt.
+
 ## Der Befund
 
 `[cmd]` **Die Goals-Seite fiel am 2026-10-01 aus.** Am Schirm stand

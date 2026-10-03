@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-02
 agent: codex
 beauftragt: 2026-10-02
+erledigt: 2026-10-03
+commit: df9cd8aa
 
 braucht: [G-559, G-563, G-514, G-567]
 
@@ -15,7 +17,7 @@ quellen:
   - docs/punkte/erledigt/goals-G-0514-die-modulverrechnung-fehlt-ganz.md
   - docs/punkte/erledigt/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md
   - docs/punkte/erledigt/goals-g-0577-die-umfangserfassung-hat-keinen-schreibweg.md
-  - docs/punkte/todos/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md
+  - docs/punkte/laufend_claudecode/next/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md
 
 beruehrt:
   tabellen:
@@ -255,3 +257,100 @@ offenen Phasen an zwei Zielen · die zwei kcal-Zahlen aus A7 · kein
 `[read]` **Und wenn ein Posten nicht sauber einspielbar ist, brich bei
 ihm ab und melde.** Ein halb eingespielter Stand ist genau das, was
 dieser Punkt aufraeumt — er darf nicht sein Ergebnis sein.
+
+---
+
+## Abnahme — 2026-10-03, Commit `df9cd8aa`
+
+`[cmd]` **Alles vom Orchestrator nachgemessen, live, nach dem Lauf:**
+
+    G-567  micronutrient_snapshot
+           zielwerte_am JA -> nein · berechne_zielwerte JA -> nein
+           tdee_basis_am nein -> JA · missing_profile nein -> JA
+           Rumpf 2485 -> 2269 Bytes
+    G-514  goal_contributions   Tabelle 0 -> 1 · 10 Spalten
+           4 CHECKs · RLS an · 1 Policy · 892 Zeilen
+    G-563  berechne_zielwerte   nur noch (p_user_id, p_goal_id,
+           p_stichtag), 6674 Bytes. Die Zweiparameter-Fassung ist weg.
+    Seed   test-user 0/0 -> 2 Ziele / 2 offene Phasen
+           dev 5/0 · tom.seed 5/1 · max.seed 1/0 unveraendert
+
+`[cmd]` **A7 belegt den Zweck, nicht nur die Existenz.** Fuer test-user,
+je Ziel, bei TDEE 2753,6 und 81,40 kg:
+
+    901  lose_weight   Rate -0,400 %/Woche   2395,4 kcal
+    902  gain_muscle   Rate +0,400 %/Woche   3111,8 kcal
+    Abstand 716,4 kcal
+
+`[read]` **Vorher nahm die Rechnung still eine von zwei Raten.** Jetzt
+bekommt jedes Ziel seine Zahl — das ist der ganze Punkt von G-563, und er
+ist damit am Nutzer belegt, nicht an der Signatur.
+
+### Der Schritt, der im Bericht fehlte, und er war der heikelste
+
+`[cmd]` **A5 verlangte: erst die Aufrufer umstellen, DANN die alte Fassung
+entfernen.** Der Bericht sagt nur, dass sie entfernt ist. **Nachgesehen:
+der Aufrufer wurde umgestellt**, und zwar richtig —
+`goals.nutrition_target_assign_phase` ruft jetzt
+
+    FROM goals.berechne_zielwerte(NEW.user_id, v_goal_id, NEW.gueltig_ab)
+
+`[read]` **Ohne diese Zeile waere der Trigger seit heute kaputt.** Der
+Schritt ist getan; **im Bericht stand er nicht.** Das ist die Klasse, bei
+der eine Abnahme am Bericht gruen gegeben haette, was nur die Messung
+belegt.
+
+`[cmd]` **Und das `max(p.goal_id::text)::uuid` in diesem Trigger ist KEIN
+stilles Auswaehlen** — davor steht `count(*)`, und bei mehr als einer
+Phase bricht die Funktion mit `23514` ab. **Richtig gebaut.** Daraus ist
+aber ein neuer Punkt geworden, siehe unten.
+
+### Zwei Zahlen im Bericht, die nicht stimmen
+
+`[cmd]` **Datenbankzaehler:** der Bericht sagt 156 → 155. **Gemessen sind
+156**, und keine `%a95%`-Datenbank liegt mehr da. **Die Wegwerf-Datenbank
+ist also sauber verworfen** — der Endstand ist nur um eins falsch
+benannt (der Ausgangsstand war 156, nicht 156→155).
+
+`[cmd]` **`backup/a95-nachher.sql`:** der Bericht sagt 421.094 Bytes,
+gemessen sind **421.044**. `backup/a95-vorher.sql` stimmt mit 21.368.
+
+`[read]` **Beides aendert am Ergebnis nichts und steht hier trotzdem:**
+*„Ein `[cmd]` mit falscher Zahl ist schlimmer als ein `[annahme]`"* — eine
+Zahl unter dieser Marke wird geglaubt und zur Regel.
+
+### Zwei neue Punkte aus diesem Lauf
+
+`[cmd]` **G-594** — `goals.nutrition_targets` traegt `phase_id`, aber
+**keine `goal_id`**. Der Trigger muss das Ziel aus `phase_am` ableiten und
+verweigert bei zwei Phasen mit `23514` *„Zielbezug fehlt"*. **Seit diesem
+Lauf hat test-user genau zwei** — damit ist fuer ihn kein formelbasiertes
+Ernaehrungsziel mehr schreibbar, und er ist der Nutzer, auf dem jeder
+Nachweis laeuft. **Der Lauf hat das nicht erzeugt, er hat es sichtbar
+gemacht.**
+
+`[cmd]` **A-97** — zwei Pipelineskripte tragen jetzt `--a95-live` und
+`--a95-goals-only` und lassen damit `PGDATABASE=postgres` zu. **Fuer den
+freigegebenen Lauf richtig, danach falsch** — dieselbe Klasse wie G-570.
+**Und der A-88-Waechter bleibt dabei gruen**, weil `hatFailClosed` nur
+prueft, ob `!DB` und `DB === 'postgres'` irgendwo in der Datei stehen,
+nicht ob der Zweig unbedingt wirft. **Die `assert.match`-Klasse eine
+Ebene hoeher.**
+
+`[read]` **Die `DROP FUNCTION`-Zeile in `030_mikro-uebersicht.ts` bleibt** —
+sie gehoert in die Pipeline, damit die Kette die alte Fassung nicht wieder
+anlegt. **Nur die zwei Schalter gehen raus.**
+
+### Belege
+
+`[cmd]` Sicherungen `backup/a95-vorher.sql` (21.368 Bytes) und
+`-nachher.sql` (421.044 Bytes), beide vorwaerts und rueckwaerts geprueft;
+der Nachher-Stand reproduziert 892 Zeilen und sieben Funktionsdefinitionen
+mit gleichen Pruefsummen. **Zwei dauerhafte Proben in
+`testdaten-pruefen.ts`:** die 716 kcal und dass die alte Ueberladung nicht
+wieder auftaucht. `pnpm gate` gruen im Vorcommit-Haken. Commit
+`df9cd8aa`, 3 Dateien, +316/−14. **Claude Codes laufende G-590-Arbeit in
+`apps/web` blieb ausserhalb des Staging.**
+
+`[cmd]` **Offen und bekannt:** C-557 haelt den Vollauf weiter rot, G-570
+(die Bruecke in `zielwerte-read.ts`) ist jetzt toter Code und gehoert weg.

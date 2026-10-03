@@ -4,6 +4,8 @@ typ: fehler
 modul: supplements
 schwere: hoch
 angelegt: 2026-10-03
+agent: codex
+beauftragt: 2026-10-03
 
 braucht: [C-295, C-556, A-91]
 kind_von: C-295
@@ -33,6 +35,39 @@ beruehrt:
              Orchestrator, auch diese Punktdatei. A-95 ist dein
              laufender Auftrag und hat Vorrang.
     Stand:   2026-10-03
+
+## Stand 2026-10-03 — lies das zuerst, du faengst ohne Kontext an
+
+`[cmd]` **Deine letzten zwei Auftraege sind abgenommen und committet.
+Nicht wiederholen:**
+
+    C-556  16fd9c9c   148 Zeilen in die C-230-Filter,
+                      detection_marker als eigener Typ
+    A-95   df9cd8aa   Live-Stand nachgezogen: G-567 und G-514
+                      eingespielt, alte Zweiparameter-Fassung von
+                      berechne_zielwerte entfernt, Seed fuer test-user
+
+`[cmd]` **Die laufende Datenbank ist seit A-95 anders als vorher:**
+`goals.goal_contributions` existiert (892 Zeilen),
+`nutrition.micronutrient_snapshot` ist zielfrei, und
+`goals.berechne_zielwerte` gibt es nur noch dreiparametrig.
+
+`[cmd]` **WICHTIG — die zwei Schalter aus A-95 benutzt du NICHT.**
+`030_mikro-uebersicht.ts --a95-live` und
+`testdaten-einspielen.ts --a95-goals-only` lassen `PGDATABASE=postgres`
+zu. **Sie waren fuer den einen freigegebenen Lauf da und gehen wieder
+raus** (A-97). **Dieser Auftrag laeuft ausschliesslich auf einer
+Wegwerf-Datenbank.**
+
+`[cmd]` **Umgebung ist oben:** alle neun Supabase-Container healthy, Web
+3200 und Coach 3220 laufen. In der Nacht zum 03.10. war Stromausfall
+(05:59 bis 07:38); der Wiederanlauf der Datenbank kostete 440 s fsync,
+**jede liegengebliebene Wegwerf-Datenbank verlaengert das** (A-80, A-96).
+
+`[read]` **Claude Code arbeitet parallel an G-590** in
+`apps/web/src/app/v2/recovery/` und `apps/web/src/lib/recovery/`. **Finger
+weg von `apps/` und `packages/`** — dort stehen seine ungesicherten
+Aenderungen.
 
 ## Der Befund — der Nachtlauf, und warum C-556 ihn nicht gruen gemacht hat
 
