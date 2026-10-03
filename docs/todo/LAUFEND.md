@@ -1,14 +1,14 @@
 # Laufende Auftraege
 
-**Stand: 2026-10-03, 10:10**
+**Stand: 2026-10-03, 11:35**
 
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-590 | Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht | **laeuft**, raus 03.10. |
+| Claude Code | G-570 | Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg | **laeuft**, raus 03.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
 | Codex | C-557 | Vierzehn von siebzehn Naehrstoffzuordnungen finden ihre Substanz nicht | **laeuft**, raus 03.10. |
-| Claude Code | G-570 | Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg | **bereit in `next/`** |
+| Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
@@ -78,6 +78,34 @@ starten, dann haengt der Prozess in keinem Baum des Orchestrators:
 `[read]` **Weiter ueber `server.py`, nicht an ihm vorbei** — die
 Portpruefung aus A-36 muss greifen, sonst weicht Next stumm aus.
 **Skript: `.git/server-start-abgekoppelt.ps1`.**
+
+## Der Dev-Server — beide Erklaerungen des Orchestrators sind falsifiziert
+
+`[cmd]` **Stand 11:35: der Server laeuft seit 11:01 durch** (PID 46852),
+und er hat seither UEBERLEBT:
+
+    den vollen pnpm-gate-Lauf von Claude Code (G-590, 11:24)
+    den vollen pnpm gate im Vorcommit-Haken des Orchestrators (b1c4c540)
+
+`[read]` **Damit sind beide Erklaerungen weg, die der Orchestrator
+angeboten hat.** Die erste war *„die Bridge raeumt ihren Prozessbaum
+mit"* — widerlegt, weil der ueber WMI gestartete Server trotzdem starb.
+Die zweite war *„der Gate-Build im Code-Commit"* — widerlegt, weil
+derselbe Lauf ihn heute zweimal nicht umgebracht hat.
+
+`[cmd]` **Was bleibt, sind die Fakten ohne Erklaerung:** zweimal `[?25h`
+am Logende (geordnetes Beenden), beide Male in der Stunde nach dem
+Hochfahren der Maschine, waehrend die Datenbank noch 150+ Datenbanken
+durchsynchronisierte. `[annahme]` **Speicherdruck in der Phase nach dem
+Stromausfall ist die naechstliegende Vermutung** — und sie ist
+ausdruecklich eine Vermutung.
+
+`[read]` **Keine Lehre, keine Regel, kein Waechter.** Zwei Faelle,
+nicht reproduzierbar, Ursache offen. **Was belegt bleibt und gilt:** ein
+`server.py start` aus der Sitzung eines AGENTEN stirbt mit ihr — das war
+Claude Codes erster Ausfall heute frueh. Der Start gehoert zu Tom oder
+zum Orchestrator, abgekoppelt ueber
+`.git/server-start-abgekoppelt.ps1`.
 
 ## G-586 hat im Betrieb gefeuert — der Nachweis, der bei der Abnahme fehlte
 
@@ -355,10 +383,11 @@ sagt, aus welcher Quelle `current_value` kommt.
     A-97        NEU: die zwei --a95-*-Schalter gehoeren raus, und der
                 A-88-Waechter prueft Gestalt statt Verhalten. Wartet auf
                 Freigabe.
-    G-590/Score Claude Code fragt: soll ein gespeicherter Check-in den
-                Score neu rechnen? Der Knopf versprach es, es gibt aber
-                keinen Trigger und keinen Aufrufer von
-                refresh_scores_for_user.
+    G-590/Score G-590 ist abgenommen (b1c4c540), die Frage bleibt:
+                soll ein gespeicherter Check-in den Score neu rechnen?
+                Der Knopf versprach es, es gibt aber keinen Trigger und
+                keinen Aufrufer von refresh_scores_for_user. Die
+                Aufschrift ist entfernt, nicht ersetzt.
     Tobias      MORGEN im Office - Tom, 02.10.: "tobias ist morgen im
                 office, frag das morgen wenn er da ist"
                 G-542  ist die Rate pro Woche oder pro Monat

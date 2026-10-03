@@ -17,7 +17,7 @@ quellen:
   - docs/punkte/erledigt/goals-G-0514-die-modulverrechnung-fehlt-ganz.md
   - docs/punkte/erledigt/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md
   - docs/punkte/erledigt/goals-g-0577-die-umfangserfassung-hat-keinen-schreibweg.md
-  - docs/punkte/laufend_claudecode/next/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md
+  - docs/punkte/laufend_claudecode/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md
 
 beruehrt:
   tabellen:

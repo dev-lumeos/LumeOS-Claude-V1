@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 277 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 635 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 636 |
 | **gesamt** | **916** |
 
 ## medical — 50
@@ -544,7 +544,7 @@
 
 ## recovery — 43
 
-### beauftragbar — 41
+### beauftragbar — 42
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -589,13 +589,13 @@
 | `G-449` | befund | niedrig | [wertKommtVonGruppe hat keinen Aufrufer](todos/recovery-g-0449-wertkommtvongruppe-ohne-aufrufer.md) | offen | — | — |
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
+| `G-593` | befund | mittel | [Die Attrappe nennt eine Tabelle, die es unter anderem Namen gibt](todos/recovery-g-0593-die-attrappe-nennt-eine-tabelle-die-es-unter-anderem-namen-gibt.md) | offen | — | — |
 
-### wartet auf Blocker — 2
+### wartet auf Blocker — 1
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-590` | fehler | hoch | [Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht](laufend_claudecode/recovery-g-0590-der-checkin-ist-der-einzige-pflichtgriff-und-er-schreibt-nicht.md) | laeuft (claudecode) | G-588 | — |
-| `G-593` | befund | mittel | [Die Attrappe nennt eine Tabelle, die es unter anderem Namen gibt](todos/recovery-g-0593-die-attrappe-nennt-eine-tabelle-die-es-unter-anderem-namen-gibt.md) | offen | G-590 | — |
+| `G-590` | fehler | hoch | [Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht](erledigt/recovery-g-0590-der-checkin-ist-der-einzige-pflichtgriff-und-er-schreibt-nicht.md) | erledigt | G-588 | — |
 
 ## goals — 74
 
@@ -662,7 +662,7 @@
 | `G-565` | fehler | hoch | [Die Einheit ist eine Nutzerwahl, heute gibt es nur Prozent](erledigt/goals-g-0565-die-einheit-ist-eine-nutzerwahl.md) | erledigt | — | G-573 |
 | `G-568` | fehler | hoch | [Die Zielwerte brauchen ihr Ziel](erledigt/goals-g-0568-die-zielwerte-brauchen-ihr-ziel.md) | erledigt | — | G-570 |
 | `G-569` | fehler | hoch | [G-520 prueft Kilogramm in der Anwendung](erledigt/goals-g-0569-g520-prueft-kilogramm-in-der-anwendung.md) | erledigt | — | — |
-| `G-570` | fehler | mittel | [Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg](laufend_claudecode/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md) | vorbereitet (claudecode) | — | — |
+| `G-570` | fehler | mittel | [Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg](laufend_claudecode/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md) | laeuft (claudecode) | — | — |
 | `G-572` | fehler | mittel | [Der Dateikopf nennt Phase engine als Attrappe, und das ist seit Tagen falsch](erledigt/goals-g-0572-der-dateikopf-nennt-phase-engine-als-attrappe.md) | erledigt | — | — |
 | `G-573` | fehler | hoch | [rateAusKcal gibt es zweimal, mit verschiedener Rundung](erledigt/goals-g-0573-rateauskcal-gibt-es-zweimal-mit-verschiedener-rundung.md) | erledigt | — | — |
 | `G-574` | fehler | hoch | [Die Waechter rechnen, und niemand sieht sie](todos/goals-g-0574-die-waechter-rechnen-und-niemand-sieht-sie.md) | offen | — | — |

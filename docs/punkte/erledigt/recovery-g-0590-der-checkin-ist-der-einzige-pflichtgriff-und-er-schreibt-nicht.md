@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-02
 agent: claudecode
 beauftragt: 2026-10-03
+erledigt: 2026-10-03
+commit: b1c4c540
 
 braucht: [G-588, G-122]
 kind_von: G-588
@@ -279,3 +281,84 @@ nichts dazu**, auch nicht vorsorglich.
 
 **Zu belegen bleibt:** die fuenf Nachweise oben · Bestand am Ende wieder
 370 und 178 · `pnpm gate` gruen mit Testzahl · nichts committen.
+
+---
+
+## Abnahme — 2026-10-03, Commit `b1c4c540`
+
+`[cmd]` **Vom Orchestrator nachgemessen, nicht geglaubt** — Bestand nach
+dem Lauf, je Nutzer:
+
+    recovery.checkins       370   davon test-user 30
+    recovery.modality_log   178   davon test-user  0
+    Zeilen vom 03.10. bei test-user:  0
+
+**Exakt der Ausgangsstand.** Das Aufraeumen war gezielt per `id`, nicht
+pauschal — und es ist vollstaendig.
+
+`[cmd]` **Die neun Bilder liegen in `backup/`**, je 273 bis 342 kB.
+**Und sie belegen sich gegenseitig:** `g590-vorher-modalities.png` und
+`-nachher-modalities.png` sind byte-gleich gross (317.013), ebenso
+`today` (318.508) — genau die zwei Reiter, die er als unveraendert
+meldet (23 → 23, 21 → 21). **Nur `checkin` unterscheidet sich** (342.089
+→ 339.582), und dort sinkt die Attrappenzahl 14 → 13.
+
+`[cmd]` **`recalculates score` steht noch zweimal in `apps/`, und beide
+sind richtig:** `mockup-referenz.tsx:941` unter der Trennlinie (gewollt)
+und `tab-checkin.tsx:261` als sein eigener Entfernungsvermerk. **Am
+Knopf steht es nicht mehr.**
+
+`[cmd]` **Sabotage vom Orchestrator**, an der Zusage *„eine 0 heisst kein
+Kater und wird nicht abgelegt"* (`checkin-regeln.ts`, `v > 0` → `v >= 0`):
+
+    1 Kontrollprobe            # pass 6  # fail 0
+    2 mit Sabotage             # pass 5  # fail 1
+    3 nach Wiederherstellung   # pass 6  # fail 0
+    md5 vorher = md5 nachher   139855630affcd7c8e3aa41e65fdad14
+
+`[read]` **Die Proben sind nicht Textsuche, sondern Verhalten:**
+`checkinZusatz` und `pruefeCheckin` werden direkt aufgerufen und gegen die
+CHECKs der Tabelle gehalten. **Das ist die Form, die G-583 verlangt hat.**
+
+### Was er gefunden hat, ohne dass es im Auftrag stand
+
+`[cmd]` **Vier Felder, die das Formular fuehrte und der Schreibweg nie
+sendete:** Muskelkater, Alkohol, Koffein, Bildschirmzeit. **Jetzt gesendet,
+mit Regeln aus den CHECKs** (zwei davon ganzzahlig, alle `>= 0`).
+
+`[cmd]` **Und drei, die beim zweiten Speichern geleert worden waeren:**
+Energie, Motivation, Notiz sind jetzt optional — fehlen sie, bleibt die
+Spalte beim `upsert` unberuehrt. `[read]` **Das haette der Auftrag nicht
+gefangen**, und es ist genau die Klasse, die ein `upsert` gefaehrlich
+macht.
+
+`[cmd]` **`· recalculates score` am Knopf war eine Zusage ohne Grundlage:**
+kein Trigger, und kein Aufrufer von `refresh_scores_for_user` in `apps/`.
+**Entfernt und vermerkt, nicht gebaut.** `[read]` **Die Frage, ob ein
+gespeicherter Check-in den Score neu rechnen soll, gehoert Tom** und ist
+offen.
+
+### A3 — der Befund statt des Baus
+
+`[cmd]` **`modalitaetAendernAktion` hat keinen Ort.** Die Vorlage traegt
+keinen Bearbeiten-Griff, die Modalitaeten-Kachel zeigt die Zeilen ohne
+Griff, und der einzige vorgesehene Aenderungsweg — *„Rate now"* im
+Effectiveness log — setzt `next_day_effect`, das die Aktion nicht
+schreibt, waehrend `ladeModalitaeten` keine `id` liest. **Nichts gebaut,
+Nummer am Export.** `[read]` **Genau so war A3 gemeint:** *„wenn es
+keinen gibt, ist das ein Befund und kein Grund, einen zu bauen."*
+
+### Belege
+
+`[cmd]` `pnpm gate` gruen, 18/18, **web 2575 Tests** (vorher 2569), 9
+Sabotagen des Agenten rot und wiederhergestellt, dazu die eine des
+Orchestrators. Commit `b1c4c540`, 8 Dateien, +346/−45. Konsolenfehler
+unveraendert einer je Seitenaufruf (`data-mode` aus `RootLayout`, nicht
+aus Recovery).
+
+`[cmd]` **A6 steht:** HRV und die zwei Protokollknoepfe bleiben Attrappe,
+mit einem Test auf genau diese drei. **G-593 bleibt davon unberuehrt.**
+
+`[read]` **Offen aus diesem Punkt:** Toms Entscheidung zum Score, und
+`modalitaetAendernAktion` wartet auf einen Ort — beides kein Baurest,
+sondern benannte Befunde.

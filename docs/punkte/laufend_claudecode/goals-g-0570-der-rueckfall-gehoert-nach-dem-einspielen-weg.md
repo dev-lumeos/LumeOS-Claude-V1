@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: mittel
 angelegt: 2026-10-01
+agent: claudecode
+beauftragt: 2026-10-03
 
 braucht: [G-563]
 kind_von: G-568

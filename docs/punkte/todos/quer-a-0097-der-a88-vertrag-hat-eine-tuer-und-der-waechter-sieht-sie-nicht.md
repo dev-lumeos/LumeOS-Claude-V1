@@ -10,7 +10,7 @@ kind_von: A-88
 
 quellen:
   - docs/punkte/erledigt/quer-a-0088-31-proben-fallen-still-auf-postgres-zurueck.md
-  - docs/punkte/laufend_claudecode/next/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md
+  - docs/punkte/laufend_claudecode/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md
 
 beruehrt:
   tabellen: []
