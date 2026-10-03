@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-01
 agent: claudecode
 beauftragt: 2026-10-03
+erledigt: 2026-10-03
+commit: 96518958
 
 braucht: [G-563]
 kind_von: G-568
@@ -169,3 +171,60 @@ auffaellt.**
 **Zu belegen:** Nachweise auf `test-user@lumeos.local` · die Seite vor
 und nach dem Entfernen · `pnpm gate` gruen mit Testzahl · Sabotage je
 Zusicherung in beide Richtungen.
+
+---
+
+## Abnahme — 2026-10-03, Commit `96518958`
+
+`[cmd]` **Vom Orchestrator nachgezaehlt in `zielwerte-read.ts`:**
+
+    rpc('berechne_zielwerte'   1   (vorher 2)
+    istSignaturFehlt           0
+    der Rueckfall ist weg
+
+`[cmd]` **Und in `ladefehler.ts`:** `'schema'` 3x, `schema cache` 3x,
+`could not find the function` 2x, `Schema-Cache` 2x. **Die Erkennung
+verlangt BEIDE Textteile** und steht vor den Sitzungsmerkmalen — sonst
+wuerde ein Funktionsname mit `refresh_token` zur Sitzungsmeldung.
+
+`[cmd]` **An der Seite**, `tools/schuss.mjs /v2/goals`, 1247 ms:
+Titel steht, 19 Attrappen, 1 Konsolenfehler (die fremde `data-mode`-
+Warnung), **0 Treffer auf `PGRST202`, `berechne_zielwerte`, „konnten nicht
+geladen" und „schema cache"**. Bild `backup/g570-abnahme-goals.png`.
+
+### Die Datei ausserhalb des Bereichs — bestaetigt
+
+`[cmd]` **`lib/goals/phasenziel-write.ts`, +3/−3**, reine Typaenderung von
+`'sitzung' | 'daten'` auf `Fehlerart`, vom Compiler erzwungen.
+`[cmd]` **Der einzige Verbraucher ist `goals/modale.tsx:415`:**
+`setSitzungsfehler(r.art === 'sitzung')` — ein `schema` laeuft dort wie
+ein Datenfehler, und die Kachel zeigt den Satz fuer jede Art ausser
+`sitzung` schon. **Bestaetigt, drei Zeilen, kein Folgebedarf.**
+
+### Was er selbst gefunden und richtig behandelt hat
+
+`[cmd]` **Den echten Meldungstext hat er geholt, nicht erfunden:**
+PostgREST im Docker-Netz mit einem Wegwerf-Parameter gerufen, `404`,
+`PGRST202`, Wortlaut im Test. **Keine Aenderung an der Datenbank.**
+
+`[cmd]` **Den Vermerk aus G-568 hat er als ueberholt gekennzeichnet**,
+statt ihn stehen zu lassen: beide Fassungen geben `goal_id` zurueck.
+
+`[cmd]` **7 von 7 Sabotagen rot**, je zurueckgesetzt, Kontrollen gruen —
+darunter die zwei, die zaehlen: Erkennung nur am Code, und die Pruefung
+hinter die Sitzungsmerkmale verschoben.
+
+`[cmd]` **`pnpm gate` gruen, 18/18, web 2579 Tests** (vorher 2575: zwei in
+g568 umgedreht, vier neu). Commit `96518958`, 5 Dateien, +136/−75.
+
+### A3 — ein Befund, und er wird A-98
+
+`[read]` **Vor dem Schirm faellt dieser Fall heute nicht auf.** Er hat
+gesucht und nichts gefunden: kein Werkzeug haelt die `.rpc('name', {args})`
+-Aufrufe in `apps/` gegen `pg_proc` der laufenden Datenbank, und
+`pnpm gate` laeuft ohne Datenbank (A-77). `schemafreigabe-pruefen.mjs`
+kommt am naechsten und prueft Schemata, keine Funktionen.
+
+`[cmd]` **Er hat nichts gebaut und den Vorschlag dem Orchestrator
+ueberlassen.** `[read]` **Richtig** — `tools/` ist nicht sein Bereich, und
+ein neues Werkzeug braucht Toms Wort. **Weitergefuehrt als A-98.**

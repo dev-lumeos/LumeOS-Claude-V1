@@ -4,6 +4,8 @@ typ: fehler
 modul: recovery
 schwere: hoch
 angelegt: 2026-10-03
+agent: claudecode
+beauftragt: 2026-10-03
 
 braucht: [G-590]
 

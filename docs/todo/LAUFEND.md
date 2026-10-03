@@ -1,14 +1,14 @@
 # Laufende Auftraege
 
-**Stand: 2026-10-03, 12:15**
+**Stand: 2026-10-03, 12:45**
 
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-570 | Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg | **laeuft**, raus 03.10. |
+| Claude Code | G-593 | Die Attrappe nennt eine fehlende Tabelle — die Tabelle ist fertig und gefuellt | **laeuft**, raus 03.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
-| Codex | A-97 | Der A-88-Vertrag hat eine Tuer, und der Waechter sieht sie nicht | **bereit in `next/`** |
+| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 ## Stromausfall in der Nacht zum 03.10. — der Wiederanlauf
@@ -411,6 +411,32 @@ sagt, aus welcher Quelle `current_value` kommt.
                 "_final" sind das Problem, nicht die Platte.
     A-79        backup/-Aufbewahrung, 3.958 MiB gegen ein Limit von 2.5 GiB
     A-78        Waechter auf Bezeichner-Ueberschneidung
+## Stand Mittag 03.10. — was heute durch ist
+
+`[cmd]` **Sieben Punkte abgenommen, alle mit Commit:**
+
+    C-556  16fd9c9c  148 Zeilen in die C-230-Filter
+    A-95   df9cd8aa  Live-Stand nachgezogen (A5 war falsch, s. G-595)
+    G-586  adc9db69  Uhrensprung: einmal erneuern statt rausschmeissen
+    G-590  b1c4c540  Check-in und Anwendung schreiben wirklich
+    C-557  022f6f61  die 14 veralteten substance_id
+    G-595  c73a95c1  der Zweiparameter-Mantel kommt zurueck
+    A-97/A1 01039c80 die zwei a95-Schalter sind weg
+    G-570  96518958  Rueckfall weg, PGRST202 als eigene Fehlerart
+
+`[cmd]` **Zwei Ausfaelle, beide von mir verursacht, beide behoben:**
+die Goals-Seite (A-95/A5 loeschte eine gebrauchte Signatur, G-595) und der
+A-88-Vertrag (A-95 baute zwei Schalter ein, A-97).
+
+`[read]` **Beide Male hat das Gate vorher gruen gemeldet.** Daraus ist
+**A-98** geworden, und der liegt bei Tom: zwei Waechter pruefen Gestalt
+statt Verhalten. **Meine Empfehlung steht im Punkt** — A1 ja, A2 eher
+nicht, solange die zwei Handgriffe gelten.
+
+`[cmd]` **Laufend:** Claude Code an G-593 (Protokollknopf), Codex an A-91
+(wartet auf den Nachtlauf). `[read]` **Codex' `next/` ist leer, und das
+ist kein Versaeumnis:** alles fuer ihn haengt an G-594.
+
 ## Neu angelegt, noch ohne Reihenfolge
 
     G-547   der persoenliche Boden unter der Katalograte
@@ -468,8 +494,16 @@ sagt, aus welcher Quelle `current_value` kommt.
             ein roter Lauf laesst seine Wegwerf-Datenbank stehen
             (sieben liegen da, 156 Datenbanken). Wartet auf Toms Wort
     G-594   nutrition_targets kennt seine Phase, aber nicht sein Ziel
-    A-97    der A-88-Vertrag hat eine Tuer, und der Waechter sieht sie
-            nicht - hatFailClosed prueft zwei Muster, nicht den Wurf
+    A-97    ERLEDIGT fuer A1 (01039c80) - die Schalter sind weg,
+            am Verhalten geprueft. A2/A3 wandern nach A-98
+    A-98    zwei Waechter pruefen Gestalt statt Verhalten: der
+            Datenbankvertrag, und es fehlt ein Abgleich .rpc() gegen
+            pg_proc. BEIDES in tools/, wartet auf Toms Wort
+    G-595   der Zweiparameter-Mantel war kein Ueberrest (c73a95c1)
+    G-592   gedreht: nicht "Anzeige fehlt", sondern ein Leseweg zu viel -
+            hydration_day kann alles und ist live
+    G-593   die Attrappe nennt recovery.protocols als fehlend;
+            recovery_protocols ist fertig, gefuellt und hat RLS (laeuft)
 
 ## Was ausdruecklich wartet
 

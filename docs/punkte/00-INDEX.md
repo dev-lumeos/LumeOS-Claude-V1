@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 275 |
-| `laufend_codex` | 2 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 638 |
-| **gesamt** | **917** |
+| `todos` | 276 |
+| `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 640 |
+| **gesamt** | **918** |
 
 ## medical — 50
 
@@ -589,7 +589,7 @@
 | `G-449` | befund | niedrig | [wertKommtVonGruppe hat keinen Aufrufer](todos/recovery-g-0449-wertkommtvongruppe-ohne-aufrufer.md) | offen | — | — |
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
-| `G-593` | fehler | hoch | [Die Attrappe nennt eine fehlende Tabelle — die Tabelle ist fertig und gefuellt](laufend_claudecode/recovery-g-0593-die-attrappe-nennt-eine-tabelle-die-es-unter-anderem-namen-gibt.md) | vorbereitet (claudecode) | — | — |
+| `G-593` | fehler | hoch | [Die Attrappe nennt eine fehlende Tabelle — die Tabelle ist fertig und gefuellt](laufend_claudecode/recovery-g-0593-die-attrappe-nennt-eine-tabelle-die-es-unter-anderem-namen-gibt.md) | laeuft (claudecode) | — | — |
 
 ### wartet auf Blocker — 1
 
@@ -662,7 +662,7 @@
 | `G-565` | fehler | hoch | [Die Einheit ist eine Nutzerwahl, heute gibt es nur Prozent](erledigt/goals-g-0565-die-einheit-ist-eine-nutzerwahl.md) | erledigt | — | G-573 |
 | `G-568` | fehler | hoch | [Die Zielwerte brauchen ihr Ziel](erledigt/goals-g-0568-die-zielwerte-brauchen-ihr-ziel.md) | erledigt | — | G-570 |
 | `G-569` | fehler | hoch | [G-520 prueft Kilogramm in der Anwendung](erledigt/goals-g-0569-g520-prueft-kilogramm-in-der-anwendung.md) | erledigt | — | — |
-| `G-570` | fehler | mittel | [Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg](laufend_claudecode/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md) | laeuft (claudecode) | — | — |
+| `G-570` | fehler | mittel | [Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg](erledigt/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md) | erledigt | — | — |
 | `G-572` | fehler | mittel | [Der Dateikopf nennt Phase engine als Attrappe, und das ist seit Tagen falsch](erledigt/goals-g-0572-der-dateikopf-nennt-phase-engine-als-attrappe.md) | erledigt | — | — |
 | `G-573` | fehler | hoch | [rateAusKcal gibt es zweimal, mit verschiedener Rundung](erledigt/goals-g-0573-rateauskcal-gibt-es-zweimal-mit-verschiedener-rundung.md) | erledigt | — | — |
 | `G-574` | fehler | hoch | [Die Waechter rechnen, und niemand sieht sie](todos/goals-g-0574-die-waechter-rechnen-und-niemand-sieht-sie.md) | offen | — | — |
@@ -747,9 +747,9 @@
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 | `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](erledigt/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | erledigt | — | — |
 
-## quer — 239
+## quer — 240
 
-### beauftragbar — 236
+### beauftragbar — 237
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -809,7 +809,8 @@
 | `A-91` | fehler | hoch | [Der taegliche Lauf erzeugt bei gruen einen neuen Dump](laufend_codex/quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md) | laeuft (codex) | — | — |
 | `A-93` | fehler | hoch | [Zwei Agenten in einem Arbeitsbaum, und der Commit zahlt dafuer](todos/quer-a-0093-zwei-agenten-in-einem-arbeitsbaum.md) | offen | — | — |
 | `A-95` | feature | hoch | [Zwei fehlen, eine steht doppelt, der Seed fehlt](erledigt/quer-a-0095-zwei-fehlen-eine-steht-doppelt-der-seed-fehlt.md) | erledigt | — | G-594, G-595 |
-| `A-97` | fehler | hoch | [Der A-88-Vertrag hat eine Tuer, und der Waechter sieht sie nicht](laufend_codex/quer-a-0097-der-a88-vertrag-hat-eine-tuer-und-der-waechter-sieht-sie-nicht.md) | laeuft (codex) | — | — |
+| `A-97` | fehler | hoch | [Der A-88-Vertrag hat eine Tuer, und der Waechter sieht sie nicht](erledigt/quer-a-0097-der-a88-vertrag-hat-eine-tuer-und-der-waechter-sieht-sie-nicht.md) | erledigt | — | A-98 |
+| `A-98` | fehler | hoch | [Zwei Waechter pruefen Gestalt statt Verhalten — und beide haben heute versagt](todos/quer-a-0098-zwei-waechter-pruefen-gestalt-statt-verhalten.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |

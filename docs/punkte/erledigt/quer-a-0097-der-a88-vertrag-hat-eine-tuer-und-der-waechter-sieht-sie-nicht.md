@@ -6,13 +6,15 @@ schwere: hoch
 angelegt: 2026-10-03
 agent: codex
 beauftragt: 2026-10-03
+erledigt: 2026-10-03
+commit: 01039c80
 
 braucht: [A-88, A-95]
 kind_von: A-88
 
 quellen:
   - docs/punkte/erledigt/quer-a-0088-31-proben-fallen-still-auf-postgres-zurueck.md
-  - docs/punkte/laufend_claudecode/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md
+  - docs/punkte/erledigt/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md
 
 beruehrt:
   tabellen: []
@@ -136,3 +138,40 @@ in `todos/`, bis sie da ist.
 `DROP FUNCTION`-Zeile in `030_mikro-uebersicht.ts`, **die bleibt** — sie
 gehoert in die Pipeline, damit die Kette die alte Zweiparameter-Fassung
 nicht wieder anlegt.
+
+---
+
+## Abnahme A1 — 2026-10-03, Commit `01039c80`
+
+`[cmd]` **Null Treffer auf `a95` in beiden Dateien** — `--a95-live`,
+`--a95-goals-only`, `A95_LIVE`, `A95_GOALS_ONLY`, je 0.
+
+`[cmd]` **Und am VERHALTEN geprueft, nicht an der Gestalt** — das war der
+Befund dieses Punktes. Vom Orchestrator gefahren, vier Laeufe:
+
+    030_mikro-uebersicht.ts   PGDATABASE=postgres   Exit 1
+    030_mikro-uebersicht.ts   ohne PGDATABASE       Exit 1
+    testdaten-einspielen.ts   PGDATABASE=postgres   Exit 1
+    testdaten-einspielen.ts   ohne PGDATABASE       Exit 1
+
+**Beide werfen in `A-88`-Form, mit Dateiname und Zeile.**
+
+`[cmd]` **Codex' eigene Nachweise:** beide vollen Laeufe auf
+`lumeos_a97_probe` gruen, Probe-Datenbank geloescht, Restbestand 0.
+
+`[read]` **Und er hat dem Auftrag widersprochen, zu Recht.** Der Auftrag
+nannte die `DROP FUNCTION`-Zeile noch als zu pruefen; **G-595**
+(`c73a95c1`) hatte sie zwei Stunden vorher bewusst entfernt. **Er hat den
+neueren Stand gelesen und gelassen, statt dem Auftragstext zu folgen.**
+Das ist die Haltung, die der Punkt braucht.
+
+## A2 und A3 sind NICHT erledigt — sie wandern nach A-98
+
+`[cmd]` **`tools/pipeline-database-vertrag.mjs` prueft weiter Gestalt:**
+`hatFailClosed` sucht `!DB` und `DB === 'postgres'` irgendwo in der Datei
+und nicht den unbedingten Wurf. **Der Waechter haette die Schalter auch
+heute durchgelassen.**
+
+`[read]` **Das liegt in `tools/` und damit beim Orchestrator**, und es
+braucht Toms Freigabe. **Weitergefuehrt als A-98**, zusammen mit dem
+Befund aus G-570/A3.
