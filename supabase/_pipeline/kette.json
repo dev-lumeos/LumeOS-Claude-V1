@@ -773,6 +773,16 @@
       "covered_by_dump": true
     },
     {
+      "id": "c557_supplement_nutrient_join_probe",
+      "path": "supabase/_pipeline/_validierung/supplements-c557-nutrient-join-resolution.test.ts",
+      "kind": "tsx",
+      "creates": "C-557: zaehlt die aufloesbaren Supplement-Slugs, Substanz-IDs und Naehrstoffcodes vor dem Brueckenbau getrennt.",
+      "depends_on": [
+        "134",
+        "015"
+      ]
+    },
+    {
       "id": "135",
       "path": "supabase/_pipeline/13_supplements/135_supplement_nutrients.ts",
       "kind": "tsx",

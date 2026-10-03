@@ -48,7 +48,7 @@
     {
       "id": "local_biotin_biot",
       "supplement_slug": "biotin",
-      "substance_id": "local_biotin",
+      "substance_id": "sub_3d47470303",
       "nutrient_code": "BIOT",
       "amount_original": 5000,
       "unit_original": "mcg",
@@ -62,7 +62,7 @@
     {
       "id": "local_calcium_ca",
       "supplement_slug": "calcium",
-      "substance_id": "local_calcium",
+      "substance_id": "sub_c252280ba5",
       "nutrient_code": "CA",
       "amount_original": 500,
       "unit_original": "mg",
@@ -76,7 +76,7 @@
     {
       "id": "local_collagen_prot625",
       "supplement_slug": "collagen",
-      "substance_id": "local_collagen",
+      "substance_id": "sub_57ffcb147a",
       "nutrient_code": "PROT625",
       "amount_original": 10,
       "unit_original": "g",
@@ -90,7 +90,7 @@
     {
       "id": "local_fiber_psyllium_fibt",
       "supplement_slug": "fiber-psyllium-husk",
-      "substance_id": "local_fiber_psyllium_husk",
+      "substance_id": "sub_22d5023379",
       "nutrient_code": "FIBT",
       "amount_original": 5,
       "unit_original": "g",
@@ -104,7 +104,7 @@
     {
       "id": "local_folate_fol",
       "supplement_slug": "folate-b9",
-      "substance_id": "local_folate_b9",
+      "substance_id": "sub_cc59a39b35",
       "nutrient_code": "FOL",
       "amount_original": 400,
       "unit_original": "mcg",
@@ -146,7 +146,7 @@
     {
       "id": "local_iron_fe",
       "supplement_slug": "iron",
-      "substance_id": "local_iron",
+      "substance_id": "sub_fd9c0c1d6e",
       "nutrient_code": "FE",
       "amount_original": 18,
       "unit_original": "mg",
@@ -160,7 +160,7 @@
     {
       "id": "local_magnesium_mg",
       "supplement_slug": "magnesium",
-      "substance_id": "local_magnesium",
+      "substance_id": "sub_5322010791",
       "nutrient_code": "MG",
       "amount_original": 400,
       "unit_original": "mg",
@@ -188,7 +188,7 @@
     {
       "id": "local_vitamin_b12_vitb12",
       "supplement_slug": "vitamin-b12",
-      "substance_id": "local_vitamin_b12",
+      "substance_id": "sub_c5b925ff34",
       "nutrient_code": "VITB12",
       "amount_original": 1000,
       "unit_original": "mcg",
@@ -202,7 +202,7 @@
     {
       "id": "local_vitamin_b6_vitb6",
       "supplement_slug": "vitamin-b6",
-      "substance_id": "local_vitamin_b6",
+      "substance_id": "sub_c3e453694e",
       "nutrient_code": "VITB6",
       "amount_original": 50,
       "unit_original": "mg",
@@ -216,7 +216,7 @@
     {
       "id": "local_vitamin_c_vitc",
       "supplement_slug": "vitamin-c",
-      "substance_id": "local_vitamin_c",
+      "substance_id": "sub_4e883a82b7",
       "nutrient_code": "VITC",
       "amount_original": 1000,
       "unit_original": "mg",
@@ -230,7 +230,7 @@
     {
       "id": "local_vitamin_d3_vitd",
       "supplement_slug": "vitamin-d3",
-      "substance_id": "local_vitamin_d3",
+      "substance_id": "sub_64d002b7bf",
       "nutrient_code": "VITD",
       "amount_original": 5000,
       "unit_original": "IU",
@@ -245,7 +245,7 @@
     {
       "id": "local_vitamin_k2_vitk2",
       "supplement_slug": "vitamin-k2-mk7",
-      "substance_id": "local_vitamin_k2_mk7",
+      "substance_id": "sub_dc91b498ef",
       "nutrient_code": "VITK2",
       "amount_original": 200,
       "unit_original": "mcg",
@@ -259,7 +259,7 @@
     {
       "id": "local_whey_protein_prot625",
       "supplement_slug": "whey-protein",
-      "substance_id": "local_whey_protein",
+      "substance_id": "sub_4765cf4c14",
       "nutrient_code": "PROT625",
       "amount_original": 25,
       "unit_original": "g",
@@ -273,7 +273,7 @@
     {
       "id": "local_zinc_zn",
       "supplement_slug": "zinc",
-      "substance_id": "local_zinc",
+      "substance_id": "sub_a86faa5f3f",
       "nutrient_code": "ZN",
       "amount_original": 15,
       "unit_original": "mg",
