@@ -2,7 +2,7 @@
 // C-416: Lokaler Tageslauf. Das Ergebnis bleibt als kleiner Nachweis liegen,
 // damit der Punktelauf auch dann sichtbar rot wird, wenn der Lauf nachts
 // scheitert und niemand die Konsole offen hatte.
-import { mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs'
+import { closeSync, mkdirSync, openSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs'
 import { spawnSync } from 'node:child_process'
 import { dirname, resolve } from 'node:path'
 
@@ -19,8 +19,11 @@ function option(name) {
   return index < 0 ? undefined : process.argv[index + 1]
 }
 
+// A-96: ortsbezogen. Mit toISOString() hiess der Lauf vom 04.10. um 04:00
+// (Bangkok) "20261003" - nach dem UTC-Vortag.
 function defaultDatabase() {
-  const day = new Date().toISOString().slice(0, 10).replaceAll('-', '')
+  const j = new Date()
+  const day = `${j.getFullYear()}${String(j.getMonth() + 1).padStart(2, '0')}${String(j.getDate()).padStart(2, '0')}`
   return `lumeos_tageskette_${day}`
 }
 
@@ -32,6 +35,21 @@ const dumpManifest = resolve(option('--dump-manifest') ?? DEFAULT_DUMP_MANIFEST)
 const startedAt = new Date()
 const candidate = resolve(dumpDir, `grunddaten-${startedAt.toISOString().replace(/[-:.TZ]/g, '')}-${process.pid}.tmp`)
 
+// A-96: die Ausgabe des Laufs geht in eine Datei neben den Status. Vorher
+// ging sie mit stdio 'inherit' in eine Konsole, die nachts niemand sieht -
+// der Grund eines roten Laufs stand nur im Postgres-Containerlog.
+const logPath = resolve(dirname(statusPath), `kettenlauf-${database}.log`)
+mkdirSync(dirname(logPath), { recursive: true })
+const logFd = openSync(logPath, 'w')
+
+function logAuszug(zeilen = 60) {
+  try {
+    return readFileSync(logPath, 'utf8').split(/\r?\n/).filter(Boolean).slice(-zeilen)
+  } catch {
+    return []
+  }
+}
+
 function writeStatus(status, exitCode, dump) {
   const report = {
     version: 1,
@@ -42,6 +60,8 @@ function writeStatus(status, exitCode, dump) {
     database,
     manifest,
     exit_code: exitCode,
+    log: logPath,
+    ...(status === 'failed' ? { log_ende: logAuszug() } : {}),
     ...(dump ? { grunddaten_dump: dump } : {}),
   }
   mkdirSync(dirname(statusPath), { recursive: true })
@@ -59,7 +79,7 @@ const result = spawnSync('pnpm', [
   '--checkpoint-dump', candidate,
 ], {
   cwd: process.cwd(),
-  stdio: 'inherit',
+  stdio: ['ignore', logFd, logFd],
   shell: process.platform === 'win32',
 })
 
@@ -73,7 +93,7 @@ if (exitCode === 0) {
     '--source-database', database,
   ], {
     cwd: process.cwd(),
-    stdio: 'inherit',
+    stdio: ['ignore', logFd, logFd],
     shell: process.platform === 'win32',
   })
   const publishExit = publish.status ?? 1
@@ -99,3 +119,5 @@ if (exitCode === 0) {
   console.error(`[kettenlauf] Tageslauf rot; Nachweis: ${statusPath}`)
   process.exitCode = exitCode
 }
+
+closeSync(logFd)
