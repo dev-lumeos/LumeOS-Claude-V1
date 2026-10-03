@@ -25,12 +25,14 @@ import { Card, Pill, Icon, Ring, Meter, LineChart, InEntwicklungKnopf } from '@l
 
 import {
   MODALITY_EVIDENZ, MODALITY_META, MODALITY_LOG, TODAY_MODALITIES,
-  RECOVERY_PROTOCOLS, ACTIVE_PROTOCOL,
+  RECOVERY_PROTOCOLS,
   STRESS_TODAY, STRESS_SOURCES, STRESS_BANDS, STRESS_14D,
 } from './motor'
 import { useRecovery } from './kontext'
 // G-365: die erfassten Modalitaeten.
 import type { ModalitaetenStand } from '../../../lib/recovery/scores-read'
+// G-598: die gestarteten Protokolle. Nur der TYP aus dem Leseweg (A-30).
+import type { ProtokollStand } from '../../../lib/recovery/protokoll-read'
 import { ATTRAPPE } from './ansicht'
 
 // ═══ MODALITIES ══════════════════════════════════════════════════
@@ -384,69 +386,98 @@ export function RecOvertraining() {
 
 // ═══ PROTOCOLS ═══════════════════════════════════════════════════
 // [cmd] module-recovery-v2.jsx:825-897.
-export function RecProtocols() {
+export function RecProtocols({ stand }: {
+  /**
+   * G-598: `recovery.recovery_protocols`.
+   *
+   * `[cmd]` **Hier stand `ACTIVE_PROTOCOL`** (`motor.ts`: `day 3 of 7 ·
+   * started 2026-08-13`) — waehrend test-user seit 2026-09-12 ein
+   * echtes Protokoll mit 3 von 7 Tagen fuehrte. **Der Leseweg lag seit
+   * G-593 daneben.**
+   */
+  stand?: ProtokollStand
+}) {
   const { open } = useRecovery()
-  const active = RECOVERY_PROTOCOLS.find(p => p.id === ACTIVE_PROTOCOL.id)
-  if (!active) return null
+  // `[read]` **Ein Ladefehler ist ein eigener Zustand** (G-553) — nicht
+  // „kein Protokoll aktiv". Derselbe Satz wie in der Tageskachel und im
+  // Modal.
+  const fehler = !stand ? 'Nicht geladen.' : stand.fehler ? `Nicht geladen: ${stand.fehler}` : null
+  const aktiv = stand?.aktiv ?? []
+  const lauf = aktiv[0] ?? null
+  const laeuft = (key: string) => aktiv.some(z => z.protocol_key === key)
 
   return (
     <div className="v2-rec-grid-13">
       <div className="v2-col-gap" style={{ gap: 14 }}>
         <Card
-          title={`Active · ${active.name}`}
-          sub={`day ${ACTIVE_PROTOCOL.day} of ${ACTIVE_PROTOCOL.of} · started ${ACTIVE_PROTOCOL.started}`}
-          attrappe={ATTRAPPE}
-          actions={
+          title={lauf ? `Active · ${lauf.name}` : 'Active protocol'}
+          sub={lauf
+            ? `${lauf.completed_days} of ${lauf.duration_days} days done · started ${lauf.started_on}`
+              + (aktiv.length > 1 ? ` · ${aktiv.length - 1} weitere aktiv` : '')
+            : undefined}
+          actions={lauf ? (
+            // `[read]` **Bleibt Attrappe** — ob „End" `discontinued` oder
+            // `completed` setzt, ist nicht entschieden (00-FRAGEN, G-598).
             <InEntwicklungKnopf titel="End protocol" className="v2-btn v2-btn-ghost v2-btn-sm">
               End protocol
             </InEntwicklungKnopf>
-          }
+          ) : undefined}
         >
-          <div style={{ display: 'flex', gap: 4, marginBottom: 14 }}>
-            {Array.from({ length: Number(active.days) || 7 }).map((_, i) => (
-              <div key={i} style={{
-                flex: 1, height: 8, borderRadius: 2,
-                background: i < ACTIVE_PROTOCOL.day ? 'var(--acc-recov)' : 'var(--surface-2)',
-              }} />
-            ))}
-          </div>
-          <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Today&apos;s tasks</div>
-          <div className="v2-col-gap" style={{ gap: 5 }}>
-            {active.tasks.map(t => (
-              <label key={t.t} style={{
-                display: 'flex', alignItems: 'center', gap: 9, padding: '9px 11px',
-                background: t.done ? 'color-mix(in oklch, var(--pos) 5%, var(--surface))' : 'var(--surface)',
-                border: `1px solid ${t.done ? 'color-mix(in oklch, var(--pos) 24%, var(--border))' : 'var(--border)'}`,
-                borderRadius: 5, cursor: 'pointer',
-              }}>
-                <input type="checkbox" defaultChecked={t.done} style={{ accentColor: 'var(--pos)' }} />
-                <span style={{
-                  fontSize: 12,
-                  textDecoration: t.done ? 'line-through' : 'none',
-                  color: t.done ? 'var(--fg-muted)' : 'var(--fg)',
-                }}>{t.t}</span>
-                {t.done && <Pill variant="pos" style={{ marginLeft: 'auto', fontSize: 9 }}>done</Pill>}
-              </label>
-            ))}
-          </div>
-          <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 10, lineHeight: 1.5 }}>
-            Protocol tasks appear in your Today view the same way meal-plan ghost entries do — pre-filled, confirmable, skippable.
-          </div>
+          <span data-probe="protokoll-aktiv" hidden />
+          {fehler ? (
+            <div style={{ fontSize: 12, color: 'var(--neg)' }}>{fehler}</div>
+          ) : !lauf ? (
+            <div className="v2-dim" style={{ fontSize: 11.5, padding: '6px 0' }}>
+              Kein Protokoll aktiv. Starten lässt es sich aus der Bibliothek.
+            </div>
+          ) : (
+            <>
+              <div style={{ display: 'flex', gap: 4, marginBottom: 14 }}>
+                {Array.from({ length: lauf.duration_days }).map((_, i) => (
+                  <div key={i} style={{
+                    flex: 1, height: 8, borderRadius: 2,
+                    background: i < lauf.completed_days ? 'var(--acc-recov)' : 'var(--surface-2)',
+                  }} />
+                ))}
+              </div>
+              <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Daily activities</div>
+              <div className="v2-col-gap" style={{ gap: 5 }}>
+                {/* `[read]` **Kein Haken je Aufgabe** — die Tabelle fuehrt
+                    nur `completed_days`. Die Vorlage hatte Checkboxen mit
+                    festem `done`; ein Haken ohne Spalte waere erfunden. */}
+                {lauf.daily_activities.map(a => (
+                  <div key={a} style={{
+                    padding: '9px 11px', background: 'var(--surface)',
+                    border: '1px solid var(--border)', borderRadius: 5, fontSize: 12,
+                  }}>{a}</div>
+                ))}
+              </div>
+              <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 10, lineHeight: 1.5 }}>
+                Abhaken je Aufgabe ist nicht gebaut — gespeichert wird nur, wie viele Tage erledigt sind.
+              </div>
+            </>
+          )}
         </Card>
 
-        <Card title="Protocol library" sub="4 system templates" attrappe={ATTRAPPE}>
+        {/* `[cmd]` **G-598: die Marke ist weg.** Die vier Eintraege sind
+            die Vorlagen, aus denen der Activate-Knopf schreibt (G-593) —
+            Name und Aufgaben gehen so in die Zeile. **„active" kommt
+            jetzt aus der Tabelle.** Ob die Bibliothek Vorlage oder
+            Verlauf zeigen soll, ist G-596. */}
+        <Card title="Protocol library"
+              sub={`${RECOVERY_PROTOCOLS.length} templates · active laut recovery.recovery_protocols`}>
           <div className="v2-col-gap" style={{ gap: 8 }}>
             {RECOVERY_PROTOCOLS.map(p => (
               <button key={p.id} type="button" onClick={() => open({ typ: 'protocol', protokoll: p })}
                       style={{
                         padding: 12, textAlign: 'left', font: 'inherit', color: 'inherit', width: '100%',
-                        background: p.id === ACTIVE_PROTOCOL.id ? 'color-mix(in oklch, var(--acc-recov) 6%, var(--surface))' : 'var(--surface)',
-                        border: `1px solid ${p.id === ACTIVE_PROTOCOL.id ? 'color-mix(in oklch, var(--acc-recov) 28%, var(--border))' : 'var(--border)'}`,
+                        background: laeuft(p.id) ? 'color-mix(in oklch, var(--acc-recov) 6%, var(--surface))' : 'var(--surface)',
+                        border: `1px solid ${laeuft(p.id) ? 'color-mix(in oklch, var(--acc-recov) 28%, var(--border))' : 'var(--border)'}`,
                         borderRadius: 6, cursor: 'pointer',
                       }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
                   <span style={{ fontSize: 13, fontWeight: 600 }}>{p.name}</span>
-                  {p.id === ACTIVE_PROTOCOL.id && <Pill variant="acc">active</Pill>}
+                  {laeuft(p.id) && <Pill variant="acc">active</Pill>}
                   <span className="v2-dim v2-mono" style={{ marginLeft: 'auto', fontSize: 10 }}>{p.days} days</span>
                 </div>
                 <div className="v2-muted" style={{ fontSize: 11.5, marginBottom: 6 }}>{p.goal}</div>

@@ -331,7 +331,8 @@ export function RecoveryAnsicht({
       )}
       {tab === 'protocols' && (
         <>
-          <RecProtocols />
+          {/* G-598: hier stand `<RecProtocols />` ohne Stand — die Kachel las den Entwurf. */}
+          <RecProtocols stand={protokolle} />
           <RecProtocolsReferenz />
         </>
       )}

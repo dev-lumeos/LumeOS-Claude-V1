@@ -28,7 +28,7 @@ import { Card, Pill, Icon, Ring, LineChart, Empty, InEntwicklungKnopf } from '@l
 import {
   CHECKIN, HRV_BASELINE, MUSCLE_LABEL, MUSCLE_STATE, MUSCLE_SLUG_MAP,
   MODALITY_EVIDENZ, MODALITY_META, TODAY_MODALITIES,
-  ACTIVE_PROTOCOL, NUTRITION_INPUT,
+  NUTRITION_INPUT,
   calcHRVScore, calcMuscleRecovery, baseRecoveryCurve,
   type Protocol,
 } from './motor'
@@ -1039,11 +1039,20 @@ function ProtocolDetailModal({ p, onClose, tag, protokolle }: {
   // `[cmd]` **Hier stand `p.id === ACTIVE_PROTOCOL.id`** — eine
   // Entwurfskonstante (`motor.ts`, `day: 3, of: 7`). `[read]` **Jetzt
   // die juengste Zeile mit `status = 'active'` fuer DIESES Protokoll.**
-  // Ohne geladenen Stand bleibt es beim Entwurf.
-  const lauf = protokolle
-    ? protokolle.aktiv.find(z => z.protocol_key === p.id) ?? null
-    : null
-  const isActive = protokolle ? lauf !== null : p.id === ACTIVE_PROTOCOL.id
+  //
+  // `[cmd]` **G-598/A3: der Entwurfszweig ist raus.** Hier stand
+  // `protokolle ? … : p.id === ACTIVE_PROTOCOL.id` — unerreichbar, weil
+  // `ladeProtokolle()` immer einen Stand liefert, aber bereit, erfundene
+  // Zahlen zu zeigen, sobald jemand die Weitergabe aendert.
+  //
+  // `[cmd]` **G-598/A2: ein Ladefehler ist ein eigener Zustand** (G-553).
+  // Vorher zeigte das Modal dann `Activate`, als liefe nichts — waehrend
+  // die Tageskachel *„Nicht geladen"* sagte. **Derselbe Satz an allen
+  // drei Stellen** (Modal, Tageskachel, Reiterkachel).
+  const ladefehler = !protokolle ? 'Nicht geladen.'
+    : protokolle.fehler ? `Nicht geladen: ${protokolle.fehler}` : null
+  const lauf = protokolle?.aktiv.find(z => z.protocol_key === p.id) ?? null
+  const isActive = lauf !== null
   // `[cmd]` **A3: kein eindeutiger Schluessel auf `active`** — ein
   // zweites laufendes Protokoll ist erlaubt. Genannt, nicht verhindert.
   const anderes = protokolle?.aktiv.find(z => z.protocol_key !== p.id) ?? null
@@ -1066,7 +1075,7 @@ function ProtocolDetailModal({ p, onClose, tag, protokolle }: {
           footer={
             <>
               <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Close</button>
-              {isActive
+              {ladefehler ? null : isActive
                 ? (
                   <InEntwicklungKnopf titel="End protocol" className="v2-btn v2-btn-ghost"
                                       style={{ color: 'var(--neg)' }}>
@@ -1089,7 +1098,12 @@ function ProtocolDetailModal({ p, onClose, tag, protokolle }: {
                 )}
             </>
           }>
-      {isActive && (
+      {ladefehler && (
+        <div role="alert" data-probe="protokoll-ladefehler" style={{
+          fontSize: 12, color: 'var(--neg)', marginBottom: 14,
+        }}>{ladefehler}</div>
+      )}
+      {lauf && (
         <div style={{
           padding: 11, background: 'color-mix(in oklch, var(--acc-recov) 7%, var(--surface))',
           border: '1px solid color-mix(in oklch, var(--acc-recov) 28%, var(--border))',
@@ -1098,16 +1112,15 @@ function ProtocolDetailModal({ p, onClose, tag, protokolle }: {
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
             <Pill variant="acc">active</Pill>
             <span style={{ fontSize: 12 }}>
-              {lauf ? `${lauf.completed_days} of ${lauf.duration_days} days done`
-                : `Day ${ACTIVE_PROTOCOL.day} of ${ACTIVE_PROTOCOL.of}`}
+              {lauf.completed_days} of {lauf.duration_days} days done
             </span>
             <span className="v2-dim v2-mono" style={{ marginLeft: 'auto', fontSize: 10 }}>
-              started {lauf ? lauf.started_on : ACTIVE_PROTOCOL.started}
+              started {lauf.started_on}
             </span>
           </div>
         </div>
       )}
-      {!isActive && (
+      {!ladefehler && !isActive && (
         <div className="v2-grid v2-g-cols-2" style={{ gap: 10, marginBottom: 14 }}>
           <div>
             <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Start</div>
@@ -1121,7 +1134,7 @@ function ProtocolDetailModal({ p, onClose, tag, protokolle }: {
           </div>
         </div>
       )}
-      {!isActive && anderes && (
+      {!ladefehler && !isActive && anderes && (
         <div role="note" data-probe="protokoll-anderes-aktiv" style={{
           fontSize: 11.5, color: 'var(--warn)', marginBottom: 12, lineHeight: 1.5,
         }}>

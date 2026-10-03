@@ -620,7 +620,9 @@ test('das Recovery-Modul kennzeichnet jede Kachel', () => {
     //
     // `[read]` **Der Leseweg lag ungenutzt daneben**, wie bei
     // G-364 und der Sitzungskachel.
-    [path.join(process.cwd(), 'src/app/v2/recovery/tab-protokolle.tsx'), 13],
+    // `[cmd]` **G-598: 13 -> 11.** `Active · …` und `Protocol library`
+    // lesen `recovery.recovery_protocols` (G-593 hatte den Leseweg gebaut).
+    [path.join(process.cwd(), 'src/app/v2/recovery/tab-protokolle.tsx'), 11],
   ]
   for (const [datei, erwartet] of dateien) {
     const quelle = fs.readFileSync(datei, 'utf8')
