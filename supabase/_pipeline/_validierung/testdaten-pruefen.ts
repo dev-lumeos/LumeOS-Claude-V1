@@ -555,6 +555,43 @@ if (MODE === 'clean') {
     errors.push('G-559: test-user traegt nicht zwei offene Phasen an zwei Zielen')
   }
   if (!hasRows(`
+    WITH test_user AS (
+      SELECT id
+      FROM auth.users
+      WHERE email = 'test-user@lumeos.local'
+    ),
+    zielwerte AS (
+      SELECT z.kcal, z.zielrate_pct_kg_woche
+      FROM test_user u
+      JOIN goals.goal_phases gp
+        ON gp.user_id = u.id
+       AND gp.actual_end_date IS NULL
+      CROSS JOIN LATERAL goals.berechne_zielwerte(
+        u.id, gp.goal_id, CURRENT_DATE
+      ) z
+    )
+    SELECT 1
+    FROM zielwerte
+    GROUP BY true
+    HAVING count(*) = 2
+       AND min(zielrate_pct_kg_woche) = -0.400
+       AND max(zielrate_pct_kg_woche) = 0.400
+       AND count(kcal) = 2
+       AND round(max(kcal) - min(kcal)) = 716;`)) {
+    errors.push('A-95: test-user liefert nicht zwei zielbezogene kcal-Werte mit 716 kcal Abstand')
+  }
+  if (hasRows(`
+    SELECT 1
+    FROM pg_proc p
+    JOIN pg_namespace n ON n.oid = p.pronamespace
+    WHERE p.prokind = 'f'
+      AND n.nspname = 'goals'
+      AND p.proname = 'berechne_zielwerte'
+      AND pg_get_function_identity_arguments(p.oid) =
+        'p_user_id uuid, p_stichtag date';`)) {
+    errors.push('A-95: alte Zweiparameter-Fassung von berechne_zielwerte steht noch')
+  }
+  if (!hasRows(`
     SELECT 1
     FROM goals.adaptive_tdee('${tom}'::uuid, DATE '${relDate('2026-09-13')}', 14)
     WHERE status = 'complete'

@@ -5,7 +5,13 @@ import fs from 'node:fs'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE
-if (!DB || DB === 'postgres') throw new Error('A-88: 030_mikro-uebersicht.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
+const A95_LIVE = process.argv.includes('--a95-live')
+if (!DB || (DB === 'postgres' && !A95_LIVE)) {
+  throw new Error('A-88: 030_mikro-uebersicht.ts braucht PGDATABASE als Wegwerf-Datenbank; postgres nur mit --a95-live.')
+}
+if (A95_LIVE && DB !== 'postgres') {
+  throw new Error('--a95-live ist ausschliesslich fuer die freigegebene laufende Datenbank.')
+}
 const INPUT = 'supabase/_pipeline/daten/mikro-uebersicht.json'
 
 type OverviewEntry = {
@@ -375,6 +381,10 @@ SELECT
     FROM below
   ), '[]'::jsonb) AS items;
 $function$;
+
+-- A-95: Nach dem zielfreien Snapshot und dem zielbezogenen Trigger hat die
+-- nutzerweite Kompatibilitaetsfassung keinen Aufrufer mehr.
+DROP FUNCTION IF EXISTS goals.berechne_zielwerte(UUID, DATE);
 
 COMMENT ON FUNCTION nutrition.micronutrient_snapshot(UUID, DATE) IS
   'Acht kuratierte Naehrstoffe fuer das Micronutrient-Snapshot-Netzdiagramm. G-567: ALA folgt zielfrei dem TDEE-Bedarf mit EFSA 0,5 E%; Gesamt-Omega-3, EPA und DHA werden nicht ungestuetzt addiert.';
