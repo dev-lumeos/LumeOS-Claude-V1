@@ -13,10 +13,19 @@
 // `color-mix(in srgb, …)` -> `in oklch`, `<div onClick>` -> `<button>`.
 // Der Speichern-Knopf oeffnet `InEntwicklung` — es gibt keine Tabelle,
 // in die er schreiben koennte.
+//   `[cmd]` **G-590: ueberholt.** `recovery.checkins` traegt 370 Zeilen
+//   (gemessen 2026-10-03), der Schreibweg liegt seit G-122 in
+//   `lib/recovery/checkin-write.ts`. **Der Knopf schreibt jetzt** ueber
+//   `checkinAktion` — ein `upsert` je Tag, ein zweites Speichern
+//   aendert statt zu doppeln.
 //
 // `[cmd]` ALLES IST ATTRAPPE.
+//   `[cmd]` **G-590: gilt nicht mehr fuer `Morning check-in`** — die
+//   Kachel ist vorbelegt aus dem juengsten Check-in und schreibt.
+//   `Readiness levels` und `Why check in daily` bleiben Attrappe.
 import * as React from 'react'
-import { Card, Pill, Icon, Ring, InEntwicklungKnopf, Koerperkarte } from '@lumeos/ui'
+import { useRouter } from 'next/navigation'
+import { Card, Pill, Icon, Ring, Koerperkarte } from '@lumeos/ui'
 
 import {
   CHECKIN, MOOD_META, MOOD_MULTIPLIER, MUSCLE_LABEL, MUSCLE_STATE,
@@ -27,16 +36,69 @@ import { katerAlsMuskeln, flaechenFuer, KARTE_ZU_RECOVERY } from './muskel-zuord
 import { ATTRAPPE } from './ansicht'
 // G-82: die Vorschau rechnet mit denselben Gewichten wie alles andere.
 import { vorschauScore } from '../../../lib/recovery/score'
+import type { CheckinStand } from '../../../lib/recovery/checkin-read'
+import { checkinAktion } from './erfassen-aktionen'
 
 /** Die zehn Gesichter der Vorlage. [cmd] module-recovery-v2.jsx:254. */
 const EMOJI = ['😫', '😣', '😕', '😐', '🙂', '😌', '😊', '😃', '😁', '🤩']
 
-export function RecCheckin() {
-  const [hours, setHours] = React.useState(CHECKIN.sleep_hours)
-  const [quality, setQuality] = React.useState(CHECKIN.sleep_quality)
-  const [feeling, setFeeling] = React.useState(CHECKIN.subjective_feeling)
-  const [mood, setMood] = React.useState(CHECKIN.mood)
-  const [soreness, setSoreness] = React.useState<Record<string, number>>({ ...CHECKIN.soreness })
+/** Zahl oder leer — fuer die freien Felder unter „Add more". */
+const feld = (n: number | null | undefined) => (n == null ? '' : String(n))
+
+/**
+ * G-590: der Check-in schreibt.
+ *
+ * `[read]` **Vorbelegt aus dem juengsten Check-in bis zum Tag** — die
+ * Vorlage sagt selbst *„it remembers yesterday"*. Ist er vom Tag
+ * selbst, ist Speichern das Aendern (`upsert` auf
+ * `checkins_user_id_entry_date_key`). **Nur ohne jede Zeile faellt es
+ * auf den Entwurf zurueck** — und die Pille sagt das.
+ */
+export function RecCheckin({ stand, tag, zukunft = false }: {
+  stand?: CheckinStand
+  /** Der Tag, fuer den gespeichert wird (`stichtag` oder heute). */
+  tag: string
+  zukunft?: boolean
+}) {
+  const router = useRouter()
+  const v = stand?.neuster ?? null
+  const vomTag = v?.entry_date === tag ? v : null
+  const [hours, setHours] = React.useState(v ? v.sleep_hours ?? 0 : CHECKIN.sleep_hours)
+  const [quality, setQuality] = React.useState(v ? v.sleep_quality ?? 5 : CHECKIN.sleep_quality)
+  const [feeling, setFeeling] = React.useState(
+    v ? v.subjective_feeling ?? 5 : CHECKIN.subjective_feeling)
+  const [mood, setMood] = React.useState(v?.mood ?? CHECKIN.mood)
+  const [soreness, setSoreness] = React.useState<Record<string, number>>(
+    { ...(v ? v.soreness : CHECKIN.soreness) })
+  const [stress, setStress] = React.useState(feld(v ? v.stress_level : CHECKIN.stress_level))
+  const [alkohol, setAlkohol] = React.useState(feld(v ? v.alcohol_units : CHECKIN.alcohol_units))
+  const [koffein, setKoffein] = React.useState(feld(v ? v.caffeine_mg : CHECKIN.caffeine_mg))
+  const [schirm, setSchirm] = React.useState(
+    feld(v ? v.screen_time_before_bed : CHECKIN.screen_time_before_bed))
+  const [laeuft, starte] = React.useTransition()
+  const [meldung, setMeldung] = React.useState<{ ok: boolean; text: string } | null>(null)
+
+  const speichern = () => starte(async () => {
+    const jetzt = new Date()
+    const r = await checkinAktion({
+      entry_date: tag,
+      checkin_time: `${String(jetzt.getHours()).padStart(2, '0')}:${String(jetzt.getMinutes()).padStart(2, '0')}`,
+      sleep_hours: String(hours), sleep_quality: String(quality),
+      subjective_feeling: String(feeling), mood,
+      // `[read]` Energie, Motivation und Notiz fuehrt die Vorlage nicht
+      // im Formular — sie fehlen hier ABSICHTLICH, damit ein zweites
+      // Speichern ihren Bestandswert nicht leert (`checkin-write.ts`).
+      stress_level: stress, alcohol_units: alkohol, caffeine_mg: koffein,
+      screen_time_before_bed: schirm, soreness,
+    })
+    if (r.ok) {
+      setMeldung({ ok: true, text: `Gespeichert für ${r.zeile.entry_date}.` })
+      router.refresh()
+    } else {
+      setMeldung({ ok: false, text: r.felder.length
+        ? r.felder.map(f => f.text).join(' ') : r.text })
+    }
+  })
   const [sel, setSel] = React.useState<string | null>(null)
   // G-432/A4: welche FLAECHE geklickt wurde — nicht welche Gruppe.
   const [selFlaeche, setSelFlaeche] = React.useState<string[] | null>(null)
@@ -49,8 +111,9 @@ export function RecCheckin() {
     <div className="v2-rec-grid-13">
       <Card
         title="Morning check-in" sub="target: under 30 seconds · overwrite any time today"
-        attrappe={ATTRAPPE}
-        actions={<Pill variant="pos">logged {CHECKIN.logged_at}</Pill>}
+        actions={vomTag
+          ? <Pill variant="pos">logged {vomTag.checkin_time?.slice(0, 5) ?? vomTag.entry_date}</Pill>
+          : <Pill>{v ? `noch offen · vorbelegt vom ${v.entry_date}` : 'noch offen · Werte aus dem Entwurf'}</Pill>}
       >
         <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Sleep duration · {hours} h</div>
         <input type="range" min="0" max="12" step="0.5" value={hours}
@@ -176,14 +239,15 @@ export function RecCheckin() {
         {more && (
           <div className="v2-grid v2-g-cols-2" style={{ gap: 10, marginBottom: 12 }}>
             {([
-              ['Stress level · 1–10', CHECKIN.stress_level],
-              ['Alcohol · units', CHECKIN.alcohol_units],
-              ['Caffeine · mg', CHECKIN.caffeine_mg],
-              ['Screen time before bed · min', CHECKIN.screen_time_before_bed],
-            ] as Array<[string, number]>).map(([l, v]) => (
+              ['Stress level · 1–10', stress, setStress],
+              ['Alcohol · units', alkohol, setAlkohol],
+              ['Caffeine · mg', koffein, setKoffein],
+              ['Screen time before bed · min', schirm, setSchirm],
+            ] as Array<[string, string, (w: string) => void]>).map(([l, w, setze]) => (
               <div key={l}>
                 <div className="v2-eyebrow" style={{ marginBottom: 4 }}>{l}</div>
-                <input type="number" defaultValue={v} aria-label={l} style={{
+                <input type="number" value={w} aria-label={l}
+                       onChange={e => setze(e.target.value)} style={{
                   width: '100%', height: 30, background: 'var(--surface)',
                   border: '1px solid var(--border)', borderRadius: 6, padding: '0 10px',
                   fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--fg)',
@@ -194,14 +258,25 @@ export function RecCheckin() {
         )}
 
         <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>
-          <InEntwicklungKnopf
-            titel="Save check-in" className="v2-btn v2-btn-primary"
-            grund="`recovery.checkins` gibt es (29 Spalten, 340 Zeilen live) und der Score rechnet daraus. Was fehlt, ist der Schreibweg."
-            style={{ flex: 1, justifyContent: 'center' }}
-          >
-            <Icon name="check" className="v2-ic v2-ic-sm" />Save check-in · recalculates score
-          </InEntwicklungKnopf>
+          {/* `[cmd]` **G-590: hier stand `· recalculates score`.** Kein
+              Trigger auf `recovery.checkins` rechnet `recovery.scores`
+              nach (nur `touch_updated_at`), und kein Aufrufer in `apps/`
+              ruft `refresh_scores_for_user`. **Das Versprechen ist raus,
+              bis es jemand haelt.** */}
+          <button type="button" className="v2-btn v2-btn-primary" data-probe="checkin-speichern"
+                  onClick={speichern} disabled={laeuft || zukunft}
+                  title={zukunft ? 'Ein Tag in der Zukunft hat noch keinen Check-in.' : undefined}
+                  style={{ flex: 1, justifyContent: 'center' }}>
+            <Icon name="check" className="v2-ic v2-ic-sm" />
+            {laeuft ? 'Speichert …' : `${vomTag ? 'Update' : 'Save'} check-in · ${tag}`}
+          </button>
         </div>
+        {meldung && (
+          <div role="status" data-probe="checkin-meldung" style={{
+            marginTop: 8, fontSize: 11.5,
+            color: meldung.ok ? 'var(--pos)' : 'var(--neg)',
+          }}>{meldung.text}</div>
+        )}
       </Card>
 
       <div className="v2-col-gap" style={{ gap: 14 }}>

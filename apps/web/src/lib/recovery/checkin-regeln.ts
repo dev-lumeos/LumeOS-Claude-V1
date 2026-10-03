@@ -32,16 +32,28 @@ export type CheckinEingabe = {
   sleep_quality: string
   subjective_feeling: string
   mood: string
-  energy_level: string
-  motivation: string
+  // G-590: optional — fehlt eins, laesst der Schreibweg die Spalte
+  // unberuehrt, statt sie beim `upsert` zu leeren. Das Check-in-
+  // Formular fuehrt alle drei nicht.
+  energy_level?: string
+  motivation?: string
   stress_level: string
-  notes: string
+  // G-590: die vier Felder, die das Formular fuehrt und die bis hier
+  // nicht gespeichert wurden. `[cmd]` Die drei Zahlen tragen je einen
+  // CHECK `>= 0`; `soreness` nur `jsonb_typeof = 'object'`.
+  alcohol_units: string
+  caffeine_mg: string
+  screen_time_before_bed: string
+  /** Muskelkater je Recovery-Kuerzel, Stufen 0-3 wie im Formular. */
+  soreness: Record<string, number>
+  notes?: string
 }
 
 export const LEERER_CHECKIN: CheckinEingabe = {
   entry_date: '', checkin_time: '', sleep_hours: '', sleep_quality: '',
   subjective_feeling: '', mood: 'neutral', energy_level: '',
-  motivation: '', stress_level: '', notes: '',
+  motivation: '', stress_level: '', alcohol_units: '', caffeine_mg: '',
+  screen_time_before_bed: '', soreness: {}, notes: '',
 }
 
 export type ModalitaetEingabe = {
@@ -107,10 +119,59 @@ export function pruefeCheckin(e: CheckinEingabe): Feldfehler[] {
   }
   skala(fehler, 'sleep_quality', e.sleep_quality, 'Schlafqualität')
   skala(fehler, 'subjective_feeling', e.subjective_feeling, 'Gefühl')
-  skala(fehler, 'energy_level', e.energy_level, 'Energie')
-  skala(fehler, 'motivation', e.motivation, 'Motivation')
+  skala(fehler, 'energy_level', e.energy_level ?? '', 'Energie')
+  skala(fehler, 'motivation', e.motivation ?? '', 'Motivation')
   skala(fehler, 'stress_level', e.stress_level, 'Stress')
+  // `[cmd]` G-590: `checkins_alcohol_units_check` (numeric),
+  // `_caffeine_mg_check` und `_screen_time_before_bed_check` (integer)
+  // — alle drei `>= 0`.
+  for (const [feld, roh, ganzzahlig, text] of [
+    ['alcohol_units', e.alcohol_units, false, 'Alkohol: nicht negativ.'],
+    ['caffeine_mg', e.caffeine_mg, true, 'Koffein: ganze mg, nicht negativ.'],
+    ['screen_time_before_bed', e.screen_time_before_bed, true,
+      'Bildschirmzeit: ganze Minuten, nicht negativ.'],
+  ] as const) {
+    const n = zahl(roh)
+    if (n !== null && (Number.isNaN(n) || n < 0 || (ganzzahlig && !Number.isInteger(n)))) {
+      fehler.push({ feld, text })
+    }
+  }
+  // `[read]` Das Schema prueft nur, dass es ein Objekt ist. Die Stufen
+  // 0-3 sind die des Formulars und des Lesewegs (`checkin-read.ts`).
+  if (Object.values(e.soreness ?? {}).some(v => !Number.isInteger(v) || v < 0 || v > 3)) {
+    fehler.push({ feld: 'soreness', text: 'Muskelkater: Stufe 0 bis 3.' })
+  }
   return fehler
+}
+
+/**
+ * G-590: die Check-in-Spalten jenseits der Pflichtfelder, so wie sie
+ * der `upsert` sendet.
+ *
+ * `[read]` **Ein fehlendes Feld fehlt auch im Ergebnis** — PostgREST
+ * setzt beim `upsert` nur gesendete Spalten. Ein zweites Speichern
+ * aus dem Formular, das Energie, Motivation und Notiz nicht fuehrt,
+ * laesst deren Bestandswert deshalb stehen, statt ihn zu leeren.
+ *
+ * `[cmd]` **`soreness` im Bestand traegt nur Stufen 1-3** (gemessen
+ * 2026-10-03) — eine 0 heisst *kein Kater* und wird nicht abgelegt.
+ */
+export function checkinZusatz(e: CheckinEingabe): Record<string, unknown> {
+  const n = (roh: string) => {
+    const z = zahl(roh)
+    return z === null || Number.isNaN(z) ? null : z
+  }
+  const g = (roh: string) => { const z = n(roh); return z === null ? null : Math.round(z) }
+  return {
+    ...(e.energy_level !== undefined && { energy_level: g(e.energy_level) }),
+    ...(e.motivation !== undefined && { motivation: g(e.motivation) }),
+    ...(e.notes !== undefined && { notes: e.notes.trim() || null }),
+    alcohol_units: n(e.alcohol_units),
+    caffeine_mg: g(e.caffeine_mg),
+    screen_time_before_bed: g(e.screen_time_before_bed),
+    soreness: Object.fromEntries(
+      Object.entries(e.soreness ?? {}).filter(([, v]) => v > 0)),
+  }
 }
 
 /** Eine Modalitaet pruefen. */

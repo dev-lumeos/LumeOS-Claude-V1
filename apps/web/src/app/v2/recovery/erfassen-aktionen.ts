@@ -59,6 +59,17 @@ export async function modalitaetAnlegenAktion(
   }
 }
 
+// ══ G-590: OHNE AUFRUFER — UND DAS IST DER BEFUND ═══════════════════
+//
+// `[cmd]` **Die Vorlage fuehrt keinen Bearbeiten-Griff fuer eine
+// Anwendung** (`module-recovery-v2.jsx`, `-modals2.jsx` gelesen
+// 2026-10-03). `ModalitaetenKachel` zeigt die Zeilen ohne Griff.
+// `[read]` **Der einzige vorgesehene Aenderungsweg ist `Rate now`** im
+// `Effectiveness log` (`tab-protokolle.tsx`, `InEntwicklungKnopf`) —
+// und der setzt `next_day_effect`, das diese Aktion NICHT schreibt
+// (`ModalitaetEingabe` fuehrt es nicht). Ausserdem liest
+// `ladeModalitaeten` keine `id` (`MOD_SPALTEN`), ohne die sich keine
+// Zeile adressieren laesst. **Nicht gebaut — gemeldet.**
 export async function modalitaetAendernAktion(
   id: string, e: ModalitaetEingabe,
 ): Promise<ModalitaetErgebnis> {

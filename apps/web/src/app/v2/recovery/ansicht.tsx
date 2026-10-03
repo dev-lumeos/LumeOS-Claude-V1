@@ -69,6 +69,8 @@ import { ScoreKachel, ScoreVerlauf } from './score-kachel'
 import { ModalitaetenKachel } from './modalitaeten-kachel'
 import { CheckinStreifen } from './checkin-streifen'
 import { RecCheckin } from './tab-checkin'
+// G-590: der Tag, fuer den Check-in und Anwendung gespeichert werden.
+import { heute } from '../../../lib/datum'
 import { RecMuscleMap, RecHRV, RecSleep } from './tab-messwerte'
 import { RecModalities, RecOvertraining, RecProtocols, RecStress } from './tab-protokolle'
 // C-418: die elf Kacheln, die es im Code nicht gibt.
@@ -171,6 +173,7 @@ export function RecoveryAnsicht({
   // C-181: der ACWR-Term ist seither per Evidenzregister entfernt;
   // ob die DB-Formel nachzieht, entscheidet Codex (`scores.acwr_used`).
   const echterScore = scores?.neuster ?? null
+  const tag = stichtag ?? heute()
 
   const kontext = React.useMemo(() => ({
     open: (m: ModalZustand) => setModal(m),
@@ -265,7 +268,8 @@ export function RecoveryAnsicht({
       )}
       {tab === 'checkin' && (
         <>
-          <RecCheckin />
+          {/* G-590: `key` = Tag — ein Tageswechsel belegt das Formular neu. */}
+          <RecCheckin key={tag} stand={checkins} tag={tag} zukunft={zukunft} />
           <RecCheckinReferenz />
         </>
       )}
@@ -335,7 +339,7 @@ export function RecoveryAnsicht({
         </>
       )}
 
-      <RecoveryModale modal={modal} onClose={kontext.close}
+      <RecoveryModale modal={modal} onClose={kontext.close} tag={tag}
                       hierarchie={hierarchie}
                       muskelbaum={muskelbaum} />
     </RecoveryKontext.Provider>

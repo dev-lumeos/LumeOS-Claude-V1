@@ -50,7 +50,7 @@
 import { createSessionClient } from '@lumeos/shared/session'
 
 import {
-  pruefeCheckin, pruefeModalitaet, zahl,
+  pruefeCheckin, pruefeModalitaet, zahl, checkinZusatz,
   type CheckinEingabe, type ModalitaetEingabe, type Feldfehler,
 } from './checkin-regeln'
 
@@ -157,10 +157,10 @@ export async function checkinSchreiben(
       sleep_quality: ganz(e.sleep_quality),
       subjective_feeling: ganz(e.subjective_feeling),
       mood: e.mood.trim(),
-      energy_level: ganz(e.energy_level),
-      motivation: ganz(e.motivation),
       stress_level: ganz(e.stress_level),
-      notes: e.notes.trim() || null,
+      // G-590: die Spalten, die optional sind oder neu dazukamen —
+      // reine Rechnung in `checkin-regeln.ts`, damit sie pruefbar ist.
+      ...checkinZusatz(e),
       measurement_source: 'manual',
       updated_at: new Date().toISOString(),
     }, { onConflict: 'user_id,entry_date' })

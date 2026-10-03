@@ -610,7 +610,9 @@ test('das Recovery-Modul kennzeichnet jede Kachel', () => {
     // gab** — der Leseweg lag daneben, die Kachel nahm ihn nur nicht.
     // **Tom, 2026-09-07:** *„DIE WAREN ANGEBUNDEN."*
     [RECOVERY, 2],
-    [path.join(process.cwd(), 'src/app/v2/recovery/tab-checkin.tsx'), 3],
+    // `[cmd]` **G-590: 3 -> 2.** `Morning check-in` schreibt ueber
+    // `checkinAktion` und ist aus dem juengsten Check-in vorbelegt.
+    [path.join(process.cwd(), 'src/app/v2/recovery/tab-checkin.tsx'), 2],
     [path.join(process.cwd(), 'src/app/v2/recovery/tab-messwerte.tsx'), 2],
     // `[cmd]` **G-365: 17 -> 13.** `RecModalities` liest jetzt
     // `recovery.modality_log` (178 Zeilen) — vier Kacheln sind

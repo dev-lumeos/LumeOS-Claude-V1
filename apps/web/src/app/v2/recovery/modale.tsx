@@ -58,6 +58,9 @@ import {
   baueBaum, mitWerten, type AstMitWert,
 } from '../../../lib/koerper/muskelbaum'
 import type { ModalZustand } from './kontext'
+// G-590: der Log-Knopf schreibt.
+import { useRouter } from 'next/navigation'
+import { modalitaetAnlegenAktion } from './erfassen-aktionen'
 
 // ── Der Rahmen ──────────────────────────────────────────────────
 // [cmd] module-recovery-modals2.jsx:3-18.
@@ -117,9 +120,11 @@ const FELD: React.CSSProperties = {
 }
 
 // ── Die Verteilung ──────────────────────────────────────────────
-export function RecoveryModale({ modal, onClose, hierarchie, muskelbaum }: {
+export function RecoveryModale({ modal, onClose, hierarchie, muskelbaum, tag }: {
   modal: ModalZustand | null
   onClose: () => void
+  /** G-590: der angesehene Tag — Vorgabe fuer das Datum einer Anwendung. */
+  tag: string
   /** G-430: der Flaechenbaum — fuer „Per-muscle detail zeigt den Elternteil". */
   hierarchie?: HierarchieStand
   /** G-432/A6: alle 95 Muskelgruppen, fuer die vollstaendige Hierarchie. */
@@ -128,7 +133,7 @@ export function RecoveryModale({ modal, onClose, hierarchie, muskelbaum }: {
   if (!modal) return null
   switch (modal.typ) {
     case 'hrvMeasure': return <HRVMeasureModal onClose={onClose} />
-    case 'logModality': return <LogModalityModal onClose={onClose} />
+    case 'logModality': return <LogModalityModal onClose={onClose} tag={tag} />
     case 'muscle': return <MuscleDetailModal slug={modal.slug} onClose={onClose}
                                              hierarchie={hierarchie}
                                              muskelbaum={muskelbaum} />
@@ -437,9 +442,30 @@ function HRVMeasureModal({ onClose }: { onClose: () => void }) {
 
 // ── Modalitaet erfassen ─────────────────────────────────────────
 // [cmd] module-recovery-modals2.jsx:114-160.
-function LogModalityModal({ onClose }: { onClose: () => void }) {
+function LogModalityModal({ onClose, tag }: { onClose: () => void; tag: string }) {
+  const router = useRouter()
   const [type, setType] = React.useState('sauna')
   const [rating, setRating] = React.useState(7)
+  // G-590: hier standen `defaultValue="2026-08-15"`, `"19:30"`, `"20"` —
+  // ungesteuert, also nie gelesen. Jetzt Zustand, Datum = angesehener Tag.
+  const [datum, setDatum] = React.useState(tag)
+  const [zeit, setZeit] = React.useState(() => {
+    const d = new Date()
+    return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+  })
+  const [dauer, setDauer] = React.useState('20')
+  const [detail, setDetail] = React.useState('')
+  const [laeuft, starte] = React.useTransition()
+  const [fehler, setFehler] = React.useState<string | null>(null)
+
+  const loggen = () => starte(async () => {
+    const r = await modalitaetAnlegenAktion({
+      entry_date: datum, logged_time: zeit, modality_type: type,
+      duration_min: dauer, detail, immediate_effect: String(rating), notes: '',
+    })
+    if (r.ok) { router.refresh(); onClose() }
+    else setFehler(r.felder.length ? r.felder.map(f => f.text).join(' ') : r.text)
+  })
   // C-124: kein „bonus after logging" mehr — es gibt keinen Bonus.
   const evidenz = MODALITY_EVIDENZ[type]
 
@@ -449,11 +475,19 @@ function LogModalityModal({ onClose }: { onClose: () => void }) {
           eyebrow="plus" onClose={onClose} width={640}
           footer={
             <>
+              {fehler && (
+                <span role="alert" data-probe="modalitaet-fehler"
+                      style={{ fontSize: 11.5, color: 'var(--neg)', marginRight: 'auto' }}>{fehler}</span>
+              )}
               <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
-              <InEntwicklungKnopf titel="Log" className="v2-btn v2-btn-primary"
-                                  grund="`recovery.modality_log` gibt es (17 Spalten, 178 Zeilen live) und die Kachel liest sie. Was fehlt, ist der Schreibweg.">
-                <Icon name="check" className="v2-ic v2-ic-sm" />Log
-              </InEntwicklungKnopf>
+              {/* `[cmd]` Hier stand ein `InEntwicklungKnopf` mit dem Grund
+                  *„Was fehlt, ist der Schreibweg."* **G-590: falsch seit
+                  G-122** — `modalitaetAnlegen` in `checkin-write.ts`.
+                  Jetzt schreibt der Knopf (`insert`, mehrere je Tag). */}
+              <button type="button" className="v2-btn v2-btn-primary" data-probe="modalitaet-loggen"
+                      onClick={loggen} disabled={laeuft}>
+                <Icon name="check" className="v2-ic v2-ic-sm" />{laeuft ? 'Speichert …' : 'Log'}
+              </button>
             </>
           }>
       <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Modality</div>
@@ -479,17 +513,18 @@ function LogModalityModal({ onClose }: { onClose: () => void }) {
       <div className="v2-grid v2-g-cols-3" style={{ gap: 10, marginBottom: 14 }}>
         <div>
           <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Date</div>
-          <input type="date" defaultValue="2026-08-15" aria-label="Date"
+          <input type="date" value={datum} onChange={e => setDatum(e.target.value)} aria-label="Date"
                  style={{ ...FELD, fontFamily: 'var(--font-mono)' }} />
         </div>
         <div>
           <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Time</div>
-          <input type="time" defaultValue="19:30" aria-label="Time"
+          <input type="time" value={zeit} onChange={e => setZeit(e.target.value)} aria-label="Time"
                  style={{ ...FELD, fontFamily: 'var(--font-mono)' }} />
         </div>
         <div>
           <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Duration · min</div>
-          <input type="number" defaultValue="20" aria-label="Duration in minutes"
+          <input type="number" value={dauer} onChange={e => setDauer(e.target.value)}
+                 aria-label="Duration in minutes"
                  style={{ ...FELD, fontFamily: 'var(--font-mono)' }} />
         </div>
       </div>
@@ -509,6 +544,7 @@ function LogModalityModal({ onClose }: { onClose: () => void }) {
       </div>
       <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Detail</div>
       <input placeholder="Temperature, routine, location…" aria-label="Detail"
+             value={detail} onChange={e => setDetail(e.target.value)}
              style={{ ...FELD, marginBottom: 12 }} />
       {/* C-124: statt „Bonus after logging: +2.0" steht hier, was das
           Register ueber die gewaehlte Modalitaet sagt — Richtung,
