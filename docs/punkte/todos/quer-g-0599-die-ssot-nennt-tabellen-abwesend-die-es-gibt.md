@@ -99,3 +99,65 @@ haelt jeden Commit an.
 **Nicht Teil:** G-596 (Bibliothek gegen Verlauf) · G-597 · G-598 · der
 Abwesenheitswaechter fuer den CODE (`tools/abwesenheit-pruefen.mjs`), der
 ist gruen: 18 markierte Aussagen, alle gelten noch.
+
+## Toms Antwort, 2026-10-03 — A3 ist entschieden
+
+**Tom:** *„ja das ist dein orchestrator job die immer nachzuziehen"*
+
+`[read]` **Damit ist A3 keine Frage mehr, sondern eine Daueraufgabe.** Die
+73 Zeilen werden nachgezogen, nicht als historischer Stand gelassen, und
+die SSOT wird laufend nachgezogen statt einmalig.
+
+## Erster Durchgang — und er hat den Waechter verschlechtert
+
+`[cmd]` **Nachgezogen am 03.10. (Recovery, der gemessene Stand):**
+
+    recovery hat NEUN Tabellen, nicht eine und nicht drei:
+      checkins 29 · scores 34 · modality_log 17 ·
+      overtraining_alerts 11 · score_contributions 11 ·
+      stress_logs 12 · recovery_protocols 12 ·
+      muscle_recovery_profiles 6 · recovery_effort_factors 6
+    alle mit RLS, gemessen gegen pg_class
+
+**Geaendert:** `127-recovery-checkins.md` — die Protocols-Zeile, der Satz
+*„genau eine Tabelle"*, und die `Fehlt`-Tabelle nennt jetzt nur noch
+Fehlendes (`hrv_readings`, `protocol_assignments`, Abhak-Zustand).
+`162-recovery-rest.md` — zwei Nachtraege mit dem heutigen Stand.
+
+`[cmd]` **Und der Waechter ist dadurch von 73 auf 76 gestiegen:**
+
+    vorher                 73 Zeilen
+    nach dem Nachziehen    76 Zeilen
+    neu rot: 162-recovery-rest.md:168, :176, :177
+
+`[cmd]` **Der Grund ist der Nachzug selbst.** Die drei neuen Zeilen nennen
+Tabellen, **die es gibt** — das ist der Inhalt einer Berichtigung —, und
+sie stehen in einem Absatz, den der Waechter als Verneinung liest.
+**Die Rows aus der `Fehlt`-Tabelle zu entfernen hat nichts geaendert;**
+es sind die Berichtigungssaetze.
+
+`[read]` **Damit ist A2 keine Kuer mehr.** Solange der Waechter eine
+Berichtigung nicht von der Behauptung unterscheiden kann, die sie
+berichtigt, **treibt jede Erfuellung der Daueraufgabe seine Zahl nach
+oben** — und die Daueraufgabe ist mit ihm nicht durchfuehrbar.
+
+### A2 neu — der Waechter lernt die Berichtigung, dann den Fast-Treffer
+
+**Zuerst:** eine Zeile, die eine Berichtigung traegt, zaehlt nicht als
+Verneinung. Form zu entscheiden — eine Marke am Zeilenanfang ist das
+einfachste, etwa `[berichtigt]`. **Soll-Zahl setzen und in beide
+Richtungen belegen:** mit der Marke gruen, ohne sie rot.
+
+**Danach** der Fast-Treffer aus A2 alt: `recovery.protocols` gegen
+`recovery.recovery_protocols`.
+
+`[read]` **Ich habe die Saetze NICHT umgeschrieben, um den Waechter
+gruen zu bekommen.** Der Text ist richtig; der Waechter ist zu eng.
+**Einen Waechter mit Prosa zu bedienen ist die Umkehrung von A-98.**
+
+## Rest der Daueraufgabe
+
+`[read]` **70 Zeilen bleiben**, nach Modul zu teilen. **Reihenfolge nach
+Schaden:** zuerst die Zeilen mit `[cmd]`-Marker und einer Zahl — die
+liest niemand nach —, dann der Rest. **Nicht in einem Zug**, und jede
+Stelle mit gemessenem Stand und Datum.

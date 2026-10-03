@@ -170,7 +170,7 @@ und das Gegenteil zu behaupten.
 | **Overtraining** | `[read]` Braucht Wochen Verlauf und ist Stufe 6 im Entwurf. Der Auftrag schliesst es aus. |
 | **HRV-Tab** | `[cmd]` 43 von 170 Zeilen tragen HRV, `resting_hr` ist **0-mal** belegt. Eine Baseline über 30 Tage ist damit nicht rechenbar. |
 | **Sleep-Tab** | `[cmd]` `sleep_start_time`/`sleep_end_time` existieren, aber der Schlaf-Score der Wearable-Quelle ist Entwurf 3.9 und offen. |
-| **Protocols** | `[cmd]` Braucht `recovery.protocols` + `protocol_assignments` (Entwurf 2.6) — beide gibt es nicht. |
+| **Protocols** | `[cmd]` **Nicht mehr Attrappe (G-593, Commit `c3e2c7fd`).** Die Tabelle heisst `recovery.recovery_protocols` — 12 Spalten, RLS, gemessen 2026-10-03 — und der Knopf schreibt hinein. `protocol_assignments` fehlt weiter; den Abhak-Zustand je Aufgabe gibt es nicht. |
 | **Pending actions** | `[cmd]` Der Abhak-Zustand der Tagesaufgaben ist laut Entwurf 2.7 **in allen drei Quellen eine Lücke**. |
 | **Stress-Tab** | `[cmd]` `stress_level`, `work_stress`, `life_stress` sind da — aber der Tab-Zuschnitt ist Entwurf 3.10 und offen. |
 
@@ -201,16 +201,22 @@ Abhak-Zustand.**
 `[read]` **Diese Zeile war die schlimmste der fuenf** ? **sie
 traegt einen `[cmd]`-Marker und nennt eine Zahl.** `[read]` **Wer
 sie liest, hat keinen Anlass nachzusehen.**
-`[cmd]` **`recovery` hat genau eine Tabelle:** `checkins`. Der
-Schemaentwurf nennt sechs weitere als nötig — keine davon existiert.
+`[cmd]` **`recovery` hat neun Tabellen**, gemessen 2026-10-03 gegen
+`pg_class`: `checkins` 29 · `scores` 34 · `modality_log` 17 ·
+`overtraining_alerts` 11 · `score_contributions` 11 · `stress_logs` 12 ·
+`recovery_protocols` 12 · `muscle_recovery_profiles` 6 ·
+`recovery_effort_factors` 6 — alle mit RLS. **Der Satz davor sagte
+„genau eine Tabelle, keine der sechs weiteren existiert"; das war der
+Stand vor C-421 und ist seit G-599 nachgezogen.**
+
+**Was heute noch fehlt** — die vier gestrichenen Zeilen (`modality_log`,
+`scores`, `overtraining_alerts`, die Protokolltabelle) stehen im Absatz
+darueber als gemessener Bestand.
 
 | Fehlt | Wofür | Entwurf |
 |---|---|---|
-| `recovery.modality_log` | Modalitäten, Bonus | 2.4 |
-| `recovery.scores` | Verlauf, Wochenbericht | 2.2 |
 | `recovery.hrv_readings` | HRV-Baseline über 30 Tage | 2.3 |
-| `recovery.overtraining_alerts` | Übertrainings-Signale | 2.5 |
-| `recovery.protocols` + `_assignments` | Protokolle | 2.6 |
+| `protocol_assignments` | Zuordnung von Protokollen | 2.6 |
 | Abhak-Zustand | Tagesaufgaben | 2.7 |
 
 `[read]` **Die Modalitäten sind der grösste Einzelposten** — der Tab

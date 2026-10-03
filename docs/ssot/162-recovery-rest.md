@@ -163,9 +163,21 @@ tatsächlich nicht gibt** — `medical.symptoms`,
 `recovery.protocols`, `training.routines`, `training.blocks`.
 **Insoweit stimmen sie.**
 
+`[cmd]` **G-599, 2026-10-03: `recovery.protocols` gehoert nicht mehr in
+diese Reihe.** Den Namen gibt es nicht, die Sache gibt es — als
+`recovery.recovery_protocols`, und seit G-593 schreibt der Knopf hinein.
+**Woertlich wahr, sachlich falsch** — genau die Falle, die der
+Abwesenheitswaechter nicht sieht.
+
 `[cmd]` **Falsch ist der Halbsatz dahinter:** *„das Schema gibt es noch
 nicht."* Gemessen: **`medical` 11 Tabellen, `training` 8, `recovery`
 3.** Alle drei Schemata stehen.
+`[cmd]` **G-599, 2026-10-03: `recovery` traegt inzwischen NEUN Tabellen** —
+`checkins`, `scores`, `modality_log`, `overtraining_alerts`,
+`score_contributions`, `stress_logs`, `recovery_protocols`,
+`muscle_recovery_profiles`, `recovery_effort_factors`, alle mit RLS.
+**Die 3 war der Stand des damaligen Berichts und bleibt als solcher
+stehen; die Zahl von heute steht hier.**
 
 `[cmd]` **Und zweimal in `supplements/tab-extended.tsx`:** *„Das Modul
 `/v2/medical` gibt es noch nicht."* **Es gibt es** — mit 140 Werten und
