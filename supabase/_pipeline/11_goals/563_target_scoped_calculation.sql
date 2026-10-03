@@ -312,27 +312,35 @@ DECLARE
   v_phase_count integer;
   v_target record;
 BEGIN
-  SELECT
-    max(p.phase_id::text)::uuid,
-    max(p.goal_id::text)::uuid,
-    count(*)::integer
-  INTO v_phase_id, v_goal_id, v_phase_count
-  FROM goals.phase_am(NEW.user_id, NEW.gueltig_ab) p;
+  IF NEW.phase_id IS NOT NULL THEN
+    SELECT p.phase_id, p.goal_id
+    INTO v_phase_id, v_goal_id
+    FROM goals.phase_am(NEW.user_id, NEW.gueltig_ab) p
+    WHERE p.phase_id = NEW.phase_id;
 
-  IF v_phase_count = 0 THEN
-    RAISE EXCEPTION 'nutrition_targets: keine aktive Phase am Gueltigkeitstag'
-      USING ERRCODE = '23514';
-  END IF;
+    IF NOT FOUND THEN
+      RAISE EXCEPTION
+        'nutrition_targets: genannte phase_id ist am Gueltigkeitstag keine aktive Phase dieses Nutzers'
+        USING ERRCODE = '23514';
+    END IF;
+  ELSE
+    SELECT
+      max(p.phase_id::text)::uuid,
+      max(p.goal_id::text)::uuid,
+      count(*)::integer
+    INTO v_phase_id, v_goal_id, v_phase_count
+    FROM goals.phase_am(NEW.user_id, NEW.gueltig_ab) p;
 
-  IF v_phase_count > 1 THEN
-    RAISE EXCEPTION
-      'nutrition_targets: mehrere aktive Phasen am Gueltigkeitstag; Zielbezug fehlt'
-      USING ERRCODE = '23514';
-  END IF;
+    IF v_phase_count = 0 THEN
+      RAISE EXCEPTION 'nutrition_targets: keine aktive Phase am Gueltigkeitstag'
+        USING ERRCODE = '23514';
+    END IF;
 
-  IF NEW.phase_id IS NOT NULL AND NEW.phase_id <> v_phase_id THEN
-    RAISE EXCEPTION 'nutrition_targets: phase_id ist am Gueltigkeitstag nicht die aktive Phase'
-      USING ERRCODE = '23514';
+    IF v_phase_count > 1 THEN
+      RAISE EXCEPTION
+        'nutrition_targets: mehrere aktive Phasen am Gueltigkeitstag; Zielbezug fehlt'
+        USING ERRCODE = '23514';
+    END IF;
   END IF;
   NEW.phase_id := v_phase_id;
 
@@ -375,6 +383,6 @@ GRANT EXECUTE ON FUNCTION goals.nutrition_target_assign_phase()
   TO authenticated, service_role;
 
 COMMENT ON FUNCTION goals.nutrition_target_assign_phase() IS
-  'G-563: der eindeutige Zielbezug der Phase wird an die Zielwertrechnung durchgereicht; mehrere Nutzerphasen bleiben ein ausdrueckliches Hindernis.';
+  'G-594/G-563: eine genannte aktive Nutzerphase bestimmt ihr Ziel; ohne phase_id bleiben mehrere Nutzerphasen ein ausdrueckliches Hindernis.';
 
 COMMIT;

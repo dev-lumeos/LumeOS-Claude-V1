@@ -572,7 +572,6 @@ if (MODE === 'clean') {
     )
     SELECT 1
     FROM zielwerte
-    GROUP BY true
     HAVING count(*) = 2
        AND min(zielrate_pct_kg_woche) = -0.400
        AND max(zielrate_pct_kg_woche) = 0.400

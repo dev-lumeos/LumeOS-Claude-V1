@@ -11,6 +11,7 @@ if (!db || db === 'postgres') throw new Error('G-511 braucht eine Wegwerf-Datenb
 const NO_PHASE_USER = '51100000-0000-0000-0000-000000000001'
 const BULK_USER = '51100000-0000-0000-0000-000000000002'
 const ENDED_USER = '51100000-0000-0000-0000-000000000003'
+const FORMULA_USER = '51100000-0000-0000-0000-000000000004'
 
 function one<T>(sql: string): T {
   const output = execFileSync('docker', [
@@ -41,6 +42,22 @@ function profile(userId: string, email: string, nutritionGoal: string): string {
     SET birth_date = DATE '1990-01-01', biological_sex = 'male', height_cm = 180,
         body_weight_kg = 80, activity_level = 'moderate', nutrition_goal = '${nutritionGoal}'
     WHERE id = '${userId}'::uuid;
+  `
+}
+
+function goal(userId: string, goalId: string, date: string): string {
+  return `
+    INSERT INTO goals.user_goals (
+      id, user_id, goal_type, title, gueltig_ab, priority
+    ) VALUES (
+      '${goalId}'::uuid, '${userId}'::uuid, 'body_composition',
+      'G-511 Testziel', DATE '${date}', 1
+    );
+    INSERT INTO goals.body_measurements (
+      user_id, measurement_date, measurement_time, weight_kg
+    ) VALUES (
+      '${userId}'::uuid, DATE '${date}', TIME '08:00', 80
+    );
   `
 }
 
@@ -96,11 +113,14 @@ test('G-511 A1/A4: lean_bulk rechnet die Rate statt eines gespeicherten Kalorien
   }>(`
     BEGIN;
     ${profile(BULK_USER, 'g511-bulk@example.test', 'lose_weight')}
+    ${goal(BULK_USER, '51120000-0000-0000-0000-000000000002', '2030-01-01')}
     INSERT INTO goals.goal_phases (
-      id, user_id, phase_type, zielrate_pct_kg_woche, parameters, gueltig_ab
+      id, user_id, goal_id, phase_type, zielrate_pct_kg_woche,
+      parameters, gueltig_ab, strategie_code
     ) VALUES (
-      '51110000-0000-0000-0000-000000000002', '${BULK_USER}', 'lean_bulk',
-      0.5, '{"source":"G-511 test"}'::jsonb, DATE '2030-01-01'
+      '51110000-0000-0000-0000-000000000002', '${BULK_USER}',
+      '51120000-0000-0000-0000-000000000002', 'lean_bulk',
+      0.5, '{"source":"G-511 test"}'::jsonb, DATE '2030-01-01', 'lean_bulk'
     );
     SELECT json_build_object(
       'tdee', tdee,
@@ -121,7 +141,7 @@ test('G-511 A1/A4: lean_bulk rechnet die Rate statt eines gespeicherten Kalorien
   assert.equal(result.hindernis, null)
 })
 
-test('G-511 A2: verlaessliche Reihe gewinnt, test-user faellt auf Formel-TDEE zurueck', () => {
+test('G-511 A2: verlaessliche Reihe gewinnt, ohne Reihe gilt Formel-TDEE', () => {
   const result = one<{
     devSource: string
     devHistoryId: string
@@ -131,30 +151,54 @@ test('G-511 A2: verlaessliche Reihe gewinnt, test-user faellt auf Formel-TDEE zu
     testHistoryId: string | null
   }>(`
     BEGIN;
-    UPDATE goals.goal_phases
-    SET zielrate_pct_kg_woche = 0.267
-    WHERE user_id = (SELECT id FROM auth.users WHERE email = 'dev@lumeos.app')
-      AND phase_type = 'lean_bulk'
-      AND actual_end_date IS NULL;
-
+    ${profile(BULK_USER, 'g511-adaptive@example.test', 'gain_muscle')}
+    ${goal(BULK_USER, '51120000-0000-0000-0000-000000000102', '2030-01-01')}
     INSERT INTO goals.goal_phases (
-      user_id, phase_type, zielrate_pct_kg_woche, parameters, gueltig_ab
+      id, user_id, goal_id, phase_type, zielrate_pct_kg_woche,
+      parameters, gueltig_ab, strategie_code
     ) VALUES (
-      (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'),
-      'lean_bulk', 0.267, '{"source":"G-511 test"}'::jsonb, CURRENT_DATE
+      '51110000-0000-0000-0000-000000000102', '${BULK_USER}',
+      '51120000-0000-0000-0000-000000000102', 'lean_bulk',
+      0.267, '{}'::jsonb, DATE '2030-01-01', 'lean_bulk'
+    );
+    INSERT INTO goals.tdee_history (
+      id, user_id, stichtag, window_days, complete_intake_days,
+      weight_measurement_count, weight_start_kg, weight_end_kg,
+      weight_delta_kg, measurement_span_days, avg_intake_kcal,
+      formula_tdee_kcal, raw_tdee_kcal, previous_tdee_kcal,
+      previous_source, adaptive_tdee_kcal, delta_to_formula_kcal,
+      alpha, confidence, reliable, status, method
+    ) VALUES (
+      '51130000-0000-0000-0000-000000000102', '${BULK_USER}',
+      DATE '2030-01-04', 14, 14, 2, 80, 80.2, 0.2, 13, 2500,
+      2400, 2500, 2400, 'formula_seed', 2430, 30,
+      0.3, 'high', true, 'complete', 'G-511 Testreihe'
+    );
+
+    ${profile(FORMULA_USER, 'g511-formula@example.test', 'gain_muscle')}
+    ${goal(FORMULA_USER, '51120000-0000-0000-0000-000000000104', '2030-01-01')}
+    INSERT INTO goals.goal_phases (
+      id, user_id, goal_id, phase_type, zielrate_pct_kg_woche,
+      parameters, gueltig_ab, strategie_code
+    ) VALUES (
+      '51110000-0000-0000-0000-000000000104', '${FORMULA_USER}',
+      '51120000-0000-0000-0000-000000000104', 'lean_bulk',
+      0.267, '{}'::jsonb, DATE '2030-01-01', 'lean_bulk'
     );
 
     WITH dev AS (
       SELECT *
       FROM goals.berechne_zielwerte(
-        (SELECT id FROM auth.users WHERE email = 'dev@lumeos.app'),
-        CURRENT_DATE
+        '${BULK_USER}'::uuid,
+        '51120000-0000-0000-0000-000000000102'::uuid,
+        DATE '2030-01-05'
       )
     ), test_user AS (
       SELECT *
       FROM goals.berechne_zielwerte(
-        (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'),
-        CURRENT_DATE
+        '${FORMULA_USER}'::uuid,
+        '51120000-0000-0000-0000-000000000104'::uuid,
+        DATE '2030-01-05'
       )
     )
     SELECT json_build_object(
@@ -188,11 +232,14 @@ test('G-511 A3: eine Formel-Zielzeile friert Rate, Gewicht und TDEE-Herkunft ein
   }>(`
     BEGIN;
     ${profile(BULK_USER, 'g511-snapshot@example.test', 'lose_weight')}
+    ${goal(BULK_USER, '51120000-0000-0000-0000-000000000012', '2031-01-01')}
     INSERT INTO goals.goal_phases (
-      id, user_id, phase_type, zielrate_pct_kg_woche, parameters, gueltig_ab
+      id, user_id, goal_id, phase_type, zielrate_pct_kg_woche,
+      parameters, gueltig_ab, strategie_code
     ) VALUES (
-      '51110000-0000-0000-0000-000000000012', '${BULK_USER}', 'lean_bulk',
-      0.5, '{"source":"G-511 test"}'::jsonb, DATE '2031-01-01'
+      '51110000-0000-0000-0000-000000000012', '${BULK_USER}',
+      '51120000-0000-0000-0000-000000000012', 'lean_bulk',
+      0.5, '{"source":"G-511 test"}'::jsonb, DATE '2031-01-01', 'lean_bulk'
     );
 
     INSERT INTO goals.nutrition_targets (
@@ -235,10 +282,12 @@ test('G-511 A4: fehlende Rate behaelt den Hindernisnamen phasenparameter_fehlt',
   const result = one<{ kcal: number | null; hindernis: string }>(`
     BEGIN;
     ${profile(BULK_USER, 'g511-no-rate@example.test', 'gain_muscle')}
+    ${goal(BULK_USER, '51120000-0000-0000-0000-000000000022', '2032-01-01')}
     INSERT INTO goals.goal_phases (
-      id, user_id, phase_type, zielrate_pct_kg_woche, parameters, gueltig_ab
+      id, user_id, goal_id, phase_type, zielrate_pct_kg_woche, parameters, gueltig_ab
     ) VALUES (
-      '51110000-0000-0000-0000-000000000022', '${BULK_USER}', 'maintenance',
+      '51110000-0000-0000-0000-000000000022', '${BULK_USER}',
+      '51120000-0000-0000-0000-000000000022', 'maintenance',
       NULL, '{}'::jsonb, DATE '2032-01-01'
     );
     SELECT json_build_object('kcal', kcal, 'hindernis', hindernis)
@@ -253,16 +302,19 @@ test('G-511: eine Zielzeile gilt nur waehrend ihrer zugeordneten Phase', () => {
   const result = one<{ waehrend: number; danach: number }>(`
     BEGIN;
     ${profile(ENDED_USER, 'g511-ended@example.test', 'gain_muscle')}
+    ${goal(ENDED_USER, '51120000-0000-0000-0000-000000000003', '2030-01-01')}
     INSERT INTO goals.goal_phases (
-      id, user_id, phase_type, zielrate_pct_kg_woche, parameters, gueltig_ab, actual_end_date
+      id, user_id, goal_id, phase_type, zielrate_pct_kg_woche,
+      parameters, gueltig_ab, actual_end_date
     ) VALUES (
-      '51110000-0000-0000-0000-000000000003', '${ENDED_USER}', 'maintenance',
+      '51110000-0000-0000-0000-000000000003', '${ENDED_USER}',
+      '51120000-0000-0000-0000-000000000003', 'maintenance',
       0, '{}'::jsonb, DATE '2030-01-01', DATE '2030-01-10'
     );
     INSERT INTO goals.nutrition_targets (
       user_id, gueltig_ab, kcal, protein_g, carbs_g, fat_g, herkunft, tdee
     ) VALUES (
-      '${ENDED_USER}', DATE '2030-01-05', 2400, 160, 280, 70, 'formel', 2400
+      '${ENDED_USER}', DATE '2030-01-05', 2400, 160, 280, 70, 'manuell', 2400
     );
     SELECT json_build_object(
       'waehrend', (SELECT count(*) FROM goals.zielwerte_am('${ENDED_USER}'::uuid, DATE '2030-01-08')),
