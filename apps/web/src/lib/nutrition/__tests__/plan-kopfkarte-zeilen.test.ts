@@ -177,7 +177,10 @@ test('G-317/Z. 371: die eine Zeile fasst Dauer, Start und Herkunft', () => {
     p: { start_date: start, plan_origin: origin } as never,
   })
   const heute = new Date()
-  const iso = (v: Date) => v.toISOString().slice(0, 10)
+  // A-100: ortsbezogen wie `heuteIso()` in plans-echt.tsx. Mit
+  // `toISOString()` (UTC) war die Probe in Bangkok von 00:00 bis 07:00 rot.
+  const iso = (v: Date) => `${v.getFullYear()}-${String(v.getMonth() + 1).padStart(2, '0')}`
+    + `-${String(v.getDate()).padStart(2, '0')}`
   const heuteIso = iso(heute)
   const morgen = new Date(heute); morgen.setDate(morgen.getDate() + 1)
 
