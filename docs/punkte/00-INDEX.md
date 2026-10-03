@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 276 |
-| `laufend_codex` | 2 |
+| `todos` | 277 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 641 |
-| **gesamt** | **920** |
+| `erledigt` | 642 |
+| **gesamt** | **923** |
 
 ## medical — 50
 
@@ -542,9 +542,9 @@
 | `G-509` | feature | hoch | [der Workoutplaner von aussen nach innen](todos/training-g-0509-workoutplaner-von-aussen-nach-innen.md) | offen | — | — |
 | `G-584` | befund | mittel | [Drei Anzeigen ohne Quelle, aus dem LiveWorkout-Entwurf gerettet](todos/training-g-0584-drei-anzeigen-ohne-quelle-aus-dem-liveworkout-entwurf.md) | offen | — | — |
 
-## recovery — 44
+## recovery — 46
 
-### beauftragbar — 42
+### beauftragbar — 45
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -589,14 +589,16 @@
 | `G-449` | befund | niedrig | [wertKommtVonGruppe hat keinen Aufrufer](todos/recovery-g-0449-wertkommtvongruppe-ohne-aufrufer.md) | offen | — | — |
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
-| `G-593` | fehler | hoch | [Die Attrappe nennt eine fehlende Tabelle — die Tabelle ist fertig und gefuellt](laufend_claudecode/recovery-g-0593-die-attrappe-nennt-eine-tabelle-die-es-unter-anderem-namen-gibt.md) | laeuft (claudecode) | — | G-596 |
+| `G-593` | fehler | hoch | [Die Attrappe nennt eine fehlende Tabelle — die Tabelle ist fertig und gefuellt](erledigt/recovery-g-0593-die-attrappe-nennt-eine-tabelle-die-es-unter-anderem-namen-gibt.md) | erledigt | — | G-596, G-597, G-598, G-599 |
+| `G-596` | befund | mittel | [Die Spec beschreibt eine Bibliothek, die Tabelle ist ein Verlauf](todos/recovery-g-0596-die-spec-beschreibt-eine-bibliothek-die-tabelle-ist-ein-verlauf.md) | offen | — | — |
+| `G-597` | fehler | mittel | [Zwei aktive Protokolle sind erlaubt — und im Nachweis sind sie entstanden](laufend_codex/recovery-g-0597-zwei-aktive-protokolle-sind-erlaubt.md) | vorbereitet (codex) | — | — |
+| `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](laufend_claudecode/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | laeuft (claudecode) | — | — |
 
-### wartet auf Blocker — 2
+### wartet auf Blocker — 1
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `G-590` | fehler | hoch | [Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht](erledigt/recovery-g-0590-der-checkin-ist-der-einzige-pflichtgriff-und-er-schreibt-nicht.md) | erledigt | G-588 | — |
-| `G-596` | befund | mittel | [Die Spec beschreibt eine Bibliothek, die Tabelle ist ein Verlauf](todos/recovery-g-0596-die-spec-beschreibt-eine-bibliothek-die-tabelle-ist-ein-verlauf.md) | offen | G-593 | — |
 
 ## goals — 75
 
@@ -748,9 +750,9 @@
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 | `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](erledigt/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | erledigt | — | — |
 
-## quer — 241
+## quer — 242
 
-### beauftragbar — 238
+### beauftragbar — 239
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -992,6 +994,7 @@
 | `G-587` | fehler | hoch | [Ein Service-Client ohne Aufrufer umgeht die Zeilensicherheit](todos/quer-g-0587-ein-service-client-ohne-aufrufer-umgeht-die-rls.md) | offen | — | — |
 | `G-588` | befund | hoch | [Sechs Serveraktionen ohne Aufrufer — dieselbe Klasse wie G-571, eine Ebene hoeher](todos/quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md) | offen | — | G-590, G-591, G-592 |
 | `G-589` | befund | niedrig | [328 Ausfuhren zu viel — und wie die Zahl 385 zu 56 wurde](todos/quer-g-0589-dreihundertachtundzwanzig-ausfuhren-zu-viel.md) | offen | — | — |
+| `G-599` | befund | mittel | [Die SSOT nennt Tabellen abwesend, die es gibt — und der Waechter sieht den Fast-Treffer nicht](todos/quer-g-0599-die-ssot-nennt-tabellen-abwesend-die-es-gibt.md) | offen | — | — |
 
 ### wartet auf Blocker — 3
 

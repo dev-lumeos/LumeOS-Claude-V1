@@ -5,11 +5,11 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-593 | Die Attrappe nennt eine fehlende Tabelle — die Tabelle ist fertig und gefuellt | **laeuft**, raus 03.10. |
+| Claude Code | G-598 | Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt | **laeuft**, raus 03.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
 | Codex | A-98 | Zwei Waechter pruefen Gestalt statt Verhalten — und beide haben heute versagt | **laeuft**, raus 03.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
-| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
+| Codex | G-597 | Zwei aktive Protokolle sind erlaubt — und im Nachweis sind sie entstanden | **bereit in `next/`** |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 ## Stromausfall in der Nacht zum 03.10. — der Wiederanlauf

@@ -9,7 +9,7 @@ braucht: [G-593]
 kind_von: G-593
 
 quellen:
-  - docs/punkte/laufend_claudecode/recovery-g-0593-die-attrappe-nennt-eine-tabelle-die-es-unter-anderem-namen-gibt.md
+  - docs/punkte/erledigt/recovery-g-0593-die-attrappe-nennt-eine-tabelle-die-es-unter-anderem-namen-gibt.md
 
 beruehrt:
   tabellen:
