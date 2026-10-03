@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 277 |
-| `laufend_codex` | 1 |
+| `todos` | 276 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 641 |
 | **gesamt** | **920** |
@@ -811,7 +811,7 @@
 | `A-93` | fehler | hoch | [Zwei Agenten in einem Arbeitsbaum, und der Commit zahlt dafuer](todos/quer-a-0093-zwei-agenten-in-einem-arbeitsbaum.md) | offen | — | — |
 | `A-95` | feature | hoch | [Zwei fehlen, eine steht doppelt, der Seed fehlt](erledigt/quer-a-0095-zwei-fehlen-eine-steht-doppelt-der-seed-fehlt.md) | erledigt | — | A-99, G-594, G-595 |
 | `A-97` | fehler | hoch | [Der A-88-Vertrag hat eine Tuer, und der Waechter sieht sie nicht](erledigt/quer-a-0097-der-a88-vertrag-hat-eine-tuer-und-der-waechter-sieht-sie-nicht.md) | erledigt | — | A-98 |
-| `A-98` | fehler | hoch | [Zwei Waechter pruefen Gestalt statt Verhalten — und beide haben heute versagt](todos/quer-a-0098-zwei-waechter-pruefen-gestalt-statt-verhalten.md) | offen | — | — |
+| `A-98` | fehler | hoch | [Zwei Waechter pruefen Gestalt statt Verhalten — und beide haben heute versagt](laufend_codex/quer-a-0098-zwei-waechter-pruefen-gestalt-statt-verhalten.md) | laeuft (codex) | — | — |
 | `A-99` | fehler | hoch | [Der Testdatenpruefer brach ab, statt rot zu werden — und niemand sah es](todos/quer-a-0099-der-testdatenpruefer-brach-ab-statt-rot-zu-werden.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |

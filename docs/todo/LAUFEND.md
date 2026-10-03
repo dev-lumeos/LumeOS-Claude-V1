@@ -7,6 +7,7 @@
 |---|---|---|---|
 | Claude Code | G-593 | Die Attrappe nennt eine fehlende Tabelle — die Tabelle ist fertig und gefuellt | **laeuft**, raus 03.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
+| Codex | A-98 | Zwei Waechter pruefen Gestalt statt Verhalten — und beide haben heute versagt | **laeuft**, raus 03.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
