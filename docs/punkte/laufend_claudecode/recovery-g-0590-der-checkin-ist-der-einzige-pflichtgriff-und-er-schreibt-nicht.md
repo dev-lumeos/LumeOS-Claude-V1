@@ -193,3 +193,89 @@ Bestand wieder 370 und 178 · nichts committen.
 **Recovery ist davon nicht betroffen** — aber wenn dir eine Abfrage
 unterwegs mit `PGRST202` oder einem fehlenden Objekt antwortet, ist das
 sein Lauf und nicht dein Fehler. **Melde es, warte es ab, rate nicht.**
+
+---
+
+## Fortsetzung — 2026-10-03, 11:05. Du faengst erneut ohne Kontext an
+
+`[read]` **Du hast diesen Auftrag heute schon zu ueber neun Zehnteln
+erledigt und beim Browsernachweis angehalten, weil der Web-Server auf
+3200 nicht lief. Der laeuft jetzt. Fang NICHT von vorn an.**
+
+### Was fertig ist und nicht wiederholt werden darf
+
+`[cmd]` **Dein Arbeitsstand liegt unverändert im Arbeitsbaum**, gemessen
+um 11:04:
+
+    M  apps/web/src/app/v2/recovery/ansicht.tsx
+    M  apps/web/src/app/v2/recovery/erfassen-aktionen.ts
+    M  apps/web/src/app/v2/recovery/modale.tsx
+    M  apps/web/src/app/v2/recovery/tab-checkin.tsx
+    M  apps/web/src/components/shell/__tests__/v2-attrappen.test.ts
+    M  apps/web/src/lib/recovery/checkin-regeln.ts
+    M  apps/web/src/lib/recovery/checkin-write.ts
+    ?? apps/web/src/app/v2/recovery/__tests__/g590-aufrufer.test.ts
+
+`[cmd]` **Nichts davon ist committet** — das macht der Orchestrator nach
+deinem Bericht. **`pnpm gate` war gruen bei 2575 Tests** (vorher 2569),
+**9 Sabotagen rot und wiederhergestellt.** A1 bis A6 sind eingelöst:
+Check-in-Knopf und Log-Knopf schreiben, die zwei falschen Begruendungen
+sind an Ort und Stelle berichtigt, `modalitaetAendernAktion` ist als
+Befund am Export vermerkt (kein Ort dafuer, nichts gebaut), und HRV plus
+die zwei Protokollknoepfe bleiben Attrappe mit einem Test darauf.
+
+### Was noch offen ist — genau das und nichts anderes
+
+`[cmd]` **Dein Skript steht bereit: `tools/_g590-schreiben.mjs`.** Offen
+sind die fuenf Nachweise, die du selbst benannt hast:
+
+    1  ein Check-in durch die Oberflaeche geschrieben und zurueckgelesen
+    2  der zweite Check-in am selben Tag: aendert, statt zu doppeln,
+       mit Zeilenzahl vorher und nachher
+    3  eine Anwendung geschrieben, Zeilenzahl vorher und nachher
+    4  Bilder vorher und nachher, Attrappen je Reiter, Konsolenfehler
+    5  die Testzeilen danach entfernen
+
+`[cmd]` **Der Bestand, auf den du aufräumst, gemessen um 11:05:**
+
+    recovery.checkins       370   davon test-user 30
+    recovery.modality_log   178
+
+`[cmd]` **Der Server laeuft: PID 46852 auf 3200, antwortet in 0,1 s.**
+Coach 3220 laeuft ebenfalls (PID 74132).
+
+### Wenn 3200 wieder stirbt — und das ist moeglich
+
+`[read]` **Er ist heute zweimal gestorben, und die Ursache ist NICHT
+geklaert.** `[cmd]` Beide Male stand `[?25h` am Ende von
+`backup/dev-server.log` — ein geordnetes Beenden, kein Absturz, kein
+OOM. `[annahme]` Die Todeszeitpunkte fallen mit Code-Commits des
+Orchestrators zusammen (die fahren `pnpm gate` mit Build); die reinen
+docs-Commits hat er ueberlebt. **Zwei Faelle sind eine Korrelation, keine
+Ursache.**
+
+`[cmd]` **Der Orchestrator macht ab jetzt keinen Code-Commit, solange du
+3200 brauchst.**
+
+`[read]` **Wenn er trotzdem stirbt: starte ihn NICHT selbst.** Ein
+`server.py start` aus deiner Sitzung stirbt mit ihr — genau das ist dir
+heute früh passiert. **Melde es, dann startet Tom oder der Orchestrator
+ihn abgekoppelt** (über den WMI-Dienst, Skript
+`.git/server-start-abgekoppelt.ps1`).
+
+### Zwei Dinge, die NICHT zu diesem Auftrag gehoeren
+
+`[cmd]` **Codex arbeitet parallel an C-557** in
+`supabase/_pipeline/13_supplements/` und `_validierung/`. **Finger weg von
+`supabase/`.** Die zwei untracked Dateien `backup/a95-*.sql` sind seine
+Nachweise aus A-95.
+
+`[read]` **Deine Frage nach dem Score ist offen und bleibt offen:** ob
+ein gespeicherter Check-in den Score neu rechnen soll, entscheidet Tom.
+`[cmd]` **Du hast richtig gehandelt** — die Aufschrift
+*„· recalculates score"* war falsch (kein Trigger, kein Aufrufer von
+`refresh_scores_for_user`), du hast sie entfernt und vermerkt. **Bau
+nichts dazu**, auch nicht vorsorglich.
+
+**Zu belegen bleibt:** die fuenf Nachweise oben · Bestand am Ende wieder
+370 und 178 · `pnpm gate` gruen mit Testzahl · nichts committen.
