@@ -6,6 +6,7 @@
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
 | Claude Code | G-593 | Die Attrappe nennt eine fehlende Tabelle — die Tabelle ist fertig und gefuellt | **laeuft**, raus 03.10. |
+| Codex | G-594 | Ein Ernaehrungsziel kennt seine Phase, aber nicht sein Ziel | **laeuft**, raus 03.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
