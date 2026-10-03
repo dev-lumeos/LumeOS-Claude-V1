@@ -4,6 +4,8 @@ typ: fehler
 modul: quer
 schwere: hoch
 angelegt: 2026-10-03
+agent: codex
+beauftragt: 2026-10-03
 
 braucht: [A-88, A-95]
 kind_von: A-88

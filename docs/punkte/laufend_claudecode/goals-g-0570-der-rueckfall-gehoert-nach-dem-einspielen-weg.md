@@ -24,11 +24,13 @@ beruehrt:
 
 ## Auftrag — Kopf
 
-    AUFTRAG FUER Claude Code - G-570: die Bruecke ist toter Code und
-                                     gehoert weg
+    AUFTRAG FUER Claude Code - G-570: der Rueckfall gehoert weg, und
+                                     PGRST202 bekommt seinen Text
     Bereich: apps/web/src/lib/profile/
-    Fremd:   supabase/ gehoert Codex - er arbeitet an C-557.
-             docs/ gehoert dem Orchestrator, auch diese Punktdatei.
+             apps/web/src/lib/fehler/ladefehler.ts  (A4)
+    Fremd:   supabase/ gehoert Codex - er arbeitet an A-97 und entfernt
+             dort zwei Schalter. docs/ gehoert dem Orchestrator, auch
+             diese Punktdatei.
     Stand:   2026-10-03
 
 ## Stand 2026-10-03 — die Voraussetzung ist da
@@ -40,11 +42,23 @@ Auftrags ist damit schon gemessen**, vom Orchestrator, live:
                              p_stichtag date)     6674 Bytes
     die Zweiparameter-Fassung ist ENTFERNT - einmal in pg_proc
 
-`[cmd]` **Und damit ist der Rueckfall nicht nur ueberfluessig, er ist
-unerreichbar:** er greift bei `PGRST202`, und die Dreiparameter-Fassung
-steht. **Faellt sie kuenftig weg, gibt es die alte Fassung nicht mehr, auf
-die er zurueckfallen koennte** — der Zweig kann nur noch verdecken, nie
-helfen.
+`[cmd]` **BERICHTIGUNG 12:10 — der Satz, der hier stand, war falsch.**
+Ich hatte geschrieben: *„faellt sie kuenftig weg, gibt es die alte Fassung
+nicht mehr, auf die er zurueckfallen koennte."* **Die alte Fassung gibt es
+wieder** — G-595 (`c73a95c1`) hat sie zurueckgespielt, weil die Anwendung
+sie braucht, wo sie kein Ziel kennt.
+
+`[cmd]` **Der LIVE-Stand, gemessen 12:05:**
+
+    goals.berechne_zielwerte(p_user_id, p_goal_id, p_stichtag)   rechnet
+    goals.berechne_zielwerte(p_user_id, p_stichtag)              Mantel
+
+`[read]` **Beide gehoeren zusammen** (`563_target_scoped_calculation.sql`),
+und `zielwerte-read.ts:267` ruft je nach Lage die eine oder die andere.
+**Der Rueckfall ist damit weiter ueberfluessig** — die Dreiparameter-Fassung
+steht, `PGRST202` entsteht nur bei veraltetem Schema-Cache — **aber er ist
+nicht harmlos:** er wechselt still von „Ziel genannt" auf „Ziel
+unbekannt", und das ist eine andere Rechnung, kein Wiederholungsversuch.
 
 `[read]` **Zaehl A1 trotzdem selbst nach, bevor du entfernst.** Eine
 Messung aus einem anderen Lauf ist eine Angabe, kein Nachweis.
