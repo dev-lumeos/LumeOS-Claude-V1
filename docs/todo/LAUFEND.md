@@ -7,9 +7,8 @@
 |---|---|---|---|
 | Claude Code | G-570 | Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg | **laeuft**, raus 03.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
-| Codex | C-557 | Vierzehn von siebzehn Naehrstoffzuordnungen finden ihre Substanz nicht | **laeuft**, raus 03.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
-| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
+| Codex | A-97 | Der A-88-Vertrag hat eine Tuer, und der Waechter sieht sie nicht | **bereit in `next/`** |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 ## Stromausfall in der Nacht zum 03.10. — der Wiederanlauf

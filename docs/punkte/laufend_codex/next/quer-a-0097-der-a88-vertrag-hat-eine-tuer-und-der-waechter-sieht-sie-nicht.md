@@ -22,6 +22,48 @@ beruehrt:
 
 # Der A-88-Vertrag hat eine Tuer, und der Waechter sieht sie nicht
 
+## Auftrag — Kopf
+
+    AUFTRAG FUER Codex - A-97/A1: die zwei a95-Schalter wieder entfernen
+    Bereich: supabase/_pipeline/_ableitung/030_mikro-uebersicht.ts
+             supabase/_pipeline/_testdaten/testdaten-einspielen.ts
+    Fremd:   tools/pipeline-database-vertrag.mjs gehoert dem
+             Orchestrator - A2 und A3 macht er, nicht du.
+             apps/ und packages/ gehoeren Claude Code (G-570).
+             docs/ gehoert dem Orchestrator, auch diese Punktdatei.
+    Stand:   2026-10-03
+
+## Stand 2026-10-03 — dein Teil ist A1, und er ist klein
+
+`[cmd]` **A-95 ist abgenommen** (`df9cd8aa`) — die Schalter haben ihren
+Grund verbraucht. **Du entfernst sie, nichts weiter.**
+
+`[cmd]` **Deine letzten drei Auftraege sind committet. Nicht wiederholen:**
+
+    C-556  16fd9c9c   148 Zeilen in die C-230-Filter
+    A-95   df9cd8aa   Live-Stand nachgezogen
+    C-557  022f6f61   die 14 veralteten substance_id
+
+`[cmd]` **Was NICHT mitgeht:** die `DROP FUNCTION`-Zeile in
+`030_mikro-uebersicht.ts`, die A-95 eingefuegt hat. **Die bleibt** — sie
+haelt die alte Zweiparameter-Fassung von `berechne_zielwerte` aus der
+Kette heraus.
+
+`[read]` **Und dein eigener Kettenbeitrag bleibt auch:** die Probe aus
+C-557 in `kette.json:776` und die Verbundprobe. **Nur die zwei
+Argument-Schalter und ihre Sonderzweige gehen raus**, sodass beide
+Dateien wieder unbedingt werfen, wenn `PGDATABASE` fehlt oder `postgres`
+ist.
+
+`[cmd]` **Zu belegen:** beide Dateien mit `PGDATABASE=postgres` gestartet
+und mit Exitcode ungleich 0 abgebrochen, je Datei einmal · dasselbe ohne
+`PGDATABASE` · ein Lauf auf einer Wegwerf-Datenbank weiter gruen · kein
+`db push` · nichts committen.
+
+`[read]` **A2 und A3 liegen beim Orchestrator** — der Waechter prueft
+heute Gestalt statt Verhalten und muss umgestellt werden. **Du wartest
+nicht darauf.**
+
 ## Der Befund
 
 `[cmd]` **A-95 hat zwei Pipelineskripte aufgebohrt**, damit der

@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-03
 agent: codex
 beauftragt: 2026-10-03
+erledigt: 2026-10-03
+commit: 022f6f61
 
 braucht: [C-295, C-556, A-91]
 kind_von: C-295
@@ -194,3 +196,75 @@ Wegwerf-Datenbank nicht.** Gemessen am 03.10. liegen
 **Gesamtzahl 156** (02.10.: 152), davon 117 mit `lumeos`-Praefix. `[read]`
 **Das ist A-80 und nicht dieser Punkt** — aber nenn es im Bericht, damit
 die Zahl nicht wieder nur im Vorbeigehen auftaucht.
+
+---
+
+## Abnahme — 2026-10-03, Commit `022f6f61`
+
+`[cmd]` **A1 beantwortet, und die Zahlen widerlegen die Vermutung des
+Auftrags nicht, sie praezisieren sie.** Die drei Verbuende, je einzeln
+gezaehlt:
+
+    supplement_catalog.slug   17
+    substance_catalog.id       3   <- der Verbund, der fallen liess
+    nutrient_defs.code        17
+
+`[cmd]` **A2 entschieden, und zwar die erste der beiden Formen:**
+**Schritt 134 erzeugt ueberhaupt keine `local_`-IDs mehr** (0 Zeilen) —
+nicht andere. Damit war nicht die Datendatei nachzuziehen, weil sich IDs
+geaendert haetten, sondern weil ihre Gegenstuecke **verschwunden** sind
+und im Kimi-Bestand liegen.
+
+### Nachgeprueft wurde die ZUORDNUNG, nicht die Zahl
+
+`[read]` **17 von 17 aufloesen ist trivial, sobald die IDs existieren** —
+die Frage ist, ob jede ID die richtige Substanz trifft. **Ein Vertippen
+haette eine stille Falschzuordnung ergeben, die keine Probe faengt.**
+`[cmd]` Gegen den Rohbestand gehalten, je Zeile:
+
+    biotin               -> sub_3d47470303  Biotin
+    calcium              -> sub_c252280ba5  Calcium
+    collagen             -> sub_57ffcb147a  Collagen
+    fiber-psyllium-husk  -> sub_22d5023379  Fiber/Psyllium Husk
+    folate-b9            -> sub_cc59a39b35  Folate (B9)
+    glutamine            -> sub_8d8a87d263  L-Glutamine
+    glycine              -> sub_f8dec97a40  L-Glycine
+    iron                 -> sub_fd9c0c1d6e  Iron
+    magnesium            -> sub_5322010791  Magnesium
+    omega-3-epa-dha      -> sub_4480fcfa86  Omega-3 (EPA/DHA)
+    vitamin-b12          -> sub_c5b925ff34  Vitamin B12
+    vitamin-b6           -> sub_c3e453694e  Vitamin B6
+    vitamin-c            -> sub_4e883a82b7  Vitamin C
+    vitamin-d3           -> sub_64d002b7bf  Vitamin D3
+    vitamin-k2-mk7       -> sub_dc91b498ef  Vitamin K2 (MK-7)
+    whey-protein         -> sub_4765cf4c14  Whey Protein
+    zinc                 -> sub_a86faa5f3f  Zinc
+
+    ohne Treffer im Rohbestand   0
+    verbliebene local_-IDs       0
+    verschiedene substance_id   17
+
+**Jede Zeile passt namentlich zu ihrem `supplement_slug`**, einschliesslich
+der drei mit Klammern und Schraegstrich. **Nicht geraten.**
+
+### A3 und A4 eingeloest
+
+`[cmd]` **Der innere Verbund bleibt** — kein `LEFT JOIN`, der Filterzwang
+der Bruecke ist unberuehrt. `[cmd]` **Die Probe zaehlt je Verbund**
+(`_validierung/supplements-c557-nutrient-join-resolution.test.ts`),
+zwischen 134 und 135 verdrahtet (`kette.json:776`), im beschleunigten
+Modus und vom Vollmodus geerbt. **Vor der Korrektur rot, mit allen 14
+fehlenden IDs im Text** — das ist die Gegenprobe, und sie zeigt nicht nur
+*dass* es faellt, sondern *wo*.
+
+`[cmd]` **A5 wie verlangt:** kein Vollauf von Hand. Wegwerf-Datenbank
+verworfen, Zaehler 156 → 155. Commit `022f6f61`, 3 Dateien.
+
+`[read]` **Was die Nacht vorfinden wird:** C-557 gruen. **Ob der Vollauf
+dann durchlaeuft, ist damit NICHT gesagt** — er ist nach diesem Schritt
+noch nie bis zum Ende gekommen, und der naechste Fehler kann hinter 135
+liegen. **A-91/A5 ist erst belegt, wenn der Dump da ist.**
+
+`[cmd]` **Der Nebenbefund steht unveraendert:** sieben alte
+Tageskette-Datenbanken, 155 Datenbanken gesamt, 117 mit `lumeos`-Praefix.
+**Das ist A-80 und A-96**, und beide warten auf Tom.
