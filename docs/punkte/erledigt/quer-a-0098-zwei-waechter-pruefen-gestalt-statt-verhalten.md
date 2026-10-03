@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-03
 agent: codex
 beauftragt: 2026-10-03
+erledigt: 2026-10-03
+commit: 6127f57
 
 braucht: [A-97, G-570, A-77]
 kind_von: A-97
@@ -140,3 +142,85 @@ keinen einzigen geprueft hat, ist rot.
 **Nicht Teil:** A-77 (das Gate hat keine Datenbank, das bleibt so) ·
 A-96 (Logdatei des Nachtlaufs) · A-99 (der Testdatenpruefer) · A2, oben
 verworfen.
+
+## Abnahme — 2026-10-03, Commit `6127f57`
+
+`[cmd]` **Gate gruen im Vorcommit-Haken.** 1 Datei, +141/−18.
+
+### Die Zahlen des Berichts, von mir nachgemessen
+
+`[cmd]` **211 Quelldateien in `supabase/_pipeline/`, 182 mit
+`process.env.PGDATABASE`** — eigene Zaehlung, Zahl fuer Zahl deckungsgleich
+mit dem Bericht.
+
+`[cmd]` **Und die Lücke, die ich vermutet hatte, gibt es nicht.** Drei
+weitere Dateien nennen `PGDATABASE`, ohne es zu lesen:
+
+    grunddaten-erneuern.ts:129   PGDATABASE: database,
+    kette-ausfuehren.ts:328/338  PGDATABASE: db,
+
+**Das sind Setzer, keine Leser** — sie geben den Namen an ein Kind weiter.
+Der Zuschnitt des Musters ist also richtig, nicht zu eng.
+
+`[cmd]` **Laufzeit, zweimal gemessen:** 6,804 s und 6,893 s. **Der
+Bericht sagte „etwa 6,7 s" — das haelt.** Der eigene Test der Datei
+braucht 7,663 s, 5 von 5 gruen.
+
+### Die rote Richtung habe ich selbst erzeugt
+
+`[cmd]` **Eine Wegwerfdatei mit einem Leser ohne Wurf** nach
+`supabase/_pipeline/` gelegt, Waechter gefahren:
+
+    183 von 212 Pipeline-Skripten im Lauf geprueft.
+    _a98-abnahme-probe.ts:4: PGDATABASE-Leser ist im Lauf nicht
+      fail-closed (ohne PGDATABASE: Exit 0; mit PGDATABASE=postgres:
+      Exit 0).
+
+`[cmd]` **Datei entfernt, Waechter wieder gruen:** 182 von 211.
+**Damit ist die Pruefung in beide Richtungen belegt, und zwar von mir,
+nicht vom Bericht.**
+
+### Die Bauart, und warum sie die Klasse wirklich trifft
+
+`[read]` **Der Kern ist `laufVerletztVertrag`:**
+
+    ergebnis.fehler || ergebnis.signal || ergebnis.code === 0
+      || ergebnis.code === GESPERRTER_ZUGRIFF
+
+**Exit 86 ist der Griff, der zaehlt:** die Laufzeitsperre beendet das
+Skript mit 86, sobald es einen Kindprozess, einen Socket oder `fetch`
+anfasst. **Ein Skript, das bis zur Datenbank kommt, verletzt den
+Vertrag — und das ist genau die Aussage, die vorher kein Muster traf.**
+
+`[read]` **Und `process.argv.includes` ist waehrend der Probe so
+veraendert, dass JEDER `--`-Schalter als gesetzt gilt.** Damit oeffnet
+die Probe alle Tueren auf einmal — die `--a95-live`-Tuer aus A-97 waere
+nicht durchgekommen.
+
+`[read]` **Die A-99-Lehre ist eingebaut**, ohne dass ich sie verlangt
+hatte: `pgLeser.length === 0` ist ein Verstoss, und die Zahl der
+geprueften Skripte steht in der Ausgabe. **Ein Lauf, der nichts geprueft
+hat, ist nicht mehr von einem gruenen zu unterscheiden — jetzt doch.**
+
+### Ein Restloch, benannt und nicht geschlossen
+
+`[read]` **Ein Exit ungleich 0 und ungleich 86 gilt als vertragstreu.**
+Ein Skript, das an einem Tippfehler oder einem fehlenden Import
+stirbt, zaehlt damit als fail-closed. **Gedeckt ist das vom Typecheck
+und von den Tests im Gate** — aber es ist dieselbe Klasse: ein
+Merkmal, zwei Bedeutungen.
+
+`[read]` **Dazu:** die fuenf Proben des eigenen Tests sind die
+A-88-Proben. **Der neue Fall — ein Leser, der gar nichts wirft — hat
+keine eigene Probe;** ich habe ihn von Hand belegt. **Beides gehoert in
+A-99 als Nachtrag, nicht in einen neuen Punkt.**
+
+### Kosten, die jeder Commit jetzt traegt
+
+`[cmd]` **Der Waechter laeuft ueber seinen Test im Gate** (`tools`-Paket,
+61 Proben). **6,8 s je Lauf, 364 Kindprozesse, 12 parallel.** Bei
+gefuelltem Turbo-Cache faellt das weg; bei kaltem kommt es dazu.
+**Gemessen und hingenommen** — A-97 hat von Hand dieselben vier Laeufe
+gebraucht, nur ohne Netz.
+
+**A2 bleibt verworfen.** Nicht gebaut, und das war die Entscheidung.

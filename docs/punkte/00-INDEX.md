@@ -6,9 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 277 |
-| `laufend_codex` | 3 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 642 |
+| `erledigt` | 643 |
 | **gesamt** | **923** |
 
 ## medical — 50
@@ -591,7 +591,7 @@
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 | `G-593` | fehler | hoch | [Die Attrappe nennt eine fehlende Tabelle — die Tabelle ist fertig und gefuellt](erledigt/recovery-g-0593-die-attrappe-nennt-eine-tabelle-die-es-unter-anderem-namen-gibt.md) | erledigt | — | G-596, G-597, G-598, G-599 |
 | `G-596` | befund | mittel | [Die Spec beschreibt eine Bibliothek, die Tabelle ist ein Verlauf](todos/recovery-g-0596-die-spec-beschreibt-eine-bibliothek-die-tabelle-ist-ein-verlauf.md) | offen | — | — |
-| `G-597` | fehler | mittel | [Zwei aktive Protokolle sind erlaubt — und im Nachweis sind sie entstanden](laufend_codex/recovery-g-0597-zwei-aktive-protokolle-sind-erlaubt.md) | vorbereitet (codex) | — | — |
+| `G-597` | fehler | mittel | [Zwei aktive Protokolle sind erlaubt — und im Nachweis sind sie entstanden](laufend_codex/recovery-g-0597-zwei-aktive-protokolle-sind-erlaubt.md) | laeuft (codex) | — | — |
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](laufend_claudecode/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | laeuft (claudecode) | — | — |
 
 ### wartet auf Blocker — 1
@@ -813,7 +813,7 @@
 | `A-93` | fehler | hoch | [Zwei Agenten in einem Arbeitsbaum, und der Commit zahlt dafuer](todos/quer-a-0093-zwei-agenten-in-einem-arbeitsbaum.md) | offen | — | — |
 | `A-95` | feature | hoch | [Zwei fehlen, eine steht doppelt, der Seed fehlt](erledigt/quer-a-0095-zwei-fehlen-eine-steht-doppelt-der-seed-fehlt.md) | erledigt | — | A-99, G-594, G-595 |
 | `A-97` | fehler | hoch | [Der A-88-Vertrag hat eine Tuer, und der Waechter sieht sie nicht](erledigt/quer-a-0097-der-a88-vertrag-hat-eine-tuer-und-der-waechter-sieht-sie-nicht.md) | erledigt | — | A-98 |
-| `A-98` | fehler | hoch | [Zwei Waechter pruefen Gestalt statt Verhalten — und beide haben heute versagt](laufend_codex/quer-a-0098-zwei-waechter-pruefen-gestalt-statt-verhalten.md) | laeuft (codex) | — | — |
+| `A-98` | fehler | hoch | [Zwei Waechter pruefen Gestalt statt Verhalten — und beide haben heute versagt](erledigt/quer-a-0098-zwei-waechter-pruefen-gestalt-statt-verhalten.md) | erledigt | — | — |
 | `A-99` | fehler | hoch | [Der Testdatenpruefer brach ab, statt rot zu werden — und niemand sah es](todos/quer-a-0099-der-testdatenpruefer-brach-ab-statt-rot-zu-werden.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |

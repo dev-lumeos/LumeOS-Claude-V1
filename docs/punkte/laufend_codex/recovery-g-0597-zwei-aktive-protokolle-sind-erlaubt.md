@@ -4,6 +4,8 @@ typ: fehler
 modul: recovery
 schwere: mittel
 angelegt: 2026-10-03
+agent: codex
+beauftragt: 2026-10-03
 
 braucht: [G-593]
 kind_von: G-593
