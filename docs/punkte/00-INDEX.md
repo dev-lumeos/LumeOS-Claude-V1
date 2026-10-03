@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 276 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 633 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 634 |
 | **gesamt** | **914** |
 
 ## medical — 50
@@ -594,7 +594,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-590` | fehler | hoch | [Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht](laufend_claudecode/recovery-g-0590-der-checkin-ist-der-einzige-pflichtgriff-und-er-schreibt-nicht.md) | vorbereitet (claudecode) | G-588 | — |
+| `G-590` | fehler | hoch | [Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht](laufend_claudecode/recovery-g-0590-der-checkin-ist-der-einzige-pflichtgriff-und-er-schreibt-nicht.md) | laeuft (claudecode) | G-588 | — |
 | `G-593` | befund | mittel | [Die Attrappe nennt eine Tabelle, die es unter anderem Namen gibt](todos/recovery-g-0593-die-attrappe-nennt-eine-tabelle-die-es-unter-anderem-namen-gibt.md) | offen | G-590 | — |
 
 ## goals — 73
@@ -982,7 +982,7 @@
 | `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](erledigt/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | erledigt | — | G-577, G-578, G-579, G-582 |
 | `G-583` | fehler | niedrig | [Drei Reste ohne Aufrufer, nach demselben Verfahren wie G-581](erledigt/quer-g-0583-drei-reste-ohne-aufrufer.md) | erledigt | — | G-584, G-585 |
 | `G-585` | befund | mittel | [Die Inventur der Ausfuhren ohne Aufrufer](erledigt/quer-g-0585-die-inventur-der-ausfuhren-ohne-aufrufer.md) | erledigt | — | G-587, G-588, G-589 |
-| `G-586` | fehler | hoch | [Ein Uhrensprung wirft den Nutzer raus, statt die Sitzung zu erneuern](laufend_claudecode/quer-g-0586-ein-uhrensprung-wirft-den-nutzer-raus.md) | laeuft (claudecode) | — | — |
+| `G-586` | fehler | hoch | [Ein Uhrensprung wirft den Nutzer raus, statt die Sitzung zu erneuern](erledigt/quer-g-0586-ein-uhrensprung-wirft-den-nutzer-raus.md) | erledigt | — | — |
 | `G-587` | fehler | hoch | [Ein Service-Client ohne Aufrufer umgeht die Zeilensicherheit](todos/quer-g-0587-ein-service-client-ohne-aufrufer-umgeht-die-rls.md) | offen | — | — |
 | `G-588` | befund | hoch | [Sechs Serveraktionen ohne Aufrufer — dieselbe Klasse wie G-571, eine Ebene hoeher](todos/quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md) | offen | — | G-590, G-591, G-592 |
 | `G-589` | befund | niedrig | [328 Ausfuhren zu viel — und wie die Zahl 385 zu 56 wurde](todos/quer-g-0589-dreihundertachtundzwanzig-ausfuhren-zu-viel.md) | offen | — | — |

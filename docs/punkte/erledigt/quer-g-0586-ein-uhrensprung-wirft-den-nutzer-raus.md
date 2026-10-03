@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-02
 agent: claudecode
 beauftragt: 2026-10-02
+erledigt: 2026-10-03
+commit: adc9db69
 
 braucht: [G-553]
 kind_von: G-553
@@ -110,3 +112,96 @@ Fehlschlag faellt durch · Sabotage je Zusicherung in beide Richtungen ·
 `[read]` **Kein Kettenlauf.** Und wenn du den Fehler nicht reproduzieren
 kannst: **das ist ein Befund und keine Niederlage** — dann liefert A1 den
 Weg, ihn beim naechsten Mal einzufangen, und A2 steht trotzdem.
+
+---
+
+## Abnahme — 2026-10-03, Commit `adc9db69`
+
+`[read]` **Diese Abnahme hat der Orchestrator geschrieben, nicht der
+Agent.** Der Stromausfall am 03.10. um 05:59 hat Claude Code den Kontext
+genommen, bevor er berichten konnte. **Die Arbeit lag fertig und gruen im
+Arbeitsbaum** — 19 neue Tests, die das Gate schon mitzaehlte (web 2550 →
+2569). Abgenommen wurde am Diff und an eigenen Messungen, nicht an einem
+Bericht.
+
+### Der Auftrag wurde an einer Stelle widerlegt, und zwar gemessen
+
+`[cmd]` **Der Auftrag sagte:** *„PostgREST hat dafuer keine Toleranz —
+keine Sekunde."* **Gemessen sind es 30 Sekunden**, mit einem selbst
+gepraegten Token gegen `/rest/v1/user_goals`:
+
+    iat + 30 s  ->  200
+    iat + 31 s  ->  401  JWT issued at future
+
+`[read]` **Das aendert die Ursachenlage, nicht nur eine Zahl.** Die 753
+bis 837 ms Versatz, die ich im Auftrag gemessen hatte, **koennen Toms
+Fehler nicht erklaeren** — es braucht einen Ruecksprung von mehr als 30
+Sekunden. **Meine Vermutung „Ruecksprung nach Standby" bleibt damit
+plausibel und ist weiter unbelegt**, aber die Groessenordnung steht jetzt.
+
+### A1 bis A4, je mit der Zahl, die sie traegt
+
+`[cmd]` **A1** — `sprungbeleg()` und `sprungZeile()` halten `iat`, `exp`,
+Vorsprung in Sekunden, Toleranz und den Erneuerungsausgang fest, mit
+fester Marke `[uhrensprung]` zum Greppen. **Zeiten, keine Inhalte:** kein
+Token, kein Geheimnis, keine Nutzerkennung. `jetzt` kommt als Parameter
+herein statt aus `Date.now()` — deshalb ist die Funktion ohne laufende
+Umgebung pruefbar.
+
+`[cmd]` **A2** — zwei Messungen erklaeren, warum die Erneuerung
+ueberhaupt greifen kann: **GoTrue prueft `iat` gar nicht** (`iat + 300 s`
+→ `200`), deshalb sieht die Middleware den Fall nicht und der Fehler
+entsteht erst an der Abfrage; und **`grant_type=refresh_token` traegt
+kein `iat`**, faellt also an keiner Uhr. `[read]` **Verdrahtet ist es
+einmal**, an `global.fetch` in `session.ts:createSessionClient`, **nicht
+an 256 Aufrufstellen.**
+
+`[cmd]` **A3** — der Merker `schonErneuert` lebt am Client, also eine
+Anfrage lang; der zweite Uhrensprung faellt zur Anmeldeaufforderung
+durch. **Die Einordnung bleibt Sitzungsfehler** (G-553 unberuehrt).
+
+`[cmd]` **A4** — die Umgebung wurde NICHT angefasst, sondern benannt:
+**zwischen den Diensten driftet nichts.** Postgres, Auth und Kong teilen
+einen Kernel-Timer; die Kreuzmessung `auth → pg` (1790–2070 ms) liegt
+innerhalb der Kontrollmessung `pg → pg` (2037–2327 ms). **Was driftet,
+ist die Docker-VM gegen den Host** — und das trifft ein Token, das vor
+dem Sprung gepraegt wurde.
+
+### Zwei Feinheiten, die nur beim echten Messen auffallen
+
+`[cmd]` **Der Antwortrumpf wird geklont.** Wer ihn liest, verbraucht ihn
+— ohne `clone()` kaeme beim Aufrufer ein leerer Strom an.
+
+`[cmd]` **Das frische Token muss in den `Authorization`-Kopf.** Gemessen
+am 02.10.: die Erneuerung holte ein gueltiges Token, **die Wiederholung
+kam trotzdem mit `401`**, weil sie das alte `init` erneut schickte.
+Deshalb gibt der Erneuerer das **Token** zurueck, nicht `true`. `[read]`
+**Im Betrieb waere das nicht aufgefallen**, weil `supabase-js` den Kopf
+je Aufruf neu baut — in einem Aufrufer mit festen `headers` schon.
+
+### Vom Orchestrator nachgefahren, nicht geglaubt
+
+`[cmd]` **Sabotage in beide Richtungen**, am Kern von A3
+(`if (schonErneuert)` → `if (false)`):
+
+    1 Kontrollprobe            # pass 19  # fail 0
+    2 mit Sabotage             # pass 18  # fail 1
+    3 nach Wiederherstellung   # pass 19  # fail 0
+    md5 vorher = md5 nachher   4c7d8ddd5c48a42e1f2fb7f31558d05e
+
+`[cmd]` **`pnpm gate` gruen**, 18/18, web 2569 Tests, `[gate] gruen.` im
+Vorcommit-Haken. Commit `adc9db69`, 3 Dateien, +658/−1.
+
+### Was offen bleibt
+
+`[read]` **A1 ist als WEG eingeloest, nicht als Vorfall.** Es gibt noch
+kein Protokoll von einem echten Fehlerfall bei Tom — die Marke
+`[uhrensprung]` steht bereit, und beim naechsten Mal faengt sie die drei
+Zeiten ein. **Das ist genau die Form, die der Auftrag zugelassen hat:**
+*„wenn du den Fehler nicht reproduzieren kannst, ist das ein Befund und
+keine Niederlage."*
+
+`[cmd]` **Und der Erfolgsfall ist noch nicht am Schirm belegt** — die
+Erneuerung ist in Zusicherungen bewiesen, nicht an Toms Browser. **Wenn
+die Meldung wieder auftritt, ist das die Probe**, und das Serverlog
+traegt dann die Zeile.

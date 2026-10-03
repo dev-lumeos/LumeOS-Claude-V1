@@ -4,6 +4,8 @@ typ: fehler
 modul: recovery
 schwere: hoch
 angelegt: 2026-10-02
+agent: claudecode
+beauftragt: 2026-10-03
 
 braucht: [G-588, G-122]
 kind_von: G-588
@@ -33,9 +35,33 @@ beruehrt:
              apps/web/src/lib/recovery/
     Fremd:   supabase/ gehoert Codex - er arbeitet gerade an A-95 und
              spielt dabei LIVE ein. docs/ gehoert dem Orchestrator,
-             auch diese Punktdatei. packages/shared/src/supabase/
-             haengt an G-586 - wenn der noch laeuft, nicht anfassen.
-    Stand:   2026-10-02
+             auch diese Punktdatei.
+    Stand:   2026-10-03
+
+## Stand 2026-10-03 — lies das zuerst, du faengst ohne Kontext an
+
+`[cmd]` **In der Nacht zum 03.10. war Stromausfall** (Halt 05:59:22,
+System oben 07:38:19). **Dein vorheriger Auftrag G-586 ist fertig und
+abgenommen** — Commit `adc9db69`, der erneuernde `fetch` in
+`packages/shared/src/supabase/uhrensprung.ts`, 19 Proben gruen. **Du
+hast ihn gebaut, konntest aber nicht mehr berichten; der Orchestrator hat
+ihn am Diff abgenommen und die Sabotage nachgefahren.** Nichts daran ist
+offen, und `packages/shared/src/supabase/` ist wieder frei.
+
+`[cmd]` **Der Arbeitsbaum ist sauber** — nur `backup/g577-535-vorher.sql`
+und `-nachher.sql` liegen untracked da, die gehoeren Tom.
+
+`[cmd]` **Umgebung ist oben:** alle neun Supabase-Container healthy, Web
+3200 (`/login` 5,8 s) und Coach 3220 laufen. `pnpm gate` gruen, 18/18,
+**web 2569 Tests** — das ist dein Ausgangsstand.
+
+`[read]` **Codex arbeitet parallel an A-95 und spielt dabei LIVE in die
+Datenbank ein** (Toms Freigabe): `nutrition.micronutrient_snapshot`,
+`goals.goal_contributions`, und er entfernt eine alte
+`berechne_zielwerte`-Fassung. **Recovery ist davon nicht betroffen** —
+aber wenn dir eine Abfrage mit `PGRST202` oder einem fehlenden Objekt
+antwortet, ist das sein Lauf und nicht dein Fehler. **Melde es, warte es
+ab, rate nicht.**
 
 ## Der Befund
 

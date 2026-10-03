@@ -37,7 +37,36 @@ beruehrt:
     Fremd:   apps/ und packages/ gehoeren Claude Code - er arbeitet
              gerade an G-586 in packages/shared/src/supabase/.
              docs/ gehoert dem Orchestrator, auch diese Punktdatei.
-    Stand:   2026-10-02
+    Stand:   2026-10-03
+
+## Stand 2026-10-03 — lies das zuerst, du faengst ohne Kontext an
+
+`[cmd]` **In der Nacht zum 03.10. war Stromausfall** (Halt 05:59:22,
+System oben 07:38:19). **Dieser Auftrag war dir schon zugeteilt und du
+hattest noch nicht angefangen** — in `backup/` liegt keine
+`a95-vorher.sql`, und der Live-Stand ist unveraendert. **Fang von vorn
+an, es ist nichts halb getan.**
+
+`[cmd]` **Deine letzte Arbeit ist committet:** C-556 steht als `16fd9c9c`
+(148 Zeilen in die C-230-Filter, `detection_marker` als eigener Typ).
+**Nicht noch einmal machen.**
+
+`[cmd]` **Der Live-Stand wurde am 03.10. nach dem Hochfahren erneut
+gemessen und ist Zahl fuer Zahl derselbe wie unten beschrieben:**
+`berechne_zielwerte` steht zweimal (6674 und 1027 Bytes),
+`goals.goal_contributions` 0, `nutrition.micronutrient_snapshot` 2485
+Bytes alter Rumpf, letzter Schreibvorgang in `goals` am 15.09. **Alles
+unter „Der Befund" gilt unveraendert.**
+
+`[cmd]` **Umgebung ist oben:** alle neun Supabase-Container healthy, Web
+3200 und Coach 3220 laufen. **Der Wiederanlauf der Datenbank kostete
+440 s fsync** — wenn du eine Wegwerf-Datenbank anlegst und verwirfst,
+denk daran, dass jede liegengebliebene das naechste Mal verlaengert
+(A-80, A-96).
+
+`[read]` **Nach diesem Auftrag liegt C-557 fuer dich bereit** — der rote
+Nachtlauf, `supplement_nutrient_mappings: 3, erwartet 17`. **Nicht
+jetzt.** Dieser hier geht vor, er hat Toms Freigabe.
 
 ## Die Freigabe — und warum sie eine ist
 

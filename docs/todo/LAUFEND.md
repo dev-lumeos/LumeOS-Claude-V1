@@ -1,14 +1,14 @@
 # Laufende Auftraege
 
-**Stand: 2026-10-03, 08:20**
+**Stand: 2026-10-03, 08:45**
 
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-586 | Ein Uhrensprung wirft den Nutzer raus, statt die Sitzung zu erneuern | **laeuft**, raus 02.10. |
+| Claude Code | G-590 | Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht | **laeuft**, raus 03.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
 | Codex | A-95 | Zwei fehlen, eine steht doppelt, der Seed fehlt | **laeuft**, raus 02.10. |
-| Claude Code | G-590 | Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht | **bereit in `next/`** |
+| Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | C-557 | Vierzehn von siebzehn Naehrstoffzuordnungen finden ihre Substanz nicht | **bereit in `next/`** |
 <!-- /ERZEUGT:laufend-tabelle -->
 
@@ -42,8 +42,40 @@ kann unveraendert neu rausgehen.**
 
 `[cmd]` **`pnpm gate` gruen:** 18/18, web 2569 Tests (02.10.: 2550),
 coach 80, scoring 36, admin 7, tools 61. `[read]` **Die 19 neuen Tests
-sind G-586** — Claude Codes Arbeit ist gebaut und gruen, **nur der
+sind G-586** — Claude Codes Arbeit war gebaut und gruen, **nur der
 Bericht ist nie angekommen.**
+
+`[cmd]` **G-586 ist abgenommen und committet** (`adc9db69`, 3 Dateien,
++658/−1) — **vom Orchestrator am Diff, weil der Agent seinen Kontext
+verloren hat.** Sabotage nachgefahren: 19/0 gruen, mit entschaerftem
+Einmal-Merker 18/1 rot, nach Wiederherstellung 19/0, md5 identisch.
+
+`[read]` **Und der Auftrag war an einer Stelle falsch:** er sagte,
+PostgREST habe *„keine Toleranz — keine Sekunde"*. `[cmd]` **Gemessen
+sind es 30 Sekunden** (+30 → 200, +31 → 401). **Damit erklaeren die 0,75 s
+Uhrenversatz aus dem Auftrag Toms Fehler NICHT** — es braucht einen
+Ruecksprung von mehr als 30 s, und was driftet, ist die Docker-VM gegen
+den Host, nicht ein Dienst gegen den anderen.
+
+## Die zwei Agenten nach dem Ausfall — beide ohne Kontext
+
+**Tom, 2026-10-03, 08:06:** *„ok die beiden agenten sind bereit, aber
+bedenke die haben keinen context mehr"*
+
+`[cmd]` **Beide laufenden Auftraege tragen jetzt einen Kopf „Stand
+2026-10-03 — lies das zuerst, du faengst ohne Kontext an":** was committet
+ist und nicht wiederholt werden darf, dass nichts halb getan ist, dass die
+Umgebung oben ist, und was der andere Agent parallel tut.
+
+    Codex        A-95  das Einspielen, Toms Freigabe, unverbraucht
+                 C-557 liegt in next/ und wartet - NICHT jetzt
+    Claude Code  G-590 Recovery: drei Serveraktionen bekommen ihren
+                       Aufrufer
+
+`[read]` **Die Lehre, und sie ist neu:** ein Auftrag muss einen Agenten
+tragen, der nichts mehr weiss. **Bisher trug der Auftragskopf den
+Bereich; jetzt traegt er auch den Stand** — sonst faengt ein frischer
+Agent an, etwas zu wiederholen, das schon committet ist.
 
 `[cmd]` **Der Nachtlauf ist NICHT am Strom gestorben:** 04:00:02 bis
 04:03:35, Exit 1 nach 213,6 s, mit C-556 drin. Grund im
