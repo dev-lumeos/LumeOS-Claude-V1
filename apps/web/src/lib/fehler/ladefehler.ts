@@ -47,7 +47,36 @@
 // `[read]` **Nicht Gegenstand dieses Punktes:** WARUM die Uhr
 // sprang. Das ist Umgebung, nicht Bau.
 
-export type Fehlerart = 'sitzung' | 'daten'
+// ══ G-570: DIE DRITTE ART — DIE DATENBANK KENNT DIE FUNKTION NICHT ══
+//
+// **Tom, 2026-10-03, 11:43, auf der Goals-Seite:**
+//
+//     Die Daten konnten nicht geladen werden.
+//     Could not find the function
+//     goals.berechne_zielwerte(p_stichtag, p_user_id) in the schema cache
+//
+// `[cmd]` **Die Funktion stand in `pg_proc`** — PostgREST hatte einen
+// Schema-Cache von 09:04, A-95 hatte ab 10:15 getauscht. `[read]`
+// **„Die Daten konnten nicht geladen werden" schickt auf die falsche
+// Suche:** an den Daten ist nichts, der Datenbank fehlt (oder ihr
+// Cache kennt nicht) die Funktion, die die Seite ruft.
+export type Fehlerart = 'sitzung' | 'daten' | 'schema'
+
+/**
+ * Ist das ein `PGRST202` — Funktion mit dieser Argumentliste unbekannt?
+ *
+ * `[cmd]` **Der Code kommt meist NICHT an:** die Lesewege verpacken
+ * den Fehler (`ProfileWriteError('WRITE_FAILED', error.message)`),
+ * es bleibt der Text. `[read]` **Deshalb Code ODER beide Textteile** —
+ * `could not find the function` allein koennte auch eine eigene
+ * Meldung sein, `schema cache` steht nur in der von PostgREST.
+ */
+function istSchemafehler(text: string | null, code?: string | null): boolean {
+  if (code === 'PGRST202') return true
+  const t = (text ?? '').toLowerCase()
+  return t.includes('pgrst202')
+    || (t.includes('could not find the function') && t.includes('schema cache'))
+}
 
 /**
  * Die Merkmale, an denen ein Tokenfehler erkennbar ist.
@@ -102,6 +131,10 @@ export function fehlerart(
   // Merkmale unten. **Ohne diese Zeile stuende er als Datenfehler
   // da, ohne Weg zur Anmeldung.**
   if (code === '28000' || code === '42501') return 'sitzung'
+  // G-570: VOR den Sitzungsmerkmalen — ein Funktionsname wie
+  // `…refresh_token…` in der PostgREST-Meldung waere sonst eine
+  // Sitzung.
+  if (istSchemafehler(text, code)) return 'schema'
   if (!text) return 'daten'
   const t = text.toLowerCase()
   return SITZUNGSMERKMALE.some(m => t.includes(m)) ? 'sitzung' : 'daten'
@@ -250,6 +283,17 @@ export function fehlertexte(
       titel: 'Sitzung abgelaufen',
       satz: 'Die Sitzung ist nicht mehr gueltig. Melde dich neu an — '
         + 'deine Daten sind unveraendert.',
+    }
+  }
+  if (art === 'schema') {
+    // `[read]` **Fuer den Nutzer und fuer den Betrieb zugleich** — der
+    // Nutzer kann nichts tun als es zu melden, der Betrieb braucht die
+    // zwei Ursachen. Der technische Text darunter nennt die Funktion.
+    return {
+      titel: modul ?? 'Daten',
+      satz: 'Die Datenbank kennt eine Funktion nicht, die diese Seite '
+        + 'braucht — entweder ist sie nicht eingespielt, oder der '
+        + 'Schema-Cache ist veraltet. An deinen Daten liegt es nicht.',
     }
   }
   return {

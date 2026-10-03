@@ -214,20 +214,6 @@ function istMehrdeutig(f: { code?: string; message?: string }): boolean {
     && t.includes('zielbezug fehlt')
 }
 
-/**
- * Kennt die Datenbank die Dreiparameter-Fassung noch nicht?
- *
- * `[cmd]` **PostgREST meldet `PGRST202`**, wenn keine Funktion mit
- * dieser Argumentliste existiert. `[read]` **Nur dann faellt der
- * Aufruf zurueck** — ein anderer Fehler bleibt ein Fehler.
- */
-function istSignaturFehlt(f: { code?: string; message?: string }): boolean {
-  if (f.code === 'PGRST202') return true
-  const t = (f.message ?? '').toLowerCase()
-  return t.includes('could not find the function')
-    && t.includes('berechne_zielwerte')
-}
-
 /** Ein Vorschlag ohne Zahlen — je Feld `null`, nichts erfunden. */
 const LEERER_VORSCHLAG: Zielvorschlag = {
   goal_id: null,
@@ -268,38 +254,30 @@ export async function getZielwertVorschlag(
     ? { p_user_id: userId, p_goal_id: goalId, p_stichtag: stichtag }
     : { p_user_id: userId, p_stichtag: stichtag }
 
-  let { data, error } = await supabase
+  const { data, error } = await supabase
     .schema('goals')
     .rpc('berechne_zielwerte', args)
 
-  // ══ G-565: die neue Signatur ist NICHT eingespielt ══════════
+  // ══ G-570: KEIN RUECKFALL MEHR ══════════════════════════════
   //
-  // `[cmd]` **Am Schirm gefunden, 2026-10-01:** mit genau einer
-  // offenen Phase reichte G-568 ein `p_goal_id` durch, und die Seite
-  // antwortete mit
+  // `[cmd]` **Hier stand seit G-565 (`f3088a98`) ein Rueckfall:** bei
+  // `PGRST202` auf die Dreiparameter-Fassung wurde ohne Ziel neu
+  // gefragt — eine Bruecke, solange G-563 nicht eingespielt war.
   //
-  //     Could not find the function
-  //     goals.berechne_zielwerte(p_goal_id, p_stichtag, p_user_id)
-  //     in the schema cache
+  // `[cmd]` **Seit A-95 steht sie live** (`pg_proc`, 2026-10-03:
+  // `(uuid,uuid,date)` und der Mantel `(uuid,date)`, beide
+  // `prokind = 'f'`).
   //
-  // `[cmd]` **Live steht nur die Zweiparameter-Fassung**
-  // (`p_user_id, p_stichtag`) — G-563 ist gebaut und nicht
-  // eingespielt.
+  // `[cmd]` **Und der Rueckfall hat am 2026-10-03, 11:43 gelogen:**
+  // PostgREST hatte einen veralteten Schema-Cache, antwortete auf
+  // den Dreiparameter-Aufruf mit `PGRST202`, der Rueckfall rief die
+  // Zweiparameter-Fassung — **und die Meldung am Schirm nannte die
+  // ALTE Signatur.** `[read]` **Er war auch nie ein Wiederholen:**
+  // „Ziel genannt" und „Ziel unbekannt" sind zwei Rechnungen.
   //
-  // `[read]` **Die Reihenfolge verlangt beides:** die Anwendung muss
-  // VOR dem Einspielen laufen und danach. **Also: den Zielbezug
-  // versuchen, und wenn die Funktion ihn nicht kennt, ohne ihn
-  // fragen** — dann waehlt die Datenbank wie bisher, und bei
-  // mehreren Phasen wirft sie (A4).
-  //
-  // `[read]` **`PGRST202` ist „Funktion nicht gefunden"**, nicht
-  // „Aufruf falsch" — der Rueckfall greift also genau dann, wenn die
-  // Signatur fehlt, und verdeckt keinen echten Fehler.
-  if (error && goalId && istSignaturFehlt(error)) {
-    ;({ data, error } = await supabase
-      .schema('goals')
-      .rpc('berechne_zielwerte', { p_user_id: userId, p_stichtag: stichtag }))
-  }
+  // `[read]` **Jetzt ist `PGRST202` ein Fehler** und wird als
+  // eigener Zustand gezeigt (`lib/fehler/ladefehler.ts`, Fehlerart
+  // `schema`): *Funktion nicht eingespielt oder Cache veraltet.*
 
   if (error) {
     // ══ G-568/A4: die Mehrdeutigkeit ist ein ZUSTAND ══════════
@@ -340,6 +318,9 @@ export async function getZielwertVorschlag(
     // `[read]` **`null`, solange die alte Signatur live ist** — sie
     // fuehrt die Spalte nicht, und eine erfundene Kennung waere
     // schlimmer als keine.
+    //   `[cmd]` **G-570: ueberholt.** Seit A-95/G-595 fuehren BEIDE
+    //   Fassungen `goal_id` (`pg_get_function_result`, 2026-10-03).
+    //   `null` kommt nur noch, wenn die Zeile selbst keins traegt.
     goal_id: text(zeile.goal_id),
   }
 }

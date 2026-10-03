@@ -34,7 +34,7 @@ import { createSessionClient } from '@lumeos/shared/session'
 
 import { zielAnlegen } from './schreiben'
 import { phaseStarten, PhaseFehler } from './phase-write'
-import { fehlerart } from '../fehler/ladefehler'
+import { fehlerart, type Fehlerart } from '../fehler/ladefehler'
 import type { ZielNeu } from './ziel-regeln'
 import type { Phasenart } from './phase-regeln'
 
@@ -81,8 +81,8 @@ export type PhasenzielErgebnis =
   | {
       ok: false
       fehler: string
-      /** `sitzung` schickt zur Anmeldung, `daten` nicht (G-553). */
-      art: 'sitzung' | 'daten'
+      /** `sitzung` schickt zur Anmeldung, `daten` nicht (G-553); G-570: `schema` ebenso nicht. */
+      art: Fehlerart
       /** Wurde ein angelegtes Ziel wieder entfernt? */
       zurueckgenommen: boolean
     }

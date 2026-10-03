@@ -264,40 +264,31 @@ describe('G-568 — gegen G-563 gehalten', () => {
   })
 })
 
-describe('G-568 — die Anwendung laeuft VOR dem Einspielen', () => {
-  it('ein unbekanntes p_goal_id faellt auf die alte Signatur zurueck', () => {
-    // `[cmd]` **Am BILD gefunden, 2026-10-01** (beim Bau von G-565):
-    // mit genau einer offenen Phase reichte G-568 ein `p_goal_id`
-    // durch, und die Seite antwortete mit
-    //
-    //     Could not find the function
-    //     goals.berechne_zielwerte(p_goal_id, p_stichtag, p_user_id)
-    //
-    // `[cmd]` **Live steht nur die Zweiparameter-Fassung** — G-563
-    // ist gebaut und nicht eingespielt.
-    //
-    // `[read]` **Die Reihenfolge verlangt beides:** die Anwendung
-    // muss VOR dem Einspielen laufen und danach.
-    const q = R()
-    assert.match(q, /if \(error && goalId && istSignaturFehlt\(error\)\) \{/,
-      'es gibt keinen Rueckfall — dann faellt die Goals-Seite, '
-      + 'solange G-563 nicht eingespielt ist')
-    assert.match(q, /\.rpc\('berechne_zielwerte', \{ p_user_id: userId, p_stichtag: stichtag \}\)/,
-      'der Rueckfall ruft nicht die Zweiparameter-Fassung')
+describe('G-570 — kein Rueckfall mehr nach dem Einspielen', () => {
+  // `[cmd]` **Hier standen bis G-570 zwei Zusicherungen FUER den
+  // Rueckfall** (G-565): bei `PGRST202` ohne Ziel neu fragen. **Seit
+  // A-95 steht die Dreiparameter-Fassung live**, und am 2026-10-03,
+  // 11:43 hat der Rueckfall einen veralteten Schema-Cache verdeckt —
+  // die Meldung nannte die ALTE Signatur.
+  //
+  // `[read]` **„Ziel genannt" und „Ziel unbekannt" sind zwei
+  // Rechnungen**, kein Wiederholungsversuch. Deshalb jetzt dagegen.
+
+  it('`berechne_zielwerte` wird genau EINMAL gerufen', () => {
+    const n = (R().match(/\.rpc\('berechne_zielwerte'/g) ?? []).length
+    assert.equal(n, 1,
+      `${n} Aufrufe — ein zweiter ist ein Rueckfall, der die `
+      + 'Rechnung still wechselt (G-570)')
   })
 
-  it('der Rueckfall greift NUR bei fehlender Signatur', () => {
-    // `[read]` **Sonst verdeckt er echte Fehler** — ein
-    // Berechtigungsfehler saehe aus wie eine alte Datenbank.
+  it('der Leseweg behandelt `PGRST202` nicht selbst', () => {
+    // `[read]` **Der Fehler geht an `ladefehler.ts`** und wird dort
+    // ein eigener Zustand (`schema`). Wer ihn hier abfaengt, verdeckt
+    // ihn wieder.
     const q = R()
-    const i = q.indexOf('function istSignaturFehlt')
-    const r = q.slice(i, i + 420)
-    assert.match(r, /PGRST202/,
-      'der Rueckfall erkennt den Code nicht — dann greift er zu oft '
-      + 'oder zu selten')
-    assert.match(r, /could not find the function/,
-      'nur der Code wird geprueft, nicht die Meldung')
-    assert.match(r, /berechne_zielwerte/,
-      'jede fehlende Funktion loest den Rueckfall aus')
+    assert.doesNotMatch(q, /PGRST202/, 'zielwerte-read.ts faengt PGRST202 wieder ab')
+    assert.doesNotMatch(q, /could not find the function/i,
+      'zielwerte-read.ts sucht wieder nach der Signaturmeldung')
+    assert.doesNotMatch(q, /istSignaturFehlt/, 'istSignaturFehlt ist zurueck')
   })
 })
