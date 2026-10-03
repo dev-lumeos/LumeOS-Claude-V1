@@ -580,7 +580,12 @@ if (MODE === 'clean') {
        AND round(max(kcal) - min(kcal)) = 716;`)) {
     errors.push('A-95: test-user liefert nicht zwei zielbezogene kcal-Werte mit 716 kcal Abstand')
   }
-  if (hasRows(`
+  // G-595: DIESE PROBE HATTE DIE FALSCHE RICHTUNG.
+  // A-95 verlangte, dass die Zweiparameter-Fassung NICHT mehr existiert.
+  // Sie MUSS existieren: 563 legt sie als Mantel an, und
+  // getZielwertVorschlag ruft sie, wo kein Ziel bekannt ist. Ohne sie
+  // faellt die Goals-Seite mit PGRST202 aus.
+  if (!hasRows(`
     SELECT 1
     FROM pg_proc p
     JOIN pg_namespace n ON n.oid = p.pronamespace
@@ -589,7 +594,18 @@ if (MODE === 'clean') {
       AND p.proname = 'berechne_zielwerte'
       AND pg_get_function_identity_arguments(p.oid) =
         'p_user_id uuid, p_stichtag date';`)) {
-    errors.push('A-95: alte Zweiparameter-Fassung von berechne_zielwerte steht noch')
+    errors.push('G-595: der Zweiparameter-Mantel von berechne_zielwerte fehlt')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM pg_proc p
+    JOIN pg_namespace n ON n.oid = p.pronamespace
+    WHERE p.prokind = 'f'
+      AND n.nspname = 'goals'
+      AND p.proname = 'berechne_zielwerte'
+      AND pg_get_function_identity_arguments(p.oid) =
+        'p_user_id uuid, p_goal_id uuid, p_stichtag date';`)) {
+    errors.push('G-595: die Dreiparameter-Fassung von berechne_zielwerte fehlt')
   }
   if (!hasRows(`
     SELECT 1

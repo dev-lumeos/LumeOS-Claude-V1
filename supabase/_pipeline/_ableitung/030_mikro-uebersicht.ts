@@ -382,9 +382,15 @@ SELECT
   ), '[]'::jsonb) AS items;
 $function$;
 
--- A-95: Nach dem zielfreien Snapshot und dem zielbezogenen Trigger hat die
--- nutzerweite Kompatibilitaetsfassung keinen Aufrufer mehr.
-DROP FUNCTION IF EXISTS goals.berechne_zielwerte(UUID, DATE);
+-- G-595: HIER STAND EIN DROP, UND ER WAR FALSCH.
+-- A-95 hat goals.berechne_zielwerte(UUID, DATE) hier geloescht, weil der
+-- Auftrag sie fuer einen Ueberrest hielt. Sie ist keiner:
+-- 11_goals/563_target_scoped_calculation.sql legt sie bewusst als Mantel
+-- neben die dreiparametrige Fassung, und getZielwertVorschlag ruft genau
+-- sie, wo der Aufrufer KEIN Ziel kennt (G-568/A2, "kein geratenes Ziel").
+-- Ohne sie faellt die Goals-Seite mit PGRST202 aus - am 2026-10-03 belegt.
+-- Dieser Schritt laeuft NACH 563; ein DROP hier loescht, was dort
+-- absichtlich entsteht.
 
 COMMENT ON FUNCTION nutrition.micronutrient_snapshot(UUID, DATE) IS
   'Acht kuratierte Naehrstoffe fuer das Micronutrient-Snapshot-Netzdiagramm. G-567: ALA folgt zielfrei dem TDEE-Bedarf mit EFSA 0,5 E%; Gesamt-Omega-3, EPA und DHA werden nicht ungestuetzt addiert.';
