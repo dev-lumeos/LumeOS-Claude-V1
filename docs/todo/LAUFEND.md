@@ -1,6 +1,6 @@
 # Laufende Auftraege
 
-**Stand: 2026-10-03, 11:35**
+**Stand: 2026-10-03, 11:50**
 
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
@@ -576,6 +576,40 @@ melden EINMAL am Ende.
 ---
 
 ## Lehren
+
+`[cmd]` **Ein Einspielen ist nicht fertig, wenn SQL es bestaetigt — erst,
+wenn die Seite laedt.** Dreimal dieselbe Klasse, zweimal von mir:
+
+    01.10.  G-568 rief dreiparametrig, live stand zweiparametrig.
+            Das Gate war gruen, 2.386 Tests. Der Fehler stand am Schirm.
+    03.10.  A-95 hat live getauscht. Meine Abnahme zaehlte pg_proc,
+            information_schema, Zeilen, kcal - alles SQL. Die Seite hat
+            niemand geoeffnet. Tom sah um 11:43 denselben Ausfall.
+
+`[cmd]` **Der Mechanismus hat einen Namen: PostgREST haelt einen
+Schema-Cache.** SQL sieht die neue Welt sofort, die Anwendung die
+gecachte. Gemessen am 03.10.: Cache geladen 09:04, A-95 tauschte ab
+10:15 — PostgREST antwortete bis 11:44 mit `PGRST202` auf die neue
+Signatur.
+
+`[read]` **Daraus folgen zwei Handgriffe, keine Regel und kein Waechter:**
+
+    1  nach jedem Live-DDL:  NOTIFY pgrst, 'reload schema'
+    2  danach:               node tools/schuss.mjs <pfad> <bild.png>
+                             und die Konsolenfehler lesen
+
+`[cmd]` **Das Gate kann das nicht sehen** — es laeuft gegen keine
+Datenbank (A-77). **Die Seite ist das einzige Instrument**, und
+`schuss.mjs` nennt Titel, Attrappen, Konsolenfehler und Laufzeit in einem
+Aufruf. Es kostet 1,3 Sekunden.
+
+`[read]` **Und eine Bruecke, die auf einen entfernten Weg zurueckfaellt,
+luegt.** Der Rueckfall aus G-570 griff bei `PGRST202`, rief die
+geloeschte Zweiparameter-Fassung und liess den Nutzer eine Signatur
+lesen, die niemand mehr aufruft. **Ich hatte ihn in der A-95-Abnahme als
+„toter Code" bezeichnet — das war eine `[read]`-Behauptung, keine
+Messung, und sie war falsch.** G-570 traegt den Nachtrag und ein neues A4.
+
 
 `[cmd]` **Ein Punkt kann zur Haelfte erledigt sein, ohne dass es
 jemand merkt.** A-77 sagte „`tools/__tests__/` laeuft nirgends" — der

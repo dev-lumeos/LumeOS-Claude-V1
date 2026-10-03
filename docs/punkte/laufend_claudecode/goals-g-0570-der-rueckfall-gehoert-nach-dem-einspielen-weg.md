@@ -57,6 +57,60 @@ einmal, unter `lib/profile/`.
 `[read]` **Dein laufender Auftrag G-590 geht vor.** Dieser hier ist
 vorbereitet, nicht zugeteilt.
 
+## Nachtrag 2026-10-03, 11:45 — der Rueckfall ist NICHT harmlos, er luegt
+
+`[read]` **Dieser Nachtrag hebt eine Aussage des Orchestrators auf**, die
+in der A-95-Abnahme stand: *„der Rueckfall ist bereits toter Code, weil
+`PGRST202` nicht mehr entstehen kann."* **Das war falsch, und zwar
+heute um 11:43 belegt.**
+
+`[cmd]` **Tom sah an der Goals-Seite:**
+
+    Die Daten konnten nicht geladen werden.
+    Could not find the function
+    goals.berechne_zielwerte(p_stichtag, p_user_id) in the schema cache
+
+`[cmd]` **Die Ursache ist der Schema-Cache von PostgREST, nicht die
+Datenbank.** Gemessen:
+
+    pg_proc                     genau EINE Fassung, dreiparametrig
+    PostgREST-Cache geladen     03.10. 09:04 Ortszeit
+    A-95 hat getauscht          03.10. ab 10:15 Ortszeit
+
+**PostgREST kannte die neue Signatur nicht** — es antwortete auf den
+Dreiparameter-Aufruf mit `PGRST202`, **der Rueckfall griff**, rief die
+Zweiparameter-Fassung, und die ist seit A-95 weg. `[read]` **Die
+Fehlermeldung nennt deshalb die ALTE Signatur** — der Nutzer liest einen
+Namen, den niemand mehr aufruft.
+
+`[cmd]` **Behoben durch `NOTIFY pgrst, 'reload schema'`** (11:44, 151
+Funktionen neu geladen); `tools/schuss.mjs /v2/goals` danach gruen, Titel
+steht, kein `PGRST202`, nur die bekannte `data-mode`-Warnung.
+
+### Was das fuer diesen Auftrag aendert
+
+`[read]` **A2 bleibt richtig und wird dringender:** der Rueckfall gehoert
+weg. **Aber er ist nicht nur ueberfluessig — er hat den Fehler
+verschleiert.** Ohne ihn haette die Seite sofort gesagt, dass die
+Dreiparameter-Fassung nicht erreichbar ist.
+
+**A4 — NEU, und der eigentliche Gewinn dieses Punkts.** `[cmd]`
+**`PGRST202` muss sagen, was es heisst.** Heute landet es als
+Datenfehler-Text mit einer Signatur, die der Nutzer nicht einordnen kann.
+`[read]` **Nach dem Entfernen des Rueckfalls ist `PGRST202` ein eigener
+Zustand:** *die Datenbank kennt diese Funktion nicht — entweder ist sie
+nicht eingespielt, oder der Schema-Cache ist veraltet.* **Das gehoert in
+`apps/web/src/lib/fehler/ladefehler.ts`**, wo die `FACHMELDUNGEN` liegen
+und wo G-553 den Sitzungsfehler schon so behandelt hat.
+
+`[cmd]` **Zu belegen fuer A4:** die Meldung einmal ausgeloest (eine
+Wegwerf-Signatur reicht, kein Eingriff in die Datenbank) · der Text nennt
+den Cache als moegliche Ursache · Sabotage in beide Richtungen.
+
+`[read]` **Nicht Teil:** das Neuladen des Caches selbst. **Das ist eine
+Betriebsregel und gehoert dem Orchestrator** — er hat sie heute verletzt,
+nicht du.
+
 ## Der Befund
 
 `[cmd]` **Die Goals-Seite fiel am 2026-10-01 aus.** Am Schirm stand
