@@ -22,6 +22,8 @@ import type { Metadata } from 'next'
 
 import { ladeCheckins } from '../../../lib/recovery/checkin-read'
 import { ladeScores, ladeModalitaeten } from '../../../lib/recovery/scores-read'
+// G-593: die gestarteten Protokolle (`recovery.recovery_protocols`).
+import { ladeProtokolle } from '../../../lib/recovery/protokoll-read'
 import { RecoveryAnsicht } from './ansicht'
 // ══ G-430: die Muskelhierarchie aus `public.koerperflaechen` ══════
 //
@@ -71,7 +73,7 @@ export default async function V2RecoveryPage({
   // aus, bleiben die uebrigen gueltig. Dieselbe Linie wie im
   // Tagebuch.
   const [checkins, scores, modalitaeten, hierarchie, muskelbaum,
-    muskelzustand] = await Promise.all([
+    muskelzustand, protokolle] = await Promise.all([
     ladeCheckins(30, stichtag),
     ladeScores(180, stichtag),
     ladeModalitaeten(120, stichtag),
@@ -100,6 +102,7 @@ export default async function V2RecoveryPage({
     // ihn zugedeckt: kein Typfehler, keine Meldung, nur eine Zahl,
     // die sich nie ruehrte.
     ladeMuskelzustand(105, bezugszeitpunkt(stichtag)),
+    ladeProtokolle(),
   ])
   return (
     <RecoveryAnsicht
@@ -109,6 +112,7 @@ export default async function V2RecoveryPage({
       hierarchie={hierarchie}
       muskelbaum={muskelbaum}
       muskelzustand={muskelzustand}
+      protokolle={protokolle}
       // G-450: gegen welchen Tag gerechnet wurde — und ob er in der
       // Zukunft liegt (A6).
       stichtag={stichtag}

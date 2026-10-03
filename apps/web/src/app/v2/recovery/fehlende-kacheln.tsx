@@ -48,6 +48,8 @@ import { Card, Pill } from '@lumeos/ui'
 
 import { attrappeAus } from './ansicht'
 import { HRV_LOG, SLEEP_DATA } from './motor'
+// G-593: die laufenden Protokolle. Nur der TYP aus dem Leseweg (A-30).
+import type { ProtokollStand } from '../../../lib/recovery/protokoll-read'
 
 // `[cmd]` Die Werte der Vorlage: 30 Tage Gewichtsverlauf.
 const GEWICHT_30T = [
@@ -83,12 +85,9 @@ const MUSTER: Array<[string, string, string]> = [
   ['Sauna am Vorabend', '5 von 30 Tagen', 'HRV +4.2 ms'],
   ['Reisetag', '3 von 30 Tagen', 'Bereitschaft −8'],
 ]
-const PROT_AUFGABEN: Array<[string, string]> = [
-  ['Zone-1 cardio 25 min', 'erledigt'],
-  ['Mobility flow · hips', 'erledigt'],
-  ['Stretch 15 min', 'offen'],
-  ['In bed by 22:30', 'offen'],
-]
+// `[cmd]` **G-593: hier stand `PROT_AUFGABEN`** — vier Aufgaben aus
+// dem Entwurf mit festem `erledigt`/`offen`. Die Kachel liest jetzt
+// `recovery.recovery_protocols`.
 
 /** Die vier Verlaufskacheln des HRV-Reiters. */
 export function FehlendeHrvKacheln() {
@@ -360,7 +359,10 @@ export function FehlendeSchlafKacheln() {
 }
 
 /** Die vier Auswertungskacheln aus den Modalen. */
-export function FehlendeAuswertungsKacheln() {
+export function FehlendeAuswertungsKacheln({ protokolle }: {
+  /** G-593: die gestarteten Protokolle, fuer `Today · protocols logged`. */
+  protokolle?: ProtokollStand
+}) {
   return (
     <div className="v2-col-gap" style={{ gap: 14, marginTop: 14 }}>
       <Card title="Training load × Recovery" sub="Zusammenhang, nicht Ursache"
@@ -442,34 +444,53 @@ export function FehlendeAuswertungsKacheln() {
         </div>
       </Card>
 
+      {/* ══ G-593: angebunden ═══════════════════════════════════════
+          `[cmd]` **Hier stand die Marke** *„die Tagesliste ist nur
+          nicht gebaut"* — richtig benannt, `recovery.recovery_protocols`
+          existiert. **Jetzt liest die Kachel sie:** die laufenden
+          Protokolle mit ihren `daily_activities`.
+          `[read]` **Kein Haken je Aufgabe** — die Tabelle fuehrt nur
+          `completed_days`, keinen Stand je Aufgabe. Ein Haken waere
+          eine Behauptung ohne Spalte. */}
       <Card title="Today · protocols logged"
-            attrappe={attrappeAus(MOD,
-              'nichts an der Datenbank — `recovery.recovery_protocols` '
-              + 'existiert; die Tagesliste ist nur nicht gebaut')}>
-        <div className="v2-col-gap" style={{ gap: 5 }}>
-          {PROT_AUFGABEN.map(([a, stand]) => (
-            <div key={a} style={{
-              display: 'flex', alignItems: 'center', gap: 9,
-              padding: '8px 10px', borderRadius: 5,
-              background: stand === 'erledigt'
-                ? 'color-mix(in oklch, var(--pos) 5%, var(--surface))'
-                : 'var(--surface)',
-              border: '1px solid var(--border)',
-            }}>
-              <span style={{
-                width: 12, height: 12, borderRadius: 3,
-                background: stand === 'erledigt' ? 'var(--pos)' : 'var(--surface-2)',
-                border: '1px solid var(--border)', flexShrink: 0,
-              }} />
-              <span style={{ fontSize: 11.5 }}>{a}</span>
-              {stand === 'erledigt' && (
-                <Pill variant="pos" style={{ marginLeft: 'auto', fontSize: 9 }}>
-                  done
-                </Pill>
-              )}
+            sub={protokolle && protokolle.aktiv.length > 0
+              ? `${protokolle.aktiv.length} aktiv` : undefined}>
+        <span data-probe="protokolle-heute" hidden />
+        {!protokolle || protokolle.fehler ? (
+          <div style={{ fontSize: 12, color: 'var(--neg)' }}>
+            Nicht geladen{protokolle?.fehler ? `: ${protokolle.fehler}` : '.'}
+          </div>
+        ) : protokolle.aktiv.length === 0 ? (
+          <div className="v2-dim" style={{ fontSize: 11.5, padding: '6px 0' }}>
+            Kein Protokoll aktiv. Starten lässt es sich unter Protocols.
+          </div>
+        ) : (
+          <div className="v2-col-gap" style={{ gap: 10 }}>
+            {protokolle.aktiv.map(z => (
+              <div key={z.id}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5, flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: 12, fontWeight: 600 }}>{z.name}</span>
+                  <Pill>{z.completed_days} / {z.duration_days} Tage</Pill>
+                  <span className="v2-dim v2-mono" style={{ marginLeft: 'auto', fontSize: 10 }}>
+                    seit {z.started_on}
+                  </span>
+                </div>
+                <div className="v2-col-gap" style={{ gap: 4 }}>
+                  {z.daily_activities.map(a => (
+                    <div key={a} style={{
+                      padding: '7px 10px', borderRadius: 5, fontSize: 11.5,
+                      background: 'var(--surface)', border: '1px solid var(--border)',
+                    }}>{a}</div>
+                  ))}
+                </div>
+              </div>
+            ))}
+            <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.45 }}>
+              Abhaken je Aufgabe ist nicht gebaut — gespeichert wird nur,
+              wie viele Tage erledigt sind.
             </div>
-          ))}
-        </div>
+          </div>
+        )}
       </Card>
     </div>
   )

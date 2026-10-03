@@ -20,6 +20,11 @@ import {
 import type {
   CheckinEingabe, ModalitaetEingabe,
 } from '../../../lib/recovery/checkin-regeln'
+// G-593: das dritte Ziel — ein Protokoll starten.
+import {
+  protokollStarten, type GestartetesProtokoll,
+} from '../../../lib/recovery/protokoll-write'
+import type { ProtokollEingabe } from '../../../lib/recovery/protokoll-regeln'
 
 export type CheckinErgebnis =
   | { ok: true; zeile: GeschriebenerCheckin }
@@ -75,6 +80,21 @@ export async function modalitaetAendernAktion(
 ): Promise<ModalitaetErgebnis> {
   try {
     return { ok: true, zeile: await modalitaetAendern(id, e) }
+  } catch (f) {
+    return alsFehler(f)
+  }
+}
+
+export type ProtokollErgebnis =
+  | { ok: true; zeile: GestartetesProtokoll }
+  | { ok: false; code: string; text: string
+      felder: Array<{ feld: string; text: string }> }
+
+export async function protokollStartenAktion(
+  e: ProtokollEingabe,
+): Promise<ProtokollErgebnis> {
+  try {
+    return { ok: true, zeile: await protokollStarten(e) }
   } catch (f) {
     return alsFehler(f)
   }

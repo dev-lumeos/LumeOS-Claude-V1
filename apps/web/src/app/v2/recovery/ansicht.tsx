@@ -65,6 +65,7 @@ import type { CheckinStand } from '../../../lib/recovery/checkin-read'
 // einer Browserrechnung. `lib/recovery/score.ts` (G-76) bleibt — aber
 // nur noch als Vorschau im Check-in-Entwurf, nicht mehr hier.
 import type { ScoreStand, ModalitaetenStand } from '../../../lib/recovery/scores-read'
+import type { ProtokollStand } from '../../../lib/recovery/protokoll-read'
 import { ScoreKachel, ScoreVerlauf } from './score-kachel'
 import { ModalitaetenKachel } from './modalitaeten-kachel'
 import { CheckinStreifen } from './checkin-streifen'
@@ -122,8 +123,10 @@ function tabs(muskelzahl: number, modalitaeten: number, otZahl: number): TabItem
 
 export function RecoveryAnsicht({
   checkins, scores, modalitaeten, hierarchie, muskelbaum, muskelzustand,
-  zukunft = false, stichtag,
+  zukunft = false, stichtag, protokolle,
 }: {
+  /** G-593: die gestarteten Protokolle. */
+  protokolle?: ProtokollStand
   checkins?: CheckinStand
   scores?: ScoreStand
   modalitaeten?: ModalitaetenStand
@@ -261,7 +264,7 @@ export function RecoveryAnsicht({
       {tab === 'today' && (
         <>
           <RecToday checkins={checkins} scores={scores} modalitaeten={modalitaeten} />
-          <FehlendeAuswertungsKacheln />
+          <FehlendeAuswertungsKacheln protokolle={protokolle} />
           <RecTodayReferenz />
           <MuscleReadinessReferenz />
         </>
@@ -340,6 +343,7 @@ export function RecoveryAnsicht({
       )}
 
       <RecoveryModale modal={modal} onClose={kontext.close} tag={tag}
+                      protokolle={protokolle}
                       hierarchie={hierarchie}
                       muskelbaum={muskelbaum} />
     </RecoveryKontext.Provider>

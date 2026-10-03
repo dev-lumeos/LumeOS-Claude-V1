@@ -107,6 +107,11 @@ test('G-590: die beiden Knoepfe sind keine Attrappe mehr', () => {
   assert.ok(ab > 0 && bis > ab, 'LogModalityModal nicht gefunden')
   assert.equal((modale.slice(ab, bis).match(/<InEntwicklungKnopf\b/g) ?? []).length, 0,
     'der Log-Knopf ist wieder ein InEntwicklungKnopf')
-  assert.equal((modale.match(/<InEntwicklungKnopf\b/g) ?? []).length, 3,
-    'HRV-Speichern und die zwei Protokollknoepfe sollen Attrappe bleiben (A6)')
+  // `[cmd]` **G-593: 3 -> 2.** `Activate protocol` schreibt jetzt.
+  // **HRV-Speichern bleibt Attrappe** (G-593/A5: `recovery.hrv_readings`
+  // gibt es nicht), `End protocol` ebenso (kein Statuswechsel gebaut).
+  assert.equal((modale.match(/<InEntwicklungKnopf\b/g) ?? []).length, 2,
+    'HRV-Speichern und End protocol sollen Attrappe bleiben (G-590/A6, G-593/A5)')
+  assert.equal((modale.match(/<InEntwicklungKnopf titel="Save · 64 ms"/g) ?? []).length, 1,
+    'der HRV-Knopf ist keine Attrappe mehr — dafuer fehlt die Tabelle')
 })

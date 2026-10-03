@@ -60,7 +60,9 @@ import {
 import type { ModalZustand } from './kontext'
 // G-590: der Log-Knopf schreibt.
 import { useRouter } from 'next/navigation'
-import { modalitaetAnlegenAktion } from './erfassen-aktionen'
+import { modalitaetAnlegenAktion, protokollStartenAktion } from './erfassen-aktionen'
+// G-593: der Protokollknopf schreibt. Nur der TYP aus dem Leseweg (A-30).
+import type { ProtokollStand } from '../../../lib/recovery/protokoll-read'
 
 // ── Der Rahmen ──────────────────────────────────────────────────
 // [cmd] module-recovery-modals2.jsx:3-18.
@@ -120,9 +122,11 @@ const FELD: React.CSSProperties = {
 }
 
 // ── Die Verteilung ──────────────────────────────────────────────
-export function RecoveryModale({ modal, onClose, hierarchie, muskelbaum, tag }: {
+export function RecoveryModale({ modal, onClose, hierarchie, muskelbaum, tag, protokolle }: {
   modal: ModalZustand | null
   onClose: () => void
+  /** G-593: die gestarteten Protokolle — wer laeuft, und seit wann. */
+  protokolle?: ProtokollStand
   /** G-590: der angesehene Tag — Vorgabe fuer das Datum einer Anwendung. */
   tag: string
   /** G-430: der Flaechenbaum — fuer „Per-muscle detail zeigt den Elternteil". */
@@ -144,7 +148,8 @@ export function RecoveryModale({ modal, onClose, hierarchie, muskelbaum, tag }: 
     case 'muskelgruppe': return <GruppenDetailModal name={modal.name}
                                                     onClose={onClose}
                                                     muskelbaum={muskelbaum} />
-    case 'protocol': return <ProtocolDetailModal p={modal.protokoll} onClose={onClose} />
+    case 'protocol': return <ProtocolDetailModal p={modal.protokoll} onClose={onClose}
+                                                 tag={tag} protokolle={protokolle} />
     default: return null
   }
 }
@@ -1025,8 +1030,36 @@ function MuscleDetailModal({ slug, onClose, hierarchie, muskelbaum }: {
 
 // ── Protokolldetail ─────────────────────────────────────────────
 // [cmd] module-recovery-modals2.jsx:238-266.
-function ProtocolDetailModal({ p, onClose }: { p: Protocol; onClose: () => void }) {
-  const isActive = p.id === ACTIVE_PROTOCOL.id
+function ProtocolDetailModal({ p, onClose, tag, protokolle }: {
+  p: Protocol; onClose: () => void; tag: string; protokolle?: ProtokollStand
+}) {
+  const router = useRouter()
+  // ══ G-593: WER LAEUFT, STEHT IN DER TABELLE ══════════════════════
+  //
+  // `[cmd]` **Hier stand `p.id === ACTIVE_PROTOCOL.id`** — eine
+  // Entwurfskonstante (`motor.ts`, `day: 3, of: 7`). `[read]` **Jetzt
+  // die juengste Zeile mit `status = 'active'` fuer DIESES Protokoll.**
+  // Ohne geladenen Stand bleibt es beim Entwurf.
+  const lauf = protokolle
+    ? protokolle.aktiv.find(z => z.protocol_key === p.id) ?? null
+    : null
+  const isActive = protokolle ? lauf !== null : p.id === ACTIVE_PROTOCOL.id
+  // `[cmd]` **A3: kein eindeutiger Schluessel auf `active`** — ein
+  // zweites laufendes Protokoll ist erlaubt. Genannt, nicht verhindert.
+  const anderes = protokolle?.aktiv.find(z => z.protocol_key !== p.id) ?? null
+  // `[read]` `injury_protocol` steht in der Vorlage als `'7–14'` — die
+  // Dauer ist deshalb ein Feld, vorbelegt mit der ersten Zahl.
+  const [dauer, setDauer] = React.useState(String(parseInt(String(p.days), 10) || 7))
+  const [laeuft, starte] = React.useTransition()
+  const [fehler, setFehler] = React.useState<string | null>(null)
+  const starten = () => starte(async () => {
+    const r = await protokollStartenAktion({
+      protocol_key: p.id, name: p.name, started_on: tag,
+      duration_days: dauer, daily_activities: p.activities,
+    })
+    if (r.ok) { router.refresh(); onClose() }
+    else setFehler(r.felder.length ? r.felder.map(f => f.text).join(' ') : r.text)
+  })
   return (
     <RMod title={p.name} subtitle={`${p.goal} · ${p.days} days`}
           eyebrow="calendar" onClose={onClose}
@@ -1041,14 +1074,18 @@ function ProtocolDetailModal({ p, onClose }: { p: Protocol; onClose: () => void 
                   </InEntwicklungKnopf>
                 )
                 : (
-                                      // @abwesend recovery.protocols
-                    // G-278: Der Protokoll-Knopf begruendet sich damit.
-                    // Kommt die Tabelle, faellt der Gate-Waechter und
-                    // nennt diese Zeile (A-62). 2026-08-30: FEHLT.
-                  <InEntwicklungKnopf titel="Activate protocol" className="v2-btn v2-btn-primary"
-                                      grund="Protokolle brauchen eine Tabelle recovery.protocols — die gibt es nicht. Das Schema `recovery` steht (3 Tabellen), diese eine fehlt.">
-                    <Icon name="play" className="v2-ic v2-ic-sm" />Activate protocol
-                  </InEntwicklungKnopf>
+                    // ══ G-593: hier stand ein `InEntwicklungKnopf` ══════
+                    // mit dem Grund *„Protokolle brauchen eine Tabelle
+                    // recovery.protocols — die gibt es nicht."* `[cmd]`
+                    // **Woertlich richtig, sachlich falsch:** die Tabelle
+                    // heisst `recovery.recovery_protocols` (12 Spalten,
+                    // 2 Zeilen, gemessen 2026-10-03) — so, wie
+                    // `fehlende-kacheln.tsx` sie schon nannte. **Jetzt
+                    // schreibt der Knopf** (`protokollStartenAktion`).
+                  <button type="button" className="v2-btn v2-btn-primary"
+                          data-probe="protokoll-starten" onClick={starten} disabled={laeuft}>
+                    <Icon name="play" className="v2-ic v2-ic-sm" />{laeuft ? 'Startet …' : 'Activate protocol'}
+                  </button>
                 )}
             </>
           }>
@@ -1060,16 +1097,45 @@ function ProtocolDetailModal({ p, onClose }: { p: Protocol; onClose: () => void 
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
             <Pill variant="acc">active</Pill>
-            <span style={{ fontSize: 12 }}>Day {ACTIVE_PROTOCOL.day} of {ACTIVE_PROTOCOL.of}</span>
+            <span style={{ fontSize: 12 }}>
+              {lauf ? `${lauf.completed_days} of ${lauf.duration_days} days done`
+                : `Day ${ACTIVE_PROTOCOL.day} of ${ACTIVE_PROTOCOL.of}`}
+            </span>
             <span className="v2-dim v2-mono" style={{ marginLeft: 'auto', fontSize: 10 }}>
-              started {ACTIVE_PROTOCOL.started}
+              started {lauf ? lauf.started_on : ACTIVE_PROTOCOL.started}
             </span>
           </div>
         </div>
       )}
+      {!isActive && (
+        <div className="v2-grid v2-g-cols-2" style={{ gap: 10, marginBottom: 14 }}>
+          <div>
+            <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Start</div>
+            <div className="v2-mono" style={{ fontSize: 12, padding: '6px 0' }}>{tag}</div>
+          </div>
+          <div>
+            <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Duration · days (1–31)</div>
+            <input type="number" min={1} max={31} value={dauer} aria-label="Duration in days"
+                   onChange={e => setDauer(e.target.value)}
+                   style={{ ...FELD, fontFamily: 'var(--font-mono)' }} />
+          </div>
+        </div>
+      )}
+      {!isActive && anderes && (
+        <div role="note" data-probe="protokoll-anderes-aktiv" style={{
+          fontSize: 11.5, color: 'var(--warn)', marginBottom: 12, lineHeight: 1.5,
+        }}>
+          Es läuft bereits „{anderes.name}“ (seit {anderes.started_on}). Ein
+          zweites aktives Protokoll ist möglich — die Datenbank begrenzt es
+          nicht.
+        </div>
+      )}
+      {fehler && (
+        <div role="alert" style={{ fontSize: 11.5, color: 'var(--neg)', marginBottom: 12 }}>{fehler}</div>
+      )}
       <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Daily activities</div>
       <div className="v2-col-gap" style={{ gap: 5, marginBottom: 14 }}>
-        {p.activities.map(a => (
+        {(lauf ? lauf.daily_activities : p.activities).map(a => (
           <div key={a} style={{
             display: 'flex', gap: 9, padding: '9px 11px', background: 'var(--surface)',
             border: '1px solid var(--border)', borderRadius: 5, fontSize: 12,
@@ -1083,7 +1149,12 @@ function ProtocolDetailModal({ p, onClose }: { p: Protocol; onClose: () => void 
         padding: 11, background: 'var(--surface)', border: '1px solid var(--border)',
         borderRadius: 6, fontSize: 11.5, color: 'var(--fg-muted)', lineHeight: 1.6,
       }}>
-        Activating this protocol writes its activities into your Today view as daily tasks — the same pattern nutrition meal plans use for ghost entries. Tasks can be confirmed, skipped, or edited. The protocol ends automatically after {p.days} days, or you can end it early.
+        {/* `[cmd]` **G-593: der Vorlagensatz versprach mehr, als gebaut
+            ist** — *„Tasks can be confirmed, skipped, or edited. The
+            protocol ends automatically"*. Die Tabelle fuehrt keinen
+            Stand je Aufgabe (nur `completed_days`), und nichts beendet
+            ein Protokoll von selbst (kein Trigger, gemessen 2026-10-03). */}
+        Activating this protocol saves it with its daily activities; they appear on Today under „Today · protocols logged“. Ticking off single tasks and ending the protocol automatically after {p.days} days are not built yet.
       </div>
     </RMod>
   )

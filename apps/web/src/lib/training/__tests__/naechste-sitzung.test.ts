@@ -150,7 +150,10 @@ test('G-278: die tragenden Gruende sind markiert', () => {
   const paare: Array<[string, string, string]> = [
     ['src/app/v2/medical/modale.tsx', 'medical.biomarker_results', '@abwesend medical.biomarker_results'],
     ['src/app/v2/recovery/modale.tsx', 'recovery.hrv_readings', '@abwesend recovery.hrv_readings'],
-    ['src/app/v2/recovery/modale.tsx', 'recovery.protocols', '@abwesend recovery.protocols'],
+    // `[cmd]` **G-593: das Paar `recovery.protocols` ist raus.** Der
+    // Knopf, den die Marke begruendete, schreibt jetzt in
+    // `recovery.recovery_protocols` — **die Abwesenheit traegt keine
+    // Anzeige mehr.** Die Regel bleibt fuer die uebrigen vier.
     ['src/app/v2/training/modale.tsx', 'training.routines', '@nachgefuehrt training.routines'],
     ['src/app/v2/training/modale.tsx', 'training.blocks', '@abwesend training.blocks'],
   ]
