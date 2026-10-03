@@ -35,8 +35,9 @@ beruehrt:
     Bereich: die laufende Datenbank (ausdrueckliche Freigabe von Tom,
              2026-10-02) · supabase/_pipeline/ · backup/
     Fremd:   apps/ und packages/ gehoeren Claude Code - er arbeitet
-             gerade an G-586 in packages/shared/src/supabase/.
-             docs/ gehoert dem Orchestrator, auch diese Punktdatei.
+             gerade an G-590 in apps/web/src/app/v2/recovery/ und
+             apps/web/src/lib/recovery/. docs/ gehoert dem
+             Orchestrator, auch diese Punktdatei.
     Stand:   2026-10-03
 
 ## Stand 2026-10-03 — lies das zuerst, du faengst ohne Kontext an
