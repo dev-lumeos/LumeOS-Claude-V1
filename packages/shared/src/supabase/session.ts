@@ -15,16 +15,44 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 import { authCookieOptions } from './cookie-name'
+// `[cmd]` **G-586: der erneuernde `fetch` liegt in
+// `uhrensprung.ts`** -- er haengt an keinem `next/headers` und
+// ist deshalb ohne Next-Umgebung pruefbar.
+import { fetchMitEinmaligerErneuerung } from './uhrensprung'
 
 export function createSessionClient() {
   const cookieStore = cookies()
   const cookieOptions = authCookieOptions()
 
-  return createServerClient(
+  // `[read]` **Der Client muss sich selbst erneuern koennen** —
+  // deshalb die Vorwaertsreferenz: `fetch` braucht ihn, und er
+  // braucht `fetch`.
+  let selbst: ReturnType<typeof createServerClient> | null = null
+
+  const client = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       ...(cookieOptions ? { cookieOptions } : {}),
+      // ══ G-586: einmal erneuern statt rausschmeissen ════════════
+      //
+      // `[cmd]` **`refreshSession()` geht ueber
+      // `grant_type=refresh_token`** — gemessen: der traegt kein
+      // `iat` und faellt an keiner Uhr. **Genau deshalb hilft er.**
+      //
+      // `[read]` **Der neue Keks kann hier nicht ankommen** (Server
+      // Components duerfen nicht schreiben, siehe `set` unten) —
+      // **aber das ist egal:** `supabase-js` haelt das frische
+      // Token im Speicher, und die Wiederholung laeuft damit. Die
+      // naechste Anfrage erneuert die Middleware.
+      global: {
+        fetch: fetchMitEinmaligerErneuerung(async () => {
+          const { data, error } = await selbst!.auth.refreshSession()
+          // `[read]` **Das TOKEN zurueckgeben, nicht `true`** — die
+          // Wiederholung setzt es in den Kopf.
+          return error ? null : data.session?.access_token ?? null
+        }),
+      },
       cookies: {
         get(name: string) {
           return cookieStore.get(name)?.value
@@ -47,4 +75,6 @@ export function createSessionClient() {
       },
     },
   )
+  selbst = client
+  return client
 }
