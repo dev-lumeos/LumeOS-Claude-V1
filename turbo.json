@@ -12,6 +12,7 @@
       "persistent": true
     },
     "test": {
+      "cache": false,
       "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/packages/shared/src/**"]
     },
     "lint": {},
