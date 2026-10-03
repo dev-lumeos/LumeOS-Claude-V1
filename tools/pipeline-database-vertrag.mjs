@@ -1,12 +1,42 @@
+import { spawn } from 'node:child_process'
 import { readdir, readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const QUELLDATEI = /\.(?:c|m)?(?:j|t)s$/i
 const EIGENER_NAME = /process\.env\.(LUMEOS_[A-Z0-9_]*DATABASE)\b/g
-const PG_LESER = /\b(?:const|let)\s+([A-Za-z_$][\w$]*)\s*=\s*(?:[^;\n]*?\?\?\s*)?process\.env\.PGDATABASE\b/g
+const PGDATABASE_LESER = /process\.env\.PGDATABASE\b/
 const POSTGRES_RUECKFALL = /process\.env\.PGDATABASE\s*(?:\?\?|\|\|)\s*(['"])postgres\1/g
 const FESTE_BASISDATENBANK = /(['"])-d\1\s*,\s*(['"])postgres\2/g
+const GESPERRTER_ZUGRIFF = 86
+const PARALLELE_LAEUFE = 12
+const MAX_LAUFZEIT_MS = 5_000
+// Die Probe aktiviert auch boolesche CLI-Schalter wie --a95-live, blockiert
+// aber jeden Kindprozess und Netzwerkzugriff, bevor eine Datenbank erreichbar ist.
+const LAUFZEIT_SPERRE = `data:text/javascript,${encodeURIComponent(`
+import childProcess from 'node:child_process'
+import http from 'node:http'
+import https from 'node:https'
+import net from 'node:net'
+import { syncBuiltinESMExports } from 'node:module'
+
+const gesperrt = () => process.exit(${GESPERRTER_ZUGRIFF})
+for (const name of ['spawn', 'spawnSync', 'exec', 'execSync', 'execFile', 'execFileSync', 'fork']) {
+  childProcess[name] = gesperrt
+}
+http.request = gesperrt
+http.get = gesperrt
+https.request = gesperrt
+https.get = gesperrt
+net.Socket.prototype.connect = gesperrt
+globalThis.fetch = gesperrt
+
+const includes = process.argv.includes.bind(process.argv)
+process.argv.includes = (wert, ab = 0) =>
+  typeof wert === 'string' && wert.startsWith('--') ? true : includes(wert, ab)
+
+syncBuiltinESMExports()
+`)}`
 
 async function quellDateien(wurzel) {
   const ergebnis = []
@@ -30,17 +60,72 @@ function zeileVon(inhalt, index) {
   return inhalt.slice(0, index).split(/\r?\n/).length
 }
 
-function hatFailClosed(inhalt, variable) {
-  const name = variable.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-  const fehlt = new RegExp(`!\\s*${name}\\b`).test(inhalt)
-  const basisdatenbank = new RegExp(`\\b${name}\\s*===\\s*(['"])postgres\\1`).test(inhalt)
-  return fehlt && basisdatenbank
+function pruefeLauf(datei, database) {
+  const env = {
+    ...process.env,
+    LUMEOS_DB_CONTAINER: '__a98_gesperrt__',
+  }
+  if (database === null) {
+    delete env.PGDATABASE
+  } else {
+    env.PGDATABASE = database
+  }
+
+  return new Promise((resolve) => {
+    const kind = spawn(
+      process.execPath,
+      ['--import', 'tsx', '--import', LAUFZEIT_SPERRE, datei],
+      {
+        env,
+        stdio: 'ignore',
+        timeout: MAX_LAUFZEIT_MS,
+        windowsHide: true,
+      },
+    )
+
+    kind.once('error', (fehler) => resolve({ fehler }))
+    kind.once('close', (code, signal) => resolve({ code, signal }))
+  })
 }
 
-export async function pruefePipelineDatenbankvertrag(pipelineWurzel) {
-  const verstoesse = []
+async function parallelAbbilden(eintraege, abbilden) {
+  const ergebnisse = new Array(eintraege.length)
+  let naechsterIndex = 0
 
-  for (const datei of await quellDateien(pipelineWurzel)) {
+  async function arbeiter() {
+    while (naechsterIndex < eintraege.length) {
+      const index = naechsterIndex
+      naechsterIndex += 1
+      ergebnisse[index] = await abbilden(eintraege[index])
+    }
+  }
+
+  await Promise.all(
+    Array.from(
+      { length: Math.min(PARALLELE_LAEUFE, eintraege.length) },
+      () => arbeiter(),
+    ),
+  )
+  return ergebnisse
+}
+
+function laufVerletztVertrag(ergebnis) {
+  return ergebnis.fehler || ergebnis.signal || ergebnis.code === 0 || ergebnis.code === GESPERRTER_ZUGRIFF
+}
+
+function laufBefund(modus, ergebnis) {
+  if (ergebnis.fehler) return `${modus}: Start fehlgeschlagen`
+  if (ergebnis.signal) return `${modus}: abgebrochen mit ${ergebnis.signal}`
+  if (ergebnis.code === GESPERRTER_ZUGRIFF) return `${modus}: Datenbank- oder Kindprozess erreicht`
+  return `${modus}: Exit 0`
+}
+
+async function analysierePipelineDatenbankvertrag(pipelineWurzel) {
+  const verstoesse = []
+  const pgLeser = []
+  const dateien = await quellDateien(pipelineWurzel)
+
+  for (const datei of dateien) {
     const inhalt = await readFile(datei, 'utf8')
     const relativ = path.relative(pipelineWurzel, datei).replaceAll('\\', '/')
 
@@ -68,25 +153,63 @@ export async function pruefePipelineDatenbankvertrag(pipelineWurzel) {
       })
     }
 
-    for (const treffer of inhalt.matchAll(PG_LESER)) {
-      if (!hatFailClosed(inhalt, treffer[1])) {
-        verstoesse.push({
-          datei: relativ,
-          zeile: zeileVon(inhalt, treffer.index),
-          grund: `PGDATABASE-Leser ${treffer[1]} ist nicht fail-closed gegen fehlenden Namen und postgres.`,
-        })
-      }
+    const pgTreffer = PGDATABASE_LESER.exec(inhalt)
+    if (pgTreffer) {
+      pgLeser.push({
+        absolut: datei,
+        relativ,
+        zeile: zeileVon(inhalt, pgTreffer.index),
+      })
     }
   }
 
-  return verstoesse.sort((a, b) =>
+  const laufErgebnisse = await parallelAbbilden(pgLeser, async (datei) => ({
+    datei,
+    laeufe: [
+      ['ohne PGDATABASE', await pruefeLauf(datei.absolut, null)],
+      ['mit PGDATABASE=postgres', await pruefeLauf(datei.absolut, 'postgres')],
+    ],
+  }))
+
+  for (const { datei, laeufe } of laufErgebnisse) {
+    const befund = laeufe
+      .filter(([, ergebnis]) => laufVerletztVertrag(ergebnis))
+      .map(([modus, ergebnis]) => laufBefund(modus, ergebnis))
+    if (befund.length > 0) {
+      verstoesse.push({
+        datei: datei.relativ,
+        zeile: datei.zeile,
+        grund: `PGDATABASE-Leser ist im Lauf nicht fail-closed (${befund.join('; ')}).`,
+      })
+    }
+  }
+
+  if (pgLeser.length === 0 && verstoesse.length === 0) {
+    verstoesse.push({
+      datei: '.',
+      zeile: 1,
+      grund: 'Kein PGDATABASE-Leser wurde im Lauf geprueft.',
+    })
+  }
+
+  verstoesse.sort((a, b) =>
     a.datei.localeCompare(b.datei) || a.zeile - b.zeile || a.grund.localeCompare(b.grund),
   )
+  return {
+    verstoesse,
+    quellskripte: dateien.length,
+    gepruefteSkripte: pgLeser.length,
+  }
+}
+
+export async function pruefePipelineDatenbankvertrag(pipelineWurzel) {
+  return (await analysierePipelineDatenbankvertrag(pipelineWurzel)).verstoesse
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const wurzel = path.resolve(process.argv[2] ?? 'supabase/_pipeline')
-  const verstoesse = await pruefePipelineDatenbankvertrag(wurzel)
+  const { verstoesse, quellskripte, gepruefteSkripte } = await analysierePipelineDatenbankvertrag(wurzel)
+  console.log(`${gepruefteSkripte} von ${quellskripte} Pipeline-Skripten im Lauf geprueft.`)
   if (verstoesse.length === 0) {
     console.log('OK: Pipeline-Datenbankvertrag gilt.')
   } else {
