@@ -136,3 +136,27 @@ Daten.** Wer dort Zahlen sehen will, braucht eine Phase an einem Ziel.
 neues A4 (`PGRST202` als eigener, lesbarer Zustand in `ladefehler.ts`)
 ist durch diesen Vorfall belegt: der Nutzer las eine Signatur, die
 niemand mehr aufruft.
+
+## Berichtigung — 2026-10-03, nachmittags
+
+`[read]` **Punkt 3 der Behebung war mit `[cmd]` ueberzeichnet.** Dort
+steht, die A-95-Probe in `testdaten-pruefen.ts` *„verlangt jetzt beide
+Fassungen, je mit eigener Meldung"*. **Am Dateiinhalt ist das richtig und
+bleibt richtig. Durch einen Lauf der Datei belegt war es nie.**
+
+`[cmd]` **Der Grund, gefunden bei der Abnahme von G-594:** A-95 hatte in
+derselben Datei eine Probe mit `GROUP BY true` hinterlassen — in Postgres
+ungueltig. `sql()` benutzt `execFileSync` und faengt nichts ab, **also
+brach das Skript bei Zeile 557 ab.** Die zwei Proben, die G-595 bei
+Zeile 587 ff. angelegt hat, stehen **unterhalb** dieser Stelle und sind
+nie ausgefuehrt worden.
+
+`[cmd]` **Die Zeile ist entfernt** (G-594, Commit `dc04902a`); der
+Pruefer laeuft technisch durch. **Die Bauart ist jetzt A-99** — ein
+Pruefer, der bei einem eigenen Fehler abbricht, meldet dasselbe wie
+einer, der nie lief.
+
+`[read]` **Was an G-595 unberuehrt bleibt:** der Mantel ist live
+wiederhergestellt, der `DROP` in `030_mikro-uebersicht.ts` ist weg, und
+die Seite ist am Bildschirm belegt. **Nur die dritte der drei Handgriffe
+traegt ab jetzt `[read]`, nicht `[cmd]`.**

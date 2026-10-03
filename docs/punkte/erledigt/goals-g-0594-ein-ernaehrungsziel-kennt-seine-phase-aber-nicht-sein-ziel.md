@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-03
 agent: codex
 beauftragt: 2026-10-03
+erledigt: 2026-10-03
+commit: dc04902a
 
 braucht: [G-563, A-95]
 kind_von: A-95
@@ -189,3 +191,95 @@ Datei**. `goals-g511-phase-calories.test.ts` und
 `goal_id`-Spalte (verworfen) · G-532/A2, das auf `goal_contributions`
 wartet · die Frage, ob ein Nutzer mehrere offene Phasen haben darf
 (beantwortet: ja, G-559 und G-563 sind darauf gebaut).
+
+## Abnahme — 2026-10-03, Commit `dc04902a`
+
+`[cmd]` **Gate gruen im Vorcommit-Haken**, 18/18 Aufgaben. Commit
+`dc04902a`, 5 Dateien, +310/−135.
+
+### Was ich selbst gemessen habe, nicht dem Bericht entnommen
+
+`[cmd]` **Die tragende Behauptung des Berichts haelt:** zwischen 559 und
+563 liegt kein Kettenschritt. Aus `kette.json` (343 Schritte):
+
+    Position 299   559_phase_at_scope
+    Position 300   563_target_scoped_calculation
+
+**Damit war die Entfernung der doppelten Triggerfassung in 559 sicher** —
+und sie entfernt zugleich einen Aufrufer der Zweiparameter-Fassung, der
+dort nichts mehr zu suchen hatte.
+
+`[read]` **Die fuenf Nachweise treffen die fuenf verlangten Faelle, einer
+je Fall**, in `goals-g563-target-calculation.test.ts`:
+
+    237  genannte Phase waehlt bei zwei Nutzerphasen ihr Ziel
+    274  zwei Phasen ohne Nennung bleiben mehrdeutig
+    309  fremde Phase -> 23514
+    344  inaktive Phase -> 23514
+    385  eine Phase ohne Nennung wird weiter automatisch gewaehlt
+
+`[cmd]` **5 Erwartungen auf `23514`, 7 `BEGIN;` zu 7 `ROLLBACK`** — die
+Datei laesst nichts stehen. **Die Wegwerf-Wache ist intakt:**
+`if (!db || db === 'postgres') throw` am Dateikopf.
+
+`[read]` **Der Umbau im Trigger ist genau der verlangte:** die
+Mengenpruefung steht jetzt im `ELSE`-Zweig und ist nicht verschwunden;
+der `IF`-Zweig loest ueber `phase_am(...) WHERE p.phase_id =
+NEW.phase_id` auf und wirft bei `NOT FOUND`. `search_path = ''` und
+`SECURITY INVOKER` unveraendert.
+
+`[read]` **A3 ist beantwortet und braucht keinen Folgepunkt:**
+`FOREIGN KEY (phase_id, user_id) ... ON DELETE RESTRICT`. Eine Phase mit
+Zielzeilen laesst sich nicht loeschen — der Zielbezug kann nicht
+stillschweigend verschwinden.
+
+### Berichtigung 1 — zwei Fixture-Aenderungen aendern die Deckung
+
+`[read]` **Der Bericht nennt `goals-g511-phase-calories.test.ts` als
+„veraltete Fixtures angepasst". Zwei der Aenderungen sind mehr als das**
+und gehoeren benannt:
+
+    'formel' -> 'manuell'   in der letzten Probe (Zeile ~317)
+    A2 benutzt die Seed-Nutzer dev und test-user nicht mehr
+
+**Beide sind vertretbar, und hier ist warum.** Die letzte Probe prueft,
+dass eine Zielzeile nur waehrend ihrer Phase gilt. `NEW.phase_id` wird
+vor der `herkunft`-Verzweigung gesetzt, also bleibt der Gegenstand der
+Probe unberuehrt; die Formelrechnung selbst prueft A3 an eigener Stelle.
+**Die A2-Aenderung ist sogar eine Verbesserung** — eine Probe, die am
+Seedbestand haengt, misst den Seed mit. `[read]` **Aber der alte
+Probentitel behauptete etwas ueber test-user**, und das tut sie jetzt
+nicht mehr; der Titel ist mitgeaendert. **Erzwungen** waren dagegen
+`goal_id` und `strategie_code` in den Phasen — ohne sie laufen die
+Fixtures seit G-558/G-559 nicht mehr.
+
+### Berichtigung 2 — die entfernte Zeile war kein Schoenheitsfehler
+
+`[read]` **`GROUP BY true` ist in Postgres ungueltig**, und
+`testdaten-pruefen.ts` faengt das nicht ab:
+
+    function sql(query) { return execFileSync('docker', [...]) }
+
+`execFileSync` wirft bei einem Exitcode ungleich null. **Das Skript ist
+an dieser Probe abgebrochen, nicht rot geworden** — und damit lief
+**nichts mehr, was darunter steht.**
+
+`[cmd]` **Eingebracht hat die Zeile A-95**, heute:
+
+    df9cd8aa  2026-10-03  goals(A-95): Live-Stand nachgezogen, alte
+                          Zweiparameter-Fassung entfernt
+
+`[read]` **Die Folge trifft meine eigene G-595-Abnahme.** G-595 hat die
+A-95-Probe umgedreht und zwei neue Proben bei Zeile 587 ff. angelegt —
+**unterhalb der Abbruchstelle.** Die Umdrehung ist am Dateiinhalt belegt
+und bleibt richtig; **belegt ist sie aber nie durch einen Lauf der
+Datei** gewesen. Das steht jetzt als Berichtigung in G-595 und als
+eigener Punkt.
+
+### Was offen bleibt — nicht von mir geprueft
+
+`[read]` **Die 16 Befunde, die `testdaten-pruefen.ts` jetzt meldet, sind
+Codex' Messung, nicht meine.** Sie brauchen einen Wegwerflauf der ganzen
+Kette, und den habe ich bewusst nicht gestartet. **Codex hat ihn
+korrekt auch nicht gestartet** — A-91 haelt den Vollkettenlauf, und er
+hat gefragt statt gehandelt. Die 16 werden ein eigener Punkt.
