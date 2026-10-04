@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 275 |
-| `laufend_codex` | 1 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 651 |
-| **gesamt** | **928** |
+| **gesamt** | **929** |
 
 ## medical — 50
 
@@ -603,7 +603,7 @@
 |---|---|---|---|---|---|---|
 | `G-590` | fehler | hoch | [Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht](erledigt/recovery-g-0590-der-checkin-ist-der-einzige-pflichtgriff-und-er-schreibt-nicht.md) | erledigt | G-588 | — |
 
-## goals — 75
+## goals — 76
 
 ### beauftragbar — 68
 
@@ -678,7 +678,7 @@
 | `G-594` | fehler | hoch | [Ein Ernaehrungsziel kennt seine Phase, aber nicht sein Ziel](erledigt/goals-g-0594-ein-ernaehrungsziel-kennt-seine-phase-aber-nicht-sein-ziel.md) | erledigt | — | — |
 | `G-595` | fehler | hoch | [Der Zweiparameter-Mantel war kein Ueberrest — mein Auftrag hat ihn geloescht](erledigt/goals-g-0595-der-zweiparameter-mantel-war-kein-ueberrest.md) | erledigt | — | — |
 
-### wartet auf Blocker — 7
+### wartet auf Blocker — 8
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -688,7 +688,8 @@
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
-| `G-591` | fehler | mittel | [Zwei Goals-Aktionen ohne Aufrufer — eine Messung aendern, die Reihenfolge speichern](laufend_claudecode/goals-g-0591-zwei-goals-aktionen-ohne-aufrufer.md) | laeuft (claudecode) | G-588 | — |
+| `G-591` | fehler | mittel | [Zwei Goals-Aktionen ohne Aufrufer — eine Messung aendern, die Reihenfolge speichern](laufend_claudecode/goals-g-0591-zwei-goals-aktionen-ohne-aufrufer.md) | laeuft (claudecode) | G-588 | G-602 |
+| `G-602` | fehler | mittel | [Die Reihenfolge aktiver Ziele wird atomar getauscht](laufend_codex/goals-g-0602-die-reihenfolge-aktiver-ziele-wird-atomar-getauscht.md) | vorbereitet (codex) | G-591 | — |
 
 ## coach — 58
 
