@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-04
 agent: codex
 beauftragt: 2026-10-04
+erledigt: 2026-10-04
+commit: 404e181c
 
 braucht: [A-99]
 kind_von: A-99
@@ -60,3 +62,29 @@ Nie gegen Live. Wegwerf-Datenbanken danach loeschen, Anzahl nennen. Kein
 Commit. Braucht eine Probe eine fachliche Entscheidung: melden.
 
 **Erst nach G-602.**
+
+## Abnahme - 2026-10-04, Commit `404e181c`
+
+`[cmd]` **Diff:** genau zwei Dateien, +108/-41. Gate beim Commit gruen.
+Sein Lauf: 183 Proben, 21 -> 0 Befunde, frische Kette 346 Schritte gruen,
+Seed-Quelltest 11/11, 2 Wegwerf-Datenbanken geloescht, 0 verbleibend.
+
+`[read]` **Zielwerte:** das alte Formel-Insert (G-511) stand vor den
+Phasen und schrieb 0 Zeilen; es ist entfernt. Neu: drei manuelle
+Snapshots fuer die Phasen `...0101`, `...0102`, `...0201`, je mit
+`phase_id`. **Die aktiven Ziele von test-user erzeugen damit weiterhin
+0 Zielwerte** - Folge der unmoeglichen Doppelkonstellation, geht in C-561.
+
+`[read]` **Einkaufsliste:** C-251 jetzt im kanonischen Seed, 6 Positionen
+mit BLS-Codes.
+
+`[read]` **Proben mit tragfaehigem Grund:** C-344 3 -> 4 (Magnesium EFSA
+und NAM), Cycling nur noch test-user, zwei Trainings- und zwei
+Supplement-Proben am lokalen Lauftag (`TODAY_DATE = tagIso()`).
+
+`[read]` **Zwei Proben ohne tragfaehigen Grund - C-561:**
+Mangel-Szenario `total_assessed >= 17` -> `= 7` (warum werden 10
+Naehrstoffe weniger bewertet?) und Omega-3 `GOAL` -> `AI`, obwohl die
+Meldung der Probe weiter ,gegen Goals-Ziel" sagt. Beide sind im Commit,
+weil sie den Bestand korrekt beschreiben - ob der Bestand richtig ist,
+klaert C-561.

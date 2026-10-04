@@ -6,10 +6,7 @@
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
 | Claude Code | G-592 | Die Hydration-Zusammenfassung ist ein ZWEITER Leseweg, keine fehlende Anzeige | **laeuft**, raus 04.10. |
-| Codex | G-603 | Ein leerer Wassertag ist nicht „0 getrunken" | **laeuft**, raus 04.10. |
-| Codex | C-560 | Der Testdatenpruefer wird gruen | **laeuft**, raus 04.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
-| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 ## Stromausfall in der Nacht zum 03.10. — der Wiederanlauf

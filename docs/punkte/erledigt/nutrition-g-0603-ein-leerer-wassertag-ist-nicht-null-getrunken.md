@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-04
 agent: codex
 beauftragt: 2026-10-04
+erledigt: 2026-10-04
+commit: 3a3ac5e6
 
 braucht: [G-592]
 kind_von: G-592
@@ -62,3 +64,15 @@ einem Eintrag → unveraendert; Sabotage in beide Richtungen.
 genau diese eine Funktion, `NOTIFY pgrst`, Nachweis, Sicherung nachher.
 Kein Commit. Danach zieht Claude Code `parseHydrationDay` und die Kachel
 nach (G-592).
+
+## Abnahme - 2026-10-04, Commit `3a3ac5e6`, live
+
+`[cmd]` **Live nachgemessen** (test-user, 2026-10-04, kein Eintrag):
+`logged_ml` NULL, `total_ml` NULL, `progress_pct` NULL,
+`total_complete` f, `log_count` 0, `target_ml` 2849 - genau das Soll.
+
+`[cmd]` **Sicherungen vorhanden:** `backup/g603-vorher.sql` 397.016 Byte,
+`backup/g603-nachher.sql` 397.053 Byte. Nur die eine Funktion, kein Seed,
+keine Datenzeile, `NOTIFY pgrst` laut Bericht.
+
+Weiter mit G-592 bei Claude Code.

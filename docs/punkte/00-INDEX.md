@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 274 |
-| `laufend_codex` | 2 |
+| `todos` | 275 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 654 |
-| **gesamt** | **931** |
+| `erledigt` | 656 |
+| **gesamt** | **932** |
 
 ## medical — 50
 
@@ -343,7 +342,7 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `G-592` | fehler | mittel | [Die Hydration-Zusammenfassung ist ein ZWEITER Leseweg, keine fehlende Anzeige](laufend_claudecode/nutrition-g-0592-die-hydration-zusammenfassung-hat-keinen-leser.md) | laeuft (claudecode) | G-588 | G-603 |
-| `G-603` | fehler | mittel | [Ein leerer Wassertag ist nicht „0 getrunken"](laufend_codex/nutrition-g-0603-ein-leerer-wassertag-ist-nicht-null-getrunken.md) | laeuft (codex) | G-592 | — |
+| `G-603` | fehler | mittel | [Ein leerer Wassertag ist nicht „0 getrunken"](erledigt/nutrition-g-0603-ein-leerer-wassertag-ist-nicht-null-getrunken.md) | erledigt | G-592 | — |
 
 ## supplements — 131
 
@@ -755,9 +754,9 @@
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 | `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](erledigt/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | erledigt | — | — |
 
-## quer — 245
+## quer — 246
 
-### beauftragbar — 244
+### beauftragbar — 245
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -891,7 +890,8 @@
 | `C-541` | fehler | hoch | [der Erfahrungsgrad darf nicht leer sein](erledigt/quer-c-0541-erfahrungsgrad-darf-nicht-leer-sein.md) | erledigt | — | G-501 |
 | `C-544` | feature | hoch | [der Ort am Koerper als Begriff](erledigt/quer-c-0544-ort-am-koerper.md) | erledigt | — | — |
 | `C-554` | blocker | hoch | [das Migrationsregister sagt nicht, was in der Datenbank steht](erledigt/quer-c-0554-das-migrationsregister-ist-unbrauchbar.md) | erledigt | — | — |
-| `C-560` | fehler | mittel | [Der Testdatenpruefer wird gruen](laufend_codex/quer-c-0560-der-testdatenpruefer-wird-gruen.md) | laeuft (codex) | — | — |
+| `C-560` | fehler | mittel | [Der Testdatenpruefer wird gruen](erledigt/quer-c-0560-der-testdatenpruefer-wird-gruen.md) | erledigt | — | C-561 |
+| `C-561` | fehler | mittel | [Zwei Testproben beschreiben den Bestand, nicht das Soll](todos/quer-c-0561-zwei-testproben-beschreiben-den-bestand-nicht-das-soll.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
