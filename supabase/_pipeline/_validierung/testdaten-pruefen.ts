@@ -31,18 +31,53 @@ function relDate(anchorDate: string): string {
 }
 const END_DATE = addIsoDays(NEXT_START_DATE, WINDOW_DAYS - 1)
 const TODAY_DATE = NEXT_START_DATE
+const errors: string[] = []
+let probesRun = 0
 
-function sql(query: string): string[][] {
+function rawSql(query: string): string {
   return execFileSync('docker', [
     'exec', CONTAINER,
     'psql', '-U', 'postgres', '-d', DB,
     '-t', '-A', '-F', SEP,
     '-c', query,
-  ], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })
-    .split('\n')
-    .map(line => line.trimEnd())
-    .filter(Boolean)
-    .map(line => line.split(SEP))
+  ], {
+    encoding: 'utf8',
+    maxBuffer: 64 * 1024 * 1024,
+    stdio: ['pipe', 'pipe', 'pipe'],
+  })
+}
+
+function commandErrorText(error: unknown): string {
+  if (error && typeof error === 'object') {
+    const commandError = error as { message?: string, stderr?: string | Buffer }
+    const stderr = Buffer.isBuffer(commandError.stderr)
+      ? commandError.stderr.toString('utf8')
+      : commandError.stderr
+    const text = stderr?.trim() || commandError.message?.trim()
+    if (text) return text.replace(/\s+/g, ' ')
+  }
+  return String(error)
+}
+
+try {
+  rawSql('SELECT 1;')
+} catch (error) {
+  console.error(`DATENBANK NICHT ERREICHBAR (${DB}): ${commandErrorText(error)}`)
+  process.exit(2)
+}
+
+function sql(query: string): string[][] {
+  probesRun += 1
+  try {
+    return rawSql(query)
+      .split('\n')
+      .map(line => line.trimEnd())
+      .filter(Boolean)
+      .map(line => line.split(SEP))
+  } catch (error) {
+    errors.push(`SQL-Probe ${probesRun}: ${commandErrorText(error)}`)
+    return []
+  }
 }
 
 function numberScalar(query: string): number {
@@ -53,7 +88,10 @@ function hasRows(query: string): boolean {
   return numberScalar(query) > 0
 }
 
-const errors: string[] = []
+if (process.env.LUMEOS_TESTDATA_INJECT_INVALID_PROBE === '1') {
+  sql('SELECT * FROM a99_absichtlich_ungueltige_probe;')
+}
+
 const users = numberScalar(`SELECT count(*) FROM auth.users WHERE id IN (${IDS_SQL});`)
 const coachUsers = numberScalar(`SELECT count(*) FROM auth.users WHERE id = '${COACH_ID}'::uuid;`)
 const profiles = numberScalar(`SELECT count(*) FROM public.profiles WHERE id IN (${IDS_SQL});`)
@@ -1523,7 +1561,10 @@ if (MODE === 'clean') {
   console.log(`  Fehlzaehler-Summen ENERCC/VITA/FE: ${missingCounters.join('/')}`)
 }
 
+console.log(`Proben ausgefuehrt: ${probesRun}`)
+
 if (errors.length) {
+  errors.sort((left, right) => left.localeCompare(right, 'de'))
   console.error('')
   console.error(`FEHLER: ${errors.length}`)
   for (const error of errors) console.error(`  ${error}`)
