@@ -18,6 +18,7 @@
 // Wächter, der die falsche Beziehung prüft, ist grün und wertlos.
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { utcTagIso } from '@lumeos/shared/datum'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -183,7 +184,7 @@ test('G-318: die Verschiebung rechnet in beide Richtungen', () => {
   const ziel = (start: string, tage: number) => {
     const d = new Date(`${start}T00:00:00Z`)
     d.setUTCDate(d.getUTCDate() + tage)
-    return d.toISOString().slice(0, 10)
+    return utcTagIso(d)
   }
 
   // Vorwärts: von hinten, dann ist jedes Ziel frei.

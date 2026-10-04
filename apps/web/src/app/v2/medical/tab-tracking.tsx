@@ -11,6 +11,7 @@
 // (Begruendung an der Stelle).
 //
 // `[cmd]` ALLES IST ATTRAPPE.
+import { tagIso } from '@lumeos/shared/datum'
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, Pill, Icon, Sparkline, InEntwicklungKnopf, UnterTabs } from '@lumeos/ui'
@@ -558,7 +559,7 @@ export function MedTracking({ echt }: { echt: EchteDaten }) {
                             <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
                                     onClick={() => {
                                       setAbsetzen(m.id)
-                                      setAbsetzDatum(new Date().toISOString().slice(0, 10))
+                                      setAbsetzDatum(tagIso())
                                     }}>
                               Absetzen
                             </button>

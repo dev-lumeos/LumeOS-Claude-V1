@@ -17,6 +17,7 @@
 //
 // `[cmd]` **Die Formregel kommt aus G-480** (`darfInMahlzeit`) —
 // **gerufen, nicht nachgebaut.**
+import { tagIso } from '@lumeos/shared/datum'
 import * as React from 'react'
 import { Icon } from '@lumeos/ui'
 
@@ -152,7 +153,7 @@ export function ProduktAktion({
         method: 'POST', headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           art: 'mahlzeit',
-          entry_date: new Date().toISOString().slice(0, 10),
+          entry_date: tagIso(),
           meal_type: neuTyp,
           meal_time: neuZeit,
         }),
@@ -166,7 +167,7 @@ export function ProduktAktion({
       // `produkt-ziele` liefert Namen und Zeit in der Form, die das
       // Pulldown braucht.
       const b = await fetch(
-        `/api/supplements/produkt-ziele?datum=${new Date().toISOString().slice(0, 10)}`)
+        `/api/supplements/produkt-ziele?datum=${tagIso()}`)
       if (b.ok) {
         const d = await b.json() as { mahlzeiten?: MahlzeitWahl[] }
         const liste = d.mahlzeiten ?? []
@@ -197,7 +198,7 @@ export function ProduktAktion({
   React.useEffect(() => {
     if (offen === null) return
     let abgebrochen = false
-    fetch(`/api/supplements/produkt-ziele?datum=${new Date().toISOString().slice(0, 10)}`)
+    fetch(`/api/supplements/produkt-ziele?datum=${tagIso()}`)
       .then(a => a.ok ? a.json() : null)
       .then(d => {
         if (abgebrochen || !d) return

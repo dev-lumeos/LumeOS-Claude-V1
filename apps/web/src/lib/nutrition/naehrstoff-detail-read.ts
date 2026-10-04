@@ -15,6 +15,7 @@
 //   „Fake 14-day trend") — hier sind es Tageswerte.
 //
 // Laeuft ausschliesslich serverseitig.
+import { utcTagIso } from '@lumeos/shared/datum'
 import { createSessionClient } from '@lumeos/shared/session'
 
 import {
@@ -142,7 +143,7 @@ export type NaehrstoffDetail = {
 function trendVon(stichtag: string): string {
   const d = new Date(`${stichtag}T00:00:00Z`)
   d.setUTCDate(d.getUTCDate() - 13)
-  return d.toISOString().slice(0, 10)
+  return utcTagIso(d)
 }
 
 export async function ladeNaehrstoffDetail(

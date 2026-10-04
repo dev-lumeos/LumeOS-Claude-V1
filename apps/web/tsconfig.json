@@ -47,6 +47,9 @@
       ],
       "@lumeos/shared/cookie-name": [
         "../../packages/shared/src/supabase/cookie-name.ts"
+      ],
+      "@lumeos/shared/datum": [
+        "../../packages/shared/src/datum/tag.ts"
       ]
     },
     "resolveJsonModule": true,

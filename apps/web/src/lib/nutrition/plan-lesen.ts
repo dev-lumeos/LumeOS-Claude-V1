@@ -19,6 +19,7 @@
 // haette man zwei Wahrheiten, sobald jemand eine Zutat aendert.
 //
 // Laeuft ausschliesslich serverseitig.
+import { utcTagIso } from '@lumeos/shared/datum'
 import { createSessionClient } from '@lumeos/shared/session'
 // G-486/A4: der Grund, warum ein Tag leer ist.
 import type { PlanFenster } from './plan-eintrag-lage'
@@ -638,7 +639,7 @@ export async function ladePlanLogs(
     .from('meal_plan_logs')
     .select('execution_date, status, confirmation_mode, deviation_kcal')
     .eq('user_id', user.id)
-    .gte('execution_date', von.toISOString().slice(0, 10))
+    .gte('execution_date', utcTagIso(von))
     .lte('execution_date', bisDatum)
     .order('execution_date', { ascending: true })
     .limit(1000)
@@ -1441,7 +1442,7 @@ export async function ladeWechselbefunde(
     `)
     .eq('user_id', user.id)
     .neq('status', 'pending')
-    .gte('execution_date', von.toISOString().slice(0, 10))
+    .gte('execution_date', utcTagIso(von))
     .lte('execution_date', bisDatum)
     .limit(1000)
   if (error || !data) return LEERER_WECHSELSTAND

@@ -23,6 +23,7 @@
 // Spalten sind auf allen 44 Katalogeintraegen leer, und G-91 hat sie
 // deshalb aus dem Katalog entfernt.
 
+import { tagIso } from '@lumeos/shared/datum'
 import { createSessionClient } from '@lumeos/shared/session'
 
 export class SupplementSchreibFehler extends Error {
@@ -688,8 +689,10 @@ export async function letzteEinnahmen(): Promise<
     await sitzung()
     const supabase = createSessionClient()
     const jetzt = new Date()
-    const heute = jetzt.toISOString().slice(0, 10)
-    const gestern = new Date(jetzt.getTime() - 86_400_000).toISOString().slice(0, 10)
+    const heute = tagIso(jetzt)
+    // G-600: der Vortag in Ortszeit — `getTime() - 86_400_000` traefe an
+    // einem Umstellungstag die falsche Stunde, `setDate` nicht.
+    const gestern = tagIso(new Date(jetzt.getFullYear(), jetzt.getMonth(), jetzt.getDate() - 1))
     const { data, error } = await supabase
       .schema('supplements')
       .from('intake_logs')

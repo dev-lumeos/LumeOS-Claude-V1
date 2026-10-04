@@ -16,6 +16,7 @@
 // Nebenwirkung — im Bericht 152 als Befund.
 //
 // Laeuft ausschliesslich serverseitig.
+import { utcTagIso } from '@lumeos/shared/datum'
 import { createSessionClient } from '@lumeos/shared/session'
 import type {
   TrendTag, MakroKnoten, Flag,
@@ -141,7 +142,7 @@ export async function ladeInsights(
 
     const von = new Date(`${stichtag}T00:00:00Z`)
     von.setUTCDate(von.getUTCDate() - (tage - 1))
-    const vonIso = von.toISOString().slice(0, 10)
+    const vonIso = utcTagIso(von)
 
     // `[read]` **Beide Grenzen, immer.** `[cmd]` `daily_summary`
     // traegt 77 kuenftige Tage — ohne `lte` zeichnete der Trend

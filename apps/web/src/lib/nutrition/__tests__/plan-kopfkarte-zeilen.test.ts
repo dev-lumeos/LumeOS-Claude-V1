@@ -14,6 +14,7 @@
 // LESEWEG `kcal: null` lieferte. **Das Wort stand da, der Wert nicht.**
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { tagIso } from '@lumeos/shared/datum'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -177,10 +178,9 @@ test('G-317/Z. 371: die eine Zeile fasst Dauer, Start und Herkunft', () => {
     p: { start_date: start, plan_origin: origin } as never,
   })
   const heute = new Date()
-  // A-100: ortsbezogen wie `heuteIso()` in plans-echt.tsx. Mit
-  // `toISOString()` (UTC) war die Probe in Bangkok von 00:00 bis 07:00 rot.
-  const iso = (v: Date) => `${v.getFullYear()}-${String(v.getMonth() + 1).padStart(2, '0')}`
-    + `-${String(v.getDate()).padStart(2, '0')}`
+  // A-100: ortsbezogen. Mit `toISOString()` (UTC) war die Probe in
+  // Bangkok von 00:00 bis 07:00 rot. G-600: `tagIso` statt eigener Abschrift.
+  const iso = tagIso
   const heuteIso = iso(heute)
   const morgen = new Date(heute); morgen.setDate(morgen.getDate() + 1)
 

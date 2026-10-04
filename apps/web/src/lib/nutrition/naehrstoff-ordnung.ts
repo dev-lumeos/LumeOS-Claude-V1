@@ -41,6 +41,7 @@
 // oeffnet, findet sie am Telefon offen. Ohne Zeile gilt „alles zu".
 //
 // Laeuft ausschliesslich serverseitig.
+import { utcTagIso } from '@lumeos/shared/datum'
 import { createSessionClient } from '@lumeos/shared/session'
 
 import { getReferenceAssessment, getFlags } from './reference-assessment-read'
@@ -380,7 +381,7 @@ async function ladeSupplemente(
 function vonDatum(stichtag: string, fenster: number): string {
   const d = new Date(`${stichtag}T00:00:00Z`)
   d.setUTCDate(d.getUTCDate() - (fenster - 1))
-  return d.toISOString().slice(0, 10)
+  return utcTagIso(d)
 }
 
 function zaehle(k: NaehrstoffKnoten): number {

@@ -12,6 +12,7 @@
 //
 // Alle sind ATTRAPPEN: es gibt kein `supplements`-Schema, also gibt es
 // nichts zu speichern. Der Knopf, der speichern wuerde, sagt das.
+import { tagIso } from '@lumeos/shared/datum'
 import * as React from 'react'
 import { useTranslations } from 'next-intl'
 import { Pill, Icon, Meter, InEntwicklungKnopf } from '@lumeos/ui'
@@ -869,7 +870,7 @@ function LogInjektionFenster({ onClose, konfig }: {
   // es fehlte nur der Weg dahinter.
   const [substanz, setSubstanz] = React.useState('')
   const [datum, setDatum] = React.useState(
-    () => new Date().toISOString().slice(0, 10))
+    () => tagIso())
   const [uhrzeit, setUhrzeit] = React.useState(
     () => new Date().toTimeString().slice(0, 5))
   const [dosis, setDosis] = React.useState('150')

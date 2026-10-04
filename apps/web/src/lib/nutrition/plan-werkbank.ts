@@ -50,6 +50,7 @@
 // `[read]` **Ein `pending`-Log traegt nichts, was sich verfaelschen
 // liesse.** **Deshalb sperrt es nicht.**
 
+import { utcTagIso } from '@lumeos/shared/datum'
 /**
  * `[cmd]` **Der CHECK an `meal_plans` kennt fuenf Werte** — am
  * 2026-08-31 aus `pg_constraint` gelesen.
@@ -202,7 +203,7 @@ export function wochenAnker(heute: string): string {
   // Montag = 1; getUTCDay liefert 0 fuer Sonntag.
   const versatz = (d.getUTCDay() + 6) % 7
   d.setUTCDate(d.getUTCDate() - versatz)
-  return d.toISOString().slice(0, 10)
+  return utcTagIso(d)
 }
 
 /** Die `week_start`-Daten fuer `n` Wochen ab dem Anker. */
@@ -212,7 +213,7 @@ export function wochenDaten(anker: string, anzahl: number): string[] {
   for (let i = 0; i < zahl; i += 1) {
     const d = new Date(`${anker}T00:00:00Z`)
     d.setUTCDate(d.getUTCDate() + i * 7)
-    aus.push(d.toISOString().slice(0, 10))
+    aus.push(utcTagIso(d))
   }
   return aus
 }
@@ -231,7 +232,7 @@ export function tageDerWoche(weekStart: string): Array<{
   for (let i = 0; i < 7; i += 1) {
     const d = new Date(`${weekStart}T00:00:00Z`)
     d.setUTCDate(d.getUTCDate() + i)
-    aus.push({ plan_date: d.toISOString().slice(0, 10), day_index: i + 1 })
+    aus.push({ plan_date: utcTagIso(d), day_index: i + 1 })
   }
   return aus
 }
@@ -252,7 +253,7 @@ export function verschiebung(ersteWoche: string, startdatum: string): number {
 export function tageVerschieben(iso: string, tage: number): string {
   const d = new Date(`${iso}T00:00:00Z`)
   d.setUTCDate(d.getUTCDate() + tage)
-  return d.toISOString().slice(0, 10)
+  return utcTagIso(d)
 }
 
 // ══ WAS NICHT GEBAUT WIRD ═══════════════════════════════════════════

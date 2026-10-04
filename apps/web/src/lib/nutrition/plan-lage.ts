@@ -30,6 +30,7 @@
 // ein Konto, das noch nichts protokolliert hat. **Sie sind kein
 // Dauerzustand mehr, sondern ein Anfangszustand.**
 
+import { utcTagIso } from '@lumeos/shared/datum'
 /**
  * Die Herkunft eines Plans — G-268 / G-269.
  *
@@ -422,7 +423,7 @@ export function tagesQuoten(
   for (let i = tage - 1; i >= 0; i -= 1) {
     const d = new Date(bis)
     d.setUTCDate(d.getUTCDate() - i)
-    const iso = d.toISOString().slice(0, 10)
+    const iso = utcTagIso(d)
     const e = einhaltungVon(jeTag.get(iso) ?? [])
     aus.push({ datum: iso, quote: quoteVon(e), entschieden: e.entschieden })
   }

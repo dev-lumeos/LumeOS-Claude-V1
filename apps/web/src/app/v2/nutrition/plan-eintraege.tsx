@@ -19,6 +19,7 @@
 // vergangene Tage."* **Also kein Ausgrauen alter Tage, nur ein
 // Hinweis, auf welchen Tag gebucht wird.**
 
+import { tagIso } from '@lumeos/shared/datum'
 import * as React from 'react'
 import { Card, Icon, Pill } from '@lumeos/ui'
 
@@ -60,7 +61,7 @@ export function PlanEintraegeEcht({
   const [mengen, setMengen] = React.useState<Record<string, string>>({})
   const [fehler, setFehler] = React.useState<string | null>(null)
 
-  const heute = new Date().toISOString().slice(0, 10)
+  const heute = tagIso()
   const rueckwirkend = istRueckwirkend(datum, heute)
   const offen = eintraege.filter(e => e.status === 'pending').length
 

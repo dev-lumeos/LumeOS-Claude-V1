@@ -6,6 +6,7 @@
 // (Auswahlliste, Zahlenfeld mit Einheit, Aktivitaetsliste mit Faktor).
 // Uebernommen wurden die Muster, nicht die Inline-Stile: die Klassen
 // aus v2.css leisten dasselbe und sind an einer Stelle beschrieben.
+import { tagIso } from '@lumeos/shared/datum'
 import * as React from 'react'
 // G-72: der Verweis auf die Vorlieben.
 // G-332: ein Formular, zwei Orte — derselbe Baustein wie Preferences.
@@ -224,7 +225,7 @@ export function ProfilFormular({
                 type="date"
                 className="v2-feld"
                 value={werte.birth_date}
-                max={new Date().toISOString().slice(0, 10)}
+                max={tagIso()}
                 onChange={e => setze('birth_date', e.target.value)}
               />
             </Feld>

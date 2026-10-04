@@ -19,6 +19,7 @@
 // November als „heute".
 //
 // Laeuft ausschliesslich serverseitig.
+import { utcTagIso } from '@lumeos/shared/datum'
 import { createSessionClient } from '@lumeos/shared/session'
 
 // `[read]` DIE MEDICAL-ZAHLEN WERDEN NICHT NACHGEBAUT. G-84 hat die
@@ -182,7 +183,7 @@ export type DashboardDaten = {
 function minusTage(datum: string, n: number): string {
   const d = new Date(`${datum}T00:00:00Z`)
   d.setUTCDate(d.getUTCDate() - n)
-  return d.toISOString().slice(0, 10)
+  return utcTagIso(d)
 }
 
 const LEER: Omit<DashboardDaten, 'stichtag' | 'angemeldet' | 'fehler'> = {

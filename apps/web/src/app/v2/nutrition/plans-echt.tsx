@@ -27,6 +27,7 @@
 // Plausibles rechnet, waere schlimmer als eine markierte.** Sie sieht
 // aus wie eine Messung. Genau das war der Fall bei der
 // Health-Score-Kachel (G-135).
+import { tagIso } from '@lumeos/shared/datum'
 import * as React from 'react'
 
 // G-335: EINE Namensliste statt acht.
@@ -130,7 +131,7 @@ export function kopfzeile(
 
   // „Day 3 of 7" — der wievielte Tag von wie vielen.
   const tage = d.wochen.reduce((s, w) => s + w.tage.length, 0)
-  const heute = heuteIso()
+  const heute = tagIso()
   const alle = d.wochen
     .flatMap(w => w.tage.map(x => x.plan_date))
     .filter(Boolean)
@@ -169,12 +170,7 @@ export function kopfzeile(
 }
 
 /** Heute als ISO - dieselbe Rechnung wie im Planner. */
-function heuteIso(): string {
-  const j = new Date()
-  const m = String(j.getMonth() + 1).padStart(2, '0')
-  const t = String(j.getDate()).padStart(2, '0')
-  return `${j.getFullYear()}-${m}-${t}`
-}
+// G-600: `heuteIso` ist in `tagIso` (`@lumeos/shared/datum`) aufgegangen.
 
 export function PlanKopfEcht({ d, logs = [] }: {
   d: PlanDaten
@@ -207,7 +203,7 @@ export function PlanKopfEcht({ d, logs = [] }: {
   // umzuschreiben waere ein Schreibvorgang. **Also wird der Zustand
   // gezeigt UND eingeordnet.**
   const laufzeit = laufzeitVon(
-    d.wochen.flatMap(w => w.tage.map(x => x.plan_date)), heuteIso())
+    d.wochen.flatMap(w => w.tage.map(x => x.plan_date)), tagIso())
   const marke = LAUFZEIT_MARKE[laufzeit.art]
 
   // ══ DIE RECHNUNG STEHT IN DER ATTRAPPE, ZEILE 164-166 ═══════
@@ -347,7 +343,7 @@ export function PlanEinstellungenEcht({ d }: { d: PlanDaten }) {
   // `[read]` **Die Laufzeit ist echt** — sie steht in den Tageszeilen,
   // auch wenn `days_count` fehlt (G-298).
   const laufzeit = laufzeitVon(
-    d.wochen.flatMap(w => w.tage.map(x => x.plan_date)), heuteIso())
+    d.wochen.flatMap(w => w.tage.map(x => x.plan_date)), tagIso())
   return (
     <Card title="Plan settings" sub="aus nutrition.meal_plans">
       {/* Die Attrappe: Lifecycle · Days count · Started. */}

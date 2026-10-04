@@ -7,6 +7,7 @@
 // Nutzerin einen brauchbaren Satz liest statt einer
 // Postgres-Fehlermeldung, und damit ein Tippfehler nicht erst nach dem
 // Netzwerkweg auffaellt.
+import { tagIso } from '@lumeos/shared/datum'
 import { z } from 'zod'
 
 /** `[cmd]` Genau die fuenf Werte des CHECK-Constraints. */
@@ -139,7 +140,7 @@ export const profileWriteSchema = z.object({
       .refine(v => v >= BIRTH_DATE_MIN, `Geburtsdatum fruehestens ${BIRTH_DATE_MIN}.`)
       // `[cmd]` Der Constraint prueft gegen CURRENT_DATE. Hier gegen
       // die Uhr des Servers — die Datenbank entscheidet endgueltig.
-      .refine(v => v <= new Date().toISOString().slice(0, 10),
+      .refine(v => v <= tagIso(),
               'Geburtsdatum darf nicht in der Zukunft liegen.')
       .nullable(),
   ),

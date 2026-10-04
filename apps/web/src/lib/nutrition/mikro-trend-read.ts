@@ -28,6 +28,7 @@
 // keinen Anteil hergibt, bleibt die Zelle leer und sagt es.
 //
 // Laeuft ausschliesslich serverseitig.
+import { utcTagIso } from '@lumeos/shared/datum'
 import { createSessionClient } from '@lumeos/shared/session'
 
 export type TrendZelle = {
@@ -69,7 +70,7 @@ export async function ladeMikroTrend(
   const bis = stichtag
   const vonD = new Date(`${stichtag}T00:00:00Z`)
   vonD.setUTCDate(vonD.getUTCDate() - (tage - 1))
-  const von = vonD.toISOString().slice(0, 10)
+  const von = utcTagIso(vonD)
 
   const leer: MikroTrendStand = { von, bis, tage: [], reihen: [] }
 
@@ -102,7 +103,7 @@ export async function ladeMikroTrend(
   for (let i = 0; i < tage; i++) {
     const d = new Date(`${von}T00:00:00Z`)
     d.setUTCDate(d.getUTCDate() + i)
-    tageListeRoh.push(d.toISOString().slice(0, 10))
+    tageListeRoh.push(utcTagIso(d))
   }
 
   const antworten = await Promise.all(tageListeRoh.map(d =>

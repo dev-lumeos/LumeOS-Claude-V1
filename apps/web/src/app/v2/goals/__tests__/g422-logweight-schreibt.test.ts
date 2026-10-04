@@ -138,6 +138,9 @@ describe('G-422 — das Gewichtsmodal ist verdrahtet', () => {
     assert.doesNotMatch(r, /2026-05-16/,
       'das feste Vorlagendatum steht wieder da — jede Messung liefe '
       + 'auf denselben Tag')
-    assert.match(r, /heuteISO\(\)/, 'kein Tagesdatum gesetzt')
+    // `[cmd]` **G-600: `heuteISO` ist in `tagIso` (`@lumeos/shared/datum`)
+    // aufgegangen** — eine Definition von „heute" fuer alle Apps. Die
+    // Regel bleibt: das Datum kommt aus dem Tag, nicht aus der Vorlage.
+    assert.match(r, /tagIso\(\)/, 'kein Tagesdatum gesetzt')
   })
 })

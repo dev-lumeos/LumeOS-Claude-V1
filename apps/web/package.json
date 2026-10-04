@@ -7,7 +7,7 @@
     "build": "node scripts/gate-build.js",
     "start": "next start -p 3200",
     "lint": "next lint",
-    "test": "tsx --test \"src/**/__tests__/*.test.ts\"",
+    "test": "tsx --test \"src/**/__tests__/*.test.ts\" \"src/**/__tests__/*.test.tsx\"",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

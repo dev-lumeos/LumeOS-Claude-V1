@@ -54,6 +54,7 @@
 // `[read]` **Wer auf `-` prueft, findet nichts** und zeigt eine leere
 // Achse, ohne dass es auffaellt.
 
+import { utcTagIso } from '@lumeos/shared/datum'
 /** Eine Zeile des rueckwaerts gerechneten Plans. */
 export type Ankerzeile = {
   /** Der Name aus `sub_phases`, oder der feste des Entwurfs. */
@@ -82,7 +83,7 @@ export function minusWochen(iso: string, wochen: number): string | null {
   if (!ISO.test(iso)) return null
   const t = Date.parse(`${iso}T00:00:00Z`)
   if (!Number.isFinite(t)) return null
-  return new Date(t - wochen * 7 * 86400000).toISOString().slice(0, 10)
+  return utcTagIso(new Date(t - wochen * 7 * 86400000))
 }
 
 /**

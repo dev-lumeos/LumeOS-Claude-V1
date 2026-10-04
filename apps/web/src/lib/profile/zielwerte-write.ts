@@ -7,6 +7,7 @@
 // die Regel steht in `goals.berechne_zielwerte`.
 //
 // Laeuft ausschliesslich serverseitig.
+import { tagIso } from '@lumeos/shared/datum'
 import { createSessionClient } from '@lumeos/shared/session'
 
 import { ProfileWriteError } from './profile-model'
@@ -41,12 +42,7 @@ function hindernisAusFehler(
 }
 
 /** Heute in lokaler Zeit als YYYY-MM-DD. */
-function heute(): string {
-  const d = new Date()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const t = String(d.getDate()).padStart(2, '0')
-  return `${d.getFullYear()}-${m}-${t}`
-}
+// G-600: `heute` ist in `tagIso` (`@lumeos/shared/datum`) aufgegangen.
 
 /**
  * Setzt die Zielwerte aus der Formel, gueltig ab heute.
@@ -63,7 +59,7 @@ export async function setzeZielwerteAusFormel(): Promise<Zielwerte> {
   } = await supabase.auth.getUser()
   if (!user) throw new ProfileWriteError('NO_SESSION', 'Keine angemeldete Session.')
 
-  const stichtag = heute()
+  const stichtag = tagIso()
   const vorschlag = await getZielwertVorschlag(stichtag)
 
   // ── G-527/A1: je Hindernis der eigene Satz ─────────────────────

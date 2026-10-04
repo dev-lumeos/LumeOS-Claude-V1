@@ -16,7 +16,8 @@
     "./auth/safe-redirect": "./src/auth/safe-redirect.ts",
     "./nutrition/db": "./src/nutrition/nutrition-db.ts",
     "./nutrition/preferences-catalog": "./src/nutrition/preferences-catalog.ts",
-    "./cookie-name": "./src/supabase/cookie-name.ts"
+    "./cookie-name": "./src/supabase/cookie-name.ts",
+    "./datum": "./src/datum/tag.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0",

@@ -15,6 +15,7 @@
 // Uebung ohne Satz, Saetze da. **Jeder Schritt schreibt sofort** —
 // es gibt keinen Entwurf, der beim Schliessen verloren ginge.
 
+import { tagIso } from '@lumeos/shared/datum'
 import React from 'react'
 
 import { Pill, Icon } from '@lumeos/ui'
@@ -39,7 +40,6 @@ type UebungZeile = {
   }>
 }
 
-const heuteAls = () => new Date().toISOString().slice(0, 10)
 
 export function SitzungFormular({ onClose }: { onClose: () => void }) {
   const [laedt, setLaedt] = React.useState(true)
@@ -59,7 +59,7 @@ export function SitzungFormular({ onClose }: { onClose: () => void }) {
   const [treffer, setTreffer] = React.useState<Uebung[]>([])
   const [suchLaeuft, setSuchLaeuft] = React.useState(false)
 
-  const heute = heuteAls()
+  const heute = tagIso()
   const stand: Stand = standVon(sitzung, heute)
   const saetzeGesamt = uebungen.reduce((n, u) => n + u.saetze.length, 0)
 

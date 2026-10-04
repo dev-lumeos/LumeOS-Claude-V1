@@ -2,6 +2,7 @@
 // (module-coach.jsx:923-940), serverseitig gerendert. Datengetragene
 // Tabs lesen echt (lib/daten.ts), der Rest ist Leerzustand mit
 // Ursache (Muster G-65) — keine Attrappe.
+import { tagIso } from '@lumeos/shared/datum'
 import { redirect } from 'next/navigation'
 import { Card, Empty, Pill } from '@lumeos/ui'
 import { portalStand, type PortalStand } from '../lib/daten'
@@ -96,7 +97,7 @@ export default async function PortalSeite({
   //
   // `[read]` **Deshalb reist der Tag als Zeichenkette weiter**, und
   // keine Komponente fragt selbst nach der Uhr.
-  const heute = new Date().toISOString().slice(0, 10)
+  const heute = tagIso()
   const suche = searchParams.suche ?? ''
   const stand_ = searchParams.stand ?? ''
 

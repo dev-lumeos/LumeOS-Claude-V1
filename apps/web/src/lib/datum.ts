@@ -19,17 +19,17 @@
 // `toISOString()` und widerspricht damit seinem eigenen
 // `getLocalDateStr`. Hier ist beides lokal.
 
+// G-600: beide gehen in `tagIso` (`@lumeos/shared/datum`) auf — EINE
+// Definition fuer alle Apps. Die Namen bleiben fuer die neun Aufrufer.
+
+import { tagIso } from '@lumeos/shared/datum'
 /** Heute als YYYY-MM-DD in lokaler Zeit. */
 export function heute(): string {
-  return alsDatum(new Date())
+  return tagIso()
 }
 
 /** Ein `Date` als YYYY-MM-DD in lokaler Zeit. */
-export function alsDatum(d: Date): string {
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const t = String(d.getDate()).padStart(2, '0')
-  return `${d.getFullYear()}-${m}-${t}`
-}
+export const alsDatum = (d: Date): string => tagIso(d)
 
 /** Ein Datum um `tage` verschieben. Mittag als Anker (siehe Kopf). */
 export function verschiebe(datum: string, tage: number): string {

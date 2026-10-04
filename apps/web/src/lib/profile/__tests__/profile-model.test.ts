@@ -6,6 +6,7 @@
 // Fehler ist.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
+import { tagIso } from '@lumeos/shared/datum'
 import fs from 'node:fs'
 import path from 'node:path'
 
@@ -78,7 +79,11 @@ test('Groesse und Gewicht halten sich an die CHECK-Grenzen', () => {
 })
 
 test('ein Geburtsdatum in der Zukunft wird abgelehnt', () => {
-  const morgen = new Date(Date.now() + 86400000).toISOString().slice(0, 10)
+  // G-600: morgen in ORTSZEIT, wie die Regel. Hier stand UTC-morgen —
+  // in Bangkok vor 07:00 ist das der Orts-heute-Tag, und der Test
+  // waere je nach Uhrzeit rot geworden.
+  const j = new Date()
+  const morgen = tagIso(new Date(j.getFullYear(), j.getMonth(), j.getDate() + 1))
   assert.equal(profileWriteSchema.safeParse({ ...LEER, birth_date: morgen }).success, false)
   assert.equal(profileWriteSchema.safeParse({ ...LEER, birth_date: '1990-05-17' }).success, true)
 })

@@ -43,6 +43,7 @@
 // Saetze eingeht, ist C-487.** `[read]` **Bis dahin zaehlt ein Satz
 // fuer jeden zugeordneten Muskel gleich — und die Kachel sagt es.**
 
+import { tagIso } from '@lumeos/shared/datum'
 /** Ein Satz, wie ihn `training.workout_sets` fuehrt. */
 export type RohSatz = {
   workout_exercise_id: string | null
@@ -587,5 +588,5 @@ export function istZukunft(
   stichtag: string | undefined, jetzt: Date = new Date(),
 ): boolean {
   if (!stichtag || !/^\d{4}-\d{2}-\d{2}$/.test(stichtag)) return false
-  return stichtag > jetzt.toISOString().slice(0, 10)
+  return stichtag > tagIso(jetzt)
 }

@@ -20,6 +20,7 @@
 // `[read]` **Hier ist es eine Wahl** — drei Diagramme nebeneinander
 // waeren auf 375 px unlesbar, und der Reiter traegt schon zwei
 // Kacheln.
+import { tagIso } from '@lumeos/shared/datum'
 export const FENSTER = [7, 14, 30] as const
 export type Fenster = (typeof FENSTER)[number]
 
@@ -53,7 +54,7 @@ export function imFenster(
 ): TrendTag[] {
   const von = new Date(`${heute}T00:00:00`)
   von.setDate(von.getDate() - (fenster - 1))
-  const vonStr = von.toISOString().slice(0, 10)
+  const vonStr = tagIso(von)
   return tage
     .filter(t => t.datum >= vonStr && t.datum <= heute)
     .sort((a, b) => a.datum.localeCompare(b.datum))

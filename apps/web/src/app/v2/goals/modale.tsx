@@ -21,6 +21,7 @@
 // Kommentar, der eine vorhandene Tabelle für abwesend erklärt, ist
 // eine Falschaussage, die beim nächsten Auftrag als Grund zitiert
 // wird.
+import { tagIso } from '@lumeos/shared/datum'
 import * as React from 'react'
 import { Card, Pill, Icon, LineChart, InEntwicklungKnopf } from '@lumeos/ui'
 
@@ -63,12 +64,7 @@ import {
   type UmfangEingabe, type Umfangsfeld,
 } from '../../../lib/goals/umfang-rechnung'
 
-/** Heute als `YYYY-MM-DD`, in Ortszeit. */
-function heuteISO(): string {
-  const d = new Date()
-  const z = (n: number) => String(n).padStart(2, '0')
-  return `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}`
-}
+// G-600: `heuteISO` ist in `tagIso` (`@lumeos/shared/datum`) aufgegangen.
 
 /**
  * Jetzt als `HH:MM`, in Ortszeit — G-577.
@@ -294,7 +290,7 @@ function NewGoalModal({ onClose, strategien }: {
   const [ist, setIst] = React.useState('')
   const [ziel, setZiel] = React.useState('')
   const [einheit, setEinheit] = React.useState('')
-  const [start, setStart] = React.useState(heuteISO())
+  const [start, setStart] = React.useState(tagIso())
   const [deadline, setDeadline] = React.useState('')
   const [prio, setPrio] = React.useState(1)
   const [notiz, setNotiz] = React.useState('')
@@ -826,7 +822,7 @@ function GoalProgressChart({ g }: { g: Ziel }) {
 function LogWeightModal({ onClose }: { onClose: () => void }) {
   const [eingabe, setEingabe] = React.useState<KoerpermassEingabe>({
     ...LEERE_MESSUNG,
-    measurement_date: heuteISO(),
+    measurement_date: tagIso(),
     bf_method: 'manual',
   })
   const [laeuft, setLaeuft] = React.useState(false)
@@ -969,7 +965,7 @@ function LogWeightModal({ onClose }: { onClose: () => void }) {
 function LogMeasureModal({ onClose }: { onClose: () => void }) {
   const [eingabe, setEingabe] = React.useState<UmfangEingabe>({
     ...LEERE_UMFANGSEINGABE,
-    measurement_date: heuteISO(),
+    measurement_date: tagIso(),
     measurement_time: jetztHHMM(),
   })
   const [laeuft, setLaeuft] = React.useState(false)
@@ -1106,7 +1102,7 @@ function LogMeasureModal({ onClose }: { onClose: () => void }) {
 function LogPhotoModal({ onClose }: { onClose: () => void }) {
   const [dateien, setDateien] = React.useState<Record<string, File>>({})
   const [datum, setDatum] = React.useState(
-    () => new Date().toISOString().slice(0, 10))
+    () => tagIso())
   const [notiz, setNotiz] = React.useState('')
   const [laeuft, setLaeuft] = React.useState(false)
   const [fehler, setFehler] = React.useState<string | null>(null)

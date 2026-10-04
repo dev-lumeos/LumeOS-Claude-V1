@@ -17,6 +17,7 @@
 //
 // `[cmd]` ALLES IST ATTRAPPE. Kein Modal schreibt — es gibt kein
 // `medical`-Schema.
+import { tagIso } from '@lumeos/shared/datum'
 import * as React from 'react'
 import { Card, Pill, Icon, Row, LineChart, InEntwicklungKnopf } from '@lumeos/ui'
 
@@ -36,12 +37,7 @@ import { MarkerReihenModal } from './marker-modal'
 import { zeilenUebernehmenAktion } from './laborimport-aktionen'
 import { ergebnisSatz } from '../../../lib/medical/laborimport'
 
-/** Heute als `YYYY-MM-DD`, in Ortszeit — wie `goals/modale.tsx:59`. */
-function heuteISO(): string {
-  const d = new Date()
-  const z = (n: number) => String(n).padStart(2, '0')
-  return `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}`
-}
+// G-600: `heuteISO` ist in `tagIso` (`@lumeos/shared/datum`) aufgegangen.
 
 // ── Der Rahmen ──────────────────────────────────────────────────
 // [cmd] module-medical-modals.jsx:3-18.
@@ -720,7 +716,7 @@ function OCRReviewModal({ onClose }: { onClose: () => void }) {
       // `[cmd]` **Nur `report_date` und `source` sind Pflicht**
       // (`lab_reports`, gemessen) — `lab_name` und `title` bleiben
       // leer, statt erfunden zu werden.
-      report_date: heuteISO(),
+      report_date: tagIso(),
       source: 'photo_ocr',
       title: 'Uebernahme aus der Erkennungspruefung',
     }, zeilen)

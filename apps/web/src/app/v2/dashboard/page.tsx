@@ -14,6 +14,7 @@
 // `[read]` Der Entwurf bleibt stehen und wird nicht geloescht: Er ist
 // die Vorlage, an der sich der naechste Schritt misst. Was daran heute
 // nicht baubar ist, steht im Bericht 149 mit Begruendung.
+import { tagIso } from '@lumeos/shared/datum'
 import type { Metadata } from 'next'
 
 import { ladeDashboard, type DashboardDaten } from '../../../lib/dashboard/lesen'
@@ -33,12 +34,7 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic'
 
 /** Heute in lokaler Zeit als YYYY-MM-DD. */
-function heute(): string {
-  const d = new Date()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const t = String(d.getDate()).padStart(2, '0')
-  return `${d.getFullYear()}-${m}-${t}`
-}
+// G-600: `heute` ist in `tagIso` (`@lumeos/shared/datum`) aufgegangen.
 
 export default async function V2DashboardPage({
   searchParams,
@@ -47,7 +43,7 @@ export default async function V2DashboardPage({
 }) {
   const datum = /^\d{4}-\d{2}-\d{2}$/.test(searchParams?.datum ?? '')
     ? searchParams!.datum!
-    : heute()
+    : tagIso()
 
   // `[read]` Faellt das Lesen ganz aus, zeigt die Seite leere Kacheln
   // mit Grund — nicht die Entwurfszahlen. Eine erfundene Zahl ohne

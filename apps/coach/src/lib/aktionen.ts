@@ -10,6 +10,7 @@
 // die Bestaetigung des Klienten. Der Ausfuehrer (Anwenden eines
 // bestaetigten payload auf das Zielmodul) fehlt weiterhin — wie in
 // ssot/139 benannt; hier nur Vorschlaege, keine Wirkung.
+import { tagIso } from '@lumeos/shared/datum'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createSessionClient } from '@lumeos/shared/session'
@@ -61,7 +62,7 @@ export async function checkinAnlegen(formData: FormData): Promise<void> {
     coach_id: uid,
     client_id: clientId,
     template_id: templateId,
-    due_date: due.toISOString().slice(0, 10),
+    due_date: tagIso(due),
     status: 'pending',
   })
   zurueck(pfad, error?.message)

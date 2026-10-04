@@ -10,6 +10,7 @@
 // Zahlen selbst ergibt — Tagesdosis, Kosten, Reichweite.
 //
 // Laeuft ausschliesslich serverseitig.
+import { tagIso } from '@lumeos/shared/datum'
 import { createSessionClient } from '@lumeos/shared/session'
 // G-484: EINE Namensquelle fuer die Mahlzeitart (E-58).
 import { KATEGORIE_TEXT } from '../nutrition/slots-lage'
@@ -629,7 +630,7 @@ export async function ladeProduktZiele(datum: string | null): Promise<{
 
     // `[read]` **Der Tag kommt vom Aufrufer** — der Server kennt die
     // Zeitzone des Browsers nicht (dieselbe Lehre wie `lib/datum.ts`).
-    const tag = datum ?? new Date().toISOString().slice(0, 10)
+    const tag = datum ?? tagIso()
 
     // `[cmd]` **Gleichzeitig** — die beiden Listen haengen nicht
     // voneinander ab (G-252).

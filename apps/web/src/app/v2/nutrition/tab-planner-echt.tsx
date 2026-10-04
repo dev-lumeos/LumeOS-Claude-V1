@@ -67,6 +67,7 @@
 // System vorschlaegt, ist eine Ernaehrungsempfehlung."* Das ist Buddys
 // Aufgabe. `Copy week` kopiert deshalb eine vorhandene Woche
 // (`copy_meal_plan_week`), es erfindet keine.
+import { tagIso, utcTagIso } from '@lumeos/shared/datum'
 import * as React from 'react'
 
 // `[cmd]` **G-555: dieselbe Kachel wie in Goals und Medical.**
@@ -290,7 +291,7 @@ function KopierZiel({ woche, wochen, onFertig, onAbbruch }: {
 function tageWeiter(iso: string, n: number): string {
   const d = new Date(`${iso}T00:00:00Z`)
   d.setUTCDate(d.getUTCDate() + n)
-  return d.toISOString().slice(0, 10)
+  return utcTagIso(d)
 }
 
 /** Ein ISO-Datum deutsch, kurz. */
@@ -320,12 +321,7 @@ function wochenSpanne(woche: PlanWoche): string {
   return `${tagKurz(a)} – ${tagKurz(b)}`
 }
 
-function heuteIso(): string {
-  const j = new Date()
-  const m = String(j.getMonth() + 1).padStart(2, '0')
-  const t = String(j.getDate()).padStart(2, '0')
-  return `${j.getFullYear()}-${m}-${t}`
-}
+// G-600: `heuteIso` ist in `tagIso` (`@lumeos/shared/datum`) aufgegangen.
 
 export function PlannerEchtTab({ d }: { d: PlanDaten }) {
   // G-319: welche Woche wird gerade kopiert?
@@ -345,7 +341,7 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
   const router = useRouter()
   const [woche, setWoche] = React.useState(() => {
     // Die Woche, in der heute liegt — sonst die erste.
-    const heute = heuteIso()
+    const heute = tagIso()
     const i = d.wochen.findIndex(w => w.tage.some(t => t.plan_date === heute))
     return i >= 0 ? i : 0
   })
@@ -448,7 +444,7 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
   }
 
   const w = d.wochen[Math.min(woche, d.wochen.length - 1)]
-  const heute = heuteIso()
+  const heute = tagIso()
   const eintraegeDerWoche = w.tage.reduce((s, t) => s + t.eintraege.length, 0)
 
   // ══ G-298: die Laufzeit, aus den Tagen gelesen ═══════════════════
