@@ -21,6 +21,7 @@ import { createSessionClient } from '@lumeos/shared/session'
 
 import {
   pruefeAenderung, pruefeNeuesZiel,
+  pruefeReihenfolge, reihenfolgeArgumente, reihenfolgeFehler,
   type ZielAenderung, type ZielNeu,
 } from './ziel-regeln'
 
@@ -159,19 +160,28 @@ export async function zielAnlegen(z: ZielNeu): Promise<SchreibErgebnis> {
 }
 
 /**
- * Die Reihenfolge mehrerer Ziele setzen.
+ * Die Reihenfolge der aktiven Ziele setzen — ATOMAR, in der Datenbank.
  *
- * `[read]` Ein Aufruf je Ziel statt einer Stapelabfrage: die
- * Zeilenschutzregel prueft `auth.uid() = user_id` je Zeile, und die
- * Liste ist kurz (aktive Ziele tragen Rang 1–3). Ein Fehler bricht ab
- * und meldet, statt die uebrigen still zu schreiben.
+ * `[cmd]` **G-591: hier stand eine Schleife ueber `zielAendern`**, ein
+ * Ziel nach dem anderen. **Sie scheiterte an jedem Tausch:**
+ * `uq_user_goals_active_slot` ist eindeutig und nicht aufschiebbar —
+ * wer A auf Platz 2 setzt, solange B dort steht, bekommt `23505`. Und
+ * bei drei aktiven Zielen gibt es keinen freien Platz (`check1`: 1-3).
+ *
+ * `[cmd]` **Jetzt `goals.ziel_reihenfolge_setzen(p_reihenfolge)`**
+ * (G-602, Codex) — eine Transaktion, alle aktiven Ziele genannt.
  */
 export async function reihenfolgeSetzen(
   paare: Array<{ id: string; priority: number }>,
 ): Promise<SchreibErgebnis> {
-  for (const p of paare) {
-    const e = await zielAendern(p.id, { priority: p.priority })
-    if (!e.ok) return e
-  }
+  const vorab = pruefeReihenfolge(paare)
+  if (vorab) return { ok: false, fehler: vorab }
+  const supabase = createSessionClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { ok: false, fehler: 'Keine angemeldete Sitzung.' }
+  const { error } = await supabase
+    .schema('goals')
+    .rpc('ziel_reihenfolge_setzen', reihenfolgeArgumente(paare))
+  if (error) return { ok: false, fehler: reihenfolgeFehler(error.code, error.message) }
   return { ok: true }
 }

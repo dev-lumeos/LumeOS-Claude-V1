@@ -47,7 +47,10 @@ import type { Meilenstein, ZielFortschritt } from '../../../lib/goals/lesen'
 import { ZielEditor } from './ziel-editor'
 import {
   ABGESCHLOSSEN, STATUS_LABEL, type ZielStatus,
+  tauschePlatz, type Platz,
 } from '../../../lib/goals/ziel-regeln'
+// G-591: der Griff fuer die Reihenfolge.
+import { prioritaetenSpeichern } from './ziel-aktionen'
 // G-554/A4: der Pace — eine Rechnung, kein Urteil über die Person.
 import { berechnePace, PACE_TEXT } from '../../../lib/goals/pace'
 
@@ -96,11 +99,17 @@ function bisFrist(frist: string | null, stichtag: string): string {
   return tage > 0 ? `noch ${tage} Tage` : `${Math.abs(tage)} Tage vorbei`
 }
 
-function ZielKarte({ g, stichtag, onBearbeiten }: {
+function ZielKarte({ g, stichtag, onBearbeiten, umsortieren }: {
   g: ZielFortschritt
   stichtag: string
   /** G-79: `undefined` blendet den Stift aus (z. B. in der Historie). */
   onBearbeiten?: () => void
+  /**
+   * G-591: einen Platz hoch oder runter. `null` heisst: kein Nachbar in
+   * diese Richtung. **Fehlt das Ganze, gibt es keinen Griff** — nur
+   * aktive Ziele haben einen Platz (`user_goals_check1`).
+   */
+  umsortieren?: { hoch: (() => void) | null; runter: (() => void) | null; laeuft: boolean }
 }) {
   const farbe = 'var(--acc-goals)'
   const pct = g.progress_pct
@@ -160,6 +169,29 @@ function ZielKarte({ g, stichtag, onBearbeiten }: {
                 Reihenfolge dieser Liste. Bis heute stand nur die
                 Marke `primaer` da, ohne Rang. */}
             {g.priority != null && <Pill>Prio {g.priority}</Pill>}
+            {/* ══ G-591: der Griff, der die Reihenfolge abschickt ══
+                `[read]` **Keine Vorlage, kein Spec-Satz, kein Griff im
+                Vorgaengerrepo** (gesucht 2026-10-04) — er steht deshalb
+                da, wo der Rang schon sichtbar ist. **Er bietet nur
+                Nachbarplaetze an, nie einen vierten.** */}
+            {umsortieren && (
+              <span style={{ display: 'inline-flex', gap: 2 }}>
+                <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                        data-ziel-hoch={g.goal_id} aria-label={`${g.title} einen Platz hoch`}
+                        disabled={!umsortieren.hoch || umsortieren.laeuft}
+                        onClick={umsortieren.hoch ?? undefined}
+                        style={{ height: 20, padding: '0 5px' }}>
+                  <Icon name="chevron_up" className="v2-ic v2-ic-sm" />
+                </button>
+                <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                        data-ziel-runter={g.goal_id} aria-label={`${g.title} einen Platz runter`}
+                        disabled={!umsortieren.runter || umsortieren.laeuft}
+                        onClick={umsortieren.runter ?? undefined}
+                        style={{ height: 20, padding: '0 5px' }}>
+                  <Icon name="chevron_down" className="v2-ic v2-ic-sm" />
+                </button>
+              </span>
+            )}
             {g.status && g.status !== 'active' && (
               <Pill>{STATUS_LABEL[g.status as ZielStatus] ?? g.status}</Pill>
             )}
@@ -274,6 +306,27 @@ export function ZielKarten({ ziele, meilensteine, stichtag }: {
   // G-79: welches Ziel gerade bearbeitet wird.
   const [bearbeitet, setBearbeitet] = React.useState<string | null>(null)
 
+  // ══ G-591: die Reihenfolge ══════════════════════════════════════
+  //
+  // `[read]` **Nur `status = 'active'` hat einen Platz** — `paused`
+  // steht in derselben Liste, aber ausserhalb von `check1` und
+  // `uq_user_goals_active_slot`. **Gesendet werden ALLE aktiven Ziele**
+  // (Vertrag G-602), nicht nur die zwei getauschten.
+  const plaetze: Platz[] = ziele
+    .filter(g => g.status === 'active' && g.priority != null)
+    .map(g => ({ id: g.goal_id, priority: g.priority as number }))
+  const [ordnet, starte] = React.useTransition()
+  const [ordnungsFehler, setOrdnungsFehler] = React.useState<string | null>(null)
+  const verschiebe = (id: string, richtung: -1 | 1) => {
+    const paare = tauschePlatz(plaetze, id, richtung)
+    if (!paare) return null
+    return () => starte(async () => {
+      setOrdnungsFehler(null)
+      const e = await prioritaetenSpeichern(paare)
+      if (!e.ok) setOrdnungsFehler(e.fehler)
+    })
+  }
+
   // `[read]` Abgeschlossene Ziele gehoeren in die Historie, nicht in
   // die Uebersicht. Die Trennung ist der Status, nicht ein Datum:
   // `achieved` und `abandoned` sind abgeschlossen, `paused` nicht.
@@ -295,7 +348,12 @@ export function ZielKarten({ ziele, meilensteine, stichtag }: {
             </div>
           </Card>
         ) : (
-          aktive.map(g => (
+          <>
+          {ordnungsFehler && (
+            <div role="alert" data-ziel-ordnung-fehler
+                 style={{ fontSize: 12, color: 'var(--neg)' }}>{ordnungsFehler}</div>
+          )}
+          {aktive.map(g => (
             bearbeitet === g.goal_id
               ? (
                 <ZielEditor key={g.goal_id} ziel={g}
@@ -303,9 +361,17 @@ export function ZielKarten({ ziele, meilensteine, stichtag }: {
               )
               : (
                 <ZielKarte key={g.goal_id} g={g} stichtag={stichtag}
-                           onBearbeiten={() => setBearbeitet(g.goal_id)} />
+                           onBearbeiten={() => setBearbeitet(g.goal_id)}
+                           umsortieren={g.status === 'active' && plaetze.length > 1
+                             ? {
+                                hoch: verschiebe(g.goal_id, -1),
+                                runter: verschiebe(g.goal_id, 1),
+                                laeuft: ordnet,
+                              }
+                             : undefined} />
               )
-          ))
+          ))}
+          </>
         )}
 
         {/* G-79: die Historie. **Tom:** „Dann macht man einfach einen
