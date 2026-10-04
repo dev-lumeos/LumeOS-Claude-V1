@@ -3280,6 +3280,15 @@
       ]
     },
     {
+      "id": "603_hydration_empty_day",
+      "path": "supabase/_pipeline/05_user_tabellen/056a_hydration_day.sql",
+      "kind": "sql",
+      "creates": "G-603: hydration_day laesst einen Tag ohne Erfassung unbekannt statt ihn als vollstaendige Null-Milliliter-Summe auszugeben.",
+      "depends_on": [
+        "056a"
+      ]
+    },
+    {
       "id": "567_goal_free_daily_reference",
       "path": "supabase/_pipeline/_ableitung/030_mikro-uebersicht.ts",
       "kind": "tsx",
@@ -3380,6 +3389,16 @@
       "creates": "G-602 Gegenprobe: Tausch und Ringtausch bleiben atomar; unvollstaendige oder fremde Belegungen scheitern; nur ein Messdatumswechsel erneuert den Snapshot.",
       "depends_on": [
         "602_goal_order_and_measurement_snapshot",
+        "a86_testdaten_einspielen"
+      ]
+    },
+    {
+      "id": "603_hydration_empty_day_probe",
+      "path": "supabase/_pipeline/_validierung/nutrition-g603-hydration-empty-day.test.ts",
+      "kind": "tsx",
+      "creates": "G-603 Gegenprobe: ein leerer Wassertag bleibt unbekannt; ein Tag mit Wassereintrag rechnet unveraendert weiter.",
+      "depends_on": [
+        "603_hydration_empty_day",
         "a86_testdaten_einspielen"
       ]
     },

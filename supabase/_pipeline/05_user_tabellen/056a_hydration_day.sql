@@ -127,18 +127,18 @@ history AS (
 SELECT
   t.user_id,
   t.entry_date,
-  COALESCE(t.logged_ml, 0) AS logged_ml,
+  t.logged_ml,
   COALESCE(t.log_count, 0)::INTEGER AS log_count,
   t.food_ml,
   COALESCE(t.food_ml_missing, 0)::INTEGER AS food_ml_missing,
-  COALESCE(t.total_ml, 0) AS total_ml,
-  COALESCE(t.total_complete, true) AS total_complete,
+  t.total_ml,
+  COALESCE(t.total_complete, false) AS total_complete,
   t.target_ml,
   t.target_source,
   (t.target_ml IS NOT NULL) AS target_available,
   CASE
     WHEN t.target_ml IS NULL OR t.target_ml = 0 THEN NULL
-    ELSE ROUND(COALESCE(t.total_ml, 0) / t.target_ml * 100, 1)
+    ELSE ROUND(t.total_ml / t.target_ml * 100, 1)
   END AS progress_pct,
   250 AS glass_size_ml,
   FLOOR(COALESCE(t.total_ml, 0) / 250)::INTEGER AS glasses_total,
@@ -164,7 +164,9 @@ COMMENT ON FUNCTION nutrition.hydration_day(UUID, DATE) IS
   '* Klimafaktor plus Trainings-/Schwangerschafts-/Stillzeitbonus, liefert '
   'Glaszaehler zu 250 ml und Vergleich gegen die vorherigen 14 Kalendertage. '
   'Klima steht bis zur Orts-/Gym-Anbindung auf 1.0, Trainingsbonus bis zu '
-  'Trainingseinheiten auf 0 ml. Kein Maximum; progress_pct darf ueber 100 liegen.';
+  'Trainingseinheiten auf 0 ml. Kein Maximum; progress_pct darf ueber 100 liegen. '
+  'G-603: Ohne Tageszeile bleiben logged_ml, total_ml und progress_pct NULL; '
+  'total_complete ist false.';
 
 REVOKE ALL ON FUNCTION nutrition.hydration_day(UUID, DATE) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION nutrition.hydration_day(UUID, DATE)
