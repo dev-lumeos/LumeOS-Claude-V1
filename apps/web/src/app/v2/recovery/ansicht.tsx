@@ -68,6 +68,8 @@ import type { ScoreStand, ModalitaetenStand } from '../../../lib/recovery/scores
 import type { ProtokollStand } from '../../../lib/recovery/protokoll-read'
 import { ScoreKachel, ScoreVerlauf } from './score-kachel'
 import { ModalitaetenKachel } from './modalitaeten-kachel'
+// G-601: leer und nicht geladen sind zwei Zustaende.
+import { LadeHinweis } from './lade-hinweis'
 import { CheckinStreifen } from './checkin-streifen'
 import { RecCheckin } from './tab-checkin'
 // G-590: der Tag, fuer den Check-in und Anwendung gespeichert werden.
@@ -422,16 +424,12 @@ function RecToday({
             `recovery.scores`, steht hier der Grund, nicht der Entwurf
             mit erfundenen Zahlen (und nicht ein Strich: ein Strich
             hiesse „leer" statt „nicht gelesen", G-161). */}
+        {/* `[cmd]` **G-601: hier stand IMMER „Nicht geladen"** — auch
+            wenn die Abfrage gelang und nur keine Zeile lieferte. */}
         {!echterScore && (
-          <Card title="Erholungswert">
-            <Empty
-              title="Nicht geladen"
-              sub={scores?.fehler
-                ? `recovery.scores meldet: ${scores.fehler}`
-                : 'recovery.scores kam für dieses Konto leer zurück — es liegt keine Score-Zeile vor.'}
-              icon="recovery"
-            />
-          </Card>
+          <LadeHinweis titel="Erholungswert" icon="recovery" quelle="recovery.scores"
+                       stand={scores} leerTitel="Noch kein Erholungswert"
+                       leerSatz="recovery.scores kam für dieses Konto leer zurück — es liegt keine Score-Zeile vor." />
         )}
 
         <Card
@@ -502,16 +500,11 @@ function RecToday({
         {/* G-163: der Modalitaeten-Rueckfall ist raus. Ohne Zeile aus
             `recovery.modality_log` steht hier der Grund — nicht die
             erfundene Tagesliste des Entwurfs. */}
+        {/* `[cmd]` **G-601: dieselbe Vermischung wie beim Erholungswert.** */}
         {!(modalitaeten && modalitaeten.gesamt > 0) && (
-          <Card title="Today's modalities">
-            <Empty
-              title="Nicht geladen"
-              sub={modalitaeten?.fehler
-                ? `recovery.modality_log meldet: ${modalitaeten.fehler}`
-                : 'recovery.modality_log kam für dieses Konto leer zurück — keine erfasste Modalität.'}
-              icon="droplet"
-            />
-          </Card>
+          <LadeHinweis titel="Today's modalities" icon="droplet" quelle="recovery.modality_log"
+                       stand={modalitaeten} leerTitel="Noch keine Modalität"
+                       leerSatz="recovery.modality_log kam für dieses Konto leer zurück — keine erfasste Modalität." />
         )}
 
         <Card title="Overtraining watch" sub={`${ot.count} of 8 signals · ${ot.severity}`} attrappe={ATTRAPPE}>

@@ -30,6 +30,8 @@ import {
 import { alsErmuedung, KARTE_ZU_RECOVERY } from './muskel-zuordnung'
 import { useRecovery } from './kontext'
 import { ATTRAPPE } from './ansicht'
+// G-601: leer und nicht geladen sind zwei Zustaende.
+import { LadeHinweis } from './lade-hinweis'
 // G-160: die erfassten Werte aus `recovery.checkins`.
 import type { CheckinStand, CheckinZeile } from '../../../lib/recovery/checkin-read'
 // `[cmd]` **G-435/A6: die Hierarchie fuer `Per-muscle detail`.**
@@ -621,16 +623,11 @@ export function RecHRV({ stand }: { stand?: CheckinStand | null }) {
   // G-163: die Rueckfallfassung ist raus — statt erfundener Werte
   // steht hier, dass nicht gelesen werden konnte (kein Strich: ein
   // Strich hiesse "leer" statt "nicht gelesen", G-161).
+  // `[cmd]` **G-601: hier stand IMMER „Nicht geladen"**, auch ohne Fehler.
   return (
-    <Card title="HRV">
-      <Empty
-        title="Nicht geladen"
-        sub={stand?.fehler
-          ? `recovery.checkins meldet: ${stand.fehler}`
-          : 'recovery.checkins kam für dieses Konto leer zurück — kein Check-in erfasst.'}
-        icon="trend_up"
-      />
-    </Card>
+    <LadeHinweis titel="HRV" icon="trend_up" quelle="recovery.checkins"
+                 stand={stand} leerTitel="Noch kein Check-in"
+                 leerSatz="recovery.checkins kam für dieses Konto leer zurück — kein Check-in erfasst." />
   )
 }
 
@@ -801,16 +798,11 @@ function PhoneCameraKachel() {
 export function RecSleep({ stand }: { stand?: CheckinStand | null }) {
   if (stand && stand.zeilen.length > 0) return <SleepEcht stand={stand} />
   // G-163: Rueckfall raus, Hinweis statt Entwurf.
+  // `[cmd]` **G-601: dieselbe Vermischung wie bei HRV.**
   return (
-    <Card title="Sleep">
-      <Empty
-        title="Nicht geladen"
-        sub={stand?.fehler
-          ? `recovery.checkins meldet: ${stand.fehler}`
-          : 'recovery.checkins kam für dieses Konto leer zurück — kein Check-in erfasst.'}
-        icon="moon"
-      />
-    </Card>
+    <LadeHinweis titel="Sleep" icon="moon" quelle="recovery.checkins"
+                 stand={stand} leerTitel="Noch kein Check-in"
+                 leerSatz="recovery.checkins kam für dieses Konto leer zurück — kein Check-in erfasst." />
   )
 }
 
