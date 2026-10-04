@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-04
 agent: codex
 beauftragt: 2026-10-04
+erledigt: 2026-10-04
+commit: 5e399987
 
 braucht: [G-591]
 kind_von: G-591
@@ -110,3 +112,16 @@ Sabotage in beide Richtungen.
 
 **Am Bildschirm belegt Claude Code** (G-591), nicht du. Melde, wenn live
 steht — ich gebe ihm dann Bescheid.
+
+## Abnahme — 2026-10-04, Commit `5e399987`
+
+`[cmd]` **Live von mir nachgelesen:** `ziel_reihenfolge_setzen` 1×,
+`prosecdef = f` (INVOKER), EXECUTE nur an `authenticated` (und den
+Eigentuemer), nicht an `anon`; `nutrition_target_assign_phase` traegt die
+G-594-Fassung; `uq_recovery_protocols_one_active` 1×; der Snapshot-Trigger
+kennt `measurement_date`; `berechne_zielwerte` weiter in beiden
+Signaturen. `[cmd]` Gate gruen. test-user live unveraendert:
+Abbauziel = 1, Aufbauziel = 2.
+
+**Damit ist G-591 am Schirm belegbar.** Claude Code fuehrt den Tausch vor
+und baut ihn zurueck.

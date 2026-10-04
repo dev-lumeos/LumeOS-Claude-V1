@@ -8,8 +8,8 @@
 | `todos` | 274 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 652 |
-| **gesamt** | **930** |
+| `erledigt` | 653 |
+| **gesamt** | **931** |
 
 ## medical — 50
 
@@ -66,7 +66,7 @@
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 | `G-578` | fehler | hoch | [Der Laborimport hat drei Datenbankfunktionen und keine Oberflaeche](erledigt/medical-g-0578-der-laborimport-hat-keine-oberflaeche.md) | erledigt | — | — |
 
-## nutrition — 266
+## nutrition — 267
 
 ### beauftragbar — 265
 
@@ -338,11 +338,12 @@
 | `G-581` | fehler | mittel | [Ein Modal ohne Aufrufer, mit eigener Wahrheit ueber den Lebenszyklus](erledigt/nutrition-g-0581-ein-modal-ohne-aufrufer-mit-eigener-wahrheit.md) | erledigt | — | G-583 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-### wartet auf Blocker — 1
+### wartet auf Blocker — 2
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-592` | fehler | mittel | [Die Hydration-Zusammenfassung ist ein ZWEITER Leseweg, keine fehlende Anzeige](laufend_claudecode/nutrition-g-0592-die-hydration-zusammenfassung-hat-keinen-leser.md) | laeuft (claudecode) | G-588 | — |
+| `G-592` | fehler | mittel | [Die Hydration-Zusammenfassung ist ein ZWEITER Leseweg, keine fehlende Anzeige](laufend_claudecode/nutrition-g-0592-die-hydration-zusammenfassung-hat-keinen-leser.md) | laeuft (claudecode) | G-588 | G-603 |
+| `G-603` | fehler | mittel | [Ein leerer Wassertag ist nicht „0 getrunken"](laufend_codex/nutrition-g-0603-ein-leerer-wassertag-ist-nicht-null-getrunken.md) | laeuft (codex) | G-592 | — |
 
 ## supplements — 131
 
@@ -689,7 +690,7 @@
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
 | `G-591` | fehler | mittel | [Zwei Goals-Aktionen ohne Aufrufer — eine Messung aendern, die Reihenfolge speichern](laufend_claudecode/goals-g-0591-zwei-goals-aktionen-ohne-aufrufer.md) | laeuft (claudecode) | G-588 | G-602 |
-| `G-602` | fehler | mittel | [Die Reihenfolge aktiver Ziele wird atomar getauscht](laufend_codex/goals-g-0602-die-reihenfolge-aktiver-ziele-wird-atomar-getauscht.md) | laeuft (codex) | G-591 | — |
+| `G-602` | fehler | mittel | [Die Reihenfolge aktiver Ziele wird atomar getauscht](erledigt/goals-g-0602-die-reihenfolge-aktiver-ziele-wird-atomar-getauscht.md) | erledigt | G-591 | — |
 
 ## coach — 58
 

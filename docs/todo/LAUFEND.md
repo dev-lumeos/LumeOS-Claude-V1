@@ -7,7 +7,7 @@
 |---|---|---|---|
 | Claude Code | G-591 | Zwei Goals-Aktionen ohne Aufrufer — eine Messung aendern, die Reihenfolge speichern | **laeuft**, raus 04.10. |
 | Claude Code | G-592 | Die Hydration-Zusammenfassung ist ein ZWEITER Leseweg, keine fehlende Anzeige | **laeuft**, raus 04.10. |
-| Codex | G-602 | Die Reihenfolge aktiver Ziele wird atomar getauscht | **laeuft**, raus 04.10. |
+| Codex | G-603 | Ein leerer Wassertag ist nicht „0 getrunken" | **laeuft**, raus 04.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | C-560 | Der Testdatenpruefer wird gruen | **bereit in `next/`** |
 <!-- /ERZEUGT:laufend-tabelle -->
