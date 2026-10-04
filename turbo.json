@@ -15,7 +15,9 @@
       "cache": false,
       "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/packages/shared/src/**"]
     },
-    "lint": {},
+    "lint": {
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.eslintrc.json"]
+    },
     "typecheck": {
       "dependsOn": ["^build", "build"],
       "env": ["LUMEOS_DIST_DIR"],
