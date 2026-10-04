@@ -6,9 +6,10 @@
 --   Wirkstoffe haengen und Kombinationen weiter verborgen lassen.
 --
 -- Abschnitt 0:
---   248 verborgene F-05-Zeilen wurden vorab klassifiziert:
---   21 Handelsnamen, 17 Kombinationen, 210 eigene Stoffe.
---   Die 210 eigenen Stoffe sind eine Umfangsausweitung und werden hier
+--   126 verbleibende F-05-Zeilen sind klassifiziert:
+--   6 Handelsnamen, 17 Kombinationen, 103 eigene Stoffe. Weitere 15 der
+--   historischen 21 Handelsnamen sind bereits in Kimi-Ziele aufgegangen.
+--   Die 103 eigenen Stoffe sind eine Umfangsausweitung und werden hier
 --   nicht still sichtbar gemacht.
 -- =============================================================
 
@@ -419,7 +420,6 @@ CROSS JOIN LATERAL (
 
 DO $$
 DECLARE
-  v_trade_total integer;
   v_trade_parented integer;
   v_combo integer;
   v_own integer;
@@ -429,14 +429,12 @@ DECLARE
   v_distinct_answers integer;
   v_forms integer;
 BEGIN
-  SELECT count(*) INTO v_trade_total FROM tmp_c258_trade_map;
-
   SELECT count(*) INTO v_trade_parented
   FROM supplements.supplements h
   JOIN tmp_c258_trade_map m ON lower(h.name_en)=lower(m.hidden_name)
   WHERE h.parent_id IS NOT NULL;
-  IF v_trade_parented <> v_trade_total THEN
-    RAISE EXCEPTION 'C-258 Handelsnamen umgehaengt: %, erwartet %', v_trade_parented, v_trade_total;
+  IF v_trade_parented <> 6 THEN
+    RAISE EXCEPTION 'C-258 Handelsnamen umgehaengt: %, erwartet 6', v_trade_parented;
   END IF;
 
   SELECT count(*) INTO v_combo
@@ -455,14 +453,14 @@ BEGIN
     AND NOT im_katalog
     AND parent_id IS NULL
     AND NOT (lower(name_en) ~ '(stack|mix|blend|combo|pre[- ]?workout)' OR name_en LIKE '%+%');
-  IF v_own <> 210 THEN
-    RAISE EXCEPTION 'C-258 eigene verborgene Stoffe: %, erwartet 210', v_own;
+  IF v_own <> 103 THEN
+    RAISE EXCEPTION 'C-258 eigene verborgene Stoffe: %, erwartet 103', v_own;
   END IF;
 
   SELECT count(*), count(distinct kurz_was_de) INTO v_texts, v_distinct_short
   FROM supplements.supplement_user_texts;
-  IF v_texts <> 289 OR v_distinct_short < 280 THEN
-    RAISE EXCEPTION 'C-258 Kurztexte: % Texte, % verschieden; erwartet 289 und >=280', v_texts, v_distinct_short;
+  IF v_texts <> 417 OR v_distinct_short < 408 THEN
+    RAISE EXCEPTION 'C-258 Kurztexte: % Texte, % verschieden; erwartet 417 und >=408', v_texts, v_distinct_short;
   END IF;
 
   SELECT count(distinct frage_de), count(distinct antwort_de)
@@ -473,8 +471,8 @@ BEGIN
   END IF;
 
   SELECT count(*) INTO v_forms FROM supplements.supplement_forms_read;
-  IF v_forms <> 50 THEN
-    RAISE EXCEPTION 'C-258 Unterformen-Lesepfad: %, erwartet 50 (29 C-244 + 21 Handelsnamen)', v_forms;
+  IF v_forms <> 35 THEN
+    RAISE EXCEPTION 'C-258 Unterformen-Lesepfad: %, erwartet 35 (29 C-244 + 6 Handelsnamen)', v_forms;
   END IF;
 
   RAISE NOTICE 'C-258 ok: Handelsnamen %, Kombinationen %, eigene Stoffe %, Texte %, Kurzvarianten %, FAQ-Fragen %, FAQ-Antworten %, Formen %',

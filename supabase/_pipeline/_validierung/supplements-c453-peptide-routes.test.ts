@@ -17,7 +17,7 @@ function sql<T>(statement: string): T {
   return JSON.parse(output.split(/\r?\n/).at(-1) ?? '') as T
 }
 
-test('C-453: Route ist skalar, spec-konform und alle 93 Peptide sind SubQ', () => {
+test('C-453: Route ist skalar, spec-konform und alle 90 Peptide sind SubQ', () => {
   const result = sql<{
     distribution: Record<string, number>
     peptideTotal: number
@@ -92,13 +92,13 @@ test('C-453: Route ist skalar, spec-konform und alle 93 Peptide sind SubQ', () =
 
   assert.deepEqual(result.distribution, {
     // A-87: C-516 erweiterte den Katalog um 21 Stoffe ohne erfundene Route.
-    '<NULL>': 310,
-    injection_im: 10,
-    injection_subq: 93,
-    oral: 204,
+    '<NULL>': 162,
+    injection_im: 26,
+    injection_subq: 90,
+    oral: 315,
   })
-  assert.equal(result.peptideTotal, 93)
-  assert.equal(result.peptideSubq, 93)
+  assert.equal(result.peptideTotal, 90)
+  assert.equal(result.peptideSubq, 90)
   assert.equal(result.peptideOtherOrNull, 0)
   assert.deepEqual(result.semaglutideAndTirzepatide, [
     { name: 'Semaglutide', route: 'injection_subq' },

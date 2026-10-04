@@ -394,19 +394,19 @@ BEGIN
   INTO v_im, v_children
   FROM supplements.supplements;
 
-  IF v_dosing_parents <> 22 OR v_dosing_fields <> 109 THEN
-    RAISE EXCEPTION 'C-281 Dosing-Erwartung verletzt: Gruppen %, Eltern %, Felder % statt */22/109',
+  IF v_dosing_parents <> 23 OR v_dosing_fields <> 93 THEN
+    RAISE EXCEPTION 'C-281 Dosing-Erwartung verletzt: Gruppen %, Eltern %, Felder % statt */23/93',
       v_dosing_groups, v_dosing_parents, v_dosing_fields;
   END IF;
-  IF v_dosing_rows <> 22 THEN
-    RAISE EXCEPTION 'C-281 Dosing hochgereicht % statt 22', v_dosing_rows;
+  IF v_dosing_rows <> 23 THEN
+    RAISE EXCEPTION 'C-281 Dosing hochgereicht % statt 23', v_dosing_rows;
   END IF;
-  IF v_lab_uniform <> 46 OR v_lab_nonuniform <> 1 OR v_lab_inserted <> 46 THEN
-    RAISE EXCEPTION 'C-281 Lab-Erwartung verletzt: uniform %, uneinheitlich %, eingefuegt % statt 46/1/46',
+  IF v_lab_uniform <> 47 OR v_lab_nonuniform <> 5 OR v_lab_inserted <> 46 THEN
+    RAISE EXCEPTION 'C-281 Lab-Erwartung verletzt: uniform %, uneinheitlich %, eingefuegt % statt 47/5/46',
       v_lab_uniform, v_lab_nonuniform, v_lab_inserted;
   END IF;
-  IF v_wada_uniform <> 17 OR v_wada_nonuniform <> 1 OR v_wada_inserted <> 17 THEN
-    RAISE EXCEPTION 'C-281 WADA-Erwartung verletzt: uniform %, uneinheitlich %, eingefuegt % statt 17/1/17',
+  IF v_wada_uniform <> 18 OR v_wada_nonuniform <> 1 OR v_wada_inserted <> 0 THEN
+    RAISE EXCEPTION 'C-281 WADA-Erwartung verletzt: uniform %, uneinheitlich %, eingefuegt % statt 18/1/0',
       v_wada_uniform, v_wada_nonuniform, v_wada_inserted;
   END IF;
   IF v_caffeine_parent_wada <> 0 THEN
@@ -419,7 +419,7 @@ BEGIN
     RAISE EXCEPTION 'C-281 im_katalog %, sichtbare Unterformen %, erwartet 412/0', v_im, v_children;
   END IF;
 
-  RAISE NOTICE 'OK C-281: Dosis 22 Eltern/109 Felder, Lab 46 geerbt/1 gemeldet, WADA 17 geerbt/1 gemeldet; Koffein und Magnesium nicht blind vererbt';
+  RAISE NOTICE 'OK C-281: Dosis 23 Eltern/93 Felder, Lab 46 geerbt/5 gemeldet, WADA direkt belegt/1 gemeldet; Koffein und Magnesium nicht blind vererbt';
 END $$;
 
 COMMIT;

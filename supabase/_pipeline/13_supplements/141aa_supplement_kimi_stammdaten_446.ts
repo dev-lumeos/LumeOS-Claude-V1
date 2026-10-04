@@ -118,8 +118,8 @@ const payload = {
   records,
   expected: {
     sourceRecords: Number(process.env.C275_EXPECT_SOURCE_RECORDS ?? 446),
-    finalSupplements: Number(process.env.C275_EXPECT_FINAL_SUPPLEMENTS ?? 596),
-    finalVisible: Number(process.env.C275_EXPECT_FINAL_VISIBLE ?? 416),
+    finalSupplements: Number(process.env.C275_EXPECT_FINAL_SUPPLEMENTS ?? 572),
+    finalVisible: Number(process.env.C275_EXPECT_FINAL_VISIBLE ?? 417),
     finalTextsSource: Number(process.env.C275_EXPECT_TEXT_SOURCE ?? 446),
     finalFaqSource: Number(process.env.C275_EXPECT_FAQ_SOURCE ?? 1970),
     duplicateVisibleNames: Number(process.env.C275_EXPECT_DUPLICATE_VISIBLE_NAMES ?? 0),
@@ -374,7 +374,7 @@ BEGIN
 
   SELECT count(*) INTO v_testosterone_enanthate
   FROM supplements.supplements
-  WHERE lower(name_en) = 'testosterone enanthate' AND im_katalog AND slug = 'f05_testosterone_enanthate';
+  WHERE lower(name_en) = 'testosterone enanthate' AND im_katalog AND slug = 'sub_1eb5582c8a';
 
   SELECT count(*) INTO v_insulin_glargine
   FROM supplements.supplements

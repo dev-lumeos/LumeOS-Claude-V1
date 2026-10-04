@@ -6,9 +6,9 @@
 --   Anhaengsel erst nach belegter Uebernahme entfernen.
 --
 -- Erwartung vor dem Lauf:
---   substance_lab_effects        222 -> supplement_lab_effects 222
+--   substance_lab_effects        522 -> supplement_lab_effects 522
 --   supplement_nutrient_mappings  17 -> supplement_nutrients 17
---   substance_catalog_sources    668 -> supplement_field_sources +668
+--   substance_catalog_sources    824 -> supplement_field_sources +824
 --
 -- Korrekturblock zum Auftrag:
 --   Live lagen 5 Policies und 4 Trigger auf den zu entfernenden alten
@@ -67,12 +67,12 @@ BEGIN
   SELECT count(*) INTO v_old_sources FROM supplements.substance_catalog_sources;
   SELECT count(*) INTO v_field_sources_before FROM supplements.supplement_field_sources;
 
-  IF v_old_lab <> 222 THEN RAISE EXCEPTION 'C-255: substance_lab_effects % statt 222', v_old_lab; END IF;
-  IF v_new_lab <> 222 THEN RAISE EXCEPTION 'C-255: supplement_lab_effects % statt 222', v_new_lab; END IF;
+  IF v_old_lab <> 522 THEN RAISE EXCEPTION 'C-255: substance_lab_effects % statt 522', v_old_lab; END IF;
+  IF v_new_lab <> 522 THEN RAISE EXCEPTION 'C-255: supplement_lab_effects % statt 522', v_new_lab; END IF;
   IF v_old_nutrients <> 17 THEN RAISE EXCEPTION 'C-255: supplement_nutrient_mappings % statt 17', v_old_nutrients; END IF;
   IF v_new_nutrients <> 17 THEN RAISE EXCEPTION 'C-255: supplement_nutrients % statt 17', v_new_nutrients; END IF;
-  IF v_old_sources <> 668 THEN RAISE EXCEPTION 'C-255: substance_catalog_sources % statt 668', v_old_sources; END IF;
-  IF v_field_sources_before <> 2147 THEN RAISE EXCEPTION 'C-255: supplement_field_sources vor Quellenuebernahme % statt 2147', v_field_sources_before; END IF;
+  IF v_old_sources <> 824 THEN RAISE EXCEPTION 'C-255: substance_catalog_sources % statt 824', v_old_sources; END IF;
+  IF v_field_sources_before <> 2284 THEN RAISE EXCEPTION 'C-255: supplement_field_sources vor Quellenuebernahme % statt 2284', v_field_sources_before; END IF;
 
   SELECT count(*) INTO v_lab_missing
   FROM supplements.substance_lab_effects old
@@ -152,11 +152,11 @@ BEGIN
   );
   SELECT count(*) INTO v_field_sources_after FROM supplements.supplement_field_sources;
 
-  IF v_old_source_rows_in_new <> 668 THEN
-    RAISE EXCEPTION 'C-255: alte Quellen in supplement_field_sources % statt 668', v_old_source_rows_in_new;
+  IF v_old_source_rows_in_new <> 824 THEN
+    RAISE EXCEPTION 'C-255: alte Quellen in supplement_field_sources % statt 824', v_old_source_rows_in_new;
   END IF;
-  IF v_field_sources_after <> 2815 THEN
-    RAISE EXCEPTION 'C-255: supplement_field_sources nach Quellenuebernahme % statt 2815', v_field_sources_after;
+  IF v_field_sources_after <> 3108 THEN
+    RAISE EXCEPTION 'C-255: supplement_field_sources nach Quellenuebernahme % statt 3108', v_field_sources_after;
   END IF;
 END $$;
 
@@ -302,9 +302,9 @@ BEGIN
     RAISE EXCEPTION 'C-255: stack_item_substance_matches existiert noch';
   END IF;
   IF v_old_fks <> 0 THEN RAISE EXCEPTION 'C-255: % FKs zeigen noch auf alte Kataloge', v_old_fks; END IF;
-  IF v_new_lab <> 222 THEN RAISE EXCEPTION 'C-255: supplement_lab_effects nach Drop % statt 222', v_new_lab; END IF;
+  IF v_new_lab <> 522 THEN RAISE EXCEPTION 'C-255: supplement_lab_effects nach Drop % statt 522', v_new_lab; END IF;
   IF v_new_nutrients <> 17 THEN RAISE EXCEPTION 'C-255: supplement_nutrients nach Drop % statt 17', v_new_nutrients; END IF;
-  IF v_new_sources <> 2815 THEN RAISE EXCEPTION 'C-255: supplement_field_sources nach Drop % statt 2815', v_new_sources; END IF;
+  IF v_new_sources <> 3108 THEN RAISE EXCEPTION 'C-255: supplement_field_sources nach Drop % statt 3108', v_new_sources; END IF;
 END $$;
 
 COMMIT;

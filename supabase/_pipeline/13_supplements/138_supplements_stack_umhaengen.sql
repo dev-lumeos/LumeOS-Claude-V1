@@ -301,8 +301,8 @@ BEGIN
     INTO v_true, v_false, v_total
   FROM supplements.supplements;
 
-  IF v_true <> 290 OR v_false <> 276 OR v_total <> 566 THEN
-    RAISE EXCEPTION 'C-243 im_katalog: true %, false %, total %, erwartet 290/276/566',
+  IF v_true <> 446 OR v_false <> 126 OR v_total <> 572 THEN
+    RAISE EXCEPTION 'C-243 im_katalog: true %, false %, total %, erwartet 446/126/572',
       v_true, v_false, v_total;
   END IF;
 

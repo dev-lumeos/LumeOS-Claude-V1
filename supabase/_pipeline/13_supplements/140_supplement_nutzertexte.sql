@@ -206,6 +206,20 @@ WHERE s.slug = m.old_slug
     SELECT 1 FROM supplements.supplements other WHERE other.slug = m.new_slug
   );
 
+-- C-558: Schritt 134 fuehrt die frueheren local_*-Zeilen inzwischen in ihre
+-- kanonischen Kimi-Ziele zusammen. Die erhaltene LumeOS-Katalogherkunft ist
+-- der eindeutige Ersatzpfad fuer die 28 lesbaren Eltern-Slugs.
+UPDATE supplements.supplements s
+SET slug = m.new_slug
+FROM tmp_c257_slug_map m
+JOIN supplements.supplement_field_sources fs
+  ON fs.source_id = 'supabase/_pipeline/daten/supplement-katalog.json#' || m.new_slug
+ AND fs.field_name LIKE 'catalog_source.lumeos_supplement_catalog.%'
+WHERE s.id = fs.supplement_id
+  AND NOT EXISTS (
+    SELECT 1 FROM supplements.supplements other WHERE other.slug = m.new_slug
+  );
+
 CREATE TEMP TABLE tmp_c257_parent_map(
   parent_slug TEXT NOT NULL,
   child_slug TEXT PRIMARY KEY,
@@ -841,8 +855,8 @@ BEGIN
   END IF;
 
   SELECT count(*) INTO v_targets FROM supplements.supplement_user_texts;
-  IF v_targets <> 289 THEN
-    RAISE EXCEPTION 'C-257 Nutzertexte: %, erwartet 289', v_targets;
+  IF v_targets <> 417 THEN
+    RAISE EXCEPTION 'C-257 Nutzertexte: %, erwartet 417', v_targets;
   END IF;
 
   SELECT count(*) INTO v_supplement
@@ -860,14 +874,14 @@ BEGIN
   JOIN supplements.supplements s ON s.id=t.supplement_id
   JOIN supplements.supplement_groups g ON g.id=s.group_id
   WHERE g.code='enhanced';
-  IF v_supplement <> 153 OR v_peptide <> 61 OR v_enhanced <> 75 THEN
-    RAISE EXCEPTION 'C-257 Textgruppen supplement/peptide/enhanced: %/%/%, erwartet 153/61/75',
+  IF v_supplement <> 214 OR v_peptide <> 79 OR v_enhanced <> 124 THEN
+    RAISE EXCEPTION 'C-257 Textgruppen supplement/peptide/enhanced: %/%/%, erwartet 214/79/124',
       v_supplement, v_peptide, v_enhanced;
   END IF;
 
   SELECT count(*) INTO v_faq FROM supplements.supplement_faq;
-  IF v_faq <> 867 THEN
-    RAISE EXCEPTION 'C-257 FAQ: %, erwartet 867', v_faq;
+  IF v_faq <> 1251 THEN
+    RAISE EXCEPTION 'C-257 FAQ: %, erwartet 1251', v_faq;
   END IF;
 
   WITH folded AS (

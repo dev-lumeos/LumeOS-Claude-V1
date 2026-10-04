@@ -59,6 +59,24 @@ function readEntries(): OverviewEntry[] {
 
 function runPsql(entries: OverviewEntry[]): void {
   const payload = entries.map(row => csvCell(JSON.stringify(row))).join('\n')
+  const tdeeProbe = spawnSync(
+    'docker',
+    [
+      'exec', CONTAINER, 'psql', '-U', 'postgres', '-d', DB, '-t', '-A', '-v', 'ON_ERROR_STOP=1',
+      '-c', "SELECT to_regprocedure('goals.tdee_basis_am(uuid,date)') IS NOT NULL",
+    ],
+    { encoding: 'utf8' },
+  )
+  if (tdeeProbe.status !== 0) {
+    if (tdeeProbe.stdout) process.stdout.write(tdeeProbe.stdout)
+    if (tdeeProbe.stderr) process.stderr.write(tdeeProbe.stderr)
+    process.exit(tdeeProbe.status ?? 1)
+  }
+  const tdeeBasis = tdeeProbe.stdout.trim() === 't'
+    ? `SELECT b.tdee
+       FROM (SELECT 1) seed
+       LEFT JOIN LATERAL goals.tdee_basis_am(p_user_id, p_entry_date) b ON true`
+    : 'SELECT NULL::numeric AS tdee'
   const sql = `\\set ON_ERROR_STOP on
 BEGIN;
 
@@ -164,9 +182,7 @@ SECURITY INVOKER
 SET search_path = ''
 AS $function$
 WITH tdee_basis AS (
-  SELECT b.tdee
-  FROM (SELECT 1) seed
-  LEFT JOIN LATERAL goals.tdee_basis_am(p_user_id, p_entry_date) b ON true
+  ${tdeeBasis}
 ),
 assessment AS (
   SELECT

@@ -8,11 +8,11 @@
 -- Quelle: docs/specs/Supplements/SCHEMA_NEUAUFBAU.md, Abschnitt 8.
 --
 -- Entscheidung zu 276 Nicht-Kimi-Zeilen:
--- dosing, pharmacology und evidence erhalten fuer alle 566 Substanzen
--- eine Zeile. Die 276 F-05/LumeOS-Zeilen tragen dort status='unbekannt',
--- weil die Frage im Zielschema gestellt wird, aber kein Kimi-Satz dahinter
--- liegt. Safety, Regulatory, Warnings, Quality, Monitoring und Organrisiken
--- werden nur fuer die 290 Kimi-Zeilen befuellt; dort ist die Quelle gefragt.
+-- dosing, pharmacology und evidence erhalten fuer alle 572 Substanzen
+-- eine Zeile. Die 126 F-05-Zeilen tragen dort status='unbekannt', weil die
+-- Frage im Zielschema gestellt wird, aber kein Kimi-Satz dahinter liegt.
+-- Safety, Regulatory, Warnings, Quality, Monitoring und Organrisiken werden
+-- nur fuer die 446 Kimi-Zeilen befuellt; dort ist die Quelle gefragt.
 --
 -- Befund zu supplement_interactions:
 -- Die vorhandene Huelle aus Schritt 130 zeigte noch auf supplement_catalog
@@ -151,7 +151,7 @@ SELECT
 FROM supplements.substance_catalog sc;
 
 INSERT INTO supplements.supplement_aliases (id, supplement_id, alias, locale, source, confidence)
-SELECT
+SELECT DISTINCT ON (COALESCE(sc.id, src.substance_id), sa.alias, sa.source)
   pg_temp.stable_uuid('supplement_alias:' || sa.id),
   pg_temp.stable_uuid('supplement:' || COALESCE(sc.id, src.substance_id)),
   sa.alias,
@@ -168,7 +168,14 @@ LEFT JOIN supplements.substance_catalog_sources src
    ELSE sa.source
  END
 WHERE btrim(sa.alias) <> ''
-  AND COALESCE(sc.id, src.substance_id) IS NOT NULL;
+  AND COALESCE(sc.id, src.substance_id) IS NOT NULL
+ORDER BY
+  COALESCE(sc.id, src.substance_id),
+  sa.alias,
+  sa.source,
+  sa.source_ref LIKE '%:aliases',
+  sa.source_ref,
+  sa.id;
 
 INSERT INTO supplements.supplement_lab_effects (
   id, supplement_id, status, lab_marker_id, loinc_code, effect_type,
@@ -280,7 +287,15 @@ SELECT
   pg_temp.stable_uuid('supplement:' || id),
   CASE WHEN source_primary IN ('kimi_supplement','kimi_performance','kimi_peptide')
     AND pharmacology IS NOT NULL AND pharmacology <> '{}'::jsonb THEN 'bekannt' ELSE 'unbekannt' END,
-  array_to_string(canonical_routes, ','),
+  CASE
+    WHEN gruppe = 'peptide' THEN array_to_string(canonical_routes, ',')
+    WHEN canonical_routes = ARRAY['intramuscular']::text[] THEN 'intramuscular'
+    WHEN canonical_routes = ARRAY['oral']::text[] THEN 'oral'
+    WHEN canonical_routes = ARRAY['topical']::text[] THEN 'topical'
+    WHEN canonical_routes = ARRAY['intranasal']::text[] THEN 'nasal'
+    WHEN canonical_routes = ARRAY['sublingual']::text[] THEN 'sublingual'
+    ELSE NULL
+  END,
   half_life,
   NULLIF(pharmacology->>'metabolism', ''),
   pharmacology->'bioavailability',
@@ -540,7 +555,7 @@ WHERE rn = 1;
 DO $$
 DECLARE
   v_counts jsonb;
-  v_reg_expected integer := 1185;
+  v_reg_expected integer := 1728;
   v_reg_actual integer;
   v_evidence_grades integer;
 BEGIN
@@ -575,24 +590,24 @@ BEGIN
 
   IF (v_counts->>'supplement_groups')::integer <> 3 THEN RAISE EXCEPTION 'C-235: supplement_groups % statt 3', v_counts->>'supplement_groups'; END IF;
   IF (v_counts->>'supplement_categories')::integer <> 23 THEN RAISE EXCEPTION 'C-235: supplement_categories % statt 23', v_counts->>'supplement_categories'; END IF;
-  IF (v_counts->>'supplements')::integer <> 566 THEN RAISE EXCEPTION 'C-235: supplements % statt 566', v_counts->>'supplements'; END IF;
-  IF (v_counts->>'supplement_aliases')::integer <> 1541 THEN RAISE EXCEPTION 'C-235: supplement_aliases % statt 1541', v_counts->>'supplement_aliases'; END IF;
-  IF (v_counts->>'supplement_lab_effects')::integer <> 222 THEN RAISE EXCEPTION 'C-235: supplement_lab_effects % statt 222', v_counts->>'supplement_lab_effects'; END IF;
+  IF (v_counts->>'supplements')::integer <> 572 THEN RAISE EXCEPTION 'C-235: supplements % statt 572', v_counts->>'supplements'; END IF;
+  IF (v_counts->>'supplement_aliases')::integer <> 2342 THEN RAISE EXCEPTION 'C-235: supplement_aliases % statt 2342', v_counts->>'supplement_aliases'; END IF;
+  IF (v_counts->>'supplement_lab_effects')::integer <> 522 THEN RAISE EXCEPTION 'C-235: supplement_lab_effects % statt 522', v_counts->>'supplement_lab_effects'; END IF;
   IF (v_counts->>'supplement_nutrients')::integer <> 17 THEN RAISE EXCEPTION 'C-235: supplement_nutrients % statt 17', v_counts->>'supplement_nutrients'; END IF;
-  IF (v_counts->>'supplement_safety')::integer <> 290 THEN RAISE EXCEPTION 'C-235: supplement_safety % statt 290', v_counts->>'supplement_safety'; END IF;
-  IF (v_counts->>'supplement_warnings')::integer <> 290 THEN RAISE EXCEPTION 'C-235: supplement_warnings % statt 290', v_counts->>'supplement_warnings'; END IF;
-  IF (v_counts->>'supplement_wada')::integer <> 290 THEN RAISE EXCEPTION 'C-235: supplement_wada % statt 290', v_counts->>'supplement_wada'; END IF;
-  IF (v_counts->>'supplement_quality')::integer <> 237 THEN RAISE EXCEPTION 'C-235: supplement_quality % statt 237', v_counts->>'supplement_quality'; END IF;
-  IF (v_counts->>'supplement_pharmacology')::integer <> 566 THEN RAISE EXCEPTION 'C-235: supplement_pharmacology % statt 566', v_counts->>'supplement_pharmacology'; END IF;
-  IF (v_counts->>'supplement_dosing')::integer <> 566 THEN RAISE EXCEPTION 'C-235: supplement_dosing % statt 566', v_counts->>'supplement_dosing'; END IF;
-  IF (v_counts->>'supplement_evidence')::integer <> 566 THEN RAISE EXCEPTION 'C-235: supplement_evidence % statt 566', v_counts->>'supplement_evidence'; END IF;
+  IF (v_counts->>'supplement_safety')::integer <> 446 THEN RAISE EXCEPTION 'C-235: supplement_safety % statt 446', v_counts->>'supplement_safety'; END IF;
+  IF (v_counts->>'supplement_warnings')::integer <> 446 THEN RAISE EXCEPTION 'C-235: supplement_warnings % statt 446', v_counts->>'supplement_warnings'; END IF;
+  IF (v_counts->>'supplement_wada')::integer <> 446 THEN RAISE EXCEPTION 'C-235: supplement_wada % statt 446', v_counts->>'supplement_wada'; END IF;
+  IF (v_counts->>'supplement_quality')::integer <> 393 THEN RAISE EXCEPTION 'C-235: supplement_quality % statt 393', v_counts->>'supplement_quality'; END IF;
+  IF (v_counts->>'supplement_pharmacology')::integer <> 572 THEN RAISE EXCEPTION 'C-235: supplement_pharmacology % statt 572', v_counts->>'supplement_pharmacology'; END IF;
+  IF (v_counts->>'supplement_dosing')::integer <> 572 THEN RAISE EXCEPTION 'C-235: supplement_dosing % statt 572', v_counts->>'supplement_dosing'; END IF;
+  IF (v_counts->>'supplement_evidence')::integer <> 572 THEN RAISE EXCEPTION 'C-235: supplement_evidence % statt 572', v_counts->>'supplement_evidence'; END IF;
   SELECT count(*) INTO v_evidence_grades FROM supplements.supplement_evidence WHERE overall_grade IS NOT NULL;
-  IF v_evidence_grades <> 290 THEN RAISE EXCEPTION 'C-240: supplement_evidence overall_grade % statt 290', v_evidence_grades; END IF;
-  IF (v_counts->>'supplement_monitoring')::integer <> 46 THEN RAISE EXCEPTION 'C-235: supplement_monitoring % statt 46', v_counts->>'supplement_monitoring'; END IF;
-  IF (v_counts->>'supplement_organ_risks')::integer <> 1450 THEN RAISE EXCEPTION 'C-235: supplement_organ_risks % statt 1450', v_counts->>'supplement_organ_risks'; END IF;
-  IF (v_counts->>'supplement_identifiers')::integer <> 1226 THEN RAISE EXCEPTION 'C-235: supplement_identifiers % statt 1226', v_counts->>'supplement_identifiers'; END IF;
-  IF (v_counts->>'supplement_field_sources')::integer <> 2147 THEN RAISE EXCEPTION 'C-235: supplement_field_sources % statt 2147', v_counts->>'supplement_field_sources'; END IF;
-  IF (v_counts->>'supplement_interactions')::integer <> 78 THEN RAISE EXCEPTION 'C-235: supplement_interactions % statt 78', v_counts->>'supplement_interactions'; END IF;
+  IF v_evidence_grades <> 446 THEN RAISE EXCEPTION 'C-240: supplement_evidence overall_grade % statt 446', v_evidence_grades; END IF;
+  IF (v_counts->>'supplement_monitoring')::integer <> 169 THEN RAISE EXCEPTION 'C-235: supplement_monitoring % statt 169', v_counts->>'supplement_monitoring'; END IF;
+  IF (v_counts->>'supplement_organ_risks')::integer <> 2230 THEN RAISE EXCEPTION 'C-235: supplement_organ_risks % statt 2230', v_counts->>'supplement_organ_risks'; END IF;
+  IF (v_counts->>'supplement_identifiers')::integer <> 1595 THEN RAISE EXCEPTION 'C-235: supplement_identifiers % statt 1595', v_counts->>'supplement_identifiers'; END IF;
+  IF (v_counts->>'supplement_field_sources')::integer <> 2284 THEN RAISE EXCEPTION 'C-235: supplement_field_sources % statt 2284', v_counts->>'supplement_field_sources'; END IF;
+  IF (v_counts->>'supplement_interactions')::integer <> 218 THEN RAISE EXCEPTION 'C-235: supplement_interactions % statt 218', v_counts->>'supplement_interactions'; END IF;
 
   RAISE NOTICE 'OK C-235: Supplements-Zieltabellen befuellt. Counts: %', v_counts;
 END $$;

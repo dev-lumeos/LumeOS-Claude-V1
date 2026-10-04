@@ -47,15 +47,14 @@ CREATE TEMP TABLE tmp_c276_visible_form_map (
 
 INSERT INTO tmp_c276_visible_form_map(child_slug, parent_slug, form_note_en) VALUES
   ('sub_c92eb30265', 'ashwagandha-ksm66', 'Kimi root-extract form for the Ashwagandha KSM-66/Sensoril catalog entry.'),
-  ('f05_boldenone_acetate', 'sub_af6dd9482e', 'Boldenone acetate ester under the Boldenone undecylenate catalog branch.'),
-  ('f05_boldenone_cypionate', 'sub_af6dd9482e', 'Boldenone cypionate ester under the Boldenone undecylenate catalog branch.'),
+  ('sub_b375d46a48', 'sub_af6dd9482e', 'Boldenone acetate ester under the Boldenone undecylenate catalog branch.'),
+  ('sub_e95b788278', 'sub_af6dd9482e', 'Boldenone cypionate ester under the Boldenone undecylenate catalog branch.'),
   ('sub_2c308411e9', 'caffeine', 'Anhydrous caffeine form under the caffeine umbrella entry.'),
   ('sub_7f400b189e', 'calcium', 'Calcium carbonate form under the calcium umbrella entry.'),
   ('sub_4aff89287a', 'calcium', 'Calcium citrate form under the calcium umbrella entry.'),
   ('sub_96dc337b14', 'iron', 'Ferrous bisglycinate form under the iron umbrella entry.'),
   ('sub_1b98d69c9a', 'iron', 'Ferrous sulfate form under the iron umbrella entry.'),
   ('sub_ca8d1dd406', 'lions-mane', 'Hericium erinaceus form under the Lion''s Mane umbrella entry.'),
-  ('f05_nac', 'nac', 'C-276: Kimi NAC was resolved onto the old f05 slug; it is kept as a child of the NAC umbrella entry.'),
   ('sub_f4b95e805a', 'nac', 'N-acetylcysteine form under the NAC umbrella entry.'),
   ('sub_73c6284113', 'tongkat-ali', 'Eurycoma longifolia form under the Tongkat Ali umbrella entry.'),
   ('sub_d370f8f2d6', 'vitamin-a', 'Retinol form under the Vitamin A umbrella entry.'),
@@ -167,16 +166,16 @@ BEGIN
   FROM supplements.supplements s
   JOIN tmp_c276_visible_form_map m ON m.child_slug = s.slug
   WHERE s.parent_id IS NOT NULL;
-  IF v_visible_forms <> 22 THEN
-    RAISE EXCEPTION 'C-276 sichtbare Formen parented: %, erwartet 22', v_visible_forms;
+  IF v_visible_forms <> 21 THEN
+    RAISE EXCEPTION 'C-276 sichtbare Formen parented: %, erwartet 21', v_visible_forms;
   END IF;
 
   SELECT count(*) INTO v_hidden_parented
   FROM tmp_c276_hidden_candidates c
   JOIN supplements.supplements s ON s.id = c.hidden_id
   WHERE s.parent_id IS NOT NULL;
-  IF v_hidden_parented NOT IN (0, 50, 66) THEN
-    RAISE EXCEPTION 'C-276 unsichtbare Huellen parented: %, erwartet 0 (idempotenter Wiederlauf), 50 (frische Kette) oder 66 (Live-Drift)', v_hidden_parented;
+  IF v_hidden_parented NOT IN (0, 49, 50, 66) THEN
+    RAISE EXCEPTION 'C-276 unsichtbare Huellen parented: %, erwartet 0 (idempotenter Wiederlauf), 49/50 (frische Kette) oder 66 (Live-Drift)', v_hidden_parented;
   END IF;
 
   SELECT count(*) INTO v_parented_total FROM supplements.supplements WHERE parent_id IS NOT NULL;

@@ -49,10 +49,10 @@ const payload = {
 const expected = {
   wadaScopeRecords: 446,
   wadaNoteRecords: 318,
-  wadaScopeMapped: Number(process.env.C272_EXPECT_WADA_SCOPE_MAPPED ?? 320),
-  wadaNotesMapped: Number(process.env.C272_EXPECT_WADA_NOTES_MAPPED ?? 290),
-  wadaNoteDe: Number(process.env.C272_EXPECT_WADA_NOTE_DE ?? 320),
-  wadaScopeNoteDe: Number(process.env.C272_EXPECT_WADA_SCOPE_NOTE_DE ?? 290),
+  wadaScopeMapped: Number(process.env.C272_EXPECT_WADA_SCOPE_MAPPED ?? 446),
+  wadaNotesMapped: Number(process.env.C272_EXPECT_WADA_NOTES_MAPPED ?? 318),
+  wadaNoteDe: Number(process.env.C272_EXPECT_WADA_NOTE_DE ?? 446),
+  wadaScopeNoteDe: Number(process.env.C272_EXPECT_WADA_SCOPE_NOTE_DE ?? 318),
   wadaConflicts: Number(process.env.C272_EXPECT_WADA_CONFLICTS ?? 6),
   wadaMismatches: Number(process.env.C272_EXPECT_WADA_MISMATCHES ?? 0),
   labEffects: 47,
@@ -69,7 +69,7 @@ const expected = {
   aliases: 64,
   pubchemConflicts: 20,
   pubchemTrueConflicts: 6,
-  imKatalogAllowed: [412, 416],
+  imKatalogAllowed: [412, 416, 417],
   visibleChildren: 0,
 }
 
@@ -308,6 +308,21 @@ CREATE TEMP TABLE tmp_c272_payload (payload jsonb NOT NULL);
 ${csvJson([{ ...payload, expected }])}
 \\.
 
+CREATE TEMP VIEW tmp_c272_supplement_targets AS
+SELECT DISTINCT ON (candidate.entity_id)
+  candidate.entity_id,
+  s.*
+FROM (
+  SELECT slug AS entity_id, id AS supplement_id, 0 AS priority
+  FROM supplements.supplements
+  UNION ALL
+  SELECT alias, supplement_id, 1
+  FROM supplements.supplement_aliases
+  WHERE source = 'kimi_entity_id'
+) candidate
+JOIN supplements.supplements s ON s.id = candidate.supplement_id
+ORDER BY candidate.entity_id, candidate.priority;
+
 DELETE FROM supplements.wada_conflict_records WHERE source = 'kimi:wada_status_enrichment';
 DELETE FROM supplements.lab_effect_enrichment_records WHERE source = 'kimi:lab_effects_enrichment';
 DELETE FROM supplements.supplement_human_evidence_flags WHERE source = 'kimi:human_evidence_flags';
@@ -325,7 +340,7 @@ WITH rows AS (
 ), mapped AS (
   SELECT s.id, r
   FROM rows
-  JOIN supplements.supplements s ON s.slug = r->>'entity_id'
+  JOIN tmp_c272_supplement_targets s ON s.entity_id = r->>'entity_id'
 )
 UPDATE supplements.supplement_wada w
 SET
@@ -346,7 +361,7 @@ WITH rows AS (
 ), mapped AS (
   SELECT s.id, r
   FROM rows
-  JOIN supplements.supplements s ON s.slug = r->>'entity_id'
+  JOIN tmp_c272_supplement_targets s ON s.entity_id = r->>'entity_id'
 )
 INSERT INTO supplements.supplement_wada(id, supplement_id, status, wada_status, wada_category, note_de, scope_class, sources, raw, source)
 SELECT
@@ -370,7 +385,7 @@ WITH rows AS (
 ), mapped AS (
   SELECT s.id, r
   FROM rows
-  JOIN supplements.supplements s ON s.slug = r->>'entity_id'
+  JOIN tmp_c272_supplement_targets s ON s.entity_id = r->>'entity_id'
 )
 UPDATE supplements.supplement_wada w
 SET
@@ -420,7 +435,7 @@ FROM corrections;
 WITH rows AS (
   SELECT jsonb_array_elements(payload->'labEffects') AS r FROM tmp_c272_payload
 ), mapped AS (
-  SELECT r, s.id AS supplement_id FROM rows LEFT JOIN supplements.supplements s ON s.slug = r->>'substance_id'
+  SELECT r, s.id AS supplement_id FROM rows LEFT JOIN tmp_c272_supplement_targets s ON s.entity_id = r->>'substance_id'
 )
 INSERT INTO supplements.lab_effect_enrichment_records(
   id, substance_id, supplement_id, substance_name, domain, marker_id, marker_name,
@@ -445,7 +460,7 @@ FROM mapped;
 WITH rows AS (
   SELECT jsonb_array_elements(payload->'labEffects') AS r FROM tmp_c272_payload
 ), mapped AS (
-  SELECT r, s.id AS supplement_id FROM rows JOIN supplements.supplements s ON s.slug = r->>'substance_id'
+  SELECT r, s.id AS supplement_id FROM rows JOIN tmp_c272_supplement_targets s ON s.entity_id = r->>'substance_id'
 )
 INSERT INTO supplements.supplement_lab_effects(
   id, supplement_id, status, lab_marker_id, loinc_code, effect_type, analyte_en,
@@ -497,7 +512,7 @@ SELECT
   coalesce(ARRAY(SELECT jsonb_array_elements_text(coalesce(r->'linked_files','[]'::jsonb))), '{}'),
   r
 FROM numbered
-LEFT JOIN supplements.supplements s ON s.slug = r->>'entity_id';
+LEFT JOIN tmp_c272_supplement_targets s ON s.entity_id = r->>'entity_id';
 
 WITH rows AS (
   SELECT 'thailand_regulatory_enrichment.jsonl' AS source_file, jsonb_array_elements(payload->'thailandRegulatory') AS r FROM tmp_c272_payload
@@ -531,7 +546,7 @@ SELECT
   coalesce(ARRAY(SELECT jsonb_array_elements_text(coalesce(r#>'{thailand,source_ids}','[]'::jsonb))), '{}'),
   r
 FROM numbered
-LEFT JOIN supplements.supplements s ON s.slug = coalesce(r->>'entity_id', r->>'entity_ref', r->>'product_id');
+LEFT JOIN tmp_c272_supplement_targets s ON s.entity_id = coalesce(r->>'entity_id', r->>'entity_ref', r->>'product_id');
 
 WITH rows AS (
   SELECT jsonb_array_elements(payload->'cyp') AS r FROM tmp_c272_payload
@@ -555,7 +570,7 @@ SELECT
   'kimi:c272_cyp_enrichment',
   v
 FROM enzymes
-LEFT JOIN supplements.supplements s ON s.slug = r->>'entity_id';
+LEFT JOIN tmp_c272_supplement_targets s ON s.entity_id = r->>'entity_id';
 
 WITH rows AS (
   SELECT jsonb_array_elements(payload->'transporters') AS r FROM tmp_c272_payload
@@ -579,7 +594,7 @@ SELECT
   'kimi:c272_transporter_enrichment',
   v
 FROM transporters
-LEFT JOIN supplements.supplements s ON s.slug = r->>'entity_id';
+LEFT JOIN tmp_c272_supplement_targets s ON s.entity_id = r->>'entity_id';
 
 WITH rows AS (
   SELECT jsonb_array_elements(payload->'studies') AS r FROM tmp_c272_payload
@@ -638,7 +653,7 @@ SELECT
   coalesce(ARRAY(SELECT jsonb_array_elements_text(coalesce(r->'canonical_id','[]'::jsonb))), '{}'),
   r
 FROM numbered
-LEFT JOIN supplements.supplements s ON s.slug = r->>'entity_id';
+LEFT JOIN tmp_c272_supplement_targets s ON s.entity_id = r->>'entity_id';
 
 WITH rows AS (
   SELECT jsonb_array_elements(payload->'pubchemConflicts') AS r FROM tmp_c272_payload
@@ -662,7 +677,7 @@ SELECT
   r->>'detail',
   r
 FROM rows
-LEFT JOIN supplements.supplements s ON s.slug = r->>'entity_id';
+LEFT JOIN tmp_c272_supplement_targets s ON s.entity_id = r->>'entity_id';
 
 DO $$
 DECLARE
@@ -704,9 +719,9 @@ BEGIN
   END IF;
 
   WITH rows AS (SELECT jsonb_array_elements(payload->'wadaScope') AS r FROM tmp_c272_payload)
-  SELECT count(*) INTO v_wada_scope_mapped FROM rows JOIN supplements.supplements s ON s.slug = r->>'entity_id';
+  SELECT count(*) INTO v_wada_scope_mapped FROM rows JOIN tmp_c272_supplement_targets s ON s.entity_id = r->>'entity_id';
   WITH rows AS (SELECT jsonb_array_elements(payload->'wadaNotes') AS r FROM tmp_c272_payload)
-  SELECT count(*) INTO v_wada_notes_mapped FROM rows JOIN supplements.supplements s ON s.slug = r->>'entity_id';
+  SELECT count(*) INTO v_wada_notes_mapped FROM rows JOIN tmp_c272_supplement_targets s ON s.entity_id = r->>'entity_id';
   SELECT count(*) FILTER (WHERE nullif(note_de,'') IS NOT NULL), count(*) FILTER (WHERE nullif(scope_note_de,'') IS NOT NULL)
   INTO v_wada_note, v_wada_scope_note FROM supplements.supplement_wada;
   SELECT count(*) INTO v_wada_conflicts FROM supplements.wada_conflict_records WHERE source = 'kimi:wada_status_enrichment';
