@@ -13,7 +13,7 @@ braucht: [G-591]
 kind_von: G-591
 
 quellen:
-  - docs/punkte/laufend_claudecode/goals-g-0591-zwei-goals-aktionen-ohne-aufrufer.md
+  - docs/punkte/erledigt/goals-g-0591-zwei-goals-aktionen-ohne-aufrufer.md
 
 beruehrt:
   tabellen:

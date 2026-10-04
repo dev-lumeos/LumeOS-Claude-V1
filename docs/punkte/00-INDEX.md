@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 274 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 653 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 654 |
 | **gesamt** | **931** |
 
 ## medical — 50
@@ -606,7 +606,7 @@
 
 ## goals — 76
 
-### beauftragbar — 68
+### beauftragbar — 69
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -678,8 +678,9 @@
 | `G-577` | fehler | hoch | [Die Umfangserfassung hat keinen Schreibweg](erledigt/goals-g-0577-die-umfangserfassung-hat-keinen-schreibweg.md) | erledigt | — | — |
 | `G-594` | fehler | hoch | [Ein Ernaehrungsziel kennt seine Phase, aber nicht sein Ziel](erledigt/goals-g-0594-ein-ernaehrungsziel-kennt-seine-phase-aber-nicht-sein-ziel.md) | erledigt | — | — |
 | `G-595` | fehler | hoch | [Der Zweiparameter-Mantel war kein Ueberrest — mein Auftrag hat ihn geloescht](erledigt/goals-g-0595-der-zweiparameter-mantel-war-kein-ueberrest.md) | erledigt | — | — |
+| `G-602` | fehler | mittel | [Die Reihenfolge aktiver Ziele wird atomar getauscht](erledigt/goals-g-0602-die-reihenfolge-aktiver-ziele-wird-atomar-getauscht.md) | erledigt | — | — |
 
-### wartet auf Blocker — 8
+### wartet auf Blocker — 7
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -689,8 +690,7 @@
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
-| `G-591` | fehler | mittel | [Zwei Goals-Aktionen ohne Aufrufer — eine Messung aendern, die Reihenfolge speichern](laufend_claudecode/goals-g-0591-zwei-goals-aktionen-ohne-aufrufer.md) | laeuft (claudecode) | G-588 | G-602 |
-| `G-602` | fehler | mittel | [Die Reihenfolge aktiver Ziele wird atomar getauscht](erledigt/goals-g-0602-die-reihenfolge-aktiver-ziele-wird-atomar-getauscht.md) | erledigt | G-591 | — |
+| `G-591` | fehler | mittel | [Zwei Goals-Aktionen ohne Aufrufer — eine Messung aendern, die Reihenfolge speichern](erledigt/goals-g-0591-zwei-goals-aktionen-ohne-aufrufer.md) | erledigt | G-588 | G-602 |
 
 ## coach — 58
 
@@ -891,7 +891,7 @@
 | `C-541` | fehler | hoch | [der Erfahrungsgrad darf nicht leer sein](erledigt/quer-c-0541-erfahrungsgrad-darf-nicht-leer-sein.md) | erledigt | — | G-501 |
 | `C-544` | feature | hoch | [der Ort am Koerper als Begriff](erledigt/quer-c-0544-ort-am-koerper.md) | erledigt | — | — |
 | `C-554` | blocker | hoch | [das Migrationsregister sagt nicht, was in der Datenbank steht](erledigt/quer-c-0554-das-migrationsregister-ist-unbrauchbar.md) | erledigt | — | — |
-| `C-560` | fehler | mittel | [Der Testdatenpruefer wird gruen](laufend_codex/quer-c-0560-der-testdatenpruefer-wird-gruen.md) | vorbereitet (codex) | — | — |
+| `C-560` | fehler | mittel | [Der Testdatenpruefer wird gruen](laufend_codex/quer-c-0560-der-testdatenpruefer-wird-gruen.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |

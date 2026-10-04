@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-02
 agent: claudecode
 beauftragt: 2026-10-04
+erledigt: 2026-10-04
+commit: 85afa021
 
 braucht: [G-588]
 kind_von: G-588
@@ -87,3 +89,17 @@ nur den Prioritaetenteil.
 
 **Nicht Teil:** die drei Recovery-Aktionen (G-590),
 `getHydrationSummary` (G-592), `createServiceClient` (G-587).
+
+## Abnahme — 2026-10-04, Commit `85afa021`
+
+`[cmd]` Gate gruen, `web:test # tests 2650`, `# fail 0`. Am Schirm auf
+test-user: Tausch, Neuladen, Rueckbau ueber die Oberflaeche, Datenbank und
+Bild in jedem Schritt gleich. `[cmd]` Von mir live nachgelesen:
+`G-559 Abbauziel=1 (primaer), G-559 Aufbauziel=2` — Ausgangsstand.
+
+**`messungAendernAktion`:** die Snapshot-Frage ist entschieden (Tom: ja) und
+in G-602/A2 gebaut und live — eine Datumsaenderung holt die Groesse neu.
+Der Griff dafuer ist noch nicht gebaut; das wird ein eigener Auftrag.
+
+**Offen fuer Tom:** soll „primaer" an Platz 1 haengen? Heute sind
+`is_primary` und `priority` getrennt, und der Tausch fasst nur `priority` an.
