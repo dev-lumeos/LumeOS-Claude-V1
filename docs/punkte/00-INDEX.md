@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 275 |
+| `todos` | 274 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 1 |
+| `laufend_claudecode` | 2 |
 | `erledigt` | 652 |
 | **gesamt** | **930** |
 
@@ -342,7 +342,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-592` | fehler | mittel | [Die Hydration-Zusammenfassung ist ein ZWEITER Leseweg, keine fehlende Anzeige](todos/nutrition-g-0592-die-hydration-zusammenfassung-hat-keinen-leser.md) | offen | G-588 | — |
+| `G-592` | fehler | mittel | [Die Hydration-Zusammenfassung ist ein ZWEITER Leseweg, keine fehlende Anzeige](laufend_claudecode/nutrition-g-0592-die-hydration-zusammenfassung-hat-keinen-leser.md) | laeuft (claudecode) | G-588 | — |
 
 ## supplements — 131
 

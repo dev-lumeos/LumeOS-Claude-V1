@@ -4,6 +4,8 @@ typ: fehler
 modul: nutrition
 schwere: mittel
 angelegt: 2026-10-03
+agent: claudecode
+beauftragt: 2026-10-04
 
 braucht: [G-588]
 kind_von: G-588
