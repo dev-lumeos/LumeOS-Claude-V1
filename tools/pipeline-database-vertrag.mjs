@@ -11,6 +11,10 @@ const FESTE_BASISDATENBANK = /(['"])-d\1\s*,\s*(['"])postgres\2/g
 const GESPERRTER_ZUGRIFF = 86
 const PARALLELE_LAEUFE = 12
 const MAX_LAUFZEIT_MS = 5_000
+// Unter Last (12 parallele Laeufe neben anderen Testdateien) kann ein Start
+// laenger dauern. Ein Abbruch durch das Zeitlimit beweist nichts - er wird
+// einmal einzeln und mit Luft wiederholt, erst dann zaehlt das Ergebnis.
+const WIEDERHOLUNG_MS = 60_000
 // Die Probe aktiviert auch boolesche CLI-Schalter wie --a95-live, blockiert
 // aber jeden Kindprozess und Netzwerkzugriff, bevor eine Datenbank erreichbar ist.
 const LAUFZEIT_SPERRE = `data:text/javascript,${encodeURIComponent(`
@@ -60,7 +64,7 @@ function zeileVon(inhalt, index) {
   return inhalt.slice(0, index).split(/\r?\n/).length
 }
 
-function pruefeLauf(datei, database) {
+function pruefeLauf(datei, database, zeitlimit = MAX_LAUFZEIT_MS) {
   const env = {
     ...process.env,
     LUMEOS_DB_CONTAINER: '__a98_gesperrt__',
@@ -78,7 +82,7 @@ function pruefeLauf(datei, database) {
       {
         env,
         stdio: 'ignore',
-        timeout: MAX_LAUFZEIT_MS,
+        timeout: zeitlimit,
         windowsHide: true,
       },
     )
@@ -170,6 +174,19 @@ async function analysierePipelineDatenbankvertrag(pipelineWurzel) {
       ['mit PGDATABASE=postgres', await pruefeLauf(datei.absolut, 'postgres')],
     ],
   }))
+
+  // Zeitlimit-Abbrueche einzeln wiederholen, nacheinander, ohne Konkurrenz.
+  for (const eintrag of laufErgebnisse) {
+    for (const lauf of eintrag.laeufe) {
+      if (lauf[1].signal) {
+        lauf[1] = await pruefeLauf(
+          eintrag.datei.absolut,
+          lauf[0] === 'ohne PGDATABASE' ? null : 'postgres',
+          WIEDERHOLUNG_MS,
+        )
+      }
+    }
+  }
 
   for (const { datei, laeufe } of laufErgebnisse) {
     const befund = laeufe
