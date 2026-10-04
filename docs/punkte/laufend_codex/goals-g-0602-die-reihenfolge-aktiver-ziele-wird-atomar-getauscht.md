@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: mittel
 angelegt: 2026-10-04
+agent: codex
+beauftragt: 2026-10-04
 
 braucht: [G-591]
 kind_von: G-591

@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-03
 agent: codex
 beauftragt: 2026-10-04
+erledigt: 2026-10-04
+commit: 48a9ab4c
 
 braucht: [A-95, G-594]
 kind_von: A-95
@@ -130,3 +132,22 @@ nachgezogen, einige der 16 koennen dadurch weg sein.
 **Reihenfolge:** A1 (Bauart), dann A2 (Triage, jeder echte Befund ein
 eigener Punkt im Bericht, nicht repariert), dann A3 (nur melden).
 **Kein Commit. Nie gegen Live. Wegwerf-Datenbank danach loeschen.**
+
+## Abnahme — 2026-10-04, Commit `48a9ab4c`
+
+`[read]` **A1 am Diff:** `sql()` faengt jeden Fehler, schreibt
+`SQL-Probe N: <Fehlertext>` in die Befunde und gibt `[]` zurueck; vorher
+prueft ein `SELECT 1` die Erreichbarkeit (Exit 2 mit eigener Meldung);
+am Ende `Proben ausgefuehrt: N`. `[cmd]` Gate gruen. Seine Gegenprobe:
+183 → 184 Proben, Exit 1, ein zusaetzlicher SQL-Befund.
+
+`[read]` **A2 — 21 Befunde, neu gezaehlt:** 10 Zielwerte (Seed-Reihenfolge:
+`nutrition_targets` entsteht vor den Phasen, das Insert schreibt 0 Zeilen),
+3 Einkaufsliste (C-251 nur in `eigenes-konto-fuellen.sql`), 8 veraltete
+Proben. **Alle 21 gehen gemeinsam in C-560** — Ziel ist ein gruener
+Testdatenpruefer, nicht 21 Einzelpunkte.
+
+`[read]` **A3 — 26 Nicht-Test-Skripte mit ungefangenem `execFileSync`**
+(17 in `_validierung/`, 9 in `tools/`). **Kein Punkt:** es sind von Hand
+gefahrene Messskripte; wo eines davon im Gate oder in der Kette laeuft und
+still abbrechen kann, wird es beim naechsten Fund dort behoben.

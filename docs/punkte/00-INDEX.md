@@ -8,8 +8,8 @@
 | `todos` | 275 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 651 |
-| **gesamt** | **929** |
+| `erledigt` | 652 |
+| **gesamt** | **930** |
 
 ## medical — 50
 
@@ -689,7 +689,7 @@
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
 | `G-591` | fehler | mittel | [Zwei Goals-Aktionen ohne Aufrufer — eine Messung aendern, die Reihenfolge speichern](laufend_claudecode/goals-g-0591-zwei-goals-aktionen-ohne-aufrufer.md) | laeuft (claudecode) | G-588 | G-602 |
-| `G-602` | fehler | mittel | [Die Reihenfolge aktiver Ziele wird atomar getauscht](laufend_codex/goals-g-0602-die-reihenfolge-aktiver-ziele-wird-atomar-getauscht.md) | vorbereitet (codex) | G-591 | — |
+| `G-602` | fehler | mittel | [Die Reihenfolge aktiver Ziele wird atomar getauscht](laufend_codex/goals-g-0602-die-reihenfolge-aktiver-ziele-wird-atomar-getauscht.md) | laeuft (codex) | G-591 | — |
 
 ## coach — 58
 
@@ -754,9 +754,9 @@
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 | `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](erledigt/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | erledigt | — | — |
 
-## quer — 244
+## quer — 245
 
-### beauftragbar — 243
+### beauftragbar — 244
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -820,7 +820,7 @@
 | `A-95` | feature | hoch | [Zwei fehlen, eine steht doppelt, der Seed fehlt](erledigt/quer-a-0095-zwei-fehlen-eine-steht-doppelt-der-seed-fehlt.md) | erledigt | — | A-99, G-594, G-595 |
 | `A-97` | fehler | hoch | [Der A-88-Vertrag hat eine Tuer, und der Waechter sieht sie nicht](erledigt/quer-a-0097-der-a88-vertrag-hat-eine-tuer-und-der-waechter-sieht-sie-nicht.md) | erledigt | — | A-98 |
 | `A-98` | fehler | hoch | [Zwei Waechter pruefen Gestalt statt Verhalten — und beide haben heute versagt](erledigt/quer-a-0098-zwei-waechter-pruefen-gestalt-statt-verhalten.md) | erledigt | — | — |
-| `A-99` | fehler | hoch | [Der Testdatenpruefer brach ab, statt rot zu werden — und niemand sah es](laufend_codex/quer-a-0099-der-testdatenpruefer-brach-ab-statt-rot-zu-werden.md) | laeuft (codex) | — | — |
+| `A-99` | fehler | hoch | [Der Testdatenpruefer brach ab, statt rot zu werden — und niemand sah es](erledigt/quer-a-0099-der-testdatenpruefer-brach-ab-statt-rot-zu-werden.md) | erledigt | — | C-560 |
 | `A-100` | fehler | hoch | [Der Gate prueft nicht, was er sagt](erledigt/quer-a-0100-der-gate-prueft-nicht-was-er-sagt.md) | erledigt | — | G-600 |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
@@ -890,6 +890,7 @@
 | `C-541` | fehler | hoch | [der Erfahrungsgrad darf nicht leer sein](erledigt/quer-c-0541-erfahrungsgrad-darf-nicht-leer-sein.md) | erledigt | — | G-501 |
 | `C-544` | feature | hoch | [der Ort am Koerper als Begriff](erledigt/quer-c-0544-ort-am-koerper.md) | erledigt | — | — |
 | `C-554` | blocker | hoch | [das Migrationsregister sagt nicht, was in der Datenbank steht](erledigt/quer-c-0554-das-migrationsregister-ist-unbrauchbar.md) | erledigt | — | — |
+| `C-560` | fehler | mittel | [Der Testdatenpruefer wird gruen](laufend_codex/quer-c-0560-der-testdatenpruefer-wird-gruen.md) | vorbereitet (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
