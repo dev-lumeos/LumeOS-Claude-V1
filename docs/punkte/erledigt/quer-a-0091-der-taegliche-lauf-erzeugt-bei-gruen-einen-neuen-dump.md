@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-01
 agent: codex
 beauftragt: 2026-10-01
+erledigt: 2026-10-04
+commit: 38684342
 
 braucht: [A-90]
 kind_von: A-90
@@ -126,3 +128,16 @@ mit 19 Quellen, 2026-10-01T07:48:38.367Z.
 `[read]` **A5 wird in A-87 belegt** — dort laeuft der Vollauf einmal am
 Ende der Zeugenstaffel. **Dieser Punkt schliesst, wenn ein Dump
 veroeffentlicht ist, nicht vorher.**
+
+## Abnahme — 2026-10-04, Commit `38684342`
+
+`[cmd]` **Der erste gruene Tageslauf hat den Dump selbst erneuert**
+(C-558, Lauf 15). Statusnachweis `backup/_manifests/kettenlauf-status.json`:
+`status passed`, `grunddaten_dump
+supabase/_pipeline/daten/grunddaten-20261004T011755Z.dump`; das Manifest
+traegt Quelle `lumeos_c558_lauf15`, 418.887.599 Bytes, sha256 85db308e….
+`[cmd]` Aus dem Dump von mir gelesen: 593 Supplements.
+
+**Damit ist belegt, was der Punkt verlangt:** gruen → neuer Dump, ohne
+Handgriff. Gebaut war es seit `38684342`; gefehlt hat bis heute ein
+gruener Lauf.

@@ -8,7 +8,7 @@ angelegt: 2026-10-03
 braucht: [A-91, A-80]
 
 quellen:
-  - docs/punkte/laufend_codex/quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md
+  - docs/punkte/erledigt/quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md
   - docs/punkte/erledigt/supplements-c-0556-zwei-fachliche-folgen-des-neuen-kimi-bestands.md
 
 beruehrt:

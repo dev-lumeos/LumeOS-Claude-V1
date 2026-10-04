@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: mittel
 angelegt: 2026-10-02
+agent: claudecode
+beauftragt: 2026-10-04
 
 braucht: [G-588]
 kind_von: G-588
@@ -22,6 +24,29 @@ beruehrt:
 ---
 
 # Zwei Goals-Aktionen ohne Aufrufer — eine Messung aendern, die Reihenfolge speichern
+
+## Auftrag — Kopf
+
+    AUFTRAG FUER Claude Code - G-591: die Reihenfolge der Ziele wird
+                                     gespeichert
+    Bereich: apps/web/src/app/v2/goals/  apps/web/src/lib/goals/
+    Fremd:   supabase/ gehoert Codex. docs/ gehoert dem Orchestrator,
+             auch diese Punktdatei.
+    Stand:   2026-10-04
+
+**Beauftragt ist nur der Prioritaetenteil** (`prioritaetenSpeichern`),
+weil G-575 offen ist. **`messungAendernAktion`: nur messen** — was tut
+`messungAendern` heute mit `height_cm_snapshot`? Ergebnis in den Bericht,
+**nicht bauen**; die Frage geht an Tom.
+
+**Nachweise:** am Schirm auf `test-user@lumeos.local` die Reihenfolge
+geaendert, neu geladen, steht; die drei aktiven Plaetze aus
+`uq_user_goals_active_slot` geprueft — **eine Oberflaeche, die einen
+vierten Platz anbietet, faellt am CHECK**, das muss eine Probe zeigen.
+Danach den alten Stand per Oberflaeche wiederherstellen. Sabotage in beide
+Richtungen, Gate gruen (Tests ungecacht). Kein Commit, Dev-Server nicht
+selbst starten.
+
 
 ## Der Befund
 

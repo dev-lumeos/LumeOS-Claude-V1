@@ -4,6 +4,8 @@ typ: fehler
 modul: quer
 schwere: hoch
 angelegt: 2026-10-03
+agent: codex
+beauftragt: 2026-10-04
 
 braucht: [A-95, G-594]
 kind_von: A-95
@@ -19,6 +21,16 @@ beruehrt:
 ---
 
 # Der Testdatenpruefer brach ab, statt rot zu werden — und niemand sah es
+
+## Auftrag — Kopf
+
+    AUFTRAG FUER Codex - A-99: der Testdatenpruefer wird rot statt
+                              abzubrechen, und die Befunde werden sortiert
+    Bereich: supabase/_pipeline/
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator,
+             auch diese Punktdatei.
+    Stand:   2026-10-04
+
 
 ## Der Befund
 
@@ -104,3 +116,17 @@ aendern** — die Liste entscheidet, ob daraus ein Punkt wird.
 **Nicht Teil:** A-98 (der Datenbankvertrag-Waechter) · A-96 (die
 Logdatei des Nachtlaufs) · die 16 Befunde selbst, solange sie nicht
 sortiert sind.
+
+## Stand 2026-10-04 — jetzt durchfuehrbar
+
+`[cmd]` **Die Kette ist seit C-558 gruen** (`4dd9aa11`, Dump
+`grunddaten-20261004T011755Z.dump`). **A2 wartet damit nicht mehr** — die
+Triage laeuft auf einer Wegwerf-Datenbank aus der Kette, nicht auf Live.
+
+`[read]` **Die 16 Befunde sind alt** (gemessen vor C-558). **Zuerst neu
+zaehlen**, dann sortieren; C-558 hat Sollzahlen im Supplement-Bereich
+nachgezogen, einige der 16 koennen dadurch weg sein.
+
+**Reihenfolge:** A1 (Bauart), dann A2 (Triage, jeder echte Befund ein
+eigener Punkt im Bericht, nicht repariert), dann A3 (nur melden).
+**Kein Commit. Nie gegen Live. Wegwerf-Datenbank danach loeschen.**

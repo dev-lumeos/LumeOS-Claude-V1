@@ -5,9 +5,8 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-601 | „Nicht geladen" steht da, wo die Daten nur leer sind | **laeuft**, raus 04.10. |
-| Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
-| Codex | C-559 | Der neue Grundbestand hat 45 Supplements weniger als Live | **laeuft**, raus 04.10. |
+| Claude Code | G-591 | Zwei Goals-Aktionen ohne Aufrufer — eine Messung aendern, die Reihenfolge speichern | **laeuft**, raus 04.10. |
+| Codex | A-99 | Der Testdatenpruefer brach ab, statt rot zu werden — und niemand sah es | **laeuft**, raus 04.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->

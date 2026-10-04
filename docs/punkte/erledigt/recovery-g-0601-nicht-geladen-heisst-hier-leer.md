@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-04
 agent: claudecode
 beauftragt: 2026-10-04
+erledigt: 2026-10-04
+commit: 824d6ad4
 
 braucht: [G-598]
 kind_von: G-598
@@ -49,3 +51,10 @@ fuer ein leeres Ergebnis sagt — suchen und Zahl nennen.
 Gerenderte Probe je Zustand und Stelle (`renderToStaticMarkup`), Sabotage
 in beide Richtungen, am Schirm auf test-user der Leerzustand. Gate gruen
 (Tests ungecacht). Kein Commit, Dev-Server nicht selbst starten.
+
+## Abnahme — 2026-10-04, Commit `824d6ad4`
+
+`[cmd]` Gate gruen, Tests ungecacht: `web:test # tests 2641`, `# fail 0`
+(2635 + 6). Vier Stellen statt der zwei im Auftrag — HRV und Sleep in
+`tab-messwerte.tsx` hatten dieselbe Form; eine gemeinsame Kachel
+`lade-hinweis.tsx` statt vier Abschriften.

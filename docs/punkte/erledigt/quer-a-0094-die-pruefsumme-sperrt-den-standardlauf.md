@@ -14,7 +14,7 @@ kind_von: A-90
 
 quellen:
   - docs/punkte/erledigt/quer-a-0090-grunddaten-als-dump-statt-als-import.md
-  - docs/punkte/laufend_codex/quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md
+  - docs/punkte/erledigt/quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md
 
 beruehrt:
   tabellen: []

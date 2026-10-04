@@ -16,7 +16,7 @@ quellen:
   - docs/punkte/erledigt/quer-a-0097-der-a88-vertrag-hat-eine-tuer-und-der-waechter-sieht-sie-nicht.md
   - docs/punkte/erledigt/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md
   - docs/punkte/erledigt/goals-g-0595-der-zweiparameter-mantel-war-kein-ueberrest.md
-  - docs/punkte/todos/quer-a-0099-der-testdatenpruefer-brach-ab-statt-rot-zu-werden.md
+  - docs/punkte/laufend_codex/quer-a-0099-der-testdatenpruefer-brach-ab-statt-rot-zu-werden.md
 
 beruehrt:
   tabellen: []

@@ -15,7 +15,7 @@ kind_von: C-295
 quellen:
   - docs/punkte/erledigt/quer-c-0295-die-kette-liest-aus-zwei-kimi-pfaden.md
   - docs/punkte/erledigt/supplements-c-0556-zwei-fachliche-folgen-des-neuen-kimi-bestands.md
-  - docs/punkte/laufend_codex/quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md
+  - docs/punkte/erledigt/quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md
 
 beruehrt:
   tabellen: []

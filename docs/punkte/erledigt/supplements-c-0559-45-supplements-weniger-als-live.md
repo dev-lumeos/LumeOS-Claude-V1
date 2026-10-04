@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-04
 agent: codex
 beauftragt: 2026-10-04
+erledigt: 2026-10-04
+commit: 4dd9aa11
 
 braucht: [C-558]
 kind_von: C-558
@@ -54,3 +56,23 @@ beruehrt:
 - **Nichts reparieren.** Das Ergebnis ist eine Liste und eine Empfehlung;
   ob Live je auf diesen Stand abgeglichen wird, entscheidet Tom.
 - Wegwerf-Datenbank danach loeschen. Kein Commit.
+
+## Abnahme — 2026-10-04 (Messpunkt, Stand `4dd9aa11`)
+
+**Ergebnis: dem neuen Grundbestand fehlt fachlich kein Supplement.**
+
+`[cmd]` **Berichtigung meiner eigenen Zahl:** ich hatte 572/446 genannt —
+das waren Sollwerte eines Zwischenschritts aus dem Diff, nicht der Dump.
+Von mir aus dem veroeffentlichten Dump gezaehlt (`pg_restore -a -t
+supplements`): **593 Zeilen, davon 126 mit `f05_`-Slug.** Live 617/430.
+
+`[read]` **Die Differenz von 24** sind alte, live verborgene `f05_*`-Huellen;
+jede hat im Dump ein sichtbares kanonisches Ziel. 121 von 122 nur-live
+Slugs haben keine Nutzerverweise; `f05_nac` hat fuenf, alle von
+`test-user`.
+
+**Vor einem spaeteren Live-Abgleich** ist `f05_nac` ausdruecklich zu
+behandeln (Test-Stack umhaengen oder verwerfen, vier kuratierte
+Template-Positionen fachlich entscheiden, 1.500 Produktverknuepfungen
+gegen 1.735 kanonische deduplizieren). **Kein Abgleich ist geplant;
+die Entscheidung liegt bei Tom.**
