@@ -6,9 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 275 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 656 |
-| **gesamt** | **932** |
+| **gesamt** | **933** |
 
 ## medical — 50
 
@@ -603,9 +604,9 @@
 |---|---|---|---|---|---|---|
 | `G-590` | fehler | hoch | [Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht](erledigt/recovery-g-0590-der-checkin-ist-der-einzige-pflichtgriff-und-er-schreibt-nicht.md) | erledigt | G-588 | — |
 
-## goals — 76
+## goals — 77
 
-### beauftragbar — 69
+### beauftragbar — 70
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -678,6 +679,7 @@
 | `G-594` | fehler | hoch | [Ein Ernaehrungsziel kennt seine Phase, aber nicht sein Ziel](erledigt/goals-g-0594-ein-ernaehrungsziel-kennt-seine-phase-aber-nicht-sein-ziel.md) | erledigt | — | — |
 | `G-595` | fehler | hoch | [Der Zweiparameter-Mantel war kein Ueberrest — mein Auftrag hat ihn geloescht](erledigt/goals-g-0595-der-zweiparameter-mantel-war-kein-ueberrest.md) | erledigt | — | — |
 | `G-602` | fehler | mittel | [Die Reihenfolge aktiver Ziele wird atomar getauscht](erledigt/goals-g-0602-die-reihenfolge-aktiver-ziele-wird-atomar-getauscht.md) | erledigt | — | — |
+| `G-604` | fehler | hoch | [Hoechstens ein aktives Kalorienziel](laufend_codex/goals-g-0604-hoechstens-ein-aktives-kalorienziel.md) | laeuft (codex) | — | — |
 
 ### wartet auf Blocker — 7
 
@@ -890,7 +892,7 @@
 | `C-541` | fehler | hoch | [der Erfahrungsgrad darf nicht leer sein](erledigt/quer-c-0541-erfahrungsgrad-darf-nicht-leer-sein.md) | erledigt | — | G-501 |
 | `C-544` | feature | hoch | [der Ort am Koerper als Begriff](erledigt/quer-c-0544-ort-am-koerper.md) | erledigt | — | — |
 | `C-554` | blocker | hoch | [das Migrationsregister sagt nicht, was in der Datenbank steht](erledigt/quer-c-0554-das-migrationsregister-ist-unbrauchbar.md) | erledigt | — | — |
-| `C-560` | fehler | mittel | [Der Testdatenpruefer wird gruen](erledigt/quer-c-0560-der-testdatenpruefer-wird-gruen.md) | erledigt | — | C-561 |
+| `C-560` | fehler | mittel | [Der Testdatenpruefer wird gruen](erledigt/quer-c-0560-der-testdatenpruefer-wird-gruen.md) | erledigt | — | C-561, G-604 |
 | `C-561` | fehler | mittel | [Zwei Testproben beschreiben den Bestand, nicht das Soll](todos/quer-c-0561-zwei-testproben-beschreiben-den-bestand-nicht-das-soll.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
