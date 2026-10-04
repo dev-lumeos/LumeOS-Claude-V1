@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process'
 import crypto from 'node:crypto'
+import { tagIso, utcTagIso } from '@lumeos/shared/datum'
 // G-175: das Anmeldewort des Pruefkontos kommt aus derselben Quelle
 // wie tools/schuss.mjs und die Nachweisskripte — eine Stelle.
 import { KONTEN } from '../../../tools/konten.mjs'
@@ -33,7 +34,7 @@ function argValue(name: string): string | null {
 function addIsoDays(date: string, days: number): string {
   const d = new Date(`${date}T00:00:00Z`)
   d.setUTCDate(d.getUTCDate() + days)
-  return d.toISOString().slice(0, 10)
+  return utcTagIso(d)
 }
 
 function daysOffset(start: string, end: string): number {
@@ -58,7 +59,7 @@ const ALL_DATES = WINDOWS.flatMap(window => daysBetween(window.start, window.end
 const END_DATE = WINDOWS[WINDOWS.length - 1]!.end
 // C-412/C-413: Einnahmeprotokolle muessen bis zum Lauftag reichen.
 // --today bleibt fuer einen reproduzierbaren Nachweis moeglich.
-const TODAY_DATE = argValue('--today') ?? new Date().toISOString().slice(0, 10)
+const TODAY_DATE = argValue('--today') ?? tagIso()
 
 function relDate(anchorDate: string): string {
   return addIsoDays(START_DATE, daysOffset(ANCHOR_DATE, anchorDate))
@@ -987,7 +988,7 @@ function uuidFrom(label: string): string {
 function addDays(date: string, days: number): string {
   const d = new Date(`${date}T00:00:00Z`)
   d.setUTCDate(d.getUTCDate() + days)
-  return d.toISOString().slice(0, 10)
+  return utcTagIso(d)
 }
 
 function daysBetween(start: string, end: string): string[] {
@@ -3641,34 +3642,6 @@ VALUES
   ${lit(COACH_USER.id)}::uuid
 );
 
-INSERT INTO goals.nutrition_targets (
-  user_id, gueltig_ab, kcal, protein_g, carbs_g, fat_g,
-  fiber_g, linoleic_acid_g, alpha_linolenic_acid_g,
-  herkunft, tdee, nutrition_goal, notiz, phase_id
-)
-SELECT gp.user_id, gp.gueltig_ab, bz.kcal, bz.protein_g, bz.carbs_g, bz.fat_g,
-       bz.fiber_g, bz.linoleic_acid_g, bz.alpha_linolenic_acid_g,
-       'formel', bz.tdee, bz.nutrition_goal,
-       'G-511 Testdaten aus der am Stichtag laufenden Phase', gp.id
-FROM goals.goal_phases AS gp
-CROSS JOIN LATERAL goals.berechne_zielwerte(
-  gp.user_id, gp.goal_id, gp.gueltig_ab
-) AS bz
-WHERE bz.hindernis IS NULL
-ON CONFLICT (user_id, gueltig_ab) DO UPDATE SET
-  kcal = EXCLUDED.kcal,
-  protein_g = EXCLUDED.protein_g,
-  carbs_g = EXCLUDED.carbs_g,
-  fat_g = EXCLUDED.fat_g,
-  fiber_g = EXCLUDED.fiber_g,
-  linoleic_acid_g = EXCLUDED.linoleic_acid_g,
-  alpha_linolenic_acid_g = EXCLUDED.alpha_linolenic_acid_g,
-  tdee = EXCLUDED.tdee,
-  nutrition_goal = EXCLUDED.nutrition_goal,
-  notiz = EXCLUDED.notiz,
-  phase_id = EXCLUDED.phase_id,
-  updated_at = now();
-
 CREATE TEMP TABLE test_goals (
   id uuid PRIMARY KEY,
   user_id uuid NOT NULL,
@@ -3749,6 +3722,42 @@ SELECT
   gueltig_ab, projected_end_date, actual_end_date,
   transitioned_from, recommended_next, transition_reason, strategie_code
 FROM test_goal_phases;
+
+-- C-560: Die drei historischen Zielwert-Snapshots entstehen erst, wenn
+-- ihre Phasen vorhanden sind. Sie bleiben bewusst manuell: zwei der alten
+-- Phasen haben keinen vollstaendigen Formelvertrag. Die explizite phase_id
+-- bindet jede Zeile eindeutig, ohne die parallelen test-user-Ziele zu nutzen.
+INSERT INTO goals.nutrition_targets (
+  user_id, gueltig_ab, kcal, protein_g, carbs_g, fat_g,
+  fiber_g, linoleic_acid_g, alpha_linolenic_acid_g,
+  herkunft, tdee, nutrition_goal, notiz, phase_id
+)
+SELECT gp.user_id, gp.gueltig_ab,
+       tu.kcal, tu.protein_g, tu.carbs_g, tu.fat_g,
+       30, round(tu.kcal * 0.04 / 9, 1), round(tu.kcal * 0.005 / 9, 1),
+       'manuell', tu.tdee, tu.nutrition_goal,
+       'C-560 historischer Szenario-Snapshot', gp.id
+FROM goals.goal_phases AS gp
+JOIN test_users AS tu ON tu.id = gp.user_id
+WHERE gp.id IN (
+  '31000000-0000-0000-0000-000000000101'::uuid,
+  '31000000-0000-0000-0000-000000000102'::uuid,
+  '31000000-0000-0000-0000-000000000201'::uuid
+)
+ON CONFLICT (user_id, gueltig_ab) DO UPDATE SET
+  kcal = EXCLUDED.kcal,
+  protein_g = EXCLUDED.protein_g,
+  carbs_g = EXCLUDED.carbs_g,
+  fat_g = EXCLUDED.fat_g,
+  fiber_g = EXCLUDED.fiber_g,
+  linoleic_acid_g = EXCLUDED.linoleic_acid_g,
+  alpha_linolenic_acid_g = EXCLUDED.alpha_linolenic_acid_g,
+  herkunft = EXCLUDED.herkunft,
+  tdee = EXCLUDED.tdee,
+  nutrition_goal = EXCLUDED.nutrition_goal,
+  notiz = EXCLUDED.notiz,
+  phase_id = EXCLUDED.phase_id,
+  updated_at = now();
 
 CREATE TEMP TABLE test_goal_milestones (
   id uuid PRIMARY KEY,
@@ -4392,6 +4401,64 @@ JOIN nutrition.meal_plan_weeks w ON w.plan_id = p.id
 JOIN nutrition.meal_plan_days d ON d.week_id = w.id AND d.day_index = 2
 JOIN nutrition.meal_plan_entries e ON e.day_id = d.id AND e.meal_type = 'breakfast'
 WHERE p.id = 'c4130000-0000-0000-0000-000000000001'::uuid;
+
+-- C-251/C-560: eine kanonische Einkaufsliste des Nachweiskontos mit
+-- sechs echten BLS-Verknuepfungen statt eines separaten Hilfsseeds.
+INSERT INTO nutrition.shopping_lists (
+  id, user_id, name, source_type, servings, status,
+  measurement_source, source_detail
+)
+SELECT
+  'c2510000-0000-0000-0000-000000000001'::uuid, u.id,
+  'Nachweis-Einkaufsliste', 'manual', 1, 'open',
+  'seed', 'C-251 test-user Einkaufsliste'
+FROM auth.users u
+WHERE u.email = 'test-user@lumeos.local';
+
+CREATE TEMP TABLE c251_shopping_items (
+  sort_order integer NOT NULL,
+  bls_code text NOT NULL,
+  amount_g numeric,
+  quantity numeric,
+  unit_display text NOT NULL,
+  notes text
+) ON COMMIT DROP;
+
+INSERT INTO c251_shopping_items VALUES
+  (10, 'C133000', 500, NULL, 'g', 'Oats fuer Fruehstueck'),
+  (20, 'F503100', 750, NULL, 'g', 'Banane'),
+  (30, 'E111100', NULL, 12, 'Stueck', 'Eier'),
+  (40, 'V416100', 800, NULL, 'g', 'Haehnchen'),
+  (50, 'C351000', 1000, NULL, 'g', 'Reis'),
+  (60, 'Q120000', 250, NULL, 'ml', 'Olivenoel');
+
+DO $$
+DECLARE
+  v_missing text;
+BEGIN
+  SELECT string_agg(i.bls_code, ', ' ORDER BY i.bls_code)
+    INTO v_missing
+  FROM c251_shopping_items i
+  LEFT JOIN nutrition.foods f ON f.bls_code = i.bls_code
+  WHERE f.id IS NULL;
+
+  IF v_missing IS NOT NULL THEN
+    RAISE EXCEPTION 'C-251 Einkaufslisten-Seed: BLS-Codes fehlen: %', v_missing;
+  END IF;
+END $$;
+
+INSERT INTO nutrition.shopping_list_items (
+  shopping_list_id, user_id, sort_order, item_source, food_id, food_name,
+  amount_g, quantity, unit_display, notes
+)
+SELECT
+  'c2510000-0000-0000-0000-000000000001'::uuid,
+  u.id, i.sort_order, 'bls', f.id,
+  COALESCE(NULLIF(f.name_display_de, ''), f.name_de),
+  i.amount_g, i.quantity, i.unit_display, i.notes
+FROM c251_shopping_items i
+JOIN nutrition.foods f ON f.bls_code = i.bls_code
+CROSS JOIN (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local') u;
 
 INSERT INTO supplements.user_stacks (id, user_id, name, description, goal, source, is_active)
 SELECT 'c4130000-0000-0000-0000-000000000003'::uuid, u.id,

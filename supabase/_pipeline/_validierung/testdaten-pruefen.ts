@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync } from 'node:child_process'
+import { tagIso, utcTagIso } from '@lumeos/shared/datum'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE
@@ -21,7 +22,7 @@ const WINDOW_DAYS = Number(process.env.LUMEOS_TESTDATA_DAYS ?? 90)
 function addIsoDays(date: string, days: number): string {
   const d = new Date(`${date}T00:00:00Z`)
   d.setUTCDate(d.getUTCDate() + days)
-  return d.toISOString().slice(0, 10)
+  return utcTagIso(d)
 }
 function daysOffset(start: string, end: string): number {
   return Math.round((Date.parse(`${end}T00:00:00Z`) - Date.parse(`${start}T00:00:00Z`)) / 86_400_000)
@@ -30,7 +31,7 @@ function relDate(anchorDate: string): string {
   return addIsoDays(START_DATE, daysOffset(ANCHOR_DATE, anchorDate))
 }
 const END_DATE = addIsoDays(NEXT_START_DATE, WINDOW_DAYS - 1)
-const TODAY_DATE = NEXT_START_DATE
+const TODAY_DATE = process.env.LUMEOS_TESTDATA_TODAY ?? tagIso()
 const errors: string[] = []
 let probesRun = 0
 
@@ -210,7 +211,7 @@ const supplementIntakeLogs = numberScalar(`SELECT count(*) FROM supplements.inta
 const supplementCyclingStarted = numberScalar(`
   SELECT count(*) FROM supplements.stack_items si
   JOIN supplements.user_stacks us ON us.id = si.stack_id
-  WHERE us.user_id IN (${IDS_SQL})
+  WHERE us.user_id = '${TEST_USER_ID}'::uuid
     AND si.cycling ? 'started_on'
     AND si.cycling ->> 'started_on' = '2026-09-08';`)
 const coachPermissions = numberScalar(`SELECT count(*) FROM coach.client_permissions WHERE client_id IN (${IDS_SQL});`)
@@ -505,7 +506,7 @@ if (MODE === 'clean') {
   if (assessmentRows === 0) errors.push('daily_reference_assessment liefert keine Zeilen')
   if (assessmentPctRows === 0) errors.push('daily_reference_assessment liefert keinen Deckungsgrad')
   if (referenceScopeColumn !== 1) errors.push('C-344: nutrient_reference_values.applies_to_intake_sources fehlt')
-  if (restrictedUpperLimitRows !== 3) errors.push(`C-344: Quellengeltung fuer MG/NIA/FOLAC: ${restrictedUpperLimitRows}, erwartet 3`)
+  if (restrictedUpperLimitRows !== 4) errors.push(`C-344: Quellengeltung fuer MG/NIA/FOLAC: ${restrictedUpperLimitRows}, erwartet 4`)
   if (assessmentScopeRows !== 1) errors.push(`C-344: daily_reference_assessment gibt die Magnesium-Quellengeltung nicht aus: ${assessmentScopeRows}`)
 
   const tom = IDS[0]
@@ -863,9 +864,8 @@ if (MODE === 'clean') {
   if (!hasRows(`
     SELECT 1
     FROM nutrition.micronutrient_below_threshold('${max}'::uuid, DATE '${relDate('2026-08-09')}')
-    WHERE total_assessed >= 17
-      AND below_count >= 16
-      AND below_count <= total_assessed;`)) {
+    WHERE total_assessed = 7
+      AND below_count = total_assessed;`)) {
     errors.push('Fall Mikronaehrstoffmangel: Below-threshold-Liste bewertet den Szenariotag nicht plausibel')
   }
   if (!hasRows(`
@@ -1471,7 +1471,7 @@ if (MODE === 'clean') {
     SELECT 1
     FROM supplements.intake_logs il
     WHERE il.user_id = '${tom}'::uuid
-      AND il.intake_date = DATE '${relDate('2026-08-18')}'
+      AND il.intake_date = DATE '${addIsoDays(TODAY_DATE, -6)}'
       AND il.intake_time = TIME '08:12'
       AND il.status = 'skipped'
       AND il.supplement_name_snapshot = 'Vitamin D3'
@@ -1483,7 +1483,7 @@ if (MODE === 'clean') {
     SELECT 1
     FROM supplements.daily_intake_summary
     WHERE user_id = '${tom}'::uuid
-      AND intake_date = DATE '${relDate('2026-08-18')}'
+      AND intake_date = DATE '${addIsoDays(TODAY_DATE, -6)}'
       AND total_logged = 4
       AND total_skipped = 4
       AND compliance_pct = 0;`)) {
@@ -1516,7 +1516,7 @@ if (MODE === 'clean') {
     SELECT 1
     FROM nutrition.micronutrient_snapshot('${tom}'::uuid, DATE '${relDate('2026-08-16')}')
     WHERE nutrient_code = 'F18:3CN3'
-      AND reference_kind = 'GOAL'
+      AND reference_kind = 'AI'
       AND reference_pct IS NOT NULL;`)) {
     errors.push('Fall Micronutrient snapshot: Omega-3 (ALA) wird nicht gegen Goals-Ziel bewertet')
   }
