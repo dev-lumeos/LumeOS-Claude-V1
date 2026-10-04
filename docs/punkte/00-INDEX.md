@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 278 |
+| `todos` | 277 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 645 |
-| **gesamt** | **926** |
+| `erledigt` | 648 |
+| **gesamt** | **928** |
 
 ## medical — 50
 
@@ -344,9 +344,9 @@
 |---|---|---|---|---|---|---|
 | `G-592` | fehler | mittel | [Die Hydration-Zusammenfassung ist ein ZWEITER Leseweg, keine fehlende Anzeige](todos/nutrition-g-0592-die-hydration-zusammenfassung-hat-keinen-leser.md) | offen | G-588 | — |
 
-## supplements — 130
+## supplements — 131
 
-### beauftragbar — 127
+### beauftragbar — 128
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -424,6 +424,7 @@
 | `C-552` | feature | hoch | [wofuer ist eine Substanz gut?](todos/supplements-c-0552-wofuer-ist-eine-substanz-gut.md) | offen | — | — |
 | `C-553` | befund | mittel | [135 von 617 Beschreibungen sind Schablonen](todos/supplements-c-0553-schablonen-statt-beschreibungen.md) | offen | — | — |
 | `C-556` | fehler | hoch | [Zwei fachliche Folgen des neuen Kimi-Bestands](erledigt/supplements-c-0556-zwei-fachliche-folgen-des-neuen-kimi-bestands.md) | erledigt | — | — |
+| `C-559` | befund | hoch | [Der neue Grundbestand hat 45 Supplements weniger als Live](laufend_codex/supplements-c-0559-45-supplements-weniger-als-live.md) | laeuft (codex) | — | — |
 | `E-85` | entscheidung | hoch | [kein Zwischenspeicher fuer die DSLD-Bilder](erledigt/supplements-e-0085-kein-zwischenspeicher-dsld-bilder.md) | erledigt | — | — |
 | `E-88` | entscheidung | hoch | [die Entwurfsreferenz zeigt PED-Protokolle ohne Gradpruefung](erledigt/supplements-e-0088-entwurfsreferenz-zeigt-ped.md) | erledigt | — | G-499 |
 | `E-89` | entscheidung | hoch | [Wissen ist offen, das Protokoll ist gesperrt](erledigt/supplements-e-0089-wissen-offen-protokoll-gesperrt.md) | erledigt | — | — |
@@ -484,7 +485,7 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 | `C-557` | fehler | hoch | [Vierzehn von siebzehn Naehrstoffzuordnungen finden ihre Substanz nicht](erledigt/supplements-c-0557-vierzehn-von-siebzehn-naehrstoffzuordnungen-finden-ihre-substanz-nicht.md) | erledigt | A-91 | — |
-| `C-558` | fehler | hoch | [Die Kette laeuft gruen — Schritt fuer Schritt, heute, nicht eine Nacht pro Fehler](laufend_codex/supplements-c-0558-die-kette-laeuft-gruen.md) | laeuft (codex) | A-96 | — |
+| `C-558` | fehler | hoch | [Die Kette laeuft gruen — Schritt fuer Schritt, heute, nicht eine Nacht pro Fehler](erledigt/supplements-c-0558-die-kette-laeuft-gruen.md) | erledigt | A-96 | C-559 |
 
 ## training — 52
 
@@ -543,9 +544,9 @@
 | `G-509` | feature | hoch | [der Workoutplaner von aussen nach innen](todos/training-g-0509-workoutplaner-von-aussen-nach-innen.md) | offen | — | — |
 | `G-584` | befund | mittel | [Drei Anzeigen ohne Quelle, aus dem LiveWorkout-Entwurf gerettet](todos/training-g-0584-drei-anzeigen-ohne-quelle-aus-dem-liveworkout-entwurf.md) | offen | — | — |
 
-## recovery — 46
+## recovery — 47
 
-### beauftragbar — 45
+### beauftragbar — 46
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -593,7 +594,8 @@
 | `G-593` | fehler | hoch | [Die Attrappe nennt eine fehlende Tabelle — die Tabelle ist fertig und gefuellt](erledigt/recovery-g-0593-die-attrappe-nennt-eine-tabelle-die-es-unter-anderem-namen-gibt.md) | erledigt | — | G-596, G-597, G-598, G-599 |
 | `G-596` | befund | mittel | [Die Spec beschreibt eine Bibliothek, die Tabelle ist ein Verlauf](todos/recovery-g-0596-die-spec-beschreibt-eine-bibliothek-die-tabelle-ist-ein-verlauf.md) | offen | — | — |
 | `G-597` | fehler | mittel | [Zwei aktive Protokolle sind erlaubt — und im Nachweis sind sie entstanden](erledigt/recovery-g-0597-zwei-aktive-protokolle-sind-erlaubt.md) | erledigt | — | — |
-| `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | — |
+| `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
+| `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](laufend_claudecode/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | laeuft (claudecode) | — | — |
 
 ### wartet auf Blocker — 1
 
@@ -753,7 +755,7 @@
 
 ## quer — 244
 
-### beauftragbar — 240
+### beauftragbar — 241
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -816,7 +818,7 @@
 | `A-97` | fehler | hoch | [Der A-88-Vertrag hat eine Tuer, und der Waechter sieht sie nicht](erledigt/quer-a-0097-der-a88-vertrag-hat-eine-tuer-und-der-waechter-sieht-sie-nicht.md) | erledigt | — | A-98 |
 | `A-98` | fehler | hoch | [Zwei Waechter pruefen Gestalt statt Verhalten — und beide haben heute versagt](erledigt/quer-a-0098-zwei-waechter-pruefen-gestalt-statt-verhalten.md) | erledigt | — | — |
 | `A-99` | fehler | hoch | [Der Testdatenpruefer brach ab, statt rot zu werden — und niemand sah es](todos/quer-a-0099-der-testdatenpruefer-brach-ab-statt-rot-zu-werden.md) | offen | — | — |
-| `A-100` | fehler | hoch | [Der Gate prueft nicht, was er sagt](todos/quer-a-0100-der-gate-prueft-nicht-was-er-sagt.md) | offen | — | G-600 |
+| `A-100` | fehler | hoch | [Der Gate prueft nicht, was er sagt](erledigt/quer-a-0100-der-gate-prueft-nicht-was-er-sagt.md) | erledigt | — | G-600 |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
@@ -997,15 +999,15 @@
 | `G-588` | befund | hoch | [Sechs Serveraktionen ohne Aufrufer — dieselbe Klasse wie G-571, eine Ebene hoeher](todos/quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md) | offen | — | G-590, G-591, G-592 |
 | `G-589` | befund | niedrig | [328 Ausfuhren zu viel — und wie die Zahl 385 zu 56 wurde](todos/quer-g-0589-dreihundertachtundzwanzig-ausfuhren-zu-viel.md) | offen | — | — |
 | `G-599` | befund | mittel | [Die SSOT nennt Tabellen abwesend, die es gibt — und der Waechter sieht den Fast-Treffer nicht](todos/quer-g-0599-die-ssot-nennt-tabellen-abwesend-die-es-gibt.md) | offen | — | — |
+| `G-600` | fehler | hoch | [„Heute" ist an 32 Stellen der UTC-Vortag](erledigt/quer-g-0600-heute-ist-an-32-stellen-der-utc-vortag.md) | erledigt | — | — |
 
-### wartet auf Blocker — 4
+### wartet auf Blocker — 3
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-92` | fehler | hoch | [Die G-558-Probe ruft berechne_zielwerte ohne Zielbezug und haelt den Tagesdump auf](erledigt/quer-a-0092-die-g558-probe-ruft-ohne-zielbezug.md) | erledigt | A-91 | — |
 | `A-94` | fehler | hoch | [Die Pruefsumme sperrt den Standardlauf, und niemand hat es gemerkt](erledigt/quer-a-0094-die-pruefsumme-sperrt-den-standardlauf.md) | erledigt | A-91 | — |
 | `A-96` | fehler | hoch | [Der Nachtlauf verwirft seinen eigenen Grund](todos/quer-a-0096-der-nachtlauf-verwirft-seinen-eigenen-grund.md) | offen | A-91, A-80 | — |
-| `G-600` | fehler | hoch | [„Heute" ist an 32 Stellen der UTC-Vortag](laufend_claudecode/quer-g-0600-heute-ist-an-32-stellen-der-utc-vortag.md) | laeuft (claudecode) | A-100 | — |
 
 ## buddy — 1
 

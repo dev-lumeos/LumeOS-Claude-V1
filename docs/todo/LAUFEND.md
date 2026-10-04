@@ -5,9 +5,9 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-600 | „Heute" ist an 32 Stellen der UTC-Vortag | **laeuft**, raus 04.10. |
+| Claude Code | G-601 | „Nicht geladen" steht da, wo die Daten nur leer sind | **laeuft**, raus 04.10. |
 | Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
-| Codex | C-558 | Die Kette laeuft gruen — Schritt fuer Schritt, heute, nicht eine Nacht pro Fehler | **laeuft**, raus 04.10. |
+| Codex | C-559 | Der neue Grundbestand hat 45 Supplements weniger als Live | **laeuft**, raus 04.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->

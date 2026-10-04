@@ -4,6 +4,10 @@ typ: fehler
 modul: quer
 schwere: hoch
 angelegt: 2026-10-04
+agent: claudecode
+beauftragt: 2026-10-04
+erledigt: 2026-10-04
+commit: f31585ba
 
 braucht: [A-98]
 
@@ -42,3 +46,13 @@ Derselbe Hash danach: `cache bypass, force executing` →
 **Nicht erfasst:** `app/v2/nutrition/__tests__/leer-hinweis.test.tsx`,
 `app/v2/supplements/__tests__/abschnitte.test.tsx`. Glob um `*.test.tsx`
 erweitern, beide Dateien muessen dann laufen (Zahl vorher/nachher).
+
+## Abschluss — 2026-10-04
+
+`[cmd]` **A3 erledigt in G-600 (`f31585ba`):** der Test-Glob erfasst
+`*.test.tsx`, 2599 → 2635 Tests.
+`[cmd]` **Dazu zwei weitere Stellen derselben Klasse, behoben:**
+der Lint-Cache sah die Wurzel-`.eslintrc.json` nicht (`1582b6c1`, belegt:
+Regel geaendert → cache miss), und der Datenbankvertrag-Waechter zaehlte
+einen Zeitlimit-Abbruch unter Last als Verstoss (`506b3aeb`, belegt:
+langsam und werfend gruen, langsam und nicht werfend rot).

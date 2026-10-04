@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-04
 agent: codex
 beauftragt: 2026-10-04
+erledigt: 2026-10-04
+commit: 4dd9aa11
 
 braucht: [C-557, A-96]
 
@@ -93,3 +95,29 @@ letzten roten (fuer die Diagnose) und der gruenen. Anzahl im Bericht.
 Zahl der Laeufe, je Lauf: Dauer, Exit, gestorben an welchem Schritt. Am Ende
 der gruene Statusnachweis (`kettenlauf-status`-Format) und die Zahl der
 Kettenschritte.
+
+## Abnahme — 2026-10-04, Commit `4dd9aa11`
+
+`[cmd]` **Der Statusnachweis des Tageslaufs sagt es selbst**
+(`backup/_manifests/kettenlauf-status.json`):
+
+    status passed · exit 0 · 800,1 s · lumeos_c558_lauf15
+    grunddaten_dump supabase/_pipeline/daten/grunddaten-20261004T011755Z.dump
+    (418.887.599 Bytes, sha256 85db308e...)
+
+**Der erste gruene Gesamtlauf seit dem 01.10.** 15 Laeufe an einem
+Vormittag statt 15 Naechte. Die Wegwerf-Datenbanken der Laeufe sind
+geloescht (uebrig nur `lumeos_tageskette_20261003`). `[cmd]` Gate gruen
+im Vorcommit-Haken.
+
+### Was offen bleibt — und vor jedem Live-Abgleich geklaert sein muss
+
+`[cmd]` **Gruen ist die Kette auch, weil Sollzahlen nachgezogen wurden**
+(596 → 572 Supplements in 137, 141t, 141x, 281, schema-sollstand). Der
+Bericht nennt fuer jede Stelle den Grund, aber nicht, **welche 24 frueher
+erwarteten Datensaetze es nicht mehr gibt.**
+
+`[cmd]` **Live (nur gelesen):** `supplements.supplements` 617 Zeilen, 430
+`im_katalog`. **Der neue Grundbestand: 572, davon 446 im Katalog.** Vor
+einem Abgleich von Live auf diesen Stand ist zu klaeren, welche 45
+Supplements wegfielen und ob Nutzerdaten an ihnen haengen → C-559.

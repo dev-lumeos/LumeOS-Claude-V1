@@ -6,12 +6,14 @@ schwere: hoch
 angelegt: 2026-10-04
 agent: claudecode
 beauftragt: 2026-10-04
+erledigt: 2026-10-04
+commit: f31585ba
 
 braucht: [A-100]
 kind_von: A-100
 
 quellen:
-  - docs/punkte/todos/quer-a-0100-der-gate-prueft-nicht-was-er-sagt.md
+  - docs/punkte/erledigt/quer-a-0100-der-gate-prueft-nicht-was-er-sagt.md
 
 beruehrt:
   tabellen: []
@@ -86,3 +88,22 @@ laufen. Testzahl vorher/nachher nennen.
 - **Kein Commit, kein Push.** Dev-Server nicht selbst starten.
 - **Kein Schreiben in die laufende Datenbank.**
 - Am Bildschirm nur, wenn eine Stelle eine sichtbare Anzeige aendert.
+
+## Abnahme — 2026-10-04, Commit `f31585ba`
+
+`[cmd]` **Nachgemessen:** `.toISOString().slice(0, 10)` steht in `apps/` und
+`packages/` nur noch in `packages/shared/src/datum/tag.ts` (Helfer plus zwei
+Kommentarzeilen) und in `g600-tag.test.ts:50` (der alte Weg als Befund).
+`tagIso(` 36 Aufrufe, `utcTagIso(` 22.
+
+`[cmd]` **Lint rot in meiner eigenen Probe:** eine Wegwerfdatei mit
+`new Date().toISOString().slice(0, 10)` → `no-restricted-syntax`, 1 error.
+Datei entfernt.
+
+`[cmd]` **Gate gruen, Tests ungecacht:** `web:test cache bypass` →
+`# tests 2635`, `# fail 0`.
+
+**Nachgezogen von mir:** der Lint-Cache sah die Wurzel-`.eslintrc.json`
+nicht (`1582b6c1`), und der Datenbankvertrag-Waechter zaehlte einen
+Zeitlimit-Abbruch unter Last als Verstoss (`506b3aeb`). Server neu
+gestartet (tsconfig und Exports geaendert).
