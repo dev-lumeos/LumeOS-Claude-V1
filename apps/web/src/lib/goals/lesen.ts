@@ -509,6 +509,17 @@ async function phaseAusZeile(
 // ── Körpermessungen und Umfänge ─────────────────────────────────
 
 export type Koerpermessung = {
+  /**
+   * G-606: Kennung und die Eingabefelder — ohne sie laesst sich eine
+   * Messung nicht vorbefuellt aendern. `[read]` **Die Zeile ist die
+   * Quelle des Formulars**, nicht ein zweiter Abruf.
+   */
+  id: string
+  measurement_time: string | null
+  bf_method: string | null
+  notes: string | null
+  /** Die beim Schreiben eingefrorene Groesse (Trigger, G-605). */
+  height_cm_snapshot: number | null
   measurement_date: string
   weight_kg: number | null
   body_fat_pct: number | null
@@ -534,14 +545,22 @@ export async function ladeMessungen(
 ): Promise<Koerpermessung[]> {
   const { data, error } = await goalsDb()
     .from('body_measurements')
-    .select('measurement_date, weight_kg, body_fat_pct, lean_mass_kg, fat_mass_kg, bmi, ffmi')
+    .select('id, measurement_date, measurement_time, weight_kg, body_fat_pct, bf_method, '
+      + 'notes, height_cm_snapshot, lean_mass_kg, fat_mass_kg, bmi, ffmi')
     .eq('user_id', userId)
     .lte('measurement_date', bis)
     .order('measurement_date', { ascending: true })
+    // G-606: zwei Messungen am selben Tag — die Uhrzeit ordnet.
+    .order('measurement_time', { ascending: true })
     .limit(limit)
   if (error) throw new GoalsLeseFehler('READ_FAILED', `body_measurements: ${error.message}`)
 
   return ((data ?? []) as unknown as Array<Record<string, unknown>>).map(z => ({
+    id: text(z.id) ?? '',
+    measurement_time: text(z.measurement_time),
+    bf_method: text(z.bf_method),
+    notes: text(z.notes),
+    height_cm_snapshot: zahl(z.height_cm_snapshot),
     measurement_date: text(z.measurement_date) ?? '',
     weight_kg: zahl(z.weight_kg),
     body_fat_pct: zahl(z.body_fat_pct),

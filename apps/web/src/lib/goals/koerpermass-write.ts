@@ -42,9 +42,20 @@
 import { createSessionClient } from '@lumeos/shared/session'
 
 import {
-  pruefeMessung, abgeleitet, zahl,
+  pruefeMessung, abgeleitet, zahl, doppelterZeitpunkt,
   type KoerpermassEingabe, type Feldfehler,
 } from './koerpermass-rechnung'
+
+/**
+ * G-606: ein Schreibfehler — am Feld, wenn die Regel ihn kennt
+ * (`doppelterZeitpunkt` in `koerpermass-rechnung.ts`).
+ */
+function schreibFehler(error: { code?: string; message: string }): KoerpermassFehler {
+  const feld = doppelterZeitpunkt(error.code, error.message)
+  return feld
+    ? new KoerpermassFehler('VALIDATION_FAILED', 'Zu diesem Zeitpunkt gibt es schon eine Messung.', [feld])
+    : new KoerpermassFehler('WRITE_FAILED', error.message)
+}
 
 export class KoerpermassFehler extends Error {
   constructor(
@@ -169,7 +180,7 @@ export async function messungAnlegen(
       measurement_source: 'manual',
     })
     .select(RUECKGABE)
-  if (error) throw new KoerpermassFehler('WRITE_FAILED', error.message)
+  if (error) throw schreibFehler(error)
   const zeilen = (data ?? []) as unknown[]
   if (zeilen.length === 0) throw new KoerpermassFehler('NOT_FOUND', 'Nicht angelegt.')
   return alsZeile(zeilen[0])
@@ -232,7 +243,7 @@ export async function messungAendern(
     .eq('id', id)
     .eq('user_id', userId)
     .select(RUECKGABE)
-  if (error) throw new KoerpermassFehler('WRITE_FAILED', error.message)
+  if (error) throw schreibFehler(error)
   const zeilen = (data ?? []) as unknown[]
   if (zeilen.length === 0) throw new KoerpermassFehler('NOT_FOUND', 'Nicht gefunden.')
   return alsZeile(zeilen[0])

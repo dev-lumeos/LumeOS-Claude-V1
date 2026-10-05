@@ -20,7 +20,9 @@
 // eine Aussage über einen Menschen. Hier steht die Änderung als Zahl
 // mit Richtung; was sie bedeutet, sagt die Anzeige nicht.
 import * as React from 'react'
-import { Card, Row, Sparkline } from '@lumeos/ui'
+import { Card, Icon, Row, Sparkline } from '@lumeos/ui'
+// G-606: der Bearbeiten-Griff oeffnet das Messungs-Modal.
+import { useGoals } from './kontext'
 
 import type { Koerpermessung, Umfangssatz } from '../../../lib/goals/lesen'
 
@@ -92,6 +94,7 @@ export function KoerperMetriken({ messungen, zukunft, stichtag }: {
   zukunft: number
   stichtag: string
 }) {
+  const { open } = useGoals()
   const reihe = (feld: keyof Koerpermessung) =>
     messungen.map(m => ({ datum: m.measurement_date, wert: m[feld] as number | null }))
 
@@ -125,17 +128,38 @@ export function KoerperMetriken({ messungen, zukunft, stichtag }: {
                   <th style={{ textAlign: 'right' }}>Magermasse</th>
                   <th style={{ textAlign: 'right' }}>BMI</th>
                   <th style={{ textAlign: 'right' }}>FFMI</th>
+                  {/* G-606: der Griff je Messung. */}
+                  <th style={{ width: 36 }} aria-label="Ändern" />
                 </tr>
               </thead>
               <tbody>
+                {/* `[cmd]` **G-606: `key` ist die Kennung**, nicht das
+                    Datum — zwei Messungen am selben Tag (andere Uhrzeit)
+                    trugen sonst denselben Schluessel. */}
                 {messungen.slice().reverse().slice(0, 14).map(m => (
-                  <tr key={m.measurement_date}>
+                  <tr key={m.id || `${m.measurement_date}-${m.measurement_time}`}>
                     <td className="v2-num v2-muted">{m.measurement_date}</td>
                     <td className="v2-num" style={{ textAlign: 'right' }}>{z(m.weight_kg, 2)}</td>
                     <td className="v2-num" style={{ textAlign: 'right' }}>{z(m.body_fat_pct, 2)}</td>
                     <td className="v2-num" style={{ textAlign: 'right' }}>{z(m.lean_mass_kg, 2)}</td>
                     <td className="v2-num" style={{ textAlign: 'right' }}>{z(m.bmi, 2)}</td>
                     <td className="v2-num" style={{ textAlign: 'right' }}>{z(m.ffmi, 2)}</td>
+                    <td style={{ textAlign: 'right' }}>
+                      {/* ══ G-606: Messung aendern ══════════════════
+                          `[read]` **Keine Vorlage fuer diesen Griff** —
+                          `module-goals.jsx` fuehrt keine Liste der
+                          Gewichtsmessungen; das naechste Muster sind die
+                          anklickbaren Umfangszeilen (`:499`). Er oeffnet
+                          das Modal der Vorlage (`:828`) im Aendern-Modus. */}
+                      <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                              data-messung-aendern={m.id}
+                              aria-label={`Messung vom ${m.measurement_date} ändern`}
+                              disabled={!m.id}
+                              onClick={() => open({ typ: 'logWeight', messung: m })}
+                              style={{ height: 22, padding: '0 6px' }}>
+                        <Icon name="edit" className="v2-ic v2-ic-sm" />
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

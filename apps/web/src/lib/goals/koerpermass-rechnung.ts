@@ -45,6 +45,51 @@ export const LEERE_MESSUNG: KoerpermassEingabe = {
 export type Feldfehler = { feld: string; text: string }
 
 /**
+ * G-606: der Feldfehler zu einem Schreibfehler, oder `null`.
+ *
+ * `[cmd]` **`body_measurements_user_date_time_uq`** — UNIQUE (user_id,
+ * measurement_date, measurement_time). Wer beim Aendern das Datum auf
+ * einen belegten Zeitpunkt legt, bekam den rohen Postgres-Satz.
+ */
+export function doppelterZeitpunkt(
+  code: string | undefined, text: string,
+): Feldfehler | null {
+  if (code === '23505' && text.includes('user_date_time_uq')) {
+    return { feld: 'measurement_time', text: 'Zu Datum und Uhrzeit liegt schon eine Messung — andere Uhrzeit waehlen.' }
+  }
+  return null
+}
+
+/** Was das Formular aus einer gelesenen Messung braucht (G-606). */
+export type MessungZumAendern = {
+  measurement_date: string
+  measurement_time: string | null
+  weight_kg: number | null
+  body_fat_pct: number | null
+  bf_method: string | null
+  notes: string | null
+}
+
+/**
+ * G-606: eine gelesene Messung als Formulareingabe — die Vorbefuellung
+ * des Aendern-Modus.
+ *
+ * `[read]` **Die Uhrzeit ohne Sekunden** — `<input type="time">`
+ * zeigt `HH:MM`, die Datenbank liefert `HH:MM:SS`. **Leeres bleibt
+ * leer**, eine fehlende Methode wird nicht zu `manual`.
+ */
+export function messungAlsEingabe(m: MessungZumAendern): KoerpermassEingabe {
+  return {
+    measurement_date: m.measurement_date,
+    measurement_time: (m.measurement_time ?? '').slice(0, 5),
+    weight_kg: m.weight_kg === null ? '' : String(m.weight_kg),
+    body_fat_pct: m.body_fat_pct === null ? '' : String(m.body_fat_pct),
+    bf_method: m.bf_method ?? '',
+    notes: m.notes ?? '',
+  }
+}
+
+/**
  * Die Methoden, die die Datenbank zulaesst.
  *
  * `[cmd]` Aus `body_measurements_method_ck` gelesen, nicht erfunden.

@@ -58,7 +58,9 @@ describe('G-422 — das Gewichtsmodal ist verdrahtet', () => {
     assert.match(logWeightRumpf(), /messungAnlegenAktion\(/,
       'das Modal ruft den Schreibweg nicht — die Funktion ist wieder '
       + 'gebaut und unerreichbar')
-    assert.match(MODALE(), /import \{ messungAnlegenAktion \}/,
+    // `[cmd]` G-606: der Import traegt jetzt zwei Aktionen (Anlegen und
+    // Aendern) — die Regel bleibt, die Schreibform ist frei.
+    assert.match(MODALE(), /import \{[^}]*\bmessungAnlegenAktion\b[^}]*\} from '\.\/koerpermass-aktionen'/,
       'die Serveraktion wird nicht importiert')
   })
 
@@ -108,7 +110,10 @@ describe('G-422 — das Gewichtsmodal ist verdrahtet', () => {
     assert.match(r, /setFelder\(r\.felder\)/,
       'die Feldfehler der Pruefung werden verworfen — der Nutzer '
       + 'sieht nicht, WELCHES Feld fehlt')
-    assert.match(r, /felder\.map/,
+    // `[cmd]` G-606: die Fehler stehen jetzt AM Feld (`GField fehler=`),
+    // nicht mehr als `felder.map`-Sammelliste. Die Regel bleibt: sie
+    // werden gerendert.
+    assert.match(r, /fehler=\{feldFehler\('weight_kg'\)\}/,
       'die Feldfehler werden nicht gerendert')
   })
 

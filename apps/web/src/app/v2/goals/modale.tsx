@@ -31,12 +31,15 @@ import { Card, Pill, Icon, LineChart, InEntwicklungKnopf } from '@lumeos/ui'
 import { fotosessionAnlegenAktion } from './fotosession-aktionen'
 // G-422: der Schreibweg fuer Koerpermessungen gibt es seit G-122 —
 // nur der Aufrufer fehlte.
-import { messungAnlegenAktion } from './koerpermass-aktionen'
+import { messungAnlegenAktion, messungAendernAktion } from './koerpermass-aktionen'
+// G-606: der Aendern-Modus — Typ aus dem Leseweg, Router fuer das Neuladen.
+import type { Koerpermessung } from '../../../lib/goals/lesen'
+import { useRouter } from 'next/navigation'
 // `[read]` **Nur Typ und Konstanten** — `koerpermass-rechnung.ts`
 // hat kein Server-I/O, aber die Regel bleibt: kein Wert-Import aus
 // einem `*-write`-Modul.
 import {
-  BF_METHODEN, LEERE_MESSUNG, type KoerpermassEingabe,
+  BF_METHODEN, LEERE_MESSUNG, messungAlsEingabe, type KoerpermassEingabe,
 } from '../../../lib/goals/koerpermass-rechnung'
 
 import {
@@ -135,8 +138,11 @@ function GModal({
 }
 
 // [cmd] module-goals.jsx:683-692.
-function GField({ label, sub, children }: {
-  label: React.ReactNode; sub?: React.ReactNode; children: React.ReactNode
+function GField({ label, sub, fehler, children }: {
+  label: React.ReactNode; sub?: React.ReactNode
+  /** G-606: der Feldfehler steht AM Feld, nicht in einer Sammelliste. */
+  fehler?: string
+  children: React.ReactNode
 }) {
   return (
     <div style={{ marginBottom: 14 }}>
@@ -145,6 +151,11 @@ function GField({ label, sub, children }: {
         {sub && <span className="v2-dim" style={{ fontSize: 10 }}>{sub}</span>}
       </div>
       {children}
+      {fehler && (
+        <div role="alert" data-feldfehler style={{ marginTop: 4, fontSize: 11, color: 'var(--neg)' }}>
+          {fehler}
+        </div>
+      )}
     </div>
   )
 }
@@ -174,7 +185,7 @@ export function GoalsModale({ modal, onClose, strategien = [] }: {
   switch (modal.typ) {
     case 'newGoal': return <NewGoalModal onClose={onClose} strategien={strategien} />
     case 'goalDet': return <GoalDetailModal g={modal.ziel} onClose={onClose} />
-    case 'logWeight': return <LogWeightModal onClose={onClose} />
+    case 'logWeight': return <LogWeightModal onClose={onClose} messung={modal.messung} />
     case 'logMeasure': return <LogMeasureModal onClose={onClose} />
     case 'logPhoto': return <LogPhotoModal onClose={onClose} />
     case 'measureDet': return <MeasureDetailModal m={modal.mass} onClose={onClose} />
@@ -795,6 +806,9 @@ function GoalProgressChart({ g }: { g: Ziel }) {
 }
 
 // ── LOG WEIGHT ──────────────────────────────────────────────────
+/** G-606: die Felder, die im Formular einen eigenen Fehlerplatz haben. */
+const MESSFELDER = ['measurement_date', 'measurement_time', 'weight_kg', 'body_fat_pct', 'bf_method']
+
 // [cmd] module-goals.jsx:827-847.
 //
 // ══ G-422: gebaut und nicht verdrahtet ═══════════════════════════
@@ -819,12 +833,30 @@ function GoalProgressChart({ g }: { g: Ziel }) {
 // `body_measurements_method_ck` — **vorher standen dort
 // `Manual / Smart scale / DXA`, und zwei davon kennt der CHECK
 // nicht.**
-function LogWeightModal({ onClose }: { onClose: () => void }) {
-  const [eingabe, setEingabe] = React.useState<KoerpermassEingabe>({
-    ...LEERE_MESSUNG,
-    measurement_date: tagIso(),
-    bf_method: 'manual',
-  })
+//
+// ══ G-606: DASSELBE MODAL AENDERT ═════════════════════════════════
+//
+// `[cmd]` **`messungAendernAktion` hatte keinen Aufrufer** — die letzte
+// der sechs Aktionen aus G-588. `[read]` **Kein zweites Modal:** mit
+// `messung` oeffnet dieses vorbefuellt und speichert ueber
+// `messungAendernAktion`. `[cmd]` **Die Groesse rechnet die Oberflaeche
+// NICHT** — wird das Datum geaendert, holt der Trigger
+// `fill_body_measurement_snapshot` die Profilgroesse neu (gemessen
+// 2026-10-05).
+function LogWeightModal({ onClose, messung }: {
+  onClose: () => void
+  /** G-606: gesetzt = Aendern-Modus. */
+  messung?: Koerpermessung
+}) {
+  const router = useRouter()
+  const aendern = Boolean(messung)
+  const [eingabe, setEingabe] = React.useState<KoerpermassEingabe>(() => messung
+    ? messungAlsEingabe(messung)
+    : {
+      ...LEERE_MESSUNG,
+      measurement_date: tagIso(),
+      bf_method: 'manual',
+    })
   const [laeuft, setLaeuft] = React.useState(false)
   const [fehler, setFehler] = React.useState<string | null>(null)
   const [felder, setFelder] = React.useState<Array<{ feld: string; text: string }>>([])
@@ -838,10 +870,14 @@ function LogWeightModal({ onClose }: { onClose: () => void }) {
     setLaeuft(true)
     setFehler(null)
     setFelder([])
-    const r = await messungAnlegenAktion(eingabe)
+    const r = messung
+      ? await messungAendernAktion(messung.id, eingabe)
+      : await messungAnlegenAktion(eingabe)
     setLaeuft(false)
     if (r.ok) {
       setFertig(true)
+      // G-606: die Tabelle liest serverseitig — neu holen.
+      router.refresh()
       // `[read]` **Erst schliessen, wenn die Zeile da ist** — sonst
       // sieht ein Fehlschlag aus wie Erfolg (dasselbe wie im
       // Fotomodal).
@@ -853,8 +889,10 @@ function LogWeightModal({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <GModal title="Log weight" subtitle="Daily — morning fasted preferred"
-            eyebrow="plus" onClose={onClose} width={520}
+    <GModal title={aendern ? 'Edit measurement' : 'Log weight'}
+            subtitle={aendern ? `Messung vom ${messung?.measurement_date} ändern`
+              : 'Daily — morning fasted preferred'}
+            eyebrow={aendern ? 'edit' : 'plus'} onClose={onClose} width={520}
             footer={
               <>
                 <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
@@ -863,29 +901,29 @@ function LogWeightModal({ onClose }: { onClose: () => void }) {
                         disabled={laeuft || !eingabe.weight_kg.trim()}
                         onClick={() => { void speichern() }}>
                   <Icon name="check" className="v2-ic v2-ic-sm" />
-                  {laeuft ? 'Speichert …' : 'Log'}
+                  {laeuft ? 'Speichert …' : aendern ? 'Save' : 'Log'}
                 </button>
               </>
             }>
       <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
-        <GField label="Date">
+        <GField label="Date" fehler={feldFehler('measurement_date')}>
           <GInput type="date" aria-label="Date" data-messfeld="datum"
                   value={eingabe.measurement_date}
                   onChange={e => setz('measurement_date', e.target.value)} />
         </GField>
-        <GField label="Time">
+        <GField label="Time" fehler={feldFehler('measurement_time')}>
           <GInput type="time" aria-label="Time" data-messfeld="zeit"
                   value={eingabe.measurement_time}
                   onChange={e => setz('measurement_time', e.target.value)} />
         </GField>
       </div>
       <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
-        <GField label="Weight" sub="kg">
+        <GField label="Weight" sub="kg" fehler={feldFehler('weight_kg')}>
           <GInput type="number" aria-label="Weight" data-messfeld="gewicht"
                   value={eingabe.weight_kg}
                   onChange={e => setz('weight_kg', e.target.value)} />
         </GField>
-        <GField label="Body fat (optional)" sub="%">
+        <GField label="Body fat (optional)" sub="%" fehler={feldFehler('body_fat_pct')}>
           <GInput type="number" aria-label="Body fat" data-messfeld="koerperfett"
                   value={eingabe.body_fat_pct}
                   onChange={e => setz('body_fat_pct', e.target.value)} />
@@ -893,7 +931,7 @@ function LogWeightModal({ onClose }: { onClose: () => void }) {
       </div>
       {/* `[cmd]` **Die zehn Werte aus dem CHECK**, nicht drei
           erfundene. */}
-      <GField label="Source" sub="aus body_measurements_method_ck">
+      <GField label="Source" sub="aus body_measurements_method_ck" fehler={feldFehler('bf_method')}>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           {BF_METHODEN.map(s => (
             <button key={s} type="button" data-messfeld-quelle={s}
@@ -910,18 +948,16 @@ function LogWeightModal({ onClose }: { onClose: () => void }) {
                 onChange={e => setz('notes', e.target.value)} />
       </GField>
 
-      {/* `[read]` **Feldfehler am Feld, nicht als Sammelsatz** — die
-          Pruefung liefert sie einzeln. */}
-      {felder.length > 0 && (
-        <div style={{
-          marginTop: 10, padding: '8px 10px', borderRadius: 5, fontSize: 11.5,
-          lineHeight: 1.5,
-          background: 'color-mix(in oklch, var(--neg) 8%, var(--surface))',
-          border: '1px solid color-mix(in oklch, var(--neg) 30%, var(--border))',
-        }}>
-          {felder.map(f => <div key={f.feld}>{f.feld}: {f.text}</div>)}
+      {/* `[cmd]` **G-606: hier stand eine Sammelliste** (`feld: text`)
+          unter dem Formular — der Kommentar sagte *„am Feld"*, der Code
+          tat es nicht, und `feldFehler()` hatte keinen Aufrufer. **Jetzt
+          steht jeder Fehler an seinem Feld** (`GField fehler=`). Nur
+          ein Fehler OHNE bekanntes Feld bleibt hier. */}
+      {felder.filter(f => !MESSFELDER.includes(f.feld)).map(f => (
+        <div key={f.feld} role="alert" style={{ marginTop: 10, fontSize: 11.5, color: 'var(--neg)' }}>
+          {f.text}
         </div>
-      )}
+      ))}
       {fehler && (
         <div className="v2-muted" style={{ marginTop: 10, fontSize: 11.5 }}>{fehler}</div>
       )}

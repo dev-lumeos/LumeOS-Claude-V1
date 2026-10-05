@@ -11,12 +11,14 @@
 import * as React from 'react'
 
 import type { Ziel } from './daten'
+import type { Koerpermessung } from '../../../lib/goals/lesen'
 
 /** Die sechs Modale des Rahmens. [cmd] module-goals.jsx:198-203. */
 export type ModalZustand =
   | { typ: 'newGoal' }
   | { typ: 'goalDet'; ziel: Ziel }
-  | { typ: 'logWeight' }
+  // G-606: mit `messung` oeffnet dasselbe Modal im Aendern-Modus.
+  | { typ: 'logWeight'; messung?: Koerpermessung }
   | { typ: 'logMeasure' }
   | { typ: 'logPhoto' }
   | { typ: 'measureDet'; mass: typeof import('./daten').MEASUREMENTS[number] }
