@@ -13,7 +13,7 @@ braucht: [G-588]
 kind_von: G-588
 
 quellen:
-  - docs/punkte/todos/quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md
+  - docs/punkte/erledigt/quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md
   - docs/punkte/erledigt/quer-g-0585-die-inventur-der-ausfuhren-ohne-aufrufer.md
 
 beruehrt:

@@ -5,10 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 275 |
-| `laufend_codex` | 2 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 660 |
+| `todos` | 274 |
+| `erledigt` | 664 |
 | **gesamt** | **938** |
 
 ## medical — 50
@@ -67,8 +65,6 @@
 | `G-578` | fehler | hoch | [Der Laborimport hat drei Datenbankfunktionen und keine Oberflaeche](erledigt/medical-g-0578-der-laborimport-hat-keine-oberflaeche.md) | erledigt | — | — |
 
 ## nutrition — 268
-
-### beauftragbar — 267
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -336,15 +332,10 @@
 | `G-579` | fehler | mittel | [Der Plansprung existiert in der Datenbank und wird von nichts benutzt](erledigt/nutrition-g-0579-der-plansprung-hat-keinen-aufrufer.md) | erledigt | — | G-580, G-581 |
 | `G-580` | fehler | mittel | [Die Plankette darf einen Ring schliessen](todos/nutrition-g-0580-die-plankette-darf-einen-ring-schliessen.md) | offen | — | — |
 | `G-581` | fehler | mittel | [Ein Modal ohne Aufrufer, mit eigener Wahrheit ueber den Lebenszyklus](erledigt/nutrition-g-0581-ein-modal-ohne-aufrufer-mit-eigener-wahrheit.md) | erledigt | — | G-583 |
+| `G-592` | fehler | mittel | [Die Hydration-Zusammenfassung ist ein ZWEITER Leseweg, keine fehlende Anzeige](erledigt/nutrition-g-0592-die-hydration-zusammenfassung-hat-keinen-leser.md) | erledigt | — | A-102, G-603, G-605 |
 | `G-603` | fehler | mittel | [Ein leerer Wassertag ist nicht „0 getrunken"](erledigt/nutrition-g-0603-ein-leerer-wassertag-ist-nicht-null-getrunken.md) | erledigt | — | — |
-| `G-605` | fehler | niedrig | [Der 14-Tage-Schnitt ohne Eintraege ist nicht ,0 ml"](laufend_codex/nutrition-g-0605-der-14-tage-schnitt-ohne-eintraege-ist-nicht-null.md) | laeuft (codex) | — | — |
+| `G-605` | fehler | niedrig | [Der 14-Tage-Schnitt ohne Eintraege ist nicht ,0 ml"](erledigt/nutrition-g-0605-der-14-tage-schnitt-ohne-eintraege-ist-nicht-null.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
-
-### wartet auf Blocker — 1
-
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `G-592` | fehler | mittel | [Die Hydration-Zusammenfassung ist ein ZWEITER Leseweg, keine fehlende Anzeige](erledigt/nutrition-g-0592-die-hydration-zusammenfassung-hat-keinen-leser.md) | erledigt | G-588 | A-102, G-603, G-605 |
 
 ## supplements — 131
 
@@ -548,8 +539,6 @@
 
 ## recovery — 47
 
-### beauftragbar — 46
-
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-50` | feature | mittel | [Ein `DROP COLUMN` prueft die Lesepfade nicht](erledigt/recovery-a-0050-ein-drop-column-prueft-die-lesepfade-nicht.md) | erledigt | — | — |
@@ -593,21 +582,16 @@
 | `G-449` | befund | niedrig | [wertKommtVonGruppe hat keinen Aufrufer](todos/recovery-g-0449-wertkommtvongruppe-ohne-aufrufer.md) | offen | — | — |
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
+| `G-590` | fehler | hoch | [Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht](erledigt/recovery-g-0590-der-checkin-ist-der-einzige-pflichtgriff-und-er-schreibt-nicht.md) | erledigt | — | — |
 | `G-593` | fehler | hoch | [Die Attrappe nennt eine fehlende Tabelle — die Tabelle ist fertig und gefuellt](erledigt/recovery-g-0593-die-attrappe-nennt-eine-tabelle-die-es-unter-anderem-namen-gibt.md) | erledigt | — | G-596, G-597, G-598, G-599 |
 | `G-596` | befund | mittel | [Die Spec beschreibt eine Bibliothek, die Tabelle ist ein Verlauf](todos/recovery-g-0596-die-spec-beschreibt-eine-bibliothek-die-tabelle-ist-ein-verlauf.md) | offen | — | — |
 | `G-597` | fehler | mittel | [Zwei aktive Protokolle sind erlaubt — und im Nachweis sind sie entstanden](erledigt/recovery-g-0597-zwei-aktive-protokolle-sind-erlaubt.md) | erledigt | — | — |
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-### wartet auf Blocker — 1
-
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `G-590` | fehler | hoch | [Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht](erledigt/recovery-g-0590-der-checkin-ist-der-einzige-pflichtgriff-und-er-schreibt-nicht.md) | erledigt | G-588 | — |
-
 ## goals — 78
 
-### beauftragbar — 71
+### beauftragbar — 72
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -677,13 +661,14 @@
 | `G-575` | fehler | hoch | [Ein Ziel traegt genau eine Messgroesse](todos/goals-g-0575-ein-ziel-traegt-genau-eine-messgroesse.md) | offen | — | — |
 | `G-576` | fehler | niedrig | [weight wird ein Untertyp, Eigenes bleibt ohne](erledigt/goals-g-0576-weight-als-untertyp-eigenes-ohne.md) | erledigt | — | — |
 | `G-577` | fehler | hoch | [Die Umfangserfassung hat keinen Schreibweg](erledigt/goals-g-0577-die-umfangserfassung-hat-keinen-schreibweg.md) | erledigt | — | — |
+| `G-591` | fehler | mittel | [Zwei Goals-Aktionen ohne Aufrufer — eine Messung aendern, die Reihenfolge speichern](erledigt/goals-g-0591-zwei-goals-aktionen-ohne-aufrufer.md) | erledigt | — | G-602 |
 | `G-594` | fehler | hoch | [Ein Ernaehrungsziel kennt seine Phase, aber nicht sein Ziel](erledigt/goals-g-0594-ein-ernaehrungsziel-kennt-seine-phase-aber-nicht-sein-ziel.md) | erledigt | — | — |
 | `G-595` | fehler | hoch | [Der Zweiparameter-Mantel war kein Ueberrest — mein Auftrag hat ihn geloescht](erledigt/goals-g-0595-der-zweiparameter-mantel-war-kein-ueberrest.md) | erledigt | — | — |
 | `G-602` | fehler | mittel | [Die Reihenfolge aktiver Ziele wird atomar getauscht](erledigt/goals-g-0602-die-reihenfolge-aktiver-ziele-wird-atomar-getauscht.md) | erledigt | — | — |
 | `G-604` | fehler | hoch | [Hoechstens ein aktives Kalorienziel](erledigt/goals-g-0604-hoechstens-ein-aktives-kalorienziel.md) | erledigt | — | A-101 |
-| `G-606` | fehler | mittel | [Eine Messung laesst sich nicht aendern](laufend_claudecode/goals-g-0606-eine-messung-laesst-sich-nicht-aendern.md) | laeuft (claudecode) | — | — |
+| `G-606` | fehler | mittel | [Eine Messung laesst sich nicht aendern](erledigt/goals-g-0606-eine-messung-laesst-sich-nicht-aendern.md) | erledigt | — | — |
 
-### wartet auf Blocker — 7
+### wartet auf Blocker — 6
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -693,7 +678,6 @@
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
-| `G-591` | fehler | mittel | [Zwei Goals-Aktionen ohne Aufrufer — eine Messung aendern, die Reihenfolge speichern](erledigt/goals-g-0591-zwei-goals-aktionen-ohne-aufrufer.md) | erledigt | G-588 | G-602 |
 
 ## coach — 58
 
@@ -826,7 +810,7 @@
 | `A-98` | fehler | hoch | [Zwei Waechter pruefen Gestalt statt Verhalten — und beide haben heute versagt](erledigt/quer-a-0098-zwei-waechter-pruefen-gestalt-statt-verhalten.md) | erledigt | — | — |
 | `A-99` | fehler | hoch | [Der Testdatenpruefer brach ab, statt rot zu werden — und niemand sah es](erledigt/quer-a-0099-der-testdatenpruefer-brach-ab-statt-rot-zu-werden.md) | erledigt | — | C-560 |
 | `A-100` | fehler | hoch | [Der Gate prueft nicht, was er sagt](erledigt/quer-a-0100-der-gate-prueft-nicht-was-er-sagt.md) | erledigt | — | G-600 |
-| `A-101` | fehler | mittel | [Der Kurzlauf der Kette ist in Schritt 027 rot](laufend_codex/quer-a-0101-der-kurzlauf-der-kette-ist-in-schritt-027-rot.md) | laeuft (codex) | — | — |
+| `A-101` | fehler | mittel | [Der Kurzlauf der Kette ist in Schritt 027 rot](erledigt/quer-a-0101-der-kurzlauf-der-kette-ist-in-schritt-027-rot.md) | erledigt | — | — |
 | `A-102` | fehler | niedrig | [verdrahtung-pruefen ist rot und steht nicht im Gate](erledigt/quer-a-0102-verdrahtung-pruefen-ist-rot-und-steht-nicht-im-gate.md) | erledigt | — | A-103 |
 | `A-103` | fehler | niedrig | [verdrahtung-pruefen sieht coach und packages nicht](todos/quer-a-0103-verdrahtung-pruefen-sieht-coach-und-packages-nicht.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
@@ -1008,7 +992,7 @@
 | `G-585` | befund | mittel | [Die Inventur der Ausfuhren ohne Aufrufer](erledigt/quer-g-0585-die-inventur-der-ausfuhren-ohne-aufrufer.md) | erledigt | — | G-587, G-588, G-589 |
 | `G-586` | fehler | hoch | [Ein Uhrensprung wirft den Nutzer raus, statt die Sitzung zu erneuern](erledigt/quer-g-0586-ein-uhrensprung-wirft-den-nutzer-raus.md) | erledigt | — | — |
 | `G-587` | fehler | hoch | [Ein Service-Client ohne Aufrufer umgeht die Zeilensicherheit](todos/quer-g-0587-ein-service-client-ohne-aufrufer-umgeht-die-rls.md) | offen | — | — |
-| `G-588` | befund | hoch | [Sechs Serveraktionen ohne Aufrufer — dieselbe Klasse wie G-571, eine Ebene hoeher](todos/quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md) | offen | — | G-590, G-591, G-592, G-606 |
+| `G-588` | befund | hoch | [Sechs Serveraktionen ohne Aufrufer — dieselbe Klasse wie G-571, eine Ebene hoeher](erledigt/quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md) | erledigt | — | G-590, G-591, G-592, G-606 |
 | `G-589` | befund | niedrig | [328 Ausfuhren zu viel — und wie die Zahl 385 zu 56 wurde](todos/quer-g-0589-dreihundertachtundzwanzig-ausfuhren-zu-viel.md) | offen | — | — |
 | `G-599` | befund | mittel | [Die SSOT nennt Tabellen abwesend, die es gibt — und der Waechter sieht den Fast-Treffer nicht](todos/quer-g-0599-die-ssot-nennt-tabellen-abwesend-die-es-gibt.md) | offen | — | — |
 | `G-600` | fehler | hoch | [„Heute" ist an 32 Stellen der UTC-Vortag](erledigt/quer-g-0600-heute-ist-an-32-stellen-der-utc-vortag.md) | erledigt | — | — |

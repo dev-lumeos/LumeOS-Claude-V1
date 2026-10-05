@@ -4,6 +4,10 @@ typ: befund
 modul: quer
 schwere: hoch
 angelegt: 2026-10-02
+agent: claudecode
+beauftragt: 2026-10-05
+erledigt: 2026-10-05
+commit: f87e49bc
 
 braucht: [G-585]
 kind_von: G-585
@@ -122,3 +126,22 @@ heute eine Attrappe mit einer Begruendung, die nicht mehr stimmt (G-590).
 `[cmd]` **Ein Nebenfund aus derselben Messung wurde eigener Punkt:**
 G-593 — eine Attrappe nennt `recovery.protocols` als fehlend, waehrend
 `recovery.recovery_protocols` mit 12 Spalten existiert.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER Claude Code - G-588: aufgeteilt in G-590, G-591, G-592, G-606
+    Bereich: apps/web/src
+
+## Abnahme - 2026-10-05, letzter Teil Commit `f87e49bc`
+
+`[cmd]` **Alle sechs haben einen Aufrufer oder sind begruendet entfernt:**
+
+    checkinAktion, modalitaetAnlegenAktion,
+    modalitaetAendernAktion            G-590  Recovery
+    prioritaetenSpeichern              G-591  Goals    85afa021
+    getHydrationSummary                G-592  entfernt, ein Leseweg  a646fd80
+    messungAendernAktion               G-606  Goals    f87e49bc
+
+`[read]` Lehre bestaetigt: in jedem Teil hat das Messen vor dem Bauen
+etwas geaendert - G-591 brauchte G-602 (atomarer Tausch), G-592 entfernte
+statt anzuschliessen, G-606 berichtigte die Snapshot-Annahme.

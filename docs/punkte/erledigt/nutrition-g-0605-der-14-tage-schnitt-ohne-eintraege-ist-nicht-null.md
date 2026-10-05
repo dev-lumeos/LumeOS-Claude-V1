@@ -6,6 +6,8 @@ schwere: niedrig
 angelegt: 2026-10-05
 agent: codex
 beauftragt: 2026-10-05
+erledigt: 2026-10-05
+commit: 1a4b79d3
 
 braucht: [G-603]
 kind_von: G-592
@@ -66,3 +68,11 @@ Schnitt nur bei `!== null`. `avg_14d_days` laeuft ueber `zahlOder0`,
 bei 0 richtig.
 
 Offen: Live-Einspielen, wartet auf Toms Freigabe.
+
+## Live - 2026-10-05
+
+`[cmd]` **Live nachgemessen** (05.10.): test-user Schnitt/Tage/Delta
+`NULL / 0 / NULL`; `dev@lumeos.app` 3095,9 ml ueber 14 Tage, Delta
+-31,7 ml. Sicherungen `backup/g605-vorher.sql` 397.053 Byte,
+`g605-nachher.sql` 397.160 Byte. Nur die eine Funktion, kein Seed, keine
+Datenzeile, `NOTIFY pgrst` laut Bericht. G-603-Werte unveraendert.

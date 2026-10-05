@@ -5,11 +5,6 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-606 | Eine Messung laesst sich nicht aendern | **laeuft**, raus 05.10. |
-| Codex | G-605 | Der 14-Tage-Schnitt ohne Eintraege ist nicht ,0 ml" | **laeuft**, raus 05.10. |
-| Codex | A-101 | Der Kurzlauf der Kette ist in Schritt 027 rot | **laeuft**, raus 05.10. |
-| Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
-| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 ## Stromausfall in der Nacht zum 03.10. — der Wiederanlauf
