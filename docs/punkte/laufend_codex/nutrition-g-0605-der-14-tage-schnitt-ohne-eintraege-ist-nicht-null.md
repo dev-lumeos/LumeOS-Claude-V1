@@ -4,6 +4,8 @@ typ: fehler
 modul: nutrition
 schwere: niedrig
 angelegt: 2026-10-05
+agent: codex
+beauftragt: 2026-10-05
 
 braucht: [G-603]
 kind_von: G-592
@@ -33,3 +35,16 @@ Der Schnitt zaehlt nur Tage mit Eintrag. Ohne einen einzigen Tag im
 Fenster: `avg_14d_total_ml`, `delta_vs_14d_ml`, `behind_14d_avg_pct` NULL,
 `avg_14d_days` 0. Danach zeigt Claude Code ,—" statt ,0 ml".
 Live nur mit Toms Freigabe nach dem Muster G-603.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER Codex - G-605: 14-Tage-Schnitt ohne Eintraege ist NULL
+    Bereich: supabase/_pipeline/
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-05
+
+Vorher messen: wie rechnet `hydration_day` den Schnitt heute (Tage mit
+Eintrag oder alle 14), und wer liest die vier Spalten. Nachweise:
+Wegwerf-Kette gruen; leeres Fenster -> NULL/0 wie oben; Fenster mit
+Eintraegen unveraendert; Sabotage beidseitig. Nie gegen Live, kein
+Commit, Wegwerf-DBs loeschen und zaehlen.

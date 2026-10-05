@@ -4,6 +4,10 @@ typ: fehler
 modul: quer
 schwere: mittel
 angelegt: 2026-10-04
+agent: codex
+beauftragt: 2026-10-05
+erledigt: 2026-10-05
+commit: 306378cb
 
 braucht: [C-560]
 kind_von: C-560
@@ -38,3 +42,19 @@ gezogen, ohne zu begruenden, dass der Bestand gewollt ist:
 Je Probe: Ursache messen (welcher Commit, welche Zeilen), dann entweder
 Soll begruenden oder Bestand reparieren. Haengt fuer (2) an der Regel
 ,hoechstens ein aktives Kalorienziel" - erst nach Toms Entscheidung.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER Codex - C-561: als Teil von G-604 beauftragt (2026-10-04)
+    Bereich: supabase/_pipeline/
+
+## Abnahme - 2026-10-05, Commit `306378cb`
+
+`[read]` **(1) Mangel-Szenario 7 ist richtig:** der kuratierte Snapshot
+fuehrt acht Stoffe, Zink ist mangels vollstaendiger Quelldaten nicht
+bewertbar, also 7/7 unter 75 %.
+
+`[read]` **(2) Omega-3 `AI` war richtig - die Praemisse dieses Punkts war
+falsch.** E-87 (Tom, 01.10.) macht die Tagesreferenz zielfrei; nur die
+Meldung der Probe war veraltet. Sie lautet jetzt ,gegen den zielfreien
+TDEE-Referenzwert". `[cmd]` Live-Quelle `tdee_alpha_linolenic_acid`.

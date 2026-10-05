@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 277 |
+| `todos` | 275 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 657 |
+| `erledigt` | 659 |
 | **gesamt** | **936** |
 
 ## medical — 50
@@ -337,7 +337,7 @@
 | `G-580` | fehler | mittel | [Die Plankette darf einen Ring schliessen](todos/nutrition-g-0580-die-plankette-darf-einen-ring-schliessen.md) | offen | — | — |
 | `G-581` | fehler | mittel | [Ein Modal ohne Aufrufer, mit eigener Wahrheit ueber den Lebenszyklus](erledigt/nutrition-g-0581-ein-modal-ohne-aufrufer-mit-eigener-wahrheit.md) | erledigt | — | G-583 |
 | `G-603` | fehler | mittel | [Ein leerer Wassertag ist nicht „0 getrunken"](erledigt/nutrition-g-0603-ein-leerer-wassertag-ist-nicht-null-getrunken.md) | erledigt | — | — |
-| `G-605` | fehler | niedrig | [Der 14-Tage-Schnitt ohne Eintraege ist nicht ,0 ml"](todos/nutrition-g-0605-der-14-tage-schnitt-ohne-eintraege-ist-nicht-null.md) | offen | — | — |
+| `G-605` | fehler | niedrig | [Der 14-Tage-Schnitt ohne Eintraege ist nicht ,0 ml"](laufend_codex/nutrition-g-0605-der-14-tage-schnitt-ohne-eintraege-ist-nicht-null.md) | laeuft (codex) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -680,7 +680,7 @@
 | `G-594` | fehler | hoch | [Ein Ernaehrungsziel kennt seine Phase, aber nicht sein Ziel](erledigt/goals-g-0594-ein-ernaehrungsziel-kennt-seine-phase-aber-nicht-sein-ziel.md) | erledigt | — | — |
 | `G-595` | fehler | hoch | [Der Zweiparameter-Mantel war kein Ueberrest — mein Auftrag hat ihn geloescht](erledigt/goals-g-0595-der-zweiparameter-mantel-war-kein-ueberrest.md) | erledigt | — | — |
 | `G-602` | fehler | mittel | [Die Reihenfolge aktiver Ziele wird atomar getauscht](erledigt/goals-g-0602-die-reihenfolge-aktiver-ziele-wird-atomar-getauscht.md) | erledigt | — | — |
-| `G-604` | fehler | hoch | [Hoechstens ein aktives Kalorienziel](laufend_codex/goals-g-0604-hoechstens-ein-aktives-kalorienziel.md) | laeuft (codex) | — | A-101 |
+| `G-604` | fehler | hoch | [Hoechstens ein aktives Kalorienziel](erledigt/goals-g-0604-hoechstens-ein-aktives-kalorienziel.md) | erledigt | — | A-101 |
 
 ### wartet auf Blocker — 7
 
@@ -896,7 +896,7 @@
 | `C-544` | feature | hoch | [der Ort am Koerper als Begriff](erledigt/quer-c-0544-ort-am-koerper.md) | erledigt | — | — |
 | `C-554` | blocker | hoch | [das Migrationsregister sagt nicht, was in der Datenbank steht](erledigt/quer-c-0554-das-migrationsregister-ist-unbrauchbar.md) | erledigt | — | — |
 | `C-560` | fehler | mittel | [Der Testdatenpruefer wird gruen](erledigt/quer-c-0560-der-testdatenpruefer-wird-gruen.md) | erledigt | — | C-561, G-604 |
-| `C-561` | fehler | mittel | [Zwei Testproben beschreiben den Bestand, nicht das Soll](todos/quer-c-0561-zwei-testproben-beschreiben-den-bestand-nicht-das-soll.md) | offen | — | — |
+| `C-561` | fehler | mittel | [Zwei Testproben beschreiben den Bestand, nicht das Soll](erledigt/quer-c-0561-zwei-testproben-beschreiben-den-bestand-nicht-das-soll.md) | erledigt | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |

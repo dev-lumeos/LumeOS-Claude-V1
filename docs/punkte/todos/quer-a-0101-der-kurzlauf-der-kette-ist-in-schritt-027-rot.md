@@ -9,7 +9,7 @@ braucht: []
 kind_von: G-604
 
 quellen:
-  - docs/punkte/laufend_codex/goals-g-0604-hoechstens-ein-aktives-kalorienziel.md
+  - docs/punkte/erledigt/goals-g-0604-hoechstens-ein-aktives-kalorienziel.md
 
 beruehrt:
   tabellen: []

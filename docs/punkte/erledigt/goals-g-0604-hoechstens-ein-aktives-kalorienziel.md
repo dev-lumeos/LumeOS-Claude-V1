@@ -6,13 +6,15 @@ schwere: hoch
 angelegt: 2026-10-04
 agent: codex
 beauftragt: 2026-10-04
+erledigt: 2026-10-05
+commit: 306378cb
 
 braucht: [C-560]
 kind_von: C-560
 
 quellen:
   - docs/punkte/erledigt/quer-c-0560-der-testdatenpruefer-wird-gruen.md
-  - docs/punkte/todos/quer-c-0561-zwei-testproben-beschreiben-den-bestand-nicht-das-soll.md
+  - docs/punkte/erledigt/quer-c-0561-zwei-testproben-beschreiben-den-bestand-nicht-das-soll.md
   - docs/ssot/97-ziele-und-phasen.md
   - supabase/_pipeline/daten/zielvokabular.json
 
@@ -84,3 +86,23 @@ Nie gegen Live schreiben. Live nur lesend messen. Wegwerf-Datenbanken
 danach loeschen, Anzahl nennen. Kein Commit. Live-Einspielen nur mit
 Toms Freigabe, nach dem Muster G-602/G-603. Trifft die Regel live
 bestehende Daten: **melden, nicht anpassen.**
+
+## Abnahme - 2026-10-05, Commit `306378cb`, live
+
+`[cmd]` **Diff:** 10 Dateien im Pipeline-Bereich, neue Regel
+`11_goals/604_one_active_calorie_goal.sql` mit Gegenprobe. **Der
+ALA-Umbau aus dem ersten Lauf ist vollstaendig zurueckgenommen** - er
+folgte meinem falschen C-561-Auftrag gegen E-87; `030_mikro-uebersicht`,
+`mikro-uebersicht.json` und die G-567-Probe sind unveraendert.
+
+`[cmd]` **Live nachgemessen:** test-user `G-559 Abbauziel` active/primary,
+`G-559 Aufbauziel` on_hold; ALA-Quelle live `tdee_alpha_linolenic_acid`.
+Sicherungen `backup/g604-vorher.sql` (140.045 Byte) und
+`g604-nachher.sql` (148.167 Byte). Laut Bericht: 23514 beim zweiten
+aktiven Kalorienziel, Probe zurueckgerollt, `NOTIFY pgrst`.
+
+`[read]` Sein Lauf: Vollkette 348 Schritte gruen, `testdaten-pruefen`
+186 Proben 0 Befunde, Sabotage beidseitig, 3 + 10 Wegwerf-DBs geloescht.
+
+Lehre: vor einem Auftrag, der eine Bewertungsquelle aendert, die
+Entscheidungen zum Vorgaengerpunkt lesen (hier E-87 zu G-567).
