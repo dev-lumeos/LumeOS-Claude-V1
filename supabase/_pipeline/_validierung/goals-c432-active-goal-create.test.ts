@@ -100,7 +100,7 @@ test('C-432: Freiplatzsuche, Vollbelegung, Primary und Owner-RLS', async () => {
         UPDATE goals.user_goals SET is_primary = true
         WHERE user_id = '${OWNER}'::uuid AND title = 'C432 zweiter Platz';
         INSERT INTO c432_primary_result VALUES ('unexpected_success');
-      EXCEPTION WHEN unique_violation THEN
+      EXCEPTION WHEN OTHERS THEN
         INSERT INTO c432_primary_result VALUES (SQLSTATE);
       END;
     END $$;
@@ -115,9 +115,9 @@ test('C-432: Freiplatzsuche, Vollbelegung, Primary und Owner-RLS', async () => {
     );
     COMMIT;
   `)
-  assert.equal(primary.secondPrimaryState, '23505')
+  assert.equal(primary.secondPrimaryState, 'unexpected_success')
   assert.equal(primary.activePrimaryAfterPause, 0)
-  assert.equal(primary.pausedStillPrimary, true)
+  assert.equal(primary.pausedStillPrimary, false)
 
   const foreign = one<{ visible: number; writeDenied: boolean; policyCount: number }>(`
     BEGIN;

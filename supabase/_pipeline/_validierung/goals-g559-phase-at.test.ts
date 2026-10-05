@@ -51,6 +51,10 @@ test('G-559 A2/A3: zwei Ziele liefern zwei geordnete Nutzerphasen und je eine Zi
        '55900000-0000-0000-0000-000000000001',
        'body_composition', 'G-559 Ziel zwei', DATE '2099-01-01', 2);
 
+    UPDATE goals.user_goals
+    SET status = 'on_hold', priority = 4
+    WHERE id = '55900000-0000-0000-0000-000000000102';
+
     INSERT INTO goals.goal_phases (
       id, user_id, goal_id, phase_type, parameters, gueltig_ab,
       created_at, strategie_code

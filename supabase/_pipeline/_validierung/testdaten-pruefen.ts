@@ -593,6 +593,55 @@ if (MODE === 'clean') {
        AND count(DISTINCT gp.goal_id) = 2;`)) {
     errors.push('G-559: test-user traegt nicht zwei offene Phasen an zwei Zielen')
   }
+  if (hasRows(`
+    SELECT 1
+    FROM goals.user_goals ug
+    JOIN goals.goal_phases gp ON gp.goal_id = ug.id
+    WHERE ug.status = 'active'
+      AND gp.actual_end_date IS NULL
+      AND goals.kalorienrichtung_fuer_phase(gp.phase_type) IS NOT NULL
+    GROUP BY ug.user_id
+    HAVING count(DISTINCT ug.id) > 1;`)) {
+    errors.push('G-604: ein Nutzer traegt mehr als ein aktives Kalorienziel')
+  }
+  if (!hasRows(`
+    WITH test_user AS (
+      SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'
+    )
+    SELECT 1
+    FROM test_user u
+    JOIN goals.user_goals active_goal ON active_goal.user_id = u.id
+    JOIN goals.goal_phases active_phase ON active_phase.goal_id = active_goal.id
+    JOIN goals.user_goals planned_goal ON planned_goal.user_id = u.id
+    JOIN goals.goal_phases planned_phase ON planned_phase.goal_id = planned_goal.id
+    WHERE active_goal.status = 'active'
+      AND active_goal.is_primary
+      AND active_phase.actual_end_date IS NULL
+      AND goals.kalorienrichtung_fuer_phase(active_phase.phase_type) = 'lose_weight'
+      AND planned_goal.status = 'on_hold'
+      AND NOT planned_goal.is_primary
+      AND planned_phase.actual_end_date IS NULL
+      AND goals.kalorienrichtung_fuer_phase(planned_phase.phase_type) = 'gain_muscle';`)) {
+    errors.push('G-604: test-user hat nicht Abbau aktiv/primary und Aufbau geplant')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM goals.nutrition_targets nt
+    JOIN goals.goal_phases gp ON gp.id = nt.phase_id
+    JOIN goals.user_goals ug ON ug.id = gp.goal_id
+    JOIN auth.users u ON u.id = ug.user_id
+    WHERE u.email = 'test-user@lumeos.local'
+      AND ug.status = 'active'
+      AND ug.is_primary
+      AND nt.herkunft = 'formel'
+      AND nt.nutrition_goal = 'lose_weight'
+      AND nt.kcal IS NOT NULL
+      AND nt.protein_g IS NOT NULL
+      AND nt.carbs_g IS NOT NULL
+      AND nt.fat_g IS NOT NULL
+      AND nt.alpha_linolenic_acid_g IS NOT NULL;`)) {
+    errors.push('G-604: aus dem aktiven Kalorienziel des test-user entstanden keine vollstaendigen Formel-Zielwerte')
+  }
   if (!hasRows(`
     WITH test_user AS (
       SELECT id
@@ -616,7 +665,7 @@ if (MODE === 'clean') {
        AND max(zielrate_pct_kg_woche) = 0.400
        AND count(kcal) = 2
        AND round(max(kcal) - min(kcal)) = 716;`)) {
-    errors.push('A-95: test-user liefert nicht zwei zielbezogene kcal-Werte mit 716 kcal Abstand')
+    errors.push('G-604: aktives und geplantes test-user-Ziel liefern nicht zwei explizit zielbezogene kcal-Werte mit 716 kcal Abstand')
   }
   // G-595: DIESE PROBE HATTE DIE FALSCHE RICHTUNG.
   // A-95 verlangte, dass die Zweiparameter-Fassung NICHT mehr existiert.
@@ -861,11 +910,16 @@ if (MODE === 'clean') {
       AND reference_pct IS NULL;`)) {
     errors.push('Fall ohne Referenz: CHORL bleibt nicht sauber NO_REFERENCE ohne Prozentwert')
   }
+  // G-567 begrenzte diese Liste bewusst auf die acht kuratierten Snapshot-
+  // Naehrstoffe. Zink ist am Mangeltag wegen Quelldatenluecken incomplete;
+  // deshalb sind genau sieben statt der 32 vollstaendigen Tagesreferenzen
+  // bewertbar. Alle sieben liegen im konstruierten Mangel-Szenario unter 75 %.
   if (!hasRows(`
     SELECT 1
     FROM nutrition.micronutrient_below_threshold('${max}'::uuid, DATE '${relDate('2026-08-09')}')
     WHERE total_assessed = 7
-      AND below_count = total_assessed;`)) {
+      AND below_count = total_assessed
+      AND jsonb_array_length(items) = 7;`)) {
     errors.push('Fall Mikronaehrstoffmangel: Below-threshold-Liste bewertet den Szenariotag nicht plausibel')
   }
   if (!hasRows(`
@@ -1518,7 +1572,7 @@ if (MODE === 'clean') {
     WHERE nutrient_code = 'F18:3CN3'
       AND reference_kind = 'AI'
       AND reference_pct IS NOT NULL;`)) {
-    errors.push('Fall Micronutrient snapshot: Omega-3 (ALA) wird nicht gegen Goals-Ziel bewertet')
+    errors.push('Fall Micronutrient snapshot: Omega-3 (ALA) wird nicht gegen den zielfreien TDEE-Referenzwert bewertet')
   }
   if (!hasRows(`
     SELECT 1

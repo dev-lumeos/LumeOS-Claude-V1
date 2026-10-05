@@ -108,7 +108,7 @@ test('G-561 A2/A3: die aktuelle Schwelle skaliert mit dem Gewicht, die 83,74-kg-
   ])
 })
 
-test('G-561 A5: isolierter Testnutzer mit zwei Zielphasen behaelt je Strategie den relativen Waechter', () => {
+test('G-561 A5: aktive und geplante Zielphase behalten je Strategie den relativen Waechter', () => {
   const result = one<{
     openPhases: number
     goalReferences: number
@@ -142,12 +142,15 @@ test('G-561 A5: isolierter Testnutzer mit zwei Zielphasen behaelt je Strategie d
     ) VALUES
       ('56100000-0000-0000-0000-000000000101',
        '56100000-0000-0000-0000-000000000001',
-       -- G-559 belegt am echten Seed bereits die aktiven Plaetze 1 und 2;
-       -- die transaktionale G-561-Probe darf diese Seedwahrheit nicht umraeumen.
+       -- Die Probe haelt nur die Abbaurichtung aktiv; Aufbau wird geplant.
        'body_composition', 'G-561 Abbauziel', DATE '2099-01-01', 1),
       ('56100000-0000-0000-0000-000000000102',
        '56100000-0000-0000-0000-000000000001',
        'body_composition', 'G-561 Aufbauziel', DATE '2099-01-01', 2);
+
+    UPDATE goals.user_goals
+    SET status = 'on_hold', priority = 4
+    WHERE id = '56100000-0000-0000-0000-000000000102';
 
     INSERT INTO goals.goal_phases (
       id, user_id, goal_id, phase_type, parameters, gueltig_ab,

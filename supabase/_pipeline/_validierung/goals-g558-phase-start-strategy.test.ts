@@ -61,17 +61,17 @@ test('G-558 A1/A2: Strategie, Katalograte und persoenlicher Override kommen atom
       experience_level = EXCLUDED.experience_level;
 
     INSERT INTO goals.user_goals (
-      id, user_id, goal_type, title, gueltig_ab, priority
+      id, user_id, goal_type, title, gueltig_ab, status, priority
     ) VALUES
       ('55800000-0000-0000-0000-000000000101',
        '55800000-0000-0000-0000-000000000001',
-       'body_composition', 'G-558 Katalograte', DATE '2099-01-01', 1),
+       'body_composition', 'G-558 Katalograte', DATE '2099-01-01', 'active', 1),
       ('55800000-0000-0000-0000-000000000102',
        '55800000-0000-0000-0000-000000000001',
-       'body_composition', 'G-558 Override', DATE '2099-02-01', 2),
+       'body_composition', 'G-558 Override', DATE '2099-02-01', 'on_hold', 4),
       ('55800000-0000-0000-0000-000000000103',
        '55800000-0000-0000-0000-000000000001',
-       'body_composition', 'G-558 unbekannt', DATE '2099-03-01', 3);
+       'body_composition', 'G-558 unbekannt', DATE '2099-03-01', 'on_hold', 5);
 
     INSERT INTO goals.body_measurements (
       user_id, measurement_date, measurement_time, weight_kg
@@ -131,8 +131,9 @@ test('G-558 A1/A2: Strategie, Katalograte und persoenlicher Override kommen atom
 
     RESET ROLE;
 
-    -- Beide Zielphasen sind am Stichtag aktiv. G-558 prueft bewusst den
-    -- persoenlichen Override des zweiten Ziels ueber den zielbezogenen Vertrag.
+    -- Beide Zielphasen sind am Stichtag offen; nur das Katalogziel ist aktiv.
+    -- G-558 prueft den Override des geplanten zweiten Ziels ausdruecklich
+    -- ueber den zielbezogenen Vertrag.
     WITH calculated AS (
       SELECT z.*
       FROM goals.berechne_zielwerte(

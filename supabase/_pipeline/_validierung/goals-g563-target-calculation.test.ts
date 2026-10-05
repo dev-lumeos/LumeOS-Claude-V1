@@ -61,6 +61,10 @@ const fixture = `
      '${OTHER_USER_ID}',
      'body_composition', 'G-594 fremdes Ziel', DATE '2099-01-01', 1);
 
+  UPDATE goals.user_goals
+  SET status = 'on_hold', priority = 4
+  WHERE id = '56300000-0000-0000-0000-000000000102';
+
   INSERT INTO goals.body_measurements (
     user_id, measurement_date, measurement_time, weight_kg
   ) VALUES (
@@ -105,7 +109,7 @@ const fixture = `
   SET LOCAL ROLE authenticated;
 `
 
-test('G-563 A3/A4: die nutzerweite Vorschau wirft bei zwei Zielphasen wie der Schreibweg', () => {
+test('G-563 A3/A4: die nutzerweite Vorschau bleibt bei aktiver und geplanter Zielphase explizit', () => {
   const result = one<{ message: string }>(`
     BEGIN;
     ${fixture}
@@ -271,7 +275,7 @@ test('G-594 A1: eine genannte aktive Phase waehlt bei zwei Nutzerphasen ihr Ziel
   assert.equal(typeof result.fatG, 'number')
 })
 
-test('G-594 A1: zwei aktive Phasen ohne genannte Phase bleiben mehrdeutig', () => {
+test('G-594 A1: aktive und geplante Phase ohne genannte Phase bleiben mehrdeutig', () => {
   const result = one<{ code: string, message: string }>(`
     BEGIN;
     ${fixture}

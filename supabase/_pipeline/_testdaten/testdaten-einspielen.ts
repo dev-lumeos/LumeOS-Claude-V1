@@ -1151,7 +1151,7 @@ const goalRows: GoalRow[] = [
     goalType: 'body_composition',
     subtype: 'cut',
     title: 'G-559 Abbauziel',
-    description: 'Gegenprobe fuer zwei gleichzeitig laufende Zielphasen',
+    description: 'G-604: einziges aktives Kalorienziel des test-user',
     targetValue: null,
     targetUnit: null,
     startValue: null,
@@ -1162,7 +1162,7 @@ const goalRows: GoalRow[] = [
     priority: 1,
     isPrimary: true,
     progressPct: 0,
-    motivationReason: 'G-559 Seed: erste von zwei parallelen Zielphasen',
+    motivationReason: 'G-604 Seed: aktive Abbaurichtung',
     difficultyLevel: null,
     achievementDate: null,
   },
@@ -1172,18 +1172,18 @@ const goalRows: GoalRow[] = [
     goalType: 'body_composition',
     subtype: 'gain_muscle',
     title: 'G-559 Aufbauziel',
-    description: 'Zweites Ziel fuer die Mehrphasen-Gegenprobe',
+    description: 'G-604: geplantes Kalorienziel nach dem aktiven Abbauziel',
     targetValue: null,
     targetUnit: null,
     startValue: null,
     currentValue: null,
     gueltigAb: relDate('2026-08-02'),
     targetDate: null,
-    status: 'active',
-    priority: 2,
+    status: 'on_hold',
+    priority: 4,
     isPrimary: false,
     progressPct: 0,
-    motivationReason: 'G-559 Seed: zweite von zwei parallelen Zielphasen',
+    motivationReason: 'G-604 Seed: geplant, nicht gleichzeitig aktiv',
     difficultyLevel: null,
     achievementDate: null,
   },
@@ -1244,13 +1244,13 @@ const goalPhaseRows: GoalPhaseRow[] = [
     phaseType: 'fat_loss',
     variant: null,
     zielRatePctKgWoche: -0.400,
-    parameters: '{"source":"G-559 Mehrphasen-Gegenprobe"}',
+    parameters: '{"source":"G-604 aktives Kalorienziel"}',
     gueltigAb: relDate('2026-08-01'),
     projectedEndDate: null,
     actualEndDate: null,
     transitionedFrom: null,
     recommendedNext: null,
-    transitionReason: 'G-559: offene Phase des Koerperziels',
+    transitionReason: 'G-604: offene Phase des aktiven Kalorienziels',
     strategyCode: 'moderate_cut',
   },
   {
@@ -1260,13 +1260,13 @@ const goalPhaseRows: GoalPhaseRow[] = [
     phaseType: 'lean_bulk',
     variant: null,
     zielRatePctKgWoche: 0.400,
-    parameters: '{"source":"G-559 Mehrphasen-Gegenprobe"}',
+    parameters: '{"source":"G-604 geplantes Kalorienziel"}',
     gueltigAb: relDate('2026-08-02'),
     projectedEndDate: null,
     actualEndDate: null,
     transitionedFrom: null,
     recommendedNext: null,
-    transitionReason: 'G-559: offene Phase des Leistungsziels',
+    transitionReason: 'G-604: vorbereitete Phase des geplanten Kalorienziels',
     strategyCode: 'lean_bulk',
   },
 ]
@@ -3758,6 +3758,25 @@ ON CONFLICT (user_id, gueltig_ab) DO UPDATE SET
   notiz = EXCLUDED.notiz,
   phase_id = EXCLUDED.phase_id,
   updated_at = now();
+
+-- G-604: test-user hat genau ein aktives Kalorienziel. Dessen offene Phase
+-- erzeugt einen echten Formel-Snapshot; das zweite Kalorienziel bleibt als
+-- on_hold geplant und beeinflusst die Zielwerte nicht.
+INSERT INTO goals.nutrition_targets (
+  user_id, gueltig_ab, kcal, herkunft, phase_id, notiz
+)
+SELECT ug.user_id, gp.gueltig_ab, 1, 'formel', gp.id,
+       'G-604 Formelziel aus dem aktiven Kalorienziel'
+FROM goals.user_goals ug
+JOIN goals.goal_phases gp ON gp.goal_id = ug.id
+WHERE ug.user_id = current_setting('app.test_user_id')::uuid
+  AND ug.status = 'active'
+  AND ug.is_primary
+  AND gp.actual_end_date IS NULL
+  AND gp.phase_type IN (
+    'fat_loss', 'mini_cut', 'contest_prep',
+    'lean_bulk', 'maintenance', 'recomp'
+  );
 
 CREATE TEMP TABLE test_goal_milestones (
   id uuid PRIMARY KEY,
