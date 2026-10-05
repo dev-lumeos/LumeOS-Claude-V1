@@ -1,6 +1,6 @@
 # Laufende Auftraege
 
-**Stand: 2026-10-03, 12:45**
+**Stand: 2026-10-06, 06:45**
 
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
@@ -10,6 +10,34 @@
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
+
+## Stromausfall in der Nacht zum 06.10. - der Wiederanlauf
+
+`[cmd]` **Nichts verloren.** HEAD `42fc28b3`, Arbeitsbaum sauber, kein
+`index.lock`, `git fsck` Exit 0. **Beide Agenten hatten G-562 (Codex) und
+A-103 (Claude Code) erhalten, aber noch keine Datei geschrieben** -
+juengste Aenderung im Baum ist der G-606-Stand vom 05.10. 15:15.
+
+`[cmd]` **Hochgefahren am 06.10., 06:30:** Docker Desktop war ganz unten.
+Postgres: Datenverzeichnis-fsync gut zwei Minuten, `redo done` in 0,01 s,
+`ready to accept connections`. Neun Supabase-Container healthy
+(`edge_runtime` ist seit 03.10. beendet, unabhaengig vom Ausfall). Web 3200
+ueber `tools/server.py start` (`/login` 5,1 s), Coach 3220 und Admin 3210
+direkt ueber das `next`-Binary, beide 307 auf die Anmeldung.
+
+`[cmd]` **Live-Stand unveraendert:** `user_goals` 13, `foods` 7140,
+`water_logs` 1264, G-604-Trigger vorhanden, `hydration_day` mit G-605
+(`COUNT(h.total_ml)`).
+
+`[cmd]` **Der Nachtlauf 06.10. 04:00 ist mitten im Lauf gestorben:**
+`lumeos_tageskette_20261006` steht mit 472 MB, `kettenlauf-status.json`
+zeigt weiter den gruenen Lauf vom 05.10. **Das ist A-96:** ein
+abgebrochener Lauf raeumt seine Datenbank nicht weg. Dazu liegen noch
+`lumeos_tageskette_20261003` (roter Lauf) und 15 `wegwerf_c2xx` aus dem
+September (zusammen rund 3,6 GB). **`.git/wegwerf-db-entsorgen.py` wuerde
+die abgebrochene 20261006 BEHALTEN** (es behaelt die neueste) und kennt
+`wegwerf_*` nicht - Tom entsorgt mit benannter Liste.
+
 
 ## Stromausfall in der Nacht zum 03.10. — der Wiederanlauf
 
