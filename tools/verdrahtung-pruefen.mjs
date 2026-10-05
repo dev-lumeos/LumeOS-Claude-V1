@@ -127,43 +127,58 @@ for (const p of alle) {
   }
 }
 
-// ── Die Bestandsliste ─────────────────────────────────────────────
+// ── Die Bestandsliste — EINGEFROREN seit A-102 (2026-10-05) ───────
 //
-// `[cmd]` Stand 2026-08-26. **Wer hier eine Zeile streicht, hat
-// einen Test geschrieben — wer eine hinzufuegt, tut das Falsche.**
+// `[cmd]` **Bis A-102 war dieses Werkzeug rot, und niemand sah es** —
+// es stand nicht im Gate. Gemessen 2026-10-05: 26 Namen verdrahtet und
+// in keinem Test, 29 der 53 Listeneintraege veraltet (der Name stand
+// inzwischen in einem Test). **Ein roter Waechter ausserhalb des Gates
+// misst nichts.**
+//
+// `[read]` **Jetzt im Gate, mit einem Sollstand aus NAMEN, nicht aus
+// einer Zahl.** Eine Zahl laesst einen Tausch durch: ein Name abgebaut,
+// ein neuer dazu — gleiche Summe, gruen. **Die Liste haelt jeden Namen
+// einzeln fest:**
+//
+//     neuer Name ohne Test          -> ROT  (Test schreiben)
+//     Eintrag hier, Name im Test    -> ROT  (Eintrag streichen —
+//     Eintrag hier, nicht verdrahtet          das Soll sinkt)
+//
+// `[read]` **Wer hier eine Zeile streicht, hat einen Test geschrieben
+// oder einen toten Weg entfernt — wer eine hinzufuegt, tut das Falsche.**
 const GEDULDET = new Set([
+  // Der alte Bestand, Stand 2026-08-26 (nach A-102 noch 24).
   'tabelle:autonomy_change_log', 'tabelle:biomarker_aliases',
   'tabelle:biomarker_catalog', 'tabelle:biomarker_reference_ranges',
-  'tabelle:body_circumferences', 'tabelle:client_autonomy',
-  'tabelle:client_permissions', 'tabelle:daily_nutrient_summary_long',
-  'tabelle:daily_summary', 'tabelle:equipment', 'tabelle:food_groups',
-  'tabelle:foods_portions', 'tabelle:goal_milestones',
-  // G-592: `tabelle:hydration_summary` gestrichen — der letzte Leser
-  // (`getHydrationSummary`) ist mit dem zweiten Leseweg gefallen.
-  'tabelle:intake_logs', 'tabelle:lab_reports',
-  'tabelle:meal_items', 'tabelle:modality_log', 'tabelle:nutrient_details',
+  'tabelle:body_circumferences', 'tabelle:client_permissions',
+  'tabelle:equipment', 'tabelle:food_groups', 'tabelle:foods_portions',
+  'tabelle:goal_milestones', 'tabelle:nutrient_details',
   'tabelle:nutrient_reference_values', 'tabelle:nutrient_search_aliases',
-  'tabelle:pending_actions', 'tabelle:permission_change_log',
-  'tabelle:preparation_kinds', 'tabelle:recipes', 'tabelle:rule_catalog',
-  'tabelle:scores', 'tabelle:search_events', 'tabelle:stack_items',
+  'tabelle:permission_change_log', 'tabelle:preparation_kinds',
   'tabelle:supplement_categories', 'tabelle:supplement_dosing',
-  'tabelle:supplement_evidence', 'tabelle:tag_definitions',
-  'tabelle:user_display_preferences', 'tabelle:user_stacks',
-  'tabelle:water_logs',
-  // Datenbankfunktionen, Stand 2026-08-26. Dieselbe Klasse: ein
-  // Tippfehler im Namen faellt in keinem Test auf.
-  'rpc:berechne_zielwerte', 'rpc:food_categories_tree',
-  'rpc:food_nutrient_snapshot', 'rpc:goal_milestone_status',
-  'rpc:goal_progress_at', 'rpc:hydration_day',
-  'rpc:micronutrient_below_threshold', 'rpc:micronutrient_snapshot',
-  'rpc:nutrient_summary_window', 'rpc:phase_am',
-  'rpc:preference_search_preview', 'rpc:recipe_nutrition',
-  'rpc:rule_assessment', 'rpc:schema_debug', 'rpc:zielwerte_am',
-  // Diese drei waren durch den Teilstring-Fehler verdeckt: ihre
-  // Namen kommen in Tests nur als Teil eines laengeren Namens vor
-  // (). Erst die Wortgrenze hat sie sichtbar
-  // gemacht.
-  'rpc:adaptive_tdee', 'tabelle:muscle_groups', 'tabelle:user_goals',
+  'tabelle:supplement_evidence', 'tabelle:water_logs',
+  'rpc:food_categories_tree', 'rpc:micronutrient_below_threshold',
+  'rpc:preference_search_preview', 'rpc:rule_assessment',
+  'rpc:schema_debug',
+  // Der Restbestand aus A-102, 2026-10-05: verdrahtet, lebendig (je
+  // Funktion mit Aufrufer, je Name in der Datenbank), aber in keinem
+  // Test. **Eingefroren, nicht nachgeschrieben** — Auftrag A-102.
+  'tabelle:activity_stream', 'tabelle:appointments',
+  'tabelle:health_events', 'tabelle:health_timeline',
+  'tabelle:injection_tissue_condition_guidance',
+  'rpc:nutrient_intake_detail_for_day',
+  'rpc:nutrient_upper_limit_assessment_with_supplements',
+  'tabelle:product_suppliers', 'rpc:publish_stack_template',
+  'rpc:shopping_list_from_meal_plan_week', 'rpc:shopping_list_read',
+  'rpc:supplement_brand_options', 'tabelle:supplement_nutrients',
+  'tabelle:supplement_pharmacology', 'rpc:supplement_preferences_read',
+  'tabelle:supplement_protocol_items',
+  'tabelle:supplement_protocol_template_items',
+  'tabelle:supplement_protocol_templates', 'tabelle:supplement_protocols',
+  'rpc:supplier_product_allergy_matches',
+  'tabelle:supplier_product_nutrient_serving_options',
+  'rpc:supplier_product_search_meta', 'rpc:user_allergy_catalog_matches',
+  'tabelle:user_supplement_cycles', 'rpc:withdraw_stack_template',
 ])
 
 // `[cmd]` **Der Name muss ALS GANZES in einem Test stehen.** Die
@@ -177,6 +192,22 @@ const GEDULDET = new Set([
 // Muster oben, nur an der zweiten Stelle.
 const alsGanzes = (name) =>
   new RegExp(`(?<![A-Za-z0-9_])${name}(?![A-Za-z0-9_])`).test(tests)
+
+// ══ A-102: ein veralteter Eintrag ist ein Fehler ═══════════════════
+//
+// `[cmd]` **29 von 53 Eintraegen waren veraltet**, als A-102 maß — der
+// Name stand laengst in einem Test, die Duldung galt fuer nichts mehr.
+// **Eine Liste, die nur waechst, ist keine Bestandsliste, sondern ein
+// Freibrief.** Ohne diese Pruefung koennte ein Name den Test verlieren
+// und still wieder unter die Duldung fallen.
+const veraltet = []
+for (const k of GEDULDET) {
+  const [art, name] = k.split(':')
+  const e = gefunden.get(k)
+  if (!e) veraltet.push({ k, grund: 'nicht mehr verdrahtet' })
+  else if (alsGanzes(name)) veraltet.push({ k, grund: 'steht inzwischen in einem Test' })
+  else if (e.art !== art) veraltet.push({ k, grund: 'falsche Art' })
+}
 
 const unbewacht = []
 for (const [key, e] of gefunden) {
@@ -206,10 +237,22 @@ console.log(`  ${bewacht.length} davon in mindestens einem Test`)
 console.log(`  ${GEDULDET.size} auf der Bestandsliste`)
 console.log()
 
-if (unbewacht.length === 0) {
-  console.log('[verdrahtung] kein unbewachter Zuwachs.')
+console.log(`  Soll: ${GEDULDET.size} geduldete Namen (eingefroren, A-102)`)
+console.log()
+
+if (veraltet.length > 0) {
+  console.log(`[verdrahtung] ${veraltet.length} Eintrag/Eintraege in GEDULDET veraltet:`)
+  for (const v of veraltet) console.log(`  ${v.k.padEnd(48)} ${v.grund}`)
+  console.log('\n  Gute Nachricht mit einer Pflicht: den Eintrag in')
+  console.log('  tools/verdrahtung-pruefen.mjs streichen — das Soll sinkt.')
+  console.log('  Sonst faellt der naechste Rueckschritt nicht auf.')
+}
+
+if (unbewacht.length === 0 && veraltet.length === 0) {
+  console.log('[verdrahtung] gruen: kein unbewachter Zuwachs, kein veralteter Eintrag.')
   process.exit(0)
 }
+if (unbewacht.length === 0) process.exit(1)
 
 console.log(`[verdrahtung] ${unbewacht.length} NEU verdrahtet und in keinem `
   + 'Test:')
