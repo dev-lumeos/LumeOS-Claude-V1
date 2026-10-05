@@ -32,12 +32,12 @@ const TAG_DEFINITIONS = [
 ] as const
 
 const MANAGED_TAGS = TAG_DEFINITIONS.map(([code]) => code)
+// G-221 owns gluten_free; the A-90 dump already contains its assignments.
 const OBSOLETE_TAGS = [
   'processed_food',
   'mediterranean',
   'spicy',
   'nut_free',
-  'gluten_free',
   'lactose_free',
 ]
 const VALID_TAGS = new Set(MANAGED_TAGS)

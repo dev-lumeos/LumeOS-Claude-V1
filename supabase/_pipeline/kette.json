@@ -287,8 +287,7 @@
       "creates": "halal- und kosher-Zuordnungen aus den Presets; die Definitionen aus C-98 waren leer",
       "depends_on": [
         "018"
-      ],
-      "covered_by_dump": true
+      ]
     },
     {
       "id": "028",
@@ -780,7 +779,8 @@
       "depends_on": [
         "134",
         "015"
-      ]
+      ],
+      "covered_by_dump": true
     },
     {
       "id": "135",
