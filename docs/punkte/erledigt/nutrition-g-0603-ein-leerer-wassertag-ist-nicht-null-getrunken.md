@@ -13,7 +13,7 @@ braucht: [G-592]
 kind_von: G-592
 
 quellen:
-  - docs/punkte/laufend_claudecode/nutrition-g-0592-die-hydration-zusammenfassung-hat-keinen-leser.md
+  - docs/punkte/erledigt/nutrition-g-0592-die-hydration-zusammenfassung-hat-keinen-leser.md
 
 beruehrt:
   tabellen:

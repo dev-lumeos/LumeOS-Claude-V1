@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-03
 agent: claudecode
 beauftragt: 2026-10-04
+erledigt: 2026-10-05
+commit: a646fd80
 
 braucht: [G-588]
 kind_von: G-588
@@ -109,3 +111,10 @@ auf `test-user@lumeos.local` · nichts committen.
 
 `[read]` **Und der Satz aus G-588 ist damit berichtigt:** nicht *„hier
 fehlt eine Anzeige"*, sondern *„hier gibt es einen Leseweg zu viel"*.
+
+## Abnahme - 2026-10-05, Commit `a646fd80`
+
+`[cmd]` Diff: 6 geaenderte Dateien plus `g592-hydration-leer.test.ts` (7 Tests); 2650 - 5 + 7 = 2652 stimmt. `[cmd]` Kein Aufrufer von getHydrationSummary, parseHydrationSummaries, emptyHydrationSummary, hydrationPercent oder from('hydration_summary') mehr in apps/ und packages/, nur zwei Kommentare. Gate beim Commit gruen. Sein Schirmnachweis: leerer Tag test-user ,nichts erfasst', Tag mit Daten auf dev unveraendert; Sabotage 8/8 rot.
+
+Befunde daraus: G-605 (14-Tage-Schnitt ohne Eintraege ist 0 statt NULL, Codex), A-102 (verdrahtung-pruefen rot, 26 Namen, nicht im Gate).
+

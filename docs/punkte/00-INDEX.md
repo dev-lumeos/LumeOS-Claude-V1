@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 276 |
+| `todos` | 278 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 656 |
-| **gesamt** | **934** |
+| `erledigt` | 657 |
+| **gesamt** | **936** |
 
 ## medical — 50
 
@@ -66,9 +65,9 @@
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 | `G-578` | fehler | hoch | [Der Laborimport hat drei Datenbankfunktionen und keine Oberflaeche](erledigt/medical-g-0578-der-laborimport-hat-keine-oberflaeche.md) | erledigt | — | — |
 
-## nutrition — 267
+## nutrition — 268
 
-### beauftragbar — 265
+### beauftragbar — 267
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -336,14 +335,15 @@
 | `G-579` | fehler | mittel | [Der Plansprung existiert in der Datenbank und wird von nichts benutzt](erledigt/nutrition-g-0579-der-plansprung-hat-keinen-aufrufer.md) | erledigt | — | G-580, G-581 |
 | `G-580` | fehler | mittel | [Die Plankette darf einen Ring schliessen](todos/nutrition-g-0580-die-plankette-darf-einen-ring-schliessen.md) | offen | — | — |
 | `G-581` | fehler | mittel | [Ein Modal ohne Aufrufer, mit eigener Wahrheit ueber den Lebenszyklus](erledigt/nutrition-g-0581-ein-modal-ohne-aufrufer-mit-eigener-wahrheit.md) | erledigt | — | G-583 |
+| `G-603` | fehler | mittel | [Ein leerer Wassertag ist nicht „0 getrunken"](erledigt/nutrition-g-0603-ein-leerer-wassertag-ist-nicht-null-getrunken.md) | erledigt | — | — |
+| `G-605` | fehler | niedrig | [Der 14-Tage-Schnitt ohne Eintraege ist nicht ,0 ml"](todos/nutrition-g-0605-der-14-tage-schnitt-ohne-eintraege-ist-nicht-null.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-### wartet auf Blocker — 2
+### wartet auf Blocker — 1
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-592` | fehler | mittel | [Die Hydration-Zusammenfassung ist ein ZWEITER Leseweg, keine fehlende Anzeige](laufend_claudecode/nutrition-g-0592-die-hydration-zusammenfassung-hat-keinen-leser.md) | laeuft (claudecode) | G-588 | G-603 |
-| `G-603` | fehler | mittel | [Ein leerer Wassertag ist nicht „0 getrunken"](erledigt/nutrition-g-0603-ein-leerer-wassertag-ist-nicht-null-getrunken.md) | erledigt | G-592 | — |
+| `G-592` | fehler | mittel | [Die Hydration-Zusammenfassung ist ein ZWEITER Leseweg, keine fehlende Anzeige](erledigt/nutrition-g-0592-die-hydration-zusammenfassung-hat-keinen-leser.md) | erledigt | G-588 | A-102, G-603, G-605 |
 
 ## supplements — 131
 
@@ -756,9 +756,9 @@
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 | `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](erledigt/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | erledigt | — | — |
 
-## quer — 247
+## quer — 248
 
-### beauftragbar — 246
+### beauftragbar — 247
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -825,6 +825,7 @@
 | `A-99` | fehler | hoch | [Der Testdatenpruefer brach ab, statt rot zu werden — und niemand sah es](erledigt/quer-a-0099-der-testdatenpruefer-brach-ab-statt-rot-zu-werden.md) | erledigt | — | C-560 |
 | `A-100` | fehler | hoch | [Der Gate prueft nicht, was er sagt](erledigt/quer-a-0100-der-gate-prueft-nicht-was-er-sagt.md) | erledigt | — | G-600 |
 | `A-101` | fehler | mittel | [Der Kurzlauf der Kette ist in Schritt 027 rot](todos/quer-a-0101-der-kurzlauf-der-kette-ist-in-schritt-027-rot.md) | offen | — | — |
+| `A-102` | fehler | niedrig | [verdrahtung-pruefen ist rot und steht nicht im Gate](todos/quer-a-0102-verdrahtung-pruefen-ist-rot-und-steht-nicht-im-gate.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
