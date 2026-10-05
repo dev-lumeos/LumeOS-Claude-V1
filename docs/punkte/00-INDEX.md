@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 276 |
-| `laufend_codex` | 1 |
+| `todos` | 275 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 660 |
 | **gesamt** | **938** |
@@ -826,7 +826,7 @@
 | `A-98` | fehler | hoch | [Zwei Waechter pruefen Gestalt statt Verhalten — und beide haben heute versagt](erledigt/quer-a-0098-zwei-waechter-pruefen-gestalt-statt-verhalten.md) | erledigt | — | — |
 | `A-99` | fehler | hoch | [Der Testdatenpruefer brach ab, statt rot zu werden — und niemand sah es](erledigt/quer-a-0099-der-testdatenpruefer-brach-ab-statt-rot-zu-werden.md) | erledigt | — | C-560 |
 | `A-100` | fehler | hoch | [Der Gate prueft nicht, was er sagt](erledigt/quer-a-0100-der-gate-prueft-nicht-was-er-sagt.md) | erledigt | — | G-600 |
-| `A-101` | fehler | mittel | [Der Kurzlauf der Kette ist in Schritt 027 rot](todos/quer-a-0101-der-kurzlauf-der-kette-ist-in-schritt-027-rot.md) | offen | — | — |
+| `A-101` | fehler | mittel | [Der Kurzlauf der Kette ist in Schritt 027 rot](laufend_codex/quer-a-0101-der-kurzlauf-der-kette-ist-in-schritt-027-rot.md) | laeuft (codex) | — | — |
 | `A-102` | fehler | niedrig | [verdrahtung-pruefen ist rot und steht nicht im Gate](erledigt/quer-a-0102-verdrahtung-pruefen-ist-rot-und-steht-nicht-im-gate.md) | erledigt | — | A-103 |
 | `A-103` | fehler | niedrig | [verdrahtung-pruefen sieht coach und packages nicht](todos/quer-a-0103-verdrahtung-pruefen-sieht-coach-und-packages-nicht.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
