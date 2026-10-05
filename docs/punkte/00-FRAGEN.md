@@ -115,7 +115,7 @@ danach.**
 
 ## G-562 — goals-g-0562-die-teilphasen-haben-keine-zeitachse-mehr.md
 
-**Modul:** goals · **angelegt:** 2026-09-30 · **Datei:** `todos/goals-g-0562-die-teilphasen-haben-keine-zeitachse-mehr.md`
+**Modul:** goals · **angelegt:** 2026-09-30 · **Datei:** `laufend_codex/goals-g-0562-die-teilphasen-haben-keine-zeitachse-mehr.md`
 
 ## Der Befund
 

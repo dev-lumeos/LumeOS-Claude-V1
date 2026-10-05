@@ -5,6 +5,10 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
+| Claude Code | A-103 | verdrahtung-pruefen sieht coach und packages nicht | **laeuft**, raus 05.10. |
+| Codex | G-562 | Die Teilphasen haben keine Zeitachse mehr | **laeuft**, raus 05.10. |
+| Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
+| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 ## Stromausfall in der Nacht zum 03.10. — der Wiederanlauf

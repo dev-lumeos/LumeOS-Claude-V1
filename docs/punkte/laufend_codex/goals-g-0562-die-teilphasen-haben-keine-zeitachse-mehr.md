@@ -4,6 +4,8 @@ typ: entscheidung
 modul: goals
 schwere: hoch
 angelegt: 2026-09-30
+agent: codex
+beauftragt: 2026-10-05
 
 braucht: [G-544, G-545]
 kind_von: G-545
@@ -102,3 +104,28 @@ vorher geloest werden.
 war nicht die Zahl, sondern die Regel, aus der sie entsteht. Die
 editierten Wochen des Nutzers liegen im Programm (E-85), nicht im
 Katalog.
+
+## Auftrag - Kopf (Datenhaelfte, 2026-10-05)
+
+    AUFTRAG FUER Codex - G-562: die Teilphasen tragen ihren Dauer-Anteil
+    Bereich: supabase/_pipeline/
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-05
+
+`[cmd]` 05.10.: `anker.ts` kennt noch keine Verteilungsregel; E-85 ist
+nicht umgesetzt. `sub_phases` liegt in `goals.goal_strategies`.
+
+1. Messen: welche Strategien haben `sub_phases`, wie viele Stufen je
+   Strategie, welche `max_duration_weeks`; wer liest `sub_phases`
+   (Pipeline und `apps/`).
+2. Je Stufe ein Feld `dauer_anteil` (Verhaeltnis, keine Wochen) aus der
+   Quelle 0-4 / 4-12 / 12-18 Wochen = 4 : 8 : 6. **`weeks` kommt NICHT
+   zurueck** (E-85). Quelle im Datenfeld oder in der Begruendung nennen.
+3. Pruefung: Summe der Anteile je Strategie = 1 (oder 18 als Teiler,
+   begruenden); auf 16 Wochen ergibt die Rundung 4 / 7 / 5, auf 20
+   Wochen 4 / 9 / 7 - diese zwei Faelle als Probe.
+4. Kette gruen, `testdaten-pruefen` 0 Befunde, Sabotage beidseitig.
+   Nie gegen Live, kein Commit, Wegwerf-DBs loeschen und zaehlen.
+
+Die Oberflaechenhaelfte (`anker.ts` rechnet den Vorschlag, der Nutzer
+editiert ihn im Programm) folgt als eigener Auftrag an Claude Code.

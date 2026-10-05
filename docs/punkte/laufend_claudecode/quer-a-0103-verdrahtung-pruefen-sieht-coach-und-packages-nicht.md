@@ -4,6 +4,8 @@ typ: fehler
 modul: quer
 schwere: niedrig
 angelegt: 2026-10-05
+agent: claudecode
+beauftragt: 2026-10-05
 
 braucht: [A-102]
 kind_von: A-102
@@ -31,3 +33,14 @@ unbewachte Namen.
 Lesebereich auf `apps/coach/src` und `packages/*/src` erweitern, neue
 Namen messen und einordnen wie in A-102, Restbestand einfrieren, Gate
 gruen, Sabotage je Bereich.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER Claude Code - A-103: verdrahtung-pruefen liest alle Apps
+    Bereich: tools/, apps/, packages/
+    Fremd:   supabase/_pipeline/ (Codex). docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-05
+
+Nachweise: neue Namen je Bereich als Tabelle (Name, Datei, Einordnung),
+Restbestand eingefroren wie in A-102, Sabotage je Bereich (coach,
+packages), Gate gruen mit Testzahl. Kein Commit.
