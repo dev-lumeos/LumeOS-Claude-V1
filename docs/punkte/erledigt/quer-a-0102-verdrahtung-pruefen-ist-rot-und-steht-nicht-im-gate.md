@@ -6,6 +6,8 @@ schwere: niedrig
 angelegt: 2026-10-05
 agent: claudecode
 beauftragt: 2026-10-05
+erledigt: 2026-10-05
+commit: 1671b760
 
 braucht: []
 kind_von: G-592
@@ -49,3 +51,19 @@ Gates misst nichts.
 3. Ins Gate mit eingefrorenem Sollstand (Muster `punkte-pruefen`): ein
    neuer Name ohne Test macht das Gate rot.
 4. Sabotage in beide Richtungen, Gate gruen. Kein Commit.
+
+## Abnahme - 2026-10-05, Commit `1671b760`
+
+`[cmd]` **Diff:** `tools/verdrahtung-pruefen.mjs`, Gate-Zeile in der
+Wurzel-`package.json` (nach `abwesenheit-pruefen`), toter Leseweg
+`getNaehrstoffDauer` aus `reference-assessment-read.ts` entfernt - kein
+Aufrufer mehr in apps/ und packages/, nur Kommentare und ein
+`doesNotMatch`-Test. `[cmd]` Gate beim Commit gruen, Zeile
+`[verdrahtung] gruen` im Log, web 2652, coach 80.
+
+`[read]` 26 Namen: 1 tot, 25 lebendig ohne Test (eingefroren), 29 alte
+Eintraege veraltet und gestrichen; Soll 49 Namen. **Soll als Namensliste
+statt Zahl** - begruendete Abweichung vom Muster: ein Tausch bliebe bei
+einer Zahl gruen. Sabotage 5/5.
+
+Befund daraus: A-103 (das Werkzeug liest nur `apps/web/src`).

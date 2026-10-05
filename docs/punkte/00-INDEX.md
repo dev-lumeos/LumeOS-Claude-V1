@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 275 |
+| `todos` | 276 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 659 |
-| **gesamt** | **936** |
+| `erledigt` | 660 |
+| **gesamt** | **938** |
 
 ## medical — 50
 
@@ -605,9 +605,9 @@
 |---|---|---|---|---|---|---|
 | `G-590` | fehler | hoch | [Der Check-in ist der einzige Pflichtgriff — und er schreibt nicht](erledigt/recovery-g-0590-der-checkin-ist-der-einzige-pflichtgriff-und-er-schreibt-nicht.md) | erledigt | G-588 | — |
 
-## goals — 77
+## goals — 78
 
-### beauftragbar — 70
+### beauftragbar — 71
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -681,6 +681,7 @@
 | `G-595` | fehler | hoch | [Der Zweiparameter-Mantel war kein Ueberrest — mein Auftrag hat ihn geloescht](erledigt/goals-g-0595-der-zweiparameter-mantel-war-kein-ueberrest.md) | erledigt | — | — |
 | `G-602` | fehler | mittel | [Die Reihenfolge aktiver Ziele wird atomar getauscht](erledigt/goals-g-0602-die-reihenfolge-aktiver-ziele-wird-atomar-getauscht.md) | erledigt | — | — |
 | `G-604` | fehler | hoch | [Hoechstens ein aktives Kalorienziel](erledigt/goals-g-0604-hoechstens-ein-aktives-kalorienziel.md) | erledigt | — | A-101 |
+| `G-606` | fehler | mittel | [Eine Messung laesst sich nicht aendern](laufend_claudecode/goals-g-0606-eine-messung-laesst-sich-nicht-aendern.md) | laeuft (claudecode) | — | — |
 
 ### wartet auf Blocker — 7
 
@@ -757,9 +758,9 @@
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 | `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](erledigt/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | erledigt | — | — |
 
-## quer — 248
+## quer — 249
 
-### beauftragbar — 247
+### beauftragbar — 248
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -826,7 +827,8 @@
 | `A-99` | fehler | hoch | [Der Testdatenpruefer brach ab, statt rot zu werden — und niemand sah es](erledigt/quer-a-0099-der-testdatenpruefer-brach-ab-statt-rot-zu-werden.md) | erledigt | — | C-560 |
 | `A-100` | fehler | hoch | [Der Gate prueft nicht, was er sagt](erledigt/quer-a-0100-der-gate-prueft-nicht-was-er-sagt.md) | erledigt | — | G-600 |
 | `A-101` | fehler | mittel | [Der Kurzlauf der Kette ist in Schritt 027 rot](todos/quer-a-0101-der-kurzlauf-der-kette-ist-in-schritt-027-rot.md) | offen | — | — |
-| `A-102` | fehler | niedrig | [verdrahtung-pruefen ist rot und steht nicht im Gate](laufend_claudecode/quer-a-0102-verdrahtung-pruefen-ist-rot-und-steht-nicht-im-gate.md) | laeuft (claudecode) | — | — |
+| `A-102` | fehler | niedrig | [verdrahtung-pruefen ist rot und steht nicht im Gate](erledigt/quer-a-0102-verdrahtung-pruefen-ist-rot-und-steht-nicht-im-gate.md) | erledigt | — | A-103 |
+| `A-103` | fehler | niedrig | [verdrahtung-pruefen sieht coach und packages nicht](todos/quer-a-0103-verdrahtung-pruefen-sieht-coach-und-packages-nicht.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
@@ -1006,7 +1008,7 @@
 | `G-585` | befund | mittel | [Die Inventur der Ausfuhren ohne Aufrufer](erledigt/quer-g-0585-die-inventur-der-ausfuhren-ohne-aufrufer.md) | erledigt | — | G-587, G-588, G-589 |
 | `G-586` | fehler | hoch | [Ein Uhrensprung wirft den Nutzer raus, statt die Sitzung zu erneuern](erledigt/quer-g-0586-ein-uhrensprung-wirft-den-nutzer-raus.md) | erledigt | — | — |
 | `G-587` | fehler | hoch | [Ein Service-Client ohne Aufrufer umgeht die Zeilensicherheit](todos/quer-g-0587-ein-service-client-ohne-aufrufer-umgeht-die-rls.md) | offen | — | — |
-| `G-588` | befund | hoch | [Sechs Serveraktionen ohne Aufrufer — dieselbe Klasse wie G-571, eine Ebene hoeher](todos/quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md) | offen | — | G-590, G-591, G-592 |
+| `G-588` | befund | hoch | [Sechs Serveraktionen ohne Aufrufer — dieselbe Klasse wie G-571, eine Ebene hoeher](todos/quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md) | offen | — | G-590, G-591, G-592, G-606 |
 | `G-589` | befund | niedrig | [328 Ausfuhren zu viel — und wie die Zahl 385 zu 56 wurde](todos/quer-g-0589-dreihundertachtundzwanzig-ausfuhren-zu-viel.md) | offen | — | — |
 | `G-599` | befund | mittel | [Die SSOT nennt Tabellen abwesend, die es gibt — und der Waechter sieht den Fast-Treffer nicht](todos/quer-g-0599-die-ssot-nennt-tabellen-abwesend-die-es-gibt.md) | offen | — | — |
 | `G-600` | fehler | hoch | [„Heute" ist an 32 Stellen der UTC-Vortag](erledigt/quer-g-0600-heute-ist-an-32-stellen-der-utc-vortag.md) | erledigt | — | — |

@@ -5,7 +5,7 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | A-102 | verdrahtung-pruefen ist rot und steht nicht im Gate | **laeuft**, raus 05.10. |
+| Claude Code | G-606 | Eine Messung laesst sich nicht aendern | **laeuft**, raus 05.10. |
 | Codex | G-605 | Der 14-Tage-Schnitt ohne Eintraege ist nicht ,0 ml" | **laeuft**, raus 05.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |

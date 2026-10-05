@@ -48,3 +48,21 @@ Eintrag oder alle 14), und wer liest die vier Spalten. Nachweise:
 Wegwerf-Kette gruen; leeres Fenster -> NULL/0 wie oben; Fenster mit
 Eintraegen unveraendert; Sabotage beidseitig. Nie gegen Live, kein
 Commit, Wegwerf-DBs loeschen und zaehlen.
+
+## Abnahme - 2026-10-05, Commit `1a4b79d3`, NICHT live
+
+`[cmd]` **Diff:** `056a_hydration_day.sql` - `AVG(COALESCE(h.total_ml, 0))`
+und `COUNT(*)` werden `AVG(h.total_ml)` und `COUNT(h.total_ml)`; neue
+Gegenprobe, Kettenregistrierung. Gate gruen.
+
+`[read]` Vorher gemessen: leeres Fenster 0,0 ml ueber 14 Tage; zwei
+erfasste Tage 107,1 ml ueber 14 statt 750 ml ueber 2 - **der Schnitt war
+auch mit Eintraegen falsch**, nicht nur leer. Vollkette 350 Schritte
+gruen, `testdaten-pruefen` 186/0.
+
+`[cmd]` **Oberflaeche braucht nichts:** `parseHydrationDay` liest die
+Spalten schon nullbar (`zahl()`), `hydration.tsx:262-265` zeigt den
+Schnitt nur bei `!== null`. `avg_14d_days` laeuft ueber `zahlOder0`,
+bei 0 richtig.
+
+Offen: Live-Einspielen, wartet auf Toms Freigabe.
