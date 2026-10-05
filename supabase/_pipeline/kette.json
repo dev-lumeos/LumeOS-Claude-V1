@@ -3289,6 +3289,24 @@
       ]
     },
     {
+      "id": "605_hydration_recorded_day_average",
+      "path": "supabase/_pipeline/05_user_tabellen/056a_hydration_day.sql",
+      "kind": "sql",
+      "creates": "G-605: Der 14-Tage-Schnitt mittelt nur Tage mit erfasstem Hydrationswert; ein leeres Fenster bleibt NULL mit 0 Tagen.",
+      "depends_on": [
+        "603_hydration_empty_day"
+      ]
+    },
+    {
+      "id": "605_hydration_recorded_day_average_probe",
+      "path": "supabase/_pipeline/_validierung/nutrition-g605-hydration-recorded-days.test.ts",
+      "kind": "tsx",
+      "creates": "G-605 Gegenprobe: leeres Fenster liefert NULL/0; ein belegtes Fenster mittelt ausschliesslich die erfassten Tage.",
+      "depends_on": [
+        "605_hydration_recorded_day_average"
+      ]
+    },
+    {
       "id": "567_goal_free_daily_reference",
       "path": "supabase/_pipeline/_ableitung/030_mikro-uebersicht.ts",
       "kind": "tsx",

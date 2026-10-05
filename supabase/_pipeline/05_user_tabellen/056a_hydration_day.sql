@@ -117,8 +117,8 @@ history_days AS (
 ),
 history AS (
   SELECT
-    ROUND(AVG(COALESCE(h.total_ml, 0)), 1) AS avg_14d_total_ml,
-    COUNT(*)::INTEGER AS avg_14d_days
+    ROUND(AVG(h.total_ml), 1) AS avg_14d_total_ml,
+    COUNT(h.total_ml)::INTEGER AS avg_14d_days
   FROM history_days d
   LEFT JOIN nutrition.hydration_summary h
     ON h.user_id = p_user_id
@@ -166,7 +166,8 @@ COMMENT ON FUNCTION nutrition.hydration_day(UUID, DATE) IS
   'Klima steht bis zur Orts-/Gym-Anbindung auf 1.0, Trainingsbonus bis zu '
   'Trainingseinheiten auf 0 ml. Kein Maximum; progress_pct darf ueber 100 liegen. '
   'G-603: Ohne Tageszeile bleiben logged_ml, total_ml und progress_pct NULL; '
-  'total_complete ist false.';
+  'total_complete ist false. G-605: Der 14-Tage-Schnitt zaehlt nur Tage mit '
+  'erfasstem total_ml; ein leeres Fenster liefert NULL und 0 Tage.';
 
 REVOKE ALL ON FUNCTION nutrition.hydration_day(UUID, DATE) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION nutrition.hydration_day(UUID, DATE)
