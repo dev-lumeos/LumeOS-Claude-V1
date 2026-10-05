@@ -21,16 +21,30 @@ import { DiaryWriteError } from './diary-model'
  * am 16.08. sind 1.242,7 ml komplett aus Lebensmitteln und 0 ml
  * getrunken — ein einzelner Balken wuerde das verschweigen.
  */
+// ══ G-592: KEIN EINTRAG IST NICHT „0 GETRUNKEN" ═════════════════════
+//
+// `[cmd]` **Hier stand `zahlOder0` fuer die drei Mengen** — und
+// `total_complete: r.total_complete !== false`. **Ein Tag ohne jeden
+// Eintrag erschien als „0 ml getrunken, 0 ml aus Lebensmitteln,
+// vollstaendig".** Seit G-603 liefert `hydration_day` dafuer `NULL`
+// und `false` (gemessen 2026-10-04) — der Parser hat es wieder zu 0
+// gemacht.
+//
+// `[read]` **`null` heisst „nichts erfasst"**, eine 0 hiesse „gemessen,
+// nichts". Dieselbe Regel stand im Kopf von `getHydrationSummary`, dem
+// zweiten Leseweg, der mit diesem Punkt faellt.
 export type HydrationDay = {
   entry_date: string
-  /** Getrunken, aus `water_logs`. */
-  logged_ml: number
+  /** Getrunken, aus `water_logs`. `null`: an diesem Tag nichts eingetragen. */
+  logged_ml: number | null
   log_count: number
-  /** Aus Lebensmitteln, aus `daily_summary.water_g`. */
-  food_ml: number
+  /** Aus Lebensmitteln, aus `daily_summary.water_g`. `null`: kein Wert. */
+  food_ml: number | null
   /** Positionen ohne Wasserwert. Ueber null heisst: Anteil unvollstaendig. */
   food_ml_missing: number
-  total_ml: number
+  /** `null`: weder getrunken noch gegessen erfasst. */
+  total_ml: number | null
+  /** Nur `true`, wenn die Datenbank es ausdruecklich sagt. */
   total_complete: boolean
   /** `null` heisst: kein Ziel ableitbar (Profil unvollstaendig). */
   target_ml: number | null
@@ -67,12 +81,15 @@ export function parseHydrationDay(rows: unknown, entryDate: string): HydrationDa
   const r = zeile as Record<string, unknown>
   return {
     entry_date: text(r.entry_date) ?? entryDate,
-    logged_ml: zahlOder0(r.logged_ml),
+    logged_ml: zahl(r.logged_ml),
     log_count: Math.trunc(zahlOder0(r.log_count)),
-    food_ml: zahlOder0(r.food_ml),
+    food_ml: zahl(r.food_ml),
     food_ml_missing: Math.trunc(zahlOder0(r.food_ml_missing)),
-    total_ml: zahlOder0(r.total_ml),
-    total_complete: r.total_complete !== false,
+    total_ml: zahl(r.total_ml),
+    // `[read]` Aus `parseHydrationSummaries` uebernommen (G-592): kaeme
+    // `total_complete = true` zusammen mit fehlenden Positionen, waere
+    // eines falsch — dann gilt „nicht vollstaendig".
+    total_complete: r.total_complete === true && zahlOder0(r.food_ml_missing) === 0,
     target_ml: zahl(r.target_ml),
     target_source: text(r.target_source),
     target_available: r.target_available === true,

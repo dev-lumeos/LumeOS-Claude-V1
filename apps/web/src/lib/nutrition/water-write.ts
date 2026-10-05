@@ -2,9 +2,9 @@
 // RLS-konform: Session-Client mit der Identität der Nutzerin, user_id
 // wird explizit auf auth.uid() gesetzt (WITH CHECK der Insert-Policy),
 // kein Service-Client. Reine Logik liegt in water-model.ts.
-// Die Sicht nutrition.hydration_summary läuft mit security_invoker=true —
-// `[cmd]` belegt: ohne diese Option sieht eine zweite Sitzung die Zeilen
-// der ersten.
+// G-592: Gelesen wird der Wasserhaushalt NICHT hier, sondern ueber
+// `hydration-day-read.ts` (`nutrition.hydration_day`). Hier stand ein
+// zweiter Leseweg ueber die Sicht `hydration_summary` — ohne Aufrufer.
 // Läuft ausschliesslich serverseitig.
 
 import { createSessionClient } from '@lumeos/shared/session'
@@ -13,18 +13,13 @@ import { isDbUnavailableMessage } from '@lumeos/shared/nutrition/db'
 import {
   WaterWriteError,
   buildWaterLogInsert,
-  emptyHydrationSummary,
-  parseHydrationSummaries,
   parseStoredWaterLogs,
-  type HydrationSummary,
   type StoredWaterLog,
   type WaterLogCreate,
   type WaterLogUpdate,
 } from './water-model'
 
 const LOG_COLUMNS = 'id, entry_date, amount_ml, source, logged_at'
-const SUMMARY_COLUMNS =
-  'entry_date, logged_ml, log_count, food_ml, food_ml_missing, total_ml, total_complete'
 
 function classifyDbError(message: string): WaterWriteError {
   if (isDbUnavailableMessage(message)) {
@@ -123,20 +118,3 @@ export async function removeWaterLog(logId: string): Promise<{ removed: number }
   return { removed }
 }
 
-/**
- * Gesamt-Hydration eines Tages: getrunkenes Wasser plus Wasser aus
- * Nahrung. Kein Eintrag heisst nicht „0 getrunken", sondern „nichts
- * erfasst" — deshalb ein leerer Tag mit `null`, nicht mit Nullen.
- */
-export async function getHydrationSummary(entryDate: string): Promise<HydrationSummary> {
-  const { supabase } = await requireSession()
-  const { data, error } = await supabase
-    .schema('nutrition')
-    .from('hydration_summary')
-    .select(SUMMARY_COLUMNS)
-    .eq('entry_date', entryDate)
-  if (error) {
-    throw classifyDbError(error.message)
-  }
-  return parseHydrationSummaries(data)[0] ?? emptyHydrationSummary(entryDate)
-}

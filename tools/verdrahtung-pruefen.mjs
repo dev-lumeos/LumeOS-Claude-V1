@@ -138,7 +138,9 @@ const GEDULDET = new Set([
   'tabelle:client_permissions', 'tabelle:daily_nutrient_summary_long',
   'tabelle:daily_summary', 'tabelle:equipment', 'tabelle:food_groups',
   'tabelle:foods_portions', 'tabelle:goal_milestones',
-  'tabelle:hydration_summary', 'tabelle:intake_logs', 'tabelle:lab_reports',
+  // G-592: `tabelle:hydration_summary` gestrichen — der letzte Leser
+  // (`getHydrationSummary`) ist mit dem zweiten Leseweg gefallen.
+  'tabelle:intake_logs', 'tabelle:lab_reports',
   'tabelle:meal_items', 'tabelle:modality_log', 'tabelle:nutrient_details',
   'tabelle:nutrient_reference_values', 'tabelle:nutrient_search_aliases',
   'tabelle:pending_actions', 'tabelle:permission_change_log',

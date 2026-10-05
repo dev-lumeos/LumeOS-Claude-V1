@@ -46,6 +46,14 @@ function ml(v: number): string {
   return v.toLocaleString('de-DE', { maximumFractionDigits: 1 })
 }
 
+/**
+ * G-592: eine Menge oder „—". `null` heisst „nichts erfasst" — **eine
+ * 0 behauptete eine Messung, die es nicht gab.**
+ */
+function mlOderStrich(v: number | null): string {
+  return v === null ? '—' : `${ml(v)} ml`
+}
+
 export function HydrationKachel({
   tag: geladen, datum,
 }: { tag: HydrationDay | null; datum: string }) {
@@ -137,17 +145,25 @@ export function HydrationKachel({
   // einer erfundenen Bezugsgroesse zu fuellen.
   const nenner = ziel ?? 0
   const anteil = (wert: number) => (nenner > 0 ? Math.min((wert / nenner) * 100, 100) : 0)
-  const breiteGetrunken = anteil(tag.logged_ml)
+  // ══ G-592: der leere Tag ═══════════════════════════════════════
+  //
+  // `[cmd]` **Hier stand an einem Tag ohne Eintrag „0 / 2,8 L ·
+  // getrunken 0 ml · aus Lebensmitteln 0 ml · 0 of 12 glasses"**
+  // (test-user, 2026-10-04). `[read]` **Kein Eintrag ist nicht „0
+  // getrunken"** — seit G-603 sagt die Datenbank `NULL`, und die Kachel
+  // sagt es jetzt auch.
+  const leer = tag.total_ml === null
+  const breiteGetrunken = anteil(tag.logged_ml ?? 0)
   // Der Essensanteil sitzt HINTER dem getrunkenen; zusammen duerfen sie
   // 100 % nicht ueberschreiten, sonst laeuft der Balken aus der Kachel.
-  const breiteEssen = Math.max(0, Math.min(anteil(tag.total_ml) - breiteGetrunken, 100 - breiteGetrunken))
+  const breiteEssen = Math.max(0, Math.min(anteil(tag.total_ml ?? 0) - breiteGetrunken, 100 - breiteGetrunken))
 
   // Die zwoelf Glaeser der Vorlage. Wie viele davon getrunken sind,
   // entscheidet die Farbe — der Rest bis `glasses_total` kommt aus dem
   // Essen.
   const glaeserZiel = tag.glasses_target ?? 12
   const glaeserGetrunken = tag.glass_size_ml > 0
-    ? Math.min(Math.floor(tag.logged_ml / tag.glass_size_ml), glaeserZiel)
+    ? Math.min(Math.floor((tag.logged_ml ?? 0) / tag.glass_size_ml), glaeserZiel)
     : 0
   const glaeserGesamt = Math.min(tag.glasses_total, glaeserZiel)
 
@@ -182,9 +198,15 @@ export function HydrationKachel({
       sub="Today"
     >
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 8 }}>
-        <span className="v2-num" style={{ fontSize: 28, fontWeight: 500 }}>
-          {(tag.total_ml / 1000).toLocaleString('de-DE', { maximumFractionDigits: 1 })}
-        </span>
+        {leer ? (
+          <span data-hydration-leer style={{ fontSize: 15, fontWeight: 600 }}>
+            nichts erfasst
+          </span>
+        ) : (
+          <span className="v2-num" style={{ fontSize: 28, fontWeight: 500 }}>
+            {((tag.total_ml ?? 0) / 1000).toLocaleString('de-DE', { maximumFractionDigits: 1 })}
+          </span>
+        )}
         <span className="v2-dim" style={{ fontSize: 12 }}>
           / {ziel === null ? '—' : (ziel / 1000).toLocaleString('de-DE', { maximumFractionDigits: 1 })} L
         </span>
@@ -211,11 +233,11 @@ export function HydrationKachel({
       }}>
         <span className="v2-row-gap">
           <span className="v2-dot" style={{ background: FARBE_GETRUNKEN }} />
-          getrunken <span className="v2-num" style={{ color: 'var(--fg)' }}>{ml(tag.logged_ml)} ml</span>
+          getrunken <span className="v2-num" style={{ color: 'var(--fg)' }}>{mlOderStrich(tag.logged_ml)}</span>
         </span>
         <span className="v2-row-gap">
           <span className="v2-dot" style={{ background: FARBE_ESSEN }} />
-          aus Lebensmitteln <span className="v2-num" style={{ color: 'var(--fg)' }}>{ml(tag.food_ml)} ml</span>
+          aus Lebensmitteln <span className="v2-num" style={{ color: 'var(--fg)' }}>{mlOderStrich(tag.food_ml)}</span>
         </span>
       </div>
 
@@ -235,7 +257,8 @@ export function HydrationKachel({
         marginTop: 6, fontSize: 10, color: 'var(--fg-dim)',
         display: 'flex', justifyContent: 'space-between', gap: 8,
       }}>
-        <span>{glaeserGesamt} of {glaeserZiel} glasses</span>
+        {/* G-592: „0 of 12 glasses" behauptete eine Zaehlung. */}
+        <span>{leer ? `nichts erfasst · Ziel ${glaeserZiel} glasses` : `${glaeserGesamt} of ${glaeserZiel} glasses`}</span>
         {tag.behind_14d_avg_pct !== null && tag.behind_14d_avg_pct > 0 ? (
           <span className="v2-num">{Math.round(tag.behind_14d_avg_pct)}% behind 14d avg</span>
         ) : tag.avg_14d_total_ml !== null ? (

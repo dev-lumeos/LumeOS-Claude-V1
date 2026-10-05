@@ -6,9 +6,6 @@ import {
   WATER_QUICK_AMOUNTS_ML,
   WATER_UNIT,
   buildWaterLogInsert,
-  emptyHydrationSummary,
-  hydrationPercent,
-  parseHydrationSummaries,
   parseStoredWaterLogs,
   waterLogCreateSchema,
   waterLogUpdateSchema,
@@ -81,72 +78,7 @@ test('malformed log rows drop out instead of failing the whole read', () => {
   assert.equal(parseStoredWaterLogs(null).length, 0)
 })
 
-test('hydration adds both sources and reports completeness', () => {
-  const [row] = parseHydrationSummaries([
-    {
-      entry_date: '2026-08-06',
-      logged_ml: '1050.00',
-      log_count: '3',
-      food_ml: '180.0000',
-      food_ml_missing: '0',
-      total_ml: '1230.0000',
-      total_complete: true,
-    },
-  ])
-  assert.equal(row.loggedMl, 1050)
-  assert.equal(row.foodMl, 180)
-  assert.equal(row.totalMl, 1230)
-  assert.equal(row.logCount, 3)
-  assert.equal(row.complete, true)
-})
-
-test('a missing food water value makes the total a lower bound, not a truth', () => {
-  const [row] = parseHydrationSummaries([
-    {
-      entry_date: '2026-08-06',
-      logged_ml: '1050.00',
-      log_count: '3',
-      food_ml: '180.0000',
-      food_ml_missing: '1',
-      total_ml: '1230.0000',
-      total_complete: false,
-    },
-  ])
-  assert.equal(row.foodMissing, 1)
-  assert.equal(row.complete, false)
-  // Der Wert bleibt lesbar — er ist eine Untergrenze, keine Luege.
-  assert.equal(row.totalMl, 1230)
-})
-
-test('a claimed complete flag does not survive a missing counter', () => {
-  // Defensiv: kaeme total_complete=true zusammen mit food_ml_missing>0,
-  // waere eines von beiden falsch. Dann gilt "nicht vollstaendig".
-  const [row] = parseHydrationSummaries([
-    { entry_date: '2026-08-06', food_ml_missing: '2', total_complete: true },
-  ])
-  assert.equal(row.complete, false)
-})
-
-test('a day with nothing logged is null everywhere, not a row of zeros', () => {
-  const row = emptyHydrationSummary('2026-08-07')
-  assert.equal(row.loggedMl, null)
-  assert.equal(row.foodMl, null)
-  assert.equal(row.totalMl, null)
-  assert.equal(row.logCount, 0)
-  assert.equal(row.complete, false)
-})
-
-test('percent needs a target and never invents one', () => {
-  const row = parseHydrationSummaries([
-    { entry_date: '2026-08-06', logged_ml: '1500', food_ml: '600', total_ml: '2100', food_ml_missing: '0', total_complete: true },
-  ])[0]
-  assert.equal(hydrationPercent(row, 3000), 70)
-  // Ohne Ziel: null. Nicht 0 % (waere "nichts geschafft") und nicht 100 %.
-  // [read] Das Ziel liegt laut ADR in nutrition_targets (Goals, C-06);
-  // [cmd] diese Tabelle existiert noch nicht.
-  assert.equal(hydrationPercent(row, null), null)
-  assert.equal(hydrationPercent(row, 0), null)
-  assert.equal(hydrationPercent(row, -1), null)
-  // Ohne erfasste Menge ebenfalls null, nicht 0.
-  assert.equal(hydrationPercent(emptyHydrationSummary('2026-08-07'), 3000), null)
-})
+// G-592: die fuenf Tests zu `parseHydrationSummaries`, `emptyHydrationSummary`
+// und `hydrationPercent` sind mit dem zweiten Leseweg gefallen. Ihre Regeln
+// (null statt 0, Untergrenze, Defensivflag) bewacht jetzt
+// `app/v2/nutrition/__tests__/g592-hydration-leer.test.ts` am lebenden Weg.
