@@ -4,6 +4,8 @@ typ: fehler
 modul: quer
 schwere: niedrig
 angelegt: 2026-10-05
+agent: claudecode
+beauftragt: 2026-10-05
 
 braucht: []
 kind_von: G-592
@@ -32,3 +34,18 @@ Die 26 Namen messen und je einordnen (Test fehlt, Name tot, Liste
 veraltet). Danach entscheiden: ins Gate mit eingefrorenem Sollstand
 (wie `punkte-pruefen`) oder loeschen. Ein roter Waechter ausserhalb des
 Gates misst nichts.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER Claude Code - A-102: verdrahtung-pruefen gruen und im Gate
+    Bereich: tools/, apps/, packages/
+    Fremd:   supabase/_pipeline/ (Codex). docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-05
+
+1. Die 26 Namen messen, je Zeile: Name, Datei, Einordnung (Test fehlt /
+   Name tot / Liste veraltet).
+2. Tote Namen entfernen, veraltete Listeneintraege berichtigen. Fehlende
+   Tests NICHT nachschreiben - als Restbestand einfrieren.
+3. Ins Gate mit eingefrorenem Sollstand (Muster `punkte-pruefen`): ein
+   neuer Name ohne Test macht das Gate rot.
+4. Sabotage in beide Richtungen, Gate gruen. Kein Commit.

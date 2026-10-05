@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 278 |
+| `todos` | 277 |
 | `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 657 |
 | **gesamt** | **936** |
 
@@ -825,7 +826,7 @@
 | `A-99` | fehler | hoch | [Der Testdatenpruefer brach ab, statt rot zu werden — und niemand sah es](erledigt/quer-a-0099-der-testdatenpruefer-brach-ab-statt-rot-zu-werden.md) | erledigt | — | C-560 |
 | `A-100` | fehler | hoch | [Der Gate prueft nicht, was er sagt](erledigt/quer-a-0100-der-gate-prueft-nicht-was-er-sagt.md) | erledigt | — | G-600 |
 | `A-101` | fehler | mittel | [Der Kurzlauf der Kette ist in Schritt 027 rot](todos/quer-a-0101-der-kurzlauf-der-kette-ist-in-schritt-027-rot.md) | offen | — | — |
-| `A-102` | fehler | niedrig | [verdrahtung-pruefen ist rot und steht nicht im Gate](todos/quer-a-0102-verdrahtung-pruefen-ist-rot-und-steht-nicht-im-gate.md) | offen | — | — |
+| `A-102` | fehler | niedrig | [verdrahtung-pruefen ist rot und steht nicht im Gate](laufend_claudecode/quer-a-0102-verdrahtung-pruefen-ist-rot-und-steht-nicht-im-gate.md) | laeuft (claudecode) | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
