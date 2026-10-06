@@ -11,6 +11,30 @@
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
+## Plan ab 06.10. - von Tom freigegeben, 17:03
+
+**Tom:** *,block 1 ok fundament muss passen · block2 allgemein goals schaetze
+ich ist viel im backend passiert aber frontend ist noch sehr weit weg von
+brauchbar · block3 ok erledigen · dann schauen wir weiter"*
+
+**Neue Regel (Tom, 06.10.):** ein Punkt, der die Datenbank aendert, ist
+erst erledigt, wenn er live ist und der Orchestrator das gemessen hat.
+Bis dahin: ,Kette gruen, live offen".
+
+**Reihenfolge:**
+
+1. **Fundament** - A-104 (Codex, laeuft), gesammeltes Live-Einspielen
+   des Rueckstands (eine Freigabe), G-587 (Claude Code, laeuft), Regel
+   ,erledigt = live" in Zyklus und Werkzeug, A-96, A-93, G-599/A-76,
+   Stufenwochen im Programm editierbar (nach dem Live-Einspielen).
+2. **Sichtbare Fehler** - G-441, G-433, G-497, C-522.
+3. **Goals am Frontend** - zuerst ein Rundgang am Schirm gegen das
+   Mockup, Reiter fuer Reiter: was bedienbar ist, was Attrappe, was
+   fehlt. Daraus die Frontend-Punkte. Die Backend-Punkte G-526, G-529,
+   G-530, G-532, G-542, G-550, G-574, G-575, G-522 nur, wo der Rundgang
+   sie braucht.
+4. Danach mit Tom neu entscheiden (Supplements, Training, Coach).
+
 ## Freeze am 06.10. um 06:42 - zweiter Wiederanlauf, 07:50
 
 `[cmd]` **Berichtigung zu oben:** der Nachtlauf war um 06:30 nicht tot,

@@ -16,7 +16,8 @@ quellen:
 beruehrt:
   tabellen: []
   dateien:
-    - packages/shared/src/supabase/server.ts
+    - packages/shared/src/index.ts
+    - apps/web/src/lib/supplements/substanz-read.ts
 ---
 
 # Ein Service-Client ohne Aufrufer umgeht die Zeilensicherheit
