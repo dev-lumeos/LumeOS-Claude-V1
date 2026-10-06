@@ -5,8 +5,8 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-607 | Der Ankerplan rechnet aus dem Dauer-Anteil | **laeuft**, raus 06.10. |
-| Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
+| Codex | A-104 | Live hinkt der Kette hinterher, und niemand zaehlt wie weit | **laeuft**, raus 06.10. |
+| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 ## Freeze am 06.10. um 06:42 - zweiter Wiederanlauf, 07:50

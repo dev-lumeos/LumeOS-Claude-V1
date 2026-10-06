@@ -150,3 +150,8 @@ allgemein:** 17 Wochen -> 3,78/7,56/5,67 -> 4/8/6 = 18. Die Verteilung
 braucht eine Restregel - gehoert in die Oberflaechenhaelfte G-607.
 
 Nicht live. Oberflaechenhaelfte: G-607.
+
+## Live-Versuch 06.10. - abgebrochen, richtig so
+
+`[cmd]` Codex hat nicht eingespielt: live fehlen `goals.goal_programs` und `goals.goal_program_positions` (G-560), `contest_prep` traegt live weder `duration_ratio_pct` noch `dauer_anteil`. Vom Orchestrator nachgemessen. Vorher-Sicherung `backup/g562-vorher.sql` 184.316 Byte, keine Datenaenderung. Folge: A-104.
+

@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-06
 agent: claudecode
 beauftragt: 2026-10-06
+erledigt: 2026-10-06
+commit: 638397cd
 
 braucht: [G-562]
 kind_von: G-562
@@ -59,3 +61,25 @@ sodass die Summe immer die Gesamtdauer ist.
    Wegwerf-Kette ODER erst nach dem Live-Einspielen von G-562 - melden,
    welcher Weg; nichts auf `dev`.
 5. Sabotage beidseitig, Gate gruen mit Testzahl. Kein Commit.
+
+## Abnahme - 2026-10-06, Commit `638397cd`
+
+`[cmd]` **Diff:** `anker.ts` (+75, `stufenwochen`), `strategie-read.ts`,
+Editor, Zeitachse, Vorschau; neuer Test `g607-dauer-anteil.test.ts` (13),
+Fremdtest `g539-editor` auf ,Dauer-Anteil" umgestellt. Gate gruen, web
+2672.
+
+`[cmd]` **Restregel nachgerechnet:** 17 Wochen -> 3,78/7,56/5,67, abgerundet
+3/7/5 = 15, die zwei Restwochen an die groessten Reste (,78 early, ,67
+late) -> 4/7/6 = 17. Richtig.
+
+`[read]` Gesamtdauer kommt aus dem vorhandenen Override
+`max_duration_weeks` in `goal_phases.parameters` (`phasenOverrideSetzen`),
+der Anker-Reiter zeigt dafuer ,Gesamtdauer". Sabotage 6/6 rot.
+
+**Offen, nicht Teil dieser Abnahme:**
+- Schirmnachweis - G-562 und G-560 sind live nicht da (A-104). Bis dahin
+  sagt der Editor live, dass der Dauer-Anteil fehlt.
+- Wochen je Stufe aendern: Speicherort laut E-85
+  `goal_program_positions.duration_weeks` (G-560), live nicht vorhanden,
+  in `apps/` kein Leser oder Schreiber. Folgepunkt nach A-104.
