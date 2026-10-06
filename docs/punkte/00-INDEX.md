@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 273 |
+| `todos` | 272 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 669 |
 | **gesamt** | **942** |
 
@@ -1004,7 +1005,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `A-96` | fehler | hoch | [Der Nachtlauf verwirft seinen eigenen Grund](todos/quer-a-0096-der-nachtlauf-verwirft-seinen-eigenen-grund.md) | offen | A-80 | — |
+| `A-96` | fehler | hoch | [Der Nachtlauf verwirft seinen eigenen Grund](laufend_claudecode/quer-a-0096-der-nachtlauf-verwirft-seinen-eigenen-grund.md) | laeuft (claudecode) | A-80 | — |
 | `A-106` | befund | mittel | [Funktionen, Policies und Grants sind live anders als in der Kette](todos/quer-a-0106-funktionen-policies-grants-live-anders-als-die-kette.md) | offen | A-105 | — |
 
 ## buddy — 1

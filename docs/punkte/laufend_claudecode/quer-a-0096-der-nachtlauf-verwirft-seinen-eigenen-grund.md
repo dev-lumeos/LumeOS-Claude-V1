@@ -4,6 +4,8 @@ typ: fehler
 modul: quer
 schwere: hoch
 angelegt: 2026-10-03
+agent: claudecode
+beauftragt: 2026-10-06
 
 braucht: [A-91, A-80]
 
@@ -91,3 +93,36 @@ liegengebliebenen Datenbank.
 
 `[cmd]` **Keine Codeaenderung ohne Toms Freigabe** — dieser Punkt liegt
 in `todos/`, bis sie da ist.
+
+## Stand 06.10. und Auftrag
+
+`[cmd]` **Erledigt ist die erste Haelfte:** seit `f5c46439` schreibt der
+Laeufer `backup/_manifests/kettenlauf-<db>.log` und bei Rot einen
+`log_ende`-Auszug in `kettenlauf-status.json`.
+
+`[cmd]` **Offen, zweimal belegt:** ein roter (03.10.) und ein
+abgebrochener Lauf (06.10., Freeze um 06:42) liessen ihre Datenbank
+liegen - `lumeos_tageskette_20261003` 240 MB, `_20261006` 3,3 GB - und
+der abgebrochene dazu einen halben Dump
+`daten/grunddaten-<zeit>-<pid>.tmp` (418 MB, untracked). `kettenlauf-status.json`
+zeigte danach weiter den gruenen Lauf vom Vortag. Tom hat beides von Hand
+entsorgt. Der Task holt seit 06.10. keine verpassten Laeufe mehr nach
+(`StartWhenAvailable = False`).
+
+    AUFTRAG FUER Claude Code - A-96: ein roter oder abgebrochener Nachtlauf raeumt hinter sich auf
+    Bereich: tools/
+    Fremd:   supabase/_pipeline/ (Codex). docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-06
+
+1. Messen: was `tools/kettenlauf-taeglich.mjs` heute bei Gruen, Rot und
+   Abbruch mit Datenbank, `.tmp`-Dump und `kettenlauf-status.json` macht.
+2. Bei Rot: Wegwerf-Datenbank loeschen, `.tmp` loeschen, Status `failed`
+   mit `log_ende` - der Log bleibt als Beleg.
+3. Bei Abbruch (Prozess stirbt, Rechner aus): beim NAECHSTEN Start
+   erkennt der Laeufer verwaiste `lumeos_tageskette_*`-Datenbanken und
+   `grunddaten-*.tmp` und raeumt sie weg, BEVOR er anfaengt - nur Namen
+   mit genau diesem Muster, nie andere. Der Status vermerkt den
+   abgebrochenen Vorlauf (`status: aborted`).
+4. Nachweise auf einer Wegwerf-DB: Rot provoziert -> aufgeraeumt;
+   Abbruch simuliert (Prozess beenden) -> naechster Start raeumt auf;
+   eine fremde DB `lumeos_andere` bleibt stehen. Gate gruen. Kein Commit.

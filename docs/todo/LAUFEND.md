@@ -5,6 +5,8 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
+| Claude Code | A-96 | Der Nachtlauf verwirft seinen eigenen Grund | **laeuft**, raus 06.10. |
+| Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 ## Plan ab 06.10. - von Tom freigegeben, 17:03
