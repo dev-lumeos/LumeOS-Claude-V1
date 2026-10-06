@@ -21,6 +21,7 @@ dem 05.10., ein halber Dump `daten/grunddaten-20261005232748810-69500.tmp`
 (418 MB, untracked - darf nie in einen Commit). **Folge fuer den Betrieb:
 nach jedem Neustart laeuft der Kettenlauf von selbst nach** und belegt
 Docker und Platte, waehrend Agenten anfangen.
+**Behoben 06.10. 07:55 (Tom: ok):** StartWhenAvailable des Tasks \\LumeOS - taeglicher Kettenlauf von True auf False - ein verpasster Lauf wird nicht mehr nachgeholt, der naechste kommt um 04:00.
 
 `[cmd]` **Nach dem Freeze:** HEAD `96fb0082`, `git fsck` Exit 0, kein
 `index.lock`. Docker neu gestartet, Postgres `accepting connections`,
