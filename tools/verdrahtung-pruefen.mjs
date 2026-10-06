@@ -48,11 +48,29 @@
 // hier ein und begruendet es.
 //
 // Aufruf: node tools/verdrahtung-pruefen.mjs
-import { readFileSync, readdirSync, statSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { join, basename, relative } from 'node:path'
 
 const WURZEL = process.cwd()
-const QUELLE = join(WURZEL, 'apps/web/src')
+
+// ══ A-103: jede App und jedes Paket, nicht nur apps/web ════════════
+//
+// `[cmd]` **Bis A-103 las diese Pruefung nur `apps/web/src`.** Gemessen
+// 2026-10-06: `apps/coach` verdrahtet 21 Namen, `apps/admin` einen,
+// `packages/*` keinen. Die Coach-Namen standen alle schon in Tests —
+// aber die Pruefung sah weder die Namen noch die Tests, ein neuer
+// Name dort waere gruen geblieben. **Ein Waechter, der seinen
+// Gegenstand nicht findet, ist schlimmer als keiner.**
+//
+// `[read]` **Deshalb jede `src` unter `apps/*` und `packages/*`, nicht
+// eine Liste von Hand** — eine neue App ist ab dem ersten Tag bewacht,
+// statt zu warten, bis jemand sie hier eintraegt. Tests zaehlen ueber
+// alle Bereiche: ein Name, den ein Coach-Test nennt, ist bewacht, auch
+// wenn ihn apps/web verdrahtet.
+const QUELLEN = ['apps', 'packages'].flatMap(oben =>
+  readdirSync(join(WURZEL, oben))
+    .map(e => join(WURZEL, oben, e, 'src'))
+    .filter(p => existsSync(p) && statSync(p).isDirectory()))
 
 /** Alle Dateien unter einem Pfad, die auf `endung` enden. */
 function dateien(pfad, endungen, aus = []) {
@@ -72,7 +90,7 @@ function entkleiden(s) {
     .replace(/^[ \t]*\/\/.*$/gm, '')
 }
 
-const alle = dateien(QUELLE, ['.ts', '.tsx'])
+const alle = QUELLEN.flatMap(q => dateien(q, ['.ts', '.tsx']))
 const istTest = p => p.includes('__tests__')
 
 // ── Was die Tests kennen ──────────────────────────────────────────
@@ -127,7 +145,7 @@ for (const p of alle) {
   }
 }
 
-// ── Die Bestandsliste — EINGEFROREN seit A-102 (2026-10-05) ───────
+// ── Die Bestandsliste — EINGEFROREN seit A-102, A-103 (2026-10-06) ─
 //
 // `[cmd]` **Bis A-102 war dieses Werkzeug rot, und niemand sah es** —
 // es stand nicht im Gate. Gemessen 2026-10-05: 26 Namen verdrahtet und
@@ -147,14 +165,19 @@ for (const p of alle) {
 // `[read]` **Wer hier eine Zeile streicht, hat einen Test geschrieben
 // oder einen toten Weg entfernt — wer eine hinzufuegt, tut das Falsche.**
 const GEDULDET = new Set([
-  // Der alte Bestand, Stand 2026-08-26 (nach A-102 noch 24).
-  'tabelle:autonomy_change_log', 'tabelle:biomarker_aliases',
+  // Der alte Bestand, Stand 2026-08-26 (nach A-103 noch 21).
+  //
+  // `[cmd]` **A-103 strich drei:** `autonomy_change_log`,
+  // `client_permissions` und `permission_change_log` stehen in
+  // `apps/coach/src/lib/__tests__/mockup-referenz.test.ts` — der Test
+  // war schon da, nur lag er ausserhalb des Lesebereichs.
+  'tabelle:biomarker_aliases',
   'tabelle:biomarker_catalog', 'tabelle:biomarker_reference_ranges',
-  'tabelle:body_circumferences', 'tabelle:client_permissions',
+  'tabelle:body_circumferences',
   'tabelle:equipment', 'tabelle:food_groups', 'tabelle:foods_portions',
   'tabelle:goal_milestones', 'tabelle:nutrient_details',
   'tabelle:nutrient_reference_values', 'tabelle:nutrient_search_aliases',
-  'tabelle:permission_change_log', 'tabelle:preparation_kinds',
+  'tabelle:preparation_kinds',
   'tabelle:supplement_categories', 'tabelle:supplement_dosing',
   'tabelle:supplement_evidence', 'tabelle:water_logs',
   'rpc:food_categories_tree', 'rpc:micronutrient_below_threshold',
@@ -179,6 +202,14 @@ const GEDULDET = new Set([
   'tabelle:supplier_product_nutrient_serving_options',
   'rpc:supplier_product_search_meta', 'rpc:user_allergy_catalog_matches',
   'tabelle:user_supplement_cycles', 'rpc:withdraw_stack_template',
+  // Der Restbestand aus A-103, 2026-10-06: erst sichtbar, seit die
+  // Pruefung alle Apps liest. Lebendig — gerufen in
+  // `apps/admin/src/lib/nutrition/curation.ts` (`getNutritionCurationData`),
+  // das `app/curation/page.tsx` und `app/api/curation/route.ts` laden;
+  // die Funktion steht im Schema (backup/g605-nachher.sql). `curation.test.ts`
+  // prueft die Argumente, nennt den Namen aber nicht. **Eingefroren,
+  // nicht nachgeschrieben** — Auftrag A-103.
+  'rpc:curation_overview',
 ])
 
 // `[cmd]` **Der Name muss ALS GANZES in einem Test stehen.** Die
@@ -237,7 +268,7 @@ console.log(`  ${bewacht.length} davon in mindestens einem Test`)
 console.log(`  ${GEDULDET.size} auf der Bestandsliste`)
 console.log()
 
-console.log(`  Soll: ${GEDULDET.size} geduldete Namen (eingefroren, A-102)`)
+console.log(`  Soll: ${GEDULDET.size} geduldete Namen (eingefroren, A-102/A-103)`)
 console.log()
 
 if (veraltet.length > 0) {
