@@ -76,11 +76,13 @@ import { createSessionClient } from '@lumeos/shared/session'
 export type Teilphase = {
   name: string
   /**
-   * `[cmd]` **Seit G-545 in keiner Zeile mehr gefuellt.** `[read]`
-   * **Das Feld bleibt**, weil der Ankerplan es liest — **und `null`
-   * heisst dort: keine Rechnung, kein erfundenes Datum.**
+   * `[cmd]` **G-562: der Anteil der Stufe an der Gesamtdauer**
+   * (`contest_prep`: 4 / 8 / 6). `weeks` gibt es seit G-545 nicht
+   * mehr und kommt nicht zurueck (E-85) — die Wochen rechnet
+   * `stufenwochen` in `anker.ts`. `[read]` **`null` heisst: keine
+   * Rechnung, kein erfundenes Datum.**
    */
-  weeks: string | null
+  dauer_anteil: number | null
   deficit: number | null
   cardio: string | null
   special: boolean
@@ -171,18 +173,15 @@ const objekt = (v: unknown): Record<string, unknown> | null =>
 const liste = (v: unknown): string[] =>
   Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : []
 
-function teilphasen(v: unknown): Teilphase[] {
+export function teilphasen(v: unknown): Teilphase[] {
   if (!Array.isArray(v)) return []
   return v.flatMap((r) => {
     if (typeof r !== 'object' || r === null) return []
     const o = r as Record<string, unknown>
     if (typeof o.name !== 'string') return []
-    // `[read]` **`weeks` ist mal Text (`"24→16"`), mal Zahl (`1`)** —
-    // gemessen in `contest_prep`. Beides wird Text.
-    const w = o.weeks
     return [{
       name: o.name,
-      weeks: typeof w === 'string' ? w : typeof w === 'number' ? String(w) : null,
+      dauer_anteil: zahl(o.dauer_anteil),
       deficit: zahl(o.deficit),
       // `[cmd]` **`cardio` ist seit G-545 ein OBJEKT** — als Text
       // gelesen gaebe es `[object Object]`. `[read]` **Lieber

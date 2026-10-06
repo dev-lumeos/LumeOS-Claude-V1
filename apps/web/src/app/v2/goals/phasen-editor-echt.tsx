@@ -44,7 +44,7 @@ import {
 } from '../../../lib/goals/editor-rechnungen'
 // `[cmd]` **G-544 hat die Ankerrechnung gebaut** — sie wird BENUTZT,
 // nicht nachgebaut. Zwei Rechnungen fuer dasselbe gehen auseinander.
-import { ankerplan, gesamtWochen } from '../../../lib/goals/anker'
+import { ankerplan, gesamtdauer, gesamtWochen, teilphasenAusAnteil } from '../../../lib/goals/anker'
 import type { Strategie } from '../../../lib/goals/strategie-read'
 // ══ G-565/E-83: dieselbe Rate, zwei Einheiten ══════════════
 import {
@@ -197,11 +197,17 @@ export function PhasenEditor({
   }
 
   // ── Der Anker, aus G-544 ────────────────────────────────────────
+  //
+  // `[cmd]` **G-607: die Wochen aus Gesamtdauer mal `dauer_anteil`.**
+  // `[read]` **Die Gesamtdauer ist das Override `max_duration_weeks`**
+  // — derselbe Wert, den `phasenOverrideSetzen` nach
+  // `goal_phases.parameters` schreibt; ohne Override der Katalog.
+  // Kein zweites Feld, keine zweite Wahrheit.
   const [anker, setAnker] = React.useState(zieldatum ?? '')
+  const gesamt = gesamtdauer(entwurf.max_duration_weeks, strategie.max_duration_weeks)
   const plan = React.useMemo(() => ankerplan(
-    anker,
-    strategie.sub_phases.map(s => ({ name: s.name, weeks: s.weeks })),
-    'Zieltag'), [anker, strategie.sub_phases])
+    anker, teilphasenAusAnteil(strategie.sub_phases, gesamt),
+    'Zieltag'), [anker, gesamt, strategie.sub_phases])
 
   // ── Das Kalorienradeln ──────────────────────────────────────────
   const [tage, setTage] = React.useState(5)
@@ -398,8 +404,17 @@ export function PhasenEditor({
             <div data-editorblock="anchor">
               <div className="v2-dim" style={{ fontSize: 11.5, marginBottom: 12, lineHeight: 1.55 }}>
                 Setz den Zieltag. Alles davor rechnet sich rueckwaerts —
-                aus den Teilphasen des Katalogs.
+                die Gesamtdauer verteilt sich im Verhaeltnis der Teilphasen.
               </div>
+              {/* `[cmd]` **Der Entwurf zeigt daneben „Total prep length"**
+                  (`module-goals-editor.jsx`, anchor-Reiter). `[read]`
+                  **Dasselbe Override wie im duration-Reiter** — es wird
+                  mit „Anwenden" gespeichert. */}
+              <Feld label="Gesamtdauer" sub="Vorschlag aus dem Katalog">
+                <Zahlfeld marke="anker_gesamt" wert={zahl('max_duration_weeks')}
+                          katalog={strategie.max_duration_weeks} einheit="Wo"
+                          onChange={v => setzen('max_duration_weeks', v === '' ? null : Number(v))} />
+              </Feld>
               <Feld label="Zieltag" sub="Wettkampf oder Stichtag">
                 <input type="date" value={anker} data-editorfeld="anker"
                        onChange={e => setAnker(e.target.value)}
@@ -436,17 +451,20 @@ export function PhasenEditor({
               ) : (
                 <div className="v2-dim" data-editor-leerhinweis
                      style={{ fontSize: 10.5, lineHeight: 1.5 }}>
-                  {/* `[cmd]` **Drei Faelle, drei Saetze** — der
-                      mittlere ist seit G-545 der Normalfall: die
-                      Teilphasen SIND da, aber ohne `weeks`. */}
+                  {/* `[cmd]` **Fuenf Faelle, fuenf Saetze** (G-607) — der
+                      letzte gilt, bis G-562 live ist: die Teilphasen
+                      SIND da, aber ohne `dauer_anteil`. */}
                   {!anker
                     ? 'Ohne Zieltag laesst sich nichts rueckwaerts rechnen.'
                     : strategie.sub_phases.length === 0
                       ? 'Diese Strategie fuehrt keine Teilphasen — es gibt nichts zurueckzurechnen.'
-                      : `${strategie.sub_phases.length} Teilphasen, aber keine `
-                        + 'Wochenangabe. Seit dem Katalognachtrag (G-545) fuehrt '
-                        + '`sub_phases` kein `weeks` mehr — ohne sie laesst sich '
-                        + 'kein Datum zurueckrechnen.'}
+                      : gesamt === null
+                        ? 'Ohne Gesamtdauer laesst sich nichts aufteilen — der Katalog nennt keine.'
+                        : gesamt < strategie.sub_phases.length || !Number.isInteger(gesamt)
+                          ? `Die Gesamtdauer braucht ganze Wochen, mindestens eine je Teilphase (${strategie.sub_phases.length}).`
+                          : `${strategie.sub_phases.length} Teilphasen, aber ohne `
+                            + 'Dauer-Anteil — ohne Verhaeltnis laesst sich die '
+                            + 'Gesamtdauer nicht aufteilen.'}
                 </div>
               )}
             </div>

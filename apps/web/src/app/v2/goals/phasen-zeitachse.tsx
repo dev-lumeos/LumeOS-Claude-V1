@@ -27,7 +27,9 @@ import * as React from 'react'
 import { Card, Pill, Icon } from '@lumeos/ui'
 
 import { restTage } from '../../../lib/goals/pace'
-import { ankerplan, gesamtWochen, type Ankerzeile } from '../../../lib/goals/anker'
+import {
+  ankerplan, gesamtdauer, gesamtWochen, teilphasenAusAnteil, type Ankerzeile,
+} from '../../../lib/goals/anker'
 import { phasenName } from '../../../lib/goals/phase-regeln'
 import type { ZielFortschritt, Zielphase } from '../../../lib/goals/lesen'
 import type { Strategie } from '../../../lib/goals/strategie-read'
@@ -131,14 +133,17 @@ function Zielzeile({ z, heute, onBearbeiten }: {
   const rest = restTage(g.target_date, heute)
 
   // `[cmd]` **Die Teilphasen der laufenden Strategie** — nur
-  // `contest_prep` fuehrt sie (1 von 17, gemessen).
+  // `contest_prep` fuehrt sie (1 von 17, gemessen). `[cmd]` **G-607:
+  // die Wochen aus Gesamtdauer mal `dauer_anteil`**, die Gesamtdauer
+  // aus dem Override der Phase, sonst aus dem Katalog.
   const plan = React.useMemo(() => {
     if (!g.target_date || !z.strategie) return []
     return ankerplan(
       g.target_date,
-      z.strategie.sub_phases.map(s => ({ name: s.name, weeks: s.weeks })),
+      teilphasenAusAnteil(z.strategie.sub_phases, gesamtdauer(
+        z.phase?.parameters.max_duration_weeks, z.strategie.max_duration_weeks)),
       g.title)
-  }, [g.target_date, g.title, z.strategie])
+  }, [g.target_date, g.title, z.strategie, z.phase])
 
   return (
     <div data-zielzeile={g.goal_id} style={{

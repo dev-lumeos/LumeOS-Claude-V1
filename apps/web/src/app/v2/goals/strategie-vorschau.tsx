@@ -34,6 +34,7 @@ import * as React from 'react'
 import { Icon } from '@lumeos/ui'
 
 import { tdeeProzent } from '../../../lib/goals/strategie-regeln'
+import { stufenwochen } from '../../../lib/goals/anker'
 import type { Strategie } from '../../../lib/goals/strategie-read'
 
 /**
@@ -147,6 +148,8 @@ export function StrategieVorschau({ s, onSchliessen }: {
   onSchliessen: () => void
 }) {
   const tdee = tdeeProzent(s)
+  const stufen = s.max_duration_weeks === null ? null
+    : stufenwochen(s.max_duration_weeks, s.sub_phases.map(t => t.dauer_anteil ?? NaN))
 
   return (
     <div data-strategie-vorschau={s.code} style={{
@@ -229,7 +232,8 @@ export function StrategieVorschau({ s, onSchliessen }: {
 
       {/* ── Teilphasen ─────────────────────────────────────────────
           `[cmd]` **1 von 17 Zeilen** — `contest_prep`, vier
-          Abschnitte. `[read]` **`weeks` ist mal Text, mal Zahl.** */}
+          Abschnitte. `[cmd]` **G-607: Wochen aus `max_duration_weeks`
+          mal `dauer_anteil`** — derselbe Vorschlag wie im Editor. */}
       <div data-vorschau-block="sub_phases" style={{ marginBottom: 10 }}>
         <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Teilphasen</div>
         {s.sub_phases.length === 0 ? <Strich /> : (
@@ -241,7 +245,7 @@ export function StrategieVorschau({ s, onSchliessen }: {
               }}>
                 <span style={{ fontWeight: 600, minWidth: 74 }}>{t.name}</span>
                 <span className="v2-dim v2-num" style={{ minWidth: 52 }}>
-                  {t.weeks !== null ? `${t.weeks} Wo` : '—'}
+                  {stufen ? `${stufen[i]} Wo` : '—'}
                 </span>
                 <span className="v2-dim">
                   {[

@@ -147,6 +147,81 @@ export function ankerplan(
   return zeilen
 }
 
+// ══ G-607: DIE WOCHEN KOMMEN AUS DEM VERHAELTNIS ═══════════════════
+//
+// `[cmd]` **Seit G-562 traegt `sub_phases` je Stufe `dauer_anteil`**
+// (`contest_prep`: 4 / 8 / 6, Summe 18), **kein `weeks`** — E-85:
+// der Katalog traegt das Verhaeltnis, das Programm die Wochen.
+//
+// `[cmd]` **Reines Runden traegt nicht:** 17 Wochen ergaeben
+// 4 / 8 / 6 = 18. `[read]` **Deshalb der groesste Rest** (Hare-
+// Niemeyer): erst jede Stufe abrunden, dann die fehlenden Wochen an
+// die Stufen mit dem groessten Nachkommarest — bei Gleichstand an die
+// fruehere. Die Summe ist damit immer die Gesamtdauer, und keine Stufe
+// weicht um mehr als eine Woche von ihrem genauen Anteil ab.
+
+/**
+ * Gesamtwochen und Anteile → Wochen je Stufe.
+ *
+ * `[read]` **Summe immer = `gesamt`, jede Stufe ≥ 1.** Faellt eine
+ * Stufe beim Runden auf 0, gibt die groesste eine Woche ab.
+ * `[read]` **`null`, wenn es keine ehrliche Antwort gibt** — weniger
+ * Wochen als Stufen, oder ein Anteil, der keine positive Zahl ist.
+ */
+export function stufenwochen(gesamt: number, anteile: number[]): number[] | null {
+  if (!Number.isInteger(gesamt) || anteile.length === 0 || gesamt < anteile.length) return null
+  if (!anteile.every(a => typeof a === 'number' && Number.isFinite(a) && a > 0)) return null
+  const summe = anteile.reduce((s, a) => s + a, 0)
+  const genau = anteile.map(a => gesamt * a / summe)
+  const w = genau.map(Math.floor)
+  let rest = gesamt - w.reduce((s, x) => s + x, 0)
+  const nachRest = genau.map((g, i) => i).sort((a, b) =>
+    (genau[b]! - w[b]!) - (genau[a]! - w[a]!) || a - b)
+  for (const i of nachRest) { if (rest-- <= 0) break; w[i]!++ }
+  for (let i = 0; i < w.length; i++) {
+    if (w[i]! > 0) continue
+    const groesste = w.indexOf(Math.max(...w))
+    w[groesste]!--; w[i] = 1
+  }
+  return w
+}
+
+/**
+ * Die Gesamtdauer: das Override des Nutzers, sonst der Katalog.
+ *
+ * `[cmd]` **Das Override ist `max_duration_weeks` in
+ * `goal_phases.parameters`** — geschrieben von `phasenOverrideSetzen`.
+ * `[read]` **Editor und Zeitachse fragen beide hier** — zwei
+ * Rechnungen fuer dasselbe gehen auseinander.
+ */
+export function gesamtdauer(override: unknown, katalog: number | null): number | null {
+  return typeof override === 'number' && Number.isFinite(override) ? override : katalog
+}
+
+/**
+ * Die Teilphasen des Katalogs als Eingabe fuer `ankerplan`.
+ *
+ * `[read]` **`ankerplan` will je Stufe den ANFANG in Wochen vor dem
+ * Anker** — die erste Stufe beginnt `gesamt` Wochen davor, jede
+ * weitere um die Wochen ihrer Vorgaengerin spaeter.
+ * `[read]` **Ohne Gesamtdauer oder ohne lesbare Anteile: leer** —
+ * kein erfundenes Datum (G-544).
+ */
+export function teilphasenAusAnteil(
+  phasen: Array<{ name: string; dauer_anteil: number | null }>,
+  gesamt: number | null,
+): Teilphasenangabe[] {
+  if (gesamt === null) return []
+  const w = stufenwochen(gesamt, phasen.map(p => p.dauer_anteil ?? NaN))
+  if (!w) return []
+  let vorher = gesamt
+  return phasen.map((p, i) => {
+    const z = { name: p.name, weeks: vorher }
+    vorher -= w[i]!
+    return z
+  })
+}
+
 /**
  * Wie viele Wochen umfasst der Plan?
  *

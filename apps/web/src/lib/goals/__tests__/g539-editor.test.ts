@@ -447,13 +447,14 @@ describe('G-539 — die Form von G-545 faellt nicht still durch', () => {
     const q = E()
     assert.match(q, /strategie\.sub_phases\.length === 0/,
       'der Leersatz unterscheidet die zwei Faelle nicht')
-    // `[read]` **Der Satz ist ueber zwei Zeilen umgebrochen** —
-    // `keine ` endet die eine, `Wochenangabe` beginnt die
-    // naechste. **Ein Muster auf die zusammengesetzte Form
-    // faende nichts.**
-    assert.match(q, /Wochenangabe/,
+    // `[cmd]` **G-607: was fehlt, ist seit G-562 nicht mehr `weeks`,
+    // sondern `dauer_anteil`** — die Wochen rechnen sich aus dem
+    // Verhaeltnis (E-85). Die Regel bleibt: der Satz nennt, WAS fehlt.
+    // `[read]` **Der Satz ist ueber zwei Zeilen umgebrochen** — ein
+    // Muster auf die zusammengesetzte Form faende nichts.
+    assert.match(q, /Dauer-Anteil/,
       'der Satz nennt nicht, WAS fehlt')
-    assert.match(q, /G-545/,
-      'der Satz nennt den Punkt nicht, der die Form geaendert hat')
+    assert.ok(!/Wochenangabe/.test(q),
+      'der Satz nennt noch die alte Ursache (weeks, G-545)')
   })
 })
