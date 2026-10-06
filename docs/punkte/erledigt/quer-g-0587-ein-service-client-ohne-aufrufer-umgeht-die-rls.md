@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-02
 agent: claudecode
 beauftragt: 2026-10-06
+erledigt: 2026-10-06
+commit: 89844a2d
 
 braucht: [G-585]
 kind_von: G-585
@@ -195,3 +197,21 @@ Schluessel fuer Messungen lesen - Werkzeuge, kein App-Code.
    `SUPABASE_SERVICE_ROLE_KEY` in `apps/*/src` oder `packages/*/src`
    auftaucht. Ausnahmeliste leer; wer sie fuellt, braucht einen Punkt.
 4. Sabotage beidseitig, Gate gruen mit Testzahl. Kein Commit.
+
+## Abnahme - 2026-10-06, Commit `89844a2d`
+
+`[cmd]` **Diff:** `packages/shared/src/supabase/server.ts` geloescht (per
+`git rm`), Re-Export aus `index.ts` weg; in `substanz-read.ts`
+`wissenService`, `envMitRootFallback` und drei nur dafuer noetige Importe
+entfernt; neuer Waechter `tools/__tests__/g587-kein-generalschluessel.test.mjs`.
+Gate gruen, web 2672.
+
+`[read]` Gemessen: beide Stellen ohne Aufrufer, sonst liest keine Stelle in
+`apps/` oder `packages/` den Schluessel. Der Waechter verlangt mehr als 600
+gelesene Dateien (857), damit ein falscher Wurzelpfad nicht gruen durchgeht.
+Sabotage: Schluessel in apps und in packages rot, falscher Ort rot.
+
+`[read]` Sein Gate war vorher rot, nur weil die Loeschung nicht im Index
+stand (G-470-Waechter liest `git ls-files`). Mit `git rm` im Commit gruen.
+Dev-Server 3200, Coach 3220, Admin 3210 danach neu gestartet
+(`packages/shared` geaendert), alle 200 auf `/login`.

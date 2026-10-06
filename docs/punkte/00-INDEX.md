@@ -5,11 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 271 |
-| `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 667 |
-| **gesamt** | **940** |
+| `todos` | 273 |
+| `erledigt` | 669 |
+| **gesamt** | **942** |
 
 ## medical — 50
 
@@ -745,9 +743,9 @@
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 | `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](erledigt/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | erledigt | — | — |
 
-## quer — 250
+## quer — 252
 
-### beauftragbar — 249
+### beauftragbar — 250
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -816,7 +814,8 @@
 | `A-101` | fehler | mittel | [Der Kurzlauf der Kette ist in Schritt 027 rot](erledigt/quer-a-0101-der-kurzlauf-der-kette-ist-in-schritt-027-rot.md) | erledigt | — | — |
 | `A-102` | fehler | niedrig | [verdrahtung-pruefen ist rot und steht nicht im Gate](erledigt/quer-a-0102-verdrahtung-pruefen-ist-rot-und-steht-nicht-im-gate.md) | erledigt | — | A-103 |
 | `A-103` | fehler | niedrig | [verdrahtung-pruefen sieht coach und packages nicht](erledigt/quer-a-0103-verdrahtung-pruefen-sieht-coach-und-packages-nicht.md) | erledigt | — | — |
-| `A-104` | fehler | hoch | [Live hinkt der Kette hinterher, und niemand zaehlt wie weit](laufend_codex/quer-a-0104-live-hinkt-der-kette-hinterher.md) | laeuft (codex) | — | — |
+| `A-104` | fehler | hoch | [Live hinkt der Kette hinterher, und niemand zaehlt wie weit](erledigt/quer-a-0104-live-hinkt-der-kette-hinterher.md) | erledigt | — | A-105, A-106 |
+| `A-105` | fehler | hoch | [Der Live-Nachzug der sieben Schritte](todos/quer-a-0105-der-live-nachzug-der-sieben-schritte.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
@@ -995,17 +994,18 @@
 | `G-583` | fehler | niedrig | [Drei Reste ohne Aufrufer, nach demselben Verfahren wie G-581](erledigt/quer-g-0583-drei-reste-ohne-aufrufer.md) | erledigt | — | G-584, G-585 |
 | `G-585` | befund | mittel | [Die Inventur der Ausfuhren ohne Aufrufer](erledigt/quer-g-0585-die-inventur-der-ausfuhren-ohne-aufrufer.md) | erledigt | — | G-587, G-588, G-589 |
 | `G-586` | fehler | hoch | [Ein Uhrensprung wirft den Nutzer raus, statt die Sitzung zu erneuern](erledigt/quer-g-0586-ein-uhrensprung-wirft-den-nutzer-raus.md) | erledigt | — | — |
-| `G-587` | fehler | hoch | [Ein Service-Client ohne Aufrufer umgeht die Zeilensicherheit](laufend_claudecode/quer-g-0587-ein-service-client-ohne-aufrufer-umgeht-die-rls.md) | laeuft (claudecode) | — | — |
+| `G-587` | fehler | hoch | [Ein Service-Client ohne Aufrufer umgeht die Zeilensicherheit](erledigt/quer-g-0587-ein-service-client-ohne-aufrufer-umgeht-die-rls.md) | erledigt | — | — |
 | `G-588` | befund | hoch | [Sechs Serveraktionen ohne Aufrufer — dieselbe Klasse wie G-571, eine Ebene hoeher](erledigt/quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md) | erledigt | — | G-590, G-591, G-592, G-606 |
 | `G-589` | befund | niedrig | [328 Ausfuhren zu viel — und wie die Zahl 385 zu 56 wurde](todos/quer-g-0589-dreihundertachtundzwanzig-ausfuhren-zu-viel.md) | offen | — | — |
 | `G-599` | befund | mittel | [Die SSOT nennt Tabellen abwesend, die es gibt — und der Waechter sieht den Fast-Treffer nicht](todos/quer-g-0599-die-ssot-nennt-tabellen-abwesend-die-es-gibt.md) | offen | — | — |
 | `G-600` | fehler | hoch | [„Heute" ist an 32 Stellen der UTC-Vortag](erledigt/quer-g-0600-heute-ist-an-32-stellen-der-utc-vortag.md) | erledigt | — | — |
 
-### wartet auf Blocker — 1
+### wartet auf Blocker — 2
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-96` | fehler | hoch | [Der Nachtlauf verwirft seinen eigenen Grund](todos/quer-a-0096-der-nachtlauf-verwirft-seinen-eigenen-grund.md) | offen | A-80 | — |
+| `A-106` | befund | mittel | [Funktionen, Policies und Grants sind live anders als in der Kette](todos/quer-a-0106-funktionen-policies-grants-live-anders-als-die-kette.md) | offen | A-105 | — |
 
 ## buddy — 1
 

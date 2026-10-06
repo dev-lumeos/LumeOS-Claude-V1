@@ -5,10 +5,6 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-587 | Ein Service-Client ohne Aufrufer umgeht die Zeilensicherheit | **laeuft**, raus 06.10. |
-| Codex | A-104 | Live hinkt der Kette hinterher, und niemand zaehlt wie weit | **laeuft**, raus 06.10. |
-| Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
-| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 ## Plan ab 06.10. - von Tom freigegeben, 17:03
