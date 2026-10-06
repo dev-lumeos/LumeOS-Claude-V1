@@ -40,10 +40,6 @@
 // ist — es ist kein Datenfehler und wird nicht als Luecke gemeldet.
 //
 // Laeuft ausschliesslich serverseitig.
-import fs from 'node:fs'
-import path from 'node:path'
-
-import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { createSessionClient } from '@lumeos/shared/session'
 
 // `[read]` **`text()` steht seit C-254 in `substanz-luecken.ts`** — es
@@ -812,32 +808,6 @@ function marken(r: CommunityZeile): CommunityMarken {
     evidenz: text(null, r.evidence_class) ?? 'E',
     grenzen: alsListe(r.limitations),
   }
-}
-
-function wissenService() {
-  const env = envMitRootFallback()
-  const url = env.NEXT_PUBLIC_SUPABASE_URL ?? env.SUPABASE_URL
-  const key = env.SUPABASE_SERVICE_ROLE_KEY
-  if (!url || !key) return null
-  return createSupabaseClient(url, key, { auth: { persistSession: false } })
-}
-
-function envMitRootFallback(): Record<string, string | undefined> {
-  const env: Record<string, string | undefined> = { ...process.env }
-  if (env.SUPABASE_SERVICE_ROLE_KEY && (env.NEXT_PUBLIC_SUPABASE_URL || env.SUPABASE_URL)) {
-    return env
-  }
-  for (const rel of ['.env', path.join('..', '..', '.env')]) {
-    const datei = path.resolve(process.cwd(), rel)
-    if (!fs.existsSync(datei)) continue
-    for (const zeile of fs.readFileSync(datei, 'utf8').split(/\r?\n/)) {
-      const rein = zeile.trim()
-      if (!rein || rein.startsWith('#') || !rein.includes('=')) continue
-      const [k, ...rest] = rein.split('=')
-      if (!env[k]) env[k] = rest.join('=').trim().replace(/^['"]|['"]$/g, '')
-    }
-  }
-  return env
 }
 
 function sortCommunity<T extends CommunityMarken>(items: T[]): T[] {
