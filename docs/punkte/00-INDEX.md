@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 272 |
+| `todos` | 271 |
 | `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 667 |
 | **gesamt** | **940** |
 
@@ -994,7 +995,7 @@
 | `G-583` | fehler | niedrig | [Drei Reste ohne Aufrufer, nach demselben Verfahren wie G-581](erledigt/quer-g-0583-drei-reste-ohne-aufrufer.md) | erledigt | — | G-584, G-585 |
 | `G-585` | befund | mittel | [Die Inventur der Ausfuhren ohne Aufrufer](erledigt/quer-g-0585-die-inventur-der-ausfuhren-ohne-aufrufer.md) | erledigt | — | G-587, G-588, G-589 |
 | `G-586` | fehler | hoch | [Ein Uhrensprung wirft den Nutzer raus, statt die Sitzung zu erneuern](erledigt/quer-g-0586-ein-uhrensprung-wirft-den-nutzer-raus.md) | erledigt | — | — |
-| `G-587` | fehler | hoch | [Ein Service-Client ohne Aufrufer umgeht die Zeilensicherheit](todos/quer-g-0587-ein-service-client-ohne-aufrufer-umgeht-die-rls.md) | offen | — | — |
+| `G-587` | fehler | hoch | [Ein Service-Client ohne Aufrufer umgeht die Zeilensicherheit](laufend_claudecode/quer-g-0587-ein-service-client-ohne-aufrufer-umgeht-die-rls.md) | laeuft (claudecode) | — | — |
 | `G-588` | befund | hoch | [Sechs Serveraktionen ohne Aufrufer — dieselbe Klasse wie G-571, eine Ebene hoeher](erledigt/quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md) | erledigt | — | G-590, G-591, G-592, G-606 |
 | `G-589` | befund | niedrig | [328 Ausfuhren zu viel — und wie die Zahl 385 zu 56 wurde](todos/quer-g-0589-dreihundertachtundzwanzig-ausfuhren-zu-viel.md) | offen | — | — |
 | `G-599` | befund | mittel | [Die SSOT nennt Tabellen abwesend, die es gibt — und der Waechter sieht den Fast-Treffer nicht](todos/quer-g-0599-die-ssot-nennt-tabellen-abwesend-die-es-gibt.md) | offen | — | — |

@@ -4,6 +4,8 @@ typ: fehler
 modul: quer
 schwere: hoch
 angelegt: 2026-10-02
+agent: claudecode
+beauftragt: 2026-10-06
 
 braucht: [G-585]
 kind_von: G-585
@@ -157,3 +159,38 @@ Aufraeumaktion.
 ob `supplements.*`-Wissenstabellen RLS aktiviert haben und was ein
 angemeldeter Nutzer ohne Service-Role zurueckbekommt. **Das ist die erste
 Zeile des Auftrags, wenn du ihn gibst.**
+
+---
+
+## Entschieden - 2026-10-06, Tom
+
+**Tom:** *,ok entfernen"* - Weg 1.
+
+`[cmd]` **Nachgemessen beim Schreiben des Auftrags, 06.10.:** Es gibt eine
+ZWEITE Stelle derselben Klasse, im App-Code selbst:
+`apps/web/src/lib/supplements/substanz-read.ts:817` `wissenService()` baut
+einen Client mit `SUPABASE_SERVICE_ROLE_KEY` und liest dafuer notfalls die
+`.env` von der Platte (`envMitRootFallback`, :824). **Aufrufer: 0** - nur
+die Definition. Eingefuehrt am 26.08. (`7d54d4c6`/`d4e2b003`, Community-
+Reiter). Gehoert in denselben Auftrag.
+
+`[read]` Nicht Teil: die Einmal-Skripte `tools/_g4xx-*.mjs`, die den
+Schluessel fuer Messungen lesen - Werkzeuge, kein App-Code.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER Claude Code - G-587: der Generalschluessel verschwindet aus dem App-Code
+    Bereich: packages/shared, apps/web/src/lib/supplements, tools/
+    Fremd:   supabase/_pipeline/ (Codex). docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-06
+
+1. Messen: Aufrufer von `createServiceClient` und `wissenService` in
+   `apps/*/src` und `packages/*/src` (erwartet je 0), dazu jede weitere
+   Stelle, die `SUPABASE_SERVICE_ROLE_KEY` liest.
+2. Entfernen (A-59: weg, nicht auskommentiert): `createServiceClient`
+   in `packages/shared/src/supabase/server.ts`, `wissenService` und
+   `envMitRootFallback` in `substanz-read.ts`, sofern ohne Aufrufer.
+3. Waechter: ein Test oder Gate-Werkzeug wird rot, sobald
+   `SUPABASE_SERVICE_ROLE_KEY` in `apps/*/src` oder `packages/*/src`
+   auftaucht. Ausnahmeliste leer; wer sie fuellt, braucht einen Punkt.
+4. Sabotage beidseitig, Gate gruen mit Testzahl. Kein Commit.
