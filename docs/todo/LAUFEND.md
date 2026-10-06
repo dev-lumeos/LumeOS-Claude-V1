@@ -1,6 +1,6 @@
 # Laufende Auftraege
 
-**Stand: 2026-10-06, 06:45**
+**Stand: 2026-10-06, 07:55**
 
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
@@ -10,6 +10,29 @@
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
+
+## Freeze am 06.10. um 06:42 - zweiter Wiederanlauf, 07:50
+
+`[cmd]` **Berichtigung zu oben:** der Nachtlauf war um 06:30 nicht tot,
+er LIEF. Der geplante Task holt einen verpassten Lauf beim Hochfahren
+nach - Start 06:27 (`lumeos_tageskette_20261006`), Log bis 06:42:06, dann
+der Freeze. Danach: Datenbank 3,3 GB, `kettenlauf-status.json` weiter auf
+dem 05.10., ein halber Dump `daten/grunddaten-20261005232748810-69500.tmp`
+(418 MB, untracked - darf nie in einen Commit). **Folge fuer den Betrieb:
+nach jedem Neustart laeuft der Kettenlauf von selbst nach** und belegt
+Docker und Platte, waehrend Agenten anfangen.
+
+`[cmd]` **Nach dem Freeze:** HEAD `96fb0082`, `git fsck` Exit 0, kein
+`index.lock`. Docker neu gestartet, Postgres `accepting connections`,
+Supabase healthy, Web 3200 (200), Coach 3220 und Admin 3210 (307).
+Live-Stand unveraendert (`user_goals` 13, `water_logs` 1264,
+G-604-Trigger da, G-562 NICHT live).
+
+`[cmd]` **Zwischenstand der Agenten im Baum (nicht berichtet, nicht
+abgenommen):**
+- Codex G-562: `11_goals/562_goal_subphase_duration_ratio.sql`,
+  `_validierung/goals-g562-duration-ratio.test.ts`, `kette.json` (+20)
+- Claude Code A-103: `tools/verdrahtung-pruefen.mjs` (+48/-10)
 
 ## Stromausfall in der Nacht zum 06.10. - der Wiederanlauf
 
