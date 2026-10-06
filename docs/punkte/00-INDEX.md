@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 272 |
+| `todos` | 271 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 669 |
+| `erledigt` | 670 |
 | **gesamt** | **942** |
 
 ## medical — 50
@@ -340,7 +340,7 @@
 
 ## supplements — 131
 
-### beauftragbar — 129
+### beauftragbar — 130
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -419,6 +419,7 @@
 | `C-553` | befund | mittel | [135 von 617 Beschreibungen sind Schablonen](todos/supplements-c-0553-schablonen-statt-beschreibungen.md) | offen | — | — |
 | `C-556` | fehler | hoch | [Zwei fachliche Folgen des neuen Kimi-Bestands](erledigt/supplements-c-0556-zwei-fachliche-folgen-des-neuen-kimi-bestands.md) | erledigt | — | — |
 | `C-557` | fehler | hoch | [Vierzehn von siebzehn Naehrstoffzuordnungen finden ihre Substanz nicht](erledigt/supplements-c-0557-vierzehn-von-siebzehn-naehrstoffzuordnungen-finden-ihre-substanz-nicht.md) | erledigt | — | — |
+| `C-558` | fehler | hoch | [Die Kette laeuft gruen — Schritt fuer Schritt, heute, nicht eine Nacht pro Fehler](erledigt/supplements-c-0558-die-kette-laeuft-gruen.md) | erledigt | — | C-559 |
 | `C-559` | befund | hoch | [Der neue Grundbestand hat 45 Supplements weniger als Live](erledigt/supplements-c-0559-45-supplements-weniger-als-live.md) | erledigt | — | — |
 | `E-85` | entscheidung | hoch | [kein Zwischenspeicher fuer die DSLD-Bilder](erledigt/supplements-e-0085-kein-zwischenspeicher-dsld-bilder.md) | erledigt | — | — |
 | `E-88` | entscheidung | hoch | [die Entwurfsreferenz zeigt PED-Protokolle ohne Gradpruefung](erledigt/supplements-e-0088-entwurfsreferenz-zeigt-ped.md) | erledigt | — | G-499 |
@@ -474,12 +475,11 @@
 | `G-500` | fehler | hoch | [das Injektionsprotokoll ist der sechste Weg](erledigt/supplements-g-0500-injektionsprotokoll-sechster-weg.md) | erledigt | — | E-89 |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
-### wartet auf Blocker — 2
+### wartet auf Blocker — 1
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
-| `C-558` | fehler | hoch | [Die Kette laeuft gruen — Schritt fuer Schritt, heute, nicht eine Nacht pro Fehler](erledigt/supplements-c-0558-die-kette-laeuft-gruen.md) | erledigt | A-96 | C-559 |
 
 ## training — 52
 
@@ -575,7 +575,7 @@
 | `G-436` | feature | hoch | [die Hierarchie als Ansicht](erledigt/recovery-g-0436-die-hierarchie-als-ansicht.md) | erledigt | — | G-438 |
 | `G-438` | fehler | hoch | [Karte und Liste widersprechen sich](erledigt/recovery-g-0438-karte-und-liste-widersprechen-sich.md) | erledigt | — | — |
 | `G-440` | fehler | hoch | [MUSCLE_STATE ist eine Attrappe, die Kachel sagt „echte Daten"](erledigt/recovery-g-0440-muscle-state-ist-eine-attrappe.md) | erledigt | — | G-441, G-445 |
-| `G-441` | fehler | hoch | [die Today-Kachel rechnet weiter aus der Attrappe](todos/recovery-g-0441-die-today-kachel-rechnet-aus-der-attrappe.md) | offen | — | — |
+| `G-441` | fehler | hoch | [die Today-Kachel rechnet weiter aus der Attrappe](laufend_claudecode/recovery-g-0441-die-today-kachel-rechnet-aus-der-attrappe.md) | laeuft (claudecode) | — | — |
 | `G-443` | fehler | mittel | [zehn Muskeln ohne Flaechenziel](erledigt/recovery-g-0443-zehn-muskeln-ohne-flaechenziel.md) | erledigt | — | — |
 | `G-445` | fehler | hoch | [ein nie trainierter Muskel ist ERHOLT, nicht unbekannt](erledigt/recovery-g-0445-nie-trainiert-ist-erholt.md) | erledigt | — | G-446, G-448 |
 | `G-446` | fehler | hoch | [die Vererbung laeuft nur nach unten](erledigt/recovery-g-0446-die-vererbung-laeuft-nur-nach-unten.md) | erledigt | — | G-449 |
@@ -1005,7 +1005,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `A-96` | fehler | hoch | [Der Nachtlauf verwirft seinen eigenen Grund](laufend_claudecode/quer-a-0096-der-nachtlauf-verwirft-seinen-eigenen-grund.md) | laeuft (claudecode) | A-80 | — |
+| `A-96` | fehler | hoch | [Der Nachtlauf verwirft seinen eigenen Grund](erledigt/quer-a-0096-der-nachtlauf-verwirft-seinen-eigenen-grund.md) | erledigt | A-80 | — |
 | `A-106` | befund | mittel | [Funktionen, Policies und Grants sind live anders als in der Kette](todos/quer-a-0106-funktionen-policies-grants-live-anders-als-die-kette.md) | offen | A-105 | — |
 
 ## buddy — 1

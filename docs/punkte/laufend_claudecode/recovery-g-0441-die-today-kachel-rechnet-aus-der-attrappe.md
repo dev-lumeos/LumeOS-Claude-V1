@@ -12,6 +12,8 @@ beruehrt:
     - apps/web/src/app/v2/recovery/ansicht.tsx
 zahlen:
   gemessen: 2026-09-08
+agent: claudecode
+beauftragt: 2026-10-06
 ---
 
 # G-441 — die Today-Kachel rechnet weiter aus der Attrappe
@@ -149,3 +151,13 @@ Beitragstabelle haengt, ist der beste Zeitpunkt zu messen, ob die
 Oberflaeche dieselbe Zahl zeigt.
 
 Nichts committen, nichts pushen.
+
+## Auftrag - Kopf (2026-10-06)
+
+    AUFTRAG FUER Claude Code - G-441: die Today-Kachel liest dieselbe Quelle wie Muscle map
+    Bereich: apps/web/src/app/v2/recovery, apps/web/src/lib/recovery
+    Fremd:   supabase/_pipeline/ (Codex). docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-06
+
+Der Befund ist vom 08.09. - **zuerst nachmessen, ob er heute noch stimmt** (Zeilen haben sich seither verschoben). Dann: Today-Kachel ruft den Rechenweg aus G-440, `muskelwerte()` gemessen entfernen oder anschliessen, die Kopfzeile ,18 groups' nennt, was sie zaehlt. Schirmnachweis Today und Muscle map auf test-user zeigen dieselben Werte, Bild vorher/nachher. Sabotage beidseitig, Gate gruen. Kein Commit.
+

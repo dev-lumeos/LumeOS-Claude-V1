@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-03
 agent: claudecode
 beauftragt: 2026-10-06
+erledigt: 2026-10-06
+commit: 7819aa89
 
 braucht: [A-91, A-80]
 
@@ -126,3 +128,12 @@ entsorgt. Der Task holt seit 06.10. keine verpassten Laeufe mehr nach
 4. Nachweise auf einer Wegwerf-DB: Rot provoziert -> aufgeraeumt;
    Abbruch simuliert (Prozess beenden) -> naechster Start raeumt auf;
    eine fremde DB `lumeos_andere` bleibt stehen. Gate gruen. Kein Commit.
+
+## Abnahme - 2026-10-06, Commit `7819aa89`
+
+`[cmd]` Diff: `kettenlauf-taeglich.mjs` (+130), `kettenlauf-status-pruefen.mjs` (aborted als ,abgebrochen'), Test-Praefixe in `kettenlauf-status-pruefen.test.mjs`, neuer Test `a96-nachtlauf-raeumt-auf.test.mjs` (3, echte Wegwerf-DBs, Praefix `lumeos_a96probe`). Gate gruen, Werkzeugtests 66. `[cmd]` Aufraeum-Muster nachgelesen: `^<praefix>_\d{8}$` und `^grunddaten-\d{14,17}-\d+\.tmp$`, Praefix nur `[a-z][a-z0-9_]*`. Nach dem Lauf keine `lumeos_*`-DB im Container.
+
+`[read]` Gemessen vorher: Rot liess die DB absichtlich ,zur Pruefung' liegen, Abbruch liess DB und .tmp liegen und den Status auf dem Vortag. Probe war zuerst blind (DB vor dem Start angelegt) - selbst gefunden und korrigiert. Sabotage 6/6.
+
+Nebenbefund: im Container liegen weitere 21 alte Wegwerf-DBs anderer Namen (`c495_final` bis `g458_final`, September) - nicht vom Nachtlauf, nicht von diesem Muster erfasst; `g562_baseline` gehoert vermutlich zum laufenden A-105 und bleibt.
+
