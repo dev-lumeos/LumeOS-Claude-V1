@@ -6,10 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 272 |
-| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 664 |
-| **gesamt** | **938** |
+| `erledigt` | 666 |
+| **gesamt** | **939** |
 
 ## medical — 50
 
@@ -591,9 +590,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 78
+## goals — 79
 
-### beauftragbar — 72
+### beauftragbar — 73
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -650,7 +649,7 @@
 | `G-558` | fehler | hoch | [`goal_phase_start` nimmt den Strategiecode nicht entgegen](erledigt/goals-g-0558-goal-phase-start-nimmt-den-strategiecode-nicht.md) | erledigt | — | — |
 | `G-559` | fehler | hoch | [`phase_am` deckelt auf eine Phase, und der Phasenkopf haengt daran](erledigt/goals-g-0559-phase-am-deckelt-auf-eine-phase.md) | erledigt | — | G-563, G-564 |
 | `G-560` | fehler | hoch | [Die Reihenfolge eines Programms ist nirgends speicherbar](erledigt/goals-g-0560-die-reihenfolge-eines-programms-ist-nirgends-speicherbar.md) | erledigt | — | — |
-| `G-562` | entscheidung | hoch | [Die Teilphasen haben keine Zeitachse mehr](laufend_codex/goals-g-0562-die-teilphasen-haben-keine-zeitachse-mehr.md) | laeuft (codex) | — | — |
+| `G-562` | entscheidung | hoch | [Die Teilphasen haben keine Zeitachse mehr](erledigt/goals-g-0562-die-teilphasen-haben-keine-zeitachse-mehr.md) | erledigt | — | G-607 |
 | `G-563` | fehler | hoch | [`berechne_zielwerte` wählt selbst eine Phase aus](erledigt/goals-g-0563-berechne-zielwerte-waehlt-selbst-eine-phase.md) | erledigt | — | G-567, G-568 |
 | `G-564` | fehler | hoch | [`ladePhase` nimmt die erste fuer die einzige](erledigt/goals-g-0564-ladephase-nimmt-die-erste-fuer-die-einzige.md) | erledigt | — | — |
 | `G-565` | fehler | hoch | [Die Einheit ist eine Nutzerwahl, heute gibt es nur Prozent](erledigt/goals-g-0565-die-einheit-ist-eine-nutzerwahl.md) | erledigt | — | G-573 |
@@ -669,6 +668,7 @@
 | `G-602` | fehler | mittel | [Die Reihenfolge aktiver Ziele wird atomar getauscht](erledigt/goals-g-0602-die-reihenfolge-aktiver-ziele-wird-atomar-getauscht.md) | erledigt | — | — |
 | `G-604` | fehler | hoch | [Hoechstens ein aktives Kalorienziel](erledigt/goals-g-0604-hoechstens-ein-aktives-kalorienziel.md) | erledigt | — | A-101 |
 | `G-606` | fehler | mittel | [Eine Messung laesst sich nicht aendern](erledigt/goals-g-0606-eine-messung-laesst-sich-nicht-aendern.md) | erledigt | — | — |
+| `G-607` | fehler | hoch | [Der Ankerplan rechnet aus dem Dauer-Anteil](laufend_claudecode/goals-g-0607-der-ankerplan-rechnet-aus-dem-dauer-anteil.md) | laeuft (claudecode) | — | — |
 
 ### wartet auf Blocker — 6
 
@@ -814,7 +814,7 @@
 | `A-100` | fehler | hoch | [Der Gate prueft nicht, was er sagt](erledigt/quer-a-0100-der-gate-prueft-nicht-was-er-sagt.md) | erledigt | — | G-600 |
 | `A-101` | fehler | mittel | [Der Kurzlauf der Kette ist in Schritt 027 rot](erledigt/quer-a-0101-der-kurzlauf-der-kette-ist-in-schritt-027-rot.md) | erledigt | — | — |
 | `A-102` | fehler | niedrig | [verdrahtung-pruefen ist rot und steht nicht im Gate](erledigt/quer-a-0102-verdrahtung-pruefen-ist-rot-und-steht-nicht-im-gate.md) | erledigt | — | A-103 |
-| `A-103` | fehler | niedrig | [verdrahtung-pruefen sieht coach und packages nicht](laufend_claudecode/quer-a-0103-verdrahtung-pruefen-sieht-coach-und-packages-nicht.md) | laeuft (claudecode) | — | — |
+| `A-103` | fehler | niedrig | [verdrahtung-pruefen sieht coach und packages nicht](erledigt/quer-a-0103-verdrahtung-pruefen-sieht-coach-und-packages-nicht.md) | erledigt | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |

@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-09-30
 agent: codex
 beauftragt: 2026-10-05
+erledigt: 2026-10-06
+commit: fff8a82a
 
 braucht: [G-544, G-545]
 kind_von: G-545
@@ -129,3 +131,22 @@ nicht umgesetzt. `sub_phases` liegt in `goals.goal_strategies`.
 
 Die Oberflaechenhaelfte (`anker.ts` rechnet den Vorschlag, der Nutzer
 editiert ihn im Programm) folgt als eigener Auftrag an Claude Code.
+
+## Abnahme Datenhaelfte - 2026-10-06, Commit `fff8a82a`
+
+`[cmd]` **Diff:** neuer Kettenschritt `11_goals/562_goal_subphase_duration_ratio.sql`
+(nach `560_goal_programs`) ersetzt `duration_ratio_pct` 22/44/33 durch
+`dauer_anteil` 4/8/6; G-545- und G-560-Probe angepasst, neue G-562-Probe.
+Gate gruen.
+
+`[read]` Gemessen: von 17 Strategien hat nur `contest_prep` Teilphasen,
+3 Stufen, `max_duration_weeks` 16. `duration_ratio_pct` stammte aus
+`560_goal_programs.sql:60`, kein Leser in `apps/`. Vollkette 355 Schritte,
+`testdaten-pruefen` 186/0, Sabotage (Summe 19, eingefuegtes `weeks`) rot.
+
+`[cmd]` **Nachgerechnet:** 16 Wochen -> 3,56/7,11/5,33 -> 4/7/5, 20 Wochen
+-> 4,44/8,89/6,67 -> 4/9/7 - stimmt. **Aber reines Runden traegt nicht
+allgemein:** 17 Wochen -> 3,78/7,56/5,67 -> 4/8/6 = 18. Die Verteilung
+braucht eine Restregel - gehoert in die Oberflaechenhaelfte G-607.
+
+Nicht live. Oberflaechenhaelfte: G-607.
