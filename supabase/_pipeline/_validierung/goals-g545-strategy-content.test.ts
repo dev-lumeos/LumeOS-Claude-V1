@@ -57,20 +57,20 @@ test('G-545 A1: Contest Prep traegt die drei belegten Stufen aus SSOT 131', () =
   assert.deepEqual(result.stages, [
     {
       name: 'early', tdee_multiplier: 0.85, protein_g_per_kg: 2.2,
-      // A-87: G-560 speichert die editierbare Programmdauer als Verhaeltnis.
-      duration_ratio_pct: 22,
+      // G-562: Der Katalog traegt das exakte Verhaeltnis, Nutzerwochen liegen im Programm.
+      dauer_anteil: 4,
       fat_g_per_kg: 0.8, fat_minimum_g_per_kg: 0.6,
       cardio: { sessions_per_week: [3, 4], minutes: [30, 40], type: 'LISS' },
     },
     {
       name: 'mid', tdee_multiplier: 0.78, protein_g_per_kg: 2.4,
-      duration_ratio_pct: 44,
+      dauer_anteil: 8,
       fat_g_per_kg: 0.7, fat_minimum_g_per_kg: 0.5,
       cardio: { sessions_per_week: [4, 6], minutes: [40, 40], type: 'LISS/MISS' },
     },
     {
       name: 'late', tdee_multiplier: 0.7, protein_g_per_kg: 2.6,
-      duration_ratio_pct: 33,
+      dauer_anteil: 6,
       fat_g_per_kg: 0.6, fat_minimum_g_per_kg: 0.5,
       cardio: { sessions_per_week: [5, 7], minutes: [40, 45], type: 'LISS + HIIT' },
     },

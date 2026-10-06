@@ -32,7 +32,7 @@ test('G-560 A1/A3/A4: Tabellen, Grenzen, Beziehungen und RLS stehen', () => {
     uniqueKeys: string[]
     rlsTables: string[]
     policies: string[]
-    contestRatios: Array<{ name: string; duration_ratio_pct: number }>
+    contestRatios: Array<{ name: string; dauer_anteil: number }>
     contestHasWeeks: boolean
   }>(`
     SELECT json_build_object(
@@ -90,7 +90,7 @@ test('G-560 A1/A3/A4: Tabellen, Grenzen, Beziehungen und RLS stehen', () => {
         SELECT json_agg(
           json_build_object(
             'name', part ->> 'name',
-            'duration_ratio_pct', (part ->> 'duration_ratio_pct')::integer
+            'dauer_anteil', (part ->> 'dauer_anteil')::integer
           ) ORDER BY ordinality
         )
         FROM goals.goal_strategies gs
@@ -138,12 +138,13 @@ test('G-560 A1/A3/A4: Tabellen, Grenzen, Beziehungen und RLS stehen', () => {
     'goal_programs.goal_programs_owner',
   ])
   assert.deepEqual(result.contestRatios, [
-    { name: 'early', duration_ratio_pct: 22 },
-    { name: 'mid', duration_ratio_pct: 44 },
-    { name: 'late', duration_ratio_pct: 33 },
+    { name: 'early', dauer_anteil: 4 },
+    { name: 'mid', dauer_anteil: 8 },
+    { name: 'late', dauer_anteil: 6 },
   ])
+  assert.equal(result.contestRatios.reduce((sum, part) => sum + part.dauer_anteil, 0), 18)
   const weeksFromRatio = (total: number) => result.contestRatios.map(
-    part => Math.round(total * part.duration_ratio_pct / 100),
+    part => Math.round(total * part.dauer_anteil / 18),
   )
   assert.deepEqual(weeksFromRatio(16), [4, 7, 5])
   assert.deepEqual(weeksFromRatio(20), [4, 9, 7])

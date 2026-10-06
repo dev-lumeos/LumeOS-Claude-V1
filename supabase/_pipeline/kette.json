@@ -3201,6 +3201,15 @@
       ]
     },
     {
+      "id": "562_goal_subphase_duration_ratio",
+      "path": "supabase/_pipeline/11_goals/562_goal_subphase_duration_ratio.sql",
+      "kind": "sql",
+      "creates": "G-562/E-85: contest_prep-Teilphasen tragen Dauer-Anteile 4:8:6 statt gerundeter Prozente oder fester Wochen.",
+      "depends_on": [
+        "560_goal_programs"
+      ]
+    },
+    {
       "id": "514_goal_contributions_schema",
       "path": "supabase/migrations/20260929081000_g514_goal_contributions.sql",
       "kind": "sql",
@@ -3356,8 +3365,17 @@
       "kind": "tsx",
       "creates": "G-560 Gegenprobe: RLS-geschuetztes Programm mit drei 4/7/5-Positionen, spaeter Phasenverknuepfung und unveraenderte Ein-Offen-Regel je Ziel.",
       "depends_on": [
-        "560_goal_programs",
+        "562_goal_subphase_duration_ratio",
         "a86_testdaten_einspielen"
+      ]
+    },
+    {
+      "id": "562_goal_subphase_duration_ratio_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g562-duration-ratio.test.ts",
+      "kind": "tsx",
+      "creates": "G-562 Gegenprobe: 4:8:6 ergibt 18, 16 Wochen ergeben 4/7/5 und 20 Wochen 4/9/7; kein weeks oder Prozentnäherungsfeld.",
+      "depends_on": [
+        "562_goal_subphase_duration_ratio"
       ]
     },
     {
@@ -3377,6 +3395,7 @@
       "creates": "G-545 Gegenprobe: Quelleninhalt, test-user-Lesepfad, ausgeschlossene Inhalte und G-536-Grenzen auf dem Neubau.",
       "depends_on": [
         "545_goal_strategy_content",
+        "562_goal_subphase_duration_ratio",
         "a86_testdaten_einspielen"
       ]
     },
