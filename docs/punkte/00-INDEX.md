@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 271 |
+| `todos` | 270 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 670 |
 | **gesamt** | **942** |
@@ -816,7 +817,7 @@
 | `A-102` | fehler | niedrig | [verdrahtung-pruefen ist rot und steht nicht im Gate](erledigt/quer-a-0102-verdrahtung-pruefen-ist-rot-und-steht-nicht-im-gate.md) | erledigt | — | A-103 |
 | `A-103` | fehler | niedrig | [verdrahtung-pruefen sieht coach und packages nicht](erledigt/quer-a-0103-verdrahtung-pruefen-sieht-coach-und-packages-nicht.md) | erledigt | — | — |
 | `A-104` | fehler | hoch | [Live hinkt der Kette hinterher, und niemand zaehlt wie weit](erledigt/quer-a-0104-live-hinkt-der-kette-hinterher.md) | erledigt | — | A-105, A-106 |
-| `A-105` | fehler | hoch | [Der Live-Nachzug der sieben Schritte](todos/quer-a-0105-der-live-nachzug-der-sieben-schritte.md) | offen | — | — |
+| `A-105` | fehler | hoch | [Der Live-Nachzug der sieben Schritte](laufend_codex/quer-a-0105-der-live-nachzug-der-sieben-schritte.md) | laeuft (codex) | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |

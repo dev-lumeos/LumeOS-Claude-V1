@@ -4,6 +4,8 @@ typ: fehler
 modul: quer
 schwere: hoch
 angelegt: 2026-10-06
+agent: codex
+beauftragt: 2026-10-06
 
 braucht: [A-104]
 kind_von: A-104
@@ -63,3 +65,8 @@ a) Sicherung vorher `backup/a105-<punkt>-vorher.sql` (betroffenes Schema +
   anfassen (das ist A-106).
 - Danach eine A-104-Kurzmessung: welche der sieben Abweichungen sind weg.
 - Kein Commit.
+
+## Freigabe - 2026-10-06, 18:18
+
+**Tom:** *,ja gib mir das fuer codex'* - eine Freigabe fuer alle sieben Schritte, jeder einzeln nach dem Muster oben.
+
