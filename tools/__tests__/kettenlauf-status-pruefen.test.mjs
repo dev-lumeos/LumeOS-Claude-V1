@@ -58,6 +58,10 @@ test('C-416: ein eingebauter Kettenbruch schreibt den roten Status', () => {
       '--manifest', manifest,
       '--status', status,
       '--database', 'lumeos_c416_broken',
+      // A-96: eigenes Praefix und eigener Dump-Ordner — sonst raeumt die
+      // Probe die Waisen eines echten Nachtlaufs weg.
+      '--praefix', 'lumeos_c416_probe',
+      '--dump-dir', dir,
     ], { cwd: process.cwd(), encoding: 'utf8' })
 
     assert.equal(dailyResult.status, 1)
@@ -127,6 +131,7 @@ test('A-91: ein roter Vollauf verwirft den Kandidaten und veroeffentlicht keinen
       '--manifest', join(dir, 'voll.json'),
       '--status', status,
       '--database', 'lumeos_a91_red',
+      '--praefix', 'lumeos_a91_probe',
       '--dump-dir', dir,
     ], {
       cwd: process.cwd(),
@@ -162,6 +167,7 @@ test('A-91: erst ein gruener Vollauf ruft die atomare Veroeffentlichung auf', ()
       '--manifest', join(dir, 'voll.json'),
       '--status', status,
       '--database', 'lumeos_a91_green',
+      '--praefix', 'lumeos_a91_probe',
       '--dump-dir', dir,
     ], {
       cwd: process.cwd(),

@@ -37,7 +37,7 @@ if (report?.version !== 1 || typeof report.finished_at !== 'string') {
 }
 
 if (report.status !== 'passed') {
-  rot(`letzter Lauf fehlgeschlagen (DB ${report.database ?? 'unbekannt'}, Exit ${report.exit_code ?? 'unbekannt'}): ${statusPath}`)
+  rot(`letzter Lauf ${report.status === 'aborted' ? 'abgebrochen, Nachlauf startet nicht' : 'fehlgeschlagen'} (DB ${report.database ?? 'unbekannt'}, Exit ${report.exit_code ?? 'unbekannt'}): ${statusPath}`)
 }
 
 const finishedAt = new Date(report.finished_at)
