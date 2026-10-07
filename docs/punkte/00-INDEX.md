@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 274 |
+| `todos` | 275 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 678 |
-| **gesamt** | **954** |
+| **gesamt** | **955** |
 
 ## medical — 50
 
@@ -592,7 +592,7 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 89
+## goals — 90
 
 ### beauftragbar — 82
 
@@ -679,9 +679,9 @@
 | `G-613` | fehler | hoch | [Ein pausiertes Ziel laesst seine Phase laufen](laufend_codex/goals-g-0613-ein-pausiertes-ziel-laesst-seine-phase-laufen.md) | laeuft (codex) | — | — |
 | `G-614` | fehler | hoch | [Der Strategiekatalog kennt seine Karte und seinen Mindestgrad](erledigt/goals-g-0614-der-strategiekatalog-kennt-karte-und-mindestgrad.md) | erledigt | — | G-616 |
 | `G-616` | fehler | mittel | [Der G-536-Test ist rot und steht nicht in der Kette](todos/goals-g-0616-der-g536-test-ist-rot-und-steht-nicht-in-der-kette.md) | offen | — | — |
-| `G-617` | fehler | hoch | [Ein Kraftziel findet seine Uebung nur ueber den Titel](todos/goals-g-0617-ein-kraftziel-findet-seine-uebung-nur-ueber-den-titel.md) | offen | — | — |
+| `G-617` | fehler | hoch | [Ein Kraftziel findet seine Uebung nur ueber den Titel](todos/goals-g-0617-ein-kraftziel-findet-seine-uebung-nur-ueber-den-titel.md) | offen | — | G-618 |
 
-### wartet auf Blocker — 7
+### wartet auf Blocker — 8
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -692,6 +692,7 @@
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
 | `G-615` | fehler | hoch | [Der Planer legt Plaene vom Termin rueckwaerts an](todos/goals-g-0615-der-planer-legt-plaene-vom-termin-rueckwaerts-an.md) | offen | G-610 | — |
+| `G-618` | aufgabe | mittel | [Der Reiter Goals trennt das steuernde Ziel von den messenden](todos/goals-g-0618-der-reiter-goals-trennt-steuerndes-und-messende-ziele.md) | offen | G-617 | — |
 
 ## coach — 58
 

@@ -61,3 +61,13 @@ Festlegung (Orchestrator): EIN Ziel, ZWEI Eingaenge. Das Ziel lebt nur in `goals
 `[cmd]` Abgrenzung: `training.routine_exercises.target_sets/reps/weight_kg/percent_1rm` sind Vorgaben je Einheit im Plan, KEINE Ziele - nicht vermischen.
 
 `[cmd]` Uebungskatalog `training.exercises` existiert; ein Cardio-Schema gibt es noch nicht. Darum die Messart jetzt allgemein anlegen (e1RM, Gewicht x Wdh, spaeter Zeit, Distanz, Pace), damit Cardio ohne Umbau andockt.
+
+## Entschieden - 2026-10-07 16:39, Tom
+
+1. Steuernde und messende Ziele werden unterschieden: genau EIN steuerndes Ziel aktiv (Abnehmen/Halten/Aufbauen mit Strategie und Phasen), messende Ziele unbegrenzt (,der user definiert seine ziele"). Ersetzt `docs/specs/Goals/OPEN_ITEMS.md:63` ,Max. 3 aktive Goals".
+2. Messende Ziele sind ,kleine messbare ziele" - keine Strategie, keine Phasen, keine Wirkung auf Kalorien.
+3. Keine Eltern-Kind-Verknuepfung. Unterscheidung nur grafisch nach Kategorie.
+
+`[cmd]` Kategorie gibt es schon: `goal_type`/`subtype` (body_composition: cut, gain_muscle; performance: strength, training_capacity; lifestyle: cardio_frequency). Die Slot-Regel steht in `111_goals_ziele_phasen.sql` und `602_goal_order_and_measurement_snapshot.sql`, Tests c432/g602.
+
+Darstellung im Reiter Goals: G-618.
