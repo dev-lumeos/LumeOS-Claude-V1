@@ -15,6 +15,8 @@ zahlen:
   zeilen: 18
 agent: claudecode
 beauftragt: 2026-10-07
+erledigt: 2026-10-07
+commit: c5bf1cc6
 ---
 
 # G-433 — Per-muscle detail liest motor.ts
@@ -239,4 +241,11 @@ davon schon erledigt haben.**
 ## Richtung - 2026-10-07 14:19, Tom
 
 Option 1: die Karte folgt der Liste. Die Liste rechnet bereits je Muskel (105 Namen, 110 Werte, Ableitung nach G-438/G-446); `muskelzeilen()` kennt nur 18 Kartenkuerzel. Die Rechnung je Muskel zieht nach `muskelwerte.ts`, Karte/Today/Liste lesen sie, gleiche Farbschwellen. Der Auftrag oben (,Liste folgt muskelzeilen()') stand auf dem Befund vom 08.09. - Orchestrator-Fehler, nicht nachgemessen.
+
+
+## Abnahme - 2026-10-07, Commit `c5bf1cc6`
+
+`[cmd]` Diff: `muskelwerte.ts` (knotenwert, kartendaten), `ansicht.tsx`, `tab-messwerte.tsx`, Test `g433-karte-folgt-der-liste.test.ts` (8), Waechter G-438/G-440/G-441 angepasst. Gate gruen, web 2705.
+
+`[read]` Befund vom 08.09. war groesstenteils ueberholt (Liste schon hierarchisch, 112 Zeilen). Rest: deltoids/tibialis Liste 97 % vs Karte grau -> 0 von 31 Abweichungen, 110 Werte bleiben, Today vs Muscle map weiter 0/43. `motor.ts`-Namensliste bleibt (5 Leser gemessen). Probebilder `backup/g433-probe-seite.png`, `g441-g433-kontrolle-*.png` - Tom entsorgt.
 

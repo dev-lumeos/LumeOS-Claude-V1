@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 272 |
-| `laufend_codex` | 2 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 676 |
-| **gesamt** | **952** |
+| `todos` | 273 |
+| `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 678 |
+| **gesamt** | **953** |
 
 ## medical — 50
 
@@ -573,7 +573,7 @@
 | `G-364` | befund | hoch | [die Muskelkacheln waren angebunden](erledigt/recovery-g-0364-die-muskelkacheln-waren-angebunden.md) | erledigt | — | G-365, G-367 |
 | `G-367` | feature | mittel | [Stunden und Saetze je Muskel](erledigt/recovery-g-0367-per-muscle-stunden-und-saetze.md) | erledigt | — | — |
 | `G-371` | befund | mittel | [`modalities` nimmt den Leseweg nicht](erledigt/recovery-g-0371-modalities-nimmt-den-leseweg-nicht.md) | erledigt | — | — |
-| `G-433` | fehler | hoch | [Per-muscle detail liest motor.ts](laufend_claudecode/recovery-g-0433-per-muscle-detail-liest-motor-ts.md) | laeuft (claudecode) | — | C-482 |
+| `G-433` | fehler | hoch | [Per-muscle detail liest motor.ts](erledigt/recovery-g-0433-per-muscle-detail-liest-motor-ts.md) | erledigt | — | C-482 |
 | `G-436` | feature | hoch | [die Hierarchie als Ansicht](erledigt/recovery-g-0436-die-hierarchie-als-ansicht.md) | erledigt | — | G-438 |
 | `G-438` | fehler | hoch | [Karte und Liste widersprechen sich](erledigt/recovery-g-0438-karte-und-liste-widersprechen-sich.md) | erledigt | — | — |
 | `G-440` | fehler | hoch | [MUSCLE_STATE ist eine Attrappe, die Kachel sagt „echte Daten"](erledigt/recovery-g-0440-muscle-state-ist-eine-attrappe.md) | erledigt | — | G-441, G-445 |
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 87
+## goals — 88
 
-### beauftragbar — 80
+### beauftragbar — 81
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -676,8 +676,9 @@
 | `G-610` | fehler | mittel | [contest_prep ist in der App nicht anlegbar](laufend_claudecode/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md) | laeuft (claudecode) | — | G-612 |
 | `G-611` | fehler | mittel | [Ein Ziel laesst sich nicht loeschen](todos/goals-g-0611-ein-ziel-laesst-sich-nicht-loeschen.md) | offen | — | — |
 | `G-612` | entscheidung | hoch | [Drei Auswahlen auf einer Seite, und keine folgt dem Mockup](todos/goals-g-0612-drei-auswahlen-und-keine-ordnung.md) | offen | — | G-614, G-615 |
-| `G-613` | fehler | hoch | [Ein pausiertes Ziel laesst seine Phase laufen](laufend_codex/goals-g-0613-ein-pausiertes-ziel-laesst-seine-phase-laufen.md) | vorbereitet (codex) | — | — |
-| `G-614` | fehler | hoch | [Der Strategiekatalog kennt seine Karte und seinen Mindestgrad](laufend_codex/goals-g-0614-der-strategiekatalog-kennt-karte-und-mindestgrad.md) | laeuft (codex) | — | — |
+| `G-613` | fehler | hoch | [Ein pausiertes Ziel laesst seine Phase laufen](laufend_codex/goals-g-0613-ein-pausiertes-ziel-laesst-seine-phase-laufen.md) | laeuft (codex) | — | — |
+| `G-614` | fehler | hoch | [Der Strategiekatalog kennt seine Karte und seinen Mindestgrad](erledigt/goals-g-0614-der-strategiekatalog-kennt-karte-und-mindestgrad.md) | erledigt | — | G-616 |
+| `G-616` | fehler | mittel | [Der G-536-Test ist rot und steht nicht in der Kette](todos/goals-g-0616-der-g536-test-ist-rot-und-steht-nicht-in-der-kette.md) | offen | — | — |
 
 ### wartet auf Blocker — 7
 
@@ -689,7 +690,7 @@
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
-| `G-615` | fehler | hoch | [Der Planer legt Plaene vom Termin rueckwaerts an](todos/goals-g-0615-der-planer-legt-plaene-vom-termin-rueckwaerts-an.md) | offen | G-610, G-614 | — |
+| `G-615` | fehler | hoch | [Der Planer legt Plaene vom Termin rueckwaerts an](todos/goals-g-0615-der-planer-legt-plaene-vom-termin-rueckwaerts-an.md) | offen | G-610 | — |
 
 ## coach — 58
 

@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-07
 agent: codex
 beauftragt: 2026-10-07
+erledigt: 2026-10-07
+commit: f5ca5398
 
 braucht: []
 kind_von: G-612
@@ -113,4 +115,11 @@ ein empfohlener Uebergang, keine Erstwahl. **Die 7-Karten-Spalte
 ## Bestaetigt - 2026-10-07 14:19, Tom
 
 `reverse_diet` = `advanced`, geht so live.
+
+
+## Abnahme - 2026-10-07, Commit `f5ca5398`, live
+
+`[cmd]` Live nachgemessen: abnehmen = lose*(beginner), conservative/mini/moderate_cut advanced, aggressive_cut pro; halten = maintain*(beginner), body_recomp advanced, maintenance_diet_break pro; aufbauen = gain*(beginner), clean/lean_bulk advanced, aggressive_bulk pro; uebergang = reverse_diet advanced; plan = contest_prep, custom, expert_bb_annual, peak_week pro. Genau Toms Tabelle. Gate gruen, web 2705.
+
+`[read]` Alte Felder (tier, category, requirements, next_codes) inhaltsgleich (Hash vorher=nachher). Sicherungen `backup/g614-vorher.sql` 197.670 B / `-nachher.sql` 199.601 B. Kette 357, G-614-Probe 3/3, 186/0, 3 Wegwerf-DBs geloescht. `phasen_karte` nicht angelegt (Auftrag ersetzt). Befund: G-616.
 
