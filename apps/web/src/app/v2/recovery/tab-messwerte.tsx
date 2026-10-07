@@ -22,13 +22,14 @@ import { Card, Pill, Icon, Meter, Row, LineChart, Empty, ErmuedungsKarte } from 
 // CHECKIN/SLEEP_DATA/calcSleepScore braucht nur noch die
 // Score-paths-Attrappe.
 import {
-  CHECKIN, MUSCLE_GROUPS_BODYMAP, MUSCLE_LABEL, MUSCLE_STATE, NUTRITION_INPUT,
+  CHECKIN, MUSCLE_LABEL, MUSCLE_STATE, NUTRITION_INPUT,
   SLEEP_DATA,
   calcMuscleRecovery, calcSleepScore,
 } from './motor'
 // G-26: die anatomische Karte kommt jetzt aus packages/ui.
 import { alsErmuedung, KARTE_ZU_RECOVERY } from './muskel-zuordnung'
 import { useRecovery } from './kontext'
+import { muskelzeilen } from './muskelwerte'
 import { ATTRAPPE } from './ansicht'
 // G-601: leer und nicht geladen sind zwei Zustaende.
 import { LadeHinweis } from './lade-hinweis'
@@ -44,13 +45,9 @@ import {
   baueBaum, mitWerten, type AstMitWert, type MuskelbaumStand,
 } from '../../../lib/koerper/muskelbaum'
 import { EBENEN } from '../../../lib/koerper/ebenen'
-// `[cmd]` **G-438: die fehlende Uebersetzung** —
-// motor.ts-Schluessel -> muscle_groups-Name.
-// `[cmd]` **G-446: `wertKommtVonGruppe` ist hier raus** — die
-// Herkunft kommt jetzt aus der SIPPE (`muskelLage`), nicht aus der
-// Kartenflaeche. `[read]` **`SCHLUESSEL_ZU_GRUPPE` bleibt** — die
-// KARTE braucht weiter den Weg vom Kuerzel zur Muskelgruppe.
-import { SCHLUESSEL_ZU_GRUPPE } from '../../../lib/koerper/schluessel-gruppe'
+// `[cmd]` **G-441: `SCHLUESSEL_ZU_GRUPPE` ist mit der Kartenrechnung nach
+// `muskelwerte.ts` gezogen** — die KARTE braucht den Weg vom Kuerzel zur
+// Muskelgruppe weiter, aber dort, wo Today ihn mitbenutzt.
 // `[cmd]` **G-440: der gerechnete Zustand je Muskel.**
 // `[read]` **Nur der TYP aus dem Leseweg** — ein Wert-Import
 // zoege `next/headers` mit (G-430).
@@ -75,7 +72,7 @@ import { muskelLage, sippen } from '../../../lib/training/muskelzustand'
  * `[cmd]` **C-466 macht es vor:** `unmapped_taken_log_count` zaehlt,
  * was fehlt, statt es zu verschweigen.
  */
-function datenEtikett(
+export function datenEtikett(
   deckung: { gemessen: number; gesamt: number; rollenUngewichtet: boolean } | undefined,
   katerEcht: boolean,
   // ══ G-450: gegen WELCHEN Tag gerechnet wurde ═══════════════════
@@ -216,58 +213,11 @@ export function RecMuscleMap({
   // aus 18 festen Mockup-Zeilen, waehrend die Liste daneben aus
   // `workout_sets` rechnete. **Zwei Quellen, ein Bild.**
   //
-  // `[cmd]` **Der Weg vom Kuerzel zum Muskel steht in G-438:**
-  // `SCHLUESSEL_ZU_GRUPPE` nennt die Muskelgruppe, an der die
-  // Messung haengt.
-  const rows = React.useMemo(() => {
-    const nachName = new Map(
-      (muskelbaum?.knoten ?? []).map(k => [k.name.toLowerCase(), k.id]))
-    return MUSCLE_GROUPS_BODYMAP.map(slug => {
-      const gruppe = SCHLUESSEL_ZU_GRUPPE[slug]
-      const id = gruppe ? nachName.get(gruppe.toLowerCase()) : undefined
-      // ══ G-445: nie belastet ist ERHOLT ═══════════════════════
-      //
-      // **Tom:** *„dann sollten alle nicht verwendeten muskeln
-      // zumindest sicher mal gruen sein."*
-      //
-      // `[cmd]` **Hier stand `if (!st) return { value: null }`** —
-      // **die Flaeche blieb grau.** `[read]` **Grau hiess
-      // „unbekannt", gemeint war „unbelastet"** — zwei
-      // verschiedene Sachen.
-      // `[cmd]` **G-446: dieselbe Sippe wie die Liste** — sonst
-      // faerbte die Karte wieder anders, als die Liste rechnet
-      // (der Befund aus G-440).
-      const lage = id
-        ? muskelLage(id, muskelzustand?.zustaende ?? {}, katalog,
-            sippschaft[id], namenNachId)
-        : { herkunft: 'nicht-im-katalog' as const, zustand: null }
-      // `[read]` **Nicht im Katalog bleibt grau** — ihn kann keine
-      // Uebung treffen, „erholt" waere dort eine Aussage ueber
-      // etwas, das nie stattfinden kann.
-      if (lage.herkunft === 'nicht-im-katalog') {
-        return { slug, value: null as number | null, herkunft: lage.herkunft }
-      }
-      // `[read]` **Der Kater kommt aus dem Check-in**; ohne
-      // Check-in ist er `0` — eine Angabe, kein geratener Wert.
-      const kater = echterKater?.[slug] ?? 0
-      const guete = echteSchlafguete ?? CHECKIN.sleep_quality
-      const st = lage.zustand
-      // `[cmd]` **Unbelastet: `hours` unendlich, `sets` 0** — und
-      // `baseRecoveryCurve` gibt ab 96 h glatt 100. **Die Zahl
-      // kommt aus derselben Formel wie jede andere.**
-      const calc = calcMuscleRecovery({
-        hours: st ? st.hours : Number.POSITIVE_INFINITY,
-        sets: st ? st.sets : 0,
-        sleepQuality: guete,
-        proteinPct: NUTRITION_INPUT.proteinPct,
-        caloriePct: NUTRITION_INPUT.caloriePct,
-        soreness: kater,
-      })
-      return { slug, ...(st ?? {}), soreness: kater, ...calc,
-        herkunft: lage.herkunft }
-    }).sort((a, b) => (a.value ?? 999) - (b.value ?? 999))
-  }, [echterKater, echteSchlafguete, muskelbaum, muskelzustand, katalog,
-      sippschaft, namenNachId])
+  // `[cmd]` **G-441: die Rechnung steht in `muskelwerte.ts`** — Today
+  // ruft dieselbe, statt aus `MUSCLE_STATE` zu faerben.
+  const rows = React.useMemo(() => muskelzeilen({
+    kater: echterKater, schlafguete: echteSchlafguete, muskelbaum, muskelzustand,
+  }), [echterKater, echteSchlafguete, muskelbaum, muskelzustand])
 
   // ══ G-440: das Etikett sagt, was gemessen ist ════════════════
   const etikett = datenEtikett(

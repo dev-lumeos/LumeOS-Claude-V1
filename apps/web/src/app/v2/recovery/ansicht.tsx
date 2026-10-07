@@ -41,8 +41,7 @@ import {
 // mit den Rueckfallfassungen gefallen — die Evidenzbindung lebt in der
 // echten ModalitaetenKachel weiter.
 import {
-  MUSCLE_GROUPS_BODYMAP, MUSCLE_LABEL, MUSCLE_STATE, CHECKIN, NUTRITION_INPUT,
-  calcMuscleRecovery, calcRecoveryScore, readinessFor,
+  calcRecoveryScore, readinessFor,
   evaluateOvertraining, recoveryPendingActions,
 } from './motor'
 import { RecoveryKontext, useRecovery, type ModalZustand, type ScoreModus } from './kontext'
@@ -74,7 +73,8 @@ import { CheckinStreifen } from './checkin-streifen'
 import { RecCheckin } from './tab-checkin'
 // G-590: der Tag, fuer den Check-in und Anwendung gespeichert werden.
 import { heute } from '../../../lib/datum'
-import { RecMuscleMap, RecHRV, RecSleep } from './tab-messwerte'
+import { RecMuscleMap, RecHRV, RecSleep, datenEtikett } from './tab-messwerte'
+import { muskelwerte } from './muskelwerte'
 import { RecModalities, RecOvertraining, RecProtocols, RecStress } from './tab-protokolle'
 // C-418: die elf Kacheln, die es im Code nicht gibt.
 import {
@@ -265,7 +265,9 @@ export function RecoveryAnsicht({
 
       {tab === 'today' && (
         <>
-          <RecToday checkins={checkins} scores={scores} modalitaeten={modalitaeten} />
+          <RecToday checkins={checkins} scores={scores} modalitaeten={modalitaeten}
+                    muskelbaum={muskelbaum} muskelzustand={muskelzustand}
+                    zukunft={zukunft} stichtag={stichtag} />
           <FehlendeAuswertungsKacheln protokolle={protokolle} />
           <RecTodayReferenz />
           <MuscleReadinessReferenz />
@@ -356,41 +358,34 @@ export function RecoveryAnsicht({
 // ═══ TODAY ═══════════════════════════════════════════════════════
 // [cmd] module-recovery-v2.jsx:99-242.
 function RecToday({
-  checkins, scores, modalitaeten,
+  checkins, scores, modalitaeten, muskelbaum, muskelzustand, zukunft = false, stichtag,
 }: {
   checkins?: CheckinStand
   scores?: ScoreStand
   modalitaeten?: ModalitaetenStand
+  /** G-441: dieselben Eingaben wie `RecMuscleMap`. */
+  muskelbaum?: MuskelbaumStand
+  muskelzustand?: MuskelzustandStand
+  zukunft?: boolean
+  stichtag?: string
 }) {
   const { open, modus, setModus, sc, rd, ot, pending, zeigeTab } = useRecovery()
 
-  // ══ G-364: der Muskelkater kommt aus dem Check-in ═══════════════
+  // ══ G-441: dieselbe Rechnung wie Muscle map ══════════════════════
   //
-  // `[cmd]` **`muskelwerte()` rechnet aus `MUSCLE_STATE`** — dem
-  // Entwurf. `[cmd]` **`recovery.checkins.soreness` liegt vor und
-  // wird von `checkin-read.ts:28` gelesen.**
+  // `[cmd]` **Hier stand eine eigene Schleife ueber `MUSCLE_STATE`** —
+  // 18 feste Mockup-Zeilen (Stunden, Saetze), nur der Muskelkater kam
+  // aus dem Check-in (G-364). **Muscle map rechnete seit G-440 aus
+  // `workout_sets`: dieselbe Karte, zwei Quellen.**
   //
-  // `[read]` **Dieselbe Kachel, dieselbe Rechnung — nur mit dem
-  // erfassten Muskelkater statt dem erfundenen.**
+  // `[read]` **Jetzt ruft Today `muskelwerte()` aus `muskelwerte.ts`**
+  // — dieselbe Funktion, dieselben Eingaben, dasselbe Etikett.
   const kater = checkins?.neuster?.soreness ?? null
   const schlafguete = checkins?.neuster?.sleep_quality ?? null
-  const recoveryValues = React.useMemo(() => {
-    const aus: Record<string, number | null> = {}
-    for (const slug of MUSCLE_GROUPS_BODYMAP) {
-      const st = MUSCLE_STATE[slug]
-      if (!st) { aus[slug] = null; continue }
-      aus[slug] = calcMuscleRecovery({
-        hours: st.hours, sets: st.sets,
-        sleepQuality: schlafguete ?? CHECKIN.sleep_quality,
-        proteinPct: NUTRITION_INPUT.proteinPct,
-        caloriePct: NUTRITION_INPUT.caloriePct,
-        // `[read]` **`??`, nicht `||`** — eine erfasste `0` ist eine
-        // Angabe, kein fehlender Wert.
-        soreness: kater?.[slug] ?? st.soreness,
-      }).value
-    }
-    return aus
-  }, [kater, schlafguete])
+  const recoveryValues = React.useMemo(() => muskelwerte({
+    kater, schlafguete, muskelbaum, muskelzustand,
+  }), [kater, schlafguete, muskelbaum, muskelzustand])
+  const etikett = datenEtikett(muskelzustand?.deckung, !!kater, stichtag, zukunft)
 
   // G-82: dieselbe Zeile wie im Kopf — einmal gelesen, weitergereicht.
   const echterScore = scores?.neuster ?? null
@@ -434,13 +429,18 @@ function RecToday({
 
         <Card
           title="Muscle readiness"
-          sub={kater
-            ? `18 Gruppen · Muskelkater aus dem Check-in ${checkins?.neuster?.entry_date ?? ''}`
-            : '18 groups · click for the calculation'}
+          // `[cmd]` **G-441: hier stand „18 groups"** — gezaehlt waren die
+          // Kuerzel aus `MUSCLE_GROUPS_BODYMAP`, gezeichnet 43 Flaechen.
+          // `[read]` **Jetzt das Etikett der Muscle map:** wie viele
+          // Muskeln aus `workout_sets` gerechnet sind, und was geschaetzt ist.
+          sub={etikett.erklaerung}
           actions={
-            <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm" onClick={() => zeigeTab('muscles')}>
-              Full map →
-            </button>
+            <>
+              <Pill variant={etikett.ton}>{etikett.marke}</Pill>
+              <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm" onClick={() => zeigeTab('muscles')}>
+                Full map →
+              </button>
+            </>
           }
         >
           {/* G-26: die anatomische Karte aus packages/ui ersetzt die
@@ -529,15 +529,3 @@ function RecToday({
   )
 }
 
-/** Die Muskelwerte, wie Today und Muscle map sie berechnen. */
-export function muskelwerte(): Record<string, number | null> {
-  return Object.fromEntries(MUSCLE_GROUPS_BODYMAP.map(slug => {
-    const st = MUSCLE_STATE[slug]
-    if (!st) return [slug, null]
-    return [slug, calcMuscleRecovery({
-      hours: st.hours, sets: st.sets, sleepQuality: CHECKIN.sleep_quality,
-      proteinPct: NUTRITION_INPUT.proteinPct, caloriePct: NUTRITION_INPUT.caloriePct,
-      soreness: st.soreness,
-    }).value]
-  }))
-}
