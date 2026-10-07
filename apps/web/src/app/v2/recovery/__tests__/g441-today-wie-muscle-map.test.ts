@@ -12,7 +12,12 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
-import { muskelwerte, muskelzeilen } from '../muskelwerte'
+import { muskelzeilen } from '../muskelwerte'
+
+// G-433: die Abbildung Kuerzel -> Wert lebt nur noch hier; Today und Muscle
+// map lesen seit G-433 `kartendaten()` (je Muskel, siehe g433-*.test.ts).
+const muskelwerte = (e: Parameters<typeof muskelzeilen>[0]) =>
+  Object.fromEntries(muskelzeilen(e).map(r => [r.slug, r.value]))
 import { MUSCLE_GROUPS_BODYMAP } from '../motor'
 
 const HIER = dirname(fileURLToPath(import.meta.url))
@@ -55,18 +60,14 @@ describe('G-441 — die Rechnung aus G-440, einmal', () => {
     assert.ok(mit < ohne, `${mit} < ${ohne}`)
   })
 
-  it('muskelwerte ist muskelzeilen als Abbildung — keine zweite Rechnung', () => {
-    assert.deepEqual(muskelwerte(eingabe),
-      Object.fromEntries(muskelzeilen(eingabe).map(r => [r.slug, r.value])))
-  })
 })
 
 describe('G-441 — beide Kacheln rufen sie', () => {
-  it('Today ruft muskelwerte() und liest MUSCLE_STATE nicht mehr', () => {
+  it('Today ruft kartendaten() und liest MUSCLE_STATE nicht mehr', () => {
     const a = lies('ansicht.tsx')
     const i = a.indexOf('function RecToday(')
     const rumpf = a.slice(i, a.indexOf('\nfunction ', i + 1))
-    assert.match(rumpf, /muskelwerte\(\{\s*kater, schlafguete, muskelbaum, muskelzustand,?\s*\}\)/)
+    assert.match(rumpf, /kartendaten\(\{\s*kater, schlafguete, muskelbaum, muskelzustand,?\s*\}\)/)
     assert.ok(!/MUSCLE_STATE/.test(rumpf), 'Today rechnet wieder aus der Attrappe')
     assert.match(rumpf, /datenEtikett\(muskelzustand\?\.deckung/, 'die Kopfzeile ist nicht die der Muscle map')
     assert.ok(!/18 (groups|Gruppen)/.test(rumpf), 'die Kopfzeile zaehlt wieder Kuerzel')
@@ -77,8 +78,8 @@ describe('G-441 — beide Kacheln rufen sie', () => {
       /<RecToday [^>]*muskelbaum=\{muskelbaum\} muskelzustand=\{muskelzustand\}/)
   })
 
-  it('Muscle map ruft muskelzeilen()', () => {
-    assert.match(lies('tab-messwerte.tsx'), /const rows = React\.useMemo\(\(\) => muskelzeilen\(\{/)
+  it('Muscle map ruft kartendaten() — dieselbe Funktion wie Today', () => {
+    assert.match(lies('tab-messwerte.tsx'), /const karte = React\.useMemo\(\(\) => kartendaten\(eingabe\)/)
   })
 
   it('die tote muskelwerte() in ansicht.tsx ist weg', () => {

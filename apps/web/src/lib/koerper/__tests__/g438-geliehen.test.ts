@@ -157,7 +157,13 @@ test('G-438/A3: die Liste schreibt die Herkunft AN DIE ZEILE', () => {
   //
   // `[read]` **Die Frage ist: bestimmt die Kachel die Herkunft
   // ueberhaupt?** **Nicht: ruft sie diese eine Funktion?**
-  const ohneKommentare = kachel
+  // `[cmd]` **G-433: die Rechnung je Knoten steht in `muskelwerte.ts`**
+  // (`knotenwert`) — die Kachel ruft sie. Die Frage bleibt dieselbe;
+  // gesucht wird in der Kachel UND in dem Modul, das sie nachweislich ruft.
+  assert.match(kachel, /mitWerten\(baueBaum\(knoten, zeigt\), wertVon\)/,
+    'Die Liste ruft knotenwert() nicht mehr — dann gilt die Suche unten nicht.')
+  const ohneKommentare = (kachel + readFileSync(
+    join(HIER, '..', '..', '..', 'app', 'v2', 'recovery', 'muskelwerte.ts'), 'utf8'))
     .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
     .replace(/\/\*[\s\S]*?\*\//g, '')
     .split('\n')

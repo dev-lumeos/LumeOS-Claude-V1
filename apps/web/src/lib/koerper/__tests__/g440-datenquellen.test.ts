@@ -70,12 +70,20 @@ test('G-440/A5: die Muskelkacheln rechnen NICHT aus einer festen Tabelle', () =>
   // `[read]` **Die Frage ist: kommt der gerechnete Zustand in der
   // Kachel an?** **Nicht: steht er in dieser einen Schreibweise
   // da?** (die Lehre `waechter-prueft-zeilenform-statt-sache`).
-  assert.match(kachel, /muskelzustand\?\.zustaende/,
+  //
+  // `[cmd]` **G-433: die Rechnung steht in `muskelwerte.ts`** — Karte
+  // und Liste rufen sie (`kartendaten`, `knotenwert`). Gesucht wird in
+  // der Kachel UND in dem Modul, das sie nachweislich ruft.
+  assert.match(kachel, /from '\.\/muskelwerte'/,
+    'Die Kachel ruft muskelwerte.ts nicht mehr — dann gilt die Suche unten nicht.')
+  const rechnung = kachel + ohneKommentare(lies('app', 'v2', 'recovery', 'muskelwerte.ts'))
+  assert.ok(!/MUSCLE_STATE\s*\[/.test(rechnung), 'muskelwerte.ts liest MUSCLE_STATE')
+  assert.match(rechnung, /muskelzustand\?\.zustaende/,
     'Die Kachel liest den gerechneten Zustand nicht — dann zeigt '
     + 'sie entweder nichts oder wieder Entwurfszahlen.')
   // `[cmd]` **Und er muss in die FORMEL gehen**, nicht nur gelesen
   // werden — sonst haengt die Zahl wieder in der Luft.
-  assert.match(kachel, /calcMuscleRecovery\(\{/,
+  assert.match(rechnung, /calcMuscleRecovery\(\{/,
     'Die Kachel rechnet nicht mehr mit `calcMuscleRecovery` — dann '
     + 'ist der gelesene Zustand ohne Wirkung.')
 })

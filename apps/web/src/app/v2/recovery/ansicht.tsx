@@ -47,7 +47,7 @@ import {
 import { RecoveryKontext, useRecovery, type ModalZustand, type ScoreModus } from './kontext'
 // G-26: `./koerperkarte` (der Entwurf) ist raus — die anatomische
 // Karte steht in packages/ui, weil drei Module sie brauchen.
-import { alsErmuedung, KARTE_ZU_RECOVERY } from './muskel-zuordnung'
+import { KARTE_ZU_RECOVERY } from './muskel-zuordnung'
 import { RecoveryModale } from './modale'
 // G-430: der Muskelbaum — parent/child aus der Datenbank.
 // `[read]` **Der TYP aus der Rechnung, nicht aus dem Leseweg** —
@@ -74,7 +74,7 @@ import { RecCheckin } from './tab-checkin'
 // G-590: der Tag, fuer den Check-in und Anwendung gespeichert werden.
 import { heute } from '../../../lib/datum'
 import { RecMuscleMap, RecHRV, RecSleep, datenEtikett } from './tab-messwerte'
-import { muskelwerte } from './muskelwerte'
+import { kartendaten } from './muskelwerte'
 import { RecModalities, RecOvertraining, RecProtocols, RecStress } from './tab-protokolle'
 // C-418: die elf Kacheln, die es im Code nicht gibt.
 import {
@@ -378,11 +378,12 @@ function RecToday({
   // aus dem Check-in (G-364). **Muscle map rechnete seit G-440 aus
   // `workout_sets`: dieselbe Karte, zwei Quellen.**
   //
-  // `[read]` **Jetzt ruft Today `muskelwerte()` aus `muskelwerte.ts`**
+  // `[read]` **Jetzt ruft Today `kartendaten()` aus `muskelwerte.ts`**
+  // (G-433: je Muskel, wie Liste und Muscle map)
   // — dieselbe Funktion, dieselben Eingaben, dasselbe Etikett.
   const kater = checkins?.neuster?.soreness ?? null
   const schlafguete = checkins?.neuster?.sleep_quality ?? null
-  const recoveryValues = React.useMemo(() => muskelwerte({
+  const karte = React.useMemo(() => kartendaten({
     kater, schlafguete, muskelbaum, muskelzustand,
   }), [kater, schlafguete, muskelbaum, muskelzustand])
   const etikett = datenEtikett(muskelzustand?.deckung, !!kater, stichtag, zukunft)
@@ -448,7 +449,7 @@ function RecToday({
               die drei Zeilen, die hier standen, sind entfallen, weil
               sie dieselbe Skala zweimal beschrieben haetten. */}
           <ErmuedungsKarte
-            daten={alsErmuedung(recoveryValues)}
+            daten={karte}
             breite={150}
             onPick={(id, typ) => {
               // Zurueckuebersetzen: die Karte meldet ihre ID, das

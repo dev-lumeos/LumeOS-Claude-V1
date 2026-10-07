@@ -16,8 +16,10 @@ import {
   CHECKIN, MUSCLE_GROUPS_BODYMAP, NUTRITION_INPUT, calcMuscleRecovery,
 } from './motor'
 import { SCHLUESSEL_ZU_GRUPPE } from '../../../lib/koerper/schluessel-gruppe'
+import { EBENEN } from '../../../lib/koerper/ebenen'
 import { muskelLage, sippen } from '../../../lib/training/muskelzustand'
-import type { MuskelbaumStand } from '../../../lib/koerper/muskelbaum'
+import { alsErmuedung, KARTE_ZU_RECOVERY } from './muskel-zuordnung'
+import type { Ast, MuskelbaumStand } from '../../../lib/koerper/muskelbaum'
 import type { MuskelzustandStand } from '../../../lib/training/muskelzustand-read'
 
 /**
@@ -75,7 +77,79 @@ export function muskelzeilen({ kater, schlafguete, muskelbaum, muskelzustand }: 
   }).sort((a, b) => (a.value ?? 999) - (b.value ?? 999))
 }
 
-/** Kuerzel -> Wert, wie die `ErmuedungsKarte` ihn bekommt. */
-export function muskelwerte(...a: Parameters<typeof muskelzeilen>): Record<string, number | null> {
-  return Object.fromEntries(muskelzeilen(...a).map(r => [r.slug, r.value]))
+// ══ G-433: die KARTE folgt der LISTE ═══════════════════════════════
+//
+// `[cmd]` **Gemessen 2026-10-07 auf test-user:** an 2 von 31 benannten
+// Kartenflaechen zeigte `Per-muscle detail` einen Wert (97 %), die
+// Karte grau — `deltoids` und `tibialis`. Die Liste rechnete je Muskel
+// (105 Namen, Sippe aus G-446), die Karte je Kuerzel (18, eine Gruppe
+// je Kuerzel). **Tom, 2026-10-07: die Karte folgt der Liste** — kein
+// Wert geht verloren.
+//
+// `[read]` **Eine Rechnung je Muskel**, hier: `knotenwert()`. Die Liste
+// ruft sie je Knoten, die Karte je benannter Flaeche (`EBENEN`), Today
+// ueber dieselbe Karte.
+
+export type Muskeleingabe = Parameters<typeof muskelzeilen>[0]
+/** Gemessen (Zahl), geliehen (Objekt) oder ohne Wert (`null`) — wie `mitWerten` es nimmt. */
+export type Knotenwert = number | { wert: number; vonGruppe: string } | null
+
+/**
+ * Der Wert je Muskelknoten — die Rechnung, die bis G-433 inline in
+ * `Per-muscle detail` stand, unveraendert herausgezogen.
+ */
+export function knotenwert(e: Muskeleingabe): (a: Pick<Ast, 'name' | 'flaeche'>) => Knotenwert {
+  const knoten = e.muskelbaum?.knoten ?? []
+  const katalog = new Set(e.muskelzustand?.imKatalog ?? [])
+  const sippschaft = sippen(knoten)
+  const namenNachId: Record<string, string> = {}
+  for (const k of knoten) namenNachId[k.id] = k.name
+  const nachName = new Map(knoten.map(k => [k.name.toLowerCase(), k.id]))
+
+  return a => {
+    const id = nachName.get(a.name.toLowerCase())
+    // `[read]` **G-445: nie belastet ist erholt; nicht im Katalog bleibt
+    // grau. G-446: die Sippe entscheidet mit** — leihen und verdichten.
+    const lage = id
+      ? muskelLage(id, e.muskelzustand?.zustaende ?? {}, katalog, sippschaft[id], namenNachId)
+      : { herkunft: 'nicht-im-katalog' as const, zustand: null }
+    if (lage.herkunft === 'nicht-im-katalog') return null
+    const st = lage.zustand
+    const slug = a.flaeche ? KARTE_ZU_RECOVERY[a.flaeche] : null
+    const wert = calcMuscleRecovery({
+      hours: st ? st.hours : Number.POSITIVE_INFINITY,
+      sets: st ? st.sets : 0,
+      sleepQuality: e.schlafguete ?? CHECKIN.sleep_quality,
+      proteinPct: NUTRITION_INPUT.proteinPct,
+      caloriePct: NUTRITION_INPUT.caloriePct,
+      soreness: slug ? e.kater?.[slug] ?? 0 : 0,
+    }).value
+    // `[read]` **G-438: geliehen steht am Kind** — die Zeile sagt dazu, von wem.
+    if (lage.herkunft === 'geliehen') return { wert, vonGruppe: lage.quelle ?? 'der Gruppe' }
+    return wert
+  }
+}
+
+/**
+ * Was die `ErmuedungsKarte` bekommt — Today und Muscle map.
+ *
+ * `[read]` **Benannte Flaeche (`EBENEN`): der Wert ihres Muskels aus
+ * `knotenwert`** — derselbe, der in der Liste steht. **Unbenannte
+ * Flaeche** (`flanke`, `nacken`, … — die Liste hat keine Zeile dafuer):
+ * der Kuerzelwert wie bisher; dort kann die Liste nicht widersprechen.
+ */
+export function kartendaten(e: Muskeleingabe): Array<{ id: string; fatigue: number }> {
+  const wertVon = knotenwert(e)
+  const raus: Array<{ id: string; fatigue: number }> = []
+  const benannt = new Set<string>()
+  for (const [code, eb] of Object.entries(EBENEN)) {
+    if (!eb.name) continue
+    benannt.add(code)
+    const w = wertVon({ name: eb.name, flaeche: code })
+    const zahl = typeof w === 'number' ? w : w?.wert ?? null
+    if (zahl !== null) raus.push({ id: code, fatigue: 100 - zahl })
+  }
+  const nachKuerzel = Object.fromEntries(muskelzeilen(e).map(r => [r.slug, r.value]))
+  for (const d of alsErmuedung(nachKuerzel)) if (!benannt.has(d.id)) raus.push(d)
+  return raus
 }

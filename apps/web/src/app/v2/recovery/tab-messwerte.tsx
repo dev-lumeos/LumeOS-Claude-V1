@@ -16,20 +16,18 @@
 //
 // `[cmd]` ALLES IST ATTRAPPE.
 import * as React from 'react'
-import { Card, Pill, Icon, Meter, Row, LineChart, Empty, ErmuedungsKarte } from '@lumeos/ui'
+import {
+  Card, Pill, Icon, Meter, Row, LineChart, Empty, ErmuedungsKarte, ermuedungsFarbe,
+} from '@lumeos/ui'
 
 // G-163: die Entwurfsdaten der Rueckfallfassungen sind gefallen;
 // CHECKIN/SLEEP_DATA/calcSleepScore braucht nur noch die
 // Score-paths-Attrappe.
-import {
-  CHECKIN, MUSCLE_LABEL, MUSCLE_STATE, NUTRITION_INPUT,
-  SLEEP_DATA,
-  calcMuscleRecovery, calcSleepScore,
-} from './motor'
+import { CHECKIN, SLEEP_DATA, calcSleepScore } from './motor'
 // G-26: die anatomische Karte kommt jetzt aus packages/ui.
-import { alsErmuedung, KARTE_ZU_RECOVERY } from './muskel-zuordnung'
+import { KARTE_ZU_RECOVERY } from './muskel-zuordnung'
 import { useRecovery } from './kontext'
-import { muskelzeilen } from './muskelwerte'
+import { kartendaten, knotenwert } from './muskelwerte'
 import { ATTRAPPE } from './ansicht'
 // G-601: leer und nicht geladen sind zwei Zustaende.
 import { LadeHinweis } from './lade-hinweis'
@@ -215,15 +213,17 @@ export function RecMuscleMap({
   //
   // `[cmd]` **G-441: die Rechnung steht in `muskelwerte.ts`** — Today
   // ruft dieselbe, statt aus `MUSCLE_STATE` zu faerben.
-  const rows = React.useMemo(() => muskelzeilen({
+  // `[cmd]` **G-433: Karte UND Liste aus `knotenwert`** — je Muskel,
+  // nicht mehr je Kuerzel (Tom: „die Karte folgt der Liste").
+  const eingabe = React.useMemo(() => ({
     kater: echterKater, schlafguete: echteSchlafguete, muskelbaum, muskelzustand,
   }), [echterKater, echteSchlafguete, muskelbaum, muskelzustand])
+  const karte = React.useMemo(() => kartendaten(eingabe), [eingabe])
+  const wertVon = React.useMemo(() => knotenwert(eingabe), [eingabe])
 
   // ══ G-440: das Etikett sagt, was gemessen ist ════════════════
   const etikett = datenEtikett(
     muskelzustand?.deckung, !!echterKater, stichtag, zukunft)
-
-  const values = Object.fromEntries(rows.map(r => [r.slug, r.value]))
 
   return (
     <div className="v2-rec-grid-1135">
@@ -235,7 +235,7 @@ export function RecMuscleMap({
         {/* G-26: die anatomische Karte. Sie bringt ihre Legende mit —
             die drei Zeilen, die hier standen, sind entfallen. */}
         <ErmuedungsKarte
-          daten={alsErmuedung(values)}
+          daten={karte}
           breite={180}
           onPick={(id, typ) => {
             const slug = KARTE_ZU_RECOVERY[id]
@@ -296,73 +296,13 @@ export function RecMuscleMap({
           //
           // `[read]` **Ein Muskel ohne Volumenzuordnung KANN keinen
           // Wert haben** — das ist C-487, nicht mein Fehler.
-          const werte = mitWerten(baueBaum(knoten, zeigt), a => {
-            // ══ G-440: der Zustand kommt aus `workout_sets` ══════
-            //
-            // `[cmd]` **Hier stand `MUSCLE_STATE[slug]`** — eine von
-            // 18 festen Zeilen. **Jetzt je `muscle_group_id` aus
-            // dem Trainingstagebuch gerechnet.**
-            //
-            // `[read]` **Kein Eintrag heisst KEIN Wert** — nicht 0.
-            // **Wo kein Satz auf einen Muskel zeigt, hat er
-            // keinen.**
-            const id = knoten.find(
-              k => k.name.toLowerCase() === a.name.toLowerCase())?.id
-            // ══ G-445: dieselbe Entscheidung wie auf der Karte ═══
-            //
-            // `[cmd]` **Hier stand `if (!st) return null`** — und
-            // die Zeile zeigte „--  kein Volumen zugeordnet".
-            // `[read]` **Ein nie trainierter Muskel ist erholt, nicht
-            // unbekannt** (Tom, G-445).
-            // ══ G-446: die Sippe entscheidet mit ════════════════
-            //
-            // `[cmd]` **Ohne sie kannte `muskelLage` nur den Muskel
-            // selbst** — und die drei Trizepskoepfe zeigten „--",
-            // waehrend ihr Elternteil 109 Saetze trug.
-            const lage = id
-              ? muskelLage(id, muskelzustand?.zustaende ?? {}, katalog,
-                  sippschaft[id], namenNachId)
-              : { herkunft: 'nicht-im-katalog' as const, zustand: null }
-            if (lage.herkunft === 'nicht-im-katalog') return null
-            const st = lage.zustand
-            const slug = a.flaeche ? KARTE_ZU_RECOVERY[a.flaeche] : null
-            const kater = slug ? echterKater?.[slug] ?? 0 : 0
-            const guete = echteSchlafguete ?? CHECKIN.sleep_quality
-            const wert = calcMuscleRecovery({
-              hours: st ? st.hours : Number.POSITIVE_INFINITY,
-              sets: st ? st.sets : 0,
-              sleepQuality: guete,
-              proteinPct: NUTRITION_INPUT.proteinPct,
-              caloriePct: NUTRITION_INPUT.caloriePct,
-              soreness: kater,
-            }).value
-            // ══ G-438: woher kommt dieser Wert? ══════════════════
-            //
-            // **Tom:** *„arms triceps ist orange, zeigt aber keine
-            // werte in der liste."*
-            //
-            // `[cmd]` **Die Karte faerbt die drei KOEPFE, gemessen
-            // ist der ELTERNTEIL `Triceps`.** `[read]` **Wo der
-            // gezeichnete Muskel nicht die Gruppe IST, an der die
-            // Messung haengt, ist der Wert geliehen** — und die
-            // Zeile sagt es dazu.
-            // ══ G-446: die HERKUNFT sagt es, nicht der Slug ═════
-            //
-            // `[cmd]` **Hier stand `wertKommtVonGruppe(a.name,
-            // slug)`** — **eine Vermutung aus der KARTENflaeche.**
-            // `[read]` **Sie traf nur die Muskeln, die gezeichnet
-            // sind** — die drei Trizepskoepfe haben zwar eine
-            // Flaeche, aber `Vastus Medialis` lieh trotzdem
-            // nicht, weil die Zuordnung ueber den Slug lief und
-            // nicht ueber den BAUM.
-            //
-            // `[read]` **Jetzt entscheidet die Verwandtschaft** —
-            // dieselbe Quelle, aus der die Liste gebaut wird.
-            if (lage.herkunft === 'geliehen') {
-              return { wert, vonGruppe: lage.quelle ?? 'der Gruppe' }
-            }
-            return wert
-          })
+          // ══ G-433: der Wert je Knoten kommt aus `knotenwert` ═════
+          //
+          // `[cmd]` **Hier stand die Rechnung inline** (G-440/G-445/
+          // G-446/G-438) — die Karte rechnete daneben je Kuerzel.
+          // **Jetzt dieselbe Funktion fuer Liste und Karte**
+          // (`muskelwerte.ts`); was sie entscheidet, steht dort.
+          const werte = mitWerten(baueBaum(knoten, zeigt), wertVon)
 
           function zeile(a: AstMitWert): React.ReactNode {
             const slug = a.flaeche ? KARTE_ZU_RECOVERY[a.flaeche] : null
@@ -379,9 +319,14 @@ export function RecMuscleMap({
             // `[read]` **Der Kater kommt aus `recovery.checkins`** —
             // die EINZIGE Groesse, die schon vorher echt war.
             const sore = slug && echterKater ? echterKater[slug] : undefined
+            // `[cmd]` **G-433: hier standen eigene Schwellen (80/50)**,
+            // die Karte faerbt ab 75/40 — ein Wert von 76–79 waere auf
+            // der Karte gruen, in der Liste gelb gewesen. (Auf test-user
+            // lag am 2026-10-07 kein Wert dazwischen — alle 97 %.)
+            // **Jetzt dieselbe Funktion.** Geliehene Werte bleiben
+            // gedaempft (G-438) — das ist Absicht, kein Farbfehler.
             const farbe = a.wert == null ? 'var(--fg-dim)'
-              : a.wert >= 80 ? 'var(--pos)'
-              : a.wert >= 50 ? 'var(--warn)' : 'var(--neg)'
+              : ermuedungsFarbe(100 - a.wert)[0]
 
             // ══ Anwaehlbar: Gruppe UND Muskel ════════════════════
             //
