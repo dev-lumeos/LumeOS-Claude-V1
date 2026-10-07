@@ -37,3 +37,8 @@ Enddatum folgt (Tom 07.10.). Bausteine sind dieselben Strategien wie in
 Ankerplan (G-607), `goal_programs`.
 
 Auftrag folgt nach G-610.
+
+## Praezisiert - 2026-10-07 14:12, Tom
+
+Der Planer IST der **Reiter Phase engine** - dort sitzen heute die Strategie-Reiter (fest codiert, Hybrid = hybrid+recovery), die Phasenarten-Auswahl und die Attrappe ,Phase state machine'. G-615 macht daraus den Planer: Termin -> Phasen rueckwaerts, Zeitachse, Plaene aus `auswahl_gruppe = plan`, die Karte ,Phase state machine' als Anzeige (aktuell / empfohlen).
+

@@ -199,3 +199,10 @@ Planer (B) ist G-615 und folgt.
    gesperrt; pro -> alle; Ziel ueber die Oberflaeche anlegen (G-604:
    Abbauziel vorher pausieren), Rueckbau inkl. Grad.
 7. Sabotage beidseitig, Gate gruen mit Testzahl. Kein Commit.
+
+## Praezisiert - 2026-10-07 14:12, Tom
+
+*,reiter Goals mit den simplen zielen die schon drin anlegbar sind, da muss es nur noch zusaetzlich in das modal zum anlegen verbaut werden und danach grafisch eingebunden werden. reiter phase engine ist doch genau der planner'*
+
+Damit gilt: (A) ,Ziel setzen' ist der **Reiter Goals** mit seinem Anlegemodal - die zwei Ebenen (Richtung, dann ,Vorgehen anpassen' mit Varianten und Gradsperre) kommen IN dieses Modal, danach grafisch in den Reiter. Kein neuer Reiter. (B) Planer ist der **Reiter Phase engine** (G-615): dort raeumt G-615 auf. Punkt 4/5 oben (Attrappe, Reiterliste, Phasenarten-Auswahl im Reiter Phase engine) gehoeren deshalb zu G-615, NICHT zu G-610.
+
