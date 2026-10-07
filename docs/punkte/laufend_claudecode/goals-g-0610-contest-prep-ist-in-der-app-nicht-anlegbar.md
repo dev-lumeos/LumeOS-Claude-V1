@@ -157,3 +157,45 @@ hybrid+recovery; Sperre nur fuer beginner; Anlegemodal nur 3 Strategien.
    bestehendes Abbauziel vorher pausieren), Rueckbau. Bilder so, dass
    Tom die ganze Seite sieht.
 7. Sabotage beidseitig, Gate gruen mit Testzahl. Kein Commit.
+
+---
+
+## Auftrag - ERSETZT ALLE obigen (2026-10-07, 14:15)
+
+    AUFTRAG FUER Claude Code - G-610: ,Ziel setzen" in zwei Ebenen
+    Bereich: apps/web/src/lib/goals, apps/web/src/app/v2/goals
+    Fremd:   supabase/_pipeline/ (Codex). docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-07
+
+**Tom 14:09:** *,das wo da ist ist nicht brauchbar"* - direkt bauen.
+Bauart nach Recherche (RP Diet Coach, MacroFactor, Progressive Disclosure
+nach Nielsen: hoechstens zwei Ebenen, ~80 % fertig auf Ebene 1;
+TrainingPeaks fuer den Planer):
+
+**Zwei Werkzeuge statt drei Auswahlen.** Dieser Auftrag baut (A); der
+Planer (B) ist G-615 und folgt.
+
+(A) ,Ziel setzen":
+1. Ebene 1: drei grosse Karten **Abnehmen · Halten · Aufbauen**, dazu
+   Zielwert oder Zieldatum und das vorgeschlagene Tempo (aenderbar). Ein
+   Anfaenger ist hier fertig - die Standardvariante ist vorgewaehlt.
+2. Ebene 2 (aufklappbar, beschriftet ,Vorgehen anpassen"): die Varianten
+   der Richtung aus `goal_strategies.auswahl_gruppe`, Standard markiert;
+   gesperrte nach `min_erfahrung` gegen `profiles.experience_level`
+   bleiben SICHTBAR mit ,ab advanced/pro". Je Variante eine Zeile Zweck
+   und die Kernwerte (Tempo, Protein, Dauer) aus dem Katalog.
+3. Reverse Diet (`auswahl_gruppe = uebergang`) erscheint nicht in der
+   Liste, sondern nach einem Abnehm-Ziel als ,empfohlener naechster
+   Schritt" (Mockup ,recommended next", `next_codes`).
+4. Die Mockup-Karte ,Phase state machine" wird ANZEIGE: wo stehe ich,
+   was ist empfohlen. Keine Auswahl mehr.
+5. Weg damit: die fest codierten Reiter (`strategie-regeln.ts:34-40`),
+   die getrennte Phasenarten-Auswahl, das 3er-Modal als eigener Weg -
+   ,Neues Ziel" oeffnet dasselbe ,Ziel setzen". Keine Liste im Code;
+   Gruppen, Grade, Standard kommen aus Codex' G-614 (bis live gegen die
+   Kette bauen).
+6. Schirmnachweis auf `test-user@lumeos.local`, Bilder der GANZEN Seite
+   vorher/nachher: Grad beginner -> nur Standards waehlbar, Rest sichtbar
+   gesperrt; pro -> alle; Ziel ueber die Oberflaeche anlegen (G-604:
+   Abbauziel vorher pausieren), Rueckbau inkl. Grad.
+7. Sabotage beidseitig, Gate gruen mit Testzahl. Kein Commit.

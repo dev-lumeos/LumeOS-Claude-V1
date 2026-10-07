@@ -66,3 +66,46 @@ Sperre kennt nur `beginner` (`:92-108`).
 4. Live nach Toms Freigabe nach dem Muster A-105: Sicherung, nur diese
    Spalten und Werte, `NOTIFY pgrst`, Nachweis, Sicherung, **danach Gate
    gruen**. Kein Commit.
+
+---
+
+## Auftrag - ERSETZT den obigen (2026-10-07, 14:15)
+
+    AUFTRAG FUER Codex - G-614: goal_strategies bekommt auswahl_gruppe, min_erfahrung, standard
+    Bereich: supabase/_pipeline/ (Kette), danach Live
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-07
+
+**Neue Bauart nach Recherche (Tom 07.10.: ,das wo da ist ist nicht
+brauchbar" - direkt bauen):** zwei Werkzeuge statt einer Liste.
+(A) ,Ziel setzen": Richtung Abnehmen/Halten/Aufbauen, darin Varianten.
+(B) ,Planer": mehrphasige Plaene auf einer Zeitachse. Reverse Diet ist
+ein empfohlener Uebergang, keine Erstwahl. **Die 7-Karten-Spalte
+`phasen_karte` aus dem ersten Auftrag entfaellt.**
+
+| code | auswahl_gruppe | min_erfahrung | standard |
+|---|---|---|---|
+| lose | abnehmen | beginner | ja |
+| conservative_cut, moderate_cut, mini_cut | abnehmen | advanced | |
+| aggressive_cut | abnehmen | pro | |
+| maintain | halten | beginner | ja |
+| body_recomp | halten | advanced | |
+| maintenance_diet_break | halten | pro | |
+| gain | aufbauen | beginner | ja |
+| lean_bulk, clean_bulk | aufbauen | advanced | |
+| aggressive_bulk | aufbauen | pro | |
+| reverse_diet | uebergang | advanced (Tom bestaetigt noch) | |
+| contest_prep, peak_week, expert_bb_annual, custom | plan | pro | |
+
+1. Messen: `tier`, `category`, `requirements` (`min_experience`),
+   `next_codes` und wer sie liest - nichts still entfernen.
+2. Drei Spalten mit CHECK: `auswahl_gruppe` in
+   `abnehmen|halten|aufbauen|uebergang|plan`, `min_erfahrung` in
+   `beginner|advanced|pro|elite`, `standard boolean` (genau eine Zeile
+   je Gruppe abnehmen/halten/aufbauen). NOT NULL, Werte wie oben.
+3. Probe: 17 Zeilen tragen alle drei, je Richtungsgruppe genau ein
+   Standard mit `beginner`. Kette gruen, `testdaten-pruefen` 0 Befunde,
+   Sabotage beidseitig.
+4. **Live freigegeben** (Tom 14:09, ,gleich einbauen"): Muster A-105 -
+   Sicherung, nur diese Spalten und Werte, `NOTIFY pgrst`, Nachweis,
+   Sicherung, danach Gate gruen. Kein Commit.

@@ -52,3 +52,8 @@ Mockup-Attrappe ,Phase state machine" (7).
 2. Mindestgrad je Strategie (Toms Tabelle in G-610) - bestaetigt, offen
    sind `maintain` und `reverse_diet`.
 3. EINE Auswahl auf der Seite statt drei.
+
+## Entschieden - 2026-10-07 14:09, Tom
+
+Tom: *,diese aufgabe ist gewachsen, da koennen wir nicht mehr sagen das oder dieses gilt. recherchiere online ...'* und *,das wo da ist ist nicht brauchbar'* - Recherche (RP Diet Coach, MacroFactor, Nielsen Progressive Disclosure, TrainingPeaks ATP) ergab zwei Werkzeuge: (A) ,Ziel setzen' in zwei Ebenen (Richtung, dann Vorgehen) = G-610; (B) ,Planer' fuer mehrphasige Plaene vom Termin rueckwaerts = G-615. Katalogfelder = G-614. Weder die 7 Karten noch die 17 als Liste.
+
