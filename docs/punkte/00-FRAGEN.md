@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **23 Punkte tragen `typ: entscheidung`
+`[cmd]` **24 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -112,6 +112,41 @@ Attrappe, keine Modellanbindung.**
 
 `[read]` **Die Guardrails gehoeren VOR die Anbindung** ? **nicht
 danach.**
+
+## G-612 — goals-g-0612-drei-auswahlen-und-keine-ordnung.md
+
+**Modul:** goals · **angelegt:** 2026-10-07 · **Datei:** `todos/goals-g-0612-drei-auswahlen-und-keine-ordnung.md`
+
+## Rundgang 07.10. (Orchestrator ueber Unteragent, nur gelesen)
+
+Bilder: `backup/rundgang-goals/01..04-*.png` (test-user).
+
+`[read]` **Reiter fest im Code**, nicht aus der Datenbank:
+`strategie-regeln.ts:34-40` - Fat Loss, Aufbau, Hybrid, Contest, Expert;
+`hybrid` sammelt die Kategorien `hybrid` UND `recovery` - deshalb steht
+Reverse Diet unter Hybrid und es gibt keinen Reiter Recovery. Uebernommen
+aus dem Vorgaengerrepo (`GoalSelector.tsx:19-42`).
+`[read]` Im Reiter nur `tier = 'advanced'` - ,Halten" (maintain, simple)
+fehlt unter Hybrid. Das Anlegemodal (`modale.tsx:317`) zeigt nur
+ohne/Abnehmen/Aufbauen/Halten.
+`[read]` Auf derselben Seite drei Auswahlen nach drei Ordnungen:
+Strategien (17, `strategie-wahl.tsx`), Phasenarten (9, `phase-regeln.ts`),
+Mockup-Attrappe ,Phase state machine" (7).
+
+| Quelle | Ordnung |
+|---|---|
+| Mockup `module-goals-pro.jsx:5-67` | 7 Phasen, keine Gruppen, Sperre nur Expert BB Annual |
+| Spec `PHASE_MODELS.md:10-24` | 7 Phasen als Zustandsautomat; Varianten (moderate/aggressive) und Diet Break als Parameter |
+| DB `goal_strategies` | 17 Strategien, 6 Kategorien, simple/advanced |
+| UI heute | 3 simple ohne Reiter + 5 Reiter (Hybrid = hybrid+recovery) |
+
+## Was Tom entscheiden muss
+
+1. Welche Ordnung gilt: 7 Phasen (Mockup/Spec) mit Varianten, oder 17
+   Strategien in Kategorien (DB)?
+2. Mindestgrad je Strategie (Toms Tabelle in G-610) - bestaetigt, offen
+   sind `maintain` und `reverse_diet`.
+3. EINE Auswahl auf der Seite statt drei.
 
 ## G-546 — quer-g-0546-erfassen-oder-empfehlen.md
 
