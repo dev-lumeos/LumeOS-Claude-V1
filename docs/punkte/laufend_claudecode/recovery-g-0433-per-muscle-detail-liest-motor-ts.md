@@ -13,6 +13,8 @@ beruehrt:
 zahlen:
   gemessen: 2026-09-08
   zeilen: 18
+agent: claudecode
+beauftragt: 2026-10-07
 ---
 
 # G-433 — Per-muscle detail liest motor.ts
@@ -219,3 +221,17 @@ weiter aus der Attrappe.**
 
 `[read]` **Vor einem neuen Auftrag messen, was G-440 und G-441
 davon schon erledigt haben.**
+
+## Auftrag - Kopf (2026-10-07)
+
+    AUFTRAG FUER Claude Code - G-433: Per-muscle detail liest dieselben Muskeln wie die Karte
+    Bereich: apps/web/src/app/v2/recovery, apps/web/src/lib/recovery
+    Fremd:   supabase/_pipeline/ (Codex). docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-07
+
+0. **Zuerst nachmessen** - Befund vom 08.09.; G-441 (`b56e7cee`) hat seither `recovery/muskelwerte.ts` gebaut, das Today und Muscle map gemeinsam nutzen. Stimmt die Liste ,Per-muscle detail' (`/v2/recovery?tab=muscles`) noch mit der eigenen Namensliste aus `motor.ts` (Upper back, Lower back, flach, 18 Zeilen)?
+1. Die Liste liest dieselben Muskeln und Werte wie die Karte (`muskelzeilen()`), mit der Hierarchie (Gruppe -> Muskel) statt flacher Eigenliste; Kopfzeile nennt, was gezaehlt ist.
+2. Die eigene Namensliste in `motor.ts` gemessen entfernen, soweit kein anderer Leser sie braucht (Leser zaehlen).
+3. Schirmnachweis auf `test-user@lumeos.local`: Liste und Karte zeigen dieselben Muskeln mit denselben Werten; Bilder vorher/nachher der ganzen Seite nach `backup/`.
+4. Sabotage beidseitig, Gate gruen mit Testzahl. Kein Commit.
+

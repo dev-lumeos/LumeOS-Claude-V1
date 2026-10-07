@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 274 |
+| `todos` | 273 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
+| `laufend_claudecode` | 2 |
 | `erledigt` | 676 |
 | **gesamt** | **952** |
 
@@ -573,7 +573,7 @@
 | `G-364` | befund | hoch | [die Muskelkacheln waren angebunden](erledigt/recovery-g-0364-die-muskelkacheln-waren-angebunden.md) | erledigt | — | G-365, G-367 |
 | `G-367` | feature | mittel | [Stunden und Saetze je Muskel](erledigt/recovery-g-0367-per-muscle-stunden-und-saetze.md) | erledigt | — | — |
 | `G-371` | befund | mittel | [`modalities` nimmt den Leseweg nicht](erledigt/recovery-g-0371-modalities-nimmt-den-leseweg-nicht.md) | erledigt | — | — |
-| `G-433` | fehler | hoch | [Per-muscle detail liest motor.ts](todos/recovery-g-0433-per-muscle-detail-liest-motor-ts.md) | offen | — | C-482 |
+| `G-433` | fehler | hoch | [Per-muscle detail liest motor.ts](laufend_claudecode/recovery-g-0433-per-muscle-detail-liest-motor-ts.md) | laeuft (claudecode) | — | C-482 |
 | `G-436` | feature | hoch | [die Hierarchie als Ansicht](erledigt/recovery-g-0436-die-hierarchie-als-ansicht.md) | erledigt | — | G-438 |
 | `G-438` | fehler | hoch | [Karte und Liste widersprechen sich](erledigt/recovery-g-0438-karte-und-liste-widersprechen-sich.md) | erledigt | — | — |
 | `G-440` | fehler | hoch | [MUSCLE_STATE ist eine Attrappe, die Kachel sagt „echte Daten"](erledigt/recovery-g-0440-muscle-state-ist-eine-attrappe.md) | erledigt | — | G-441, G-445 |

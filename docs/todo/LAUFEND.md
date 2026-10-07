@@ -6,6 +6,7 @@
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
 | Claude Code | G-610 | contest_prep ist in der App nicht anlegbar | **laeuft**, raus 07.10. |
+| Claude Code | G-433 | Per-muscle detail liest motor.ts | **laeuft**, raus 07.10. |
 | Codex | G-614 | Der Strategiekatalog kennt seine Karte und seinen Mindestgrad | **laeuft**, raus 07.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
