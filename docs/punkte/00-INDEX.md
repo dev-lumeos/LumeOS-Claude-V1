@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 270 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
+| `laufend_claudecode` | 2 |
 | `erledigt` | 671 |
-| **gesamt** | **943** |
+| **gesamt** | **944** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 79
+## goals — 80
 
-### beauftragbar — 73
+### beauftragbar — 74
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -670,7 +670,8 @@
 | `G-602` | fehler | mittel | [Die Reihenfolge aktiver Ziele wird atomar getauscht](erledigt/goals-g-0602-die-reihenfolge-aktiver-ziele-wird-atomar-getauscht.md) | erledigt | — | — |
 | `G-604` | fehler | hoch | [Hoechstens ein aktives Kalorienziel](erledigt/goals-g-0604-hoechstens-ein-aktives-kalorienziel.md) | erledigt | — | A-101 |
 | `G-606` | fehler | mittel | [Eine Messung laesst sich nicht aendern](erledigt/goals-g-0606-eine-messung-laesst-sich-nicht-aendern.md) | erledigt | — | — |
-| `G-607` | fehler | hoch | [Der Ankerplan rechnet aus dem Dauer-Anteil](erledigt/goals-g-0607-der-ankerplan-rechnet-aus-dem-dauer-anteil.md) | erledigt | — | — |
+| `G-607` | fehler | hoch | [Der Ankerplan rechnet aus dem Dauer-Anteil](erledigt/goals-g-0607-der-ankerplan-rechnet-aus-dem-dauer-anteil.md) | erledigt | — | G-608 |
+| `G-608` | fehler | hoch | [Die Stufenwochen sind im Programm editierbar - und am Schirm belegt](laufend_claudecode/goals-g-0608-die-stufenwochen-sind-im-programm-editierbar.md) | laeuft (claudecode) | — | — |
 
 ### wartet auf Blocker — 6
 
