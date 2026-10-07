@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 272 |
+| `todos` | 273 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 674 |
-| **gesamt** | **949** |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 676 |
+| **gesamt** | **951** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 85
+## goals — 86
 
-### beauftragbar — 79
+### beauftragbar — 80
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -672,11 +672,12 @@
 | `G-606` | fehler | mittel | [Eine Messung laesst sich nicht aendern](erledigt/goals-g-0606-eine-messung-laesst-sich-nicht-aendern.md) | erledigt | — | — |
 | `G-607` | fehler | hoch | [Der Ankerplan rechnet aus dem Dauer-Anteil](erledigt/goals-g-0607-der-ankerplan-rechnet-aus-dem-dauer-anteil.md) | erledigt | — | G-608 |
 | `G-608` | fehler | hoch | [Die Stufenwochen sind im Programm editierbar - und am Schirm belegt](erledigt/goals-g-0608-die-stufenwochen-sind-im-programm-editierbar.md) | erledigt | — | G-609, G-610, G-611 |
-| `G-609` | fehler | hoch | [Die Strategie wird beim Phasenstart nicht durchgereicht](laufend_claudecode/goals-g-0609-die-strategie-wird-beim-phasenstart-nicht-durchgereicht.md) | laeuft (claudecode) | — | — |
-| `G-610` | fehler | mittel | [contest_prep ist in der App nicht anlegbar](laufend_claudecode/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md) | vorbereitet (claudecode) | — | G-612 |
+| `G-609` | fehler | hoch | [Die Strategie wird beim Phasenstart nicht durchgereicht](erledigt/goals-g-0609-die-strategie-wird-beim-phasenstart-nicht-durchgereicht.md) | erledigt | — | — |
+| `G-610` | fehler | mittel | [contest_prep ist in der App nicht anlegbar](laufend_claudecode/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md) | laeuft (claudecode) | — | G-612 |
 | `G-611` | fehler | mittel | [Ein Ziel laesst sich nicht loeschen](todos/goals-g-0611-ein-ziel-laesst-sich-nicht-loeschen.md) | offen | — | — |
-| `G-612` | entscheidung | hoch | [Drei Auswahlen auf einer Seite, und keine folgt dem Mockup](todos/goals-g-0612-drei-auswahlen-und-keine-ordnung.md) | offen | — | — |
+| `G-612` | entscheidung | hoch | [Drei Auswahlen auf einer Seite, und keine folgt dem Mockup](todos/goals-g-0612-drei-auswahlen-und-keine-ordnung.md) | offen | — | G-614 |
 | `G-613` | fehler | hoch | [Ein pausiertes Ziel laesst seine Phase laufen](todos/goals-g-0613-ein-pausiertes-ziel-laesst-seine-phase-laufen.md) | offen | — | — |
+| `G-614` | fehler | hoch | [Der Strategiekatalog kennt seine Karte und seinen Mindestgrad](laufend_codex/goals-g-0614-der-strategiekatalog-kennt-karte-und-mindestgrad.md) | laeuft (codex) | — | — |
 
 ### wartet auf Blocker — 6
 
@@ -752,9 +753,9 @@
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 | `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](erledigt/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | erledigt | — | — |
 
-## quer — 252
+## quer — 253
 
-### beauftragbar — 251
+### beauftragbar — 252
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -887,7 +888,7 @@
 | `C-513` | feature | hoch | [ein Supplement in eine Mahlzeit](erledigt/quer-c-0513-supplement-in-mahlzeit.md) | erledigt | — | G-475 |
 | `C-517` | entscheidung | hoch | [Backups gehoeren nicht in git](erledigt/quer-c-0517-backups-nicht-in-git.md) | erledigt | — | — |
 | `C-519` | feature | hoch | [ein Supplement bleibt ein Supplement](erledigt/quer-c-0519-supplement-bleibt-supplement.md) | erledigt | — | C-521, G-485 |
-| `C-522` | fehler | hoch | [die Allergiesuche kennt nur den Tagnamen](laufend_codex/quer-c-0522-allergiesuche-kennt-nur-tagnamen.md) | laeuft (codex) | — | — |
+| `C-522` | fehler | hoch | [die Allergiesuche kennt nur den Tagnamen](erledigt/quer-c-0522-allergiesuche-kennt-nur-tagnamen.md) | erledigt | — | C-562 |
 | `C-523` | befund | hoch | [welche Aliase fehlen noch?](erledigt/quer-c-0523-welche-aliase-fehlen.md) | erledigt | — | C-525 |
 | `C-525` | feature | hoch | [Suchwortschatz für Ausschluss-Tags](erledigt/quer-c-0525-suchwortschatz-ausschluss-tags.md) | erledigt | — | — |
 | `C-533` | befund | hoch | [der Sollstand unterschlaegt service_role-Rechte](erledigt/quer-c-0533-schema-sollstand-substance-group-rechte.md) | erledigt | — | — |
@@ -896,6 +897,7 @@
 | `C-554` | blocker | hoch | [das Migrationsregister sagt nicht, was in der Datenbank steht](erledigt/quer-c-0554-das-migrationsregister-ist-unbrauchbar.md) | erledigt | — | — |
 | `C-560` | fehler | mittel | [Der Testdatenpruefer wird gruen](erledigt/quer-c-0560-der-testdatenpruefer-wird-gruen.md) | erledigt | — | C-561, G-604 |
 | `C-561` | fehler | mittel | [Zwei Testproben beschreiben den Bestand, nicht das Soll](erledigt/quer-c-0561-zwei-testproben-beschreiben-den-bestand-nicht-das-soll.md) | erledigt | — | — |
+| `C-562` | fehler | mittel | [Erdnuss ist keine Nuss](todos/quer-c-0562-erdnuss-ist-keine-nuss.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |

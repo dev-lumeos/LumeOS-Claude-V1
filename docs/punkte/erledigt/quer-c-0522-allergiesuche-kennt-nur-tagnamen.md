@@ -14,6 +14,8 @@ zahlen:
   tags: 6
 agent: codex
 beauftragt: 2026-10-07
+erledigt: 2026-10-07
+commit: 6197e81c
 ---
 
 # C-522 - die Allergiesuche kennt nur den Tagnamen
@@ -114,4 +116,11 @@ nicht."*
 3. Aliase fuer die sechs ausschlussrelevanten Tags in der Kette, Quelle je Alias nennen (keine erfundenen Woerter).
 4. Probe: brot/weizen -> contains_gluten, milch -> contains_lactose usw.; ein fremdes Wort trifft nichts. Kette gruen, `testdaten-pruefen` 0 Befunde, Sabotage beidseitig.
 5. **Live nur nach Toms Freigabe**, dann nach dem Muster A-105 und mit Gate gruen danach. Kein Commit.
+
+
+## Abnahme - 2026-10-07, ohne Aenderung
+
+`[read]` Codex: bereits durch C-525 behoben, live und in der Kette - gluten/brot/weizen je 622, milch/laktose je 1.021, nuesse 120, soja 60; Aliasquelle `525_allergy_search_terms_data.sql` mit 23 belegten Begriffen (EU 1169/2011 Anhang II + gemessener Bestand), eigene Tabelle `allergy_search_terms`, damit die Produktsuche (`allergen_aliases`) unberuehrt bleibt. Vollkette 355 gruen, 186/0, C-525-Test 2/2 mit Sabotage. Kein Code, kein Commit.
+
+Befund daraus: C-562 (Erdnuss als Nuss getaggt; ,-frei'-Woerter treffen ,enthaelt').
 

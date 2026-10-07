@@ -5,9 +5,9 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-609 | Die Strategie wird beim Phasenstart nicht durchgereicht | **laeuft**, raus 07.10. |
-| Codex | C-522 | die Allergiesuche kennt nur den Tagnamen | **laeuft**, raus 07.10. |
-| Claude Code | G-610 | contest_prep ist in der App nicht anlegbar | **bereit in `next/`** |
+| Claude Code | G-610 | contest_prep ist in der App nicht anlegbar | **laeuft**, raus 07.10. |
+| Codex | G-614 | Der Strategiekatalog kennt seine Karte und seinen Mindestgrad | **laeuft**, raus 07.10. |
+| Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 

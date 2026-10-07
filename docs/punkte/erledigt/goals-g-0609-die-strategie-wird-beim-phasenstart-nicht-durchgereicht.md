@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-07
 agent: claudecode
 beauftragt: 2026-10-07
+erledigt: 2026-10-07
+commit: 6197e81c
 
 braucht: [A-105]
 kind_von: G-608
@@ -49,3 +51,10 @@ Stand vor A-105.
 3. Schirmnachweis auf `test-user@lumeos.local`: Phase mit Strategie starten
    (G-604 beachten), neu laden, Strategie steht; Rueckbau.
 4. Sabotage beidseitig, Gate gruen mit Testzahl. Kein Commit.
+
+## Abnahme - 2026-10-07, Commit `6197e81c`
+
+`[cmd]` Diff: 7 Dateien in goals + Test `g609-strategie-beim-phasenstart.test.ts` (5), G-554-Waechter umgedreht. Gate gruen, web 2698. `[cmd]` test-user danach: Abbauziel active/primary/Prio 1, Aufbauziel on_hold - wie vorher.
+
+`[read]` Schirm: Phase mit `strategie_code = gain`, nach Reload an der Zielzeile. Probeziel per SQL entfernt (kein Loeschweg, G-611).
+

@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: mittel
 angelegt: 2026-10-07
+agent: claudecode
+beauftragt: 2026-10-07
 
 braucht: [G-608]
 kind_von: G-608
@@ -110,3 +112,48 @@ Katalogfeld - dasselbe Muster wie `supplements.supplement_groups.min_experience_
 Der Grad gehoert in `goals.goal_strategies` (Codex, Kette und live), die
 Oberflaeche liest ihn (Claude Code). **Der Auftrag oben (,advanced ab pro")
 ist damit ueberholt; der Oberflaechenteil wartet auf das Katalogfeld.**
+
+---
+
+## Auftrag - ERSETZT alle obigen Auftragsteile (2026-10-07, 14:15)
+
+    AUFTRAG FUER Claude Code - G-610: EINE Strategieauswahl nach dem Mockup
+    Bereich: apps/web/src/lib/goals, apps/web/src/app/v2/goals
+    Fremd:   supabase/_pipeline/ (Codex). docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-07
+
+**Tom:** *,das will ich schnellstmoeglich erledigt und grafisch brauchbar
+in der UI sehen."* Vorlage ist das Mockup, nicht das Vorgaengerrepo.
+
+Rundgang 07.10. (`backup/rundgang-goals/01..04`, G-612): drei Auswahlen auf
+einer Seite (17 Strategien in fest codierten Reitern, 9 Phasenarten,
+Mockup-Attrappe ,Phase state machine" mit 7 Karten); Reiter Hybrid sammelt
+hybrid+recovery; Sperre nur fuer beginner; Anlegemodal nur 3 Strategien.
+
+**Soll (Mockup `module-goals-pro.jsx:5-68` und `:259-330`, Spec
+`PHASE_MODELS.md`):**
+
+1. EINE Auswahl: das Raster ,Phase state machine" mit sieben Karten
+   (Fat Loss, Lean Bulk, Maintenance, Recomposition, Contest Prep, Reverse
+   Diet, Expert BB Annual), Farben und Zustaende wie im Mockup (current /
+   recommended next / switchable / gesperrt). Die Attrappe wird zur echten
+   Auswahl; die Reiterliste und die getrennte Phasenarten-Liste gehen darin
+   auf - nichts doppelt.
+2. Klick auf eine Karte: Vorschaupanel wie Mockup, darin die Strategien
+   dieser Karte als Varianten (z. B. Fat Loss: Abnehmen, Conservative,
+   Moderate, Mini, Aggressive) mit Parametern aus `goal_strategies`.
+3. Sperre je Strategie nach `goal_strategies.min_erfahrung` gegen
+   `profiles.experience_level`, mit Satz ,ab pro" o. ae.; Karte gesperrt,
+   wenn ALLE Varianten gesperrt sind. Gruppierung aus
+   `goal_strategies.phasen_karte` - KEINE feste Liste im Code (beide
+   Spalten kommen mit Codex' G-614; bis dahin gegen die Kette bauen,
+   Schirmnachweis erst nach G-614 live).
+4. Das Anlegemodal ,Neues Ziel" nutzt dieselbe Auswahl (nicht nur 3).
+5. Zeitachse/Ankerplan: Plan beginnt nie vor dem Zielbeginn; laengere
+   Stufen verschieben das Enddatum, der Satz sagt das (Tom 07.10.).
+6. Schirmnachweis auf `test-user@lumeos.local` mit Bildern vorher/nachher:
+   Grad beginner -> nur Abnehmen/Aufbauen/Halten waehlbar; pro -> alles
+   ausser elite-only; contest_prep ueber die Oberflaeche anlegen (G-604:
+   bestehendes Abbauziel vorher pausieren), Rueckbau. Bilder so, dass
+   Tom die ganze Seite sieht.
+7. Sabotage beidseitig, Gate gruen mit Testzahl. Kein Commit.
