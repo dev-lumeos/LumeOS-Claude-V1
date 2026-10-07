@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 273 |
-| `laufend_codex` | 1 |
+| `todos` | 272 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 676 |
 | **gesamt** | **952** |
@@ -676,7 +676,7 @@
 | `G-610` | fehler | mittel | [contest_prep ist in der App nicht anlegbar](laufend_claudecode/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md) | laeuft (claudecode) | — | G-612 |
 | `G-611` | fehler | mittel | [Ein Ziel laesst sich nicht loeschen](todos/goals-g-0611-ein-ziel-laesst-sich-nicht-loeschen.md) | offen | — | — |
 | `G-612` | entscheidung | hoch | [Drei Auswahlen auf einer Seite, und keine folgt dem Mockup](todos/goals-g-0612-drei-auswahlen-und-keine-ordnung.md) | offen | — | G-614, G-615 |
-| `G-613` | fehler | hoch | [Ein pausiertes Ziel laesst seine Phase laufen](todos/goals-g-0613-ein-pausiertes-ziel-laesst-seine-phase-laufen.md) | offen | — | — |
+| `G-613` | fehler | hoch | [Ein pausiertes Ziel laesst seine Phase laufen](laufend_codex/goals-g-0613-ein-pausiertes-ziel-laesst-seine-phase-laufen.md) | vorbereitet (codex) | — | — |
 | `G-614` | fehler | hoch | [Der Strategiekatalog kennt seine Karte und seinen Mindestgrad](laufend_codex/goals-g-0614-der-strategiekatalog-kennt-karte-und-mindestgrad.md) | laeuft (codex) | — | — |
 
 ### wartet auf Blocker — 7
