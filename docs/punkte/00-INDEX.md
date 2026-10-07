@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 271 |
+| `todos` | 270 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
+| `laufend_claudecode` | 2 |
 | `erledigt` | 674 |
 | **gesamt** | **947** |
 
@@ -673,7 +673,7 @@
 | `G-607` | fehler | hoch | [Der Ankerplan rechnet aus dem Dauer-Anteil](erledigt/goals-g-0607-der-ankerplan-rechnet-aus-dem-dauer-anteil.md) | erledigt | — | G-608 |
 | `G-608` | fehler | hoch | [Die Stufenwochen sind im Programm editierbar - und am Schirm belegt](erledigt/goals-g-0608-die-stufenwochen-sind-im-programm-editierbar.md) | erledigt | — | G-609, G-610, G-611 |
 | `G-609` | fehler | hoch | [Die Strategie wird beim Phasenstart nicht durchgereicht](laufend_claudecode/goals-g-0609-die-strategie-wird-beim-phasenstart-nicht-durchgereicht.md) | laeuft (claudecode) | — | — |
-| `G-610` | entscheidung | mittel | [contest_prep ist in der App nicht anlegbar](todos/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md) | offen | — | — |
+| `G-610` | fehler | mittel | [contest_prep ist in der App nicht anlegbar](laufend_claudecode/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md) | vorbereitet (claudecode) | — | — |
 | `G-611` | fehler | mittel | [Ein Ziel laesst sich nicht loeschen](todos/goals-g-0611-ein-ziel-laesst-sich-nicht-loeschen.md) | offen | — | — |
 
 ### wartet auf Blocker — 6

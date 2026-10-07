@@ -7,7 +7,7 @@
 |---|---|---|---|
 | Claude Code | G-609 | Die Strategie wird beim Phasenstart nicht durchgereicht | **laeuft**, raus 07.10. |
 | Codex | C-522 | die Allergiesuche kennt nur den Tagnamen | **laeuft**, raus 07.10. |
-| Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
+| Claude Code | G-610 | contest_prep ist in der App nicht anlegbar | **bereit in `next/`** |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
