@@ -81,3 +81,32 @@ dasselbe Muster steht in Supplements (`extended-regel.ts:39`
    (G-604 beachten), Stufen laenger machen -> Enddatum verschiebt sich;
    Rueckbau inkl. Grad. Bilder nach `backup/`.
 5. Sabotage beidseitig, Gate gruen mit Testzahl. Kein Commit.
+
+## Berichtigt - 2026-10-07 13:54, Tom
+
+**Tom:** *,610 gehe ich mit dir nicht einig"* - nicht ,alle fortgeschrittenen
+ab pro", sondern ein Mindestgrad JE STRATEGIE:
+
+| Kategorie | Strategie | ab Grad |
+|---|---|---|
+| fat_loss | lose | beginner |
+| fat_loss | conservative_cut, mini_cut, moderate_cut | advanced |
+| fat_loss | aggressive_cut | pro |
+| muscle_gain | gain | beginner |
+| muscle_gain | clean_bulk, lean_bulk | advanced |
+| muscle_gain | aggressive_bulk | pro |
+| hybrid | maintain | beginner |
+| hybrid | body_recomp | advanced |
+| contest_prep | contest_prep, peak_week | pro |
+| expert | custom, expert_bb_annual, maintenance_diet_break | pro |
+| recovery | reverse_diet | **offen - Tom fragen** |
+
+`[annahme]` `maintain` steht in `hybrid`; Tom nennt es zuerst ausdruecklich
+,beginner" und dann ,hybrid: beide advanced". Hier gilt beginner, bis Tom
+es anders sagt.
+
+`[read]` Folge fuer die Bauart: das ist ein Wert je Strategie, also ein
+Katalogfeld - dasselbe Muster wie `supplements.supplement_groups.min_experience_level`.
+Der Grad gehoert in `goals.goal_strategies` (Codex, Kette und live), die
+Oberflaeche liest ihn (Claude Code). **Der Auftrag oben (,advanced ab pro")
+ist damit ueberholt; der Oberflaechenteil wartet auf das Katalogfeld.**
