@@ -51,3 +51,13 @@ Daten (Codex): Kraftziel traegt die Uebung als Bezug auf den Uebungskatalog
 des Titels; Titelregel weg; Bestandsziele umhaengen.
 Oberflaeche (Claude Code): Anlegemodal ,Kraft" mit Uebungsauswahl; der
 Titel ist frei und hat keine Wirkung.
+
+## Erweitert - 2026-10-07 16:32, Tom
+
+*,umgekehrt sollte es in den uebungen moeglich sein targets zu setzen die dann auch in goals kommen. im spaeteren cardiomodul dasselbe"*
+
+Festlegung (Orchestrator): EIN Ziel, ZWEI Eingaenge. Das Ziel lebt nur in `goals.user_goals`; der Uebungsdialog in Training schreibt dieselbe Zeile (mit Uebungsbezug), keine zweite Zieltabelle. Training zeigt das Ziel an der Uebung an.
+
+`[cmd]` Abgrenzung: `training.routine_exercises.target_sets/reps/weight_kg/percent_1rm` sind Vorgaben je Einheit im Plan, KEINE Ziele - nicht vermischen.
+
+`[cmd]` Uebungskatalog `training.exercises` existiert; ein Cardio-Schema gibt es noch nicht. Darum die Messart jetzt allgemein anlegen (e1RM, Gewicht x Wdh, spaeter Zeit, Distanz, Pace), damit Cardio ohne Umbau andockt.
