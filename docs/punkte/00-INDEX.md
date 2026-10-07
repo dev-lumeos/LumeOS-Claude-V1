@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 270 |
+| `todos` | 271 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 671 |
-| **gesamt** | **944** |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 674 |
+| **gesamt** | **947** |
 
 ## medical — 50
 
@@ -75,7 +75,7 @@
 | `A-37` | befund | mittel | [Zwoelf ADRs in `docs/specs/Nutrition/04_adrs/`](erledigt/nutrition-a-0037-zwoelf-adrs-in-docs-specs-nutrition-04-adrs.md) | erledigt | — | C-175, C-318, C-357 |
 | `A-41` | befund | mittel | [Berichtsnummern kollidieren](todos/nutrition-a-0041-berichtsnummern-kollidieren.md) | offen | — | — |
 | `A-47` | feature | mittel | [Der ADR widerspricht sich bei `hard`](todos/nutrition-a-0047-der-adr-widerspricht-sich-bei-hard.md) | offen | — | — |
-| `A-107` | fehler | mittel | [Der Rezeptkatalog hat live keine Sprachspalten](laufend_codex/nutrition-a-0107-der-rezeptkatalog-hat-live-keine-sprachspalten.md) | laeuft (codex) | — | — |
+| `A-107` | fehler | mittel | [Der Rezeptkatalog hat live keine Sprachspalten](erledigt/nutrition-a-0107-der-rezeptkatalog-hat-live-keine-sprachspalten.md) | erledigt | — | — |
 | `C-08` | befund | mittel | [`services/nutrition-api` — der ADR gilt](erledigt/nutrition-c-0008-services-nutrition-api-der-adr-gilt.md) | erledigt | — | — |
 | `C-20` | feature | mittel | [Treffer am Wortanfang schlägt Treffer in der Wortmitte](erledigt/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md) | erledigt | — | — |
 | `C-24` | befund | niedrig | [Halbfertigprodukte ranken als Grundzutat](todos/nutrition-c-0024-halbfertigprodukte-ranken-als-grundzutat.md) | offen | — | C-391 |
@@ -577,7 +577,7 @@
 | `G-436` | feature | hoch | [die Hierarchie als Ansicht](erledigt/recovery-g-0436-die-hierarchie-als-ansicht.md) | erledigt | — | G-438 |
 | `G-438` | fehler | hoch | [Karte und Liste widersprechen sich](erledigt/recovery-g-0438-karte-und-liste-widersprechen-sich.md) | erledigt | — | — |
 | `G-440` | fehler | hoch | [MUSCLE_STATE ist eine Attrappe, die Kachel sagt „echte Daten"](erledigt/recovery-g-0440-muscle-state-ist-eine-attrappe.md) | erledigt | — | G-441, G-445 |
-| `G-441` | fehler | hoch | [die Today-Kachel rechnet weiter aus der Attrappe](laufend_claudecode/recovery-g-0441-die-today-kachel-rechnet-aus-der-attrappe.md) | laeuft (claudecode) | — | — |
+| `G-441` | fehler | hoch | [die Today-Kachel rechnet weiter aus der Attrappe](erledigt/recovery-g-0441-die-today-kachel-rechnet-aus-der-attrappe.md) | erledigt | — | — |
 | `G-443` | fehler | mittel | [zehn Muskeln ohne Flaechenziel](erledigt/recovery-g-0443-zehn-muskeln-ohne-flaechenziel.md) | erledigt | — | — |
 | `G-445` | fehler | hoch | [ein nie trainierter Muskel ist ERHOLT, nicht unbekannt](erledigt/recovery-g-0445-nie-trainiert-ist-erholt.md) | erledigt | — | G-446, G-448 |
 | `G-446` | fehler | hoch | [die Vererbung laeuft nur nach unten](erledigt/recovery-g-0446-die-vererbung-laeuft-nur-nach-unten.md) | erledigt | — | G-449 |
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 80
+## goals — 83
 
-### beauftragbar — 74
+### beauftragbar — 77
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -671,7 +671,10 @@
 | `G-604` | fehler | hoch | [Hoechstens ein aktives Kalorienziel](erledigt/goals-g-0604-hoechstens-ein-aktives-kalorienziel.md) | erledigt | — | A-101 |
 | `G-606` | fehler | mittel | [Eine Messung laesst sich nicht aendern](erledigt/goals-g-0606-eine-messung-laesst-sich-nicht-aendern.md) | erledigt | — | — |
 | `G-607` | fehler | hoch | [Der Ankerplan rechnet aus dem Dauer-Anteil](erledigt/goals-g-0607-der-ankerplan-rechnet-aus-dem-dauer-anteil.md) | erledigt | — | G-608 |
-| `G-608` | fehler | hoch | [Die Stufenwochen sind im Programm editierbar - und am Schirm belegt](laufend_claudecode/goals-g-0608-die-stufenwochen-sind-im-programm-editierbar.md) | laeuft (claudecode) | — | — |
+| `G-608` | fehler | hoch | [Die Stufenwochen sind im Programm editierbar - und am Schirm belegt](erledigt/goals-g-0608-die-stufenwochen-sind-im-programm-editierbar.md) | erledigt | — | G-609, G-610, G-611 |
+| `G-609` | fehler | hoch | [Die Strategie wird beim Phasenstart nicht durchgereicht](laufend_claudecode/goals-g-0609-die-strategie-wird-beim-phasenstart-nicht-durchgereicht.md) | laeuft (claudecode) | — | — |
+| `G-610` | entscheidung | mittel | [contest_prep ist in der App nicht anlegbar](todos/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md) | offen | — | — |
+| `G-611` | fehler | mittel | [Ein Ziel laesst sich nicht loeschen](todos/goals-g-0611-ein-ziel-laesst-sich-nicht-loeschen.md) | offen | — | — |
 
 ### wartet auf Blocker — 6
 
@@ -882,7 +885,7 @@
 | `C-513` | feature | hoch | [ein Supplement in eine Mahlzeit](erledigt/quer-c-0513-supplement-in-mahlzeit.md) | erledigt | — | G-475 |
 | `C-517` | entscheidung | hoch | [Backups gehoeren nicht in git](erledigt/quer-c-0517-backups-nicht-in-git.md) | erledigt | — | — |
 | `C-519` | feature | hoch | [ein Supplement bleibt ein Supplement](erledigt/quer-c-0519-supplement-bleibt-supplement.md) | erledigt | — | C-521, G-485 |
-| `C-522` | fehler | hoch | [die Allergiesuche kennt nur den Tagnamen](todos/quer-c-0522-allergiesuche-kennt-nur-tagnamen.md) | offen | — | — |
+| `C-522` | fehler | hoch | [die Allergiesuche kennt nur den Tagnamen](laufend_codex/quer-c-0522-allergiesuche-kennt-nur-tagnamen.md) | laeuft (codex) | — | — |
 | `C-523` | befund | hoch | [welche Aliase fehlen noch?](erledigt/quer-c-0523-welche-aliase-fehlen.md) | erledigt | — | C-525 |
 | `C-525` | feature | hoch | [Suchwortschatz für Ausschluss-Tags](erledigt/quer-c-0525-suchwortschatz-ausschluss-tags.md) | erledigt | — | — |
 | `C-533` | befund | hoch | [der Sollstand unterschlaegt service_role-Rechte](erledigt/quer-c-0533-schema-sollstand-substance-group-rechte.md) | erledigt | — | — |

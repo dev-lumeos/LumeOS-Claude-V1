@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-07
 agent: claudecode
 beauftragt: 2026-10-07
+erledigt: 2026-10-07
+commit: 080cc8fc
 
 braucht: [G-607, A-105]
 kind_von: G-607
@@ -62,3 +64,14 @@ geplant sein oder muss das bestehende ersetzen - messen, nicht umgehen.
 
 Hinweis: das Gate ist bis A-107 an `sprachspalten` rot (Live-Tabelle aus
 C-417) - das ist nicht deins; alle uebrigen Stufen einzeln nachweisen.
+
+## Abnahme - 2026-10-07, Commit `080cc8fc`
+
+`[cmd]` Diff: `programm-write.ts`, `programm-aktionen.ts` neu, `anker.ts` (`stufenplan`), `lesen.ts` (`ladeProgrammwochen`), Editor, Zeitachse, Seite; Test `g608-stufenwochen.test.ts` (13), Fremdtests G-544/G-607 nur in der Form angepasst. Gate gruen, web 2693.
+
+`[cmd]` Live nach dem Nachweis gemessen: test-user 2 Ziele, 2 Phasen; `goal_programs` 0, `goal_program_positions` 0 - Rueckbau vollstaendig.
+
+`[read]` Schirm: 16 Wochen -> 4/7/5 mit Daten; mid = 8 gespeichert, steht nach Reload, Abweichungssatz ,17 statt 16'; ,Vorschlag wiederherstellen' -> 4/7/5, 0 Zeilen. `goal_phase_id` absichtlich nicht gesetzt (UNIQUE, drei Stufen teilen sich eine Phase). Das Testziel musste per SQL angelegt und entfernt werden.
+
+Befunde daraus: G-609 (Strategie wird beim Phasenstart nicht durchgereicht), G-610 (contest_prep nicht anlegbar; Plan beginnt vor dem Ziel - Toms Frage), G-611 (kein Loeschweg fuer Ziele).
+

@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-07
 agent: codex
 beauftragt: 2026-10-07
+erledigt: 2026-10-07
+commit: 080cc8fc
 
 braucht: [A-105]
 kind_von: A-105
@@ -47,3 +49,8 @@ Unter der A-105-Freigabe (C-417 ist einer der sieben Schritte, Tom 06.10.):
    sind (Vergleich vorher/nachher).
 
 Stopp und melden bei jeder Abweichung. Kein Commit.
+
+## Abnahme - 2026-10-07, live, nachgemessen
+
+`[cmd]` Live: `recipe_curation_catalog` hat `name_de,name_en,name_th`; `sprachspalten-pruefen` gruen (130 _de-Spalten). Sicherungen `backup/a107-vorher.sql` 4.374 B / `-nachher.sql` 4.428 B. `[read]` Die 14 uebrigen von 488 beruehrten Tabellen und zwei Views laut Fingerabdruck unveraendert. Damit ist C-417 vollstaendig live.
+

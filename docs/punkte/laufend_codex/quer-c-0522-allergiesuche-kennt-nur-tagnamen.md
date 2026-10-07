@@ -12,6 +12,8 @@ beruehrt:
 zahlen:
   gemessen: 2026-09-08
   tags: 6
+agent: codex
+beauftragt: 2026-10-07
 ---
 
 # C-522 - die Allergiesuche kennt nur den Tagnamen
@@ -99,3 +101,17 @@ nicht."*
     A5  Erdnuss: getrennt oder unter nuts? Begruendet.
     A6  Gegenprobe: ein erfundenes Wort -> 0.
     A7  Sicherung, Vollkette, ALLE Waechter.
+
+## Auftrag - Kopf (2026-10-07)
+
+    AUFTRAG FUER Codex - C-522: die Allergiesuche findet ,brot' und ,weizen'
+    Bereich: supabase/_pipeline/ (Kette), Live nur lesend
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-07
+
+1. **Zuerst nachmessen** - der Befund ist vom 08.09.: `allergy_catalog_suggestions('nahrung', ...)` fuer gluten, brot, weizen, glutenfrei, nuesse, milch, laktose, soja, live und in der Kette.
+2. Messen, ob `public.allergen_aliases` (heute fuer die Produktsuche) auch die Eingabesuche bedienen kann, oder ob es eine eigene Aliasquelle braucht - begruenden.
+3. Aliase fuer die sechs ausschlussrelevanten Tags in der Kette, Quelle je Alias nennen (keine erfundenen Woerter).
+4. Probe: brot/weizen -> contains_gluten, milch -> contains_lactose usw.; ein fremdes Wort trifft nichts. Kette gruen, `testdaten-pruefen` 0 Befunde, Sabotage beidseitig.
+5. **Live nur nach Toms Freigabe**, dann nach dem Muster A-105 und mit Gate gruen danach. Kein Commit.
+

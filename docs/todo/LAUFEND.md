@@ -5,9 +5,8 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-608 | Die Stufenwochen sind im Programm editierbar - und am Schirm belegt | **laeuft**, raus 07.10. |
-| Claude Code | G-441 | die Today-Kachel rechnet weiter aus der Attrappe | **laeuft**, raus 06.10. |
-| Codex | A-107 | Der Rezeptkatalog hat live keine Sprachspalten | **laeuft**, raus 07.10. |
+| Claude Code | G-609 | Die Strategie wird beim Phasenstart nicht durchgereicht | **laeuft**, raus 07.10. |
+| Codex | C-522 | die Allergiesuche kennt nur den Tagnamen | **laeuft**, raus 07.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->

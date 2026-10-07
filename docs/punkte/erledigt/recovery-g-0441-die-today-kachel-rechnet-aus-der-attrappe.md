@@ -14,6 +14,8 @@ zahlen:
   gemessen: 2026-09-08
 agent: claudecode
 beauftragt: 2026-10-06
+erledigt: 2026-10-07
+commit: b56e7cee
 ---
 
 # G-441 — die Today-Kachel rechnet weiter aus der Attrappe
@@ -160,4 +162,11 @@ Nichts committen, nichts pushen.
     Stand:   2026-10-06
 
 Der Befund ist vom 08.09. - **zuerst nachmessen, ob er heute noch stimmt** (Zeilen haben sich seither verschoben). Dann: Today-Kachel ruft den Rechenweg aus G-440, `muskelwerte()` gemessen entfernen oder anschliessen, die Kopfzeile ,18 groups' nennt, was sie zaehlt. Schirmnachweis Today und Muscle map auf test-user zeigen dieselben Werte, Bild vorher/nachher. Sabotage beidseitig, Gate gruen. Kein Commit.
+
+
+## Abnahme - 2026-10-07, Commit `b56e7cee`
+
+`[cmd]` Diff: `recovery/muskelwerte.ts` neu (reine Funktion, Rechenweg G-440), `ansicht.tsx` und `tab-messwerte.tsx` rufen sie, tote `muskelwerte()` und sechs/zwei verwaiste Motor-Importe weg; neuer Test `g441-today-wie-muscle-map.test.ts` (8). Gate gruen, web 2693 (zusammen mit G-608 im Baum).
+
+`[read]` Befund vom 08.09. nachgemessen, galt noch. Schirm test-user 06.10.: 29 von 43 Flaechen verschieden -> 0. Sabotage 7/7. Commit wartete einen halben Tag auf A-107 (Gate rot an `sprachspalten` durch den Live-Nachzug A-105). Probebilder `backup/g441-probe-*.png` liegen noch - Tom entsorgt.
 
