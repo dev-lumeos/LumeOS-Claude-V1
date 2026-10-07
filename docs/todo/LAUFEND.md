@@ -6,7 +6,7 @@
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
 | Claude Code | G-441 | die Today-Kachel rechnet weiter aus der Attrappe | **laeuft**, raus 06.10. |
-| Codex | A-105 | Der Live-Nachzug der sieben Schritte | **laeuft**, raus 06.10. |
+| Codex | A-107 | Der Rezeptkatalog hat live keine Sprachspalten | **laeuft**, raus 07.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->

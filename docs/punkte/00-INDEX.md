@@ -8,8 +8,8 @@
 | `todos` | 270 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 670 |
-| **gesamt** | **942** |
+| `erledigt` | 671 |
+| **gesamt** | **943** |
 
 ## medical — 50
 
@@ -66,7 +66,7 @@
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 | `G-578` | fehler | hoch | [Der Laborimport hat drei Datenbankfunktionen und keine Oberflaeche](erledigt/medical-g-0578-der-laborimport-hat-keine-oberflaeche.md) | erledigt | — | — |
 
-## nutrition — 268
+## nutrition — 269
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -75,6 +75,7 @@
 | `A-37` | befund | mittel | [Zwoelf ADRs in `docs/specs/Nutrition/04_adrs/`](erledigt/nutrition-a-0037-zwoelf-adrs-in-docs-specs-nutrition-04-adrs.md) | erledigt | — | C-175, C-318, C-357 |
 | `A-41` | befund | mittel | [Berichtsnummern kollidieren](todos/nutrition-a-0041-berichtsnummern-kollidieren.md) | offen | — | — |
 | `A-47` | feature | mittel | [Der ADR widerspricht sich bei `hard`](todos/nutrition-a-0047-der-adr-widerspricht-sich-bei-hard.md) | offen | — | — |
+| `A-107` | fehler | mittel | [Der Rezeptkatalog hat live keine Sprachspalten](laufend_codex/nutrition-a-0107-der-rezeptkatalog-hat-live-keine-sprachspalten.md) | laeuft (codex) | — | — |
 | `C-08` | befund | mittel | [`services/nutrition-api` — der ADR gilt](erledigt/nutrition-c-0008-services-nutrition-api-der-adr-gilt.md) | erledigt | — | — |
 | `C-20` | feature | mittel | [Treffer am Wortanfang schlägt Treffer in der Wortmitte](erledigt/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md) | erledigt | — | — |
 | `C-24` | befund | niedrig | [Halbfertigprodukte ranken als Grundzutat](todos/nutrition-c-0024-halbfertigprodukte-ranken-als-grundzutat.md) | offen | — | C-391 |
@@ -747,7 +748,7 @@
 
 ## quer — 252
 
-### beauftragbar — 250
+### beauftragbar — 251
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -817,7 +818,8 @@
 | `A-102` | fehler | niedrig | [verdrahtung-pruefen ist rot und steht nicht im Gate](erledigt/quer-a-0102-verdrahtung-pruefen-ist-rot-und-steht-nicht-im-gate.md) | erledigt | — | A-103 |
 | `A-103` | fehler | niedrig | [verdrahtung-pruefen sieht coach und packages nicht](erledigt/quer-a-0103-verdrahtung-pruefen-sieht-coach-und-packages-nicht.md) | erledigt | — | — |
 | `A-104` | fehler | hoch | [Live hinkt der Kette hinterher, und niemand zaehlt wie weit](erledigt/quer-a-0104-live-hinkt-der-kette-hinterher.md) | erledigt | — | A-105, A-106 |
-| `A-105` | fehler | hoch | [Der Live-Nachzug der sieben Schritte](laufend_codex/quer-a-0105-der-live-nachzug-der-sieben-schritte.md) | laeuft (codex) | — | — |
+| `A-105` | fehler | hoch | [Der Live-Nachzug der sieben Schritte](erledigt/quer-a-0105-der-live-nachzug-der-sieben-schritte.md) | erledigt | — | A-107 |
+| `A-106` | befund | mittel | [Funktionen, Policies und Grants sind live anders als in der Kette](todos/quer-a-0106-funktionen-policies-grants-live-anders-als-die-kette.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
@@ -1002,12 +1004,11 @@
 | `G-599` | befund | mittel | [Die SSOT nennt Tabellen abwesend, die es gibt — und der Waechter sieht den Fast-Treffer nicht](todos/quer-g-0599-die-ssot-nennt-tabellen-abwesend-die-es-gibt.md) | offen | — | — |
 | `G-600` | fehler | hoch | [„Heute" ist an 32 Stellen der UTC-Vortag](erledigt/quer-g-0600-heute-ist-an-32-stellen-der-utc-vortag.md) | erledigt | — | — |
 
-### wartet auf Blocker — 2
+### wartet auf Blocker — 1
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-96` | fehler | hoch | [Der Nachtlauf verwirft seinen eigenen Grund](erledigt/quer-a-0096-der-nachtlauf-verwirft-seinen-eigenen-grund.md) | erledigt | A-80 | — |
-| `A-106` | befund | mittel | [Funktionen, Policies und Grants sind live anders als in der Kette](todos/quer-a-0106-funktionen-policies-grants-live-anders-als-die-kette.md) | offen | A-105 | — |
 
 ## buddy — 1
 
