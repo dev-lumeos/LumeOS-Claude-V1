@@ -146,7 +146,7 @@ import { ZielKarten } from './ziel-karten'
 import type {
   AdaptiverTdee, Fotosession, Koerpermessung, Koerperzusammensetzung,
   Meilenstein, Phase, ProfilEingaben, Umfangssatz, ZielFortschritt,
-  Zielphase,
+  Zielphase, Programmwochen,
 } from '../../../lib/goals/lesen'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
 // `[read]` **Nur der TYP** — `strategie-read.ts` zieht
@@ -255,6 +255,8 @@ export type EchteDaten = {
    * kann sie nicht liefern** (`LIMIT 1` im Rumpf).
    */
   offenePhasen: Zielphase[]
+  /** G-608: je Ziel die gespeicherten Stufenwochen. */
+  programme: Record<string, Programmwochen>
   /**
    * `[cmd]` **G-565/A4: die gewaehlte Einheit** — aus
    * `user_display_preferences`, eine Einstellung des NUTZERS
@@ -624,6 +626,7 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                 <PhasenZeitachse
                   ziele={echt.ziele} phasen={echt.offenePhasen}
                   strategien={echt.strategien} heute={echt.stichtag}
+                  programme={echt.programme}
                   tdee={echt.tdee?.adaptive_tdee_kcal
                     ?? echt.tdee?.formula_tdee_kcal ?? null}
                   gewichtKg={echt.profil?.body_weight_kg ?? null}

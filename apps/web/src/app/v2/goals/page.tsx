@@ -29,7 +29,8 @@ import type { Metadata } from 'next'
 import { heute } from '../../../lib/datum'
 import {
   alterAm, angemeldeteNutzerin, ladeAdaptivenTdee, ladeKoerperzusammensetzung,
-  ladeFotosessions, ladeMeilensteine, ladeMessungen, ladeOffenePhasen,
+  ladeFotosessions, ladeMeilensteine, ladeMessungen, ladeOffenePhasen, ladeProgrammwochen,
+  type Programmwochen,
   ladePhasen, ladeProfil,
   ladeUmfaenge, ladeZiele,
   zaehleZukunftsmessungen,
@@ -103,6 +104,7 @@ export default async function V2GoalsPage({
   // G-538 erlaubt `uq_goal_phases_one_open` mehrere.
   // `phase_am()` kann sie nicht liefern (`LIMIT 1`).
   let offenePhasen: Zielphase[] = []
+  let programme: Record<string, Programmwochen> = {}
   // `[read]` **Eine Darstellung, kein Datum** — faellt sie aus,
   // gilt die Vorgabe, nicht ein Fehler.
   let einheit: Rateneinheit = 'prozent'
@@ -112,7 +114,7 @@ export default async function V2GoalsPage({
     const userId = await angemeldeteNutzerin()
     ;[ziele, meilensteine, phasen, navy, tdee, messungen, zukunftsmessungen, umfaenge,
       profil, fotosessions, strategien, strategieProfil, offenePhasen,
-      einheit]
+      einheit, programme]
       = await Promise.all([
         ladeZiele(userId, stichtag),
         ladeMeilensteine(userId, stichtag),
@@ -128,6 +130,8 @@ export default async function V2GoalsPage({
         ladeStrategieProfil(userId),
         ladeOffenePhasen(userId, stichtag),
         ladeEinheit(),
+        // G-608: die Stufenwochen des Nutzers (E-85).
+        ladeProgrammwochen(),
       ])
 
     // Die zwei Zielwert-Funktionen kommen aus dem bestehenden Lesepfad
@@ -176,6 +180,7 @@ export default async function V2GoalsPage({
         strategien,
         strategieProfil,
         offenePhasen,
+        programme,
         einheit,
         ladefehler,
       }}

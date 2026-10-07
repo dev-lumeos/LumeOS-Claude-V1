@@ -855,3 +855,51 @@ export async function ladeOffenePhasen(
     }
   })
 }
+
+/** Die Stufenwochen eines Programms — G-608. */
+export type Programmwochen = {
+  program_id: string
+  strategie_code: string | null
+  /** `sub_phase_code` → `duration_weeks`. */
+  wochen: Record<string, number>
+}
+
+/**
+ * Die Programme der angemeldeten Nutzerin, je Ziel — G-608.
+ *
+ * `[cmd]` **`goals.goal_programs` und `goal_program_positions` sind seit
+ * A-105 live** (E-85: die editierten Wochen liegen im Programm, nicht im
+ * Katalog). **Keine `user_id`-Spalte:** der Zeilenschutz geht ueber
+ * `user_goals` (`goal_programs_owner`).
+ *
+ * `[read]` **Je Ziel das aelteste Programm** — dieser Schreibweg legt
+ * hoechstens eines an.
+ */
+export async function ladeProgrammwochen(): Promise<Record<string, Programmwochen>> {
+  const { data, error } = await goalsDb()
+    .from('goal_programs')
+    .select('id, goal_id, created_at, '
+      + 'goal_program_positions(strategie_code, sub_phase_code, duration_weeks)')
+    .order('created_at', { ascending: true })
+  if (error) throw new GoalsLeseFehler('READ_FAILED', `goal_programs: ${error.message}`)
+
+  const aus: Record<string, Programmwochen> = {}
+  for (const r of (data ?? []) as unknown as Array<Record<string, unknown>>) {
+    const ziel = text(r.goal_id)
+    if (!ziel || aus[ziel]) continue
+    const pos = Array.isArray(r.goal_program_positions)
+      ? r.goal_program_positions as Array<Record<string, unknown>> : []
+    const wochen: Record<string, number> = {}
+    for (const q of pos) {
+      const code = text(q.sub_phase_code)
+      const w = zahl(q.duration_weeks)
+      if (code && w !== null) wochen[code] = w
+    }
+    aus[ziel] = {
+      program_id: text(r.id) ?? '',
+      strategie_code: text(pos[0]?.strategie_code) ?? null,
+      wochen,
+    }
+  }
+  return aus
+}

@@ -44,7 +44,12 @@ import {
 } from '../../../lib/goals/editor-rechnungen'
 // `[cmd]` **G-544 hat die Ankerrechnung gebaut** — sie wird BENUTZT,
 // nicht nachgebaut. Zwei Rechnungen fuer dasselbe gehen auseinander.
-import { ankerplan, gesamtdauer, gesamtWochen, teilphasenAusAnteil } from '../../../lib/goals/anker'
+import {
+  ankerplan, gesamtdauer, gesamtWochen, stufenplan, teilphasenAusWochen, type Stufenplan,
+} from '../../../lib/goals/anker'
+import {
+  stufenwochenSpeichernAktion, stufenwochenZuruecksetzenAktion,
+} from './programm-aktionen'
 import type { Strategie } from '../../../lib/goals/strategie-read'
 // ══ G-565/E-83: dieselbe Rate, zwei Einheiten ══════════════
 import {
@@ -136,8 +141,12 @@ type Entwurf = Record<string, Overridewert>
  */
 export function PhasenEditor({
   strategie, override, zieldatum, tdee, gewichtKg, einheit,
-  onClose, onAnwenden,
+  goalId, programm = {}, onClose, onAnwenden,
 }: {
+  /** G-608: das Ziel, an dem das Programm haengt. */
+  goalId?: string
+  /** G-608: die gespeicherten Stufenwochen, `sub_phase_code` → Wochen. */
+  programm?: Record<string, number>
   strategie: Strategie
   override: Record<string, Overridewert>
   zieldatum: string | null
@@ -205,9 +214,40 @@ export function PhasenEditor({
   // Kein zweites Feld, keine zweite Wahrheit.
   const [anker, setAnker] = React.useState(zieldatum ?? '')
   const gesamt = gesamtdauer(entwurf.max_duration_weeks, strategie.max_duration_weeks)
+
+  // ══ G-608: die Stufenwochen, editierbar ═════════════════════════
+  //
+  // `[read]` **E-85:** der Vorschlag aus dem Verhaeltnis steht als
+  // Platzhalter, die Eingabe des Nutzers als Wert. **Je Stufe:** ein
+  // leeres Feld heisst „gespeicherte Zahl, sonst Vorschlag".
+  const [eingabe, setEingabe] = React.useState<Record<string, string>>(
+    () => Object.fromEntries(Object.entries(programm).map(([k, v]) => [k, String(v)])))
+  const [stufenMeldung, setStufenMeldung] = React.useState<string | null>(null)
+  const stufen = React.useMemo(() => {
+    const zahlen: Record<string, number> = {}
+    for (const [k, v] of Object.entries(eingabe)) {
+      const n = Number(v)
+      if (v.trim() !== '' && Number.isInteger(n) && n > 0) zahlen[k] = n
+    }
+    return stufenplan(strategie.sub_phases, gesamt, zahlen)
+  }, [eingabe, gesamt, strategie.sub_phases])
   const plan = React.useMemo(() => ankerplan(
-    anker, teilphasenAusAnteil(strategie.sub_phases, gesamt),
-    'Zieltag'), [anker, gesamt, strategie.sub_phases])
+    anker, stufen.wochen ? teilphasenAusWochen(stufen.namen, stufen.wochen) : [],
+    'Zieltag'), [anker, stufen])
+  const hatProgramm = Object.keys(programm).length > 0
+
+  async function stufenSpeichern() {
+    if (!goalId || !stufen.wochen) return
+    const r = await stufenwochenSpeichernAktion(goalId, strategie.code,
+      stufen.namen.map((n, i) => ({ sub_phase_code: n, duration_weeks: stufen.wochen![i]! })))
+    setStufenMeldung(r.ok ? `Gespeichert — ${r.zeilen} Stufen.` : r.fehler)
+  }
+  async function stufenZuruecksetzen() {
+    if (!goalId) return
+    const r = await stufenwochenZuruecksetzenAktion(goalId)
+    if (r.ok) setEingabe({})
+    setStufenMeldung(r.ok ? 'Zurueck zum Vorschlag.' : r.fehler)
+  }
 
   // ── Das Kalorienradeln ──────────────────────────────────────────
   const [tage, setTage] = React.useState(5)
@@ -425,6 +465,45 @@ export function PhasenEditor({
                          fontFamily: 'var(--font-mono)', color: 'var(--fg)',
                        }} />
               </Feld>
+              {stufen.namen.length > 0 && (
+                <div data-editor-stufen style={{ marginBottom: 12 }}>
+                  <div className="v2-eyebrow" style={{ marginBottom: 6 }}>
+                    Wochen je Stufe · {hatProgramm ? 'aus deinem Programm' : 'Vorschlag'}
+                  </div>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    {stufen.namen.map((n, i) => (
+                      <Feld key={n} label={n} sub={stufen.vorschlag
+                        ? `Vorschlag ${stufen.vorschlag[i]}` : 'kein Vorschlag'}>
+                        <input type="number" min={1} step={1} data-editor-stufe={n}
+                               value={eingabe[n] ?? ''}
+                               placeholder={stufen.vorschlag ? String(stufen.vorschlag[i]) : ''}
+                               onChange={e => setEingabe(d => ({ ...d, [n]: e.target.value }))}
+                               style={{
+                                 width: '100%', height: 30, background: 'var(--surface)',
+                                 border: '1px solid var(--border)', borderRadius: 6,
+                                 padding: '0 10px', fontSize: 12,
+                                 fontFamily: 'var(--font-mono)', color: 'var(--fg)',
+                               }} />
+                      </Feld>
+                    ))}
+                  </div>
+                  <Abweichung stufen={stufen} />
+                  {goalId && (
+                    <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+                      <button type="button" className="v2-btn v2-btn-primary v2-btn-sm"
+                              data-editor-stufen-speichern disabled={!stufen.wochen}
+                              onClick={stufenSpeichern}>Wochen speichern</button>
+                      <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                              data-editor-stufen-zurueck disabled={!hatProgramm}
+                              onClick={stufenZuruecksetzen}>Vorschlag wiederherstellen</button>
+                    </div>
+                  )}
+                  {stufenMeldung && (
+                    <div className="v2-dim" data-editor-stufen-meldung
+                         style={{ fontSize: 10.5, marginTop: 6 }}>{stufenMeldung}</div>
+                  )}
+                </div>
+              )}
               {plan.length > 1 ? (
                 <Card className="v2-card-tight" style={{ padding: 12 }}>
                   <div className="v2-eyebrow" style={{ marginBottom: 6 }}>
@@ -756,4 +835,22 @@ export function monateAusSpanne(s: string): number {
   const [a, b] = teile
   if (!Number.isFinite(a) || !Number.isFinite(b)) return 0
   return b - a + 1
+}
+
+/**
+ * G-608: weicht die Summe der Stufen von der Gesamtdauer ab, steht das
+ * da — **sichtbar, nicht still korrigiert.** Der Plan rechnet mit den
+ * eingetragenen Wochen.
+ */
+export function Abweichung({ stufen }: { stufen: Stufenplan | null }) {
+  if (!stufen || !stufen.abweichung || stufen.summe === null) return null
+  const gesamt = stufen.summe - stufen.abweichung
+  return (
+    <div className="v2-dim" data-stufen-abweichung={stufen.abweichung}
+         style={{ fontSize: 10.5, marginTop: 6, color: 'var(--warn)' }}>
+      Die Stufen ergeben {stufen.summe} Wochen, die Gesamtdauer ist {gesamt} —
+      {' '}{Math.abs(stufen.abweichung)} Woche{Math.abs(stufen.abweichung) === 1 ? '' : 'n'}
+      {stufen.abweichung > 0 ? ' mehr' : ' weniger'}. Gerechnet wird mit {stufen.summe}.
+    </div>
+  )
 }

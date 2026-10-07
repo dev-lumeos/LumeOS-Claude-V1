@@ -213,13 +213,63 @@ export function teilphasenAusAnteil(
 ): Teilphasenangabe[] {
   if (gesamt === null) return []
   const w = stufenwochen(gesamt, phasen.map(p => p.dauer_anteil ?? NaN))
-  if (!w) return []
-  let vorher = gesamt
-  return phasen.map((p, i) => {
-    const z = { name: p.name, weeks: vorher }
-    vorher -= w[i]!
+  return w ? teilphasenAusWochen(phasen.map(p => p.name), w) : []
+}
+
+/**
+ * Wochen je Stufe → Eingabe fuer `ankerplan`. Die erste Stufe beginnt
+ * die SUMME der Wochen vor dem Anker — nicht die Gesamtdauer: sind sie
+ * editiert, zaehlt, was der Nutzer eingetragen hat.
+ */
+export function teilphasenAusWochen(namen: string[], wochen: number[]): Teilphasenangabe[] {
+  let vorher = wochen.reduce((s, w) => s + w, 0)
+  return namen.map((name, i) => {
+    const z = { name, weeks: vorher }
+    vorher -= wochen[i]!
     return z
   })
+}
+
+// ══ G-608: die Wochen des NUTZERS gehen vor dem Vorschlag ══════════
+//
+// `[read]` **E-85:** der Katalog traegt das Verhaeltnis, das Programm
+// die Wochen dieses einen Nutzers (`goal_program_positions.duration_weeks`).
+// **Je Stufe:** gespeichert, sonst der Vorschlag aus `stufenwochen`.
+//
+// `[read]` **Weicht die Summe von der Gesamtdauer ab, wird das gesagt,
+// nicht still korrigiert** — der Plan rechnet mit den eingetragenen
+// Wochen, und `abweichung` traegt die Differenz zur Anzeige.
+
+export type Stufenplan = {
+  namen: string[]
+  /** Aus Gesamtdauer und Anteil; `null`, wenn er sich nicht rechnen laesst. */
+  vorschlag: number[] | null
+  /** Je Stufe die geltende Zahl; `null`, wenn eine Stufe keine hat. */
+  wochen: number[] | null
+  /** Je Stufe: kommt die Zahl aus dem Programm? */
+  gespeichert: boolean[]
+  summe: number | null
+  /** `summe − gesamt`; `null`, wenn eines fehlt. */
+  abweichung: number | null
+}
+
+export function stufenplan(
+  phasen: Array<{ name: string; dauer_anteil: number | null }>,
+  gesamt: number | null,
+  programm: Record<string, number>,
+): Stufenplan {
+  const namen = phasen.map(p => p.name)
+  const vorschlag = gesamt === null ? null
+    : stufenwochen(gesamt, phasen.map(p => p.dauer_anteil ?? NaN))
+  const gespeichert = namen.map(n => Number.isInteger(programm[n]) && programm[n]! > 0)
+  const roh = namen.map((n, i) => gespeichert[i] ? programm[n]! : vorschlag?.[i])
+  const wochen = roh.every((w): w is number => typeof w === 'number') && roh.length > 0
+    ? roh : null
+  const summe = wochen ? wochen.reduce((s, w) => s + w, 0) : null
+  return {
+    namen, vorschlag, wochen, gespeichert, summe,
+    abweichung: summe !== null && gesamt !== null ? summe - gesamt : null,
+  }
 }
 
 /**

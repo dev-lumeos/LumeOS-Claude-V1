@@ -109,8 +109,9 @@ describe('G-607 — vom Katalog zum Plan', () => {
 
 describe('G-607 — alle drei Leser rechnen aus dem Anteil', () => {
   for (const [datei, aufruf] of [
-    ['phasen-editor-echt.tsx', /teilphasenAusAnteil\(strategie\.sub_phases, gesamt\)/],
-    ['phasen-zeitachse.tsx', /teilphasenAusAnteil\(z\.strategie\.sub_phases, gesamtdauer\(/],
+    // G-608: ueber `stufenplan` — Programm vor Vorschlag, der Vorschlag aus dem Anteil.
+    ['phasen-editor-echt.tsx', /stufenplan\(strategie\.sub_phases, gesamt, zahlen\)/],
+    ['phasen-zeitachse.tsx', /stufenplan\(z\.strategie\.sub_phases, gesamtdauer\(/],
     ['strategie-vorschau.tsx', /stufenwochen\(s\.max_duration_weeks/],
   ] as const) {
     it(datei, () => {

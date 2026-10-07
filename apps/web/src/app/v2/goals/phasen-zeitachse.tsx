@@ -28,14 +28,15 @@ import { Card, Pill, Icon } from '@lumeos/ui'
 
 import { restTage } from '../../../lib/goals/pace'
 import {
-  ankerplan, gesamtdauer, gesamtWochen, teilphasenAusAnteil, type Ankerzeile,
+  ankerplan, gesamtdauer, gesamtWochen, stufenplan, teilphasenAusWochen,
+  type Ankerzeile, type Stufenplan,
 } from '../../../lib/goals/anker'
 import { phasenName } from '../../../lib/goals/phase-regeln'
-import type { ZielFortschritt, Zielphase } from '../../../lib/goals/lesen'
+import type { Programmwochen, ZielFortschritt, Zielphase } from '../../../lib/goals/lesen'
 import type { Strategie } from '../../../lib/goals/strategie-read'
 import type { Rateneinheit } from '../../../lib/goals/zielrate-einheit'
 // G-539: der Phasen-Editor.
-import { PhasenEditor } from './phasen-editor-echt'
+import { Abweichung, PhasenEditor } from './phasen-editor-echt'
 import { phasenOverrideAktion } from './phase-aktionen'
 
 /** Ein Ziel mit dem, was daran haengt. */
@@ -43,6 +44,15 @@ type Zeile = {
   ziel: ZielFortschritt
   phase: Zielphase | null
   strategie: Strategie | null
+  /** G-608: die gespeicherten Stufenwochen, `sub_phase_code` → Wochen. */
+  programm: Record<string, number>
+}
+
+/** G-608: Programm vor Vorschlag — dieselbe Rechnung in Zeitachse und Editor. */
+function stufenDerZeile(z: Zeile): Stufenplan | null {
+  if (!z.strategie) return null
+  return stufenplan(z.strategie.sub_phases, gesamtdauer(
+    z.phase?.parameters.max_duration_weeks, z.strategie.max_duration_weeks), z.programm)
 }
 
 /**
@@ -82,8 +92,8 @@ function Fenster({ von, bis, heute }: {
  * Rechnung steht in `lib/goals/anker.ts`**, nicht hier — G-539
  * braucht sie erneut.
  */
-function Ankertafel({ zeilen, anker }: {
-  zeilen: Ankerzeile[]; anker: string
+function Ankertafel({ zeilen, anker, stufen }: {
+  zeilen: Ankerzeile[]; anker: string; stufen: Stufenplan | null
 }) {
   const gesamt = gesamtWochen(zeilen)
   return (
@@ -116,9 +126,11 @@ function Ankertafel({ zeilen, anker }: {
           ))}
         </tbody>
       </table>
+      <Abweichung stufen={stufen} />
     </div>
   )
 }
+
 
 /**
  * Eine Zielzeile mit ihrem Zeitfenster.
@@ -136,14 +148,13 @@ function Zielzeile({ z, heute, onBearbeiten }: {
   // `contest_prep` fuehrt sie (1 von 17, gemessen). `[cmd]` **G-607:
   // die Wochen aus Gesamtdauer mal `dauer_anteil`**, die Gesamtdauer
   // aus dem Override der Phase, sonst aus dem Katalog.
+  // `[cmd]` **G-608: je Stufe die gespeicherte Woche, sonst der
+  // Vorschlag** (E-85).
+  const stufen = React.useMemo(() => stufenDerZeile(z), [z])
   const plan = React.useMemo(() => {
-    if (!g.target_date || !z.strategie) return []
-    return ankerplan(
-      g.target_date,
-      teilphasenAusAnteil(z.strategie.sub_phases, gesamtdauer(
-        z.phase?.parameters.max_duration_weeks, z.strategie.max_duration_weeks)),
-      g.title)
-  }, [g.target_date, g.title, z.strategie, z.phase])
+    if (!g.target_date || !stufen?.wochen) return []
+    return ankerplan(g.target_date, teilphasenAusWochen(stufen.namen, stufen.wochen), g.title)
+  }, [g.target_date, g.title, stufen])
 
   return (
     <div data-zielzeile={g.goal_id} style={{
@@ -203,7 +214,7 @@ function Zielzeile({ z, heute, onBearbeiten }: {
             Terminplan {offen ? 'schliessen' : 'zeigen'}
           </button>
           {offen && g.target_date && (
-            <Ankertafel zeilen={plan} anker={g.target_date} />
+            <Ankertafel zeilen={plan} anker={g.target_date} stufen={stufen} />
           )}
         </>
       )}
@@ -246,8 +257,10 @@ function Zielzeile({ z, heute, onBearbeiten }: {
  * @param heute       Der Stichtag. **Kein `Date.now()`.**
  */
 export function PhasenZeitachse({
-  ziele, phasen, strategien, heute, tdee, gewichtKg, einheit, onNeuesZiel,
+  ziele, phasen, strategien, programme = {}, heute, tdee, gewichtKg, einheit, onNeuesZiel,
 }: {
+  /** G-608: je Ziel die gespeicherten Stufenwochen. */
+  programme?: Record<string, Programmwochen>
   ziele: ZielFortschritt[]
   phasen: Zielphase[]
   strategien: Strategie[]
@@ -273,7 +286,11 @@ export function PhasenZeitachse({
       : (p?.phase_type
         ? strategien.find(x => x.code === p.phase_type) ?? null
         : null)
-    return { ziel: z, phase: p, strategie: s }
+    // `[read]` **Nur, wenn das Programm zur Strategie gehoert** — nach
+    // einem Strategiewechsel waeren die alten Stufen fremde Namen.
+    const pr = programme[z.goal_id]
+    return { ziel: z, phase: p, strategie: s,
+      programm: pr && s && pr.strategie_code === s.code ? pr.wochen : {} }
   })
 
   return (
@@ -339,6 +356,8 @@ export function PhasenZeitachse({
           tdee={tdee}
           gewichtKg={gewichtKg}
           einheit={einheit}
+          goalId={bearbeitet.ziel.goal_id}
+          programm={bearbeitet.programm}
           onClose={() => setBearbeitet(null)}
           onAnwenden={async (abweichung) => {
             const phaseId = bearbeitet.phase?.phase_id

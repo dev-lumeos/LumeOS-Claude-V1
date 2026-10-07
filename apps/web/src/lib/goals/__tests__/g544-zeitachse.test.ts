@@ -315,7 +315,8 @@ describe('G-544/A4 — was die Achse nicht kann, steht da', () => {
     assert.match(q, /data-editor-auf=\{g\.goal_id\}/,
       'es gibt keinen Weg in den Editor — G-539 ist gebaut, also '
       + 'gehoert der Knopf an die Zielzeile')
-    assert.match(q, /import \{ PhasenEditor \}/,
+    // G-608: der Import traegt jetzt auch `Abweichung` — gemeint ist der Editor.
+    assert.match(q, /import \{[^}]*\bPhasenEditor\b[^}]*\} from '\.\/phasen-editor-echt'/,
       'der Knopf zeigt auf nichts — der Editor wird nicht eingebunden')
   })
 
