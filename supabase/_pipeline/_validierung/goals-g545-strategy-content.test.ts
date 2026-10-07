@@ -38,9 +38,11 @@ function strategyProbe(code: string, values: string): string {
     BEGIN;
     INSERT INTO goals.goal_strategies (
       code, label, description, icon, category, tier,
+      auswahl_gruppe, min_erfahrung, standard,
       tdee_modifier, protein_per_kg, fat_percent, max_duration_weeks
     ) VALUES (
       '${code}', 'Probe', 'Probe', 'Probe', 'hybrid', 'advanced',
+      'halten', 'advanced', false,
       ${values}
     );
     COMMIT;
@@ -213,12 +215,13 @@ test('G-545: der Katalog ist fuer test-user lesbar und G-536-Grenzen halten', ()
     BEGIN;
     INSERT INTO goals.goal_strategies (
       code, label, description, icon, category, tier,
+      auswahl_gruppe, min_erfahrung, standard,
       tdee_modifier, protein_per_kg, fat_percent, max_duration_weeks
     ) VALUES
       ('g545_low', 'Probe', 'Probe', 'Probe', 'hybrid', 'advanced',
-       -0.40, 1.2, 0.15, 1),
+       'halten', 'advanced', false, -0.40, 1.2, 0.15, 1),
       ('g545_high', 'Probe', 'Probe', 'Probe', 'hybrid', 'advanced',
-       0.25, 3.5, 0.40, 1);
+       'halten', 'advanced', false, 0.25, 3.5, 0.40, 1);
     SELECT json_build_object('rows', count(*))
     FROM goals.goal_strategies WHERE code LIKE 'g545_%';
     ROLLBACK;

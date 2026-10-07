@@ -36,9 +36,11 @@ function strategyInsert(overrides: string): string {
     BEGIN;
     INSERT INTO goals.goal_strategies (
       code, label, description, icon, category, tier,
+      auswahl_gruppe, min_erfahrung, standard,
       tdee_modifier, protein_per_kg, fat_percent
     ) VALUES (
       'g536_probe', 'Probe', 'Probe', 'Probe', 'hybrid', 'advanced',
+      'halten', 'advanced', false,
       0, 1.2, 0.15
     );
     UPDATE goals.goal_strategies SET ${overrides} WHERE code = 'g536_probe';
@@ -131,9 +133,11 @@ test('G-536 A1: Wertelisten und JSON-Objekt-CHECK akzeptieren gueltig und weisen
     BEGIN;
     INSERT INTO goals.goal_strategies (
       code, label, description, icon, category, tier,
+      auswahl_gruppe, min_erfahrung, standard,
       tdee_modifier, protein_per_kg, fat_percent, requirements
     ) VALUES (
       'g536_valid', 'Probe', 'Probe', 'Probe', 'fat_loss', 'simple',
+      'abnehmen', 'beginner', false,
       0, 1.2, 0.15, '{}'::jsonb
     );
     SELECT json_build_object('rows', count(*))
@@ -158,11 +162,12 @@ test('G-536 A1: alle numerischen CHECKs lassen beide Raender zu und sperren auss
     BEGIN;
     INSERT INTO goals.goal_strategies (
       code, label, description, icon, category, tier,
+      auswahl_gruppe, min_erfahrung, standard,
       tdee_modifier, weight_change_target_percent, max_duration_weeks,
       protein_per_kg, fat_percent
     ) VALUES
-      ('g536_low', 'Low', 'Low', 'Low', 'fat_loss', 'advanced', -0.40, -2.5, 1, 1.2, 0.15),
-      ('g536_high', 'High', 'High', 'High', 'muscle_gain', 'advanced', 0.25, 1.5, 1, 3.5, 0.40);
+      ('g536_low', 'Low', 'Low', 'Low', 'fat_loss', 'advanced', 'abnehmen', 'advanced', false, -0.40, -2.5, 1, 1.2, 0.15),
+      ('g536_high', 'High', 'High', 'High', 'muscle_gain', 'advanced', 'aufbauen', 'advanced', false, 0.25, 1.5, 1, 3.5, 0.40);
     SELECT json_build_object('rows', count(*))
     FROM goals.goal_strategies WHERE code LIKE 'g536_%';
     ROLLBACK;

@@ -3210,6 +3210,15 @@
       ]
     },
     {
+      "id": "614_goal_strategy_selection",
+      "path": "supabase/_pipeline/11_goals/614_goal_strategy_selection.sql",
+      "kind": "sql",
+      "creates": "G-614: 17 Strategien tragen Auswahlgruppe, Mindestgrad und drei eindeutige Beginner-Erstwahlen fuer Ziel setzen; Uebergang und Planer bleiben separat.",
+      "depends_on": [
+        "562_goal_subphase_duration_ratio"
+      ]
+    },
+    {
       "id": "514_goal_contributions_schema",
       "path": "supabase/migrations/20260929081000_g514_goal_contributions.sql",
       "kind": "sql",
@@ -3343,6 +3352,7 @@
       "depends_on": [
         "563_target_scoped_calculation",
         "560_goal_programs",
+        "614_goal_strategy_selection",
         "514_goal_contribution_backfill",
         "551_role_measurement_separation_data",
         "546_muscle_anatomy_data",
@@ -3379,6 +3389,15 @@
       ]
     },
     {
+      "id": "614_goal_strategy_selection_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g614-selection.test.ts",
+      "kind": "tsx",
+      "creates": "G-614 Gegenprobe: 17 exakte Zuordnungen, drei Beginner-Erstwahlen, Pflichtfelder, CHECKs und eindeutiger Standard je Zielrichtung.",
+      "depends_on": [
+        "614_goal_strategy_selection"
+      ]
+    },
+    {
       "id": "558_goal_phase_start_strategy_probe",
       "path": "supabase/_pipeline/_validierung/goals-g558-phase-start-strategy.test.ts",
       "kind": "tsx",
@@ -3396,6 +3415,7 @@
       "depends_on": [
         "545_goal_strategy_content",
         "562_goal_subphase_duration_ratio",
+        "614_goal_strategy_selection",
         "a86_testdaten_einspielen"
       ]
     },
