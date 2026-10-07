@@ -109,3 +109,8 @@ ein empfohlener Uebergang, keine Erstwahl. **Die 7-Karten-Spalte
 4. **Live freigegeben** (Tom 14:09, ,gleich einbauen"): Muster A-105 -
    Sicherung, nur diese Spalten und Werte, `NOTIFY pgrst`, Nachweis,
    Sicherung, danach Gate gruen. Kein Commit.
+
+## Bestaetigt - 2026-10-07 14:19, Tom
+
+`reverse_diet` = `advanced`, geht so live.
+

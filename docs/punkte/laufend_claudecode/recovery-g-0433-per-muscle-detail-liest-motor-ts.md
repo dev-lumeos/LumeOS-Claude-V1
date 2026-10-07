@@ -235,3 +235,8 @@ davon schon erledigt haben.**
 3. Schirmnachweis auf `test-user@lumeos.local`: Liste und Karte zeigen dieselben Muskeln mit denselben Werten; Bilder vorher/nachher der ganzen Seite nach `backup/`.
 4. Sabotage beidseitig, Gate gruen mit Testzahl. Kein Commit.
 
+
+## Richtung - 2026-10-07 14:19, Tom
+
+Option 1: die Karte folgt der Liste. Die Liste rechnet bereits je Muskel (105 Namen, 110 Werte, Ableitung nach G-438/G-446); `muskelzeilen()` kennt nur 18 Kartenkuerzel. Die Rechnung je Muskel zieht nach `muskelwerte.ts`, Karte/Today/Liste lesen sie, gleiche Farbschwellen. Der Auftrag oben (,Liste folgt muskelzeilen()') stand auf dem Befund vom 08.09. - Orchestrator-Fehler, nicht nachgemessen.
+
