@@ -249,11 +249,15 @@ describe('G-554/A2 — die Phasenart kommt aus der Katalogzeile', () => {
       + 'driften')
   })
 
-  it('die offene Strategie wird gemeldet, nicht verschwiegen', () => {
-    // `[cmd]` **`goal_phase_start` nimmt `strategie_code` nicht** —
-    // gemessen 2026-09-30.
-    assert.match(W(), /strategieOffen/,
-      'es wird nicht gemeldet, dass der Strategiecode nicht ankommt')
+  it('die gewaehlte Strategie wird an den Phasenstart gereicht (G-609)', () => {
+    // `[cmd]` **Bis A-105 nahm `goal_phase_start` den Code nicht** —
+    // gemessen 2026-09-30; die Zusage hiess „wird gemeldet". **Seit
+    // A-105 nimmt sie ihn**, also dreht sich die Zusage um: er wird
+    // durchgereicht, und „offen" gibt es nicht mehr.
+    assert.match(W(), /strategie_code: n\.phase\.strategie_code,/,
+      'phasenzielAnlegen reicht die Strategie nicht an phaseStarten')
+    assert.ok(!/strategieOffen/.test(W()),
+      'der Schreibweg meldet die Strategie noch „offen"')
   })
 })
 
@@ -473,15 +477,12 @@ describe('G-554/A1 — die Strategie im Anlegen-Dialog', () => {
       'die Fehlerart wird nicht ausgewertet')
   })
 
-  it('die offene Strategie steht am Feld UND im Ergebnis', () => {
+  it('keine Marke „noch nicht gespeichert" mehr (G-609)', () => {
+    // `[read]` **Die Marke war richtig, solange der Code nicht ankam**
+    // — jetzt waere sie eine Falschaussage.
     const q = M()
-    assert.match(q, /data-zielstrategie-marke/,
-      'am Feld fehlt die Marke — dann sieht die Wahl aus, als kaeme '
-      + 'sie an')
-    assert.match(q, /data-ziel-strategie-offen/,
-      'im Ergebnis steht nicht, dass der Code nicht gespeichert wurde')
-    assert.match(q, /G-543/,
-      'die Marke nennt den Punkt nicht, auf den sie wartet')
+    assert.ok(!/data-zielstrategie-marke|data-ziel-strategie-offen|strategieOffen/.test(q),
+      'das Modal behauptet noch, die Strategie werde nicht gespeichert')
   })
 })
 

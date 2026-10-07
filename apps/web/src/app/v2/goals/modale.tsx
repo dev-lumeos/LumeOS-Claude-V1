@@ -218,17 +218,6 @@ const BEISPIEL: Record<ZielArt, { titel: string; ist: string; ziel: string }> = 
   health: { titel: 'z. B. Blutdruck unter 130/80', ist: '138', ziel: '130' },
   lifestyle: { titel: 'z. B. dreimal pro Woche Ausdauer', ist: '1', ziel: '3' },
 }
-/**
- * Die Marke am Strategiefeld — E-68, eine Zeile.
- *
- * `[cmd]` **`goal_phase_start` nimmt `strategie_code` nicht
- * entgegen** (gemessen 2026-09-30). `[read]` **Die Phase entsteht,
- * der Code wartet** — und das steht da, statt still zu verschwinden.
- */
-const ATTRAPPE_STRATEGIE = attrappeAus(
-  'goals.goal_phase_start',
-  'den Parameter fuer den Strategiecode — G-543/A5 bei Codex. '
-  + 'Die Phase wird angelegt, der Code noch nicht gespeichert.')
 
 /** Der Stil der Wahlknoepfe — eine Stelle, damit er nicht driftet. */
 function knopfStil(an: boolean): React.CSSProperties {
@@ -315,7 +304,7 @@ function NewGoalModal({ onClose, strategien }: {
   // Strategie bleibt gueltig — **es sagt wohin, nicht wie.** Wer
   // eine waehlt, legt ein PHASENZIEL an.
   const [strategie, setStrategie] = React.useState<string | null>(null)
-  const [strategieOffen, setStrategieOffen] = React.useState(false)
+  const [mitPhase, setMitPhase] = React.useState(false)
   // `[cmd]` **G-553:** ein Tokenfehler ist kein Datenfehler.
   const [sitzungsfehler, setSitzungsfehler] = React.useState(false)
 
@@ -408,13 +397,11 @@ function NewGoalModal({ onClose, strategien }: {
     })
     setLaeuft(false)
     if (r.ok) {
-      setStrategieOffen(r.strategieOffen)
+      setMitPhase(r.phase_id !== null)
       setFertig(true)
       // `[read]` **Erst schliessen, wenn die Zeile da ist** — sonst
-      // sieht ein Fehlschlag aus wie Erfolg. `[read]` **Blieb die
-      // Strategie offen, bleibt das Fenster laenger stehen** — der
-      // Satz will gelesen werden.
-      setTimeout(onClose, r.strategieOffen ? 2600 : 900)
+      // sieht ein Fehlschlag aus wie Erfolg.
+      setTimeout(onClose, 900)
     } else {
       // `[cmd]` **G-553: Sitzungsfehler von Datenfehler trennen.**
       // `[read]` **Sonst aendert der Nutzer seine Eingaben, und das
@@ -564,22 +551,10 @@ function NewGoalModal({ onClose, strategien }: {
               )}
             </div>
           )}
-          {/* ══ Was NOCH nicht ankommt ═══════════════════════════
-              `[cmd]` **`goal_phase_start` nimmt den Strategiecode
-              heute nicht entgegen** — gemessen 2026-09-30 an
-              `pg_get_function_arguments`: sieben Parameter, keiner
-              dafuer. **Das liegt bei Codex (G-543/A5).**
-
-              `[read]` **Die Phase entsteht trotzdem** — mit der
-              richtigen Art aus der Katalogzeile. **Nur der Code
-              selbst wird noch nicht gespeichert, und genau das
-              sagt die Marke.** */}
-          {strategie !== null && (
-            <div className="v2-dim" data-zielstrategie-marke
-                 style={{ fontSize: 10.5, marginTop: 6, lineHeight: 1.5 }}>
-              {ATTRAPPE_STRATEGIE}
-            </div>
-          )}
+          {/* `[cmd]` **G-609: hier stand eine Attrappenmarke** — „der Code
+              noch nicht gespeichert" (G-543/A5). Seit A-105 nimmt
+              `goal_phase_start` ihn als `p_strategie_code`; die Phase
+              traegt die gewaehlte Strategie. */}
         </GField>
       )}
       {/* ══ G-537/A3: „Linked modules" bekommt einen Platz mit
@@ -670,16 +645,7 @@ function NewGoalModal({ onClose, strategien }: {
           background: 'color-mix(in oklch, var(--pos) 8%, var(--surface))',
           border: '1px solid color-mix(in oklch, var(--pos) 30%, var(--border))',
         }}>
-          {strategieOffen ? 'Phasenziel angelegt.' : 'Ziel angelegt.'}
-          {/* `[read]` **Was NICHT gespeichert wurde, steht hier** —
-              nicht nur am Feld, sondern auch im Ergebnis. */}
-          {strategieOffen && (
-            <div className="v2-dim" data-ziel-strategie-offen
-                 style={{ fontSize: 10.5, marginTop: 4 }}>
-              Die Phase steht. Der Strategiecode wird noch nicht
-              gespeichert — er wartet auf G-543/A5.
-            </div>
-          )}
+          {mitPhase ? 'Phasenziel angelegt.' : 'Ziel angelegt.'}
         </div>
       )}
     </GModal>

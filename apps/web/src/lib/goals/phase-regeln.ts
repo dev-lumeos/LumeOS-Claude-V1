@@ -145,6 +145,12 @@ export type Phasenstart = {
    * CHECK verlangt es fuer fuenf der neun Arten.
    */
   zielrate_pct_kg_woche?: number | null
+  /**
+   * `[cmd]` **G-609: die gewaehlte Strategie** — `goal_phase_start` nimmt
+   * sie seit A-105 als `p_strategie_code` (Fremdschluessel auf
+   * `goal_strategies.code`). `null` heisst: keine gewaehlt.
+   */
+  strategie_code?: string | null
 }
 
 // ── G-519/A5: was der CHECK je Art verlangt ──────────────────────

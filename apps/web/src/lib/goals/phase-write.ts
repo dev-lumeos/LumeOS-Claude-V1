@@ -70,9 +70,10 @@ function db() {
 // ein Augenblick.
 //
 // `[cmd]` **Gemessen 2026-09-29: G-531 ist live.**
-// `goal_phase_start` hat sieben Parameter, der letzte ist
-// `p_zielrate_pct_kg_woche numeric`, **und es gibt GENAU EINE
-// Signatur** — die alte sechsparametrige ist entfernt.
+// `goal_phase_start` hatte sieben Parameter, der letzte war
+// `p_zielrate_pct_kg_woche numeric`, **und es gab GENAU EINE
+// Signatur** — die alte sechsparametrige ist entfernt. `[cmd]` **Seit
+// A-105 (G-558) sind es acht: `p_strategie_code text` (G-609).**
 //
 // `[read]` **Damit ist der Umweg unnoetig.** **Ein Umweg im
 // Anwendungscode war einmal vertretbar; zweimal waere es eine
@@ -123,6 +124,10 @@ export async function phaseStarten(e: Phasenstart): Promise<string> {
     p_projected_end_date: e.projected_end_date ?? null,
     p_variant: e.variant ?? null,
     p_zielrate_pct_kg_woche: e.zielrate_pct_kg_woche ?? null,
+    // `[cmd]` **G-609: seit A-105 der achte Parameter** — gemessen
+    // 2026-10-07 an `pg_get_function_arguments`. Vorher entstand die
+    // Phase ohne Strategie, und die Oberflaeche meldete sie „offen".
+    p_strategie_code: e.strategie_code ?? null,
   })
 
   if (error) {

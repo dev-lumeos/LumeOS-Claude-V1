@@ -309,11 +309,12 @@ export function StrategieVorschau({ s, onSchliessen }: {
       <Liste titel="Danach moeglich" werte={s.next_codes} marke="next_codes" />
 
       {/* ── Was diese Anzeige NICHT tut ────────────────────────────
-          `[cmd]` **`goal_phases.strategie_code` ist ein
-          Fremdschluessel auf `goal_strategies.code`, aber
-          `goals.goal_phase_start` nimmt ihn nicht entgegen** —
-          gemessen an `pg_get_function_arguments`, 2026-09-29.
-          `[read]` **Ein Satz, kein Knopf** (A5). */}
+          `[cmd]` **G-609: `goal_phase_start` nimmt den Code seit
+          A-105 als `p_strategie_code`** — beim ANLEGEN einer Phase
+          (Anlegemodal) landet die Strategie also in der Phase.
+          `[read]` **Eine LAUFENDE Phase umzubinden, hat weiterhin
+          keinen Weg** — deshalb bleibt der Satz. Ein Satz, kein
+          Knopf (A5). */}
       <div data-vorschau-grenze className="v2-dim" style={{
         fontSize: 10.5, lineHeight: 1.5, marginTop: 12, paddingTop: 10,
         borderTop: '1px solid var(--border)',

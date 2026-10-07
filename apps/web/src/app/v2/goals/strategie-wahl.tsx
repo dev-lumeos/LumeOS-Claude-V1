@@ -15,14 +15,14 @@
 // ── Die Grenze (A5) ────────────────────────────────────────────────
 //
 // `[read]` **Diese Datei zeigt und waehlt. Sie schreibt nicht.**
-// `[cmd]` **`goal_phases.strategie_code` existiert als
-// Fremdschluessel, aber `goals.goal_phase_start` hat keinen
-// Parameter dafuer** — gemessen an `pg_get_function_arguments`. **Die
-// Terminierung ist G-538 und liegt bei Codex, der Editor ist G-539.**
+// `[cmd]` **G-609: `goals.goal_phase_start` nimmt den Code seit
+// A-105 als `p_strategie_code`** — das Anlegemodal reicht ihn durch,
+// eine neue Phase traegt ihre Strategie. **Eine laufende Phase
+// umzubinden, hat weiterhin keinen Weg** (bis 2026-09-29 fehlte auch
+// der Parameter).
 //
 // `[read]` **Deshalb gibt es hier keinen Knopf, der dorthin zeigt.**
-// Die Wahl wird gehalten und angezeigt — am Tag der Einspielung wird
-// sie nur noch durchgereicht.
+// Die Wahl wird gehalten und angezeigt.
 import * as React from 'react'
 import { Card, Pill, Icon } from '@lumeos/ui'
 

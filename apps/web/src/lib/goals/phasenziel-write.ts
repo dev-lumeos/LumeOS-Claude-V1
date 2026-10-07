@@ -51,15 +51,10 @@ export type PhasenzielNeu = {
   phase: {
     phase_type: Phasenart
     /**
-     * `[cmd]` **`goal_phase_start` nimmt den Strategiecode heute
-     * NICHT entgegen** — gemessen 2026-09-30 an
-     * `pg_get_function_arguments`, die Signatur hat sieben
-     * Parameter und keinen dafuer. **Das liegt bei Codex
-     * (G-543/A5).**
-     *
-     * `[read]` **Er wird trotzdem mitgefuehrt**, damit am Tag der
-     * Einspielung nur noch durchgereicht werden muss — und die
-     * Oberflaeche sagt, dass er noch nicht ankommt.
+     * `[cmd]` **G-609: landet in `goal_phases.strategie_code`** —
+     * `goal_phase_start` nimmt ihn seit A-105 als `p_strategie_code`.
+     * Bis dahin (gemessen 2026-09-30: sieben Parameter) wurde er nur
+     * mitgefuehrt, und die Oberflaeche meldete ihn „offen".
      */
     strategie_code: string | null
     zielrate_pct_kg_woche?: number | null
@@ -71,12 +66,6 @@ export type PhasenzielErgebnis =
       ok: true
       goal_id: string
       phase_id: string | null
-      /**
-       * `true`, wenn eine Strategie gewaehlt wurde, die nicht
-       * gespeichert werden konnte — **die Oberflaeche muss das
-       * sagen.**
-       */
-      strategieOffen: boolean
     }
   | {
       ok: false
@@ -138,7 +127,7 @@ export async function phasenzielAnlegen(
   // `[read]` **Ohne Phase ist hier Schluss** — ein Ziel ohne
   // Strategie ist gueltig.
   if (!n.phase) {
-    return { ok: true, goal_id: z.id, phase_id: null, strategieOffen: false }
+    return { ok: true, goal_id: z.id, phase_id: null }
   }
 
   // ── Schritt 2: die Phase ────────────────────────────────────────
@@ -149,14 +138,12 @@ export async function phasenzielAnlegen(
       goal_id: z.id,
       projected_end_date: n.ziel.target_date ?? null,
       zielrate_pct_kg_woche: n.phase.zielrate_pct_kg_woche ?? null,
+      strategie_code: n.phase.strategie_code,
     })
     return {
       ok: true,
       goal_id: z.id,
       phase_id: phaseId,
-      // `[cmd]` **Der Code wurde NICHT geschrieben** — die Signatur
-      // nimmt ihn nicht. **Das wird gemeldet, nicht verschwiegen.**
-      strategieOffen: n.phase.strategie_code !== null,
     }
   } catch (e) {
     // `[read]` **Die Phase faellt — also faellt auch das Ziel.**
