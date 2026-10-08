@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 280 |
+| `todos` | 281 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 685 |
-| **gesamt** | **971** |
+| **gesamt** | **972** |
 
 ## medical — 50
 
@@ -773,9 +773,9 @@
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 | `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](erledigt/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | erledigt | — | — |
 
-## quer — 253
+## quer — 254
 
-### beauftragbar — 252
+### beauftragbar — 253
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -1031,6 +1031,7 @@
 | `G-589` | befund | niedrig | [328 Ausfuhren zu viel — und wie die Zahl 385 zu 56 wurde](todos/quer-g-0589-dreihundertachtundzwanzig-ausfuhren-zu-viel.md) | offen | — | — |
 | `G-599` | befund | mittel | [Die SSOT nennt Tabellen abwesend, die es gibt — und der Waechter sieht den Fast-Treffer nicht](todos/quer-g-0599-die-ssot-nennt-tabellen-abwesend-die-es-gibt.md) | offen | — | — |
 | `G-600` | fehler | hoch | [„Heute" ist an 32 Stellen der UTC-Vortag](erledigt/quer-g-0600-heute-ist-an-32-stellen-der-utc-vortag.md) | erledigt | — | — |
+| `G-635` | fehler | mittel | [Dev-Server liefert die Schrift mit falschem Hash](todos/quer-g-0635-dev-server-liefert-schrift-mit-falschem-hash.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
 
