@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 281 |
+| `todos` | 283 |
 | `laufend_codex` | 4 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 680 |
-| **gesamt** | **967** |
+| **gesamt** | **969** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 102
+## goals — 104
 
-### beauftragbar — 87
+### beauftragbar — 89
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -684,7 +684,9 @@
 | `G-619` | fehler | niedrig | [Das Tempo im Anlegemodal kennt nur Prozent Koerpergewicht](todos/goals-g-0619-das-tempo-im-anlegemodal-kennt-nur-prozent.md) | offen | — | — |
 | `G-623` | aufgabe | mittel | [Im Planer laesst sich eine einzelne Phase nicht verschieben](todos/goals-g-0623-im-planer-laesst-sich-eine-phase-nicht-verschieben.md) | offen | — | — |
 | `G-624` | fehler | mittel | [Custom und Expert BB Jahreszyklus haben im Planer keine Vorschau](todos/goals-g-0624-custom-und-expert-bb-haben-keine-vorschau.md) | offen | — | — |
-| `G-626` | aufgabe | hoch | [Grenzen nach Erfahrungsgrad](laufend_codex/goals-g-0626-grenzen-nach-erfahrungsgrad.md) | laeuft (codex) | — | — |
+| `G-626` | aufgabe | hoch | [Grenzen nach Erfahrungsgrad](laufend_codex/goals-g-0626-grenzen-nach-erfahrungsgrad.md) | laeuft (codex) | — | G-632 |
+| `G-631` | aufgabe | mittel | [Es gibt kein Trendgewicht](todos/goals-g-0631-es-gibt-kein-trendgewicht.md) | offen | — | — |
+| `G-632` | fehler | niedrig | [Prüfungstexte ohne Umlaute](todos/goals-g-0632-pruefungstexte-ohne-umlaute.md) | offen | — | — |
 
 ### wartet auf Blocker — 15
 
@@ -702,7 +704,7 @@
 | `G-622` | fehler | hoch | [Ohne aktives Ziel gibt es keine Tagesziele](laufend_codex/goals-g-0622-ohne-aktives-ziel-gibt-es-keine-tagesziele.md) | laeuft (codex) | G-613 | G-630 |
 | `G-625` | aufgabe | hoch | [Ein Plan ist der Inhalt des steuernden Ziels](todos/goals-g-0625-ein-plan-ist-der-inhalt-des-steuernden-ziels.md) | offen | G-617 | G-627 |
 | `G-627` | aufgabe | mittel | [Die wöchentliche Anpassung hat kein Protokoll](todos/goals-g-0627-die-woechentliche-anpassung-hat-kein-protokoll.md) | offen | G-625 | — |
-| `G-628` | aufgabe | hoch | [Ziel setzen nach dem Entwurf](laufend_claudecode/goals-g-0628-ziel-setzen-nach-dem-entwurf.md) | laeuft (claudecode) | G-626, G-617 | — |
+| `G-628` | aufgabe | hoch | [Ziel setzen nach dem Entwurf](laufend_claudecode/goals-g-0628-ziel-setzen-nach-dem-entwurf.md) | laeuft (claudecode) | G-626, G-617 | G-631 |
 | `G-629` | aufgabe | hoch | [Die Phase engine zeigt Pläne](todos/goals-g-0629-die-phase-engine-zeigt-plaene.md) | offen | G-625, G-626 | — |
 | `G-630` | fehler | hoch | [Die Warnung ohne aktives Ziel ist unsichtbar](todos/goals-g-0630-die-warnung-ohne-aktives-ziel-ist-unsichtbar.md) | offen | G-622 | — |
 

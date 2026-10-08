@@ -116,3 +116,10 @@ Gate gruen. kette.json/testdaten-pruefen getrennt nach 613/617/622 (Codex' G-622
 `[read]` Tom 08.10.2026 12:16: „dieser stand ist fuer mich vertretbar kannst umsetzen“. Vorlage: `docs/spezifikation/goals-ziel-setzen/` (Dossier Kapitel 8/9 gilt vor dem Entwurf).
 
 Die Messarten reichen nicht: Messziele gibt es auch für Körper (Gewicht, Körperfett, Umfang mit Stelle aus den 13), Gewohnheit (Quelle: Trainings/Woche, Cardio/Woche, Schritte/Tag, Schlaf h/Nacht – was gemessen wird; Rest vorgemerkt) und Eigenes (Einheit, Richtung mehr/weniger besser, Istwert von Hand). Rhythmus einmalig oder wiederkehrend (pro Woche, Serie). Startwert wird beim Anlegen gemessen und festgehalten. Live erst mit dieser Erweiterung.
+
+
+## Erweiterung committet - 2026-10-08, Commit `4961f7ba`
+
+`[cmd]` Vier Dateien nur `supabase/_pipeline`: `617_measurement_goal_expansion.sql`, Probe `goals-g617-measurement-expansion.test.ts`, `kette.json`, `schema-sollstand.json`. Neue Schritte nur `617_measurement_goal_expansion(_probe)`; 622 hängt jetzt an der Erweiterungsprobe. Gate grün.
+
+`[read]` Codex: 369 Schritte grün. Körper, Kraft, Gewohnheit (Trainings/Woche, Schlaf) und Eigenes mit Start-Snapshot, Datenpunkten und Wochenserie. Cardio/Woche und Schritte/Tag sind vorgemerkt und werden abgewiesen. Erledigt erst nach Live (Paket 613 → 617 → 617-Erweiterung → 622 → 626).

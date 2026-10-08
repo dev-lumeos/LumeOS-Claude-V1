@@ -44,3 +44,12 @@ Vorlage: `entwurf/ZielSetzen.dc.html` und `entwurf/MesszielSetzen.dc.html`, Doss
 `[read]` Claude Code: Schirm beginner/advanced/pro wie Entwurf; Ziel angelegt und zurückgebaut. Offen in Teil 1: „später starten“ fehlt; Startwert = letzte Messung statt Trend; „beenden“ setzt `abandoned` (Anzeige „abgebrochen“) – Frage an Tom. Bis Teil 3 lassen sich in der App keine Messziele anlegen.
 
 Teil 2 (Prüfungen aus G-626) ist frei: G-626 steht in der Kette (`11cb4e44`).
+
+
+## Teil 2 committet - 2026-10-08, Commit `f48d8b0f`
+
+`[cmd]` 11 Dateien nur `apps/web/src/app/v2/goals` und `apps/web/src/lib/goals`. Neu: `zielpruefung.ts`, `zielpruefung-read.ts`, `g628-pruefung.test.ts`. Kein Grenzwert im Code: einziger Treffer `ziel-setzen.tsx:193` ist eine Rundung. Gate grün.
+
+`[read]` Claude Code: Die Prüfung ruft `goals.ziel_grenzen_pruefen` mit den Eingaben des Wächters (Profil, `tdee_basis_am`). Sperre rot mit „frei ab“, Warnung mit Pflicht-Haken, Weiter erst ohne Sperre. Bestätigte Schlüssel gehen als `g626_confirmed_warnings` bis `goal_phase_start`. „Später starten“ ist gebaut (Startdatum = `gueltig_ab`), die Startquelle ist genannt. g628-pruefung 19 Tests, Sabotage 10/10 rot, web 2752.
+
+Offen bis Live (613/617/622/626): Schirmnachweis mit echten Befunden, „frei ab“, Haken, Abweisung durch den Wächter. Trendgewicht fehlt: G-631. Texte ohne Umlaute: G-632.
