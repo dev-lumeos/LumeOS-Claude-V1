@@ -3826,6 +3826,48 @@
       "kind": "tsx",
       "creates": "G-625: Backfill, Aktivslot, Quellenwahl, Eigene Werte, G-626 und Tagesreferenz.",
       "depends_on": ["625_goal_strategy_plan_values", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "625_goal_plan_position_revision",
+      "path": "supabase/_pipeline/11_goals/625_goal_plan_position_revision.sql",
+      "kind": "sql",
+      "creates": "G-625 Teil 2: eine laufende Position ab Stichtag atomar durch neue Position und bewachte Phase abloesen.",
+      "depends_on": ["625_goal_plan_probe"]
+    },
+    {
+      "id": "625_goal_plan_position_revision_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g625-position-revision.test.ts",
+      "kind": "tsx",
+      "creates": "G-625 Teil 2: Stichtag, historische Tageswerte, G-626, fremde Position und Katalog-Fettanteil.",
+      "depends_on": ["625_goal_plan_position_revision", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "633_goal_limit_german_numbers",
+      "path": "supabase/_pipeline/11_goals/633_goal_limit_german_numbers.sql",
+      "kind": "sql",
+      "creates": "G-633: deutsche Zahlenschreibweise in G-626-Hinweisen bei unveraenderten Schluesseln.",
+      "depends_on": ["625_goal_plan_position_revision_probe"]
+    },
+    {
+      "id": "633_goal_limit_german_numbers_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g633-german-numbers.test.ts",
+      "kind": "tsx",
+      "creates": "G-633: Komma, ganze Wochen, Hex-Nachweis und gleiche G-626-Schluessel.",
+      "depends_on": ["633_goal_limit_german_numbers", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "634_measurement_goal_start_preview",
+      "path": "supabase/_pipeline/11_goals/634_measurement_goal_start_preview.sql",
+      "kind": "sql",
+      "creates": "G-634: Startwertvorschau und G-617-Snapshot teilen genau eine RLS-konforme Abfrage.",
+      "depends_on": ["633_goal_limit_german_numbers_probe", "617_measurement_goal_expansion"]
+    },
+    {
+      "id": "634_measurement_goal_start_preview_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g634-start-preview.test.ts",
+      "kind": "tsx",
+      "creates": "G-634: Vorschau gleich Snapshot fuer Koerper, Kraft, Gewohnheit und Eigenes; fehlende und fremde Daten.",
+      "depends_on": ["634_measurement_goal_start_preview", "a86_testdaten_einspielen"]
     }
   ]
 }
