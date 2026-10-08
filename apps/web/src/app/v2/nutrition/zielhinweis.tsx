@@ -18,6 +18,8 @@ import type { Route } from 'next'
 import { Icon } from '@lumeos/ui'
 
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
+import { ohneZiel } from '../../../lib/profile/zielwerte-hindernis'
+import { KeinZielWarnung } from '../kein-ziel-warnung'
 
 /** Klartext je Profilfeld. Die Kennungen sind Spaltennamen. */
 const FELDNAME: Record<string, string> = {
@@ -59,6 +61,15 @@ export function Zielhinweis({
           uebernommen hat. Am Profil liegt es nicht.
         </span>
       </p>
+    )
+  }
+  // Fall 0b, G-630: Werte stehen, aber ohne aktives Ziel — Erhaltung
+  // aus G-622. `[cmd]` **Bis G-630 stand hier Fall 1** („aus dem Profil
+  // geschaetzt"), weil der Leseweg die Herkunft auf `formel` glaettete.
+  if (ziele && ohneZiel(ziele.herkunft)) {
+    return (
+      <KeinZielWarnung herkunft={ziele.herkunft} kcal={ziele.kcal} protein={ziele.protein_g}
+                       ruhend={ziele.ruhendes_ziel} />
     )
   }
   // Fall 1: Es gelten Ziele. Dann braucht es keinen Hinweis, sondern

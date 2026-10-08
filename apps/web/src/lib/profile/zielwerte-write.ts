@@ -148,5 +148,7 @@ export async function setzeZielwerteAusFormel(): Promise<Zielwerte> {
     herkunft: r.herkunft === 'manuell' ? 'manuell' : 'formel',
     tdee: zahl(r.tdee),
     nutrition_goal: typeof r.nutrition_goal === 'string' ? r.nutrition_goal : null,
+    // Eine gespeicherte Zeile gehoert zu einer Phase — kein ruhendes Ziel (G-630).
+    ruhendes_ziel: null,
   }
 }

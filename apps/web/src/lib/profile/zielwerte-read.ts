@@ -31,9 +31,16 @@ export type Zielwerte = {
   fiber_g: number | null
   linoleic_acid_g: number | null
   alpha_linolenic_acid_g: number | null
-  herkunft: 'formel' | 'manuell'
+  /** `[cmd]` **G-630:** vier Werte, nicht mehr auf `formel` geglaettet. */
+  herkunft: Herkunft
   tdee: number | null
   nutrition_goal: string | null
+  /**
+   * `[read]` **G-630: das ruhende Steuerziel, nur ohne aktives Ziel
+   * gelesen** — fuer „Fortsetzen" statt „Ziel setzen". `paused` UND
+   * `on_hold`: der Dialog „pausieren" schreibt `on_hold`.
+   */
+  ruhendes_ziel: { goal_id: string; title: string } | null
 }
 
 /** Was die Formel aus dem Profil macht — inklusive Grund, wenn nicht. */
@@ -96,8 +103,9 @@ export type Zielvorschlag = {
 // `[read]` **Beides liegt jetzt in `zielwerte-hindernis.ts`** und
 // wird hier durchgereicht — eine Quelle, zwei Seiten.
 export { hindernisSatz } from './zielwerte-hindernis'
-export type { Hindernis } from './zielwerte-hindernis'
-import type { Hindernis } from './zielwerte-hindernis'
+export { ohneZiel, ohneZielSatz } from './zielwerte-hindernis'
+export type { Hindernis, Herkunft } from './zielwerte-hindernis'
+import { alsHerkunft, ohneZiel, type Herkunft, type Hindernis } from './zielwerte-hindernis'
 
 /**
  * Der Satz zum Hindernis — **was zu tun ist, nicht was schiefging.**
@@ -185,6 +193,15 @@ export async function getZielwerteAm(stichtag: string): Promise<Zielwerte | null
   if (!zeile) return null
 
   const r = zeile as Record<string, unknown>
+  const herkunft = alsHerkunft(r.herkunft)
+  let ruhendes_ziel: Zielwerte['ruhendes_ziel'] = null
+  if (ohneZiel(herkunft)) {
+    const { data: z } = await supabase.schema('goals').from('user_goals')
+      .select('id, title').eq('user_id', userId).eq('goal_role', 'controlling')
+      .in('status', ['paused', 'on_hold']).order('updated_at', { ascending: false }).limit(1)
+    const g = (z ?? [])[0] as { id: string; title: string } | undefined
+    ruhendes_ziel = g ? { goal_id: g.id, title: g.title } : null
+  }
   return {
     gueltig_ab: text(r.gueltig_ab) ?? stichtag,
     kcal: zahl(r.kcal),
@@ -194,9 +211,10 @@ export async function getZielwerteAm(stichtag: string): Promise<Zielwerte | null
     fiber_g: zahl(r.fiber_g),
     linoleic_acid_g: zahl(r.linoleic_acid_g),
     alpha_linolenic_acid_g: zahl(r.alpha_linolenic_acid_g),
-    herkunft: r.herkunft === 'manuell' ? 'manuell' : 'formel',
+    herkunft,
     tdee: zahl(r.tdee),
     nutrition_goal: text(r.nutrition_goal),
+    ruhendes_ziel,
   }
 }
 
@@ -309,7 +327,10 @@ export async function getZielwertVorschlag(
     alpha_linolenic_acid_g: zahl(zeile.alpha_linolenic_acid_g),
     nutrition_goal: text(zeile.nutrition_goal),
     kalorienfaktor: zahl(zeile.kalorienfaktor),
+    // `[cmd]` **G-630: die beiden aus G-622 kommen mit** — sonst
+    // verschwand „kein aktives Ziel" hier ein zweites Mal.
     hindernis: h === 'profil_unvollstaendig' || h === 'zielrichtung_ohne_faktor'
+      || h === 'kein_aktives_ziel' || h === 'erhaltung_nicht_berechenbar'
       ? h
       : null,
     fehlende_felder: Array.isArray(zeile.fehlende_felder)

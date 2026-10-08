@@ -49,7 +49,7 @@ export const STATUS_LABEL: Record<ZielStatus, string> = {
   paused: 'pausiert',
   on_hold: 'zurückgestellt',
   achieved: 'erreicht',
-  abandoned: 'abgebrochen',
+  abandoned: 'beendet', // G-630, Tom 08.10. 15:57: „beendet“ statt „abgebrochen“
 }
 
 /**

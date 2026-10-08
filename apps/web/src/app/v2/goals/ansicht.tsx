@@ -148,6 +148,7 @@ import type {
   Zielphase, Programmwochen,
 } from '../../../lib/goals/lesen'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
+import { SteuerungOhneZiel } from './steuerung-ohne-ziel'
 // `[read]` **Nur der TYP** — `strategie-read.ts` zieht
 // `createSessionClient` und damit `next/headers`; ein Wert-Import
 // von hier aus beantwortete die Seite mit HTTP 500 (A-30, G-412).
@@ -450,6 +451,8 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
             <>
               {!echtAus && (
                 <>
+                  <SteuerungOhneZiel zielwerte={echt.zielwerte}
+                                     onZielSetzen={() => kontext.open({ typ: 'newGoal' })} />
                   <ZielKarten
                     ziele={echt.ziele} meilensteine={echt.meilensteine} stichtag={echt.stichtag}
                     phasen={echt.offenePhasen} strategien={echt.strategien} />

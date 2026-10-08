@@ -28,6 +28,8 @@ import type { Route } from 'next'
 import { Card, Pill, Icon, KPI, Meter } from '@lumeos/ui'
 
 import type { DashboardDaten, Punkt } from '../../../lib/dashboard/lesen'
+import { KeinZielWarnung } from '../kein-ziel-warnung'
+import { ohneZiel } from '../../../lib/profile/zielwerte-hindernis'
 
 /** Eine Zahl fuer die Anzeige, oder ein Strich. */
 function z(v: number | null, nach = 0): string {
@@ -141,6 +143,13 @@ export function DashboardEcht({ d }: { d: DashboardDaten }) {
             sub={`${d.nutrition.positionen} Position${d.nutrition.positionen === 1 ? '' : 'en'} erfasst`}
             actions={<ModulLink href="/v2/nutrition" text="Nutrition" />}
           >
+            {/* G-630: ohne aktives Ziel laeuft der Tag auf Erhaltung — gesagt, nicht verschwiegen. */}
+            {d.nutrition.ziele && ohneZiel(d.nutrition.ziele.herkunft) && (
+              <div style={{ marginBottom: 10 }}>
+                <KeinZielWarnung herkunft={d.nutrition.ziele.herkunft} kcal={d.nutrition.ziele.kcal}
+                                 protein={d.nutrition.ziele.protein} ruhend={d.nutrition.ziele.ruhend} />
+              </div>
+            )}
             <div className="v2-grid v2-g-cols-4" style={{ gap: 10 }}>
               <Makro label="Kalorien" wert={d.nutrition.kcal}
                      ziel={d.nutrition.ziele?.kcal ?? null}

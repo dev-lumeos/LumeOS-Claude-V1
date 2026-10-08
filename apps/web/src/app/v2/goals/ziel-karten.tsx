@@ -417,7 +417,7 @@ export function ZielKarten({ ziele, meilensteine, stichtag, phasen = [], strateg
             war, ohne Stift: Vergangenes wird nicht bearbeitet. */}
         {beendete.length > 0 && (
           <Card title="Abgeschlossene Ziele"
-                sub={`${beendete.length} · erreicht oder abgebrochen`}>
+                sub={`${beendete.length} · erreicht oder beendet`}>
             <div className="v2-col-gap" style={{ gap: 10 }}>
               {beendete.map(g => (
                 <ZielKarte key={g.goal_id} g={g} stichtag={stichtag} />
