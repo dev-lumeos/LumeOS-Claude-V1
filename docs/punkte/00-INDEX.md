@@ -684,7 +684,7 @@
 | `G-619` | fehler | niedrig | [Das Tempo im Anlegemodal kennt nur Prozent Koerpergewicht](todos/goals-g-0619-das-tempo-im-anlegemodal-kennt-nur-prozent.md) | offen | — | — |
 | `G-623` | aufgabe | mittel | [Im Planer laesst sich eine einzelne Phase nicht verschieben](todos/goals-g-0623-im-planer-laesst-sich-eine-phase-nicht-verschieben.md) | offen | — | — |
 | `G-624` | fehler | mittel | [Custom und Expert BB Jahreszyklus haben im Planer keine Vorschau](todos/goals-g-0624-custom-und-expert-bb-haben-keine-vorschau.md) | offen | — | — |
-| `G-626` | aufgabe | hoch | [Grenzen nach Erfahrungsgrad](laufend_codex/goals-g-0626-grenzen-nach-erfahrungsgrad.md) | vorbereitet (codex) | — | — |
+| `G-626` | aufgabe | hoch | [Grenzen nach Erfahrungsgrad](laufend_codex/goals-g-0626-grenzen-nach-erfahrungsgrad.md) | laeuft (codex) | — | — |
 
 ### wartet auf Blocker — 15
 

@@ -10,8 +10,9 @@
 | Codex | G-613 | Ein pausiertes Ziel laesst seine Phase laufen | **laeuft**, raus 07.10. |
 | Codex | G-617 | Ein Kraftziel findet seine Uebung nur ueber den Titel | **laeuft**, raus 08.10. |
 | Codex | G-622 | Ohne aktives Ziel gibt es keine Tagesziele | **laeuft**, raus 08.10. |
+| Codex | G-626 | Grenzen nach Erfahrungsgrad | **laeuft**, raus 08.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
-| Codex | G-626 | Grenzen nach Erfahrungsgrad | **bereit in `next/`** |
+| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 ## Plan ab 06.10. - von Tom freigegeben, 17:03

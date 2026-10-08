@@ -4,6 +4,8 @@ typ: aufgabe
 modul: goals
 schwere: hoch
 angelegt: 2026-10-08
+agent: codex
+beauftragt: 2026-10-08
 
 braucht: []
 kind_von: G-610
