@@ -78,3 +78,11 @@ ob er zuerst anpassen will"*
    Kein Commit.
 
 Die Oberflaechenhaelfte (Frage beim Reaktivieren) folgt an Claude Code.
+
+## Entschieden - 2026-10-08 08:18, Tom: kein aktives Ziel
+
+*,erhaltung aktiv aber klare warnung dass kein goal aktiv ist, der user muss wissen dass er planlos laeuft"*
+
+Folge aus G-613: ohne aktive Phase gibt es keine Tagesziele. Ersatz und Warnung: G-622.
+
+`[cmd]` Commit-Versuch 08.10. rot - nicht G-613: `v2-attrappen.test.ts` ,fehlende-kacheln.tsx: 6 statt 7" aus Claude Codes laufender G-615-Arbeit. Commit nach G-615; `kette.json` getrennt (`.git/kette-ohne-617.py`, 359 Schritte).

@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 275 |
+| `todos` | 277 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 679 |
-| **gesamt** | **957** |
+| **gesamt** | **959** |
 
 ## medical — 50
 
@@ -592,7 +592,7 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 92
+## goals — 94
 
 ### beauftragbar — 84
 
@@ -676,14 +676,14 @@
 | `G-610` | fehler | mittel | [contest_prep ist in der App nicht anlegbar](erledigt/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md) | erledigt | — | G-612, G-619 |
 | `G-611` | fehler | mittel | [Ein Ziel laesst sich nicht loeschen](todos/goals-g-0611-ein-ziel-laesst-sich-nicht-loeschen.md) | offen | — | — |
 | `G-612` | entscheidung | hoch | [Drei Auswahlen auf einer Seite, und keine folgt dem Mockup](todos/goals-g-0612-drei-auswahlen-und-keine-ordnung.md) | offen | — | G-614, G-615 |
-| `G-613` | fehler | hoch | [Ein pausiertes Ziel laesst seine Phase laufen](laufend_codex/goals-g-0613-ein-pausiertes-ziel-laesst-seine-phase-laufen.md) | laeuft (codex) | — | — |
+| `G-613` | fehler | hoch | [Ein pausiertes Ziel laesst seine Phase laufen](laufend_codex/goals-g-0613-ein-pausiertes-ziel-laesst-seine-phase-laufen.md) | laeuft (codex) | — | G-622 |
 | `G-614` | fehler | hoch | [Der Strategiekatalog kennt seine Karte und seinen Mindestgrad](erledigt/goals-g-0614-der-strategiekatalog-kennt-karte-und-mindestgrad.md) | erledigt | — | G-616 |
 | `G-615` | fehler | hoch | [Der Planer legt Plaene vom Termin rueckwaerts an](laufend_claudecode/goals-g-0615-der-planer-legt-plaene-vom-termin-rueckwaerts-an.md) | laeuft (claudecode) | — | — |
 | `G-616` | fehler | mittel | [Der G-536-Test ist rot und steht nicht in der Kette](todos/goals-g-0616-der-g536-test-ist-rot-und-steht-nicht-in-der-kette.md) | offen | — | — |
-| `G-617` | fehler | hoch | [Ein Kraftziel findet seine Uebung nur ueber den Titel](laufend_codex/goals-g-0617-ein-kraftziel-findet-seine-uebung-nur-ueber-den-titel.md) | laeuft (codex) | — | G-618, G-620 |
+| `G-617` | fehler | hoch | [Ein Kraftziel findet seine Uebung nur ueber den Titel](laufend_codex/goals-g-0617-ein-kraftziel-findet-seine-uebung-nur-ueber-den-titel.md) | laeuft (codex) | — | G-618, G-620, G-621 |
 | `G-619` | fehler | niedrig | [Das Tempo im Anlegemodal kennt nur Prozent Koerpergewicht](todos/goals-g-0619-das-tempo-im-anlegemodal-kennt-nur-prozent.md) | offen | — | — |
 
-### wartet auf Blocker — 8
+### wartet auf Blocker — 10
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -695,6 +695,8 @@
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
 | `G-618` | aufgabe | mittel | [Der Reiter Goals trennt das steuernde Ziel von den messenden](todos/goals-g-0618-der-reiter-goals-trennt-steuerndes-und-messende-ziele.md) | offen | G-617 | — |
 | `G-620` | fehler | niedrig | [Zeit- und Pace-Ziele messen in die falsche Richtung](todos/goals-g-0620-zeit-und-pace-ziele-messen-in-die-falsche-richtung.md) | offen | G-617 | — |
+| `G-621` | aufgabe | mittel | [Ein Messziel kann der Richtung widersprechen, ohne dass es jemand sagt](todos/goals-g-0621-ein-messziel-kann-der-richtung-widersprechen.md) | offen | G-617 | — |
+| `G-622` | fehler | hoch | [Ohne aktives Ziel gibt es keine Tagesziele](todos/goals-g-0622-ohne-aktives-ziel-gibt-es-keine-tagesziele.md) | offen | G-613 | — |
 
 ## coach — 58
 

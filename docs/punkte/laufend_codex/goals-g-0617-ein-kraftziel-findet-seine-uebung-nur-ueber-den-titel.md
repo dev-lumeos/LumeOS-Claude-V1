@@ -90,3 +90,13 @@ Darstellung im Reiter Goals: G-618.
 Abweichung von der Annahme 07.10.: Rolle = steuernd fuer JEDES body_composition-Ziel (auch ohne Strategie), nicht nur fuer Ziele mit Strategie. Backfill nennt vier feste IDs (zwei Kettendaten, zwei dev live) mit Titel-Guard.
 
 Oberflaechenanschluss (priority/is_primary, Drei-Plaetze-Pruefung in `lib/goals/lesen.ts` u. a.): G-618. Befund Messarten: G-620.
+
+## Entschieden - 2026-10-08 08:18, Tom: Variante B
+
+*,ja logisch B. wir koennen immer noch abhaengigkeiten pruefen ob es ueberhaupt ein valides ziel ist und den user darauf hinweisen"*
+
+Steuernd ist ein Ziel genau dann, wenn es eine Phase oder einen Plan traegt - NICHT jedes body_composition-Ziel. Ein Koerperziel ohne Richtung (,12 % Koerperfett", ,80 kg") ist ein Messziel und darf neben dem steuernden Ziel aktiv sein. Bekommt es eine Richtung, wird es steuernd.
+
+`[cmd]` Begruendung gemessen: Kalorien/Makros kommen nur aus der Phase; `target_value` lesen nur `111` und `113` (Fortschritt, Meilensteine).
+
+Plausibilitaet (Messziel widerspricht der Richtung): G-621.
