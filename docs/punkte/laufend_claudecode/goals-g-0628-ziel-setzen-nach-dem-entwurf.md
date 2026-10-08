@@ -36,3 +36,11 @@ Vorlage: `entwurf/ZielSetzen.dc.html` und `entwurf/MesszielSetzen.dc.html`, Doss
     Fremd:   supabase/_pipeline/ (Codex). docs/ gehoert dem Orchestrator.
     Stand:   2026-10-08
 
+
+## Teil 1 committet - 2026-10-08, Commit `3ddd99ac`
+
+`[cmd]` 15 Dateien nur apps/web (ziel-setzen.tsx, zielrechnung.ts, g628-Test neu); keine Grenzwerte im Code (rg auf 18,5/17,5/0,75/1500/1200 leer); test-user zurückgebaut (Grad pro, 2 Ziele, 2 Phasen, keine Messung von heute). Gate grün, web 2733.
+
+`[read]` Claude Code: Schirm beginner/advanced/pro wie Entwurf; Ziel angelegt und zurückgebaut. Offen in Teil 1: „später starten“ fehlt; Startwert = letzte Messung statt Trend; „beenden“ setzt `abandoned` (Anzeige „abgebrochen“) – Frage an Tom. Bis Teil 3 lassen sich in der App keine Messziele anlegen.
+
+Teil 2 (Prüfungen aus G-626) ist frei: G-626 steht in der Kette (`11cb4e44`).

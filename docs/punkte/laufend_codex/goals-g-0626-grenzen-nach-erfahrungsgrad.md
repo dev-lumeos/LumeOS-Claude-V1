@@ -49,3 +49,11 @@ Die Regeln als Daten (eine Tabelle, keine Liste im Code) und eine Prüffunktion,
     Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
     Stand:   2026-10-08
 
+
+## Kette committet - 2026-10-08, Commit `11cb4e44`
+
+`[cmd]` Gelesen: `goals.experience_goal_limits` mit vier Zeilen (beginner, advanced, pro, elite), Werte = Tabelle oben (advanced 0,75 frei / bis 1,0 Warnung / 16–20 Wo / BMI 18,5–17,5 / kcal 1.500–1.300 ♂, 1.200–1.000 ♀; pro/elite nur Warnungen, Fett 0,5 g/kg). Schreibschutz `g626_guard_controlling_phase`: `G626_BLOCK:` bei Sperre, `G626_CONFIRM:` bei unbestätigter Warnung, Bestätigungen in `parameters.g626_confirmed_warnings`. Gate grün.
+
+`[read]` Codex: Kette 367, Proben 5/5, testdaten-pruefen 186/0, drei widersprüchliche `requirements.min_experience` entfernt. Der mehrphasige Planer ist noch nicht abgesichert -> G-625/G-629.
+
+**Live nur zusammen mit G-628 Teil 2**: sonst weist der Schreibschutz Ziele mit Warnung ab, weil die Oberfläche noch keine Bestätigungen übergibt.
