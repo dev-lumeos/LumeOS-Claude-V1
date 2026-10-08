@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: hoch
 angelegt: 2026-10-08
+agent: claudecode
+beauftragt: 2026-10-08
 
 braucht: [G-622]
 kind_von: G-622
@@ -31,3 +33,11 @@ beruehrt:
 ## Was zu tun ist (Claude Code)
 
 Herkunft und Hindernis durchreichen; sichtbare Warnung überall, wo Tagesziele stehen (Today, Nutrition, Goals-Steuerungskarte wie im Entwurf `entwurf/Main.dc.html` Zustand „kein Ziel“), mit Weg zu „Ziel setzen“ bzw. Fortsetzen. Schirmnachweis erst nach G-622 live.
+
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER Claude Code - G-630: Warnung ohne aktives Ziel sichtbar machen
+    Bereich: apps/web/src/lib/profile, apps/web/src/app/v2 (Today, Nutrition, Goals)
+    Fremd:   supabase/_pipeline/ (Codex). docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-08, HEAD aa28c51d

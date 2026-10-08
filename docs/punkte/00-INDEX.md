@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 283 |
-| `laufend_codex` | 1 |
-| `laufend_claudecode` | 2 |
+| `todos` | 281 |
+| `laufend_codex` | 2 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 685 |
 | **gesamt** | **971** |
 
@@ -691,10 +691,10 @@
 | `G-625` | aufgabe | hoch | [Ein Plan ist der Inhalt des steuernden Ziels](laufend_codex/goals-g-0625-ein-plan-ist-der-inhalt-des-steuernden-ziels.md) | laeuft (codex) | — | G-627 |
 | `G-626` | aufgabe | hoch | [Grenzen nach Erfahrungsgrad](erledigt/goals-g-0626-grenzen-nach-erfahrungsgrad.md) | erledigt | — | G-632, G-633 |
 | `G-628` | aufgabe | hoch | [Ziel setzen nach dem Entwurf](laufend_claudecode/goals-g-0628-ziel-setzen-nach-dem-entwurf.md) | laeuft (claudecode) | — | G-631, G-634 |
-| `G-630` | fehler | hoch | [Die Warnung ohne aktives Ziel ist unsichtbar](todos/goals-g-0630-die-warnung-ohne-aktives-ziel-ist-unsichtbar.md) | offen | — | — |
+| `G-630` | fehler | hoch | [Die Warnung ohne aktives Ziel ist unsichtbar](laufend_claudecode/goals-g-0630-die-warnung-ohne-aktives-ziel-ist-unsichtbar.md) | laeuft (claudecode) | — | — |
 | `G-631` | aufgabe | mittel | [Es gibt kein Trendgewicht](todos/goals-g-0631-es-gibt-kein-trendgewicht.md) | offen | — | — |
 | `G-632` | fehler | niedrig | [Prüfungstexte ohne Umlaute](erledigt/goals-g-0632-pruefungstexte-ohne-umlaute.md) | erledigt | — | — |
-| `G-633` | fehler | niedrig | [Prüfungstexte schreiben Zahlen mit Punkt](todos/goals-g-0633-pruefungstexte-zahlen-mit-punkt.md) | offen | — | — |
+| `G-633` | fehler | niedrig | [Prüfungstexte schreiben Zahlen mit Punkt](laufend_codex/goals-g-0633-pruefungstexte-zahlen-mit-punkt.md) | laeuft (codex) | — | — |
 | `G-634` | frage | mittel | [Startwert eines Messziels erst nach dem Anlegen sichtbar](todos/goals-g-0634-startwert-eines-messziels-erst-nach-dem-anlegen.md) | offen | — | — |
 
 ### wartet auf Blocker — 8
