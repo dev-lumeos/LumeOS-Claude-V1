@@ -76,3 +76,9 @@ Katalog behaelt Fett als Anteil kcal (fat_percent) und seinen Refeed-Rhythmus (r
 `[cmd]` Orchestrator nachgemessen, dev, Ziel "Lean Bulk bis September" (active, controlling, Frist 2026-12-16). Phasen: maintain 21.05.–03.06. (beendet), lean_bulk 04.06.–29.09. (beendet, transition_reason "test", recommended_next mini_cut). `berechne_zielwerte(dev, heute)` liefert hindernis `kein_aktives_ziel`, goal_id leer, kcal = TDEE 2480,7. Das Ziel ist aber aktiv → G-637.
 
 Offene Entscheidung Tom: Was übernimmt der Backfill bei einem aktiven Ziel ohne laufende Phase?
+
+## Entschieden - 2026-10-08 18:19, Tom: B und b
+
+B: Der Backfill übernimmt ALLE Phasen eines steuernden Ziels als Positionen in zeitlicher Reihenfolge. Der Plan folgt dem Status des Ziels (aktives Ziel = aktiver Plan). Eine Lücke ohne laufende Phase ist ein gültiger Zustand: Erhaltung mit Hinweis (G-637).
+
+b: Bei dev wird Lean Bulk ab dem Live-Tag bis 16.12.2026 neu gestartet (über goal_phase_start, G-626-Prüfung wie in der App).

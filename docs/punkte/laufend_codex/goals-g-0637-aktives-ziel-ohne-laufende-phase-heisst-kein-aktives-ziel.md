@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: mittel
 angelegt: 2026-10-08
+agent: codex
+beauftragt: 2026-10-08
 
 braucht: []
 kind_von: G-622
@@ -29,3 +31,9 @@ beruehrt:
 
 Codex: ein eigenes Hindernis, z. B. `ziel_ohne_laufende_phase`, mit goal_id und der Empfehlung (recommended_next). Erhaltung bleibt die Rechnung.
 Claude Code: eigener Satz, z. B. "„Lean Bulk bis September“ ist aktiv, hat aber seit 29.09. keine laufende Phase – du läufst auf Erhaltung. Nächste Phase wählen." Der Weg führt in die Phase Engine.
+## Auftrag - Kopf
+
+    AUFTRAG FUER Codex - G-625 Backfill B + G-637 (Kette), danach Live
+    Bereich: supabase/_pipeline/ (Kette). Live erst nach Pruefung durch den Orchestrator.
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-08, HEAD 54f39567

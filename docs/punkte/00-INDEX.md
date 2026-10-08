@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 282 |
-| `laufend_codex` | 3 |
+| `todos` | 281 |
+| `laufend_codex` | 4 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 686 |
 | **gesamt** | **974** |
@@ -697,7 +697,7 @@
 | `G-633` | fehler | niedrig | [Prüfungstexte schreiben Zahlen mit Punkt](laufend_codex/goals-g-0633-pruefungstexte-zahlen-mit-punkt.md) | laeuft (codex) | — | — |
 | `G-634` | frage | mittel | [Startwert eines Messziels erst nach dem Anlegen sichtbar](laufend_codex/goals-g-0634-startwert-eines-messziels-erst-nach-dem-anlegen.md) | laeuft (codex) | — | — |
 | `G-636` | fehler | niedrig | [Der Goals-Kopf zählt Phasen eines pausierten Ziels als laufend](todos/goals-g-0636-kopf-zaehlt-phasen-eines-pausierten-ziels.md) | offen | — | — |
-| `G-637` | fehler | mittel | [Ein aktives Ziel ohne laufende Phase heisst "kein aktives Ziel"](todos/goals-g-0637-aktives-ziel-ohne-laufende-phase-heisst-kein-aktives-ziel.md) | offen | — | — |
+| `G-637` | fehler | mittel | [Ein aktives Ziel ohne laufende Phase heisst "kein aktives Ziel"](laufend_codex/goals-g-0637-aktives-ziel-ohne-laufende-phase-heisst-kein-aktives-ziel.md) | laeuft (codex) | — | — |
 
 ### wartet auf Blocker — 8
 
