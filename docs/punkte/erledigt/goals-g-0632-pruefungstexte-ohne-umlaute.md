@@ -4,6 +4,10 @@ typ: fehler
 modul: goals
 schwere: niedrig
 angelegt: 2026-10-08
+agent: codex
+beauftragt: 2026-10-08
+erledigt: 2026-10-08
+commit: 488420c4
 
 braucht: []
 kind_von: G-626
@@ -29,3 +33,15 @@ beruehrt:
 ## Was zu tun ist (Codex)
 
 Die Texte für den Nutzer in echtem UTF-8 (ä ö ü ß) schreiben. Schlüssel und Bezeichner bleiben ASCII. Den Nachweis per Hex-Dump führen, nicht über die Konsole. Am besten vor dem Live-Paket, damit nicht zweimal eingespielt wird.
+
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER Codex - G-632 + Live-Paket 613/617/617-Erweiterung/622/626
+    Bereich: supabase/_pipeline/ (Kette), danach Live
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-08 (Block im Chat 08.10.)
+
+## Erledigt - 2026-10-08, Commit `488420c4`
+
+`[cmd]` Nur die zwei 626-Dateien; im Quelltext stehen keine ASCII-Ersatzformen in Nutzertexten mehr, nur Schluessel (`diaetdauer`). Live mit dem Paket, Hex 44 69 C3 A4 74. Gate gruen.

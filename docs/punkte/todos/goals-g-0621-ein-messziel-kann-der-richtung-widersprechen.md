@@ -9,7 +9,7 @@ braucht: [G-617]
 kind_von: G-617
 
 quellen:
-  - docs/punkte/laufend_codex/goals-g-0617-ein-kraftziel-findet-seine-uebung-nur-ueber-den-titel.md
+  - docs/punkte/erledigt/goals-g-0617-ein-kraftziel-findet-seine-uebung-nur-ueber-den-titel.md
 
 beruehrt:
   tabellen:

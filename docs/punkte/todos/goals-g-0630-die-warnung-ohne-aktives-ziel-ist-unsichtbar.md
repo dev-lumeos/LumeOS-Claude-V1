@@ -9,7 +9,7 @@ braucht: [G-622]
 kind_von: G-622
 
 quellen:
-  - docs/punkte/laufend_codex/goals-g-0622-ohne-aktives-ziel-gibt-es-keine-tagesziele.md
+  - docs/punkte/erledigt/goals-g-0622-ohne-aktives-ziel-gibt-es-keine-tagesziele.md
   - docs/spezifikation/goals-ziel-setzen/README.md
 
 beruehrt:

@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-07
 agent: codex
 beauftragt: 2026-10-08
+erledigt: 2026-10-08
+commit: 4961f7ba
 
 braucht: []
 kind_von: null
@@ -123,3 +125,12 @@ Die Messarten reichen nicht: Messziele gibt es auch für Körper (Gewicht, Körp
 `[cmd]` Vier Dateien nur `supabase/_pipeline`: `617_measurement_goal_expansion.sql`, Probe `goals-g617-measurement-expansion.test.ts`, `kette.json`, `schema-sollstand.json`. Neue Schritte nur `617_measurement_goal_expansion(_probe)`; 622 hängt jetzt an der Erweiterungsprobe. Gate grün.
 
 `[read]` Codex: 369 Schritte grün. Körper, Kraft, Gewohnheit (Trainings/Woche, Schlaf) und Eigenes mit Start-Snapshot, Datenpunkten und Wochenserie. Cardio/Woche und Schritte/Tag sind vorgemerkt und werden abgewiesen. Erledigt erst nach Live (Paket 613 → 617 → 617-Erweiterung → 622 → 626).
+
+
+## Live - 2026-10-08 15:51, Codex (Paket A-105, Freigabe Tom)
+
+`[cmd]` Eingespielt in dieser Reihenfolge: 613, 617 mit Backfill, 617-Erweiterung, 622 (beide Dateien), 626 (beide Dateien mit G-632-Texten); danach NOTIFY pgrst. Sicherung `backup/a105-paket-g626-vorher.sql` 1.252.413 Byte, `-nachher.sql` 1.317.811 Byte.
+
+`[cmd]` Orchestrator nachgemessen: aktiv steuernd/messend dev 1/1, max.seed 0/1, test-user 1/0, tom.seed 1/1. `experience_goal_limits` 4 Zeilen. Trigger a617_goal_role_guard, a617_phase_role_sync, a617_program_role_sync, g626_guard_controlling_phase, g626_guard_controlling_goal_update vorhanden. Keine Funktion enthaelt mehr die Titelregel `bankdruecken`. `kein_aktives_ziel` steht in 2 Funktionen. Hex "Diät" in `ziel_grenzen_pruefen` = 44 69 C3 A4 74.
+
+`[read]` Codex: 4/4 Bankdrueck-Ziele auf Barbell Bench Press. Waechter ohne Bestaetigung G626_CONFIRM, mit Bestaetigung angenommen, Probe zurueckgerollt. Ohne aktives Ziel: kein_aktives_ziel, zwei Werte maintenance_no_active_goal. pnpm gate gruen 18/18. Wegwerf-DB verworfen (23 -> 22).

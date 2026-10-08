@@ -53,3 +53,8 @@ Teil 2 (Prüfungen aus G-626) ist frei: G-626 steht in der Kette (`11cb4e44`).
 `[read]` Claude Code: Die Prüfung ruft `goals.ziel_grenzen_pruefen` mit den Eingaben des Wächters (Profil, `tdee_basis_am`). Sperre rot mit „frei ab“, Warnung mit Pflicht-Haken, Weiter erst ohne Sperre. Bestätigte Schlüssel gehen als `g626_confirmed_warnings` bis `goal_phase_start`. „Später starten“ ist gebaut (Startdatum = `gueltig_ab`), die Startquelle ist genannt. g628-pruefung 19 Tests, Sabotage 10/10 rot, web 2752.
 
 Offen bis Live (613/617/622/626): Schirmnachweis mit echten Befunden, „frei ab“, Haken, Abweisung durch den Wächter. Trendgewicht fehlt: G-631. Texte ohne Umlaute: G-632.
+
+
+## Teil 2 Schirm + Teil 3 frei - 2026-10-08
+
+Live seit 15:51: 613/617/617-Erweiterung/622/626 (G-613, G-617, G-622, G-626, G-632 abgenommen). Teil 3 = Weg B "Messziel setzen" nach `entwurf/MesszielSetzen.dc.html` und Dossier 8.2, gegen `617_measurement_goal_expansion.sql`.
