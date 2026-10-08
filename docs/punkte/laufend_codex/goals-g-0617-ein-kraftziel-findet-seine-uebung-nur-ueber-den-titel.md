@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: hoch
 angelegt: 2026-10-07
+agent: codex
+beauftragt: 2026-10-08
 
 braucht: []
 kind_von: null
@@ -71,3 +73,20 @@ Festlegung (Orchestrator): EIN Ziel, ZWEI Eingaenge. Das Ziel lebt nur in `goals
 `[cmd]` Kategorie gibt es schon: `goal_type`/`subtype` (body_composition: cut, gain_muscle; performance: strength, training_capacity; lifestyle: cardio_frequency). Die Slot-Regel steht in `111_goals_ziele_phasen.sql` und `602_goal_order_and_measurement_snapshot.sql`, Tests c432/g602.
 
 Darstellung im Reiter Goals: G-618.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER Codex - G-617: Messziele mit Uebungsbezug und Messart, nur ein steuerndes Ziel
+    Bereich: supabase/_pipeline/ (Kette), danach Live nach Toms Freigabe
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-07 (Block im Chat 07.10. 16:39)
+
+## Bericht Kette - 2026-10-08 08:02, Codex
+
+`[cmd]` Gelesen: Schritt `617_measurement_goal_exercise_and_role.sql` (407 Zeilen): Spalten goal_role (NOT NULL, controlling|measurement), exercise_id -> training.exercises, measurement_type (e1rm, weight_reps, duration, distance, pace), measurement_reps; `user_goals_check1` und `uq_user_goals_active_slot` entfernt, neu `uq_user_goals_one_active_controlling`; Trigger: Messziel ohne Phase/Programm, Phase und Programm nur an steuerndem Ziel. Istwert ueber exercise_id, Titelregel weg; weight_reps mit FILTER reps >= measurement_reps.
+
+`[read]` Codex: 361 Schritte gruen, testdaten-pruefen 186/0, G-617-Probe 3/3. Ohne Zuordnung: ,Mehr Trainingsleistung", 2x ,Vier Cardio-Einheiten". Live aktiv steuernd/messend: dev 1/1, max.seed 0/1, test-user 1/0, tom.seed 1/1.
+
+Abweichung von der Annahme 07.10.: Rolle = steuernd fuer JEDES body_composition-Ziel (auch ohne Strategie), nicht nur fuer Ziele mit Strategie. Backfill nennt vier feste IDs (zwei Kettendaten, zwei dev live) mit Titel-Guard.
+
+Oberflaechenanschluss (priority/is_primary, Drei-Plaetze-Pruefung in `lib/goals/lesen.ts` u. a.): G-618. Befund Messarten: G-620.

@@ -9,7 +9,7 @@ braucht: [G-617]
 kind_von: G-617
 
 quellen:
-  - docs/punkte/todos/goals-g-0617-ein-kraftziel-findet-seine-uebung-nur-ueber-den-titel.md
+  - docs/punkte/laufend_codex/goals-g-0617-ein-kraftziel-findet-seine-uebung-nur-ueber-den-titel.md
 
 beruehrt:
   tabellen:
@@ -34,3 +34,7 @@ laufende Phase) und Bereich ,Messziele" nach Kategorie, je Ziel Messart,
 Uebung, Ist/Ziel, Frist. Anlegen eines Messziels mit Uebungsauswahl (G-617).
 Danach eigener Punkt: ,Ziel setzen" an der Uebung in Training, oeffnet
 dasselbe Anlegen mit vorausgefuellter Uebung.
+
+## Ergaenzt - 2026-10-08, aus G-617
+
+`[read]` Codex: `priority`/`is_primary` werden in `apps/web/src/lib/goals/lesen.ts` und mehreren Zielansichten gelesen; die App prueft teils noch das alte Drei-Plaetze-Modell. Nach G-617 live gibt es in der Datenbank keine Platzgrenze mehr fuer Messziele - die App muss mitziehen.
