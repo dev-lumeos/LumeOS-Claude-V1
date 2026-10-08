@@ -115,8 +115,9 @@ export async function phaseStarten(e: Phasenstart): Promise<string> {
   // `[read]` **Damit traegt die Datenbank wieder beides:** die
   // Sperre gegen eine zweite laufende Phase (`23505`) UND die Rate.
   //
-  // `[read]` **`p_parameters` bleibt leer** — die Rate hat seit E1
-  // ihre eigene Spalte, das freie JSON-Feld ist nicht mehr der Ort.
+  // `[read]` **Die Rate steht NICHT in `p_parameters`** — sie hat seit E1
+  // ihre eigene Spalte. `[cmd]` **Seit G-628 Teil 2 traegt das Feld die
+  // bestaetigten G-626-Warnungen**, sonst nichts.
   const { data, error } = await db().rpc('goal_phase_start', {
     p_phase_type: e.phase_type,
     p_gueltig_ab: e.gueltig_ab,
@@ -128,6 +129,9 @@ export async function phaseStarten(e: Phasenstart): Promise<string> {
     // 2026-10-07 an `pg_get_function_arguments`. Vorher entstand die
     // Phase ohne Strategie, und die Oberflaeche meldete sie „offen".
     p_strategie_code: e.strategie_code ?? null,
+    // `[cmd]` **G-628 Teil 2:** die bestaetigten G-626-Warnungen. Ohne sie
+    // weist der Waechter mit `G626_CONFIRM:<schluessel>` ab.
+    p_parameters: e.parameters ?? {},
   })
 
   if (error) {

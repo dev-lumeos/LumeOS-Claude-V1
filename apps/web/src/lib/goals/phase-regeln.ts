@@ -151,6 +151,12 @@ export type Phasenstart = {
    * `goal_strategies.code`). `null` heisst: keine gewaehlt.
    */
   strategie_code?: string | null
+  /**
+   * `[cmd]` **G-628 Teil 2 / G-626:** freie Phasenparameter — heute nur
+   * `g626_confirmed_warnings` (die bestaetigten Warnschluessel, die der
+   * Schreib-Waechter `g626_guard_controlling_phase` liest).
+   */
+  parameters?: Record<string, unknown>
 }
 
 // ── G-519/A5: was der CHECK je Art verlangt ──────────────────────

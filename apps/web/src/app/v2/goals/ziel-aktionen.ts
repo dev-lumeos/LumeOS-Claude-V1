@@ -7,6 +7,8 @@ import {
   zielAendern, reihenfolgeSetzen, zielAnlegen,
 } from '../../../lib/goals/schreiben'
 import type { ZielAenderung, ZielNeu } from '../../../lib/goals/ziel-regeln'
+import { zielGrenzenPruefen, type Pruefeingabe } from '../../../lib/goals/zielpruefung-read'
+import type { Pruefung } from '../../../lib/goals/zielpruefung'
 import {
   phasenzielAnlegen, type PhasenzielNeu, type PhasenzielErgebnis,
 } from '../../../lib/goals/phasenziel-write'
@@ -61,4 +63,16 @@ export async function prioritaetenSpeichern(
   const e = await reihenfolgeSetzen(paare)
   if (e.ok) revalidatePath('/v2/goals')
   return e.ok ? { ok: true, fehler: null } : { ok: false, fehler: e.fehler }
+}
+
+/**
+ * G-628 Teil 2 — die Pruefungen nach Grad fuer die Vorschau in A2.
+ * `[read]` **Dieselbe Funktion wie der Schreib-Waechter** (G-626).
+ */
+export async function zielPruefenAktion(e: Pruefeingabe): Promise<Pruefung> {
+  try {
+    return await zielGrenzenPruefen(e)
+  } catch (f) {
+    return { stand: 'fehler', text: f instanceof Error ? f.message : String(f) }
+  }
 }

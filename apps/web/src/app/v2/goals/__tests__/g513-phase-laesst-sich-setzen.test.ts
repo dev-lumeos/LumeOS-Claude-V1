@@ -165,7 +165,12 @@ describe('G-513 — die Phase laesst sich setzen', () => {
     assert.doesNotMatch(w, /calorie_surplus_kcal|calorie_deficit_kcal|calorie_target/,
       'die Oberflaeche erfindet einen parameters-Schluessel — '
       + 'welcher gilt, entscheidet G-511 bei Codex')
-    assert.doesNotMatch(w, /p_parameters:/,
-      'parameters wird geschrieben, obwohl der Schluessel offen ist')
+    // `[cmd]` **G-628 Teil 2:** der Schluessel ist entschieden — G-626
+    // liest `g626_confirmed_warnings`. Der Schreibweg reicht NUR durch,
+    // was der Aufrufer uebergibt; er erfindet keinen eigenen Schluessel.
+    assert.match(w, /p_parameters: e\.parameters \?\? \{\},/,
+      'parameters wird anders als durchgereicht geschrieben')
+    assert.doesNotMatch(w, /p_parameters: \{\s*[a-z_]+:/,
+      'der Schreibweg setzt selbst einen parameters-Schluessel')
   })
 })

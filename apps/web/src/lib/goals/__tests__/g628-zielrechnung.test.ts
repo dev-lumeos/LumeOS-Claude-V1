@@ -156,7 +156,8 @@ describe('G-628 — Verdrahtung', () => {
     assert.match(Z(), /disabled=\{!gruppe \|\| startKg === null\}/)
   })
   it('laeuft eine Steuerung, ist die Wahl pausieren/beenden Pflicht', () => {
-    assert.match(Z(), /disabled=\{laeuft \|\| \(!!steuerung && !wahl\)\}/)
+    // Teil 2: zusaetzlich `|| !pruefungFrei` (g628-pruefung.test.ts).
+    assert.match(Z(), /disabled=\{laeuft \|\| \(!!steuerung && !wahl\)/)
     assert.match(Z(), /status: wahl === 'pausieren' \? 'on_hold' : 'abandoned'/)
   })
   it('die Fertig-Meldung nennt das ALTE Ziel, festgehalten beim Start', () => {

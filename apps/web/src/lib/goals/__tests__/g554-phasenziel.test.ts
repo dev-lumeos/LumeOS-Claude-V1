@@ -443,7 +443,7 @@ describe('G-628 — Weg A im Dialog „Ziel setzen"', () => {
 
   it('eine Richtung legt immer Ziel UND Phase an — mit der Strategie', () => {
     assert.match(Z(), /goal_type: 'body_composition'/)
-    assert.match(Z(), /phase: \{ phase_type: phasenart, strategie_code: p\.code,/)
+    assert.match(Z(), /phase: \{\s*phase_type: phasenart, strategie_code: p\.code,/)
   })
 
   it('der Dialog ruft den gemeinsamen Weg, nicht zwei', () => {

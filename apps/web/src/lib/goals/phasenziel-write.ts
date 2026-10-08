@@ -58,6 +58,8 @@ export type PhasenzielNeu = {
      */
     strategie_code: string | null
     zielrate_pct_kg_woche?: number | null
+    /** G-628 Teil 2: z. B. `{ g626_confirmed_warnings: [...] }`. */
+    parameters?: Record<string, unknown>
   } | null
 }
 
@@ -139,6 +141,7 @@ export async function phasenzielAnlegen(
       projected_end_date: n.ziel.target_date ?? null,
       zielrate_pct_kg_woche: n.phase.zielrate_pct_kg_woche ?? null,
       strategie_code: n.phase.strategie_code,
+      parameters: n.phase.parameters,
     })
     return {
       ok: true,

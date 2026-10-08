@@ -22,7 +22,10 @@ import { useRouter } from 'next/navigation'
 import { Icon } from '@lumeos/ui'
 
 import { GField, GInput, GModal } from './modale'
-import { phasenzielAnlegenAktion, zielSpeichern } from './ziel-aktionen'
+import { phasenzielAnlegenAktion, zielPruefenAktion, zielSpeichern } from './ziel-aktionen'
+import {
+  bestaetigteSchluessel, waechterSatz, weiterErlaubt, type Pruefung,
+} from '../../../lib/goals/zielpruefung'
 import { messungAnlegenAktion } from './koerpermass-aktionen'
 import {
   fmt, letzteGewichtsmessung, rechneZiel, richtungsVorzeichen, type Groesse,
@@ -59,6 +62,65 @@ function Karte({ an, onClick, kopf, children, marke }: {
   )
 }
 
+/**
+ * G-628 Teil 2 — die Befunde der Pruefung (Dossier 8.2): Sperre rot mit
+ * Satz und dem Grad, der sie freigibt; Warnung mit Pflicht-Haken.
+ * `[read]` **Text und Schluessel kommen unveraendert aus der Funktion.**
+ */
+function Befunde({ pruefung, bestaetigt, setBestaetigt }: {
+  pruefung: Pruefung | null
+  bestaetigt: Set<string>
+  setBestaetigt: React.Dispatch<React.SetStateAction<Set<string>>>
+}) {
+  if (!pruefung) return <div className="v2-dim" data-pruefung-stand="laeuft" style={{ fontSize: 11 }}>Prüfungen nach Grad …</div>
+  if (pruefung.stand === 'nicht_eingespielt') {
+    return (
+      <div className="v2-dim" data-pruefung-stand="nicht_eingespielt" style={{ fontSize: 11 }}>
+        Die Prüfungen nach Erfahrungsgrad sind noch nicht eingespielt (G-626) — es wird nichts geprüft.
+      </div>
+    )
+  }
+  if (pruefung.stand === 'fehler') {
+    return (
+      <div data-pruefung-stand="fehler" style={{ fontSize: 11.5, color: 'var(--neg)' }}>
+        Die Prüfung ist fehlgeschlagen: {pruefung.text}
+      </div>
+    )
+  }
+  if (pruefung.befunde.length === 0) return null
+  return (
+    <div className="v2-col-gap" style={{ gap: 6 }} data-pruefung-stand="geprueft">
+      {pruefung.befunde.map(b => (
+        <div key={b.schluessel} data-befund={b.schluessel} data-befund-art={b.art}
+             style={{
+               padding: '8px 10px', borderRadius: 6, fontSize: 11.5, lineHeight: 1.5,
+               background: b.art === 'sperre'
+                 ? 'color-mix(in oklch, var(--neg) 8%, var(--surface))'
+                 : 'color-mix(in oklch, var(--warn) 10%, var(--surface))',
+               border: `1px solid color-mix(in oklch, ${b.art === 'sperre' ? 'var(--neg)' : 'var(--warn)'} 35%, var(--border))`,
+             }}>
+          <strong>{b.art === 'sperre' ? 'Gesperrt:' : 'Warnung:'}</strong> {b.hinweis}
+          {b.art === 'sperre' && (
+            <span data-befund-frei> {b.freiAb ? `Frei ab ${b.freiAb}.` : 'Für keinen Grad frei.'}</span>
+          )}
+          {b.art === 'warnung' && (
+            <label style={{ display: 'flex', gap: 6, alignItems: 'center', marginTop: 4, cursor: 'pointer' }}>
+              <input type="checkbox" data-befund-haken={b.schluessel} checked={bestaetigt.has(b.schluessel)}
+                     onChange={e => setBestaetigt(s => {
+                       const n = new Set(s)
+                       if (e.target.checked) n.add(b.schluessel)
+                       else n.delete(b.schluessel)
+                       return n
+                     })} />
+              verstanden
+            </label>
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, messungen, tdee, heute, start }: {
   onClose: () => void
   strategien: Strategie[]
@@ -92,6 +154,15 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
   // Seite neu, und `steuerung` ist dann das NEUE Ziel — die Meldung nannte
   // „„G-628 Probe" ist pausiert". Deshalb beim Start festhalten.
   const [fertigSatz, setFertigSatz] = React.useState('')
+  // ── G-628 Teil 2 ──────────────────────────────────────────────────
+  // `[read]` **„später starten" (Dossier 8.2, A3)** — das Startdatum ist
+  // auch der Stichtag der Rechnung und der Pruefung (`gueltig_ab`).
+  const [startdatum, setStartdatum] = React.useState(heute)
+  const [spaeterOffen, setSpaeterOffen] = React.useState(false)
+  // `[read]` **Die Befunde kommen aus `goals.ziel_grenzen_pruefen`** (G-626) —
+  // keine Regel, kein Grenzwert in dieser Datei.
+  const [pruefung, setPruefung] = React.useState<Pruefung | null>(null)
+  const [bestaetigt, setBestaetigt] = React.useState<Set<string>>(new Set())
 
   // ── Gemessen, nicht getippt (Dossier 8.2, A1) ────────────────────
   // `[read]` **Die juengste Gewichtsmessung der letzten 14 Tage**; fehlt
@@ -109,15 +180,41 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
   const richtung = richtungsListe.find(r => r.gruppe === gruppe) ?? null
   const liste = gruppe ? varianten(strategien, gruppe) : []
   const vz = richtungsVorzeichen(liste)
+  // `[read]` **Die TDEE des Waechters** (`tdee_basis_am`), sobald die
+  // Pruefung sie liefert — sonst die der Seite. Eine Zahl, nicht zwei.
+  const tdeeBasis = pruefung?.stand === 'geprueft' && pruefung.tdee !== null ? pruefung.tdee : tdee
   const ergebnis = gruppe && startKg !== null ? rechneZiel({
-    varianten: liste, startKg, heute, fest,
-    ziel: zahlAus(zielText), datum: datum || null, programm, grad: erfahrung, tdee,
+    varianten: liste, startKg, heute: startdatum, fest,
+    ziel: zahlAus(zielText), datum: datum || null, programm, grad: erfahrung, tdee: tdeeBasis,
   }) : null
   const p = ergebnis?.programm ?? null
   const phasenart = p ? phasenartFuerStrategie(p.code, p.category) as Phasenart | null : null
   const tempo = ergebnis?.tempoPct !== null && ergebnis?.tempoPct !== undefined
     ? Math.round(ergebnis.tempoPct * 1000) / 1000 : null
   const rateFehler = phasenart ? pruefeRate(phasenart, vz === 0 ? null : tempo)[0]?.text ?? null : null
+
+  // ── Die Pruefung, live (A2/A3) ───────────────────────────────────
+  // `[read]` **Dieselben Eingaben, die der Waechter beim Schreiben nimmt:**
+  // Start, Ziel, Startdatum, Zieldatum, Programm, Tempo. Eine spaete
+  // Antwort ueberschreibt keine neuere (`lauf`).
+  const pruefZiel = vz === 0 ? null : ergebnis?.ziel ?? null
+  const pruefDatum = ergebnis?.datum ?? null
+  const pruefbar = !!(gruppe && p && startKg !== null && (schritt === 'A2' || schritt === 'A3')
+    && (vz === 0 || (ergebnis?.wochen !== null && !ergebnis?.fehler)))
+  const lauf = React.useRef(0)
+  React.useEffect(() => {
+    if (!pruefbar || !gruppe || !p || startKg === null) { setPruefung(null); return }
+    const nr = ++lauf.current
+    const t = setTimeout(() => {
+      void zielPruefenAktion({
+        richtung: gruppe, startKg, zielKg: pruefZiel, startdatum, zieldatum: pruefDatum,
+        programm: p.code, tempo: vz === 0 ? null : tempo,
+      }).then(r => { if (nr === lauf.current) setPruefung(r) })
+    }, 350)
+    return () => clearTimeout(t)
+  }, [pruefbar, gruppe, p, startKg, pruefZiel, pruefDatum, startdatum, vz, tempo])
+  const befunde = pruefung?.stand === 'geprueft' ? pruefung.befunde : []
+  const pruefungFrei = weiterErlaubt(pruefung, bestaetigt)
   const planerFrei = planStrategien(strategien).some(s => !gesperrt(s, erfahrung))
 
   /** Festlegen: hoechstens zwei — das aelteste faellt (Dossier 8.2, drei Groessen). */
@@ -163,14 +260,18 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
         goal_type: 'body_composition',
         subtype: unterartFuer('body_comp', p.category),
         title: titel.trim() || titelVorschlag,
-        gueltig_ab: heute,
+        gueltig_ab: startdatum,
         priority: platz,
         start_value: startKg, current_value: startKg,
         target_value: vz === 0 ? null : ergebnis.ziel,
         target_unit: 'kg',
         target_date: ergebnis.datum,
       },
-      phase: { phase_type: phasenart, strategie_code: p.code, zielrate_pct_kg_woche: vz === 0 ? null : tempo },
+      phase: {
+        phase_type: phasenart, strategie_code: p.code, zielrate_pct_kg_woche: vz === 0 ? null : tempo,
+        // G-626: die bestaetigten Warnschluessel — der Waechter liest genau diese.
+        parameters: { g626_confirmed_warnings: bestaetigteSchluessel(pruefung, bestaetigt) },
+      },
     })
     setLaeuft(false)
     if (!r.ok) {
@@ -178,7 +279,8 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
       // der Nutzer ohne Steuerung da.
       if (steuerung) await zielSpeichern(steuerung.goal_id, { status: 'active' })
       setSitzungsfehler(r.art === 'sitzung')
-      setFehler(r.fehler)
+      // `[read]` **G626_BLOCK / G626_CONFIRM als Satz**, nicht als Code.
+      setFehler(waechterSatz(r.fehler, befunde) ?? r.fehler)
       return
     }
     setFertigSatz(steuerung
@@ -192,7 +294,8 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
     ? ['1 Richtung', '2 Ziel, Datum, Programm', '3 Bestätigen'].map((l, i) => ({ l, an: Number(schritt[1]) - 1 === i }))
     : []
 
-  const weiterA2 = vz === 0 ? !!p : !!(p && ergebnis && ergebnis.wochen !== null && !ergebnis.fehler && !rateFehler)
+  const weiterA2 = (vz === 0 ? !!p : !!(p && ergebnis && ergebnis.wochen !== null && !ergebnis.fehler && !rateFehler))
+    && pruefungFrei
 
   const fuss = (
     <>
@@ -209,7 +312,7 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
       {schritt === 'A3' && <>
         <button type="button" className="v2-btn v2-btn-ghost" onClick={() => setSchritt('A2')}>Zurück</button>
         <button type="button" className="v2-btn v2-btn-primary" data-ziel-starten
-                disabled={laeuft || (!!steuerung && !wahl)} onClick={() => { void starten() }}>
+                disabled={laeuft || (!!steuerung && !wahl) || !pruefungFrei} onClick={() => { void starten() }}>
           <Icon name="check" className="v2-ic v2-ic-sm" /> {laeuft ? 'Startet …' : 'Ziel starten'}
         </button>
       </>}
@@ -309,7 +412,15 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
                 <div className="v2-dim" style={{ fontSize: 11.5 }}>
                   Leg fest, was dir wichtig ist – Zielgewicht, Zieldatum oder Programm. Den Rest rechnet LumeOS.
                 </div>
-                <div style={{ fontSize: 12 }}>Start <strong>{fmt(startKg)} kg</strong> <span className="v2-dim">gemessen</span></div>
+                {/* `[cmd]` **Ein Trendgewicht gibt es nicht** (gemessen 2026-10-08:
+                    weder eine Funktion noch eine Spalte) — die Quelle wird genannt. */}
+                <div style={{ fontSize: 12 }} data-ziel-startquelle>
+                  Start <strong>{fmt(startKg)} kg</strong>{' '}
+                  <span className="v2-dim">
+                    {gemessen !== null ? 'heute gemessen' : `letzte Messung am ${datumDe(letzte?.measurement_date ?? null)}`}
+                    {' '}· kein Trendwert vorhanden
+                  </span>
+                </div>
                 <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
                   <GField label="Zielgewicht (kg)" sub={ergebnis.quelle.ziel === 'festgelegt' ? '📌 festgelegt' : 'berechnet'}>
                     <GInput aria-label="Zielgewicht" data-zielfeld="ziel" inputMode="decimal"
@@ -329,6 +440,7 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
               <span className="v2-dim">· {ergebnis.quelle.programm === 'festgelegt' ? '📌 festgelegt' : `berechnet${ergebnis.warum ? ': ' + ergebnis.warum : ''}`}
                 {ergebnis.noetigPct !== null && ` (nötig ${fmt(ergebnis.noetigPct, 2)} %/Woche)`}</span>
             </div>
+            <Befunde pruefung={pruefung} bestaetigt={bestaetigt} setBestaetigt={setBestaetigt} />
             {(ergebnis.fehler || ergebnis.hinweis || rateFehler) && (
               <div data-ziel-rechenfehler style={{ fontSize: 11.5, color: ergebnis.fehler || rateFehler ? 'var(--neg)' : 'var(--warn)' }}>
                 {ergebnis.fehler ?? ergebnis.hinweis ?? rateFehler}
@@ -420,7 +532,23 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
               <GInput aria-label="Titel" data-zielfeld="titel" value={titel} placeholder={titelVorschlag}
                       onChange={e => setTitel(e.target.value)} />
             </GField>
-            <div className="v2-dim" style={{ fontSize: 11 }}>Start: ab heute, {datumDe(heute)}</div>
+            <div className="v2-dim" style={{ fontSize: 11 }} data-ziel-startdatum={startdatum}>
+              Start: {startdatum === heute ? 'ab heute, ' : 'ab '}{datumDe(startdatum)}{' '}
+              {!spaeterOffen && (
+                <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm" data-ziel-spaeter
+                        onClick={() => setSpaeterOffen(true)}>später starten</button>
+              )}
+            </div>
+            {spaeterOffen && (
+              <div style={{ maxWidth: 200 }}>
+                <GField label="Startdatum">
+                  <GInput type="date" aria-label="Startdatum" data-zielfeld="startdatum" min={heute}
+                          value={startdatum} onChange={e => setStartdatum(e.target.value || heute)} />
+                </GField>
+              </div>
+            )}
+            {/* Ein spaeteres Startdatum aendert die Rechnung — die Pruefung laeuft neu. */}
+            <Befunde pruefung={pruefung} bestaetigt={bestaetigt} setBestaetigt={setBestaetigt} />
             {steuerung && (
               <div data-ziel-rueckfrage style={{ fontSize: 12 }}>
                 Dein aktuelles Ziel „{steuerung.title}“ läuft noch. Was soll damit passieren?
