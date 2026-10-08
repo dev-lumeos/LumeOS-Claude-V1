@@ -106,3 +106,7 @@ Plausibilitaet (Messziel widerspricht der Richtung): G-621.
 `[cmd]` Gelesen (401 Zeilen): `goal_role` wird nachgefuehrt - AFTER-Trigger `a617_phase_role_sync` (goal_phases) und `a617_program_role_sync` (goal_programs) bei INSERT, UPDATE OF goal_id, DELETE; Standard beim Anlegen `measurement` ohne Phase/Plan. Abgeschlossene Phase am Ziel zaehlt weiter als Beziehung. Ein Messziel mit Uebung kann wegen `user_goals_measurement_source_check` nicht steuernd werden.
 
 `[read]` Codex: Kette 361 gruen, G-617-Probe 4/4 (12 % KFA neben aktivem Cut; Phase daran abgewiesen, nach Pausieren erlaubt; Rueckbau; gefaelschte Rolle), testdaten-pruefen 186/0, 0 Rollenabweichungen. Live gelesen, Zaehlung unveraendert: dev 1/1, max.seed 0/1, test-user 1/0, tom.seed 1/1. Commit nach G-615 (Gate rot durch fremde Arbeit), Live mit G-613 und G-622 zusammen.
+
+## Kette committet - 2026-10-08, Commit `fb115173`
+
+Gate gruen. kette.json/testdaten-pruefen getrennt nach 613/617/622 (Codex' G-622 lag schon im Baum). Erledigt erst nach Live.

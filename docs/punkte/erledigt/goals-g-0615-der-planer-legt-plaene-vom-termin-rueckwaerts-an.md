@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-07
 agent: claudecode
 beauftragt: 2026-10-08
+erledigt: 2026-10-08
+commit: 17ed5c9d
 
 braucht: [G-610, G-614]
 kind_von: G-612
@@ -53,3 +55,12 @@ Der Planer IST der **Reiter Phase engine** - dort sitzen heute die Strategie-Rei
     Stand:   2026-10-08
 
 Siehe Block im Chat 08.10.; Grundlage ,Praezisiert 14:12'.
+## Abnahme - 2026-10-08, Commit `17ed5c9d`
+
+`[cmd]` Commit: 17 Dateien nur apps/web (planer.tsx, planer.ts, g615-Test neu; strategie-wahl.tsx und phase-vorschau.tsx geloescht und mitgenommen); Attrappenzaehler fehlende-kacheln 7 -> 6. Gate gruen, web 2714 (+10, -18 entfallene Pruefungen auf geloeschte Teile).
+
+`[cmd]` test-user danach: Grad pro, Abbauziel active/1/primaer, Aufbauziel on_hold/2, 2 Phasen - wie vorher.
+
+`[read]` Schirm: pro 4 Plaene frei, advanced alle ,ab pro"; contest_prep ueber den Planer angelegt, mid 7 -> 9 verschiebt das Ende auf 2027-02-11 mit Satz (holt G-610 nach). Probezeilen per SQL entfernt (G-611).
+
+Offen: einzelne Phasen verschieben -> G-623; Plaene ohne Katalogdauer -> G-624; ,erster freier aktiver Platz" (Drei-Plaetze-Modell) -> G-618.

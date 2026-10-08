@@ -86,3 +86,7 @@ Die Oberflaechenhaelfte (Frage beim Reaktivieren) folgt an Claude Code.
 Folge aus G-613: ohne aktive Phase gibt es keine Tagesziele. Ersatz und Warnung: G-622.
 
 `[cmd]` Commit-Versuch 08.10. rot - nicht G-613: `v2-attrappen.test.ts` ,fehlende-kacheln.tsx: 6 statt 7" aus Claude Codes laufender G-615-Arbeit. Commit nach G-615; `kette.json` getrennt (`.git/kette-ohne-617.py`, 359 Schritte).
+
+## Kette committet - 2026-10-08, Commit `e50f1fcf`
+
+Gate gruen. kette.json/testdaten-pruefen getrennt nach 613/617/622 (Codex' G-622 lag schon im Baum). Erledigt erst nach Live.
