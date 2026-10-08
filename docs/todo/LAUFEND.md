@@ -7,7 +7,7 @@
 |---|---|---|---|
 | Claude Code | G-618 | Der Reiter Goals trennt das steuernde Ziel von den messenden | **laeuft**, raus 08.10. |
 | Claude Code | G-628 | Ziel setzen nach dem Entwurf | **laeuft**, raus 08.10. |
-| Claude Code | G-630 | Die Warnung ohne aktives Ziel ist unsichtbar | **laeuft**, raus 08.10. |
+| Claude Code | G-635 | Dev-Server liefert die Schrift mit falschem Hash | **laeuft**, raus 08.10. |
 | Codex | G-625 | Ein Plan ist der Inhalt des steuernden Ziels | **laeuft**, raus 08.10. |
 | Codex | G-633 | Prüfungstexte schreiben Zahlen mit Punkt | **laeuft**, raus 08.10. |
 | Codex | G-634 | Startwert eines Messziels erst nach dem Anlegen sichtbar | **laeuft**, raus 08.10. |

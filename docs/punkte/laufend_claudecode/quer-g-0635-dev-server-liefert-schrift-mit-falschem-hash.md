@@ -4,6 +4,8 @@ typ: fehler
 modul: quer
 schwere: mittel
 angelegt: 2026-10-08
+agent: claudecode
+beauftragt: 2026-10-08
 
 braucht: []
 kind_von: null
@@ -32,3 +34,9 @@ beruehrt:
 ## Was zu tun ist (Claude Code)
 
 Finden, wer um 16:18 in `apps/web/.next` geschrieben hat (Gate, Test, Typecheck, `next build` ohne `LUMEOS_DIST_DIR`). Danach die Ursache abstellen und einen Wächter einbauen: Ein Build ausser `next dev` darf `.next` nie berühren.
+## Auftrag - Kopf
+
+    AUFTRAG FUER Claude Code - G-635: wer schreibt in apps/web/.next
+    Bereich: tools/, apps/web (Build-Konfiguration, Tests)
+    Fremd:   supabase/_pipeline/ (Codex). docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-08, HEAD 113fbfae
