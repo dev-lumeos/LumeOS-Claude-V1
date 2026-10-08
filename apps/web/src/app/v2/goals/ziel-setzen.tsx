@@ -12,8 +12,8 @@
 // Prioritaet, keine Attrappe „Linked modules" (Dossier 8.3, „Faellt weg").
 //
 // `[read]` **Teil 1 baut Schritt 0 und Weg A.** Die Pruefungen nach Grad
-// (Teil 2, G-626), Weg B (Teil 3, G-617) und „Eigene Werte" (Teil 4,
-// G-625) folgen — B1 zeigt die Arten, aber legt noch nichts an.
+// (Teil 2, G-626) und Weg B (Teil 3, G-617, `messziel-setzen.tsx`) stehen;
+// „Eigene Werte" (Teil 4, G-625) folgt.
 //
 // `[read]` **Die Rechnung steht in `lib/goals/zielrechnung.ts`** — eine
 // Stelle fuer drei Groessen, Tempo, kcal und Protein.
@@ -21,14 +21,15 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { Icon } from '@lumeos/ui'
 
-import { GField, GInput, GModal } from './modale'
+import { GField, GInput, GModal, Karte } from './modale'
 import { phasenzielAnlegenAktion, zielPruefenAktion, zielSpeichern } from './ziel-aktionen'
 import {
   bestaetigteSchluessel, waechterSatz, weiterErlaubt, type Pruefung,
 } from '../../../lib/goals/zielpruefung'
 import { messungAnlegenAktion } from './koerpermass-aktionen'
+import { MesszielSetzen } from './messziel-setzen'
 import {
-  fmt, letzteGewichtsmessung, rechneZiel, richtungsVorzeichen, type Groesse,
+  fmt, letzteGewichtsmessung, rechneZiel, richtungsVorzeichen, tempoGespeichert, type Groesse,
 } from '../../../lib/goals/zielrechnung'
 import {
   gesperrt, naechsteNamen, planStrategien, richtungen, varianten,
@@ -44,23 +45,6 @@ type Schritt = 's0' | 'A1' | 'A2' | 'A3' | 'B1' | 'fertig'
 
 const datumDe = (iso: string | null) => iso ? iso.split('-').reverse().join('.') : '–'
 const zahlAus = (s: string) => { const n = Number(s.replace(',', '.')); return s.trim() !== '' && Number.isFinite(n) ? n : null }
-
-function Karte({ an, onClick, kopf, children, marke }: {
-  an?: boolean; onClick?: () => void; kopf: React.ReactNode; children?: React.ReactNode; marke?: string
-}) {
-  return (
-    <button type="button" onClick={onClick} disabled={!onClick} aria-pressed={an} data-karte={marke}
-            style={{
-              textAlign: 'left', padding: 14, borderRadius: 8, cursor: onClick ? 'pointer' : 'not-allowed',
-              background: an ? 'color-mix(in oklch, var(--acc-goals) 10%, var(--surface))' : 'var(--surface)',
-              border: `1px solid ${an ? 'color-mix(in oklch, var(--acc-goals) 40%, var(--border))' : 'var(--border)'}`,
-              opacity: onClick ? 1 : 0.6, color: 'var(--fg)', display: 'block', width: '100%',
-            }}>
-      <div style={{ fontSize: 13.5, fontWeight: 700, marginBottom: 4 }}>{kopf}</div>
-      <div className="v2-dim" style={{ fontSize: 11.5, lineHeight: 1.5 }}>{children}</div>
-    </button>
-  )
-}
 
 /**
  * G-628 Teil 2 — die Befunde der Pruefung (Dossier 8.2): Sperre rot mit
@@ -190,7 +174,7 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
   const p = ergebnis?.programm ?? null
   const phasenart = p ? phasenartFuerStrategie(p.code, p.category) as Phasenart | null : null
   const tempo = ergebnis?.tempoPct !== null && ergebnis?.tempoPct !== undefined
-    ? Math.round(ergebnis.tempoPct * 1000) / 1000 : null
+    ? tempoGespeichert(ergebnis.tempoPct) : null
   const rateFehler = phasenart ? pruefeRate(phasenart, vz === 0 ? null : tempo)[0]?.text ?? null : null
 
   // ── Die Pruefung, live (A2/A3) ───────────────────────────────────
@@ -202,17 +186,22 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
   const pruefbar = !!(gruppe && p && startKg !== null && (schritt === 'A2' || schritt === 'A3')
     && (vz === 0 || (ergebnis?.wochen !== null && !ergebnis?.fehler)))
   const lauf = React.useRef(0)
-  React.useEffect(() => {
-    if (!pruefbar || !gruppe || !p || startKg === null) { setPruefung(null); return }
+  /** Eine Pruefung mit den aktuellen Eingaben; eine spaete Antwort ueberschreibt keine neuere. */
+  const pruefeJetzt = React.useCallback(async (): Promise<Pruefung | null> => {
+    if (!gruppe || !p || startKg === null) return null
     const nr = ++lauf.current
-    const t = setTimeout(() => {
-      void zielPruefenAktion({
-        richtung: gruppe, startKg, zielKg: pruefZiel, startdatum, zieldatum: pruefDatum,
-        programm: p.code, tempo: vz === 0 ? null : tempo,
-      }).then(r => { if (nr === lauf.current) setPruefung(r) })
-    }, 350)
+    const r = await zielPruefenAktion({
+      richtung: gruppe, startKg, zielKg: pruefZiel, startdatum, zieldatum: pruefDatum,
+      programm: p.code, tempo: vz === 0 ? null : tempo,
+    })
+    if (nr === lauf.current) setPruefung(r)
+    return r
+  }, [gruppe, p, startKg, pruefZiel, pruefDatum, startdatum, vz, tempo])
+  React.useEffect(() => {
+    if (!pruefbar) { setPruefung(null); return }
+    const t = setTimeout(() => { void pruefeJetzt() }, 350)
     return () => clearTimeout(t)
-  }, [pruefbar, gruppe, p, startKg, pruefZiel, pruefDatum, startdatum, vz, tempo])
+  }, [pruefbar, pruefeJetzt])
   const befunde = pruefung?.stand === 'geprueft' ? pruefung.befunde : []
   const pruefungFrei = weiterErlaubt(pruefung, bestaetigt)
   const planerFrei = planStrategien(strategien).some(s => !gesperrt(s, erfahrung))
@@ -280,7 +269,17 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
       if (steuerung) await zielSpeichern(steuerung.goal_id, { status: 'active' })
       setSitzungsfehler(r.art === 'sitzung')
       // `[read]` **G626_BLOCK / G626_CONFIRM als Satz**, nicht als Code.
-      setFehler(waechterSatz(r.fehler, befunde) ?? r.fehler)
+      // `[cmd]` **Der Waechter kann einen Schluessel melden, den die Vorschau
+      // nicht kannte** (Grad, Groesse oder Datum haben sich dazwischen
+      // geaendert). Deshalb sofort neu pruefen: die neue Warnung steht dann
+      // mit Haken da, und der Satz traegt ihren Hinweistext.
+      if (/G626_(BLOCK|CONFIRM):/.test(r.fehler)) {
+        const neu = await pruefeJetzt()
+        const neueBefunde = neu?.stand === 'geprueft' ? neu.befunde : befunde
+        setFehler(waechterSatz(r.fehler, neueBefunde) ?? r.fehler)
+      } else {
+        setFehler(r.fehler)
+      }
       return
     }
     setFertigSatz(steuerung
@@ -289,7 +288,7 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
   }
 
   const kopf = schritt === 's0' ? 'Ziel setzen' : schritt.startsWith('A') ? 'Richtung festlegen'
-    : schritt === 'B1' ? 'Messziel hinzufügen' : 'Fertig'
+    : 'Fertig'
   const schritte = schritt.startsWith('A')
     ? ['1 Richtung', '2 Ziel, Datum, Programm', '3 Bestätigen'].map((l, i) => ({ l, an: Number(schritt[1]) - 1 === i }))
     : []
@@ -316,7 +315,7 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
           <Icon name="check" className="v2-ic v2-ic-sm" /> {laeuft ? 'Startet …' : 'Ziel starten'}
         </button>
       </>}
-      {(schritt === 's0' || schritt === 'B1') && (
+      {schritt === 's0' && (
         <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Abbrechen</button>
       )}
       {schritt === 'fertig' && (
@@ -324,6 +323,11 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
       )}
     </>
   )
+
+  // G-628 Teil 3: Weg B ist ein eigener Dialog — er teilt mit Weg A nur den Einstieg.
+  if (schritt === 'B1') {
+    return <MesszielSetzen heute={heute} onClose={onClose} zurueck={start === 'B1' ? null : () => setSchritt('s0')} />
+  }
 
   return (
     <GModal title={kopf} subtitle={schritte.length ? (
@@ -563,29 +567,6 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
                 </div>
               </div>
             )}
-          </div>
-        )}
-
-        {/* ══ B1 Art (Weg B folgt mit Teil 3, G-617) ════════════════ */}
-        {schritt === 'B1' && (
-          <div className="v2-col-gap" style={{ gap: 8 }}>
-            <div className="v2-grid v2-g-cols-2" style={{ gap: 8 }}>
-              {([
-                ['Körper', 'Gewicht, Körperfett, Umfang', 'folgt mit G-617'],
-                ['Kraft', 'eine Übung, 1RM oder Gewicht × Wdh.', 'folgt mit G-617'],
-                ['Gewohnheit', 'pro Woche, mit Serie', 'folgt mit G-617'],
-                ['Eigenes', 'eigene Einheit, Werte selbst eingetragen', 'folgt mit G-617'],
-                ['Ausdauer', 'kommt mit dem Cardio-Modul', null],
-                ['Gesundheit', 'kommt mit dem Medical-Modul', null],
-              ] as const).map(([k, satz, folgt]) => (
-                <Karte key={k} marke={`art-${k}`} kopf={k}>
-                  {satz}{folgt && <span data-art-folgt style={{ display: 'block', marginTop: 4 }}>{folgt}</span>}
-                </Karte>
-              ))}
-            </div>
-            <div className="v2-dim" style={{ fontSize: 11 }}>
-              Messziele legst du hier an, sobald die Messarten in der Datenbank stehen (G-617).
-            </div>
           </div>
         )}
 

@@ -203,6 +203,18 @@ export function rechneZiel(e: Zieleingabe): Zielergebnis {
 }
 
 /**
+ * Das Tempo, wie es gespeichert wird: `numeric(5,3)`, **dem Betrag nach
+ * AUFgerundet.** `[cmd]` **Gemessen 2026-10-08 an `ziel_grenzen_pruefen`:**
+ * ein abgerundetes Tempo liegt knapp unter dem noetigen, und die Funktion
+ * meldet `vorgehen_zu_langsam` (Toleranz 0,0001). Aufgerundet erreicht das
+ * Tempo das Ziel immer bis zum Datum.
+ */
+export function tempoGespeichert(t: number): number {
+  // 1e-6 faengt Gleitkomma-Rauschen (553.0000001), weit unter der Toleranz 0,0001.
+  return Math.sign(t) * Math.ceil(Math.abs(t) * 1000 - 1e-6) / 1000
+}
+
+/**
  * Das Tagesziel: TDEE plus die Tagesdifferenz aus E-1 (`kcalAusRate`,
  * 7700 kcal/kg) — **dieselbe Stelle wie im Phasen-Editor (G-565).**
  * Auf 10 kcal gerundet wie im Entwurf.

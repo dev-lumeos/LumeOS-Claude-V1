@@ -15,6 +15,7 @@ import * as React from 'react'
 import { Icon } from '@lumeos/ui'
 
 import { zielSpeichern } from './ziel-aktionen'
+import { waechterSatz } from '../../../lib/goals/zielpruefung'
 import {
   STATUS_WERTE, STATUS_LABEL, PRIO_MIN_AKTIV, PRIO_MAX_AKTIV,
   pruefeAenderung, type ZielStatus, type ZielAenderung,
@@ -45,13 +46,22 @@ export function ZielEditor({
   }, [status, prio])
 
   const speichern = async () => {
+    // `[cmd]` **G-628, gemessen 2026-10-08:** der Editor schickte IMMER
+    // `target_value` und `target_date` mit — auch unveraendert. Seit G-626
+    // laeuft dann `g626_guard_controlling_goal_update`, und ein Statuswechsel
+    // eines alten Ziels ohne Zielwert scheiterte an
+    // `G626_BLOCK:bmi_nicht_pruefbar,ziel_oder_datum`. **Nur, was sich
+    // geaendert hat, wird geschrieben.**
+    const neuWert = zielwert.trim() === '' ? null : Number(zielwert)
+    const neuFrist = frist.trim() === '' ? null : frist
     const a: ZielAenderung = {
-      title: titel,
-      status,
-      priority: prio,
-      target_value: zielwert.trim() === '' ? null : Number(zielwert),
-      target_date: frist.trim() === '' ? null : frist,
+      ...(titel !== ziel.title ? { title: titel } : {}),
+      ...(status !== ziel.status ? { status } : {}),
+      ...(prio !== ziel.priority ? { priority: prio } : {}),
+      ...(neuWert !== (ziel.target_value ?? null) ? { target_value: neuWert } : {}),
+      ...(neuFrist !== (ziel.target_date ?? null) ? { target_date: neuFrist } : {}),
     }
+    if (Object.keys(a).length === 0) { onFertig(); return }
     const lokal = pruefeAenderung(a)
     if (lokal) { setFehler(lokal); return }
 
@@ -60,7 +70,8 @@ export function ZielEditor({
     const e = await zielSpeichern(ziel.goal_id, a)
     setLaeuft(false)
     if (e.ok) onFertig()
-    else setFehler(e.fehler)
+    // `[read]` **G626_BLOCK / G626_CONFIRM als Satz**, nicht als Code.
+    else setFehler(e.fehler ? waechterSatz(e.fehler, []) ?? e.fehler : e.fehler)
   }
 
   const prioMax = status === 'active' ? PRIO_MAX_AKTIV : 10

@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 import {
-  datumNach, letzteGewichtsmessung, rechneZiel, tageskcal, wochenBis, type Zieleingabe,
+  datumNach, letzteGewichtsmessung, rechneZiel, tageskcal, tempoGespeichert, wochenBis, type Zieleingabe,
 } from '../zielrechnung'
 import type { Strategie } from '../strategie-read'
 
@@ -122,6 +122,12 @@ describe('G-628 — Grenzfaelle', () => {
   })
   it('Protein aus dem Katalog, nie gekuerzt', () => {
     assert.equal(rechneZiel(E({ fest: ['ziel'], ziel: 95 })).proteinG, 220)
+  })
+  it('das gespeicherte Tempo ist dem Betrag nach aufgerundet (numeric(5,3))', () => {
+    assert.equal(tempoGespeichert(-0.36712), -0.368)
+    assert.equal(tempoGespeichert(0.36712), 0.368)
+    assert.equal(tempoGespeichert(-0.75), -0.75)
+    assert.equal(tempoGespeichert(-0.5530000001), -0.553)
   })
   it('Wochen und Datum sind Kehrwerte', () => {
     assert.equal(wochenBis('2026-10-08', datumNach('2026-10-08', 12)), 12)

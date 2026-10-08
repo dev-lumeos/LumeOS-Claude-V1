@@ -166,9 +166,15 @@ describe('G-354 — eine Quelle fuer die Zielarten', () => {
   it('kein Dialog fuehrt eine eigene Zielartenliste (G-628)', () => {
     // Hier stand: das New-goal-Modal holt die Arten aus ziel-arten. Das
     // Modal ist ersetzt; „Ziel setzen" hat keine Artenliste mehr (Weg A
-    // = body_composition, Weg B folgt mit G-617).
+    // = body_composition; Weg B nennt keinen Typ, G-628 Teil 3).
     const t = lies(join(V2, 'goals', 'modale.tsx')) + lies(join(V2, 'goals', 'ziel-setzen.tsx'))
     assert.ok(!/'performance'|'lifestyle'|'health'/.test(t), 'eine eigene goal_type-Liste im Dialog')
+    // `[cmd]` **G-628 Teil 3: Weg B steht in `messziel-setzen.tsx`.** Den
+    // goal_type setzt dort `measurement_goal_create` aus der Messart — der
+    // Dialog nennt keinen. (`'health'` ist dort ein Schluessel aus
+    // `measurement_source_options`, kein goal_type.)
+    const b = lies(join(V2, 'goals', 'messziel-setzen.tsx'))
+    assert.ok(!/goal_type|'performance'|'lifestyle'|'body_composition'/.test(b), 'Weg B fuehrt eine eigene goal_type-Liste')
   })
 
   it('und es zaehlt die Arten nicht selbst hoch', () => {

@@ -10,6 +10,10 @@ import type { ZielAenderung, ZielNeu } from '../../../lib/goals/ziel-regeln'
 import { zielGrenzenPruefen, type Pruefeingabe } from '../../../lib/goals/zielpruefung-read'
 import type { Pruefung } from '../../../lib/goals/zielpruefung'
 import {
+  ladeMessquellen, messzielAnlegen, sucheUebungen, type Messquellen, type Uebung,
+} from '../../../lib/goals/messziel-io'
+import { messzielParameter, type Messformular, type Startstand } from '../../../lib/goals/messziel'
+import {
   phasenzielAnlegen, type PhasenzielNeu, type PhasenzielErgebnis,
 } from '../../../lib/goals/phasenziel-write'
 
@@ -75,4 +79,20 @@ export async function zielPruefenAktion(e: Pruefeingabe): Promise<Pruefung> {
   } catch (f) {
     return { stand: 'fehler', text: f instanceof Error ? f.message : String(f) }
   }
+}
+
+/** G-628 Teil 3 — Weg B: was waehlbar ist, Uebungen, Anlegen. */
+export async function messquellenAktion(): Promise<Messquellen | null> {
+  try { return await ladeMessquellen() } catch { return null }
+}
+export async function uebungenAktion(q: string): Promise<Uebung[]> {
+  return sucheUebungen(q)
+}
+export async function messzielAnlegenAktion(f: Messformular, heute: string):
+  Promise<{ ok: true; start: Startstand } | { ok: false; fehler: string }> {
+  const p = messzielParameter(f, heute)
+  if (!p.ok) return p
+  const r = await messzielAnlegen(p.p)
+  if (r.ok) revalidatePath('/v2/goals')
+  return r
 }

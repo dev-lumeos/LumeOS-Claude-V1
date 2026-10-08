@@ -154,6 +154,24 @@ const FELD: React.CSSProperties = {
   borderRadius: 6, padding: '0 10px', fontSize: 12, outline: 'none', color: 'var(--fg)',
 }
 
+/** Eine waehlbare Kachel (G-628, Ziel setzen und Messziel). */
+export function Karte({ an, onClick, kopf, children, marke }: {
+  an?: boolean; onClick?: () => void; kopf: React.ReactNode; children?: React.ReactNode; marke?: string
+}) {
+  return (
+    <button type="button" onClick={onClick} disabled={!onClick} aria-pressed={an} data-karte={marke}
+            style={{
+              textAlign: 'left', padding: 14, borderRadius: 8, cursor: onClick ? 'pointer' : 'not-allowed',
+              background: an ? 'color-mix(in oklch, var(--acc-goals) 10%, var(--surface))' : 'var(--surface)',
+              border: `1px solid ${an ? 'color-mix(in oklch, var(--acc-goals) 40%, var(--border))' : 'var(--border)'}`,
+              opacity: onClick ? 1 : 0.6, color: 'var(--fg)', display: 'block', width: '100%',
+            }}>
+      <div style={{ fontSize: 13.5, fontWeight: 700, marginBottom: 4 }}>{kopf}</div>
+      <div className="v2-dim" style={{ fontSize: 11.5, lineHeight: 1.5 }}>{children}</div>
+    </button>
+  )
+}
+
 export function GInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} style={{ ...FELD, ...(props.style ?? {}) }} />
 }
