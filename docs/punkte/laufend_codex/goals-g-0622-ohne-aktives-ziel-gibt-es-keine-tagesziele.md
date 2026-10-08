@@ -47,3 +47,9 @@ Oberflaeche (Claude Code): sichtbare Warnung ueberall, wo Tagesziele stehen
     Stand:   2026-10-08
 
 Block im Chat 08.10. 08:18.
+
+## Kette committet - 2026-10-08, Commit `4f84b025`
+
+`[cmd]` Gelesen: `622_goal_free_maintenance.sql` (150 Zeilen) – ohne aktive Phase Erhaltung mit `maintain`-Makros, `hindernis` = `kein_aktives_ziel` bzw. `erhaltung_nicht_berechenbar`; `622_daily_reference_maintenance.sql` reicht den Marker an die Referenzen. Schritt hängt an 613 UND 617 – Live nur zusammen mit G-617 (erweitert). Gate grün.
+
+`[read]` Codex: Kette 364, G-622-Proben 4/4, testdaten-pruefen 186/0, Max 2.416,6 kcal / 156 g P / 75,2 g F / 279 g KH. Oberflächenhälfte: G-630.

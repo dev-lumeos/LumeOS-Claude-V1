@@ -90,3 +90,7 @@ Folge aus G-613: ohne aktive Phase gibt es keine Tagesziele. Ersatz und Warnung:
 ## Kette committet - 2026-10-08, Commit `e50f1fcf`
 
 Gate gruen. kette.json/testdaten-pruefen getrennt nach 613/617/622 (Codex' G-622 lag schon im Baum). Erledigt erst nach Live.
+
+## Live-Reihenfolge - 2026-10-08
+
+Live zusammen mit G-617 (erweitert) und G-622 (622 hängt an 613 und 617).
