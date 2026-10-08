@@ -37,3 +37,11 @@ Daten (Codex): ohne aktive Phase liefern die Zielwerte Erhaltung
 Kennzeichen ,kein aktives Ziel" - nicht leer, nicht stillschweigend.
 Oberflaeche (Claude Code): sichtbare Warnung ueberall, wo Tagesziele stehen
 (Today, Nutrition, Goals), mit Weg zum Ziel setzen bzw. Reaktivieren.
+## Auftrag - Kopf (Datenhaelfte)
+
+    AUFTRAG FUER Codex - G-622: ohne aktives Ziel gilt Erhaltung, ausdruecklich gekennzeichnet
+    Bereich: supabase/_pipeline/ (Kette), danach Live nach Toms Freigabe
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-08
+
+Block im Chat 08.10. 08:18.
