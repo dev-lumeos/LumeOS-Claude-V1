@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-07
 agent: claudecode
 beauftragt: 2026-10-07
+erledigt: 2026-10-08
+commit: f7e57ebc
 
 braucht: [G-608]
 kind_von: G-608
@@ -206,3 +208,11 @@ Planer (B) ist G-615 und folgt.
 
 Damit gilt: (A) ,Ziel setzen' ist der **Reiter Goals** mit seinem Anlegemodal - die zwei Ebenen (Richtung, dann ,Vorgehen anpassen' mit Varianten und Gradsperre) kommen IN dieses Modal, danach grafisch in den Reiter. Kein neuer Reiter. (B) Planer ist der **Reiter Phase engine** (G-615): dort raeumt G-615 auf. Punkt 4/5 oben (Attrappe, Reiterliste, Phasenarten-Auswahl im Reiter Phase engine) gehoeren deshalb zu G-615, NICHT zu G-610.
 
+
+## Abnahme - 2026-10-08, Commit `f7e57ebc`
+
+`[cmd]` Diff nur apps/web/src/app/v2/goals und lib/goals (9 geaendert, `zielwahl.ts` und Test neu); Codex' G-613-Dateien nicht im Commit. `zielwahl.ts` ohne Strategie-, Gruppen- oder Gradliteral; `tier === 'simple'` nur noch im Kommentar. g610-Test fail 0; Commit-Gate gruen, web 2722 (+17).
+
+`[cmd]` test-user nach Rueckbau: Grad pro, 2 Ziele, 2 Phasen, Abbauziel active/1/primaer, Aufbauziel on_hold/2 - wie vorher.
+
+`[read]` Schirm beginner/advanced/pro wie gefordert; Ziel ueber das Modal angelegt (fat_loss/moderate_cut, -0,75). Offen: Zeitachsenregel nur per Test (kein contest_prep-Ziel) -> G-615; Probezeile per SQL entfernt, weil kein Loeschweg -> G-611; kcal-Schalter fehlt im Modal -> G-619.

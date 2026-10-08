@@ -9,7 +9,7 @@ braucht: []
 kind_von: G-610
 
 quellen:
-  - docs/punkte/laufend_claudecode/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md
+  - docs/punkte/erledigt/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md
   - docs/spezifikation/10-plattform/design-system/theme-v1/module-goals-pro.jsx
   - docs/specs/Goals/PHASE_MODELS.md
 

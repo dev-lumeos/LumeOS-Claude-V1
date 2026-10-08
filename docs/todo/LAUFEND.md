@@ -5,7 +5,7 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-610 | contest_prep ist in der App nicht anlegbar | **laeuft**, raus 07.10. |
+| Claude Code | G-615 | Der Planer legt Plaene vom Termin rueckwaerts an | **laeuft**, raus 08.10. |
 | Codex | G-613 | Ein pausiertes Ziel laesst seine Phase laufen | **laeuft**, raus 07.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |

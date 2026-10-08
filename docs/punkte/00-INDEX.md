@@ -8,8 +8,8 @@
 | `todos` | 275 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 678 |
-| **gesamt** | **955** |
+| `erledigt` | 679 |
+| **gesamt** | **956** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 90
+## goals — 91
 
-### beauftragbar — 82
+### beauftragbar — 84
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -673,15 +673,17 @@
 | `G-607` | fehler | hoch | [Der Ankerplan rechnet aus dem Dauer-Anteil](erledigt/goals-g-0607-der-ankerplan-rechnet-aus-dem-dauer-anteil.md) | erledigt | — | G-608 |
 | `G-608` | fehler | hoch | [Die Stufenwochen sind im Programm editierbar - und am Schirm belegt](erledigt/goals-g-0608-die-stufenwochen-sind-im-programm-editierbar.md) | erledigt | — | G-609, G-610, G-611 |
 | `G-609` | fehler | hoch | [Die Strategie wird beim Phasenstart nicht durchgereicht](erledigt/goals-g-0609-die-strategie-wird-beim-phasenstart-nicht-durchgereicht.md) | erledigt | — | — |
-| `G-610` | fehler | mittel | [contest_prep ist in der App nicht anlegbar](laufend_claudecode/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md) | laeuft (claudecode) | — | G-612 |
+| `G-610` | fehler | mittel | [contest_prep ist in der App nicht anlegbar](erledigt/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md) | erledigt | — | G-612, G-619 |
 | `G-611` | fehler | mittel | [Ein Ziel laesst sich nicht loeschen](todos/goals-g-0611-ein-ziel-laesst-sich-nicht-loeschen.md) | offen | — | — |
 | `G-612` | entscheidung | hoch | [Drei Auswahlen auf einer Seite, und keine folgt dem Mockup](todos/goals-g-0612-drei-auswahlen-und-keine-ordnung.md) | offen | — | G-614, G-615 |
 | `G-613` | fehler | hoch | [Ein pausiertes Ziel laesst seine Phase laufen](laufend_codex/goals-g-0613-ein-pausiertes-ziel-laesst-seine-phase-laufen.md) | laeuft (codex) | — | — |
 | `G-614` | fehler | hoch | [Der Strategiekatalog kennt seine Karte und seinen Mindestgrad](erledigt/goals-g-0614-der-strategiekatalog-kennt-karte-und-mindestgrad.md) | erledigt | — | G-616 |
+| `G-615` | fehler | hoch | [Der Planer legt Plaene vom Termin rueckwaerts an](laufend_claudecode/goals-g-0615-der-planer-legt-plaene-vom-termin-rueckwaerts-an.md) | laeuft (claudecode) | — | — |
 | `G-616` | fehler | mittel | [Der G-536-Test ist rot und steht nicht in der Kette](todos/goals-g-0616-der-g536-test-ist-rot-und-steht-nicht-in-der-kette.md) | offen | — | — |
 | `G-617` | fehler | hoch | [Ein Kraftziel findet seine Uebung nur ueber den Titel](todos/goals-g-0617-ein-kraftziel-findet-seine-uebung-nur-ueber-den-titel.md) | offen | — | G-618 |
+| `G-619` | fehler | niedrig | [Das Tempo im Anlegemodal kennt nur Prozent Koerpergewicht](todos/goals-g-0619-das-tempo-im-anlegemodal-kennt-nur-prozent.md) | offen | — | — |
 
-### wartet auf Blocker — 8
+### wartet auf Blocker — 7
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -691,7 +693,6 @@
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
-| `G-615` | fehler | hoch | [Der Planer legt Plaene vom Termin rueckwaerts an](todos/goals-g-0615-der-planer-legt-plaene-vom-termin-rueckwaerts-an.md) | offen | G-610 | — |
 | `G-618` | aufgabe | mittel | [Der Reiter Goals trennt das steuernde Ziel von den messenden](todos/goals-g-0618-der-reiter-goals-trennt-steuerndes-und-messende-ziele.md) | offen | G-617 | — |
 
 ## coach — 58

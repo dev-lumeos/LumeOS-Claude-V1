@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: hoch
 angelegt: 2026-10-07
+agent: claudecode
+beauftragt: 2026-10-08
 
 braucht: [G-610, G-614]
 kind_von: G-612
@@ -42,3 +44,12 @@ Auftrag folgt nach G-610.
 
 Der Planer IST der **Reiter Phase engine** - dort sitzen heute die Strategie-Reiter (fest codiert, Hybrid = hybrid+recovery), die Phasenarten-Auswahl und die Attrappe ,Phase state machine'. G-615 macht daraus den Planer: Termin -> Phasen rueckwaerts, Zeitachse, Plaene aus `auswahl_gruppe = plan`, die Karte ,Phase state machine' als Anzeige (aktuell / empfohlen).
 
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER Claude Code - G-615: der Reiter Phase engine wird der Planer
+    Bereich: apps/web/src/lib/goals, apps/web/src/app/v2/goals
+    Fremd:   supabase/_pipeline/ (Codex, G-613/G-617 laufen). docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-08
+
+Siehe Block im Chat 08.10.; Grundlage ,Praezisiert 14:12'.
