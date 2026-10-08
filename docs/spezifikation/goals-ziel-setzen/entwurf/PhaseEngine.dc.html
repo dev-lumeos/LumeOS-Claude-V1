@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Reiter Phase engine</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:oklch(0.985 0.002 270)}
+a{color:oklch(0.50 0.13 90)}a:hover{color:oklch(0.40 0.13 90)}
+.num{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.eb{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:oklch(0.50 0.005 270)}
+.typ{font-size:10.5px;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:oklch(0.55 0.005 270)}
+.card{background:#fff;border:1px solid oklch(0.91 0.003 270);border-radius:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:0 14px;border-radius:8px;border:1px solid oklch(0.85 0.004 270);background:#fff;font:inherit;font-size:13px;color:oklch(0.25 0.005 270);cursor:pointer;text-decoration:none}
+.btn:hover{background:oklch(0.97 0.003 270)}
+.btn-p{background:oklch(0.25 0.005 270);color:#fff;border-color:oklch(0.25 0.005 270)}
+.btn-p[disabled]{background:oklch(0.80 0.004 270);border-color:oklch(0.80 0.004 270);cursor:not-allowed}
+.btn-r{color:oklch(0.48 0.17 25);border-color:oklch(0.80 0.08 25)}
+.btn-g{border-color:transparent;background:transparent}
+.ico{width:36px;padding:0}
+.chip{display:inline-flex;align-items:center;gap:5px;min-height:24px;padding:0 10px;border-radius:999px;font-size:11.5px;font-weight:500;border:1px solid oklch(0.88 0.004 270);color:oklch(0.40 0.005 270);background:#fff;font-family:inherit}
+.inp{height:36px;border:1px solid oklch(0.85 0.004 270);border-radius:8px;padding:0 10px;font:inherit;font-size:13px;background:#fff;box-sizing:border-box}
+.lbl{font-size:11px;font-weight:600;color:oklch(0.45 0.005 270);display:block;margin-bottom:4px}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{text-align:left;font-weight:600;color:oklch(0.50 0.005 270);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:6px 8px;border-bottom:1px solid oklch(0.88 0.004 270)}
+.tbl td{padding:7px 8px;border-bottom:1px solid oklch(0.94 0.003 270)}
+.sq{width:40px;height:40px;border-radius:8px;display:grid;place-items:center;flex-shrink:0;background:oklch(0.95 0.05 90);border:1px solid oklch(0.85 0.09 90);color:oklch(0.48 0.13 90)}
+.sq svg{width:20px;height:20px}
+</style>
+</helmet>
+<div style="font-family:Inter,-apple-system,system-ui,sans-serif;font-size:13px;line-height:1.5;color:oklch(0.22 0.005 270);background:oklch(0.985 0.002 270);min-height:100%;box-sizing:border-box">
+
+<div style="background:oklch(0.93 0.005 270);border-bottom:1px solid oklch(0.86 0.005 270);padding:8px 24px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12px">
+<span style="font-weight:600;color:oklch(0.40 0.005 270)">Prototyp · Erfahrungsgrad:</span>
+<sc-for list="{{grade}}" as="g" hint-placeholder-count="3"><button class="chip" style="cursor:pointer;min-height:28px;{{g.style}}" onClick="{{g.pick}}">{{g.label}}</button></sc-for>
+<span style="font-weight:600;color:oklch(0.40 0.005 270);margin-left:12px">Coach verbunden:</span>
+<sc-for list="{{coachOpts}}" as="g" hint-placeholder-count="2"><button class="chip" style="cursor:pointer;min-height:28px;{{g.style}}" onClick="{{g.pick}}">{{g.label}}</button></sc-for>
+<button class="chip" style="cursor:pointer;min-height:28px;margin-left:12px" onClick="{{reset}}">Prototyp zurücksetzen</button>
+</div>
+
+<div style="max-width:1240px;margin:0 auto;padding:24px 24px 64px;display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
+<div style="display:flex;flex-direction:column;gap:2px"><span class="eb">Goals &amp; Body</span><h1 style="margin:0;font-size:24px;font-weight:700">Phase engine · Pläne</h1></div>
+<sc-if value="{{pro}}" hint-placeholder-val="{{ true }}"><button class="btn btn-p" style="min-height:40px" onClick="{{toggleNeu}}">+ Neuer Plan</button></sc-if>
+</div>
+<nav aria-label="Reiter" style="display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid oklch(0.90 0.003 270)">
+<a href="Main.dc.html" style="padding:10px 14px;color:oklch(0.45 0.005 270)">Goals</a>
+<a href="PhaseEngine.dc.html" style="padding:10px 14px;font-weight:600;color:oklch(0.22 0.005 270);border-bottom:2px solid oklch(0.62 0.13 90)">Phase engine</a>
+<span style="padding:10px 14px;color:oklch(0.60 0.005 270)">Adaptive TDEE</span>
+<span style="padding:10px 14px;color:oklch(0.60 0.005 270)">Cross-module</span>
+<span style="padding:10px 14px;color:oklch(0.60 0.005 270)">…</span>
+</nav>
+
+<sc-if value="{{toast}}" hint-placeholder-val="{{ false }}"><div style="background:oklch(0.95 0.04 150);border:1px solid oklch(0.82 0.08 150);border-radius:8px;padding:10px 14px;font-size:12.5px">{{toast}}</div></sc-if>
+
+<!-- GESPERRT -->
+<sc-if value="{{gesperrt}}" hint-placeholder-val="{{ false }}">
+<section class="card" style="padding:24px;display:flex;flex-direction:column;gap:12px">
+<div style="font-size:18px;font-weight:700">🔒 Die Phase engine ist ab Grad Pro frei</div>
+<div style="color:oklch(0.40 0.005 270);max-width:68ch">Dein Ziel läuft trotzdem: In Goals steuert „Lean Bulk bis Dezember“ – dahinter steht ein einfacher Plan mit einer Phase (Lean Bulk). Ab Pro kannst du Pläne mit mehreren Phasen, Wettkampfterminen und Vorlagen bauen.</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn btn-p" href="Main.dc.html">Zu deinem Ziel in Goals</a><span class="chip">Dein Grad: {{gradName}}</span></div>
+</section>
+</sc-if>
+
+<sc-if value="{{pro}}" hint-placeholder-val="{{ true }}">
+
+<!-- NEUER PLAN -->
+<sc-if value="{{neuOffen}}" hint-placeholder-val="{{ false }}">
+<section aria-label="Neuer Plan" class="card" style="padding:18px;display:flex;flex-direction:column;gap:12px;border:2px solid oklch(0.62 0.13 90)">
+<div style="display:flex;justify-content:space-between;align-items:center"><span class="eb">Neuer Plan · wird als Entwurf angelegt, aktiv erst über „Aktivieren“</span><button class="btn btn-g ico" aria-label="Schließen" onClick="{{toggleNeu}}">✕</button></div>
+<div><label class="lbl" for="np-name">Name</label><input id="np-name" class="inp" style="width:100%;max-width:420px" value="{{neuName}}" onChange="{{setNeuName}}"></div>
+<div><span class="lbl">Ausgangspunkt</span>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px">
+<sc-for list="{{neuQuellen}}" as="q" hint-placeholder-count="6"><button onClick="{{q.pick}}" disabled="{{q.aus}}" style="text-align:left;padding:10px 12px;border-radius:8px;border:1px solid oklch(0.88 0.004 270);background:#fff;font:inherit;cursor:pointer;min-height:44px;{{q.style}}"><div style="font-weight:600">{{q.n}}</div><div style="font-size:11.5px;color:oklch(0.50 0.005 270)">{{q.i}}</div></button></sc-for>
+</div></div>
+<div style="display:flex;gap:8px"><button class="btn btn-p" onClick="{{neuAnlegen}}">Als Entwurf anlegen</button><button class="btn" onClick="{{toggleNeu}}">Abbrechen</button></div>
+</section>
+</sc-if>
+
+<!-- AKTIVER PLAN -->
+<sc-if value="{{keinAktiver}}" hint-placeholder-val="{{ false }}">
+<section class="card" style="padding:20px;border:2px solid oklch(0.75 0.12 25);display:flex;flex-direction:column;gap:8px">
+<div style="font-size:17px;font-weight:700;color:oklch(0.45 0.17 25)">Kein Plan aktiv – du läufst auf Erhaltung</div>
+<div style="color:oklch(0.40 0.005 270)">Aktiviere einen Plan unten, lege einen neuen an oder setze in Goals eine Richtung.</div>
+</section>
+</sc-if>
+
+<sc-if value="{{hatAktiv}}" hint-placeholder-val="{{ true }}">
+<section aria-label="Aktiver Plan" class="card" style="padding:20px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;gap:14px;align-items:flex-start">
+<div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg></div>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><span class="typ">Aktiver Plan · {{ak.typ}}</span><span class="chip" style="color:oklch(0.42 0.13 150);border-color:oklch(0.80 0.08 150);background:oklch(0.96 0.03 150)">● läuft</span><span class="num" style="margin-left:auto;font-size:10.5px;color:oklch(0.50 0.005 270)">{{ak.zeitraum}}</span>
+<div style="display:flex;gap:2px"><button class="btn btn-g ico" aria-label="Details" onClick="{{toggleDetails}}">{{detPfeil}}</button><button class="btn btn-g ico" aria-label="Bearbeiten" onClick="{{ak.edit}}">✎</button></div></div>
+<div style="font-size:19px;font-weight:700">{{ak.name}}</div>
+<div style="font-size:12.5px;color:oklch(0.40 0.005 270)">Aktuelle Phase: <b>{{ak.aktPhase}}</b> · {{ak.aktInfo}} · steuert dein Ziel in <a href="Main.dc.html">Goals</a></div>
+</div>
+</div>
+
+<div style="overflow-x:auto">
+<div style="min-width:900px;position:relative">
+<div style="display:grid;grid-template-columns:repeat(11,minmax(0,1fr));font-size:11px;color:oklch(0.50 0.005 270);border-bottom:1px solid oklch(0.92 0.003 270);padding-bottom:4px"><sc-for list="{{monate}}" as="m" hint-placeholder-count="11"><span>{{m}}</span></sc-for></div>
+<div style="position:relative;height:72px;margin-top:8px">
+<sc-for list="{{ak.balken}}" as="b" hint-placeholder-count="4"><div style="position:absolute;top:6px;left:{{b.l}}%;width:{{b.w}}%;height:28px;border-radius:6px;font-size:11px;font-weight:600;padding:0 6px;display:flex;align-items:center;white-space:nowrap;overflow:hidden;box-sizing:border-box;{{b.style}}">{{b.n}}</div></sc-for>
+<sc-for list="{{ak.marken}}" as="t" hint-placeholder-count="2"><div style="position:absolute;top:40px;left:{{t.l}}%;transform:translateX(-50%);font-size:10.5px;white-space:nowrap;{{t.style}}">▲ {{t.n}}</div></sc-for>
+<div style="position:absolute;top:0;height:40px;left:{{heuteL}}%;width:2px;background:oklch(0.45 0.17 25)"></div>
+</div>
+</div>
+</div>
+
+<!-- Details -->
+<sc-if value="{{detOffen}}" hint-placeholder-val="{{ false }}">
+<div style="border-top:1px solid oklch(0.92 0.003 270);padding-top:14px;display:flex;flex-direction:column;gap:16px">
+<div style="overflow-x:auto"><div class="eb" style="margin-bottom:4px">Phasen</div>
+<table class="tbl" style="min-width:640px"><thead><tr><th>Phase</th><th>Wochen</th><th>Beginn</th><th>Ende</th><th>Defizit / Überschuss</th><th>Cardio</th><th>Status</th></tr></thead>
+<tbody><sc-for list="{{ak.phasen}}" as="p" hint-placeholder-count="4"><tr style="{{p.zeile}}"><td style="font-weight:600">{{p.n}}</td><td class="num">{{p.wo}}</td><td class="num">{{p.b}}</td><td class="num">{{p.e}}</td><td class="num">{{p.d}}</td><td class="num">{{p.c}}</td><td>{{p.status}}</td></tr></sc-for></tbody></table></div>
+<div style="display:flex;flex-wrap:wrap;gap:18px">
+<div style="flex:1 1 340px;min-width:0;display:flex;flex-direction:column;gap:6px"><span class="eb">Wachen der aktuellen Phase</span>
+<sc-for list="{{wachen}}" as="w" hint-placeholder-count="3"><div style="display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:4px 0;border-bottom:1px solid oklch(0.95 0.003 270)"><span>{{w.t}}</span><span style="{{w.style}}">{{w.s}}</span></div></sc-for></div>
+<div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:6px"><span class="eb">Als nächstes</span>
+<div style="background:oklch(0.97 0.03 90);border-radius:8px;padding:10px 12px;font-size:12.5px">{{ak.naechstes}}</div></div>
+</div>
+<div style="overflow-x:auto"><div class="eb" style="margin-bottom:4px">Wöchentliche Anpassung · feste Regeln, keine KI</div>
+<table class="tbl" style="min-width:600px"><thead><tr><th>Woche</th><th>Trend Δ</th><th>Soll Δ</th><th>Logtage</th><th>Anpassung</th><th>Grund</th></tr></thead><tbody>
+<sc-for list="{{anpassung}}" as="w" hint-placeholder-count="3"><tr><td>{{w.kw}}</td><td class="num">{{w.d}}</td><td class="num">{{w.soll}}</td><td class="num">{{w.log}}</td><td class="num" style="font-weight:600">{{w.anp}}</td><td>{{w.grund}}</td></tr></sc-for></tbody></table></div>
+</div>
+</sc-if>
+</section>
+</sc-if>
+
+<!-- BEARBEITEN (aktiv oder Entwurf) -->
+<sc-if value="{{editOffen}}" hint-placeholder-val="{{ false }}">
+<section aria-label="Plan bearbeiten" class="card" style="padding:18px;display:flex;flex-direction:column;gap:14px;border:2px solid oklch(0.25 0.005 270)">
+<div style="display:flex;justify-content:space-between;align-items:center"><span class="eb">Bearbeiten · {{ed.status}}</span><button class="btn btn-g ico" aria-label="Schließen" onClick="{{closeEdit}}">✕</button></div>
+<div><label class="lbl" for="ed-name">Name</label><input id="ed-name" class="inp" style="width:100%;max-width:420px" value="{{ed.name}}" onChange="{{ed.setName}}"></div>
+
+<div style="display:flex;flex-direction:column;gap:6px">
+<span class="lbl" style="margin:0">Termine · frei benennbar</span>
+<sc-for list="{{ed.termine}}" as="t" hint-placeholder-count="2">
+<div style="display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.3fr) minmax(0,1fr) 36px;gap:8px;align-items:center">
+<input class="inp" aria-label="Name des Termins" value="{{t.name}}" onChange="{{t.setName}}">
+<select class="inp" aria-label="Art" value="{{t.art}}" onChange="{{t.setArt}}"><option value="A">Wettkampf A · Hauptwettkampf</option><option value="B">Wettkampf B · weiterer</option><option value="S">Sperrtermin · Urlaub, Reise …</option><option value="X">Sonstiges</option></select>
+<input type="date" class="inp num" aria-label="Datum" value="{{t.datum}}" onChange="{{t.setDatum}}">
+<button class="btn btn-g ico" aria-label="Termin löschen" onClick="{{t.del}}">✕</button>
+</div>
+</sc-for>
+<button class="btn" style="align-self:flex-start" onClick="{{ed.addTermin}}">+ Termin</button>
+<div style="font-size:11.5px;color:oklch(0.50 0.005 270)">A: der Plan rechnet vom ersten A-Termin rückwärts · B: kurzer Peak ohne neue Prep · Sperrtermin: wird Diätpause</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:6px">
+<span class="lbl" style="margin:0">Phasen</span>
+<sc-for list="{{ed.phasen}}" as="p" hint-placeholder-count="3">
+<div style="border:1px solid oklch(0.92 0.003 270);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:8px">
+<div style="display:grid;grid-template-columns:minmax(0,2fr) auto minmax(0,1.5fr) 36px;gap:8px;align-items:center">
+<select class="inp" aria-label="Programm" value="{{p.prog}}" onChange="{{p.setProg}}"><option>early</option><option>mid</option><option>late</option><option>Peak Week</option><option>Lean Bulk</option><option>Clean Bulk</option><option>Mini Cut</option><option>Moderate Cut</option><option>Halten</option><option>Diet Break</option><option>Reverse Diet</option><option>Eigene Werte</option></select>
+<div style="display:flex;gap:4px;align-items:center"><button class="btn ico" aria-label="Woche weniger" onClick="{{p.minus}}">−</button><span class="num" style="min-width:56px;text-align:center">{{p.wo}} Wo</span><button class="btn ico" aria-label="Woche mehr" onClick="{{p.plus}}">+</button></div>
+<span class="num" style="font-size:12px;color:oklch(0.45 0.005 270)">{{p.zeit}}</span>
+<button class="btn btn-g ico" aria-label="Phase entfernen" onClick="{{p.del}}">✕</button>
+</div>
+<sc-if value="{{p.normal}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><span style="font-size:11px;color:oklch(0.50 0.005 270)">Werte des Programms:</span><sc-for list="{{p.werte}}" as="w" hint-placeholder-count="5"><span class="chip" style="background:oklch(0.98 0.002 270)"><span style="color:oklch(0.55 0.005 270)">{{w.l}}</span> <b class="num">{{w.v}}</b></span></sc-for></div>
+</sc-if>
+<sc-if value="{{p.custom}}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px">
+<sc-for list="{{p.felder}}" as="f" hint-placeholder-count="5"><div><label class="lbl" for="pf-{{p.id}}-{{f.k}}">{{f.l}}</label><input id="pf-{{p.id}}-{{f.k}}" class="inp num" style="width:100%" value="{{f.v}}" onChange="{{f.set}}"></div></sc-for>
+</div>
+</sc-if>
+</div>
+</sc-for>
+<button class="btn" style="align-self:flex-start" onClick="{{ed.addPhase}}">+ Phase</button>
+</div>
+
+<sc-if value="{{ed.fehler}}" hint-placeholder-val="{{ false }}"><div style="border:1px solid oklch(0.80 0.08 25);background:oklch(0.97 0.02 25);border-radius:8px;padding:10px 12px;font-size:12.5px"><b>{{ed.fehler}}</b></div></sc-if>
+
+<div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between">
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-p" disabled="{{ed.gesperrt}}" onClick="{{closeEdit}}">Speichern</button><button class="btn" disabled="{{ed.gesperrt}}" onClick="{{closeEdit}}">Speichern und neu berechnen</button><button class="btn" onClick="{{ed.vorlage}}">Als Vorlage speichern</button></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><sc-if value="{{ed.istAktiv}}" hint-placeholder-val="{{ true }}"><button class="btn" onClick="{{ed.pausieren}}">Pausieren</button><button class="btn" onClick="{{ed.beenden}}">Beenden</button></sc-if><button class="btn btn-r" onClick="{{ed.askDel}}">Löschen</button></div>
+</div>
+<sc-if value="{{ed.confirm}}" hint-placeholder-val="{{ false }}"><div style="border:1px solid oklch(0.80 0.08 25);background:oklch(0.97 0.02 25);border-radius:8px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><span>Plan „{{ed.name}}“ mit allen Phasen endgültig löschen?</span><div style="display:flex;gap:8px"><button class="btn" onClick="{{ed.askDel}}">Abbrechen</button><button class="btn btn-r" onClick="{{ed.del}}">Endgültig löschen</button></div></div></sc-if>
+</section>
+</sc-if>
+
+<!-- WEITERE PLAENE -->
+<section aria-label="Weitere Pläne" style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:center"><span class="eb">Weitere Pläne · Entwürfe und pausierte · immer nur einer aktiv</span></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:14px;align-items:start">
+<sc-for list="{{weitere}}" as="w" hint-placeholder-count="2">
+<div class="card" style="padding:16px;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;gap:12px;align-items:flex-start">
+<div class="sq" style="background:oklch(0.96 0.003 270);border-color:oklch(0.88 0.004 270);color:oklch(0.45 0.005 270)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg></div>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="typ">{{w.typ}}</span><span class="chip">{{w.status}}</span><button class="btn btn-g ico" style="margin-left:auto" aria-label="Bearbeiten" onClick="{{w.edit}}">✎</button></div>
+<div style="font-size:15px;font-weight:600">{{w.name}}</div>
+<div class="num" style="font-size:11.5px;color:oklch(0.50 0.005 270)">{{w.info}}</div>
+</div>
+</div>
+<div style="display:flex;height:10px;border-radius:999px;overflow:hidden;gap:2px"><sc-for list="{{w.segmente}}" as="s" hint-placeholder-count="4"><span style="flex:{{s.f}};{{s.style}}"></span></sc-for></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-p" onClick="{{w.aktivieren}}">Aktivieren</button><button class="btn btn-r" onClick="{{w.del}}">Löschen</button></div>
+<sc-if value="{{w.frage}}" hint-placeholder-val="{{ false }}">
+<div style="border:1px solid oklch(0.82 0.10 70);background:oklch(0.97 0.03 80);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;font-size:12.5px">
+<sc-if value="{{w.mitAktiv}}" hint-placeholder-val="{{ true }}"><b>„{{aktivName}}“ steuert gerade. Was damit?</b><div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{w.wahl}}" as="x" hint-placeholder-count="2"><button class="chip" style="cursor:pointer;min-height:32px;{{x.style}}" onClick="{{x.pick}}">{{x.label}}</button></sc-for></div></sc-if>
+<sc-if value="{{w.mitBest}}" hint-placeholder-val="{{ false }}">
+<label style="display:flex;gap:8px;align-items:center;min-height:32px"><input type="checkbox" checked="{{w.userOk}}" onChange="{{w.toggleUser}}"> Gelesen: Nur für erfahrene Wettkampf-Athleten · Coach-Betreuung empfohlen</label>
+<sc-if value="{{coach}}" hint-placeholder-val="{{ false }}"><div><b>Dein Coach:</b> {{w.coachStatus}} <sc-if value="{{w.coachOffen}}" hint-placeholder-val="{{ true }}"><button class="btn" style="margin-left:6px" onClick="{{w.coachOk}}">Prototyp: Coach gibt frei</button></sc-if></div></sc-if>
+</sc-if>
+<sc-if value="{{w.fehler}}" hint-placeholder-val="{{ false }}"><div style="color:oklch(0.45 0.17 25)"><b>{{w.fehler}}</b></div></sc-if>
+<div style="display:flex;gap:8px"><button class="btn btn-p" disabled="{{w.gesperrt}}" onClick="{{w.bestaetigen}}">Jetzt aktivieren</button><button class="btn" onClick="{{w.aktivieren}}">Abbrechen</button></div>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</section>
+
+<!-- ABGESCHLOSSEN -->
+<section aria-label="Abgeschlossene Pläne" style="display:flex;flex-direction:column;gap:10px">
+<span class="eb">Abgeschlossene Pläne · {{fertigCount}}</span>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;align-items:start">
+<sc-for list="{{fertig}}" as="f" hint-placeholder-count="2">
+<div class="card" style="padding:14px;display:flex;flex-direction:column;gap:8px;background:oklch(0.99 0.002 270)">
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="typ">{{f.typ}}</span><span class="chip" style="{{f.chipStyle}}">{{f.status}}</span></div>
+<div style="font-weight:600">{{f.name}}</div>
+<div class="num" style="font-size:11.5px;color:oklch(0.50 0.005 270)">{{f.info}}</div>
+<div style="display:flex;height:8px;border-radius:999px;overflow:hidden;gap:2px;opacity:.7"><sc-for list="{{f.segmente}}" as="s" hint-placeholder-count="3"><span style="flex:{{s.f}};{{s.style}}"></span></sc-for></div>
+<sc-if value="{{f.offen}}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px;background:#fff;border-radius:8px;padding:8px 10px">{{f.detail}}</div></sc-if>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" onClick="{{f.toggle}}">Details</button><button class="btn" onClick="{{f.vorlage}}">Als Vorlage</button><button class="btn" onClick="{{f.neu}}">Neu starten</button><button class="btn btn-r" onClick="{{f.del}}">Löschen</button></div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<!-- VORLAGEN -->
+<section aria-label="Vorlagen" class="card" style="padding:18px;display:flex;flex-direction:column;gap:10px">
+<span class="eb">Vorlagen</span>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px">
+<sc-for list="{{vorlagen}}" as="v" hint-placeholder-count="3">
+<div style="display:flex;flex-direction:column;gap:6px"><div style="font-weight:600;font-size:12.5px">{{v.quelle}}</div>
+<sc-for list="{{v.items}}" as="i" hint-placeholder-count="2"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid oklch(0.95 0.003 270);font-size:12.5px;{{i.style}}"><span>{{i.n}} <span style="font-size:11px;color:oklch(0.50 0.005 270)">{{i.i}}</span></span></div></sc-for>
+</div>
+</sc-for>
+</div>
+<div style="font-size:11.5px;color:oklch(0.50 0.005 270)">Vom Coach zugewiesene Programme kommen als Vorschlag und landen als Entwurf unter „Weitere Pläne“.</div>
+</section>
+
+</sc-if>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(p){ super(p); this.state = this.start(); }
+  start(){ return { grad:'pro', coach:true, det:true, edit:null, confirmDel:false, neu:false, neuName:'Neuer Plan', neuQuelle:'prep', akt:null, wahl:null, userOk:false, coachOk:false, toast:'', offenFertig:null, eigene:[],
+    plans: [
+      { id:'lean', name:'Lean Bulk bis Dezember', typ:'Einfacher Plan · aus Goals', status:'aktiv', anker:'start', start:'2026-06-12', termine:[], phasen:[{id:'p1',prog:'Lean Bulk',wo:27}] },
+      { id:'prep', name:'Contest Prep 2027', typ:'Contest Prep', status:'entwurf', anker:'A', termine:[{id:'t1',name:'NPC Classic Bangkok',art:'A',datum:'2027-02-04'},{id:'t2',name:'Samui Open',art:'B',datum:'2027-03-04'},{id:'t3',name:'Urlaub Familie',art:'S',datum:'2026-12-20'}], phasen:[{id:'q1',prog:'early',wo:6},{id:'q2',prog:'mid',wo:7},{id:'q3',prog:'late',wo:2},{id:'q4',prog:'Peak Week',wo:1}] },
+      { id:'off', name:'Off-Season 2027', typ:'Expert BB Jahreszyklus', status:'entwurf', anker:'start', start:'2027-03-15', termine:[], phasen:[{id:'o1',prog:'Reverse Diet',wo:8},{id:'o2',prog:'Lean Bulk',wo:20},{id:'o5',prog:'Eigene Werte',wo:6,cv:{kcal:'−10',prot:'2,6',fett:'0,7',cardio:'4',refeed:'2'}},{id:'o3',prog:'Mini Cut',wo:4},{id:'o4',prog:'Lean Bulk',wo:12}] },
+      { id:'f1', name:'Frühjahrs-Cut 2026', typ:'Einfacher Plan · aus Goals', status:'fertig', ergebnis:'erreicht', info:'06.01.–25.03.2026 · 88,6 → 84,0 kg', detail:'Moderate Cut, 11 Wochen, Ziel 84,0 kg am 25.03. erreicht.', phasen:[{prog:'Moderate Cut',wo:11}] },
+      { id:'f2', name:'Contest Prep 2025', typ:'Contest Prep', status:'fertig', ergebnis:'Termin gehalten', info:'02.06.–22.09.2025 · Bühnengewicht 79,4 kg', detail:'16 Wochen, 4 Stufen, eine Diätpause. Reverse Diet danach 10 Wochen.', phasen:[{prog:'early',wo:6},{prog:'mid',wo:7},{prog:'late',wo:2},{prog:'Peak Week',wo:1}] }
+    ] }; }
+  set(o){ this.setState(o); }
+  upd(id, f){ this.set({ plans: this.state.plans.map(p => p.id===id ? f(Object.assign({}, p)) : p) }); }
+  renderVals() {
+    const s = this.state;
+    const sel = 'background:oklch(0.25 0.005 270);color:#fff;border-color:oklch(0.25 0.005 270)';
+    const HEUTE = new Date(2026,9,8);
+    const D = iso => new Date(iso+'T12:00:00');
+    const dstr = d => ('0'+d.getDate()).slice(-2)+'.'+('0'+(d.getMonth()+1)).slice(-2)+'.'+String(d.getFullYear()).slice(2);
+    const iso = d => d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+    const plusW = (d,w) => new Date(d.getTime()+w*7*86400000);
+    const W0 = new Date(2026,5,1), W1 = new Date(2027,3,1);
+    const pos = d => Math.max(0, Math.min(100, (d - W0)/(W1 - W0)*100));
+    const FARBE = { early:'oklch(0.80 0.10 60)', mid:'oklch(0.74 0.12 50)', late:'oklch(0.68 0.14 40)', 'Peak Week':'oklch(0.60 0.16 30)', 'Lean Bulk':'oklch(0.82 0.09 90)', 'Clean Bulk':'oklch(0.78 0.10 95)', 'Mini Cut':'oklch(0.76 0.10 60)', 'Moderate Cut':'oklch(0.74 0.10 60)', 'Halten':'oklch(0.85 0.04 165)', 'Diet Break':'oklch(0.85 0.04 165)', 'Reverse Diet':'oklch(0.80 0.06 165)', 'Eigene Werte':'oklch(0.80 0.08 300)' };
+    const WERTE = { early:['−15 %','2,5 g/kg','0,8 g/kg','2×','–'], mid:['−20 %','2,7 g/kg','0,7 g/kg','3×','1/Wo'], late:['−25 %','3,0 g/kg','0,6 g/kg','4×','2/Wo'], 'Peak Week':['−30 %','3,0 g/kg','0,5 g/kg','–','Protokoll'], 'Lean Bulk':['+10 %','2,0 g/kg','1,0 g/kg','1×','–'], 'Clean Bulk':['+15 %','1,8 g/kg','1,0 g/kg','1×','–'], 'Mini Cut':['−25 %','2,5 g/kg','0,7 g/kg','3×','–'], 'Moderate Cut':['−20 %','2,2 g/kg','0,8 g/kg','2×','1/Wo'], 'Halten':['0 %','2,0 g/kg','1,0 g/kg','2×','–'], 'Diet Break':['0 %','2,0 g/kg','1,0 g/kg','–','–'], 'Reverse Diet':['+5 %/2 Wo','2,2 g/kg','0,9 g/kg','↓','–'] };
+    const PARAM = { early:['−15 %','2×'], mid:['−20 %','3×'], late:['−25 %','4×'], 'Peak Week':['−30 %','–'], 'Lean Bulk':['+10 %','1×'], 'Clean Bulk':['+15 %','1×'], 'Mini Cut':['−25 %','3×'], 'Moderate Cut':['−20 %','2×'], 'Halten':['0 %','2×'], 'Diet Break':['0 %','–'], 'Reverse Diet':['+5 %/2 Wo','↓'] };
+    const ART = { A:'Wettkampf A', B:'Wettkampf B', S:'Sperrtermin', X:'Sonstiges' };
+    const rechne = p => {
+      const total = p.phasen.reduce((a,x)=>a+x.wo,0);
+      const A = (p.termine||[]).filter(t=>t.art==='A').map(t=>D(t.datum)).sort((a,b)=>a-b)[0];
+      let start = p.anker==='A' && A ? plusW(A,-total) : D(p.start || iso(HEUTE));
+      const out = []; let cur = start;
+      p.phasen.forEach(x => { const e = plusW(cur,x.wo); out.push(Object.assign({}, x, { a:cur, e })); cur = e; });
+      return { phasen:out, start, ende:cur, A, total };
+    };
+    const segmente = p => p.phasen.map(x => ({ f:x.wo, style:'background:'+(FARBE[x.prog]||'oklch(0.85 0.005 270)') }));
+    const pro = s.grad==='pro';
+    const grade = [['beginner','Beginner'],['advanced','Advanced'],['pro','Pro / Elite']].map(([id,label]) => ({ label, style: s.grad===id?sel:'', pick: () => this.set({ grad:id }) }));
+    const coachOpts = [[true,'ja'],[false,'nein']].map(([v,label]) => ({ label, style: s.coach===v?sel:'', pick: () => this.set({ coach:v, coachOk:false }) }));
+    const monate = ['Jun','Jul','Aug','Sep','Okt','Nov','Dez','Jan 27','Feb 27','Mär 27','Apr 27'];
+    const aktiv = s.plans.find(p=>p.status==='aktiv');
+    let ak = null;
+    if (aktiv) {
+      const r = rechne(aktiv);
+      const cp = r.phasen.find(x => HEUTE >= x.a && HEUTE < x.e);
+      const wIn = cp ? Math.floor((HEUTE - cp.a)/86400000/7)+1 : 0;
+      ak = { name:aktiv.name, typ:aktiv.typ, zeitraum: dstr(r.start)+' – '+dstr(r.ende)+' · '+r.total+' Wochen',
+        aktPhase: cp ? cp.prog : (HEUTE < r.start ? 'beginnt '+dstr(r.start) : 'vorbei'), aktInfo: cp ? 'Woche '+wIn+' von '+cp.wo : '',
+        edit: () => this.set({ edit:aktiv.id, confirmDel:false }),
+        balken: r.phasen.map(x => ({ n:x.prog+' · '+x.wo+' Wo', l:pos(x.a).toFixed(2), w:Math.max(1,pos(x.e)-pos(x.a)).toFixed(2), style:'background:'+(FARBE[x.prog]||'#ddd')+';color:oklch(0.25 0.005 270)'+(x===cp?';outline:2px solid oklch(0.25 0.005 270)':'') + (x.e < HEUTE ? ';opacity:.55':'') })),
+        marken: (aktiv.termine||[]).map(t => ({ n:(t.art==='S'?'':t.art+' ')+t.name, l:pos(D(t.datum)).toFixed(2), style: t.art==='A'?'color:oklch(0.45 0.17 25);font-weight:700':'color:oklch(0.45 0.005 270)' })),
+        phasen: r.phasen.map(x => ({ n:x.prog, wo:x.wo, b:dstr(x.a), e:dstr(x.e), d: x.prog==='Eigene Werte' ? ((x.cv||{}).kcal||'–')+' % · eigene' : (PARAM[x.prog]||['–'])[0], c: x.prog==='Eigene Werte' ? ((x.cv||{}).cardio||'–')+'×' : (PARAM[x.prog]||['','–'])[1], status: x===cp?'● läuft':(x.e<=HEUTE?'vorbei':'geplant'), zeile: x===cp?'background:oklch(0.97 0.03 90)':'' })),
+        naechstes: aktiv.id==='lean' ? 'Empfohlen ab '+dstr(r.ende)+': Mini Cut 4 Wochen. Grund: Körperfett steigt im Überschuss auf ~17 %. Übernehmen = Phase im Plan ergänzen (✎).' : 'Nächste Stufe laut Plan: '+((r.phasen.find(x=>x.a>HEUTE)||{}).prog||'–')+'.' };
+    }
+    // Bearbeiten
+    const ep = s.plans.find(p=>p.id===s.edit);
+    let ed = {};
+    if (ep) {
+      const r = rechne(ep);
+      let fehler = '';
+      if (ep.anker==='A' && !r.A) fehler = 'Dieser Plan rechnet vom Hauptwettkampf rückwärts – lege einen Termin der Art „Wettkampf A“ an.';
+      else if (ep.anker==='A' && ep.status!=='aktiv' && r.start < HEUTE) fehler = 'Termin zu nah: die Phasen brauchen '+r.total+' Wochen, der erste A-Termin ist in '+((r.A-HEUTE)/86400000/7).toFixed(1).replace('.',',')+' Wochen. Phasen kürzen oder Termin verschieben.';
+      ed = { name: ep.name, status: ep.status==='aktiv'?'aktiver Plan':ep.status, istAktiv: ep.status==='aktiv', fehler, gesperrt: !!fehler, confirm: s.confirmDel,
+        setName: e => this.upd(ep.id, p => (p.name = e.target.value, p)),
+        termine: (ep.termine||[]).map(t => ({ name:t.name, art:t.art, datum:t.datum,
+          setName: e => this.upd(ep.id, p => (p.termine = p.termine.map(x => x.id===t.id ? Object.assign({}, x, {name:e.target.value}) : x), p)),
+          setArt: e => this.upd(ep.id, p => (p.termine = p.termine.map(x => x.id===t.id ? Object.assign({}, x, {art:e.target.value}) : x), p)),
+          setDatum: e => this.upd(ep.id, p => (p.termine = p.termine.map(x => x.id===t.id ? Object.assign({}, x, {datum:e.target.value}) : x), p)),
+          del: () => this.upd(ep.id, p => (p.termine = p.termine.filter(x => x.id!==t.id), p)) })),
+        addTermin: () => this.upd(ep.id, p => (p.termine = (p.termine||[]).concat([{ id:'t'+Date.now(), name:'Neuer Termin', art:'X', datum:iso(plusW(HEUTE,8)) }]), p)),
+        phasen: r.phasen.map(x => ({ id:x.id, prog:x.prog, wo:x.wo, zeit: dstr(x.a)+' – '+dstr(x.e),
+          custom: x.prog==='Eigene Werte', normal: x.prog!=='Eigene Werte',
+          werte: (WERTE[x.prog]||[]).map((v,i) => ({ l:['kcal','Protein','Fett','Cardio','Refeed'][i], v })),
+          felder: [['kcal','kcal % zu Erhaltung'],['prot','Protein g/kg'],['fett','Fett g/kg'],['cardio','Cardio/Wo'],['refeed','Refeed/Wo']].map(([k,l]) => ({ k, l, v: ((x.cv||{})[k]) || '', set: e => this.upd(ep.id, p => (p.phasen = p.phasen.map(y => y.id===x.id ? Object.assign({}, y, { cv: Object.assign({}, y.cv||{}, { [k]: e.target.value }) }) : y), p)) })),
+          setProg: e => this.upd(ep.id, p => (p.phasen = p.phasen.map(y => y.id===x.id ? Object.assign({}, y, {prog:e.target.value}) : y), p)),
+          plus: () => this.upd(ep.id, p => (p.phasen = p.phasen.map(y => y.id===x.id ? Object.assign({}, y, {wo:y.wo+1}) : y), p)),
+          minus: () => this.upd(ep.id, p => (p.phasen = p.phasen.map(y => y.id===x.id ? Object.assign({}, y, {wo:Math.max(1,y.wo-1)}) : y), p)),
+          del: () => this.upd(ep.id, p => (p.phasen = p.phasen.filter(y => y.id!==x.id), p)) })),
+        addPhase: () => this.upd(ep.id, p => (p.phasen = p.phasen.concat([{ id:'n'+Date.now(), prog:'Halten', wo:4 }]), p)),
+        vorlage: () => this.set({ eigene: s.eigene.concat([ep.name]), toast:'„'+ep.name+'“ als eigene Vorlage gespeichert.' }),
+        pausieren: () => { this.upd(ep.id, p => (p.status='pausiert', p)); this.set({ edit:null, toast:'Plan pausiert. Kein Plan aktiv – Erhaltung mit Warnung.' }); },
+        beenden: () => { this.upd(ep.id, p => (p.status='fertig', p.ergebnis='beendet', p.info='beendet am 08.10.2026', p.detail='Von dir beendet.', p)); this.set({ edit:null, toast:'Plan beendet und unter „Abgeschlossene Pläne“ abgelegt.' }); },
+        askDel: () => this.set({ confirmDel: !s.confirmDel }),
+        del: () => this.set({ plans: s.plans.filter(p => p.id!==ep.id), edit:null, confirmDel:false, toast:'Plan „'+ep.name+'“ gelöscht.' }) };
+    }
+    // Weitere
+    const weitere = s.plans.filter(p => p.status==='entwurf' || p.status==='pausiert').map(p => {
+      const r = rechne(p); const frage = s.akt===p.id;
+      const mitBest = p.typ==='Contest Prep';
+      const fehler = (p.anker==='A' && (!r.A || r.start < HEUTE)) ? (r.A ? 'Termin zu nah – erst Phasen oder Termin anpassen (✎).' : 'Kein Wettkampf A eingetragen (✎).') : '';
+      const gesperrt = !!fehler || (aktiv && !s.wahl) || (mitBest && (!s.userOk || (s.coach && !s.coachOk)));
+      return { name:p.name, typ:p.typ, status: p.status==='entwurf'?'Entwurf':'pausiert',
+        info: (r.A ? 'A '+dstr(r.A)+' · ' : '')+'Start '+dstr(r.start)+' · '+r.total+' Wochen', segmente: segmente(p),
+        edit: () => this.set({ edit:p.id, confirmDel:false }), del: () => this.set({ plans: s.plans.filter(x=>x.id!==p.id), toast:'Plan „'+p.name+'“ gelöscht.' }),
+        aktivieren: () => this.set({ akt: frage?null:p.id, wahl:null, userOk:false, coachOk:false }), frage, mitAktiv: !!aktiv, mitBest, fehler, gesperrt,
+        wahl: [['pausiert','pausieren'],['fertig','beenden']].map(([v,label]) => ({ label, style: s.wahl===v?sel:'', pick: () => this.set({ wahl:v }) })),
+        userOk: s.userOk, toggleUser: () => this.set({ userOk: !s.userOk }), coachOffen: s.coach && !s.coachOk, coachStatus: s.coachOk?'hat freigegeben ✓':'Freigabe angefragt …', coachOk: () => this.set({ coachOk:true }),
+        bestaetigen: () => this.set({ akt:null, toast:'„'+p.name+'“ ist jetzt aktiv und steuert dein Ziel in Goals.'+(aktiv?' „'+aktiv.name+'“ ist '+(s.wahl==='fertig'?'beendet.':'pausiert.'):''),
+          plans: s.plans.map(x => x.id===p.id ? Object.assign({}, x, {status:'aktiv'}) : (aktiv && x.id===aktiv.id ? Object.assign({}, x, {status:s.wahl, ergebnis:'beendet', info:'beendet am 08.10.2026', detail:'Durch Aktivieren eines anderen Plans beendet.'}) : x)) }) };
+    });
+    const fertigPl = s.plans.filter(p => p.status==='fertig');
+    const fertig = fertigPl.map(p => ({ name:p.name, typ:p.typ, status: p.ergebnis==='beendet'?'beendet':'✓ '+p.ergebnis, chipStyle: p.ergebnis==='beendet'?'background:oklch(0.95 0.003 270)':'color:oklch(0.42 0.13 150);border-color:oklch(0.80 0.08 150);background:oklch(0.96 0.03 150)',
+      info:p.info, detail:p.detail, segmente: segmente(p), offen: s.offenFertig===p.id,
+      toggle: () => this.set({ offenFertig: s.offenFertig===p.id?null:p.id }),
+      vorlage: () => this.set({ eigene: s.eigene.concat([p.name]), toast:'„'+p.name+'“ als eigene Vorlage gespeichert.' }),
+      neu: () => this.set({ plans: s.plans.concat([{ id:'n'+Date.now(), name:p.name+' (neu)', typ:p.typ, status:'entwurf', anker: p.typ==='Contest Prep'?'A':'start', start:iso(plusW(HEUTE,1)), termine: p.typ==='Contest Prep'?[{id:'ta',name:'Hauptwettkampf',art:'A',datum:iso(plusW(HEUTE,18))}]:[], phasen: p.phasen.map((x,i)=>Object.assign({id:'c'+i}, x)) }]), toast:'Neuer Entwurf aus „'+p.name+'“ unter „Weitere Pläne“.' }),
+      del: () => this.set({ plans: s.plans.filter(x=>x.id!==p.id), toast:'„'+p.name+'“ gelöscht.' }) }));
+    const Q = [ ['prep','Contest Prep 16 Wochen','LumeOS-Standard · 4 Stufen, rückwärts vom Wettkampf',false], ['annual','Expert BB Jahreszyklus','LumeOS-Standard · 52 Wochen, Blöcke',false], ['mini','Mini-Cut-Block','LumeOS-Standard · 4 Wochen',false], ['leer','Leerer Plan','Phasen selbst zusammenstellen',false], ['eigen','Eigene Vorlage', s.eigene.length? s.eigene.join(', ') : 'noch keine gespeichert', !s.eigene.length], ['coach','Vom Coach','kommt mit dem Coach-Modul', true] ];
+    const neuQuellen = Q.map(([id,n,i,aus]) => ({ n, i, aus, style: aus?'opacity:.5;cursor:not-allowed':(s.neuQuelle===id?'border:2px solid oklch(0.62 0.13 90);background:oklch(0.985 0.02 90)':''), pick: () => { if(!aus) this.set({ neuQuelle:id }); } }));
+    const TPL = { prep:{typ:'Contest Prep',anker:'A',termine:[{id:'ta',name:'Hauptwettkampf',art:'A',datum:iso(plusW(HEUTE,20))}],phasen:[['early',6],['mid',7],['late',2],['Peak Week',1]]}, annual:{typ:'Expert BB Jahreszyklus',anker:'start',phasen:[['Reverse Diet',8],['Lean Bulk',20],['Mini Cut',4],['Lean Bulk',12],['Halten',8]]}, mini:{typ:'Mini-Cut-Block',anker:'start',phasen:[['Mini Cut',4]]}, leer:{typ:'Eigener Plan',anker:'start',phasen:[['Halten',4]]}, eigen:{typ:'aus eigener Vorlage',anker:'start',phasen:[['Lean Bulk',12]]} };
+    const neuAnlegen = () => { const t = TPL[s.neuQuelle]; const id='n'+Date.now();
+      this.set({ neu:false, edit:id, toast:'Entwurf „'+s.neuName+'“ angelegt – jetzt Termine und Phasen anpassen.', plans: s.plans.concat([{ id, name:s.neuName, typ:t.typ, status:'entwurf', anker:t.anker, start:iso(plusW(HEUTE,1)), termine:t.termine||[], phasen:t.phasen.map(([prog,wo],i)=>({id:id+i,prog,wo})) }]) }); };
+    const vorlagen = [ { quelle:'LumeOS-Standard', items:[{n:'Contest Prep 16 Wochen',i:'4 Stufen',style:''},{n:'Expert BB Jahreszyklus',i:'52 Wochen',style:''},{n:'Mini-Cut-Block',i:'4 Wochen',style:''}] }, { quelle:'Eigene', items: s.eigene.length ? s.eigene.map(n=>({n,i:'gespeichert',style:''})) : [{n:'noch keine',i:'„Als Vorlage speichern“ an einem Plan',style:'color:oklch(0.55 0.005 270)'}] }, { quelle:'Vom Coach · später', items:[{n:'kommt mit dem Coach-Modul',i:'Zuweisung = Vorschlag',style:'color:oklch(0.55 0.005 270)'}] } ];
+    const wachen = [ {t:'Kraftverlust > 10 % in 4 Wochen → Defizit senken / Überschuss erhöhen',s:'ok · −2 %',style:'color:oklch(0.42 0.12 150)'}, {t:'Trend 3 Wochen neben Soll → ±100 kcal',s:'ausgelöst KW 38',style:'color:oklch(0.48 0.15 60)'}, {t:'Körperfett > 18 % → Mini Cut vorschlagen',s:'ok · 16,2 %',style:'color:oklch(0.42 0.12 150)'} ];
+    const anpassung = [ {kw:'KW 40',d:'−0,05',soll:'+0,21',log:'4/7',anp:'keine',grund:'zu wenig Logtage (mind. 5)'}, {kw:'KW 39',d:'−0,05',soll:'+0,21',log:'6/7',anp:'+50 kcal',grund:'Trend unter Soll'}, {kw:'KW 38',d:'−0,05',soll:'+0,21',log:'7/7',anp:'+100 kcal',grund:'Wache: 3 Wochen unter Soll'} ];
+    return { grade, coachOpts, coach:s.coach, pro, gesperrt: !pro, gradName:{beginner:'Beginner',advanced:'Advanced',pro:'Pro'}[s.grad], toast:s.toast,
+      reset: () => this.set(this.start()),
+      neuOffen: s.neu, toggleNeu: () => this.set({ neu: !s.neu }), neuName: s.neuName, setNeuName: e => this.set({ neuName: e.target.value }), neuQuellen, neuAnlegen,
+      hatAktiv: !!ak, keinAktiver: !ak, ak: ak || {}, aktivName: aktiv ? aktiv.name : '', monate, heuteL: pos(HEUTE).toFixed(2),
+      detOffen: s.det, detPfeil: s.det?'▴':'▾', toggleDetails: () => this.set({ det: !s.det }),
+      editOffen: !!ep, closeEdit: () => this.set({ edit:null, confirmDel:false }), ed,
+      weitere, fertig, fertigCount: fertig.length, vorlagen, wachen, anpassung };
+  }
+}
+</script>
+</body>
+</html>

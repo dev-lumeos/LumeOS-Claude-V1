@@ -110,3 +110,9 @@ Plausibilitaet (Messziel widerspricht der Richtung): G-621.
 ## Kette committet - 2026-10-08, Commit `fb115173`
 
 Gate gruen. kette.json/testdaten-pruefen getrennt nach 613/617/622 (Codex' G-622 lag schon im Baum). Erledigt erst nach Live.
+
+## Erweitert - 2026-10-08 12:16, vor Live
+
+`[read]` Tom 08.10.2026 12:16: „dieser stand ist fuer mich vertretbar kannst umsetzen“. Vorlage: `docs/spezifikation/goals-ziel-setzen/` (Dossier Kapitel 8/9 gilt vor dem Entwurf).
+
+Die Messarten reichen nicht: Messziele gibt es auch für Körper (Gewicht, Körperfett, Umfang mit Stelle aus den 13), Gewohnheit (Quelle: Trainings/Woche, Cardio/Woche, Schritte/Tag, Schlaf h/Nacht – was gemessen wird; Rest vorgemerkt) und Eigenes (Einheit, Richtung mehr/weniger besser, Istwert von Hand). Rhythmus einmalig oder wiederkehrend (pro Woche, Serie). Startwert wird beim Anlegen gemessen und festgehalten. Live erst mit dieser Erweiterung.

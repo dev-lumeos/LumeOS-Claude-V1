@@ -1,0 +1,505 @@
+<title>Neues Ziel setzen – Dossier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: ein schmaler Lesespalt, A4-tauglich; Kapitel beginnen im Druck auf neuer Seite. */
+:root{
+  --bg:#fbfbfa; --paper:#ffffff; --fg:#1d2124; --muted:#5b6268; --rule:#d9dcdf;
+  --accent:#8a5a12; --accent-soft:#f6eddd; --warn:#a23b2a; --warn-soft:#f8e6e2; --ok:#2f6b3a; --ok-soft:#e3f0e5;
+  --f-display:"IBM Plex Sans Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"IBM Plex Sans",-apple-system,"Segoe UI",Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#151718; --paper:#1c1f21; --fg:#e6e8ea; --muted:#9aa1a7; --rule:#33383c;
+  --accent:#e0a955; --accent-soft:#2c2416; --warn:#ef8f7e; --warn-soft:#331e1a; --ok:#86c792; --ok-soft:#1a2b1d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#151718; --paper:#1c1f21; --fg:#e6e8ea; --muted:#9aa1a7; --rule:#33383c;
+  --accent:#e0a955; --accent-soft:#2c2416; --warn:#ef8f7e; --warn-soft:#331e1a; --ok:#86c792; --ok-soft:#1a2b1d; color-scheme:dark}
+
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55;padding:0 16px}
+.blatt{max-width:820px;margin:0 auto;padding-block:40px 64px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:2rem;font-weight:700;letter-spacing:-.01em}
+h2{font-size:1.45rem;font-weight:700;margin-top:2.6rem;padding-top:.9rem;border-top:2px solid var(--fg);display:flex;gap:.6rem;align-items:baseline}
+h2 .nr{font-family:var(--f-mono);font-size:.9rem;font-weight:500;color:var(--accent)}
+h3{font-size:1.08rem;font-weight:600;margin-top:1.6rem}
+p,ul,ol{margin:.6rem 0;max-width:68ch}
+li{margin:.25rem 0}
+.kopf{display:flex;flex-direction:column;gap:.5rem;padding-bottom:1.2rem;border-bottom:1px solid var(--rule)}
+.eyebrow{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.meta{font-size:.88rem;color:var(--muted)}
+.inhalt{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.2rem 1.4rem;margin-top:1rem;font-size:.9rem;padding:0;list-style:none}
+.inhalt li{display:flex;gap:.5rem}
+.inhalt .nr{font-family:var(--f-mono);color:var(--accent);min-width:1.6rem}
+code,.mono{font-family:var(--f-mono);font-size:.86em}
+.tabelle{overflow-x:auto;margin:.9rem 0}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:560px}
+th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border-bottom:1px solid var(--rule)}
+th{font-family:var(--f-display);font-weight:600;font-size:.82rem;letter-spacing:.02em;text-transform:uppercase;color:var(--muted);border-bottom:1.5px solid var(--fg)}
+td:first-child{font-weight:500}
+.kasten{border-left:3px solid var(--accent);background:var(--accent-soft);padding:.7rem 1rem;margin:1rem 0;border-radius:0 4px 4px 0}
+.kasten.warn{border-color:var(--warn);background:var(--warn-soft)}
+.kasten.ok{border-color:var(--ok);background:var(--ok-soft)}
+.kasten p:first-child{margin-top:0}.kasten p:last-child{margin-bottom:0}
+.tag{font-family:var(--f-mono);font-size:.72rem;padding:.05rem .35rem;border:1px solid var(--rule);border-radius:3px;color:var(--muted);white-space:nowrap}
+.frage{display:grid;grid-template-columns:2rem 1fr 1fr;gap:.6rem;padding:.55rem 0;border-bottom:1px solid var(--rule);align-items:start}
+.frage .nr{font-family:var(--f-mono);color:var(--accent);font-weight:500}
+.frage .antwort{border-bottom:1px dotted var(--muted);min-height:1.4rem}
+.fluss{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin:.8rem 0}
+.fluss span{border:1px solid var(--rule);background:var(--paper);padding:.3rem .6rem;border-radius:4px;font-size:.86rem}
+.fluss b{color:var(--muted);font-weight:400}
+.quellen{font-size:.82rem;color:var(--muted)}
+.quellen a{color:var(--accent)}
+a{color:var(--accent)}
+@media (max-width:560px){.frage{grid-template-columns:1.6rem 1fr}.frage .antwort{grid-column:2}}
+@media print{
+  @page{size:A4;margin:16mm 15mm}
+  body{background:#fff;color:#000;font-size:10.5pt;padding:0}
+  .blatt{max-width:none;padding:0}
+  h2{break-before:page;margin-top:0}
+  h2.ohne-umbruch{break-before:auto;margin-top:1.6rem}
+  table,.kasten,.frage{break-inside:avoid}
+  .kasten{background:none}
+  a{color:#000;text-decoration:none}
+}
+.skizze{font-family:var(--f-mono);font-size:.74rem;line-height:1.35;background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:.7rem .9rem;overflow-x:auto;margin:.8rem 0;white-space:pre}
+@media print{.skizze{font-size:7.5pt;break-inside:avoid}}
+</style>
+
+<div class="blatt">
+
+<header class="kopf">
+  <span class="eyebrow">LumeOS · Modul Goals · Dossier zum Ausdrucken</span>
+  <h1>Neues Ziel setzen</h1>
+  <p class="meta">Wie ein Nutzer ein Ziel anlegt: Stand, Quellen, Vorschlag. Stand 08.10.2026, Orchestrator. Gemessene Aussagen tragen <span class="tag">gemessen</span>, gelesene <span class="tag">gelesen</span>, Annahmen <span class="tag">Annahme</span>.</p>
+  <ol class="inhalt">
+    <li><span class="nr">1</span>Was heute falsch ist</li>
+    <li><span class="nr">2</span>Entwurf Zieltypen-Katalog</li>
+    <li><span class="nr">3</span>Was die Spec sagt</li>
+    <li><span class="nr">4</span>Was das alte Repo zeigt</li>
+    <li><span class="nr">5</span>Was das Mockup zeigt</li>
+    <li><span class="nr">6</span>Was die Recherche ergab</li>
+    <li><span class="nr">7</span>Was die Konkurrenz macht</li>
+    <li><span class="nr">8</span>Vorschlag</li>
+    <li><span class="nr">9</span>Entscheidungen für Tom</li>
+  </ol>
+</header>
+
+<h2 class="ohne-umbruch"><span class="nr">1</span>Was heute falsch ist</h2>
+
+<div class="kasten warn">
+<p><strong>Der Fehler liegt beim Orchestrator.</strong> Recherchiert wurde das Bedienmuster (zwei Ebenen, steuernd gegen messend). Nie geschrieben wurde eine Spezifikation je Zieltyp: was der Nutzer eingibt, was das System selbst misst, welche Einheit, welche Bedingungen und Abhängigkeiten. Stattdessen gingen Einzelaufträge raus, und die Agenten setzten jeweils etwas auf das alte Formular. Die Abnahmen prüften, ob eine Funktion da ist, nicht ob die ganze Seite Sinn ergibt.</p>
+</div>
+
+<h3>Modal „New goal“ (als dev angesehen, 08.10.) <span class="tag">gemessen</span></h3>
+<ul>
+  <li>Oben sechs alte Typ-Knöpfe (Body composition, Weight, Strength PR, Performance, Habit, Custom). Die Richtung Abnehmen · Halten · Aufbauen hängt <strong>unten als optionaler Zusatz</strong> dran. Die Logik steht damit auf dem Kopf.</li>
+  <li>Den aktuellen Wert <strong>tippt der Nutzer</strong>, obwohl das System Gewicht und 1RM selbst misst.</li>
+  <li>Die Einheit ist Freitext („kg · % · min“). Die Priorität zeigt „3 aktive Plätze“, ein Modell, das am 07.10. abgeschafft wurde.</li>
+  <li>„Strength PR“ hat keine Übungsauswahl. Kraftziele fanden ihre Übung bis G-617 nur über das Wort „bankdruecken“ im Titel.</li>
+  <li>Im Modal steht eine Attrappe („Linked modules · auto-pull data“). Deutsch und Englisch sind gemischt.</li>
+</ul>
+
+<h3>Reiter Goals <span class="tag">gemessen</span></h3>
+<ul>
+  <li>„Lean Bulk bis September“ hat Frist 16.12.; es zeigt „behind“ und „0.0 %“, obwohl 84,66 kg von 85 Richtung 88 gemessen sind.</li>
+  <li>Tabellennamen wie <code>training.workout_sets.estimated_1rm</code> stehen sichtbar für den Nutzer da.</li>
+  <li>Abgelaufene Ziele bleiben „aktiv“: Bankdrücken mit Frist 18.08. steht 51 Tage danach noch als laufend.</li>
+  <li>Für Ziele gibt es keinen Löschweg (G-611).</li>
+</ul>
+
+<h3>Was bereits stimmt und bleibt</h3>
+<ul>
+  <li>Strategiekatalog mit Auswahlgruppe, Mindestgrad und Standard (G-614, live).</li>
+  <li>Eine aktive Steuerung, beliebig viele Messziele, Übung und Messart am Ziel (G-617, in der Kette, nicht live).</li>
+  <li>Eine pausierte Phase läuft nicht (G-613, in der Kette, nicht live).</li>
+  <li>Planer im Reiter Phase engine, vom Termin rückwärts (G-615). Die Darstellung ist auch dort noch zu bewerten.</li>
+</ul>
+
+<h2><span class="nr">2</span>Entwurf Zieltypen-Katalog</h2>
+<p>Zur Korrektur. Die Spalte „System liefert“ ist der Kern: Was gemessen werden kann, tippt niemand ein.</p>
+
+<h3>Steuerndes Ziel: genau eines aktiv, bestimmt Kalorien und Makros</h3>
+<div class="tabelle"><table>
+<thead><tr><th>Art</th><th>Nutzer gibt ein</th><th>System liefert</th><th>Bedingungen</th></tr></thead>
+<tbody>
+<tr><td>Abnehmen · Halten · Aufbauen</td><td>Zielgewicht <em>oder</em> Zieldatum; Tempo nur bei Bedarf ändern</td><td>Startgewicht aus der letzten Messung, Variante (Standard), daraus fehlendes Datum oder Tempo, Kalorien</td><td>Ohne Gewichtsmessung geht es nicht, das Modal führt zu „Gewicht erfassen“. Zielgewicht liegt in der Richtung. Tempo in den Grenzen der Variante. Läuft schon eine Steuerung, fragt das System: alte pausieren oder beenden?</td></tr>
+<tr><td>Plan (Contest Prep, Peak Week, Expert BB, Custom)</td><td>Termin, Plan</td><td>Phasen rückwärts vom Termin</td><td>Ab Grad pro. Termin weit genug weg für die Mindestdauer. Contest Prep und Peak Week: Coach-Bestätigung (siehe 4 und 8).</td></tr>
+</tbody></table></div>
+
+<h3>Messziele: unbegrenzt, steuern nichts</h3>
+<div class="tabelle"><table>
+<thead><tr><th>Typ</th><th>Nutzer gibt ein</th><th>Istwert kommt aus</th><th>Einheit</th></tr></thead>
+<tbody>
+<tr><td>Körpergewicht</td><td>Zielwert, Datum optional</td><td>Gewichtsmessungen</td><td>kg, fest</td></tr>
+<tr><td>Körperfett</td><td>Zielwert</td><td>Körperfettmessung</td><td>%, fest</td></tr>
+<tr><td>Umfang</td><td>Körperstelle (13 Stellen), Zielwert</td><td>Umfangsmessungen</td><td>cm, fest</td></tr>
+<tr><td>Kraft</td><td><strong>Übung aus Liste</strong>, Messart 1RM oder Gewicht × Wiederholungen</td><td>Trainingssätze</td><td>kg, fest</td></tr>
+<tr><td>Ausdauer <span class="tag">später</span></td><td>Distanz, Zeit oder Pace</td><td>Cardio-Einheiten</td><td>fest</td></tr>
+<tr><td>Gewohnheit</td><td>Häufigkeit je Woche</td><td>Zählung im jeweiligen Modul</td><td>× / Woche</td></tr>
+<tr><td>Eigenes</td><td>Titel, Einheit, Werte</td><td><strong>nur hier</strong> trägt der Nutzer den Istwert selbst ein</td><td>frei</td></tr>
+</tbody></table></div>
+
+<h3>Für alle Ziele</h3>
+<ul>
+  <li>Der Titel wird vorgeschlagen („Bankdrücken 1RM 120 kg“) und ist änderbar. Er hat keine Wirkung auf die Rechnung.</li>
+  <li>Der Startwert wird beim Anlegen gemessen und festgehalten.</li>
+  <li>Keine Priorität. Interne Quellnamen sieht der Nutzer nie.</li>
+  <li>Widerspricht ein Messziel der Richtung, erscheint ein Hinweis, keine Sperre (G-621): 12 % Körperfett neben Lean Bulk, Zieldatum beim Tempo nicht erreichbar.</li>
+  <li>Ohne aktive Steuerung gilt Erhaltung mit klarer Warnung „kein Ziel aktiv“ (Entscheid 08.10., G-622).</li>
+</ul>
+
+<h2><span class="nr">3</span>Was die Spec sagt</h2>
+<p class="meta">Quelle: <code>docs/specs/Goals/</code> (README, FEATURES, COMPONENTS, OPEN_ITEMS, STRATEGY, PHASE_MODELS). Entscheidungen gelten, Pfade und „gebaut“-Angaben nicht (A-76). <span class="tag">gelesen</span></p>
+
+<h3>Was sie festlegt</h3>
+<ul>
+  <li><strong>Vier Zielarten:</strong> Body Composition, Performance, Health, Lifestyle. SMART-Prüfung (spezifisch, messbar, erreichbar, relevant, terminiert) und ein „Realism Score“: Ist das Ziel in der Zeit erreichbar?</li>
+  <li><strong>Anlegen als Ablauf (Onboarding):</strong> Profil (Alter, Gewicht, Größe, KF %, Erfahrung) → Zieltyp (8 Optionen inkl. Expert Annual) → Parameter (Zielgewicht, Zeithorizont, Aggressivität) → berechnete Ausgabe: <em>„Dein TDEE: 2.847 kcal → Ziel: 2.347 kcal → −0,5 kg/Woche → 16 Wochen“</em>. Dazu Schnellstart-Vorlagen.</li>
+  <li><strong>Phasen:</strong> 7 Phasen, deterministische Regeln, Wechsel halbautomatisch („System empfiehlt, User bestätigt“). Exit bei Zielgewicht, Maximaldauer oder auf Wunsch.</li>
+  <li><strong>Gewicht als 7-Tage-Schnitt</strong>, damit tägliche Schwankungen nicht frustrieren.</li>
+  <li><strong>Meilensteine</strong> automatisch bei 25/50/75/100 %, dazu eigene. Prognose: „Wenn du so weitermachst, erreichst du dein Ziel in X Wochen“.</li>
+  <li><strong>Komponenten:</strong> <code>GoalCreator</code> = „Onboarding-Flow + Quick Create“; <code>PrimaryGoalCard</code> groß mit Ring, Titel, Phase, Deadline.</li>
+  <li><strong>Personas:</strong> Lena (abnehmen, 40 %), Kai (Kraft, Jahresplanung, 25 %), Nina (Wettkampf, 15 %), Frank (Gesundheit/Biomarker, 20 %).</li>
+  <li><strong>Expert Annual nur Pro</strong>; Cross-Module-Ziele („Squat 150 kg = Training + Ernährung + Schlaf + Kreatin + Recovery“) als Pro-Funktion.</li>
+</ul>
+
+<h3>Wo die Spec überholt ist oder widerspricht</h3>
+<div class="tabelle"><table>
+<thead><tr><th>Spec</th><th>Heute entschieden</th></tr></thead>
+<tbody>
+<tr><td>Priorität 1–10 + Primary; max. 3 aktive Ziele</td><td>Eine Steuerung aktiv, Messziele unbegrenzt, keine Priorität (Tom 07.10./08.10.)</td></tr>
+<tr><td>„Phase-Wechsel ohne Ziel? Ja – Phase ist unabhängig vom Ziel wählbar“</td><td>Eine Phase gehört zu einem steuernden Ziel; nach G-613 wird eine Phase ohne aktives Ziel nicht gelesen. <strong>Widerspruch, offen.</strong></td></tr>
+<tr><td>8 Zieltypen im Onboarding</td><td>3 Richtungen + Planer + Messziele</td></tr>
+</tbody></table></div>
+
+<div class="kasten"><p><strong>Was die Spec nicht hat:</strong> Felder je Zieltyp, Einheiten, Messquelle, Prüfregeln, Verhalten bei Fristablauf. Die Spec beschreibt Funktionen und Ziele, aber kein Formular.</p></div>
+
+<h2><span class="nr">4</span>Was das alte Repo zeigt</h2>
+<p class="meta">Quelle: <code>referenz/lumeos-2026/apps/app/modules/goals/</code>. Struktur ja, Code nie. Ersetzt unter anderem wegen <code>@ts-nocheck</code> und fester Ersatzwerte (Gewicht 85 kg, TDEE 2500 bei fehlendem Profil). <span class="tag">gelesen</span></p>
+
+<h3>Zwei getrennte Wege, nicht ein Formular</h3>
+<div class="tabelle"><table>
+<thead><tr><th></th><th><code>GoalForm.tsx</code> (Körperziel)</th><th><code>GoalSetupDialog.tsx</code> (Ernährungsziel)</th></tr></thead>
+<tbody>
+<tr><td>Zweck</td><td>Messziel am Körper</td><td>Strategie aktivieren (17 Definitionen)</td></tr>
+<tr><td>Auswahl</td><td>Weight, Body fat, Muscle mass, Circumference, Visual</td><td>Strategie aus Katalog (lose, maintain, gain, Cuts, Bulks, Contest Prep …)</td></tr>
+<tr><td>Eingaben</td><td>Zielwert, Frist (Pflicht, nicht in der Vergangenheit); bei Umfang/Visual zusätzlich die Messstelle als Freitext</td><td>TDEE-Regler −40 … +30 %, Makros vorberechnet und änderbar (g/kg sichtbar)</td></tr>
+<tr><td>Bedingungen</td><td>keine weiteren</td><td><strong>Warnungen müssen per Haken bestätigt werden</strong>; Coach-Zustimmung per Haken; Anforderungen Mindestgrad, min./max. Körperfett</td></tr>
+<tr><td>Istwert</td><td>nicht eingegeben</td><td>aus Profil (mit festem Ersatzwert, Fehler)</td></tr>
+</tbody></table></div>
+
+<h3>Was davon im heutigen Katalog steckt <span class="tag">gemessen</span></h3>
+<ul>
+  <li>Warnungen stehen in <code>goal_strategies.warnings</code>, z. B. Mini Cut „Max 4 Wochen / Aggressives Defizit“, Peak Week „Extrem gefährlich bei falscher Ausführung / NUR mit Coach“. Dass das neue Modal sie anzeigt und bestätigen lässt, ist nicht belegt.</li>
+  <li>Coach-Zustimmung: <code>requirements.coach_approval</code> bei Contest Prep und Peak Week.</li>
+  <li><strong>Doppelte Wahrheit:</strong> <code>requirements.min_experience</code> sagt bei Aggressive Cut „advanced“, die neue Spalte <code>min_erfahrung</code> „pro“. Eine von beiden muss weg.</li>
+</ul>
+<div class="kasten"><p><strong>Lehre:</strong> Das alte Repo trennte „Körperziel messen“ und „Strategie aktivieren“, genau die Trennung steuernd/messend. Es hatte Warnungen mit Bestätigung, die heute fehlen. Es hatte keinen tippbaren Istwert.</p></div>
+
+<h2><span class="nr">5</span>Was das Mockup zeigt</h2>
+<p class="meta">Quelle: <code>docs/spezifikation/10-plattform/design-system/theme-v1/</code> – <code>module-goals.jsx</code>, <code>module-goals-pro.jsx</code>, <code>module-goals-editor.jsx</code>. <span class="tag">gelesen</span></p>
+
+<h3>„New goal“ (<code>module-goals.jsx</code>)</h3>
+<ul>
+  <li>Raster mit 6 Typen: Body composition, Weight, Strength PR, Performance, Habit, Custom.</li>
+  <li>Felder: Title, Current value, Target value (Suffix kg), Start date, Deadline, „Linked modules · auto-pull data“ (5 Pillen), Notes.</li>
+  <li>Platzhalter je Typ: „Bench Press 1RM · 130 kg“, „10k under 45:00“, „Drop to 12 % BF“.</li>
+</ul>
+
+<h3>Zieldetail</h3>
+<ul>
+  <li>Kacheln: Progress, Pace (ahead / on-track / behind), Deadline mit Resttagen, Linked modules.</li>
+  <li>„Plan vs actual“-Kurve, „Connected data sources“ (z. B. „22 / 24 sessions · last 30d“, „−420 kcal/day avg“).</li>
+</ul>
+
+<h3>Pro und Editor</h3>
+<ul>
+  <li><code>module-goals-pro.jsx</code>: „Phase state machine“ mit 7 Karten in den Zuständen current, recommended next, switchable, gesperrt.</li>
+  <li><code>module-goals-editor.jsx</code>: „Weeks-out are anchored to your show date“; Tabelle Stage · Weeks out · Deficit · Cardio; Jahreszyklus-Editor.</li>
+</ul>
+
+<div class="kasten warn"><p><strong>Bewertung:</strong> Das Mockup zeigt den Stil, nicht die Logik. Sein „New goal“ ist ein generisches Formular mit getipptem Istwert, ohne Übung, ohne Richtung, ohne Bedingungen. Genau dieses Formular steht heute in der App. Brauchbar sind das Zieldetail (Pace, Plan gegen Ist, Datenquellen in Menschensprache) und der Editor (Wochen bis zum Termin).</p></div>
+
+<h2><span class="nr">6</span>Was die Recherche ergab</h2>
+
+<h3>MacroFactor: Gewichtsziel <span class="tag">gelesen, 08.10.</span></h3>
+<ul>
+  <li>Drei Arten: abnehmen, halten, zunehmen. Die Wahl bestimmt die folgenden Schritte.</li>
+  <li>Eingaben: <strong>Zielgewicht</strong> und <strong>Tempo per Schieber</strong> („Ideally, you want to stay within the green range“). Ein Enddatum wird nicht eingegeben; die App zeigt den voraussichtlichen Zeitraum.</li>
+  <li>Zusammenfassung prüfen, dann bestätigen.</li>
+  <li>Ziel erreicht auf der Waage: Die App bietet an, weiterzumachen, bis das Trendgewicht das Ziel erreicht. Halten läuft ohne Ende und korrigiert wöchentlich.</li>
+</ul>
+
+<h3>StrengthLog: Trainings- und Messziele <span class="tag">gelesen, 08.10.</span></h3>
+<ul>
+  <li>9 Zielarten, je eigenes Formular. Bestleistung und geschätzter 1RM: <strong>eine Übung wählen</strong> plus Zielgewicht (bei Bestleistung optional Wiederholungen). Wiederholungsziel: Übung, Wiederholungen, Gewicht. Zeitziel: Übung, Zeit.</li>
+  <li>Körpermessung: Messart wählen, Zielwert. <strong>Eine erfasste Messung ist Pflicht</strong>, sie ist der Startwert.</li>
+  <li>Enddatum optional: Ohne läuft das Ziel bis zum Erreichen. Ziele lassen sich bearbeiten, löschen, archivieren.</li>
+</ul>
+
+<h3>Bedienmuster</h3>
+<ul>
+  <li>Stufenweise Offenlegung (Nielsen): Das Häufige zuerst, Fortgeschrittenes auf einer zweiten Ebene, höchstens zwei Ebenen.</li>
+  <li>TrainingPeaks Jahresplan: Planung rückwärts vom Wettkampftermin. <span class="tag">Recherche 07.10., heute nicht erneut geprüft</span></li>
+  <li>RP Diet Coach: Richtung und Ziel zuerst, Diätdetails danach. <span class="tag">Recherche 07.10., heute nicht erneut geprüft</span></li>
+</ul>
+
+<div class="kasten ok"><p><strong>Gemeinsamer Nenner:</strong> Erst die Art des Ziels, dann ein Formular nur für diese Art. Was gemessen werden kann, wird nicht getippt. Messziele setzen eine vorhandene Messung voraus. Gewichtsziele arbeiten mit Zielwert und Tempo, das Datum ergibt sich daraus.</p></div>
+
+<h2><span class="nr">7</span>Was die Konkurrenz macht</h2>
+<p class="meta">Webrecherche 08.10. über 25 Apps in drei Gruppen, aus offiziellen Hilfeseiten wo möglich. Nur auf gelesenen Seiten Belegtes ist hier übernommen; Lücken sind genannt. MyFitnessPal stützt sich nur auf Drittseiten, weil die Hilfeseite den Abruf sperrt.</p>
+
+<h3>7.1 Gewicht und Ernährung: das steuernde Ziel</h3>
+<div class="tabelle"><table>
+<thead><tr><th>App</th><th>Zielarten</th><th>Nutzer gibt ein</th><th>App leitet ab</th><th>Grenzen und Verhalten</th></tr></thead>
+<tbody>
+<tr><td>MacroFactor</td><td>Abnehmen, Halten, Zunehmen</td><td>Zielgewicht, Tempo per Schieber (grüner Bereich)</td><td>voraussichtliches Datum, Kalorien</td><td>Bei Ziel auf der Waage: Angebot, bis zum Trendgewicht weiterzumachen. Halten läuft ohne Ende.</td></tr>
+<tr><td>Carbon</td><td>Abnehmen, Zunehmen, Halten, Reverse Diet</td><td>Assistent in 9 Schritten: Gewicht, Körperfett (Zahl oder Bildauswahl), bekannte Erhaltung ja/nein, Tempo pro Woche, Ernährungsstil</td><td>Startkalorien aus dem Tempo</td><td><strong>Zielgewicht optional, „nur zur Anzeige“</strong>. Ein Ziel aktiv, nach dem Anlegen nicht änderbar, nur ersetzen. Am Ziel und an der Kaloriengrenze: Aufforderung, das Ziel zu wechseln. Über 14 Tage Pause: Neustart ab aktuellen Makros.</td></tr>
+<tr><td>RP Diet Coach</td><td>Phasen: Fettabbau, Aufbau, Erhaltung</td><td><strong>Start- und Enddatum</strong>, Körpertyp per Bild (Körperfettband), Wochenplan mit Trainingstagen und Mahlzeiten</td><td>Zielgewicht und Tempo aus der Dauer</td><td>Diätphase max. 16 Wochen, empfohlen 6–12. Max. 1 % Körpergewicht pro Woche, nicht unter BMI 17, Fett ≥ 15 % der Kalorien, Protein wird nie gekürzt. Kein Cut direkt nach Cut; Erhaltung danach mind. ½–⅔ der Diätdauer.</td></tr>
+<tr><td>Lose It!</td><td>Abnehmen, Halten</td><td>Zielgewicht, Tempo</td><td><strong>zwei Daten</strong>: nach Plan und nach tatsächlichem Schnitt</td><td>Datum wird ausgeblendet, wenn das Tempo &gt; 5 Jahre ergibt oder 6× vom Plan abweicht. Nach 3–4 Wochen Pause: neue Kurzbefragung.</td></tr>
+<tr><td>Noom</td><td>Abnehmen, Halten (Modus)</td><td>Zielgewicht per Schieber</td><td>Vorschlag −7 % vom aktuellen Gewicht, Kalorienband statt einer Zahl</td><td>Halten zeigt ein „stabiles Band“ statt einer Ziellinie.</td></tr>
+<tr><td>YAZIO</td><td>Abnehmen, Zunehmen, Halten, Muskelaufbau</td><td>Zielgewicht, Wochenziel</td><td>Kalorien</td><td>Max. 1 kg pro Woche. Nach Zieländerung: Frage, ob Kalorien neu berechnet werden sollen. Kein Enddatum (von Nutzern gewünscht).</td></tr>
+<tr><td>Cronometer</td><td>Abnehmen, Zunehmen, Halten</td><td>Zielgewicht, Tempo (+/−)</td><td>Defizit, Kalorien, Prognosedatum, Zeitachse</td><td>Alternativ feste Kalorienzahl statt Gewichtsziel.</td></tr>
+<tr><td>Happy Scale</td><td>Zielgewicht mit Etappen</td><td>Zielgewicht, Tempo</td><td>Etappen mit Daten, Prognose aus dem Trend</td><td>Vier Glättungsverfahren wählbar; „Neustart“ blendet Altes aus, ohne zu löschen.</td></tr>
+</tbody></table></div>
+
+<h3>7.2 Kraft: Messziele an der Übung</h3>
+<div class="tabelle"><table>
+<thead><tr><th>App</th><th>Ziel an der Übung?</th><th>Was es stattdessen gibt</th></tr></thead>
+<tbody>
+<tr><td>StrengthLog</td><td><strong>ja</strong>: Übung wählen + Zielgewicht (1RM, Bestleistung mit Wdh., Wdh. bei Gewicht, Zeit); Körpermessung nur mit vorhandener Messung</td><td>9 Zielarten, Datum optional, Archiv</td></tr>
+<tr><td>JEFIT</td><td><strong>ja</strong>: „My Goals“ → Übung → Zielwert; Körperziele im Profil</td><td>kein Datum, kein Startwert dokumentiert</td></tr>
+<tr><td>Hevy, Strong, Alpha Progression, Boostcamp, Gravitus, RP Hypertrophy, Liftosaur</td><td>nein</td><td>Bestleistungen werden <strong>automatisch erkannt</strong> und danach gezeigt. Häufigstes „Ziel“: Trainings pro Woche mit Serie (Strong, Fitbod, Alpha). „Ziel“ heißt oft nur Trainingsrichtung für den Plangenerator (Fitbod: 7 Optionen, ohne Wert und Ende).</td></tr>
+</tbody></table></div>
+
+<h3>7.3 Ausdauer und ganzheitliche Plattformen</h3>
+<div class="tabelle"><table>
+<thead><tr><th>App</th><th>Wie ein Ziel entsteht</th><th>Bemerkenswert</th></tr></thead>
+<tbody>
+<tr><td>Garmin</td><td>Tägliche/wöchentliche Werte (Schritte mit „Auto Goal“). Wettkampf anlegen → Plan dazu (Wochenumfang, Tempo, „Finish“ oder Zielzeit, Trainingstage).</td><td>Mehrere Wettkämpfe → einer ist <strong>Hauptwettkampf</strong>. Statt Sperre: Prognose und „Confidence“. Nach zu vielen ausgelassenen Einheiten: Frage, ob der Plan pausiert wird.</td></tr>
+<tr><td>TrainingPeaks</td><td>Jahresplan: Zeitraum, aktuelle Form (stark/schwach), Erholungszyklus, Wettkämpfe mit Priorität <strong>A/B/C</strong>. Phasen werden rückwärts von den A-Wettkämpfen gesetzt.</td><td>Harte Prüfungen: 39–78 Wochen, mind. ein A-Wettkampf, rote Felder bei Fehlern. Warnung bei zu schnellem Formaufbau. „Speichern“ oder „Speichern und neu berechnen“ (überschreibt Handänderungen).</td></tr>
+<tr><td>Strava</td><td>Sportart, Zeitraum (Woche/Monat/Jahr), Messgröße, Wert</td><td>Ohne Ziel <strong>schlägt Strava eins vor</strong>. Schon erfasste Einheiten zählen mit. Mehrere Ziele parallel.</td></tr>
+<tr><td>Apple Fitness</td><td>Drei Tagesringe, Werte mit +/−, je Wochentag planbar</td><td>Montags Vorschlag für neue Ziele aus der Vorwoche. <strong>Pause bis 90 Tage</strong> ohne Serienverlust.</td></tr>
+<tr><td>Fitbit</td><td>Tagesziele; Gewichtsziel: Zielgewicht + Stufe „leicht / mittel / schwer / härter“ (−250 bis −1000 kcal)</td><td>Tempo als benannte Stufe statt Zahl.</td></tr>
+<tr><td>WHOOP, Oura</td><td>Wochenplan aus Vorlagen bzw. ein anpassbares Tagesziel</td><td>Werte vorbelegt aus den ersten 30 Tagen bzw. aus Profil und Tagesform. Verfehlen gilt als normal.</td></tr>
+</tbody></table></div>
+
+<div class="kasten ok">
+<p><strong>Was daraus folgt</strong></p>
+<ul>
+<li><strong>Ein Ziel steuert die Kalorien, überall.</strong> Ein neues ersetzt das alte, mit Rückfrage. Bestätigt unsere Regel.</li>
+<li><strong>Tempo rein, Datum raus</strong> ist der Normalfall (MacroFactor, Carbon, Cronometer, YAZIO, Lose It). Nur RP arbeitet mit fester Dauer; das passt zu Phasen und zum Planer, nicht zur einfachen Richtung.</li>
+<li><strong>Grenzen sind am Tempo festgemacht</strong>, nicht am Datum: 1 % bzw. 1 kg pro Woche, 16 Wochen Diätphase, BMI-Untergrenze, Protein nie kürzen. Unsere Varianten haben Tempo und Maximaldauer bereits im Katalog.</li>
+<li><strong>Ziel erreicht oder Frist vorbei: Frage statt Automatik.</strong> Carbon und RP empfehlen danach Erhaltung bzw. Reverse Diet für ½–⅔ der Diätdauer.</li>
+<li><strong>Zwei Daten zeigen</strong> (Plan gegen tatsächliches Tempo, Lose It) und Trendgewicht statt Tageswert (MacroFactor, Happy Scale, Carbon).</li>
+<li><strong>Übungsziele mit Startwert aus dem Training sind selten.</strong> Nur StrengthLog und JEFIT haben sie; keine App setzt das Ziel direkt an der Übung. Für LumeOS ist das ein Unterschied, kein Standard, den man kopieren kann.</li>
+<li><strong>Zwei Arten Messziel:</strong> wiederkehrend (pro Woche, mit Serie) und einmalig (Zielwert, Datum optional). Wiederkehrende werden aus Daten vorgeschlagen (Strava, Apple, WHOOP).</li>
+<li><strong>Wettkampfpläne brauchen eine Rangfolge</strong> (Garmin Hauptwettkampf, TrainingPeaks A/B/C) und harte Prüfregeln mit sichtbaren Fehlern.</li>
+<li><strong>Pause ist eingebaut</strong> (Apple bis 90 Tage, Garmin fragt, Carbon 14-Tage-Schwelle). Unsere Regel „pausiert = nicht aktiv, Erhaltung mit Warnung“ passt dazu.</li>
+</ul>
+</div>
+
+<h2><span class="nr">8</span>Vorschlag</h2>
+<p>Die Aufteilung: Der <strong>Reiter Goals</strong> zeigt, <em>was</em> ich will und <em>wie weit</em> ich bin. Der <strong>Reiter Phase engine</strong> zeigt, <em>wie</em> und <em>wann</em> (Phasen, Anpassung, Planer). <strong>„Ziel setzen“</strong> ist der einzige Ort, an dem ein Ziel entsteht. Ziffern in Klammern verweisen auf die Fragen in Kapitel 9. <span class="tag">Tom 08.10.: Struktur bestätigt</span></p>
+
+<h3>8.1 „Ziel setzen“: Schritt 0</h3>
+<pre class="skizze">┌───────────────────────────────────────────────────────┐
+│ Ziel setzen                                        ✕  │
+│ ┌─────────────────────────┐ ┌───────────────────────┐ │
+│ │ Richtung festlegen      │ │ Messziel hinzufügen   │ │
+│ │ Abnehmen · Halten ·     │ │ Gewicht, Körperfett,  │ │
+│ │ Aufbauen                │ │ Kraft, Gewohnheit …   │ │
+│ │ Steuert Kalorien und    │ │ Steuert nichts, misst │ │
+│ │ Makros. Immer nur eine. │ │ Fortschritt. Beliebig │ │
+│ │ aktiv: Lean Bulk        │ │ viele.                │ │
+│ └─────────────────────────┘ └───────────────────────┘ │
+│  Wettkampf oder Jahresplan? → Zum Planer  (ab pro)    │
+└───────────────────────────────────────────────────────┘</pre>
+<p>Wer aus einer Übung (Training) oder einer Körpermessung kommt, landet direkt im passenden Messziel mit vorausgewählter Übung bzw. Messgröße.</p>
+
+<h3>8.2 Weg A · Richtung festlegen (steuernd)</h3>
+<div class="fluss"><span>A1 Richtung</span><b>→</b><span>A2 Ziel &amp; Tempo (darin: Vorgehen anpassen)</span><b>→</b><span>A3 Bestätigen</span></div>
+<p><strong>A1 Richtung.</strong> Drei Karten mit je einem Satz und der Standardvariante samt Tempo („Abnehmen: Standard 0,5 % Körpergewicht pro Woche“). Fehlt eine Gewichtsmessung der letzten 14 Tage, erscheint hier „Gewicht heute: __ kg“. Das ist eine Messung, kein Zielfeld; weiter erst danach.</p>
+<p><strong>A2 Ziel, Datum, Programm.</strong> <span class="tag">Tom 08.10.: Fragen 5 und 10 entschieden</span></p>
+<p>Drei Größen hängen zusammen: <strong>Zielgewicht</strong>, <strong>Zieldatum</strong>, <strong>Programm</strong> (die Variante mit ihrem Tempo). Der Startwert ist gemessen. Der Nutzer legt fest, was ihm wichtig ist; das System rechnet den Rest. Jedes Feld zeigt, ob es <em>festgelegt</em> 📌 oder <em>berechnet</em> ist.</p>
+<pre class="skizze"> Start          84,7 kg   Trend, gemessen 08.10.
+ Zielgewicht   [ 80,0 ] kg      📌 festgelegt
+ Zieldatum     [ 31.12.2026 ]   📌 festgelegt
+ Programm        Moderate Cut   berechnet: nötig 0,68 %/Woche
+ ───────────────────────────────────────────────────────────
+ ≈ −0,58 kg/Woche · 2.090 kcal · 186 g Protein · 12 Wochen
+ andere passende Programme: Aggressive Cut (ab pro)</pre>
+<div class="tabelle"><table>
+<thead><tr><th>Nutzer legt fest</th><th>System rechnet</th><th>passt nichts</th></tr></thead>
+<tbody>
+<tr><td>Zielgewicht</td><td>Standardprogramm der Richtung → Datum</td><td>–</td></tr>
+<tr><td>Zieldatum</td><td>Standardprogramm → erreichbares Zielgewicht</td><td>–</td></tr>
+<tr><td>Programm</td><td>mit Maximaldauer (z. B. Mini Cut 4 Wo.): Datum und Zielgewicht; ohne Maximaldauer: fragt nach Ziel <em>oder</em> Datum</td><td>–</td></tr>
+<tr><td>Zielgewicht + Datum</td><td>nötiges Tempo → <strong>das mildeste Programm, das es schafft</strong> und für den Grad frei ist; andere passende als Auswahl</td><td>„Kein Programm schafft das bis zu diesem Datum“ → Datum verschieben, Ziel ändern, oder Planer</td></tr>
+<tr><td>Programm + Zielgewicht</td><td>Datum</td><td>Dauer über Maximaldauer → Warnung, Planer</td></tr>
+<tr><td>Programm + Datum</td><td>Zielgewicht</td><td>–</td></tr>
+</tbody></table></div>
+<p>Halten: kein Zielgewicht, kein Tempo; Wohlfühlbereich ±1 kg um den Trend. Fehlt eine Messung, geht A2 nicht weiter (siehe A1).</p>
+<p><strong>Grenzen nach Erfahrungsgrad</strong> <span class="tag">Tom 08.10.: Frage 11 entschieden</span> – Anfänger: alles, was vom Standard abweicht, gesperrt. Advanced: stufenweise geöffnet, mit Warnung. Pro/Elite: nur Warnungen. Zahlen sind Vorschlag des Orchestrators; Tom hat den Stand am 08.10. 12:16 als vertretbar freigegeben.</p>
+<div class="tabelle"><table>
+<thead><tr><th>Grenze</th><th>Beginner</th><th>Advanced</th><th>Pro / Elite</th></tr></thead>
+<tbody>
+<tr><td>Tempo pro Woche</td><td>nur Standard (0,5 % ab / 0,3 % auf), mehr gesperrt</td><td>bis 0,75 % frei, 0,75–1 % Warnung (Tom 08.10.), darüber gesperrt</td><td>bis 1 % frei, darüber Warnung</td></tr>
+<tr><td>Diätdauer am Stück</td><td>über 16 Wochen gesperrt</td><td>über 16 Wochen Warnung, über 20 gesperrt</td><td>über 16 Wochen Warnung</td></tr>
+<tr><td>Ziel-BMI</td><td>unter 18,5 gesperrt</td><td>unter 18,5 Warnung, unter 17,5 gesperrt</td><td>unter 18,5 Warnung</td></tr>
+<tr><td>Kalorien</td><td>unter 1.500 ♂ / 1.200 ♀ gesperrt</td><td>darunter Warnung, unter 1.300 / 1.000 gesperrt</td><td>darunter Warnung</td></tr>
+<tr><td>Zielgewicht in falscher Richtung</td><td colspan="3">immer gesperrt (Logikfehler, keine Gesundheitsfrage)</td></tr>
+<tr><td>Protein</td><td colspan="3">wird nie gekürzt – Defizit nur aus Fett und Kohlenhydraten (Systemregel)</td></tr>
+</tbody></table></div>
+<p>Eine Warnung braucht einen Bestätigungs-Haken; gesperrt heißt: Feld rot mit Satz, welcher Grad es freigibt. Dieselbe Regel gilt für Programme (Mindestgrad aus dem Katalog) und im Planer.</p>
+<p><strong>Programm wählen</strong> (Liste in A2, „Vorgehen anpassen“). Die Programme, die zu den festgelegten Werten passen, stehen oben; nicht passende mit Grund („zu langsam für dein Datum“):</p>
+<pre class="skizze"> ● Abnehmen            Standard · 0,5 %/Wo · 2,2 g/kg Protein · ohne Limit
+ ○ Conservative Cut    sanfter · 0,4 % · 2,0 g/kg
+ ○ Moderate Cut        0,75 % · 2,2 g/kg · max 20 Wochen
+ ○ Mini Cut            1 % · 2,5 g/kg · max 4 Wochen       ⚠
+ ○ Aggressive Cut      1 % · 2,5 g/kg · max 8 Wochen   🔒 ab pro</pre>
+<p>Eine Zeile Zweck, Kernwerte aus dem Katalog; gesperrte sichtbar mit Grad. ⚠-Varianten: Warnungen mit Pflicht-Haken (6). Wechsel ändert Tempo-Stufen und Rechnung sofort.</p>
+<p><strong>Eigene Werte (ab Pro/Elite)</strong> <span class="tag">Tom 08.10. 12:11</span> – in jeder Richtung als letzter Eintrag der Programmliste. Felder: Tempo % Körpergewicht/Woche (Halten: 0), Protein g/kg, Fett g/kg, Maximaldauer (leer = offen), Cardio-Einheiten/Woche, Refeed-Tage/Woche; Kohlenhydrate ergeben sich als Rest. Live-Anzeige der Makros in Gramm. Nur Warnungen (Tempo über 1 %, Fett unter 0,5 g/kg …), keine Sperren. In der Phase engine bleiben die Werte editierbar.</p>
+<p><strong>A3 Bestätigen.</strong> Ein Satz: „Abnehmen von 84,7 auf 80,0 kg mit 0,5 % pro Woche. Ab heute 2.180 kcal und 185 g Protein. Voraussichtlich erreicht am 12.01.2027.“ Darunter „Danach empfohlen: Halten oder Reverse Diet für etwa 8 Wochen“. Läuft schon eine Richtung: Pflichtwahl ◯ pausieren / ◯ beenden. Titel vorgeschlagen und änderbar. Start ab heute, später aufklappbar. Knopf <strong>„Ziel starten“</strong>.</p>
+
+<h3>8.3 Weg B · Messziel hinzufügen</h3>
+<div class="fluss"><span>B1 Art</span><b>→</b><span>B2 Details</span></div>
+<p><strong>B1:</strong> Körper · Kraft · Gewohnheit · Eigenes. Ausdauer grau („kommt mit dem Cardio-Modul“), Gesundheit vorgemerkt, kommt mit Medical (4).</p>
+<div class="tabelle"><table>
+<thead><tr><th>Art</th><th>Felder</th><th>Istwert</th><th>ohne Daten</th></tr></thead>
+<tbody>
+<tr><td>Körper</td><td>Messgröße Gewicht / Körperfett / Umfang (dann Stelle aus 13); Zielwert; Frist optional</td><td>letzte Messung mit Datum, nicht änderbar</td><td>„erst messen“ + Feld für eine Messung</td></tr>
+<tr><td>Kraft</td><td>Übung (Suche, zuerst zuletzt trainiert); Messart 1RM · Gewicht bei X Wdh.; Zielwert; Frist optional</td><td>bester Wert aus den Trainings, mit Datum</td><td>erlaubt, Start = erster erfasster Wert</td></tr>
+<tr><td>Gewohnheit</td><td>Quelle (3): alles, was gemessen wird (Trainings/Woche, Cardio/Woche, Schritte/Tag, Schlaf h/Nacht …), Rest vorgemerkt; Zielhäufigkeit</td><td>Schnitt der letzten 4 Wochen; Vorschlag = Schnitt + 1</td><td>Standardvorschlag</td></tr>
+<tr><td>Eigenes</td><td>Titel, Einheit, Start, Ziel, „mehr / weniger ist besser“, Frist</td><td><strong>getippt</strong>, als einziges</td><td>–</td></tr>
+</tbody></table></div>
+<p>Einmalig (Zielwert, Frist optional) oder wiederkehrend (pro Woche, mit Serie) (13). Widerspruch zur Richtung: gelber Hinweis, keine Sperre (G-621). Titel vorgeschlagen. Knopf <strong>„Messziel anlegen“</strong>.</p>
+<p><strong>Fällt weg:</strong> sechs alte Typ-Knöpfe, Priorität, getippter Istwert, Einheit als Freitext, Attrappe „Linked modules“, Sprachmischung.</p>
+
+<h3>8.4 Reiter Goals: alle Blöcke</h3>
+<pre class="skizze">┌ STEUERUNG ──────────────────────────────────── ✎ ─────┐
+│ Abnehmen · Moderate Cut              ● im Plan        │
+│ 84,7 ──────────●────────────── 80,0 kg   (Trend)      │
+│ nach Plan 12.01.27 · bei deinem Tempo 25.01.27        │
+│ heute 2.180 kcal · 185 g Protein · Woche 3 von max 20 │
+│ ▾ Details                                             │
+└───────────────────────────────────────────────────────┘
+┌ DIESE WOCHE ──────────────┐ ┌ MODULE ───────────────────┐
+│ Gewicht −0,4 (Soll −0,42) │ │ Ernährung 92 % · Training │
+│ Bankdrücken +2,5 kg       │ │ 4/4 · Recovery 71 · Supps │
+│ Training 3/4              │ │ 88 % → Engpass: Schlaf    │
+└───────────────────────────┘ └───────────────────────────┘
+┌ MESSZIELE ─────────────────────────── [+ Messziel] ───┐
+│ Kraft                                                 │
+│  Bankdrücken 1RM   99,3 → 120 kg  ██░░░░  bis —   ▾ ✎ │
+│ Körper                                                │
+│  Körperfett        16,2 → 12 %    ███░░░  01.03.  ▾ ✎ │
+│ Gewohnheit                                            │
+│  Training 4×/Woche ●●●○  Serie 6 Wochen           ▾ ✎ │
+└───────────────────────────────────────────────────────┘
+▸ Abgeschlossen (5)</pre>
+
+<div class="tabelle"><table>
+<thead><tr><th>Block</th><th>Inhalt</th><th>Herkunft heute</th></tr></thead>
+<tbody>
+<tr><td><strong>Steuerung</strong></td><td>Richtung · Variante, Status-Chip (im Plan / hinterher / voraus), Balken Start→Ziel mit Trendpunkt, zwei Daten (Plan / dein Tempo), Tagesziel kcal + Protein, Woche x von max. Leer oder pausiert: roter Rahmen „Kein Ziel aktiv – du läufst auf Erhaltung (2.650 kcal)“ mit <em>Ziel setzen</em> / <em>Fortsetzen</em> (Frage aus G-613). Erreicht oder Frist abgelaufen: Ziel wird <strong>eingefroren</strong> (Status „erreicht“ bzw. „abgelaufen“), Details bleiben, Aktionen Neustart (vorbelegte neue Eingabe) oder Löschen; danach gilt Erhaltung mit Warnung bis zum nächsten Ziel (1, 2).</td><td>Zielkarte (umbauen), Spec <code>PrimaryGoalCard</code> + <code>PredictionCard</code></td></tr>
+<tr><td><strong>Diese Woche</strong></td><td>Bewegung je Ziel in dieser Woche gegen Soll; erreichte Meilensteine der Woche.</td><td>Mockup „This week“ – heute Attrappe</td></tr>
+<tr><td><strong>Module</strong></td><td>Beitrag der Module zum steuernden Ziel (Ernährungstreue, Trainings, Recovery, Supplements) und ein Engpass-Satz. Kompakt; das Ausführliche bleibt im Reiter Cross-module.</td><td>Mockup „Cross-module health“ – heute Attrappe; Daten <code>goal_contributions</code> vorhanden; Spec <code>ModuleContributionGrid</code>, <code>BottleneckAlert</code></td></tr>
+<tr><td><strong>Messziele</strong></td><td>Nach Kategorie, kompakte Zeilen: Ist → Ziel, Balken, Frist, Quelle in Worten. Gewohnheiten mit Wochenpunkten und Serie.</td><td>Zielkarten (umbauen)</td></tr>
+<tr><td><strong>Abgeschlossen</strong></td><td>Eingeklappt. Erreicht / verfehlt / beendet mit Datum und Ergebnis. Aktionen: Details, Als Vorlage neu starten, Archivieren, Löschen.</td><td>„Abgeschlossene Ziele“, Mockup „Recently closed“</td></tr>
+<tr><td>Meilensteine</td><td>Kein eigener Block mehr: wandern in die Details des jeweiligen Ziels; erreichte erscheinen in „Diese Woche“.</td><td>heutiger Block mischt alte Ziele</td></tr>
+<tr><td>Fortschritt · Herkunft</td><td><strong>entfällt</strong> (zeigt Tabellennamen)</td><td>–</td></tr>
+</tbody></table></div>
+
+<h3>8.5 Details je Ziel (▾ aufklappen)</h3>
+<p>Jede Zeile und die Steuerungskarte klappen nach unten auf. Darin wird der Verlauf analysiert:</p>
+<ul>
+  <li><strong>Verlaufskurve:</strong> Messwerte als Punkte, Trend als Linie, Zielwert als Linie, Plan-Linie vom Start zum Ziel, Prognose gestrichelt bis zum voraussichtlichen Datum. Zeitraum wählbar: 4 Wochen · 3 Monate · alles.</li>
+  <li><strong>Kennzahlen:</strong> Start, aktuell, Veränderung gesamt, Tempo der letzten 4 Wochen gegen Soll, verbleibend, voraussichtlich erreicht.</li>
+  <li><strong>Datenpunkte:</strong> Tabelle Datum · Wert · Quelle. Bei Kraft verlinkt die Quelle das Training, bei Körper die Messung.</li>
+  <li><strong>Meilensteine:</strong> 25/50/75/100 % plus eigene, mit Datum der Erreichung.</li>
+  <li><strong>Nur Steuerung:</strong> Wochentabelle (Woche · Trend · Δ · Soll Δ · Schnitt kcal · Anpassung) und die Phasen dieses Ziels mit Link in den Reiter Phase engine.</li>
+  <li><strong>Nur Gewohnheit:</strong> Raster der letzten 12 Wochen, Quote, längste Serie.</li>
+</ul>
+
+<h3>8.6 Bearbeiten je Ziel (✎)</h3>
+<div class="tabelle"><table>
+<thead><tr><th>Ziel</th><th>änderbar</th><th>Aktionen</th></tr></thead>
+<tbody>
+<tr><td>Steuernd</td><td>Zielgewicht, Tempo, Variante (öffnet A2 mit aktuellen Werten, neue Rechnung wird vor dem Speichern gezeigt), Titel</td><td>Pausieren · Beenden · <strong>Löschen</strong></td></tr>
+<tr><td>Messziel</td><td>Zielwert, Frist, Titel, Messart; Übung bzw. Messgröße nicht (dann neues Ziel – sonst stimmt der Startwert nicht)</td><td>Abschließen · Archivieren · <strong>Löschen</strong></td></tr>
+<tr><td>Abgeschlossen</td><td>Titel</td><td>Archivieren · <strong>Löschen</strong> · Als Vorlage neu starten</td></tr>
+</tbody></table></div>
+<p><strong>Löschen</strong> steht im Bearbeiten-Modus unten, rot, mit Bestätigung in der Seite („Ziel und seine Phasen endgültig löschen?“). Bei einem steuernden Ziel mit Verlauf schlägt die Bestätigung „Beenden“ als Alternative vor, damit die Historie bleibt. Datenseitig fehlt der Löschweg heute (G-611).</p>
+
+<h3>8.7 Reiter Phase engine = Pläne (ab Pro)</h3>
+<p><span class="tag">Tom 08.10. 11:59: bestätigt</span> <strong>Ein Plan ist der Inhalt des steuernden Ziels.</strong> Eine Richtung aus Goals erzeugt automatisch einen einfachen Plan mit einer Phase. Ein Pro sieht und erweitert ihn in der Phase engine. Es gibt mehrere Pläne, <strong>einer ist aktiv</strong> – dieselbe Regel wie „ein Ziel steuert“. Jede laufende Phase gehört zu einem Plan. Datenbasis vorhanden: <code>goals.goal_programs.goal_id</code>.</p>
+<div class="tabelle"><table>
+<thead><tr><th>Block</th><th>Inhalt</th></tr></thead>
+<tbody>
+<tr><td>Gesperrt (unter Pro)</td><td>Hinweis, dass das Ziel in Goals als einfacher Plan läuft; Link zu Goals.</td></tr>
+<tr><td><strong>Aktiver Plan</strong></td><td>Name, Art, Zeitraum, aktuelle Phase, Zeitachse mit Phasen, Terminen und Heute-Marke. ▾ Details: Phasentabelle, Wachen, Als nächstes, wöchentliche Anpassung. ✎ Bearbeiten.</td></tr>
+<tr><td><strong>Bearbeiten</strong></td><td>Name; Termine frei benennbar (Name, Art: Wettkampf A / Wettkampf B / Sperrtermin / Sonstiges, Datum, löschen, + Termin); Phasen (Programm, Wochen ±, entfernen, + Phase); bei einem Standardprogramm stehen dessen Werte (kcal, Protein, Fett, Cardio, Refeed) sichtbar an der Phase, bei „Eigene Werte“ sind diese Felder direkt editierbar; Prüfung (A-Termin fehlt oder zu nah = rot); Speichern / Speichern und neu berechnen / Als Vorlage speichern; Pausieren, Beenden, Löschen mit Bestätigung.</td></tr>
+<tr><td><strong>+ Neuer Plan</strong></td><td>Name und Ausgangspunkt (LumeOS-Vorlage, eigene Vorlage, leer; vom Coach später) → wird Entwurf, danach Bearbeiten.</td></tr>
+<tr><td><strong>Weitere Pläne</strong></td><td>Kacheln für Entwürfe und pausierte, mit Phasenstreifen. Aktivieren fragt nach dem laufenden Plan (pausieren / beenden); Contest Prep und Peak Week brauchen Bestätigung des Nutzers und, wenn verbunden, des Coaches.</td></tr>
+<tr><td><strong>Abgeschlossene Pläne</strong></td><td>Kacheln mit Ergebnis; Details, Als Vorlage, Neu starten (als Entwurf), Löschen.</td></tr>
+<tr><td><strong>Vorlagen</strong></td><td>LumeOS-Standard · Eigene · Vom Coach (später; Zuweisung = Vorschlag, landet als Entwurf).</td></tr>
+</tbody></table></div>
+<p>In Goals zeigt die Steuerungskarte den Plan dahinter („Plan dahinter: Lean Bulk · 1 Phase“). Der frühere Umschalter „Laufend | Planer“ entfällt.</p>
+<h3>8.8 Folgen für Daten und Ablauf</h3>
+<ul>
+  <li>Messarten in G-617 kennen nur Übungswerte; hinzu kommen Körpergewicht, Körperfett, Umfang (mit Stelle), Gewohnheit (mit Quelle), Eigenes, wiederkehrend/einmalig. <strong>Live-Freigabe G-613/G-617 bleibt zurückgehalten.</strong></li>
+  <li>Löschweg (G-611), Archiv-Status, Protokoll der wöchentlichen Anpassung, Datenpunkte je Messziel als Lesefunktion.</li>
+  <li><code>requirements.min_experience</code> streichen; <code>min_erfahrung</code> ist die eine Wahrheit.</li>
+  <li>Alle Goals-Aufträge an die Oberfläche ruhen, G-618 ist zurückgeholt.</li>
+</ul>
+<div class="fluss"><span>Tom beantwortet Kapitel 9</span><b>→</b><span>klickbarer Entwurf</span><b>→</b><span>Tom bewertet</span><b>→</b><span>Codex: Daten</span><b>→</b><span>Claude Code: Oberfläche gegen den Entwurf</span></div>
+
+<h2><span class="nr">9</span>Entscheidungen für Tom</h2>
+<p>Zum Ankreuzen oder Hineinschreiben.</p>
+
+<div class="frage"><span class="nr">1</span><span>Frist abgelaufen: automatisch „verfehlt“, oder fragt das System (verlängern oder abschließen)?</span><span class="antwort">entschieden 08.10.: Frist abgelaufen: Ziel wird eingefroren, Status sichtbar, Details bleiben; Aktionen Löschen oder Neustart (neue Eingabe, vorbelegt).</span></div>
+<div class="frage"><span class="nr">2</span><span>Ziel erreicht: automatisch abschließen, oder bestätigt der Nutzer? Bei Gewicht: Waage oder 7-Tage-Schnitt maßgeblich?</span><span class="antwort">entschieden 08.10.: Ziel erreicht: wie 1 – einfrieren mit Status „erreicht“, Details bleiben, Löschen oder Neustart.</span></div>
+<div class="frage"><span class="nr">3</span><span>Gewohnheit, erste Version: welche Quellen? Trainings/Woche, Cardio/Woche, Schritte, Schlaf?</span><span class="antwort">entschieden 08.10.: Alles, was wir messen können, sofort; der Rest wird vorgemerkt.</span></div>
+<div class="frage"><span class="nr">4</span><span>Gesundheit (Blutdruck, Laborwerte): jetzt oder mit dem Medical-Modul?</span><span class="antwort">entschieden 08.10.: Vorgemerkt, kommt mit dem Medical-Modul.</span></div>
+<div class="frage"><span class="nr">5</span><span>Zieldatum als Eingabe?</span><span class="antwort">entschieden 08.10.: drei Größen (8.2)</span></div>
+<div class="frage"><span class="nr">6</span><span>Warnungen einer Variante: Pflicht-Haken zur Bestätigung wie im alten Repo?</span><span class="antwort">entschieden 08.10.: Ja, Pflicht-Haken.</span></div>
+<div class="frage"><span class="nr">7</span><span>Coach-Zustimmung bei Contest Prep / Peak Week: Haken durch den Nutzer, oder nur wenn ein Coach verbunden ist?</span><span class="antwort">entschieden 08.10.: Zweiwegprinzip: der Nutzer bestätigt; ist ein Coach verbunden, bestätigt er zusätzlich.</span></div>
+<div class="frage"><span class="nr">8</span><span>Spec sagt „Phase ohne Ziel wählbar“. Gilt das noch, oder gehört jede Phase zu einem Ziel?</span><span class="antwort">entschieden 08.10.: Eine Phase gibt es nur mit Ziel. Die Spec-Aussage „Phase ohne Ziel wählbar“ ist überholt.</span></div>
+<div class="frage"><span class="nr">9</span><span>Katalog Kapitel 2: richtig so? Fehlt ein Typ, ist einer zu viel?</span><span class="antwort">entschieden 08.10.: Katalog so bestätigt.</span></div>
+<div class="frage"><span class="nr">10</span><span>Zielgewicht Pflicht?</span><span class="antwort">entschieden 08.10.: drei Größen (8.2)</span></div>
+<div class="frage"><span class="nr">11</span><span>Harte Grenzen?</span><span class="antwort">entschieden 08.10.: nach Grad (8.2)</span></div>
+<div class="frage"><span class="nr">12</span><span>Planer: Wettkämpfe mit Rangfolge A/B/C wie TrainingPeaks, oder genau ein Termin pro Plan?</span><span class="antwort">entschieden 08.10.: Orchestrator entscheidet (siehe 8.7): A = Hauptwettkampf, Plan rückwärts; B = weitere Wettkämpfe in der Saison, kurzer Peak ohne neue Prep; C = Sperrtermine (Urlaub, Reise) als Diätpause.</span></div>
+<div class="frage"><span class="nr">13</span><span>Wiederkehrende Messziele (pro Woche, mit Serie) in der ersten Version?</span><span class="antwort">entschieden 08.10.: Ja, in der ersten Version.</span></div>
+
+<p class="quellen" style="margin-top:2rem"><strong>Quellen der Recherche:</strong>
+<a href="https://help.macrofactorapp.com/en/articles/90-set-a-new-goal">MacroFactor – Set a New Goal</a> ·
+<a href="https://macrofactor.com/goal-features/">MacroFactor – Goal features</a> ·
+<a href="https://help.strengthlog.com/help-article/how-to-set-up-a-goal/">StrengthLog – How to set up a goal</a> ·
+<a href="https://brajeshwar.com/2006/progressive-disclosure-by-jakob-nielsen-usability-expert/">Nielsen – Progressive Disclosure</a> ·
+<a href="https://help.joincarbon.com/en/articles/6040890-how-to-create-your-initial-goal">Carbon – Initial goal</a> ·
+<a href="https://help.joincarbon.com/en/articles/6004549-signs-it-might-be-time-to-switch-your-weight-loss-goal">Carbon – Switch goal</a> ·
+<a href="https://docs.rpstrength.com/docs/diet-coach-app/overview/keeping-you-safe/">RP – Keeping you safe</a> ·
+<a href="https://help.rpstrength.com/hc/en-us/articles/34705936087191-How-to-choose-an-effective-fat-loss-phase">RP – Fat loss phase</a> ·
+<a href="https://loseit.zendesk.com/hc/en-us/articles/51382148864532-Understanding-Goal-and-Streak-Projection-Dates">Lose It – Projection dates</a> ·
+<a href="https://www.noom.com/support/faqs/using-the-app/daily-features/2026/03/maintenance-mode/">Noom – Maintenance mode</a> ·
+<a href="https://help.yazio.com/hc/en-us/articles/29832253731857-How-can-I-adjust-my-goals">YAZIO – Goals</a> ·
+<a href="https://support.cronometer.com/hc/en-us/articles/31975503009044">Cronometer – Weight goal</a> ·
+<a href="https://happyscale.com/support">Happy Scale</a> ·
+<a href="https://www.jefit.com/blog/exercise-goals-how-to-set-and-track-them-in-app">JEFIT – Exercise goals</a> ·
+<a href="https://help.strongapp.io/article/239-profile-widgets">Strong – Widgets</a> ·
+<a href="https://help.fitbod.me/hc/en-us/sections/31812804804375-Training-Program-Goals">Fitbod – Goals</a> ·
+<a href="https://www.hevyapp.com/features/gym-progress/">Hevy – Progress</a> ·
+<a href="https://alphaprogression.com/en/blog/alpha-progression-guide">Alpha Progression</a> ·
+<a href="https://help.trainingpeaks.com/hc/en-us/articles/224662768-Annual-Training-Plan-Methodologies">TrainingPeaks – ATP</a> ·
+<a href="https://help.trainingpeaks.com/hc/en-us/articles/205076770-Events">TrainingPeaks – Events</a> ·
+<a href="https://support.strava.com/en-us/articles/15401694-goals-on-the-strava-app">Strava – Goals</a> ·
+<a href="https://support.apple.com/guide/watch/adjust-your-activity-ring-goals-apd29b30023c/watchos">Apple – Ring goals</a> ·
+<a href="https://www.techradar.com/health-fitness/garmins-underrated-race-day-training-tool-is-what-keeps-me-from-switching-to-the-apple-watch-heres-how-to-set-it-up">Garmin – Race tool</a> ·
+<a href="https://www.whoop.com/us/en/thelocker/set-and-reach-your-goals-with-weekly-plan">WHOOP – Weekly plan</a> ·
+<a href="https://support.ouraring.com/hc/lv/articles/8945980160659">Oura – Activity goal</a>.
+Repo: <code>docs/specs/Goals/*</code>, <code>referenz/lumeos-2026/apps/app/modules/goals/components/GoalForm.tsx</code>, <code>…/nutrition/GoalSetupDialog.tsx</code>, <code>…/lib/definitions.ts</code>, Mockups <code>module-goals*.jsx</code>, Live-Katalog <code>goals.goal_strategies</code>.</p>
+
+</div>

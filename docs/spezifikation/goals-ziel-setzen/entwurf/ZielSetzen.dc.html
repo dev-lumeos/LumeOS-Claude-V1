@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Ziel setzen</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+a{color:oklch(0.50 0.13 90)}a:hover{color:oklch(0.40 0.13 90)}
+.num{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.eb{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:oklch(0.50 0.005 270)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px;padding:0 16px;border-radius:8px;border:1px solid oklch(0.85 0.004 270);background:#fff;font:inherit;font-size:13px;color:oklch(0.25 0.005 270);cursor:pointer;text-decoration:none}
+.btn:hover{background:oklch(0.97 0.003 270)}
+.btn-p{background:oklch(0.25 0.005 270);color:#fff;border-color:oklch(0.25 0.005 270)}
+.btn-p:hover{background:oklch(0.32 0.005 270)}
+.btn-p[disabled]{background:oklch(0.80 0.004 270);border-color:oklch(0.80 0.004 270);cursor:not-allowed}
+.chip{display:inline-flex;align-items:center;gap:5px;min-height:28px;padding:0 10px;border-radius:999px;font-size:11.5px;font-weight:500;border:1px solid oklch(0.88 0.004 270);color:oklch(0.40 0.005 270);background:#fff;cursor:pointer;font-family:inherit}
+.tile{display:flex;flex-direction:column;gap:6px;text-align:left;padding:18px;border-radius:12px;border:1px solid oklch(0.88 0.004 270);background:#fff;font:inherit;color:inherit;cursor:pointer;min-height:44px}
+.tile:hover{border-color:oklch(0.62 0.13 90)}
+.inp{height:40px;border:1px solid oklch(0.85 0.004 270);border-radius:8px;padding:0 10px;font:inherit;font-size:13px;background:#fff;width:100%;box-sizing:border-box}
+.lbl{font-size:11px;font-weight:600;color:oklch(0.45 0.005 270);display:block;margin-bottom:4px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+</style>
+</helmet>
+<div style="width:1100px;min-height:1400px;box-sizing:border-box;background:oklch(0.40 0.005 270 / 0.55);font-family:Inter,-apple-system,system-ui,sans-serif;font-size:13px;line-height:1.5;color:oklch(0.22 0.005 270);display:flex;flex-direction:column;align-items:center;padding:0 0 40px">
+
+<div style="align-self:stretch;background:oklch(0.93 0.005 270);border-bottom:1px solid oklch(0.86 0.005 270);padding:8px 24px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12px">
+<span style="font-weight:600;color:oklch(0.40 0.005 270)">Prototyp · Erfahrungsgrad:</span>
+<sc-for list="{{grade}}" as="g" hint-placeholder-count="3"><button class="chip" style="{{g.style}}" onClick="{{g.pick}}">{{g.label}}</button></sc-for>
+<span style="font-weight:600;color:oklch(0.40 0.005 270);margin-left:12px">Steuerung läuft schon:</span>
+<sc-for list="{{laeuftOpts}}" as="g" hint-placeholder-count="2"><button class="chip" style="{{g.style}}" onClick="{{g.pick}}">{{g.label}}</button></sc-for>
+</div>
+
+<div role="dialog" aria-label="Ziel setzen" style="width:760px;margin-top:40px;background:#fff;border-radius:14px;box-shadow:0 20px 60px oklch(0.2 0.005 270 / 0.25);display:flex;flex-direction:column">
+<div style="padding:18px 22px;border-bottom:1px solid oklch(0.92 0.003 270);display:flex;justify-content:space-between;align-items:center;gap:12px">
+<div style="display:flex;flex-direction:column;gap:2px">
+<span style="font-size:17px;font-weight:700">{{kopf}}</span>
+<sc-if value="{{zeigeSchritte}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:6px;flex-wrap:wrap;font-size:11.5px"><sc-for list="{{schritte}}" as="x" hint-placeholder-count="3"><span style="{{x.style}}">{{x.label}}</span></sc-for></div>
+</sc-if>
+</div>
+<a class="btn" href="Main.dc.html" aria-label="Schließen" style="min-height:36px;width:36px;padding:0">✕</a>
+</div>
+
+<div style="padding:22px;display:flex;flex-direction:column;gap:18px">
+
+<!-- SCHRITT 0 -->
+<sc-if value="{{is.s0}}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px">
+<button class="tile" onClick="{{go.A1}}">
+<span style="font-size:16px;font-weight:700">Richtung festlegen</span>
+<span style="color:oklch(0.40 0.005 270)">Abnehmen · Halten · Aufbauen</span>
+<span style="font-size:12px;color:oklch(0.50 0.005 270)">Steuert Kalorien und Makros. Immer nur eine.</span>
+<sc-if value="{{laeuft}}" hint-placeholder-val="{{ true }}"><span class="chip" style="cursor:default;align-self:flex-start">aktiv: Aufbauen · Lean Bulk</span></sc-if>
+</button>
+<button class="tile" onClick="{{go.B1}}">
+<span style="font-size:16px;font-weight:700">Messziel hinzufügen</span>
+<span style="color:oklch(0.40 0.005 270)">Gewicht, Körperfett, Kraft, Gewohnheit …</span>
+<span style="font-size:12px;color:oklch(0.50 0.005 270)">Steuert nichts, misst Fortschritt. Beliebig viele.</span>
+</button>
+</div>
+<div style="font-size:12.5px">Wettkampf oder Jahresplan? <a href="PhaseEngine.dc.html">Zum Planer</a> <span style="color:oklch(0.55 0.005 270)">{{planerHinweis}}</span></div>
+</sc-if>
+
+<!-- A1 -->
+<sc-if value="{{is.A1}}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+<sc-for list="{{richtungen}}" as="r" hint-placeholder-count="3">
+<button class="tile" style="{{r.style}}" onClick="{{r.pick}}"><span style="font-size:16px;font-weight:700">{{r.name}}</span><span style="font-size:12px;color:oklch(0.45 0.005 270)">{{r.satz}}</span><span class="num" style="font-size:11.5px;color:oklch(0.45 0.13 90)">{{r.std}}</span></button>
+</sc-for>
+</div>
+<div style="background:oklch(0.97 0.003 270);border-radius:8px;padding:10px 12px;font-size:12.5px">Letzte Gewichtsmessung: <b class="num">84,66 kg</b> am 08.10. – Trend <b class="num">84,7 kg</b>. Ohne Messung der letzten 14 Tage stünde hier „Gewicht heute: __ kg“.</div>
+<div class="row" style="justify-content:space-between"><button class="btn" onClick="{{go.s0}}">Zurück</button><button class="btn btn-p" onClick="{{go.A2}}">Weiter</button></div>
+</sc-if>
+
+<!-- A2 -->
+<sc-if value="{{is.A2}}" hint-placeholder-val="{{ false }}">
+<sc-if value="{{a.halten}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div>Halten hat kein Zielgewicht und kein Tempo. Vorschlag Wohlfühlbereich um deinen Trend:</div>
+<div class="num" style="font-size:20px;font-weight:700">83,7 – 85,7 kg</div>
+<div style="font-size:12.5px;color:oklch(0.45 0.005 270)">Tagesziel <span class="num">2.650 kcal</span> · <span class="num">{{a.protein}}</span> Protein · Programm: {{a.progName}}</div>
+</div>
+</sc-if>
+<sc-if value="{{a.nichtHalten}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:12.5px;color:oklch(0.40 0.005 270)">Leg fest, was dir wichtig ist – Zielgewicht, Zieldatum oder Programm. Den Rest rechnet LumeOS.</div>
+<div style="display:grid;grid-template-columns:150px 1fr 150px;gap:10px 14px;align-items:center">
+<span class="lbl" style="margin:0">Start</span><span class="num" style="font-size:15px;font-weight:600">84,7 kg <span style="font-weight:400;font-size:11.5px;color:oklch(0.50 0.005 270)">Trend, gemessen 08.10.</span></span><span style="font-size:11.5px;color:oklch(0.55 0.005 270)">gemessen</span>
+
+<label class="lbl" for="a-ziel" style="margin:0">Zielgewicht (kg)</label>
+<input id="a-ziel" class="inp num" style="{{a.zielStyle}}" value="{{a.zielFeld}}" onChange="{{a.setZiel}}" placeholder="z. B. 80,0">
+<button class="chip" style="{{a.zielPinStyle}}" onClick="{{a.pinZiel}}">{{a.zielPin}}</button>
+
+<label class="lbl" for="a-datum" style="margin:0">Zieldatum</label>
+<input id="a-datum" type="date" class="inp num" style="{{a.datumStyle}}" value="{{a.datumFeld}}" onChange="{{a.setDatum}}">
+<button class="chip" style="{{a.datumPinStyle}}" onClick="{{a.pinDatum}}">{{a.datumPin}}</button>
+
+<span class="lbl" style="margin:0">Programm</span>
+<span style="font-weight:600">{{a.progName}} <span style="font-weight:400;font-size:12px;color:oklch(0.50 0.005 270)">{{a.progWarum}}</span></span>
+<button class="chip" style="{{a.progPinStyle}}" onClick="{{a.pinProg}}">{{a.progPin}}</button>
+</div>
+<sc-if value="{{a.fehler}}" hint-placeholder-val="{{ false }}">
+<div style="border:1px solid oklch(0.80 0.08 25);background:oklch(0.97 0.02 25);border-radius:8px;padding:10px 12px;font-size:12.5px"><b>{{a.fehler}}</b> <a href="PhaseEngine.dc.html">Zum Planer</a></div>
+</sc-if>
+<sc-if value="{{a.ergebnisDa}}" hint-placeholder-val="{{ true }}">
+<div style="border-top:1px solid oklch(0.92 0.003 270);border-bottom:1px solid oklch(0.92 0.003 270);padding:10px 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">
+<div><div class="eb">Tempo</div><div class="num" style="font-weight:600">{{a.tempo}}</div></div>
+<div><div class="eb">Tagesziel</div><div class="num" style="font-weight:600">{{a.kcal}}</div></div>
+<div><div class="eb">Protein</div><div class="num" style="font-weight:600">{{a.protein}}</div></div>
+<div><div class="eb">Dauer</div><div class="num" style="font-weight:600">{{a.dauer}}</div></div>
+</div>
+</sc-if>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:6px">
+<button class="chip" style="align-self:flex-start" onClick="{{a.toggleListe}}">{{a.listePfeil}} Vorgehen anpassen · Programme</button>
+<sc-if value="{{a.listeOffen}}" hint-placeholder-val="{{ true }}">
+<div style="border:1px solid oklch(0.92 0.003 270);border-radius:10px;overflow:hidden">
+<sc-for list="{{a.progs}}" as="p" hint-placeholder-count="5">
+<button onClick="{{p.pick}}" style="display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;width:100%;text-align:left;padding:10px 14px;background:{{p.bg}};border:0;border-bottom:1px solid oklch(0.94 0.003 270);font:inherit;color:{{p.fg}};cursor:pointer;min-height:44px">
+<span>{{p.radio}}</span>
+<span style="display:flex;flex-direction:column"><span style="font-weight:600">{{p.name}} <span style="font-weight:400;font-size:11.5px;color:oklch(0.50 0.005 270)">{{p.std}}</span></span><span style="font-size:11.5px;color:oklch(0.45 0.005 270)">{{p.zweck}} · <span class="num">{{p.werte}}</span></span></span>
+<span class="chip" style="cursor:inherit;{{p.statusStyle}}">{{p.status}}</span>
+</button>
+</sc-for>
+</div>
+<button class="chip" style="align-self:flex-start" onClick="{{a.auto}}">Programm automatisch wählen</button>
+<sc-if value="{{a.customOffen}}" hint-placeholder-val="{{ false }}">
+<div style="border:2px solid oklch(0.62 0.13 90);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+<span class="eb">Eigene Werte · ab Pro · du fährst deine Zahlen</span>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+<sc-for list="{{a.cFelder}}" as="f" hint-placeholder-count="6"><div><label class="lbl" for="c-{{f.k}}">{{f.l}}</label><input id="c-{{f.k}}" class="inp num" value="{{f.v}}" onChange="{{f.set}}" disabled="{{f.aus}}"></div></sc-for>
+</div>
+<div class="num" style="font-size:12.5px;background:oklch(0.97 0.003 270);border-radius:8px;padding:8px 10px">{{a.cMakros}}</div>
+<div style="font-size:11.5px;color:oklch(0.50 0.005 270)">Für Pro/Elite gibt es keine Sperren, nur Warnungen. Die Werte bleiben in der Phase engine editierbar.</div>
+</div>
+</sc-if>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{a.hatChecks}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:6px">
+<span class="eb">Prüfungen für Grad {{gradName}}</span>
+<sc-for list="{{a.checks}}" as="c" hint-placeholder-count="2">
+<div style="border-radius:8px;padding:9px 12px;font-size:12.5px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;{{c.style}}">
+<span><b>{{c.art}}</b> {{c.text}}</span>
+<sc-if value="{{c.warn}}" hint-placeholder-val="{{ false }}"><label style="display:flex;gap:6px;align-items:center;cursor:pointer;min-height:32px"><input type="checkbox" checked="{{c.ok}}" onChange="{{c.toggle}}"> verstanden</label></sc-if>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<div class="row" style="justify-content:space-between"><button class="btn" onClick="{{go.A1}}">Zurück</button><button class="btn btn-p" disabled="{{a.weiterGesperrt}}" onClick="{{go.A3}}">Weiter</button></div>
+</sc-if>
+
+<!-- A3 -->
+<sc-if value="{{is.A3}}" hint-placeholder-val="{{ false }}">
+<div style="font-size:16px;line-height:1.6">{{a.satz}}</div>
+<div style="font-size:12.5px;color:oklch(0.45 0.005 270)">{{a.danach}}</div>
+<div><label class="lbl" for="a-titel">Titel</label><input id="a-titel" class="inp" defaultValue="{{a.titel}}"></div>
+<div style="font-size:12.5px">Start: <b>ab heute, 08.10.2026</b> · <a href="#">später starten</a></div>
+<sc-if value="{{laeuft}}" hint-placeholder-val="{{ true }}">
+<div style="border:1px solid oklch(0.82 0.10 70);background:oklch(0.97 0.03 80);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:8px">
+<b>Dein aktuelles Ziel „Lean Bulk bis Dezember“ läuft noch. Was soll damit passieren?</b>
+<div class="row"><sc-for list="{{wahl}}" as="w" hint-placeholder-count="2"><button class="chip" style="{{w.style}}" onClick="{{w.pick}}">{{w.label}}</button></sc-for></div>
+</div>
+</sc-if>
+<div class="row" style="justify-content:space-between"><button class="btn" onClick="{{go.A2}}">Zurück</button><button class="btn btn-p" disabled="{{startGesperrt}}" onClick="{{go.doneA}}">Ziel starten</button></div>
+</sc-if>
+
+<!-- B1 -->
+<sc-if value="{{is.B1}}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+<sc-for list="{{arten}}" as="r" hint-placeholder-count="6">
+<button class="tile" style="{{r.style}}" disabled="{{r.aus}}" onClick="{{r.pick}}"><span style="font-size:15px;font-weight:700">{{r.name}}</span><span style="font-size:12px;color:oklch(0.45 0.005 270)">{{r.satz}}</span></button>
+</sc-for>
+</div>
+<div class="row" style="justify-content:space-between"><sc-if value="{{mitStart}}" hint-placeholder-val="{{ true }}"><button class="btn" onClick="{{go.s0}}">Zurück</button></sc-if><sc-if value="{{direktB}}" hint-placeholder-val="{{ false }}"><a class="btn" href="Main.dc.html">Abbrechen</a></sc-if><button class="btn btn-p" onClick="{{go.B2}}">Weiter</button></div>
+</sc-if>
+
+<!-- B2 -->
+<sc-if value="{{is.B2}}" hint-placeholder-val="{{ false }}">
+<sc-if value="{{b.koerper}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div><span class="lbl">Messgröße</span><div class="row"><sc-for list="{{b.groessen}}" as="g" hint-placeholder-count="3"><button class="chip" style="{{g.style}}" onClick="{{g.pick}}">{{g.label}}</button></sc-for></div></div>
+<sc-if value="{{b.umfang}}" hint-placeholder-val="{{ false }}"><div><label class="lbl" for="b-stelle">Stelle</label><select id="b-stelle" class="inp"><option>Taille</option><option>Brust</option><option>Oberarm rechts</option><option>Oberarm links</option><option>Oberschenkel rechts</option><option>Hüfte</option><option>Hals</option><option>Schultern</option><option>Unterarm rechts</option><option>Unterarm links</option><option>Oberschenkel links</option><option>Wade rechts</option><option>Wade links</option></select></div></sc-if>
+<div style="background:oklch(0.97 0.003 270);border-radius:8px;padding:10px 12px">Aktuell <b class="num">{{b.ist}}</b> <span style="font-size:11.5px;color:oklch(0.50 0.005 270)">{{b.istQuelle}} · wird als Startwert festgehalten</span></div>
+</div>
+</sc-if>
+<sc-if value="{{b.kraft}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div><label class="lbl" for="b-such">Übung</label><input id="b-such" class="inp" placeholder="Übung suchen …"></div>
+<div style="border:1px solid oklch(0.92 0.003 270);border-radius:10px;overflow:hidden"><div class="eb" style="padding:8px 12px">zuletzt trainiert</div>
+<sc-for list="{{b.uebungen}}" as="u" hint-placeholder-count="4"><button onClick="{{u.pick}}" style="display:flex;justify-content:space-between;width:100%;padding:10px 12px;border:0;border-top:1px solid oklch(0.94 0.003 270);background:{{u.bg}};font:inherit;color:inherit;cursor:pointer;min-height:44px;text-align:left"><span style="font-weight:600">{{u.name}}</span><span class="num" style="font-size:12px;color:oklch(0.45 0.005 270)">{{u.info}}</span></button></sc-for>
+</div>
+<div><span class="lbl">Messart</span><div class="row"><sc-for list="{{b.messarten}}" as="g" hint-placeholder-count="2"><button class="chip" style="{{g.style}}" onClick="{{g.pick}}">{{g.label}}</button></sc-for><sc-if value="{{b.mitWdh}}" hint-placeholder-val="{{ false }}"><label style="display:flex;gap:6px;align-items:center">bei <input class="inp num" style="width:70px" defaultValue="5" aria-label="Wiederholungen"> Wdh.</label></sc-if></div></div>
+<div style="background:oklch(0.97 0.003 270);border-radius:8px;padding:10px 12px">Aktuell <b class="num">{{b.ist}}</b> <span style="font-size:11.5px;color:oklch(0.50 0.005 270)">{{b.istQuelle}}</span></div>
+</div>
+</sc-if>
+<sc-if value="{{b.gew}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div><span class="lbl">Was zählt</span><div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px"><sc-for list="{{b.quellen}}" as="g" hint-placeholder-count="6"><button class="chip" style="min-height:40px;justify-content:space-between;{{g.style}}" disabled="{{g.aus}}" onClick="{{g.pick}}">{{g.label}}<span class="num" style="font-size:11px">{{g.info}}</span></button></sc-for></div></div>
+<div style="background:oklch(0.97 0.003 270);border-radius:8px;padding:10px 12px">Dein Schnitt der letzten 4 Wochen: <b class="num">{{b.ist}}</b>. Vorschlag: <b class="num">{{b.vorschlag}}</b>. Wiederkehrend jede Woche, mit Serie.</div>
+</div>
+</sc-if>
+<sc-if value="{{b.eigen}}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+<div><label class="lbl" for="e-t">Titel</label><input id="e-t" class="inp" placeholder="z. B. Wasser pro Tag"></div>
+<div><label class="lbl" for="e-e">Einheit</label><input id="e-e" class="inp" placeholder="z. B. l"></div>
+<div><label class="lbl" for="e-s">Startwert (selbst eingetragen)</label><input id="e-s" class="inp num" placeholder="1,5"></div>
+<div><span class="lbl">Besser ist</span><div class="row"><button class="chip" style="background:oklch(0.25 0.005 270);color:#fff">mehr</button><button class="chip">weniger</button></div></div>
+</div>
+</sc-if>
+
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+<div><label class="lbl" for="b-ziel">Zielwert</label><input id="b-ziel" class="inp num" value="{{b.zielFeld}}" onChange="{{b.setZiel}}" placeholder="{{b.zielPh}}"></div>
+<div><label class="lbl" for="b-frist">Frist (optional)</label><input id="b-frist" type="date" class="inp num"></div>
+<div><span class="lbl">Art</span><div class="row"><sc-for list="{{b.rhythmus}}" as="g" hint-placeholder-count="2"><button class="chip" style="{{g.style}}" disabled="{{g.aus}}" onClick="{{g.pick}}">{{g.label}}</button></sc-for></div></div>
+</div>
+<div><label class="lbl" for="b-titel">Titel (vorgeschlagen)</label><input id="b-titel" class="inp" value="{{b.titel}}" readOnly="{{ true }}"></div>
+<sc-if value="{{b.hinweis}}" hint-placeholder-val="{{ false }}">
+<div style="background:oklch(0.97 0.05 90);border:1px solid oklch(0.85 0.09 90);border-radius:8px;padding:10px 12px;font-size:12.5px"><b>Hinweis:</b> {{b.hinweis}}</div>
+</sc-if>
+<div class="row" style="justify-content:space-between"><button class="btn" onClick="{{go.B1}}">Zurück</button><button class="btn btn-p" onClick="{{go.doneB}}">Messziel anlegen</button></div>
+</sc-if>
+
+<!-- FERTIG -->
+<sc-if value="{{is.done}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+<div style="font-size:18px;font-weight:700">{{doneTitel}}</div>
+<div style="color:oklch(0.40 0.005 270)">{{doneText}}</div>
+<div class="row"><a class="btn btn-p" href="Main.dc.html">Zu den Zielen</a><button class="btn" onClick="{{go.reset}}">Noch ein Ziel</button></div>
+</div>
+</sc-if>
+
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"start":{"editor":null},"$preview":{"width":1100,"height":1400}}'>
+class Component extends DCLogic {
+  constructor(p){ super(p); const st0 = (p && p.start) || 's0'; this.state = { einstieg: (p && p.start) || null, grad:'advanced', custom:{tempo:'0,6', prot:'2,4', fett:'0,8', max:'14', cardio:'3', refeed:'1'}, laeuft:true, step:st0, richtung:'ab', ziel:'80,0', zielFix:true, datum:'', datumFix:false, prog:null, progFix:false, liste:true, ok:{}, wahl:null, art:'kraft', groesse:'kfa', uebung:'bench', messart:'1rm', quelle:'train', rhythmus:'einmalig', bziel:'' }; }
+  set(o){ this.setState(o); }
+  renderVals() {
+    const s = this.state;
+    const S = 84.7, H = 1.80, TDEE = 2650, HEUTE = new Date(2026,9,8);
+    const sel = 'background:oklch(0.25 0.005 270);color:#fff;border-color:oklch(0.25 0.005 270)';
+    const RANG = { beginner:0, advanced:1, pro:2 };
+    const rg = RANG[s.grad];
+    const gradName = { beginner:'Beginner', advanced:'Advanced', pro:'Pro/Elite' }[s.grad];
+    const grade = [['beginner','Beginner'],['advanced','Advanced'],['pro','Pro / Elite']].map(([id,label]) => ({ label, style: s.grad===id?sel:'', pick: () => this.set({ grad:id, prog:null, progFix:false, ok:{} }) }));
+    const laeuftOpts = [[true,'ja'],[false,'nein']].map(([v,label]) => ({ label, style: s.laeuft===v?sel:'', pick: () => this.set({ laeuft:v, wahl:null }) }));
+    const fmt = (n,d) => n.toFixed(d).replace('.',',');
+    const dstr = d => ('0'+d.getDate()).slice(-2)+'.'+('0'+(d.getMonth()+1)).slice(-2)+'.'+d.getFullYear();
+    const iso = d => d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+    const plusW = w => new Date(HEUTE.getTime() + Math.round(w*7)*86400000);
+    const P = {
+      ab: [ {id:'lose',n:'Abnehmen',min:0,r:0.5,max:null,p:2.2,std:true,z:'nachhaltig, ohne Limit',w:[]}, {id:'conservative_cut',n:'Conservative Cut',min:1,r:0.4,max:null,p:2.0,z:'sanfter, Leistung bleibt',w:[]}, {id:'moderate_cut',n:'Moderate Cut',min:1,r:0.75,max:20,p:2.2,z:'zügig, begrenzt',w:[]}, {id:'mini_cut',n:'Mini Cut',min:1,r:1.0,max:4,p:2.5,z:'kurz und hart',w:['Max 4 Wochen','Aggressives Defizit']}, {id:'aggressive_cut',n:'Aggressive Cut',min:2,r:1.0,max:8,p:2.5,z:'maximal schnell',w:['Nur für erfahrene Athleten','Max 8 Wochen empfohlen','Leistungseinbußen möglich']} ],
+      auf: [ {id:'gain',n:'Aufbauen',min:0,r:0.3,max:null,p:1.8,std:true,z:'kontrollierter Überschuss',w:[]}, {id:'lean_bulk',n:'Lean Bulk',min:1,r:0.25,max:52,p:2.0,z:'wenig Fettzunahme',w:[]}, {id:'clean_bulk',n:'Clean Bulk',min:1,r:0.4,max:null,p:1.8,z:'schneller, sauber',w:[]}, {id:'aggressive_bulk',n:'Aggressive Bulk',min:2,r:0.75,max:16,p:1.6,z:'maximal schnell',w:['Signifikante Fettzunahme wahrscheinlich']} ],
+      halten: [ {id:'maintain',n:'Halten',min:0,r:0,max:null,p:2.0,std:true,z:'Gewicht stabil',w:[]}, {id:'body_recomp',n:'Body Recomposition',min:1,r:0,max:null,p:2.2,z:'Fett runter, Muskel rauf',w:[]}, {id:'maintenance_diet_break',n:'Diet Break',min:2,r:0,max:2,p:2.0,z:'Pause in einer Diät',w:[]} ]
+    };
+    const num = v => parseFloat(String(v).replace(',','.'));
+    const CU = s.custom;
+    ['ab','auf','halten'].forEach(k => P[k].push({ id:'custom', n:'Eigene Werte', min:2, r: k==='halten' ? 0 : Math.abs(num(CU.tempo)||0), max: num(CU.max)||null, p: num(CU.prot)||2.0, z:'du legst Tempo, Makros und Dauer selbst fest', w:[], custom:true }));
+    const GN = ['Beginner','Advanced','Pro'];
+    const liste = P[s.richtung];
+    const vz = s.richtung==='ab' ? -1 : 1;
+    const zielNum = parseFloat(String(s.ziel).replace(',','.'));
+    const hatZ = s.zielFix && !isNaN(zielNum);
+    const hatD = s.datumFix && !!s.datum;
+    const dWeeks = hatD ? (new Date(s.datum) - HEUTE)/86400000/7 : null;
+    const erlaubt = p => rg >= p.min;
+    let prog = null, warum = '', fehler = '', reqR = null;
+    if (hatZ && hatD && dWeeks > 0) reqR = Math.abs(zielNum - S)/S*100/dWeeks;
+    if (s.progFix && s.prog) { prog = liste.find(p=>p.id===s.prog); warum = 'von dir gewählt'; }
+    else if (reqR !== null && s.richtung!=='halten') {
+      const passt = liste.filter(p => p.r >= reqR - 1e-9 && (p.max===null || p.max >= Math.min(dWeeks, Math.abs(zielNum-S)/(S*p.r/100))));
+      const frei = passt.filter(erlaubt).sort((a,b)=>a.r-b.r);
+      if (frei.length) { prog = frei[0]; warum = 'mildestes Programm, das es bis zum Datum schafft'; }
+      else if (passt.length) { const m = passt.sort((a,b)=>a.min-b.min)[0]; fehler = 'Dafür braucht es '+m.n+' (ab '+GN[m.min]+'). Datum verschieben oder Ziel ändern.'; }
+      else { fehler = 'Kein Programm schafft das bis zu diesem Datum (nötig '+fmt(reqR,2)+' %/Woche).'; }
+    } else { prog = liste.find(p=>p.std); warum = 'Standard'; }
+    let weeks = null, zielCalc = null;
+    if (prog && s.richtung!=='halten') {
+      const kgW = S*prog.r/100;
+      if (hatZ) weeks = Math.abs(zielNum - S)/kgW;
+      else if (hatD) weeks = dWeeks;
+      else if (prog.max) weeks = prog.max;
+      zielCalc = hatZ ? zielNum : (weeks!==null ? S + vz*kgW*weeks : null);
+      if (s.progFix && hatZ && hatD && reqR!==null && prog.r < reqR - 1e-9) fehler = prog.n+' ist zu langsam für dein Datum (nötig '+fmt(reqR,2)+' %/Woche).';
+    }
+    if (s.progFix && prog && !hatZ && !hatD && !prog.max && s.richtung!=='halten') fehler = 'Für '+prog.n+' fehlt noch ein Zielgewicht oder ein Zieldatum.';
+    const kgW = prog ? S*prog.r/100 : 0;
+    const kcal = Math.round((TDEE + vz*kgW*7700/7)/10)*10;
+    const prot = prog ? Math.round(prog.p*S/5)*5 : 0;
+    const ende = weeks!==null ? plusW(weeks) : null;
+    const checks = [];
+    const add = (lvl, art, text, key) => checks.push({ lvl, art, text, key });
+    if (prog && s.richtung!=='halten') {
+      if (hatZ && ((s.richtung==='ab' && zielNum >= S) || (s.richtung==='auf' && zielNum <= S))) add('block','Gesperrt:','Zielgewicht liegt nicht in der Richtung „'+(s.richtung==='ab'?'Abnehmen':'Aufbauen')+'“.','dir');
+      if (prog.r > 1.0 && rg===2) add('warn','Warnung:','Tempo '+fmt(prog.r,2)+' % pro Woche liegt über 1 %.','tempo2');
+      if (prog.custom && num(CU.fett) < 0.5) add('warn','Warnung:','Fett unter 0,5 g/kg – Hormonhaushalt beachten.','fett');
+      if (prog.r > 0.75 && rg===1) add('warn','Warnung:','Tempo '+fmt(prog.r,2)+' % pro Woche liegt über 0,75 % – für Advanced nur mit Bestätigung.','tempo');
+      if (s.richtung==='ab' && weeks!==null && weeks > 16) {
+        if (rg===0) add('block','Gesperrt:','Diät über 16 Wochen am Stück ('+fmt(weeks,0)+' Wochen). Frei ab Advanced mit Warnung.','dauer');
+        else if (rg===1 && weeks > 20) add('block','Gesperrt:','Diät über 20 Wochen am Stück ('+fmt(weeks,0)+' Wochen). Frei ab Pro mit Warnung – oder Diätpause über den Planer.','dauer');
+        else add('warn','Warnung:','Diät über 16 Wochen am Stück ('+fmt(weeks,0)+' Wochen). Empfohlen: Diätpause einplanen.','dauer');
+      }
+      if (prog.max && weeks!==null && weeks > prog.max + 0.01) add(rg===2?'warn':'block', rg===2?'Warnung:':'Gesperrt:', prog.n+' ist auf '+prog.max+' Wochen ausgelegt, gebraucht werden '+fmt(weeks,1)+'.','max');
+      if (zielCalc!==null) { const bmi = zielCalc/(H*H);
+        if (bmi < 18.5) { if (rg===0) add('block','Gesperrt:','Ziel-BMI '+fmt(bmi,1)+' liegt unter 18,5.','bmi'); else if (rg===1 && bmi < 17.5) add('block','Gesperrt:','Ziel-BMI '+fmt(bmi,1)+' liegt unter 17,5.','bmi'); else add('warn','Warnung:','Ziel-BMI '+fmt(bmi,1)+' liegt unter 18,5.','bmi'); } }
+      if (kcal < 1500) add(rg===0?'block':'warn', rg===0?'Gesperrt:':'Warnung:', 'Tagesziel '+kcal+' kcal liegt unter 1.500 kcal.','kcal');
+      prog.w.forEach((w,i) => add('warn','Hinweis des Programms:', w, 'pw'+i));
+    }
+    const checksV = checks.map(c => ({ art:c.art, text:c.text, warn:c.lvl==='warn', ok: !!s.ok[c.key],
+      style: c.lvl==='block' ? 'background:oklch(0.97 0.02 25);border:1px solid oklch(0.80 0.08 25)' : 'background:oklch(0.97 0.04 85);border:1px solid oklch(0.85 0.09 85)',
+      toggle: () => this.set({ ok: Object.assign({}, s.ok, { [c.key]: !s.ok[c.key] }) }) }));
+    const blockiert = checks.some(c=>c.lvl==='block') || checks.some(c=>c.lvl==='warn' && !s.ok[c.key]) || !!fehler || (s.richtung!=='halten' && weeks===null);
+    const progs = liste.map(p => {
+      const lock = !erlaubt(p); const aktiv = prog && prog.id===p.id;
+      let status = 'passt', sst = 'color:oklch(0.42 0.12 150);border-color:oklch(0.80 0.08 150)';
+      if (lock) { status = '🔒 ab '+GN[p.min]; sst = 'color:oklch(0.55 0.005 270)'; }
+      else if (reqR!==null && p.r < reqR - 1e-9) { status = 'zu langsam für dein Datum'; sst = 'color:oklch(0.48 0.15 60)'; }
+      else if (p.max && weeks!==null && hatZ && Math.abs(zielNum-S)/(S*p.r/100) > p.max) { status = 'zu lange (max '+p.max+' Wo)'; sst = 'color:oklch(0.48 0.15 60)'; }
+      if (aktiv) { status = 'gewählt'; sst = sel; }
+      return { name:p.n, std: p.std?'Standard':'', zweck:p.z, werte: p.custom ? 'deine Werte: '+(p.r? fmt(p.r,2)+' %/Wo · ':'')+fmt(p.p,1)+' g/kg P · '+CU.fett+' g/kg F · Cardio '+CU.cardio+'× · Refeed '+CU.refeed+'/Wo'+(p.max?' · max '+p.max+' Wo':'') : (p.r? fmt(p.r,2)+' %/Wo · ':'')+fmt(p.p,1)+' g/kg Protein'+(p.max?' · max '+p.max+' Wo':'')+(p.w.length?' · ⚠':''),
+        status, statusStyle:sst, radio: aktiv?'●':'○', bg: aktiv?'oklch(0.97 0.03 90)':'#fff', fg: lock?'oklch(0.60 0.005 270)':'inherit',
+        pick: () => { if (!lock) this.set({ prog:p.id, progFix:true, ok:{} }); } };
+    });
+    const pinS = f => f ? 'background:oklch(0.97 0.03 90);border-color:oklch(0.62 0.13 90);color:oklch(0.40 0.13 90)' : '';
+    const RN = { ab:'Abnehmen', halten:'Halten', auf:'Aufbauen' };
+    const a = {
+      halten: s.richtung==='halten', nichtHalten: s.richtung!=='halten',
+      zielFeld: hatZ ? s.ziel : (zielCalc!==null ? fmt(zielCalc,1) : ''), zielStyle: hatZ?'':'background:oklch(0.97 0.003 270);color:oklch(0.45 0.005 270)',
+      zielPin: hatZ?'📌 festgelegt':'berechnet', zielPinStyle: pinS(hatZ),
+      setZiel: e => this.set({ ziel:e.target.value, zielFix:true, ok:{} }), pinZiel: () => this.set({ zielFix: !s.zielFix, ziel: s.zielFix ? s.ziel : (zielCalc!==null?fmt(zielCalc,1):s.ziel), ok:{} }),
+      datumFeld: hatD ? s.datum : (ende ? iso(ende) : ''), datumStyle: hatD?'':'background:oklch(0.97 0.003 270);color:oklch(0.45 0.005 270)',
+      datumPin: hatD?'📌 festgelegt':'berechnet', datumPinStyle: pinS(hatD),
+      setDatum: e => this.set({ datum:e.target.value, datumFix:true, ok:{} }), pinDatum: () => this.set({ datumFix: !s.datumFix, datum: s.datumFix ? s.datum : (ende?iso(ende):''), ok:{} }),
+      progName: prog ? prog.n : '–', progWarum: warum ? '· '+warum : '', progPin: s.progFix?'📌 festgelegt':'berechnet', progPinStyle: pinS(s.progFix),
+      pinProg: () => this.set({ progFix: !s.progFix, prog: prog?prog.id:null, ok:{} }), auto: () => this.set({ progFix:false, prog:null, ok:{} }),
+      fehler, ergebnisDa: !fehler && weeks!==null,
+      customOffen: !!(prog && prog.custom),
+      cFelder: [['tempo', s.richtung==='halten'?'Tempo (Halten: 0)':'Tempo % Körpergewicht/Wo', s.richtung==='halten'],['prot','Protein g/kg',false],['fett','Fett g/kg',false],['max','Maximaldauer Wochen (leer = offen)',false],['cardio','Cardio-Einheiten/Wo',false],['refeed','Refeed-Tage/Wo',false]].map(([k,l,aus]) => ({ k, l, aus, v: CU[k], set: e => this.set({ custom: Object.assign({}, CU, { [k]: e.target.value }), ok:{} }) })),
+      cMakros: (() => { const P_ = Math.round(num(CU.prot)*S), F_ = Math.round(num(CU.fett)*S); const K_ = Math.max(0, Math.round((kcal - P_*4 - F_*9)/4)); return 'ergibt '+String(kcal).replace(/\B(?=(\d{3})+(?!\d))/g,'.')+' kcal · Protein '+P_+' g · Fett '+F_+' g · Kohlenhydrate '+K_+' g (Rest)'; })(),
+      tempo: prog ? (vz<0?'−':'+')+fmt(kgW,2)+' kg/Wo' : '–', kcal: fmt(kcal,0).replace(/\B(?=(\d{3})+(?!\d))/g,'.')+' kcal', protein: prot+' g',
+      dauer: weeks!==null ? fmt(weeks,1)+' Wo · bis '+dstr(ende) : '–',
+      listeOffen: s.liste, listePfeil: s.liste?'▴':'▾', toggleListe: () => this.set({ liste: !s.liste }), progs,
+      checks: checksV, hatChecks: checksV.length>0, weiterGesperrt: blockiert,
+      satz: s.richtung==='halten' ? 'Halten um 84,7 kg (Wohlfühlbereich 83,7–85,7 kg). Ab heute 2.650 kcal und '+prot+' g Protein.' :
+        RN[s.richtung]+' von 84,7 auf '+(zielCalc!==null?fmt(zielCalc,1):'?')+' kg mit '+(prog?prog.n:'')+' ('+(prog?fmt(prog.r,2):'')+' % pro Woche). Ab heute '+a_k(kcal)+' kcal und '+prot+' g Protein. Voraussichtlich erreicht am '+(ende?dstr(ende):'?')+'.',
+      danach: s.richtung==='ab' ? 'Danach empfohlen: Halten oder Reverse Diet für etwa '+Math.max(4,Math.round((weeks||8)*0.6))+' Wochen.' : s.richtung==='auf' ? 'Danach empfohlen: Mini Cut oder Halten.' : '',
+      titel: s.richtung==='halten' ? 'Halten um 84,7 kg' : RN[s.richtung]+' auf '+(zielCalc!==null?fmt(zielCalc,1):'?')+' kg'
+    };
+    function a_k(k){ return String(k).replace(/\B(?=(\d{3})+(?!\d))/g,'.'); }
+    const richtungen = [['ab','Abnehmen','Fett verlieren, Kalorien unter Erhaltung','Standard 0,5 % pro Woche'],['halten','Halten','Gewicht stabil, Form verbessern','Standard ohne Tempo'],['auf','Aufbauen','Muskeln aufbauen, leichter Überschuss','Standard 0,3 % pro Woche']].map(([id,name,satz,std]) => ({ name, satz, std, style: s.richtung===id?'border:2px solid oklch(0.62 0.13 90);background:oklch(0.985 0.02 90)':'', pick: () => this.set({ richtung:id, prog:null, progFix:false, ok:{}, ziel: id==='ab'?'80,0':id==='auf'?'88,0':'', zielFix: id!=='halten', datumFix:false }) }));
+    const wahl = [['pausieren','pausieren'],['beenden','beenden']].map(([id,label]) => ({ label, style: s.wahl===id?sel:'', pick: () => this.set({ wahl:id }) }));
+    const startGesperrt = s.laeuft && !s.wahl;
+    // Weg B
+    const arten = [['koerper','Körper','Gewicht, Körperfett, Umfang',false],['kraft','Kraft','eine Übung, 1RM oder Gewicht × Wdh.',false],['gew','Gewohnheit','pro Woche, mit Serie',false],['eigen','Eigenes','eigene Einheit, Werte selbst eingetragen',false],['ausd','Ausdauer','kommt mit dem Cardio-Modul',true],['ges','Gesundheit','vorgemerkt, kommt mit Medical',true]].map(([id,name,satz,aus]) => ({ name, satz, aus, style: aus?'opacity:.5;cursor:not-allowed':(s.art===id?'border:2px solid oklch(0.62 0.13 90);background:oklch(0.985 0.02 90)':''), pick: () => { if(!aus) this.set({ art:id, bziel:'', rhythmus: id==='gew'?'wieder':'einmalig' }); } }));
+    const G = { gewicht:['Gewicht','84,66 kg','Messung 08.10.','kg'], kfa:['Körperfett','16,2 %','Navy-Messung 02.10.','%'], umfang:['Umfang','82,0 cm','Taille · Messung 02.10.','cm'] };
+    const U = { bench:['Barbell Bench Press','99,3 kg e1RM · 19.08.','99,3 kg','bester Wert aus deinen Trainings, 19.08.'], squat:['Back Squat','140,0 kg e1RM · 06.10.','140,0 kg','bester Wert, 06.10.'], dead:['Deadlift','170,0 kg e1RM · 30.09.','170,0 kg','bester Wert, 30.09.'], ohp:['Overhead Press','noch nicht trainiert','–','noch kein Wert – Start ist dein erstes Training'] };
+    const Q = { train:['Trainings / Woche','Ø 3,8','3,8','4'], cardio:['Cardio / Woche','Ø 1,2','1,2','2'], steps:['Schritte / Tag','Ø 7.400','7.400','8.500'], sleep:['Schlaf h / Nacht','Ø 6,1','6,1 h','7,0'], water:['Wasser','vorgemerkt','',''], med:['Meditation','vorgemerkt','',''] };
+    let ist='', istQuelle='', titel='', zielPh='', hinweis='';
+    const bz = s.bziel;
+    if (s.art==='koerper') { const g=G[s.groesse]; ist=g[1]; istQuelle=g[2]; zielPh=g[3]; titel = g[0]+(bz?' '+bz+' '+g[3]:'');
+      const zn = parseFloat(String(bz).replace(',','.')); if (s.laeuft && !isNaN(zn) && ((s.groesse==='kfa' && zn < 16.2) || (s.groesse==='gewicht' && zn < 84.66))) hinweis = (s.groesse==='kfa'?'Körperfett senken':'Gewicht senken')+' widerspricht deiner Richtung „Aufbauen · Lean Bulk“. Möglich, aber langsam. Das Messziel steuert nichts; die Kalorien bleiben beim Aufbau.'; }
+    if (s.art==='kraft') { const u=U[s.uebung]; ist=u[2]; istQuelle=u[3]; zielPh='kg'; titel = u[0]+(s.messart==='1rm'?' 1RM':' 5 Wdh.')+(bz?' '+bz+' kg':''); }
+    if (s.art==='gew') { const q=Q[s.quelle]; ist=q[2]; zielPh=q[3]; titel = q[0].replace(' / ',' ')+(bz?' '+bz:' '+q[3]); }
+    if (s.art==='eigen') { titel = 'eigener Titel'; zielPh='Zielwert'; }
+    const b = {
+      koerper: s.art==='koerper', kraft: s.art==='kraft', gew: s.art==='gew', eigen: s.art==='eigen', umfang: s.groesse==='umfang',
+      groessen: Object.keys(G).map(k => ({ label:G[k][0], style: s.groesse===k?sel:'', pick: () => this.set({ groesse:k }) })),
+      uebungen: Object.keys(U).map(k => ({ name:U[k][0], info:U[k][1], bg: s.uebung===k?'oklch(0.97 0.03 90)':'#fff', pick: () => this.set({ uebung:k }) })),
+      messarten: [['1rm','geschätztes 1RM'],['wdh','Gewicht bei X Wdh.']].map(([id,label]) => ({ label, style: s.messart===id?sel:'', pick: () => this.set({ messart:id }) })), mitWdh: s.messart==='wdh',
+      quellen: Object.keys(Q).map(k => ({ label:Q[k][0], info:Q[k][1], aus: Q[k][1]==='vorgemerkt', style: Q[k][1]==='vorgemerkt' ? 'opacity:.5;cursor:not-allowed' : (s.quelle===k?sel:''), pick: () => { if (Q[k][1]!=='vorgemerkt') this.set({ quelle:k }); } })),
+      vorschlag: s.art==='gew' ? Q[s.quelle][3] : '',
+      rhythmus: [['einmalig','einmalig'],['wieder','wiederkehrend']].map(([id,label]) => ({ label, aus: (s.art==='gew' && id==='einmalig') || (s.art==='kraft' && id==='wieder'), style: s.rhythmus===id?sel:'', pick: () => this.set({ rhythmus:id }) })),
+      ist, istQuelle, titel, zielPh, hinweis, zielFeld: s.bziel, setZiel: e => this.set({ bziel: e.target.value })
+    };
+    const stepMapA = { A1:0, A2:1, A3:2 };
+    const isA = s.step in stepMapA, isB = s.step==='B1' || s.step==='B2';
+    const labelsA = ['1 Richtung','2 Ziel, Datum, Programm','3 Bestätigen'], labelsB = ['1 Art','2 Details'];
+    const cur = isA ? stepMapA[s.step] : (s.step==='B1'?0:1);
+    const schritte = (isA?labelsA:labelsB).map((l,i) => ({ label:l+(i<(isA?2:1)?'  →':''), style: i===cur?'font-weight:700;color:oklch(0.22 0.005 270)':'color:oklch(0.55 0.005 270)' }));
+    const kopf0 = s.step==='s0' ? 'Ziel setzen' : isA ? 'Richtung festlegen' : isB ? 'Messziel hinzufügen' : 'Fertig';
+    const kopf = kopf0;
+    const go = { s0:()=>this.set({step:'s0'}), A1:()=>this.set({step:'A1'}), A2:()=>this.set({step:'A2'}), A3:()=>this.set({step:'A3'}), B1:()=>this.set({step:'B1'}), B2:()=>this.set({step:'B2'}),
+      doneA:()=>this.set({step:'done', doneT:'A'}), doneB:()=>this.set({step:'done', doneT:'B'}), reset:()=>this.set({step: s.einstieg || 's0', wahl:null, ok:{}}) };
+    const is = { s0:s.step==='s0', A1:s.step==='A1', A2:s.step==='A2', A3:s.step==='A3', B1:s.step==='B1', B2:s.step==='B2', done:s.step==='done' };
+    const doneTitel = s.doneT==='A' ? 'Ziel gestartet: '+a.titel : 'Messziel angelegt: '+b.titel;
+    const doneText = s.doneT==='A' ? ('Tagesziel ab heute '+a.kcal+'.'+(s.laeuft?' „Lean Bulk bis Dezember“ ist '+(s.wahl==='beenden'?'beendet':'pausiert')+'.':'')) : 'Startwert '+(b.ist||'–')+' festgehalten. Es steht im Reiter Goals unter Messziele.';
+    return { mitStart: s.einstieg!=='B1', direktB: s.einstieg==='B1', grade, laeuftOpts, laeuft: s.laeuft, gradName, kopf, schritte, zeigeSchritte: isA||isB, is, go, richtungen, a, wahl, startGesperrt, arten, b, doneTitel, doneText,
+      planerHinweis: rg<2 ? '(ab Pro – für dich gesperrt)' : '(ab Pro)' };
+  }
+}
+</script>
+</body>
+</html>

@@ -31,3 +31,6 @@ ist verschiebbar und verlaengerbar, das Enddatum folgt".
 
 Mit Tom klaeren, ob Ziehen auf der Zeitachse oder ein Datumsfeld je Phase;
 dann bauen. Regel bleibt: nie vor dem Zielbeginn, das Ende folgt.
+## Aufgegangen - 2026-10-08
+
+In G-629 (Plan bearbeiten: Phasen, Wochen, Termine).

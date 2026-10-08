@@ -49,3 +49,9 @@ dasselbe Anlegen mit vorausgefuellter Uebung.
     Stand:   2026-10-08
 
 Block im Chat 08.10. Datengrundlage G-617 (Commit fb115173).
+
+## Neu gefasst - 2026-10-08
+
+`[read]` Tom 08.10.2026 12:16: „dieser stand ist fuer mich vertretbar kannst umsetzen“. Vorlage: `docs/spezifikation/goals-ziel-setzen/` (Dossier Kapitel 8/9 gilt vor dem Entwurf).
+
+Vorlage: `entwurf/Main.dc.html`, Dossier 8.4–8.6: Steuerungskarte (mit Plan dahinter), Diese Woche, Module, Messziele als Kacheln wie im Mockup (Symbol, Status voraus/im Plan/hinterher, Modul-Pillen), Details ▾ und Bearbeiten ✎ mit Löschen je Ziel, Abgeschlossen. Wartet auf G-617 (erweitert) und G-611; Auftrag wird neu gestellt, der alte Kopf gilt nicht mehr.

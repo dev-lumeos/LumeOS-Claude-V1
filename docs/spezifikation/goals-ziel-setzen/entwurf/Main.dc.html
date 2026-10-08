@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Reiter Goals</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:oklch(0.985 0.002 270)}
+a{color:oklch(0.50 0.13 90)}a:hover{color:oklch(0.40 0.13 90)}
+.num{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.eb{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:oklch(0.50 0.005 270)}
+.typ{font-size:10.5px;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:oklch(0.55 0.005 270)}
+.card{background:#fff;border:1px solid oklch(0.91 0.003 270);border-radius:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:0 14px;border-radius:8px;border:1px solid oklch(0.85 0.004 270);background:#fff;font:inherit;font-size:13px;color:oklch(0.25 0.005 270);cursor:pointer;text-decoration:none}
+.btn:hover{background:oklch(0.97 0.003 270)}
+.btn-p{background:oklch(0.25 0.005 270);color:#fff;border-color:oklch(0.25 0.005 270)}
+.btn-p:hover{background:oklch(0.32 0.005 270)}
+.btn-r{color:oklch(0.48 0.17 25);border-color:oklch(0.80 0.08 25)}
+.btn-g{border-color:transparent;background:transparent}
+.ico{width:36px;padding:0}
+.chip{display:inline-flex;align-items:center;gap:5px;min-height:22px;padding:0 9px;border-radius:999px;font-size:11px;font-weight:500;border:1px solid oklch(0.88 0.004 270);color:oklch(0.40 0.005 270);background:#fff;font-family:inherit}
+.pill{display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 8px;border-radius:999px;font-size:11px;border:1px solid oklch(0.90 0.003 270);color:oklch(0.40 0.005 270);background:oklch(0.98 0.002 270)}
+.pill svg{width:12px;height:12px}
+.sq{width:40px;height:40px;border-radius:8px;display:grid;place-items:center;flex-shrink:0}
+.sq svg{width:20px;height:20px}
+.mi{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;flex-shrink:0}
+.mi svg{width:15px;height:15px}
+.inp{height:36px;border:1px solid oklch(0.85 0.004 270);border-radius:8px;padding:0 10px;font:inherit;font-size:13px;background:#fff;width:100%;box-sizing:border-box}
+.lbl{font-size:11px;font-weight:600;color:oklch(0.45 0.005 270);display:block;margin-bottom:4px}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{text-align:left;font-weight:600;color:oklch(0.50 0.005 270);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:6px 8px;border-bottom:1px solid oklch(0.88 0.004 270)}
+.tbl td{padding:7px 8px;border-bottom:1px solid oklch(0.94 0.003 270)}
+.bar{height:6px;border-radius:999px;background:oklch(0.94 0.003 270);overflow:hidden;position:relative}
+.bar>div{position:absolute;left:0;top:0;bottom:0;border-radius:999px}
+</style>
+</helmet>
+<div style="font-family:Inter,-apple-system,system-ui,sans-serif;font-size:13px;line-height:1.5;color:oklch(0.22 0.005 270);background:oklch(0.985 0.002 270);min-height:100%;box-sizing:border-box">
+
+<div style="background:oklch(0.93 0.005 270);border-bottom:1px solid oklch(0.86 0.005 270);padding:8px 24px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12px">
+<span style="font-weight:600;color:oklch(0.40 0.005 270)">Prototyp · Zustand des steuernden Ziels:</span>
+<sc-for list="{{zustaende}}" as="z" hint-placeholder-count="5">
+<button class="chip" style="cursor:pointer;min-height:28px;{{z.style}}" onClick="{{z.pick}}">{{z.label}}</button>
+</sc-for>
+</div>
+
+<div style="max-width:1240px;margin:0 auto;padding:24px 24px 64px;display:flex;flex-direction:column;gap:18px">
+
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
+<div style="display:flex;flex-direction:column;gap:2px"><span class="eb">Goals &amp; Body</span><h1 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-.01em">Ziele</h1></div>
+<a class="btn btn-p" href="ZielSetzen.dc.html" style="min-height:40px">+ Ziel setzen</a>
+</div>
+
+<nav aria-label="Reiter" style="display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid oklch(0.90 0.003 270)">
+<a href="Main.dc.html" style="padding:10px 14px;font-weight:600;color:oklch(0.22 0.005 270);border-bottom:2px solid oklch(0.62 0.13 90)">Goals</a>
+<a href="PhaseEngine.dc.html" style="padding:10px 14px;color:oklch(0.45 0.005 270)">Phase engine</a>
+<span style="padding:10px 14px;color:oklch(0.60 0.005 270)">Adaptive TDEE</span>
+<span style="padding:10px 14px;color:oklch(0.60 0.005 270)">Cross-module</span>
+<span style="padding:10px 14px;color:oklch(0.60 0.005 270)">Timeline</span>
+<span style="padding:10px 14px;color:oklch(0.60 0.005 270)">Body metrics</span>
+<span style="padding:10px 14px;color:oklch(0.60 0.005 270)">…</span>
+</nav>
+
+<sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+<div style="background:oklch(0.95 0.04 150);border:1px solid oklch(0.82 0.08 150);border-radius:8px;padding:10px 14px;font-size:12.5px">{{toast}}</div>
+</sc-if>
+
+<!-- STEUERUNG -->
+<section aria-label="Steuerung" class="card" style="padding:20px;display:flex;flex-direction:column;gap:14px;{{st.rahmen}}">
+<div style="display:flex;gap:14px;align-items:flex-start">
+<div class="sq" style="background:oklch(0.95 0.05 90);border:1px solid oklch(0.85 0.09 90);color:oklch(0.48 0.13 90)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16l-2-12H6z"></path><path d="M9 8a3 3 0 0 1 6 0"></path><path d="M12 12l2-2"></path></svg></div>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+<span class="typ">Steuerung · bestimmt Kalorien und Makros</span>
+<sc-if value="{{st.hatZiel}}" hint-placeholder-val="{{ true }}"><span class="chip" style="{{st.chipStyle}}">{{st.chip}}</span></sc-if>
+<sc-if value="{{st.hatZiel}}" hint-placeholder-val="{{ true }}"><span class="num" style="margin-left:auto;font-size:10.5px;color:oklch(0.50 0.005 270)">Frist 16.12.2026 · noch 69 Tage</span></sc-if>
+<sc-if value="{{st.hatZiel}}" hint-placeholder-val="{{ true }}"><div style="display:flex;gap:2px"><button class="btn btn-g ico" aria-label="Details" onClick="{{st.toggle}}">{{st.pfeil}}</button><button class="btn btn-g ico" aria-label="Bearbeiten" onClick="{{st.edit}}">✎</button></div></sc-if>
+</div>
+
+<sc-if value="{{st.leer}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:18px;font-weight:600;color:oklch(0.45 0.17 25)">Kein Ziel aktiv – du läufst auf Erhaltung</div>
+<div style="color:oklch(0.40 0.005 270)">Tagesziel: <span class="num">2.650 kcal</span> (Erhaltung aus deinem TDEE) · <span class="num">170 g</span> Protein. Ohne Ziel gibt es keinen Plan, keine Prognose und keine Anpassung.</div>
+<div><a class="btn btn-p" href="ZielSetzen.dc.html">Ziel setzen</a></div>
+</div>
+</sc-if>
+
+<sc-if value="{{st.hatZiel}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:baseline"><h2 style="margin:0;font-size:20px;font-weight:700;letter-spacing:-.01em">Aufbauen · Lean Bulk</h2><span style="color:oklch(0.50 0.005 270);font-size:12px">„Lean Bulk bis Dezember“</span></div>
+<div style="font-size:12px;color:oklch(0.45 0.005 270)">Plan dahinter: <b>Lean Bulk</b> · 1 Phase · <a href="PhaseEngine.dc.html">in der Phase engine erweitern</a> <span style="color:oklch(0.55 0.005 270)">(ab Pro)</span></div>
+
+<sc-if value="{{st.pausiert}}" hint-placeholder-val="{{ false }}">
+<div style="background:oklch(0.96 0.04 25);border:1px solid oklch(0.85 0.07 25);border-radius:8px;padding:10px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between">
+<span><b>Pausiert seit 01.10.</b> – du läufst auf Erhaltung (<span class="num">2.650 kcal</span>). Die Phase bleibt gespeichert.</span>
+<button class="btn" onClick="{{st.fortsetzen}}">Fortsetzen …</button>
+</div>
+<sc-if value="{{st.fortsetzenFrage}}" hint-placeholder-val="{{ false }}">
+<div style="border:1px solid oklch(0.88 0.004 270);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:8px"><b>Wie fortsetzen?</b><div style="display:flex;flex-wrap:wrap;gap:8px"><button class="btn btn-p" onClick="{{st.weiterAlt}}">Mit den alten Daten weiter</button><a class="btn" href="ZielSetzen.dc.html">Zuerst anpassen</a></div></div>
+</sc-if>
+</sc-if>
+
+<sc-if value="{{st.frozen}}" hint-placeholder-val="{{ false }}">
+<div style="background:oklch(0.96 0.01 270);border:1px solid oklch(0.86 0.005 270);border-radius:8px;padding:10px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between">
+<span><b>{{st.frozenText}}</b> Das Ziel ist eingefroren; seitdem gilt Erhaltung (<span class="num">2.650 kcal</span>) mit Warnung.</span>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn btn-p" href="ZielSetzen.dc.html">Neustart</a><button class="btn btn-r" onClick="{{st.askDel}}">Löschen</button></div>
+</div>
+</sc-if>
+
+<div style="display:flex;align-items:baseline;gap:12px;font-size:12px;flex-wrap:wrap">
+<span><span style="color:oklch(0.55 0.005 270)">Start </span><span class="num" style="font-weight:500">85,0 kg</span></span>
+<span><span style="color:oklch(0.55 0.005 270)">Trend </span><span class="num" style="font-weight:500">84,7 kg</span></span>
+<span style="color:oklch(0.60 0.005 270)">→</span>
+<span><span style="color:oklch(0.55 0.005 270)">Ziel </span><span class="num" style="font-weight:600;color:oklch(0.50 0.13 90)">88,0 kg</span></span>
+</div>
+<div style="display:flex;align-items:center;gap:10px"><div class="bar" style="flex:1;height:8px"><div style="width:2%;background:oklch(0.62 0.13 90)"></div></div><span class="num" style="font-size:13px;font-weight:600;color:oklch(0.50 0.13 90);width:44px;text-align:right">0 %</span></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px">
+<div><div class="eb">nach Plan erreicht</div><div class="num" style="font-size:15px;font-weight:600">16.12.2026</div></div>
+<div><div class="eb">bei deinem Tempo</div><div style="font-size:13px;font-weight:600;color:oklch(0.48 0.15 60)">nicht absehbar · −0,1 kg/Wo</div></div>
+<div><div class="eb">Tagesziel</div><div class="num" style="font-size:15px;font-weight:600">2.910 kcal · 170 g P</div></div>
+<div><div class="eb">Phase</div><div style="font-size:13px;font-weight:600">Woche <span class="num">17</span> von max <span class="num">52</span></div></div>
+</div>
+<div style="display:flex;gap:4px;flex-wrap:wrap">
+<span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="oklch(0.55 0.13 60)" stroke-width="2" stroke-linecap="round"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z"></path><path d="M5 19l7-7"></path></svg>Ernährung</span>
+<span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.16 290)" stroke-width="2" stroke-linecap="round"><path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12"></path></svg>Training</span>
+<span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.10 160)" stroke-width="2" stroke-linecap="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path></svg>Recovery</span>
+<span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="oklch(0.55 0.15 25)" stroke-width="2" stroke-linecap="round"><path d="M10.5 3.5a5 5 0 0 1 7 7l-7 7a5 5 0 0 1-7-7z"></path><path d="M7 7l10 10"></path></svg>Supplements</span>
+</div>
+</div>
+</sc-if>
+</div>
+</div>
+
+<!-- Details Steuerung -->
+<sc-if value="{{st.offen}}" hint-placeholder-val="{{ false }}">
+<div style="border-top:1px solid oklch(0.92 0.003 270);padding-top:14px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><span class="eb" style="margin-right:6px">Verlauf</span>
+<sc-for list="{{zeitraeume}}" as="r" hint-placeholder-count="3"><button class="chip" style="cursor:pointer;min-height:28px;{{r.style}}" onClick="{{r.pick}}">{{r.label}}</button></sc-for>
+</div>
+<div style="overflow-x:auto">
+<svg viewBox="0 0 640 180" width="100%" style="max-width:820px;display:block" role="img" aria-label="Gewichtsverlauf mit Plan, Ziel und Prognose">
+<line x1="40" y1="20" x2="630" y2="20" stroke="oklch(0.62 0.13 90)" stroke-dasharray="2 3"></line>
+<text x="36" y="24" font-size="10" text-anchor="end" fill="oklch(0.45 0.005 270)">88</text>
+<text x="36" y="86" font-size="10" text-anchor="end" fill="oklch(0.45 0.005 270)">86</text>
+<text x="36" y="152" font-size="10" text-anchor="end" fill="oklch(0.45 0.005 270)">84</text>
+<line x1="40" y1="82" x2="630" y2="82" stroke="oklch(0.93 0.003 270)"></line>
+<line x1="40" y1="148" x2="630" y2="148" stroke="oklch(0.93 0.003 270)"></line>
+<polyline points="40,115 630,20" fill="none" stroke="oklch(0.70 0.005 270)" stroke-dasharray="5 4"></polyline>
+<polyline points="{{chart.roh}}" fill="none" stroke="oklch(0.82 0.005 270)" stroke-width="1"></polyline>
+<polyline points="{{chart.trend}}" fill="none" stroke="oklch(0.45 0.13 90)" stroke-width="2.5"></polyline>
+<polyline points="{{chart.prog}}" fill="none" stroke="oklch(0.45 0.13 90)" stroke-width="1.5" stroke-dasharray="3 3"></polyline>
+<text x="600" y="14" font-size="10" fill="oklch(0.45 0.13 90)">Ziel</text>
+<text x="44" y="172" font-size="10" fill="oklch(0.45 0.005 270)">Jun</text>
+<text x="200" y="172" font-size="10" fill="oklch(0.45 0.005 270)">Aug</text>
+<text x="360" y="172" font-size="10" fill="oklch(0.45 0.005 270)">Okt</text>
+<text x="520" y="172" font-size="10" fill="oklch(0.45 0.005 270)">Dez</text>
+</svg>
+</div>
+<div style="font-size:11.5px;color:oklch(0.45 0.005 270)">grau = Waage · Linie = Trend · gestrichelt grau = Plan · gestrichelt gelb = Prognose bei deinem Tempo</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+<div><div class="eb">Veränderung gesamt</div><div class="num" style="font-weight:600">−0,3 kg</div></div>
+<div><div class="eb">Tempo 4 Wochen</div><div class="num" style="font-weight:600">−0,10 kg/Wo</div></div>
+<div><div class="eb">Soll</div><div class="num" style="font-weight:600">+0,21 kg/Wo</div></div>
+<div><div class="eb">verbleibend</div><div class="num" style="font-weight:600">3,3 kg</div></div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:18px">
+<div style="flex:2 1 420px;min-width:0;overflow-x:auto">
+<div class="eb" style="margin-bottom:4px">Wochen</div>
+<table class="tbl"><thead><tr><th>Woche</th><th>Trend</th><th>Δ</th><th>Soll Δ</th><th>Ø kcal</th><th>Anpassung</th></tr></thead>
+<tbody><sc-for list="{{wochen}}" as="w" hint-placeholder-count="4"><tr><td>{{w.kw}}</td><td class="num">{{w.trend}}</td><td class="num">{{w.d}}</td><td class="num">{{w.soll}}</td><td class="num">{{w.kcal}}</td><td>{{w.anp}}</td></tr></sc-for></tbody></table>
+</div>
+<div style="flex:1 1 240px;min-width:0">
+<div class="eb" style="margin-bottom:4px">Meilensteine</div>
+<sc-for list="{{meilensteine}}" as="m" hint-placeholder-count="4"><div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid oklch(0.94 0.003 270);font-size:12px"><span style="display:flex;gap:8px;align-items:center"><span style="width:10px;height:10px;border-radius:50%;border:2px solid oklch(0.62 0.13 90)"></span>{{m.t}}</span><span style="color:oklch(0.50 0.005 270)">{{m.s}}</span></div></sc-for>
+<div style="margin-top:10px"><a href="PhaseEngine.dc.html">Phasen dieses Ziels im Reiter Phase engine →</a></div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- Bearbeiten Steuerung -->
+<sc-if value="{{st.editOffen}}" hint-placeholder-val="{{ false }}">
+<div style="border-top:1px solid oklch(0.92 0.003 270);padding-top:14px;display:flex;flex-direction:column;gap:12px">
+<span class="eb">Bearbeiten</span>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+<div><label class="lbl" for="st-titel">Titel</label><input id="st-titel" class="inp" defaultValue="Lean Bulk bis Dezember"></div>
+<div><label class="lbl" for="st-ziel">Zielgewicht</label><input id="st-ziel" class="inp num" defaultValue="88,0 kg"></div>
+<div><label class="lbl" for="st-datum">Zieldatum</label><input id="st-datum" class="inp num" defaultValue="16.12.2026"></div>
+<div><span class="lbl">Programm</span><a class="btn" href="ZielSetzen.dc.html" style="width:100%;box-sizing:border-box">Lean Bulk · ändern …</a></div>
+</div>
+<div style="font-size:12px;color:oklch(0.45 0.005 270)">Vor dem Speichern zeigt das System die neue Rechnung (kcal, Tempo, Datum) wie in „Ziel setzen“.</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between">
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-p" onClick="{{st.edit}}">Speichern</button><button class="btn" onClick="{{st.pausieren}}">Pausieren</button><button class="btn" onClick="{{st.edit}}">Beenden</button></div>
+<button class="btn btn-r" onClick="{{st.askDel}}">Löschen</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{st.confirm}}" hint-placeholder-val="{{ false }}">
+<div style="border:1px solid oklch(0.80 0.08 25);background:oklch(0.97 0.02 25);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:8px">
+<b>Ziel und seine Phasen endgültig löschen?</b>
+<span style="font-size:12.5px">Dieses Ziel hat 17 Wochen Verlauf. <b>Beenden</b> behält die Historie, Löschen entfernt sie.</span>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onClick="{{st.cancel}}">Abbrechen</button><button class="btn" onClick="{{st.cancel}}">Stattdessen beenden</button><button class="btn btn-r" onClick="{{st.doDel}}">Endgültig löschen</button></div>
+</div>
+</sc-if>
+</section>
+
+<!-- DIESE WOCHE + MODULE -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:18px">
+<section aria-label="Diese Woche" class="card" style="padding:18px;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between"><span class="eb">Diese Woche · KW 41</span><span style="font-size:11px;color:oklch(0.50 0.005 270)">Bewegung gegen Soll</span></div>
+<sc-for list="{{woche}}" as="w" hint-placeholder-count="4">
+<div style="display:grid;grid-template-columns:28px 1fr 110px 80px;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid oklch(0.95 0.003 270)">
+<div class="mi" style="{{w.icoStyle}}">
+<sc-if value="{{w.iWaage}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h16l-2-12H6z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg></sc-if>
+<sc-if value="{{w.iKraft}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12"></path></svg></sc-if>
+<sc-if value="{{w.iGew}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3M18 3v4h-4M6 21v-4h4"></path></svg></sc-if>
+<sc-if value="{{w.iKoerper}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3.5"></circle></svg></sc-if>
+</div>
+<span>{{w.t}}</span>
+<div class="bar" style="height:6px"><div style="width:{{w.soll}}%;background:oklch(0.88 0.005 270)"></div><div style="width:{{w.ist}}%;{{w.barStyle}}"></div></div>
+<span class="num" style="text-align:right;font-weight:600;{{w.style}}">{{w.v}}</span>
+</div>
+</sc-for>
+<div style="font-size:11px;color:oklch(0.50 0.005 270)">grau = Soll der Woche · Farbe = erreicht</div>
+</section>
+<section aria-label="Module" class="card" style="padding:18px;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between"><span class="eb">Module · Beitrag zum steuernden Ziel</span><a href="#" style="font-size:11.5px">Cross-module →</a></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+<sc-for list="{{module}}" as="m" hint-placeholder-count="4">
+<div style="border:1px solid oklch(0.93 0.003 270);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;gap:8px;align-items:center">
+<div class="mi" style="{{m.icoStyle}}">
+<sc-if value="{{m.iNutri}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z"></path><path d="M5 19l7-7"></path></svg></sc-if>
+<sc-if value="{{m.iTrain}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12"></path></svg></sc-if>
+<sc-if value="{{m.iRecov}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path></svg></sc-if>
+<sc-if value="{{m.iSupp}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.5 3.5a5 5 0 0 1 7 7l-7 7a5 5 0 0 1-7-7z"></path><path d="M7 7l10 10"></path></svg></sc-if>
+</div>
+<span style="font-weight:600;font-size:12.5px">{{m.n}}</span>
+<span style="margin-left:auto;width:8px;height:8px;border-radius:50%;{{m.dot}}"></span>
+</div>
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:8px">
+<div><div class="num" style="font-size:17px;font-weight:600">{{m.v}}</div><div style="font-size:11px;color:oklch(0.50 0.005 270)">{{m.s}}</div></div>
+<svg viewBox="0 0 70 24" width="70" height="24" aria-hidden="true"><polyline points="{{m.spark}}" fill="none" stroke="{{m.farbe}}" stroke-width="1.8"></polyline></svg>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="font-size:12.5px;background:oklch(0.97 0.03 80);border-radius:8px;padding:8px 10px;display:flex;gap:8px;align-items:center"><span style="width:8px;height:8px;border-radius:50%;background:oklch(0.70 0.14 70);flex-shrink:0"></span><span><b>Engpass:</b> Schlaf – Ø 6,1 h, Recovery 71.</span></div>
+</section>
+</div>
+
+<!-- MESSZIELE -->
+<section aria-label="Messziele" style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+<span class="eb">Messziele · steuern nichts, beliebig viele</span>
+<a class="btn" href="MesszielSetzen.dc.html">+ Messziel</a>
+</div>
+<sc-for list="{{gruppen}}" as="g" hint-placeholder-count="3">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;font-weight:600;color:oklch(0.40 0.005 270)">{{g.name}}</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(460px,1fr));gap:14px;align-items:start">
+<sc-for list="{{g.items}}" as="it" hint-placeholder-count="1">
+<div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;gap:14px;align-items:flex-start">
+<div class="sq" style="{{it.icoStyle}}">
+<sc-if value="{{it.iKraft}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12"></path></svg></sc-if>
+<sc-if value="{{it.iKoerper}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3.5"></circle><circle cx="12" cy="12" r="0.8"></circle></svg></sc-if>
+<sc-if value="{{it.iGew}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3M18 3v4h-4M6 21v-4h4"></path></svg></sc-if>
+</div>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+<span class="typ">{{it.typ}}</span>
+<span class="chip" style="{{it.paceStyle}}">{{it.pace}}</span>
+<span class="num" style="margin-left:auto;font-size:10.5px;color:oklch(0.50 0.005 270)">{{it.frist}}</span>
+<div style="display:flex;gap:2px"><button class="btn btn-g ico" aria-label="Details" onClick="{{it.toggle}}">{{it.pfeil}}</button><button class="btn btn-g ico" aria-label="Bearbeiten" onClick="{{it.edit}}">✎</button></div>
+</div>
+<div style="font-size:15px;font-weight:600;letter-spacing:-.01em">{{it.titel}}</div>
+<div style="display:flex;align-items:baseline;gap:12px;font-size:12px;flex-wrap:wrap">
+<span><span style="color:oklch(0.55 0.005 270)">aktuell </span><span class="num" style="font-weight:500">{{it.ist}}</span></span>
+<span style="color:oklch(0.60 0.005 270)">→</span>
+<span><span style="color:oklch(0.55 0.005 270)">Ziel </span><span class="num" style="font-weight:600;{{it.farbeText}}">{{it.zielTxt}}</span></span>
+</div>
+<sc-if value="{{it.habit}}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:4px;align-items:center"><sc-for list="{{it.punkte}}" as="p" hint-placeholder-count="12"><span style="width:14px;height:14px;border-radius:4px;{{p.style}}"></span></sc-for><span style="font-size:11px;color:oklch(0.50 0.005 270);margin-left:6px">12 Wochen · Serie 6</span></div></sc-if>
+<sc-if value="{{it.nichtHabit}}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:center;gap:10px"><div class="bar" style="flex:1"><div style="width:{{it.pct}}%;{{it.barFarbe}}"></div></div><span class="num" style="font-size:13px;font-weight:600;width:40px;text-align:right;{{it.farbeText}}">{{it.pct}} %</span></div></sc-if>
+<div style="display:flex;gap:4px;flex-wrap:wrap">
+<sc-for list="{{it.module}}" as="m" hint-placeholder-count="2">
+<span class="pill">
+<sc-if value="{{m.iTrain}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.16 290)" stroke-width="2" stroke-linecap="round"><path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12"></path></svg></sc-if>
+<sc-if value="{{m.iNutri}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="oklch(0.55 0.13 60)" stroke-width="2" stroke-linecap="round"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z"></path><path d="M5 19l7-7"></path></svg></sc-if>
+<sc-if value="{{m.iRecov}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.10 160)" stroke-width="2" stroke-linecap="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path></svg></sc-if>
+<sc-if value="{{m.iMess}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.13 90)" stroke-width="2"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3.5"></circle></svg></sc-if>
+{{m.n}}</span>
+</sc-for>
+<span style="font-size:11px;color:oklch(0.50 0.005 270);align-self:center;margin-left:4px">{{it.quelle}}</span>
+</div>
+</div>
+</div>
+
+<sc-if value="{{it.offen}}" hint-placeholder-val="{{ false }}">
+<div style="background:oklch(0.985 0.002 270);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:12px">
+<svg viewBox="0 0 420 130" width="100%" style="display:block" role="img" aria-label="Verlauf">
+<line x1="30" y1="{{it.zielY}}" x2="410" y2="{{it.zielY}}" stroke="oklch(0.62 0.13 90)" stroke-dasharray="2 3"></line>
+<polyline points="{{it.pts}}" fill="none" stroke="oklch(0.45 0.13 90)" stroke-width="2"></polyline>
+<polyline points="{{it.prog}}" fill="none" stroke="oklch(0.45 0.13 90)" stroke-width="1.5" stroke-dasharray="3 3"></polyline>
+<text x="406" y="{{it.zielLabelY}}" font-size="10" text-anchor="end" fill="oklch(0.45 0.13 90)">Ziel {{it.zielTxt}}</text>
+</svg>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px"><sc-for list="{{it.kz}}" as="k" hint-placeholder-count="3"><div><div class="eb">{{k.l}}</div><div class="num" style="font-weight:600">{{k.v}}</div></div></sc-for></div>
+<div style="overflow-x:auto"><div class="eb" style="margin-bottom:4px">Datenpunkte</div>
+<table class="tbl"><thead><tr><th>Datum</th><th>Wert</th><th>Quelle</th></tr></thead><tbody><sc-for list="{{it.dp}}" as="d" hint-placeholder-count="4"><tr><td class="num">{{d.dt}}</td><td class="num">{{d.v}}</td><td><a href="#">{{d.q}}</a></td></tr></sc-for></tbody></table></div>
+</div>
+</sc-if>
+
+<sc-if value="{{it.editOffen}}" hint-placeholder-val="{{ false }}">
+<div style="background:oklch(0.985 0.002 270);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:12px">
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+<div><label class="lbl" for="t-{{it.id}}">Titel</label><input id="t-{{it.id}}" class="inp" defaultValue="{{it.titel}}"></div>
+<div><label class="lbl" for="z-{{it.id}}">Zielwert</label><input id="z-{{it.id}}" class="inp num" defaultValue="{{it.zielTxt}}"></div>
+<div><label class="lbl" for="f-{{it.id}}">Frist</label><input id="f-{{it.id}}" class="inp num" defaultValue="{{it.fristWert}}"></div>
+<div><span class="lbl">{{it.festLabel}}</span><div style="height:36px;display:flex;align-items:center;color:oklch(0.45 0.005 270)">{{it.fest}} · fest</div></div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between">
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-p" onClick="{{it.edit}}">Speichern</button><button class="btn" onClick="{{it.edit}}">Abschließen</button><button class="btn" onClick="{{it.edit}}">Archivieren</button></div>
+<button class="btn btn-r" onClick="{{it.askDel}}">Löschen</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{it.confirm}}" hint-placeholder-val="{{ false }}">
+<div style="border:1px solid oklch(0.80 0.08 25);background:oklch(0.97 0.02 25);border-radius:8px;padding:12px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between">
+<span><b>„{{it.titel}}“ endgültig löschen?</b> Verlauf und Meilensteine gehen verloren.</span>
+<div style="display:flex;gap:8px"><button class="btn" onClick="{{it.cancel}}">Abbrechen</button><button class="btn btn-r" onClick="{{it.doDel}}">Endgültig löschen</button></div>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</section>
+
+<!-- ABGESCHLOSSEN -->
+<section aria-label="Abgeschlossen" class="card" style="padding:14px 18px;display:flex;flex-direction:column;gap:6px">
+<button onClick="{{toggleClosed}}" style="display:flex;justify-content:space-between;align-items:center;min-height:36px;background:none;border:0;font:inherit;cursor:pointer;text-align:left;padding:0">
+<span class="eb">Abgeschlossen · {{closedCount}}</span><span>{{closedPfeil}}</span>
+</button>
+<sc-if value="{{closedOpen}}" hint-placeholder-val="{{ false }}">
+<sc-for list="{{closed}}" as="c" hint-placeholder-count="4">
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:8px 10px;background:oklch(0.99 0.002 270);border:1px solid oklch(0.92 0.003 270);border-radius:6px;margin-top:6px">
+<div class="mi" style="{{c.icoStyle}}">
+<sc-if value="{{c.iKraft}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12"></path></svg></sc-if>
+<sc-if value="{{c.iWaage}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h16l-2-12H6z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg></sc-if>
+<sc-if value="{{c.iGew}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3M18 3v4h-4M6 21v-4h4"></path></svg></sc-if>
+</div>
+<div style="flex:1 1 240px;min-width:0"><div style="font-weight:600;font-size:12.5px">{{c.titel}}</div><div class="num" style="font-size:10.5px;color:oklch(0.50 0.005 270)">{{c.info}}</div></div>
+<span class="chip" style="{{c.chipStyle}}">{{c.status}}</span>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" onClick="{{c.pick}}">Details</button><a class="btn" href="ZielSetzen.dc.html">Neustart</a><button class="btn btn-r" onClick="{{c.askDel}}">Löschen</button></div>
+<sc-if value="{{c.confirm}}" hint-placeholder-val="{{ false }}"><div style="flex-basis:100%;border:1px solid oklch(0.80 0.08 25);background:oklch(0.97 0.02 25);border-radius:8px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><span>Endgültig löschen?</span><div style="display:flex;gap:8px"><button class="btn" onClick="{{c.cancel}}">Abbrechen</button><button class="btn btn-r" onClick="{{c.doDel}}">Löschen</button></div></div></sc-if>
+<sc-if value="{{c.offen}}" hint-placeholder-val="{{ false }}"><div style="flex-basis:100%;background:#fff;border-radius:8px;padding:10px 12px;font-size:12.5px">{{c.detail}}</div></sc-if>
+</div>
+</sc-for>
+</sc-if>
+</section>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(p){ super(p); this.state = { zustand:'aktiv', open:null, edit:null, confirm:null, closedOpen:true, removed:{}, toast:'', range:'3m', frage:false, closedOpenId:null }; }
+  set(o){ this.setState(o); }
+  renderVals() {
+    const s = this.state;
+    const sel = 'background:oklch(0.25 0.005 270);color:#fff;border-color:oklch(0.25 0.005 270)';
+    const PACE = { voraus:'color:oklch(0.42 0.13 150);border-color:oklch(0.80 0.08 150);background:oklch(0.96 0.03 150)', plan:'color:oklch(0.42 0.09 165);border-color:oklch(0.82 0.06 165);background:oklch(0.97 0.02 165)', hinter:'color:oklch(0.48 0.15 60);border-color:oklch(0.82 0.10 70);background:oklch(0.97 0.03 80)' };
+    const ICO = { kraft:'background:oklch(0.95 0.04 290);border:1px solid oklch(0.85 0.07 290);color:oklch(0.50 0.16 290)', koerper:'background:oklch(0.95 0.05 90);border:1px solid oklch(0.85 0.09 90);color:oklch(0.48 0.13 90)', gew:'background:oklch(0.95 0.04 160);border:1px solid oklch(0.85 0.06 160);color:oklch(0.45 0.10 160)', nutri:'background:oklch(0.95 0.05 60);color:oklch(0.52 0.13 60)', recov:'background:oklch(0.95 0.04 160);color:oklch(0.45 0.10 160)', supp:'background:oklch(0.95 0.04 25);color:oklch(0.52 0.15 25)' };
+    const FARBE = { kraft:'oklch(0.50 0.16 290)', koerper:'oklch(0.50 0.13 90)', gew:'oklch(0.45 0.10 160)' };
+    const Z = [['aktiv','aktiv'],['pausiert','pausiert'],['erreicht','erreicht'],['abgelaufen','Frist abgelaufen'],['leer','kein Ziel']];
+    const zustaende = Z.map(([id,label]) => ({ label, style: s.zustand===id?sel:'', pick: () => this.set({ zustand:id, frage:false, confirm:null, edit:null }) }));
+    const leer = s.zustand==='leer' || !!s.removed.steuer;
+    const chipMap = { aktiv:['hinterher',PACE.hinter], pausiert:['pausiert','color:oklch(0.45 0.17 25);border-color:oklch(0.82 0.08 25)'], erreicht:['erreicht',PACE.voraus], abgelaufen:['Frist abgelaufen','color:oklch(0.40 0.005 270);background:oklch(0.95 0.003 270)'] };
+    const c = chipMap[s.zustand] || ['',''];
+    const st = {
+      leer, hatZiel: !leer, pausiert: s.zustand==='pausiert' && !leer, frozen: (s.zustand==='erreicht'||s.zustand==='abgelaufen') && !leer,
+      frozenText: s.zustand==='erreicht' ? 'Erreicht am 30.11.2026 mit 88,1 kg.' : 'Frist 16.12.2026 abgelaufen bei 85,2 kg (von 88,0).',
+      chip: c[0], chipStyle: c[1],
+      rahmen: leer || s.zustand==='pausiert' ? 'border-color:oklch(0.75 0.12 25);border-width:2px' : '',
+      offen: s.open==='steuer' && !leer, editOffen: s.edit==='steuer' && !leer, confirm: s.confirm==='steuer' && !leer,
+      pfeil: s.open==='steuer' ? '▴' : '▾', fortsetzenFrage: s.frage,
+      toggle: () => this.set({ open: s.open==='steuer'?null:'steuer', edit:null }),
+      edit: () => this.set({ edit: s.edit==='steuer'?null:'steuer', open:null }),
+      pausieren: () => this.set({ zustand:'pausiert', edit:null }),
+      fortsetzen: () => this.set({ frage: !s.frage }),
+      weiterAlt: () => this.set({ zustand:'aktiv', frage:false, toast:'Fortgesetzt mit den alten Daten. Tagesziel wieder 2.910 kcal.' }),
+      askDel: () => this.set({ confirm:'steuer' }), cancel: () => this.set({ confirm:null }),
+      doDel: () => this.set({ confirm:null, edit:null, open:null, removed: Object.assign({}, s.removed, { steuer:true }), toast:'Ziel „Lean Bulk bis Dezember“ gelöscht. Es gilt Erhaltung mit Warnung.' })
+    };
+    const zeitraeume = [['4w','4 Wochen'],['3m','3 Monate'],['all','alles']].map(([id,label]) => ({ label, style: s.range===id?sel:'', pick: () => this.set({ range:id }) }));
+    const y = kg => (148 - (kg-84)*33).toFixed(1);
+    const roh = [85.0,85.3,84.8,85.4,85.1,84.6,85.0,85.2,84.7,84.9,84.5,84.8,84.6,84.9,84.4,84.8,84.66];
+    const tr = [85.0,85.05,85.0,85.1,85.1,85.0,85.0,85.05,84.95,84.9,84.85,84.8,84.75,84.75,84.7,84.7,84.7];
+    const xs = i => (40 + i*17).toFixed(1);
+    const chart = { roh: roh.map((v,i)=>xs(i)+','+y(v)).join(' '), trend: tr.map((v,i)=>xs(i)+','+y(v)).join(' '), prog: xs(16)+','+y(84.7)+' 630,'+y(84.3) };
+    const wochen = [ {kw:'KW 38',trend:'84,80',d:'−0,05',soll:'+0,21',kcal:'2.780',anp:'+100 kcal'}, {kw:'KW 39',trend:'84,75',d:'−0,05',soll:'+0,21',kcal:'2.840',anp:'+50 kcal'}, {kw:'KW 40',trend:'84,70',d:'−0,05',soll:'+0,21',kcal:'2.860',anp:'keine (Logtage < 5)'}, {kw:'KW 41',trend:'84,70',d:'±0,00',soll:'+0,21',kcal:'–',anp:'läuft'} ];
+    const meilensteine = [ {t:'25 % · 85,75 kg',s:'offen'}, {t:'50 % · 86,5 kg',s:'offen'}, {t:'75 % · 87,25 kg',s:'offen'}, {t:'Ziel · 88,0 kg',s:'nach Plan 16.12.'} ];
+    const gruen = 'color:oklch(0.42 0.13 150)', orange = 'color:oklch(0.48 0.15 60)';
+    const woche = [
+      { t:'Gewicht (Trend)', v:'±0,0 kg', soll:60, ist:4, barStyle:'background:oklch(0.70 0.14 70)', style:orange, iWaage:true, icoStyle:ICO.koerper },
+      { t:'Kniebeuge 1RM', v:'+2,5 kg', soll:40, ist:70, barStyle:'background:oklch(0.62 0.14 150)', style:gruen, iKraft:true, icoStyle:ICO.kraft },
+      { t:'Körperfett', v:'−0,3 %', soll:50, ist:55, barStyle:'background:oklch(0.62 0.14 150)', style:gruen, iKoerper:true, icoStyle:ICO.koerper },
+      { t:'Training', v:'3 / 4', soll:100, ist:75, barStyle:'background:oklch(0.70 0.14 70)', style:orange, iGew:true, icoStyle:ICO.gew }
+    ];
+    const sp = arr => arr.map((v,i) => (i*10)+','+(22 - v*20).toFixed(1)).join(' ');
+    const module = [
+      { n:'Ernährung', v:'92 %', s:'kcal-Treue 7 Tage', iNutri:true, icoStyle:ICO.nutri, dot:'background:oklch(0.65 0.14 150)', farbe:'oklch(0.55 0.13 60)', spark: sp([0.7,0.8,0.75,0.9,0.85,0.95,0.92,0.9]) },
+      { n:'Training', v:'3 / 4', s:'Einheiten diese Woche', iTrain:true, icoStyle:'background:oklch(0.95 0.04 290);color:oklch(0.50 0.16 290)', dot:'background:oklch(0.70 0.14 70)', farbe:'oklch(0.50 0.16 290)', spark: sp([1,1,0.75,1,1,0.75,1,0.75]) },
+      { n:'Recovery', v:'71', s:'Score Ø 7 Tage', iRecov:true, icoStyle:ICO.recov, dot:'background:oklch(0.62 0.18 25)', farbe:'oklch(0.45 0.10 160)', spark: sp([0.85,0.8,0.78,0.7,0.72,0.68,0.71,0.7]) },
+      { n:'Supplements', v:'88 %', s:'Einnahme-Treue', iSupp:true, icoStyle:ICO.supp, dot:'background:oklch(0.65 0.14 150)', farbe:'oklch(0.55 0.15 25)', spark: sp([0.9,0.85,0.9,0.88,0.92,0.85,0.88,0.88]) }
+    ];
+    const mk = (o) => { const id = o.id; return Object.assign({}, o, {
+      offen: s.open===id, editOffen: s.edit===id, confirm: s.confirm===id, pfeil: s.open===id?'▴':'▾', nichtHabit: !o.habit,
+      iKraft: o.kat==='kraft', iKoerper: o.kat==='koerper', iGew: o.kat==='gew', icoStyle: ICO[o.kat], farbeText: 'color:'+FARBE[o.kat], barFarbe: 'background:'+FARBE[o.kat],
+      pace: o.paceTxt, paceStyle: PACE[o.paceKey],
+      toggle: () => this.set({ open: s.open===id?null:id, edit:null }), edit: () => this.set({ edit: s.edit===id?null:id, open:null }),
+      askDel: () => this.set({ confirm:id }), cancel: () => this.set({ confirm:null }),
+      doDel: () => this.set({ confirm:null, edit:null, open:null, removed: Object.assign({}, s.removed, { [id]:true }), toast:'Messziel „'+o.titel+'“ gelöscht.' }) }); };
+    const habitPunkte = [1,1,1,1,0,1,1,1,1,1,1,0].map(v => ({ style: v ? 'background:oklch(0.62 0.10 160)' : 'background:oklch(0.90 0.003 270)' }));
+    const MOD = { train:{n:'Training',iTrain:true}, nutri:{n:'Ernährung',iNutri:true}, recov:{n:'Recovery',iRecov:true}, mess:{n:'Messungen',iMess:true} };
+    const alle = [
+      { gruppe:'Kraft', kat:'kraft', id:'squat', typ:'Kraft · 1RM', paceKey:'voraus', paceTxt:'voraus', titel:'Kniebeuge 1RM 160 kg', quelle:'Back Squat', ist:'140,0 kg', zielTxt:'160 kg', pct:20, frist:'bis 31.03.2027 · 174 Tage', fristWert:'31.03.2027', festLabel:'Übung · Messart', fest:'Back Squat · 1RM', habit:false, module:[MOD.train,MOD.nutri,MOD.recov],
+        pts:'30,110 90,104 150,96 210,92 270,85 330,80', prog:'330,80 410,55', zielY:'20', zielLabelY:'14', kz:[{l:'Start',v:'135,0 kg'},{l:'Tempo 4 Wo',v:'+1,2 kg/Wo'},{l:'voraussichtlich',v:'Feb 2027'}],
+        dp:[{dt:'06.10.',v:'140,0',q:'Training Push/Legs'},{dt:'29.09.',v:'137,5',q:'Training Legs'},{dt:'22.09.',v:'137,5',q:'Training Legs'},{dt:'15.09.',v:'135,0',q:'Training Legs'}] },
+      { gruppe:'Kraft', kat:'kraft', id:'dead', typ:'Kraft · 5 Wdh.', paceKey:'plan', paceTxt:'im Plan', titel:'Kreuzheben 150 kg × 5', quelle:'Deadlift', ist:'140,0 kg × 5', zielTxt:'150 kg', pct:50, frist:'ohne Frist', fristWert:'', festLabel:'Übung · Messart', fest:'Deadlift · 5 Wdh.', habit:false, module:[MOD.train,MOD.recov],
+        pts:'30,100 110,92 190,84 270,76 330,70', prog:'330,70 410,40', zielY:'30', zielLabelY:'24', kz:[{l:'Start',v:'130,0 kg'},{l:'Tempo 4 Wo',v:'+1,0 kg/Wo'},{l:'voraussichtlich',v:'Dez 2026'}],
+        dp:[{dt:'30.09.',v:'140 × 5',q:'Training Pull'},{dt:'23.09.',v:'137,5 × 5',q:'Training Pull'}] },
+      { gruppe:'Körper', kat:'koerper', id:'kfa', typ:'Körper · Körperfett', paceKey:'plan', paceTxt:'im Plan', titel:'Körperfett 14 %', quelle:'Navy-Messung', ist:'16,2 %', zielTxt:'14 %', pct:30, frist:'bis 01.03.2027 · 144 Tage', fristWert:'01.03.2027', festLabel:'Messgröße', fest:'Körperfett', habit:false, module:[MOD.mess,MOD.nutri],
+        pts:'30,40 110,48 190,58 270,62 330,70', prog:'330,70 410,95', zielY:'110', zielLabelY:'124', kz:[{l:'Start',v:'17,1 %'},{l:'Tempo 4 Wo',v:'−0,2 %/Wo'},{l:'voraussichtlich',v:'Jan 2027'}],
+        dp:[{dt:'02.10.',v:'16,2 %',q:'Messung Navy'},{dt:'18.09.',v:'16,5 %',q:'Messung Navy'},{dt:'04.09.',v:'16,8 %',q:'Messung Navy'}] },
+      { gruppe:'Gewohnheit', kat:'gew', id:'train', typ:'Gewohnheit · wöchentlich', paceKey:'hinter', paceTxt:'diese Woche offen', titel:'Training 4× pro Woche', quelle:'zählt deine Trainings', ist:'3 diese Woche', zielTxt:'4× / Wo', pct:75, frist:'wiederkehrend', fristWert:'–', festLabel:'Quelle', fest:'Trainings', habit:true, punkte: habitPunkte, module:[MOD.train],
+        pts:'30,60 70,40 110,40 150,40 190,80 230,40 270,40 310,40 350,40 390,60', prog:'', zielY:'40', zielLabelY:'34', kz:[{l:'Quote 12 Wo',v:'83 %'},{l:'längste Serie',v:'7 Wochen'},{l:'Ø pro Woche',v:'3,8'}],
+        dp:[{dt:'KW 40',v:'4',q:'4 Trainings'},{dt:'KW 39',v:'4',q:'4 Trainings'},{dt:'KW 38',v:'3',q:'3 Trainings'}] }
+    ].filter(o => !s.removed[o.id]);
+    const gruppen = ['Kraft','Körper','Gewohnheit'].map(n => ({ name:n, items: alle.filter(o=>o.gruppe===n).map(mk) })).filter(g => g.items.length);
+    const grau = 'color:oklch(0.40 0.005 270);background:oklch(0.95 0.003 270)';
+    const C = [
+      { id:'c1', status:'Frist abgelaufen', chipStyle:grau, kat:'kraft', titel:'Bankdrücken stabilisieren', info:'Frist 18.08.2026 · 99,3 von 120 kg · eingefroren', detail:'Start 105,0 kg (28.05.) · Stand bei Frist 99,3 kg · 0 % · Bester Wert 24.06. 104,0 kg. Verlauf und Datenpunkte wie bei aktiven Zielen.' },
+      { id:'c2', status:'Frist abgelaufen', chipStyle:grau, kat:'kraft', titel:'120 kg Bankdrücken bis Juli', info:'Frist 18.04.2026 · 112,0 von 120 kg', detail:'Start 105,0 kg · Stand bei Frist 112,0 kg · 47 %.' },
+      { id:'c3', status:'✓ erreicht', chipStyle:PACE.voraus, kat:'waage', titel:'Frühjahrs-Cut auf 84 kg', info:'erreicht 25.03.2026 · 84,0 kg', detail:'Start 88,6 kg (06.01.) · 11 Wochen · Moderate Cut.' },
+      { id:'c4', status:'beendet', chipStyle:grau, kat:'gew', titel:'Vier Cardio-Einheiten pro Woche', info:'beendet 02.05.2026', detail:'Wiederkehrend · Quote 58 % · beendet durch dich.' }
+    ].filter(o => !s.removed[o.id]).map(o => Object.assign({}, o, {
+      iKraft:o.kat==='kraft', iWaage:o.kat==='waage', iGew:o.kat==='gew', icoStyle: o.kat==='waage'?ICO.koerper:ICO[o.kat],
+      offen: s.closedOpenId===o.id, confirm: s.confirm===o.id,
+      pick: () => this.set({ closedOpenId: s.closedOpenId===o.id?null:o.id }),
+      askDel: () => this.set({ confirm:o.id }), cancel: () => this.set({ confirm:null }),
+      doDel: () => this.set({ confirm:null, removed: Object.assign({}, s.removed, { [o.id]:true }), toast:'„'+o.titel+'“ gelöscht.' }) }));
+    return { zustaende, st, zeitraeume, chart, wochen, meilensteine, woche, module, gruppen, toast: s.toast,
+      closed: C, closedCount: C.length, closedOpen: s.closedOpen, closedPfeil: s.closedOpen?'▴':'▾', toggleClosed: () => this.set({ closedOpen: !s.closedOpen }) };
+  }
+}
+</script>
+</body>
+</html>

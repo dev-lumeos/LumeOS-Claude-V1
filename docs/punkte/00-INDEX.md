@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 277 |
-| `laufend_codex` | 3 |
-| `laufend_claudecode` | 1 |
+| `todos` | 280 |
+| `laufend_codex` | 4 |
+| `laufend_claudecode` | 2 |
 | `erledigt` | 680 |
-| **gesamt** | **961** |
+| **gesamt** | **966** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 96
+## goals — 101
 
-### beauftragbar — 86
+### beauftragbar — 87
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -673,19 +673,20 @@
 | `G-607` | fehler | hoch | [Der Ankerplan rechnet aus dem Dauer-Anteil](erledigt/goals-g-0607-der-ankerplan-rechnet-aus-dem-dauer-anteil.md) | erledigt | — | G-608 |
 | `G-608` | fehler | hoch | [Die Stufenwochen sind im Programm editierbar - und am Schirm belegt](erledigt/goals-g-0608-die-stufenwochen-sind-im-programm-editierbar.md) | erledigt | — | G-609, G-610, G-611 |
 | `G-609` | fehler | hoch | [Die Strategie wird beim Phasenstart nicht durchgereicht](erledigt/goals-g-0609-die-strategie-wird-beim-phasenstart-nicht-durchgereicht.md) | erledigt | — | — |
-| `G-610` | fehler | mittel | [contest_prep ist in der App nicht anlegbar](erledigt/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md) | erledigt | — | G-612, G-619 |
+| `G-610` | fehler | mittel | [contest_prep ist in der App nicht anlegbar](erledigt/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md) | erledigt | — | G-612, G-619, G-626, G-628 |
 | `G-611` | fehler | mittel | [Ein Ziel laesst sich nicht loeschen](todos/goals-g-0611-ein-ziel-laesst-sich-nicht-loeschen.md) | offen | — | — |
 | `G-612` | entscheidung | hoch | [Drei Auswahlen auf einer Seite, und keine folgt dem Mockup](todos/goals-g-0612-drei-auswahlen-und-keine-ordnung.md) | offen | — | G-614, G-615 |
 | `G-613` | fehler | hoch | [Ein pausiertes Ziel laesst seine Phase laufen](laufend_codex/goals-g-0613-ein-pausiertes-ziel-laesst-seine-phase-laufen.md) | laeuft (codex) | — | G-622 |
 | `G-614` | fehler | hoch | [Der Strategiekatalog kennt seine Karte und seinen Mindestgrad](erledigt/goals-g-0614-der-strategiekatalog-kennt-karte-und-mindestgrad.md) | erledigt | — | G-616 |
-| `G-615` | fehler | hoch | [Der Planer legt Plaene vom Termin rueckwaerts an](erledigt/goals-g-0615-der-planer-legt-plaene-vom-termin-rueckwaerts-an.md) | erledigt | — | G-623, G-624 |
+| `G-615` | fehler | hoch | [Der Planer legt Plaene vom Termin rueckwaerts an](erledigt/goals-g-0615-der-planer-legt-plaene-vom-termin-rueckwaerts-an.md) | erledigt | — | G-623, G-624, G-629 |
 | `G-616` | fehler | mittel | [Der G-536-Test ist rot und steht nicht in der Kette](todos/goals-g-0616-der-g536-test-ist-rot-und-steht-nicht-in-der-kette.md) | offen | — | — |
-| `G-617` | fehler | hoch | [Ein Kraftziel findet seine Uebung nur ueber den Titel](laufend_codex/goals-g-0617-ein-kraftziel-findet-seine-uebung-nur-ueber-den-titel.md) | laeuft (codex) | — | G-618, G-620, G-621 |
+| `G-617` | fehler | hoch | [Ein Kraftziel findet seine Uebung nur ueber den Titel](laufend_codex/goals-g-0617-ein-kraftziel-findet-seine-uebung-nur-ueber-den-titel.md) | laeuft (codex) | — | G-618, G-620, G-621, G-625 |
 | `G-619` | fehler | niedrig | [Das Tempo im Anlegemodal kennt nur Prozent Koerpergewicht](todos/goals-g-0619-das-tempo-im-anlegemodal-kennt-nur-prozent.md) | offen | — | — |
 | `G-623` | aufgabe | mittel | [Im Planer laesst sich eine einzelne Phase nicht verschieben](todos/goals-g-0623-im-planer-laesst-sich-eine-phase-nicht-verschieben.md) | offen | — | — |
 | `G-624` | fehler | mittel | [Custom und Expert BB Jahreszyklus haben im Planer keine Vorschau](todos/goals-g-0624-custom-und-expert-bb-haben-keine-vorschau.md) | offen | — | — |
+| `G-626` | aufgabe | hoch | [Grenzen nach Erfahrungsgrad](laufend_codex/goals-g-0626-grenzen-nach-erfahrungsgrad.md) | vorbereitet (codex) | — | — |
 
-### wartet auf Blocker — 10
+### wartet auf Blocker — 14
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -699,6 +700,10 @@
 | `G-620` | fehler | niedrig | [Zeit- und Pace-Ziele messen in die falsche Richtung](todos/goals-g-0620-zeit-und-pace-ziele-messen-in-die-falsche-richtung.md) | offen | G-617 | — |
 | `G-621` | aufgabe | mittel | [Ein Messziel kann der Richtung widersprechen, ohne dass es jemand sagt](todos/goals-g-0621-ein-messziel-kann-der-richtung-widersprechen.md) | offen | G-617 | — |
 | `G-622` | fehler | hoch | [Ohne aktives Ziel gibt es keine Tagesziele](laufend_codex/goals-g-0622-ohne-aktives-ziel-gibt-es-keine-tagesziele.md) | laeuft (codex) | G-613 | — |
+| `G-625` | aufgabe | hoch | [Ein Plan ist der Inhalt des steuernden Ziels](todos/goals-g-0625-ein-plan-ist-der-inhalt-des-steuernden-ziels.md) | offen | G-617 | G-627 |
+| `G-627` | aufgabe | mittel | [Die wöchentliche Anpassung hat kein Protokoll](todos/goals-g-0627-die-woechentliche-anpassung-hat-kein-protokoll.md) | offen | G-625 | — |
+| `G-628` | aufgabe | hoch | [Ziel setzen nach dem Entwurf](laufend_claudecode/goals-g-0628-ziel-setzen-nach-dem-entwurf.md) | laeuft (claudecode) | G-626, G-617 | — |
+| `G-629` | aufgabe | hoch | [Die Phase engine zeigt Pläne](todos/goals-g-0629-die-phase-engine-zeigt-plaene.md) | offen | G-625, G-626 | — |
 
 ## coach — 58
 

@@ -28,3 +28,6 @@ beruehrt:
 
 Denselben Schalter wie beim Phasenstart (G-565) ins Modal, dieselbe Pruefung
 (pruefeRate). Kein zweiter Umrechnungsweg.
+## Aufgegangen - 2026-10-08
+
+In G-628: Eigene Werte ab Pro ersetzen den kcal-Schalter.

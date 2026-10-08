@@ -31,3 +31,9 @@ Messen, ob die Datenbank einen Loesch- oder Archivweg hat (Status,
 Funktion, Kaskaden auf Phasen, Programme, Zielwerte, Snapshots), und
 was das Mockup vorsieht. Danach entscheiden: echtes Loeschen oder
 Archivieren mit Historie.
+
+## Entschieden - 2026-10-08, Tom (Dossier 9, Fragen 1 und 2)
+
+`[read]` Tom 08.10.2026 12:16: „dieser stand ist fuer mich vertretbar kannst umsetzen“. Vorlage: `docs/spezifikation/goals-ziel-setzen/` (Dossier Kapitel 8/9 gilt vor dem Entwurf).
+
+Frist abgelaufen oder Ziel erreicht: das Ziel wird eingefroren (Status sichtbar, keine weitere Wertung), Details bleiben lesbar; Aktionen Neustart (neue Eingabe, vorbelegt) und Löschen. Ein eingefrorenes steuerndes Ziel heißt: Erhaltung mit Warnung (G-622). Dazu Archivieren für abgeschlossene Ziele. Löschen eines Ziels mit Verlauf: Bestätigung, Hinweis auf Beenden.

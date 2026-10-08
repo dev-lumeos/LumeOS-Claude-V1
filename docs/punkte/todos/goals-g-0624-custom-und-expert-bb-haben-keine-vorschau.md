@@ -31,3 +31,6 @@ aber der Nutzer sieht nicht, was er bekommt.
 Messen, was der Katalog fuer beide traegt. Expert BB: Jahreszyklus aus dem
 Mockup `module-goals-editor.jsx` (Bausteine); Custom: der Nutzer setzt die
 Phasen selbst zusammen. Daten (Codex) vor Oberflaeche.
+## Aufgegangen - 2026-10-08
+
+In G-629 und G-625 (Phasen mit Programmwerten oder eigenen Werten).
