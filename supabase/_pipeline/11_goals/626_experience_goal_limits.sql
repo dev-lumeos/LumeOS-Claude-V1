@@ -88,7 +88,7 @@ WHERE requirements ? 'min_experience';
 COMMENT ON TABLE goals.experience_goal_limits IS
   'G-626: freigegebene Grenzen aus Dossier 8.2; NULL bedeutet keine Schwelle. Programm-Mindestgrad bleibt goal_strategies.min_erfahrung.';
 COMMENT ON COLUMN goals.goal_strategies.min_erfahrung IS
-  'G-614/G-626: einziger Mindestgrad fuer Auswahl und Pruefung; drei widerspruechliche historische requirements.min_experience-Schluessel wurden entfernt.';
+  'G-614/G-626: einziger Mindestgrad für Auswahl und Prüfung; drei widersprüchliche historische requirements.min_experience-Schlüssel wurden entfernt.';
 
 CREATE TRIGGER experience_goal_limits_touch_updated_at
   BEFORE UPDATE ON goals.experience_goal_limits
@@ -145,17 +145,17 @@ BEGIN
   END IF;
   IF p_richtung NOT IN ('abnehmen', 'halten', 'aufbauen') OR p_richtung IS NULL THEN
     RETURN QUERY SELECT 'richtung_fehlt'::text, 'sperre'::text,
-      'Waehle Abnehmen, Halten oder Aufbauen.'::text;
+      'Wähle Abnehmen, Halten oder Aufbauen.'::text;
     RETURN;
   END IF;
   IF p_start_kg IS NULL OR p_start_kg <= 0 OR p_startdatum IS NULL THEN
     RETURN QUERY SELECT 'start_fehlt'::text, 'sperre'::text,
-      'Startgewicht und Startdatum muessen vorliegen.'::text;
+      'Startgewicht und Startdatum müssen vorliegen.'::text;
     RETURN;
   END IF;
   IF (p_programm_code IS NULL) = (p_eigene_werte IS NULL) THEN
     RETURN QUERY SELECT 'vorgehen_fehlt'::text, 'sperre'::text,
-      'Waehle genau ein Programm oder eigene Werte.'::text;
+      'Wähle genau ein Programm oder eigene Werte.'::text;
     RETURN;
   END IF;
 
@@ -163,18 +163,18 @@ BEGIN
     SELECT * INTO v_program FROM goals.goal_strategies WHERE code = p_programm_code;
     IF NOT FOUND THEN
       RETURN QUERY SELECT 'programm_unbekannt'::text, 'sperre'::text,
-        'Das gewaehlte Programm ist nicht im Katalog.'::text;
+        'Das gewählte Programm ist nicht im Katalog.'::text;
       RETURN;
     END IF;
     IF v_program.auswahl_gruppe <> p_richtung THEN
       RETURN QUERY SELECT 'programm_richtung'::text, 'sperre'::text,
-        'Das Programm gehoert nicht zu dieser Richtung.'::text;
+        'Das Programm gehört nicht zu dieser Richtung.'::text;
     END IF;
     SELECT grade_rank INTO v_min_rank FROM goals.experience_goal_limits
     WHERE experience_level = v_program.min_erfahrung;
     IF v_limit.grade_rank < v_min_rank THEN
       RETURN QUERY SELECT 'programm_mindestgrad'::text, 'sperre'::text,
-        format('%s ist erst ab %s waehlbar.', v_program.label, v_program.min_erfahrung);
+        format('%s ist erst ab %s wählbar.', v_program.label, v_program.min_erfahrung);
     END IF;
     v_rate := coalesce(p_tempo_override, v_program.weight_change_target_percent,
       CASE WHEN p_richtung = 'halten' THEN 0 END);
@@ -187,7 +187,7 @@ BEGIN
   ELSE
     IF NOT v_limit.custom_values_allowed THEN
       RETURN QUERY SELECT 'eigene_werte_grad'::text, 'sperre'::text,
-        'Eigene Werte sind erst ab Pro waehlbar.'::text;
+        'Eigene Werte sind erst ab Pro wählbar.'::text;
     END IF;
     IF jsonb_typeof(p_eigene_werte) IS DISTINCT FROM 'object'
        OR jsonb_typeof(p_eigene_werte -> 'tempo_pct_kg_woche') IS DISTINCT FROM 'number'
@@ -202,13 +202,13 @@ BEGIN
     IF v_tempo < 0 OR (p_richtung = 'halten' AND v_tempo <> 0)
        OR (p_eigene_werte ->> 'protein_g_kg')::numeric <= 0 OR v_fett <= 0 THEN
       RETURN QUERY SELECT 'eigene_werte_ungueltig'::text, 'sperre'::text,
-        'Tempo und Makrowerte muessen zur Richtung passen und gueltig sein.'::text;
+        'Tempo und Makrowerte müssen zur Richtung passen und gültig sein.'::text;
       RETURN;
     END IF;
     IF p_eigene_werte ? 'kcal' THEN
       IF jsonb_typeof(p_eigene_werte -> 'kcal') <> 'number' THEN
         RETURN QUERY SELECT 'kalorien_ungueltig'::text, 'sperre'::text,
-          'Kalorien muessen eine Zahl sein.'::text;
+          'Kalorien müssen eine Zahl sein.'::text;
         RETURN;
       END IF;
       v_kcal := (p_eigene_werte ->> 'kcal')::numeric;
@@ -219,7 +219,7 @@ BEGIN
 
   IF v_rate IS NULL THEN
     RETURN QUERY SELECT 'tempo_fehlt'::text, 'sperre'::text,
-      'Fuer dieses Vorgehen fehlt ein Wochen-Tempo.'::text;
+      'Für dieses Vorgehen fehlt ein Wochen-Tempo.'::text;
     RETURN;
   END IF;
   IF (p_richtung = 'abnehmen' AND v_rate >= 0)
@@ -232,12 +232,12 @@ BEGIN
 
   IF p_ziel_kg IS NOT NULL AND p_ziel_kg <= 0 THEN
     RETURN QUERY SELECT 'zielgewicht_ungueltig'::text, 'sperre'::text,
-      'Das Zielgewicht muss groesser als null sein.'::text;
+      'Das Zielgewicht muss größer als null sein.'::text;
   END IF;
   IF p_richtung = 'abnehmen' AND p_ziel_kg >= p_start_kg
      OR p_richtung = 'aufbauen' AND p_ziel_kg <= p_start_kg THEN
     RETURN QUERY SELECT 'zielrichtung'::text, 'sperre'::text,
-      'Das Zielgewicht liegt gegen die gewaehlte Richtung.'::text;
+      'Das Zielgewicht liegt gegen die gewählte Richtung.'::text;
   END IF;
   IF p_richtung = 'halten' AND p_ziel_kg IS NOT NULL THEN
     RETURN QUERY SELECT 'halten_ohne_zielgewicht'::text, 'sperre'::text,
@@ -260,7 +260,7 @@ BEGIN
   IF p_ziel_kg IS NOT NULL AND p_zieldatum IS NOT NULL AND v_wochen > 0
      AND abs(p_ziel_kg - p_start_kg) / p_start_kg * 100 / v_wochen > v_tempo + 0.0001 THEN
     RETURN QUERY SELECT 'vorgehen_zu_langsam'::text, 'sperre'::text,
-      'Das gewaehlte Tempo erreicht das Zielgewicht nicht bis zum Datum.'::text;
+      'Das gewählte Tempo erreicht das Zielgewicht nicht bis zum Datum.'::text;
   END IF;
   v_ziel := coalesce(p_ziel_kg, CASE WHEN v_wochen IS NOT NULL
     THEN p_start_kg + p_start_kg * v_rate / 100 * v_wochen END);
@@ -273,30 +273,30 @@ BEGIN
   ELSIF v_limit.pace_block_above_pct IS NOT NULL
       AND v_tempo > v_limit.pace_block_above_pct THEN
     RETURN QUERY SELECT 'tempo'::text, 'sperre'::text,
-      format('Tempo %s %% pro Woche liegt ueber der Grenze fuer %s.', v_tempo, p_erfahrung);
+      format('Tempo %s %% pro Woche liegt über der Grenze für %s.', v_tempo, p_erfahrung);
   ELSIF v_limit.pace_warn_above_pct IS NOT NULL
       AND v_tempo > v_limit.pace_warn_above_pct THEN
     RETURN QUERY SELECT 'tempo'::text, 'warnung'::text,
-      format('Tempo %s %% pro Woche braucht eine Bestaetigung.', v_tempo);
+      format('Tempo %s %% pro Woche braucht eine Bestätigung.', v_tempo);
   END IF;
 
   IF p_richtung = 'abnehmen' AND v_wochen IS NOT NULL THEN
     IF v_limit.diet_block_after_weeks IS NOT NULL
        AND v_wochen > v_limit.diet_block_after_weeks THEN
       RETURN QUERY SELECT 'diaetdauer'::text, 'sperre'::text,
-        format('Diaet ueber %s Wochen am Stueck ist fuer %s gesperrt.',
+        format('Diät über %s Wochen am Stück ist für %s gesperrt.',
           v_limit.diet_block_after_weeks, p_erfahrung);
     ELSIF v_limit.diet_warn_after_weeks IS NOT NULL
        AND v_wochen > v_limit.diet_warn_after_weeks THEN
       RETURN QUERY SELECT 'diaetdauer'::text, 'warnung'::text,
-        format('Diaet ueber %s Wochen am Stueck braucht eine Bestaetigung.',
+        format('Diät über %s Wochen am Stück braucht eine Bestätigung.',
           v_limit.diet_warn_after_weeks);
     END IF;
     IF p_programm_code IS NOT NULL AND v_program.max_duration_weeks IS NOT NULL
        AND v_wochen > v_program.max_duration_weeks THEN
       RETURN QUERY SELECT 'programm_dauer'::text,
         CASE WHEN v_limit.grade_rank >= 2 THEN 'warnung' ELSE 'sperre' END::text,
-        format('%s ist auf hoechstens %s Wochen ausgelegt.',
+        format('%s ist auf höchstens %s Wochen ausgelegt.',
           v_program.label, v_program.max_duration_weeks);
     END IF;
   END IF;
@@ -312,7 +312,7 @@ BEGIN
     END IF;
   ELSIF p_richtung <> 'halten' THEN
     RETURN QUERY SELECT 'bmi_nicht_pruefbar'::text, 'sperre'::text,
-      'Zielgewicht und Groesse fehlen fuer die BMI-Pruefung.'::text;
+      'Zielgewicht und Größe fehlen für die BMI-Prüfung.'::text;
   END IF;
 
   IF v_kcal IS NULL AND p_tdee_kcal IS NOT NULL AND p_tdee_kcal > 0 THEN
@@ -320,7 +320,7 @@ BEGIN
   END IF;
   IF v_kcal IS NULL THEN
     RETURN QUERY SELECT 'kalorien_nicht_pruefbar'::text, 'sperre'::text,
-      'Ohne berechnete TDEE oder eigene Kalorien ist die Kaloriengrenze nicht pruefbar.'::text;
+      'Ohne berechnete TDEE oder eigene Kalorien ist die Kaloriengrenze nicht prüfbar.'::text;
   ELSIF p_geschlecht IN ('male', 'female') THEN
     v_kcal_warn := CASE p_geschlecht WHEN 'male' THEN v_limit.kcal_male_warn_below
       ELSE v_limit.kcal_female_warn_below END;
@@ -328,27 +328,27 @@ BEGIN
       ELSE v_limit.kcal_female_block_below END;
     IF v_kcal_block IS NOT NULL AND v_kcal < v_kcal_block THEN
       RETURN QUERY SELECT 'kalorien'::text, 'sperre'::text,
-        format('%s kcal liegen unter der Grenze fuer %s.', v_kcal, p_erfahrung);
+        format('%s kcal liegen unter der Grenze für %s.', v_kcal, p_erfahrung);
     ELSIF v_kcal_warn IS NOT NULL AND v_kcal < v_kcal_warn THEN
       RETURN QUERY SELECT 'kalorien'::text, 'warnung'::text,
         format('%s kcal liegen unter dem Orientierungswert.', v_kcal);
     END IF;
   ELSE
     RETURN QUERY SELECT 'kalorien_geschlecht'::text, 'warnung'::text,
-      'Ohne maennlich/weiblich ist die geschlechtsspezifische Kaloriengrenze nicht pruefbar.'::text;
+      'Ohne männlich/weiblich ist die geschlechtsspezifische Kaloriengrenze nicht prüfbar.'::text;
   END IF;
   IF p_eigene_werte IS NOT NULL AND v_fett IS NOT NULL
      AND v_limit.custom_fat_warn_below_g_kg IS NOT NULL
      AND v_fett < v_limit.custom_fat_warn_below_g_kg THEN
     RETURN QUERY SELECT 'fett_eigene_werte'::text, 'warnung'::text,
-      format('Fett unter %s g/kg braucht eine Bestaetigung.',
+      format('Fett unter %s g/kg braucht eine Bestätigung.',
         v_limit.custom_fat_warn_below_g_kg);
   END IF;
 END;
 $$;
 
 COMMENT ON FUNCTION goals.ziel_grenzen_pruefen(text,text,numeric,numeric,date,date,text,jsonb,text,numeric,numeric,numeric) IS
-  'G-626: eine Befundliste fuer Vorschau und Schreibwache. Tempo, Dauer, BMI, Kalorien und eigene Fettwerte kommen aus experience_goal_limits; Strategie-Mindestgrad und Warnungen aus goal_strategies.';
+  'G-626: eine Befundliste für Vorschau und Schreibwache. Tempo, Dauer, BMI, Kalorien und eigene Fettwerte kommen aus experience_goal_limits; Strategie-Mindestgrad und Warnungen aus goal_strategies.';
 REVOKE ALL ON FUNCTION goals.ziel_grenzen_pruefen(text,text,numeric,numeric,date,date,text,jsonb,text,numeric,numeric,numeric)
   FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION goals.ziel_grenzen_pruefen(text,text,numeric,numeric,date,date,text,jsonb,text,numeric,numeric,numeric)

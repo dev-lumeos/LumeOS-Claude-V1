@@ -167,11 +167,11 @@ CREATE TRIGGER g626_guard_controlling_goal_update
   FOR EACH ROW EXECUTE FUNCTION goals.g626_guard_controlling_goal_update();
 
 COMMENT ON FUNCTION goals.g626_guard_controlling_phase() IS
-  'G-626: Phasenschreibweg nutzt ziel_grenzen_pruefen; Sperren werden abgewiesen, Warnungen brauchen bestaetigte stabile Schluessel im parameters-Array.';
+  'G-626: Phasenschreibweg nutzt ziel_grenzen_pruefen; Sperren werden abgewiesen, Warnungen brauchen bestätigte stabile Schlüssel im parameters-Array.';
 REVOKE ALL ON FUNCTION goals.g626_guard_controlling_phase()
   FROM PUBLIC, anon, authenticated;
 COMMENT ON FUNCTION goals.g626_guard_controlling_goal_update() IS
-  'G-626: Zielaenderungen einer laufenden Gewichtsphase pruefen dieselben Grenzen und Warnbestaetigungen erneut.';
+  'G-626: Zieländerungen einer laufenden Gewichtsphase prüfen dieselben Grenzen und Warnbestätigungen erneut.';
 REVOKE ALL ON FUNCTION goals.g626_guard_controlling_goal_update()
   FROM PUBLIC, anon, authenticated;
 
