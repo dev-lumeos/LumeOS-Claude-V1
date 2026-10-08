@@ -696,7 +696,7 @@
 | `G-618` | aufgabe | mittel | [Der Reiter Goals trennt das steuernde Ziel von den messenden](todos/goals-g-0618-der-reiter-goals-trennt-steuerndes-und-messende-ziele.md) | offen | G-617 | — |
 | `G-620` | fehler | niedrig | [Zeit- und Pace-Ziele messen in die falsche Richtung](todos/goals-g-0620-zeit-und-pace-ziele-messen-in-die-falsche-richtung.md) | offen | G-617 | — |
 | `G-621` | aufgabe | mittel | [Ein Messziel kann der Richtung widersprechen, ohne dass es jemand sagt](todos/goals-g-0621-ein-messziel-kann-der-richtung-widersprechen.md) | offen | G-617 | — |
-| `G-622` | fehler | hoch | [Ohne aktives Ziel gibt es keine Tagesziele](laufend_codex/goals-g-0622-ohne-aktives-ziel-gibt-es-keine-tagesziele.md) | vorbereitet (codex) | G-613 | — |
+| `G-622` | fehler | hoch | [Ohne aktives Ziel gibt es keine Tagesziele](laufend_codex/goals-g-0622-ohne-aktives-ziel-gibt-es-keine-tagesziele.md) | laeuft (codex) | G-613 | — |
 
 ## coach — 58
 

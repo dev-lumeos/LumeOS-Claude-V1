@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: hoch
 angelegt: 2026-10-08
+agent: codex
+beauftragt: 2026-10-08
 
 braucht: [G-613]
 kind_von: G-613
