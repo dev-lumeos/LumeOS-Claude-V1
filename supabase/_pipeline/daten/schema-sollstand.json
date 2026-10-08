@@ -2596,6 +2596,20 @@
     },
     {
       "schema": "goals",
+      "name": "goal_program_events",
+      "schritt": "625_goal_plan_model",
+      "rls": true,
+      "policies": ["ALL"],
+      "grants": {
+        "authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+        "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]
+      },
+      "grants_herkunft": "625_goal_plan_model.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": ["id", "program_id", "name", "kind", "event_date", "created_at", "updated_at"]
+    },
+    {
+      "schema": "goals",
       "name": "phase_transition_responses",
       "schritt": "422_schema",
       "rls": true,

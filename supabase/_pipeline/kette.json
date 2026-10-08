@@ -3756,6 +3756,76 @@
       "kind": "tsx",
       "creates": "G-626: Gradfaelle, Gegenrichtung, Warnbestaetigung und Schreibsperre.",
       "depends_on": ["626_controlling_goal_write_guard", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "625_goal_plan_model",
+      "path": "supabase/_pipeline/11_goals/625_goal_plan_model.sql",
+      "kind": "sql",
+      "creates": "G-625: ein Plan je Steuerziel, aktiver Plan je Nutzer, Positionen mit genau einer Quelle, Termine und bestaetigter Backfill.",
+      "depends_on": ["626_experience_goal_limits_probe", "617_measurement_goal_expansion"]
+    },
+    {
+      "id": "625_goal_plan_runtime",
+      "path": "supabase/_pipeline/11_goals/625_goal_plan_runtime.sql",
+      "kind": "sql",
+      "creates": "G-625: Plan-, Positions- und Terminaktionen sowie automatische Position bei Phasenstart.",
+      "depends_on": ["625_goal_plan_model"]
+    },
+    {
+      "id": "625_goal_plan_execution",
+      "path": "supabase/_pipeline/11_goals/625_goal_plan_execution.sql",
+      "kind": "sql",
+      "creates": "G-625: Positionsstart ueber goal_phase_start und damit G-626.",
+      "depends_on": ["625_goal_plan_runtime"]
+    },
+    {
+      "id": "625_goal_plan_limits",
+      "path": "supabase/_pipeline/11_goals/625_goal_plan_limits.sql",
+      "kind": "sql",
+      "creates": "G-625: derselbe G-626-Pruefweg bewertet Planprogramme und eigene Maximaldauer.",
+      "depends_on": ["625_goal_plan_execution", "626_experience_goal_limits"]
+    },
+    {
+      "id": "625_goal_plan_phase_guard",
+      "path": "supabase/_pipeline/11_goals/625_goal_plan_phase_guard.sql",
+      "kind": "sql",
+      "creates": "G-625: mehrphasige Planarten durchlaufen ebenfalls ziel_grenzen_pruefen und Bestaetigungswachen.",
+      "depends_on": ["625_goal_plan_limits", "626_controlling_goal_write_guard"]
+    },
+    {
+      "id": "625_goal_plan_goal_update_guard",
+      "path": "supabase/_pipeline/11_goals/625_goal_plan_goal_update_guard.sql",
+      "kind": "sql",
+      "creates": "G-625: spaetere Zielaenderungen einer aktiven Planphase durchlaufen G-626.",
+      "depends_on": ["625_goal_plan_phase_guard"]
+    },
+    {
+      "id": "625_goal_plan_custom_calculation",
+      "path": "supabase/_pipeline/11_goals/625_goal_plan_custom_calculation.sql",
+      "kind": "sql",
+      "creates": "G-625: TDEE, Protein und Fett einer eigenen Phase aus der bestehenden Zielrechnung und eigenen Werten.",
+      "depends_on": ["625_goal_plan_goal_update_guard"]
+    },
+    {
+      "id": "625_goal_plan_daily_targets",
+      "path": "supabase/_pipeline/11_goals/625_goal_plan_daily_targets.sql",
+      "kind": "sql",
+      "creates": "G-625: Tagesreferenzen lesen eigene Werte der aktiven Phase.",
+      "depends_on": ["625_goal_plan_custom_calculation", "622_daily_reference_maintenance"]
+    },
+    {
+      "id": "625_goal_strategy_plan_values",
+      "path": "supabase/_pipeline/11_goals/625_goal_strategy_plan_values.sql",
+      "kind": "sql",
+      "creates": "G-625: Fett-, Cardio- und Refeed-Felder sowie Eigene Werte in jeder Auswahlgruppe.",
+      "depends_on": ["625_goal_plan_daily_targets", "626_experience_goal_limits"]
+    },
+    {
+      "id": "625_goal_plan_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g625-plans.test.ts",
+      "kind": "tsx",
+      "creates": "G-625: Backfill, Aktivslot, Quellenwahl, Eigene Werte, G-626 und Tagesreferenz.",
+      "depends_on": ["625_goal_strategy_plan_values", "a86_testdaten_einspielen"]
     }
   ]
 }
