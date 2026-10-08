@@ -42,7 +42,9 @@
 import * as React from 'react'
 import { Card, Icon, Pill, Row } from '@lumeos/ui'
 
-import type { Meilenstein, ZielFortschritt } from '../../../lib/goals/lesen'
+import type { Meilenstein, ZielFortschritt, Zielphase } from '../../../lib/goals/lesen'
+import type { Strategie } from '../../../lib/goals/strategie-read'
+import { empfohlenDanach, richtungen } from '../../../lib/goals/zielwahl'
 // G-79: Bearbeiten, Prioritaet, Historie.
 import { ZielEditor } from './ziel-editor'
 import {
@@ -99,9 +101,14 @@ function bisFrist(frist: string | null, stichtag: string): string {
   return tage > 0 ? `noch ${tage} Tage` : `${Math.abs(tage)} Tage vorbei`
 }
 
-function ZielKarte({ g, stichtag, onBearbeiten, umsortieren }: {
+/** G-610: was das Ziel gewaehlt hat — Richtung, Variante, empfohlener naechster Schritt. */
+type Wahl = { richtung: string | null; variante: Strategie; danach: Strategie[] }
+
+function ZielKarte({ g, stichtag, onBearbeiten, umsortieren, wahl }: {
   g: ZielFortschritt
   stichtag: string
+  /** G-610: aus der offenen Phase des Ziels (`strategie_code`). */
+  wahl?: Wahl | null
   /** G-79: `undefined` blendet den Stift aus (z. B. in der Historie). */
   onBearbeiten?: () => void
   /**
@@ -137,7 +144,7 @@ function ZielKarte({ g, stichtag, onBearbeiten, umsortieren }: {
           <Icon name="goals" className="v2-ic v2-ic-lg" />
         </div>
 
-        <div style={{ flex: 1, minWidth: 0 }}>
+        <div data-zielkarte={g.goal_id} style={{ flex: 1, minWidth: 0 }}>
           <div style={{
             display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap',
           }}>
@@ -164,6 +171,22 @@ function ZielKarte({ g, stichtag, onBearbeiten, umsortieren }: {
                   ohne Unterart
                 </span>
               )}
+            {/* ══ G-610: Richtung und Variante, aus der Phase ══════════
+                `[read]` **Aus `goal_phases.strategie_code`** (seit G-609
+                gespeichert) — nicht aus der Unterart geraten. */}
+            {wahl && (
+              <span data-ziel-richtung={wahl.variante.code}>
+                <Pill variant="acc">
+                  {wahl.richtung ? `${wahl.richtung} · ` : ''}{wahl.variante.label}
+                </Pill>
+              </span>
+            )}
+            {wahl && wahl.danach.length > 0 && (
+              <span className="v2-dim" data-ziel-naechster style={{ fontSize: 10.5 }}
+                    title={wahl.danach.map(d => d.description).join(' · ')}>
+                danach empfohlen: {wahl.danach.map(d => d.label).join(', ')}
+              </span>
+            )}
             {g.is_primary && <Pill variant="acc">primaer</Pill>}
             {/* G-79: die Rangzahl steht sichtbar — sie bestimmt die
                 Reihenfolge dieser Liste. Bis heute stand nur die
@@ -295,11 +318,22 @@ function ZielKarte({ g, stichtag, onBearbeiten, umsortieren }: {
   )
 }
 
-export function ZielKarten({ ziele, meilensteine, stichtag }: {
+export function ZielKarten({ ziele, meilensteine, stichtag, phasen = [], strategien = [] }: {
   ziele: ZielFortschritt[]
   meilensteine: Meilenstein[]
   stichtag: string
+  /** G-610: die offenen Phasen — je Ziel eine (G-538). */
+  phasen?: Zielphase[]
+  strategien?: Strategie[]
 }) {
+  // ══ G-610: „danach grafisch in den Reiter" ═══════════════════════
+  const wahlVon = (goalId: string): Wahl | null => {
+    const code = phasen.find(p => p.goal_id === goalId)?.strategie_code
+    const variante = code ? strategien.find(s => s.code === code) : undefined
+    if (!variante) return null
+    const r = richtungen(strategien).find(x => x.gruppe === variante.auswahl_gruppe)
+    return { richtung: r?.standard.label ?? null, variante, danach: empfohlenDanach(variante, strategien) }
+  }
   const abweichend = meilensteine.filter(
     m => m.stored_status && m.computed_status && m.stored_status !== m.computed_status)
 
@@ -361,6 +395,7 @@ export function ZielKarten({ ziele, meilensteine, stichtag }: {
               )
               : (
                 <ZielKarte key={g.goal_id} g={g} stichtag={stichtag}
+                           wahl={wahlVon(g.goal_id)}
                            onBearbeiten={() => setBearbeitet(g.goal_id)}
                            umsortieren={g.status === 'active' && plaetze.length > 1
                              ? {

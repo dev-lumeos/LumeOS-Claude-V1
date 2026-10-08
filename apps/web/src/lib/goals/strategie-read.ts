@@ -111,6 +111,15 @@ export type Strategie = {
   icon: string
   category: string
   tier: 'simple' | 'advanced'
+  /**
+   * `[cmd]` **G-614 (live seit 2026-10-07):** die Richtung im Modal —
+   * CHECK `abnehmen | halten | aufbauen | uebergang | plan`.
+   */
+  auswahl_gruppe: string | null
+  /** `[cmd]` **G-614:** ab welchem Grad waehlbar — CHECK wie `profiles.experience_level`. */
+  min_erfahrung: string | null
+  /** `[cmd]` **G-614:** die vorgewaehlte Variante je Richtung (`lose`, `maintain`, `gain`). */
+  standard: boolean
   tdee_modifier: number | null
   weight_change_target_percent: number | null
   max_duration_weeks: number | null
@@ -226,6 +235,9 @@ function zeile(r: Record<string, unknown>): Strategie {
     icon: String(r.icon),
     category: String(r.category),
     tier: r.tier === 'simple' ? 'simple' : 'advanced',
+    auswahl_gruppe: typeof r.auswahl_gruppe === 'string' ? r.auswahl_gruppe : null,
+    min_erfahrung: typeof r.min_erfahrung === 'string' ? r.min_erfahrung : null,
+    standard: r.standard === true,
     tdee_modifier: zahl(r.tdee_modifier),
     weight_change_target_percent: zahl(r.weight_change_target_percent),
     max_duration_weeks: zahl(r.max_duration_weeks),

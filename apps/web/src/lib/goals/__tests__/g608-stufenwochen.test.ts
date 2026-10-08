@@ -101,7 +101,8 @@ describe('G-608 — Lese- und Schreibweg', () => {
   })
 
   it('Zeitachse und Editor sagen die Abweichung an', () => {
-    assert.match(lies(join(GOALS, 'phasen-zeitachse.tsx')), /<Abweichung stufen=\{stufen\} \/>/)
+    // G-610: die Zeitachse reicht zusaetzlich das verschobene Ende mit.
+    assert.match(lies(join(GOALS, 'phasen-zeitachse.tsx')), /<Abweichung stufen=\{stufen\}[^>]*\/>/)
     assert.match(lies(join(GOALS, 'phasen-editor-echt.tsx')), /<Abweichung stufen=\{stufen\} \/>/)
   })
 })

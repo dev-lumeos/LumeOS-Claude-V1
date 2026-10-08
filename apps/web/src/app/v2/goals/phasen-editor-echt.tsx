@@ -842,15 +842,30 @@ export function monateAusSpanne(s: string): number {
  * da — **sichtbar, nicht still korrigiert.** Der Plan rechnet mit den
  * eingetragenen Wochen.
  */
-export function Abweichung({ stufen }: { stufen: Stufenplan | null }) {
-  if (!stufen || !stufen.abweichung || stufen.summe === null) return null
-  const gesamt = stufen.summe - stufen.abweichung
+export function Abweichung({ stufen, verschobenAuf = null }: {
+  stufen: Stufenplan | null
+  /** G-610: das neue Ende, wenn der Plan sonst vor dem Zielbeginn laege. */
+  verschobenAuf?: string | null
+}) {
+  if (!stufen || stufen.summe === null) return null
+  if (!stufen.abweichung && !verschobenAuf) return null
+  const gesamt = stufen.summe - (stufen.abweichung ?? 0)
   return (
-    <div className="v2-dim" data-stufen-abweichung={stufen.abweichung}
+    <div className="v2-dim" data-stufen-abweichung={stufen.abweichung ?? 0}
          style={{ fontSize: 10.5, marginTop: 6, color: 'var(--warn)' }}>
-      Die Stufen ergeben {stufen.summe} Wochen, die Gesamtdauer ist {gesamt} —
-      {' '}{Math.abs(stufen.abweichung)} Woche{Math.abs(stufen.abweichung) === 1 ? '' : 'n'}
-      {stufen.abweichung > 0 ? ' mehr' : ' weniger'}. Gerechnet wird mit {stufen.summe}.
+      {stufen.abweichung ? (
+        <>
+          Die Stufen ergeben {stufen.summe} Wochen, die Gesamtdauer ist {gesamt} —
+          {' '}{Math.abs(stufen.abweichung)} Woche{Math.abs(stufen.abweichung) === 1 ? '' : 'n'}
+          {stufen.abweichung > 0 ? ' mehr' : ' weniger'}. Gerechnet wird mit {stufen.summe}.
+        </>
+      ) : null}
+      {verschobenAuf && (
+        <span data-plan-verschoben={verschobenAuf}>
+          {stufen.abweichung ? ' ' : ''}Der Plan beginnt am Zielbeginn; das Ende verschiebt
+          sich auf {verschobenAuf}.
+        </span>
+      )}
     </div>
   )
 }

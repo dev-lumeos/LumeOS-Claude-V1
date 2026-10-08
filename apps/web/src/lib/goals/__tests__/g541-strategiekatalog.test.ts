@@ -45,6 +45,7 @@ function strat(p: Partial<Strategie> = {}): Strategie {
   return {
     code: 'moderate_cut', label: 'Moderate Cut', description: 'Beschreibung',
     icon: 'flame', category: 'fat_loss', tier: 'advanced',
+    auswahl_gruppe: 'abnehmen', min_erfahrung: 'advanced', standard: false,
     tdee_modifier: -0.2, weight_change_target_percent: -0.75,
     max_duration_weeks: 12, protein_per_kg: 2.2, fat_percent: 0.25,
     macro_cycling: false, refeed_schedule: false, auto_adjust: false,

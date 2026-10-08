@@ -230,6 +230,25 @@ export function teilphasenAusWochen(namen: string[], wochen: number[]): Teilphas
   })
 }
 
+/**
+ * G-610: das Ende des Plans — nie vor dem Zielbeginn starten.
+ *
+ * `[cmd]` **G-608 mass: `mid` = 8 statt 7 liess `early` am 2026-09-30
+ * beginnen, eine Woche VOR dem Zielbeginn 2026-10-07.** `[read]` **Jetzt
+ * beginnt der Plan spaetestens am Zielbeginn, und laengere Stufen schieben
+ * das Ende hinaus** — der Satz in der Zeitachse sagt es.
+ *
+ * @returns das Ankerdatum, und ob es vom Zieldatum abweicht.
+ */
+export function planende(
+  zielbeginn: string | null, zieldatum: string, summeWochen: number,
+): { ende: string; verschoben: boolean } {
+  const fruehestes = zielbeginn ? minusWochen(zielbeginn, -summeWochen) : null
+  return fruehestes && fruehestes > zieldatum
+    ? { ende: fruehestes, verschoben: true }
+    : { ende: zieldatum, verschoben: false }
+}
+
 // ══ G-608: die Wochen des NUTZERS gehen vor dem Vorschlag ══════════
 //
 // `[read]` **E-85:** der Katalog traegt das Verhaeltnis, das Programm

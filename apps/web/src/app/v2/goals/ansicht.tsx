@@ -446,7 +446,8 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
               {!echtAus && (
                 <>
                   <ZielKarten
-                    ziele={echt.ziele} meilensteine={echt.meilensteine} stichtag={echt.stichtag} />
+                    ziele={echt.ziele} meilensteine={echt.meilensteine} stichtag={echt.stichtag}
+                    phasen={echt.offenePhasen} strategien={echt.strategien} />
                   <FehlendeZielKacheln />
                 </>
               )}
@@ -712,7 +713,8 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
           dort erscheint die Strategiewahl, aber nur bei
           `body_composition`. */}
       <GoalsModale modal={modal} onClose={kontext.close}
-                   strategien={echt.strategien} />
+                   strategien={echt.strategien}
+                   erfahrung={echt.strategieProfil.experience} />
     </GoalsKontext.Provider>
   )
 }

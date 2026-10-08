@@ -28,7 +28,7 @@ import { Card, Pill, Icon } from '@lumeos/ui'
 
 import { restTage } from '../../../lib/goals/pace'
 import {
-  ankerplan, gesamtdauer, gesamtWochen, stufenplan, teilphasenAusWochen,
+  ankerplan, gesamtdauer, gesamtWochen, planende, stufenplan, teilphasenAusWochen,
   type Ankerzeile, type Stufenplan,
 } from '../../../lib/goals/anker'
 import { phasenName } from '../../../lib/goals/phase-regeln'
@@ -92,8 +92,9 @@ function Fenster({ von, bis, heute }: {
  * Rechnung steht in `lib/goals/anker.ts`**, nicht hier — G-539
  * braucht sie erneut.
  */
-function Ankertafel({ zeilen, anker, stufen }: {
+function Ankertafel({ zeilen, anker, stufen, verschobenAuf }: {
   zeilen: Ankerzeile[]; anker: string; stufen: Stufenplan | null
+  verschobenAuf: string | null
 }) {
   const gesamt = gesamtWochen(zeilen)
   return (
@@ -126,7 +127,7 @@ function Ankertafel({ zeilen, anker, stufen }: {
           ))}
         </tbody>
       </table>
-      <Abweichung stufen={stufen} />
+      <Abweichung stufen={stufen} verschobenAuf={verschobenAuf} />
     </div>
   )
 }
@@ -151,10 +152,15 @@ function Zielzeile({ z, heute, onBearbeiten }: {
   // `[cmd]` **G-608: je Stufe die gespeicherte Woche, sonst der
   // Vorschlag** (E-85).
   const stufen = React.useMemo(() => stufenDerZeile(z), [z])
+  // `[cmd]` **G-610: nie vor dem Zielbeginn** — laengere Stufen schieben
+  // das Ende hinaus, und die Tafel sagt es (`planende`).
+  const fenster = React.useMemo(() => g.target_date && stufen?.summe != null
+    ? planende(g.gueltig_ab, g.target_date, stufen.summe) : null,
+  [g.gueltig_ab, g.target_date, stufen])
   const plan = React.useMemo(() => {
-    if (!g.target_date || !stufen?.wochen) return []
-    return ankerplan(g.target_date, teilphasenAusWochen(stufen.namen, stufen.wochen), g.title)
-  }, [g.target_date, g.title, stufen])
+    if (!fenster || !stufen?.wochen) return []
+    return ankerplan(fenster.ende, teilphasenAusWochen(stufen.namen, stufen.wochen), g.title)
+  }, [fenster, g.title, stufen])
 
   return (
     <div data-zielzeile={g.goal_id} style={{
@@ -214,7 +220,8 @@ function Zielzeile({ z, heute, onBearbeiten }: {
             Terminplan {offen ? 'schliessen' : 'zeigen'}
           </button>
           {offen && g.target_date && (
-            <Ankertafel zeilen={plan} anker={g.target_date} stufen={stufen} />
+            <Ankertafel zeilen={plan} anker={fenster?.ende ?? g.target_date} stufen={stufen}
+                        verschobenAuf={fenster?.verschoben ? fenster.ende : null} />
           )}
         </>
       )}
