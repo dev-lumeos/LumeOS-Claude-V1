@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 281 |
-| `laufend_codex` | 2 |
+| `todos` | 280 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 685 |
 | **gesamt** | **971** |
@@ -695,7 +695,7 @@
 | `G-631` | aufgabe | mittel | [Es gibt kein Trendgewicht](todos/goals-g-0631-es-gibt-kein-trendgewicht.md) | offen | — | — |
 | `G-632` | fehler | niedrig | [Prüfungstexte ohne Umlaute](erledigt/goals-g-0632-pruefungstexte-ohne-umlaute.md) | erledigt | — | — |
 | `G-633` | fehler | niedrig | [Prüfungstexte schreiben Zahlen mit Punkt](laufend_codex/goals-g-0633-pruefungstexte-zahlen-mit-punkt.md) | laeuft (codex) | — | — |
-| `G-634` | frage | mittel | [Startwert eines Messziels erst nach dem Anlegen sichtbar](todos/goals-g-0634-startwert-eines-messziels-erst-nach-dem-anlegen.md) | offen | — | — |
+| `G-634` | frage | mittel | [Startwert eines Messziels erst nach dem Anlegen sichtbar](laufend_codex/goals-g-0634-startwert-eines-messziels-erst-nach-dem-anlegen.md) | laeuft (codex) | — | — |
 
 ### wartet auf Blocker — 8
 

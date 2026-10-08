@@ -57,3 +57,7 @@ Datenmodell, Lese- und Schreibfunktionen, Bestand umhängen (jedes bestehende st
 Offen:
 1. Ändern einer laufenden Position braucht einen gemeinsamen Schreibweg für Position und Phase. Das ist Teil des Auftrags (Phase Engine editiert), also Teil 2.
 2. Katalogwerte für Fett g/kg, Cardio/Woche, Refeed/Woche fehlen und stehen auf NULL. `[cmd]` Der Katalog hat bereits fat_percent (Anteil kcal, 0,15-0,30) bei allen ausser expert_bb_annual, und refeeds als Rhythmus (moderate_cut alle 8 Wochen 1 Woche, aggressive_cut alle 4 Wochen 1 Woche). Cardio fehlt ganz. Entscheidung Tom.
+
+## Entschieden - 2026-10-08 17:40, Tom: Katalogwerte
+
+Katalog behaelt Fett als Anteil kcal (fat_percent) und seinen Refeed-Rhythmus (refeeds). Die neuen Spalten Fett g/kg, Cardio/Woche, Refeed/Woche bleiben im Katalog NULL = "keine Vorgabe" und gelten nur fuer eigene Werte. Keine doppelte Fett-Wahrheit.

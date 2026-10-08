@@ -10,6 +10,7 @@
 | Claude Code | G-630 | Die Warnung ohne aktives Ziel ist unsichtbar | **laeuft**, raus 08.10. |
 | Codex | G-625 | Ein Plan ist der Inhalt des steuernden Ziels | **laeuft**, raus 08.10. |
 | Codex | G-633 | Prüfungstexte schreiben Zahlen mit Punkt | **laeuft**, raus 08.10. |
+| Codex | G-634 | Startwert eines Messziels erst nach dem Anlegen sichtbar | **laeuft**, raus 08.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->

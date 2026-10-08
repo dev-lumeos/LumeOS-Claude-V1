@@ -4,6 +4,8 @@ typ: frage
 modul: goals
 schwere: mittel
 angelegt: 2026-10-08
+agent: codex
+beauftragt: 2026-10-08
 
 braucht: []
 kind_von: G-628
@@ -30,4 +32,10 @@ Codex zieht die Startwertermittlung aus dem Trigger in eine Lesefunktion (z. B. 
 
 ## Entscheidung Tom
 
-Offen: bauen ja/nein.
+Tom 2026-10-08 17:40: ja, bauen.
+## Auftrag - Kopf
+
+    AUFTRAG FUER Codex - G-634: Startwert-Vorschau fuer Messziele (Nachtrag zu G-625 Teil 2)
+    Bereich: supabase/_pipeline/ (Kette)
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-08
