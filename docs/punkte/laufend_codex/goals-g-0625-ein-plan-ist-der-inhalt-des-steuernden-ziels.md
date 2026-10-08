@@ -68,3 +68,11 @@ Katalog behaelt Fett als Anteil kcal (fat_percent) und seinen Refeed-Rhythmus (r
 `[cmd]` 7 Dateien nur supabase/_pipeline, neue Schritte 625_goal_plan_position_revision, 633_goal_limit_german_numbers, 634_measurement_goal_start_preview (+ je Probe). Gelesen: 634 – der Snapshot-Trigger `g617_measurement_goal_snapshot` ruft `measurement_goal_start_preview` (eine Abfrage, `auth.uid()`, Kennung `erst_messen`). 633 – Wrapper um `ziel_grenzen_pruefen` (Basis umbenannt), Regex nur auf den Hinweistext, Schlüssel gleich. 625 Teil 2 – Position mit `FOR UPDATE` nur für `auth.uid()`. Gate grün.
 
 `[read]` Codex: 385 Schritte grün, Proben G-625 2/2, G-633 1/1 (Hex 31 36 2c 38 = "16,8"), G-634 1/1 (Gewicht, Umfang, e1RM, Gewicht×Wdh, Training, Schlaf, eigener Wert), testdaten-pruefen 186/0, Sabotage 3/3 rot. Katalog: 17 Programme mit NULL in den neuen Spalten, Rechnung mit fat_percent belegt. Erledigt erst nach Live.
+
+## Live gestoppt - 2026-10-08 18:17, Codex (vor dem ersten Schritt)
+
+`[read]` Codex: Die Ausgangszählung stimmt (4 steuernde Ziele, 0 Pläne, 0 Positionen). Bei dev ist das steuernde Ziel aktiv, seine letzte Phase ist aber seit 29.09. beendet. Der Backfill (`625_goal_plan_model.sql:182`) würde genau diese beendete Phase als einzige Position eines aktiven Plans übernehmen. Nichts eingespielt.
+
+`[cmd]` Orchestrator nachgemessen, dev, Ziel "Lean Bulk bis September" (active, controlling, Frist 2026-12-16). Phasen: maintain 21.05.–03.06. (beendet), lean_bulk 04.06.–29.09. (beendet, transition_reason "test", recommended_next mini_cut). `berechne_zielwerte(dev, heute)` liefert hindernis `kein_aktives_ziel`, goal_id leer, kcal = TDEE 2480,7. Das Ziel ist aber aktiv → G-637.
+
+Offene Entscheidung Tom: Was übernimmt der Backfill bei einem aktiven Ziel ohne laufende Phase?
