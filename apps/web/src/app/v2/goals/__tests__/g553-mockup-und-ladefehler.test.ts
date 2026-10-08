@@ -131,7 +131,8 @@ describe('G-553/A2 — jeder Reiter zeigt seinen Mockup-Teil', () => {
     // `[read]` **Die datengetragenen Bauteile sind gesperrt** — die
     // Mockup-Bauteile nicht.
     for (const bauteil of ['ZielKarten', 'GoalsTDEEView', 'KoerperMetriken',
-      'KoerperUmfaenge', 'CompositionTab', 'StrategieWahl']) {
+      // G-615: StrategieWahl ist weg, der Planer liest dieselben Daten.
+      'KoerperUmfaenge', 'CompositionTab', 'Planer']) {
       const i = q.indexOf(`<${bauteil}`)
       assert.ok(i > 0, `„${bauteil}" steht nicht mehr in der Ansicht`)
       const davor = q.slice(Math.max(0, i - 260), i)

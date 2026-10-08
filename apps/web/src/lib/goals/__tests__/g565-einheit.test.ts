@@ -213,7 +213,9 @@ describe('G-565/A1 — eine Groesse, zwei Einheiten', () => {
 
   // ── Je Stelle: EIN Zustand, die Rate ────────────────────────────
   it('das Eingabefeld rechnet auf die Rate zurueck', () => {
-    for (const datei of ['phase-setzen.tsx', 'phasen-editor-echt.tsx']) {
+    // G-615: das Ratenfeld in phase-setzen.tsx gehoerte zu PhaseBeginnen —
+    // entfernt. Der Editor traegt die Einheit weiter.
+    for (const datei of ['phasen-editor-echt.tsx']) {
       const q = lies(join(GOALS, datei))
       assert.match(q, /ausEinheit\(/,
         `${datei}: die Eingabe wird nicht auf die Rate zurueckgerechnet`)
@@ -323,7 +325,8 @@ describe('G-565 — der Katalog bleibt in Prozent', () => {
     //
     // `[cmd]` **Gemessen:** weder `strategie-vorschau.tsx` noch
     // `strategie-wahl.tsx` kennt ein Koerpergewicht.
-    for (const datei of ['strategie-vorschau.tsx', 'strategie-wahl.tsx']) {
+    // G-615: strategie-wahl.tsx ist weg; der Planer zeigt Katalogzeilen.
+    for (const datei of ['strategie-vorschau.tsx', 'planer.tsx']) {
       const q = lies(join(GOALS, datei))
       assert.ok(!/<EinheitenSchalter/.test(q),
         `${datei} zeigt einen Einheitenschalter — der Katalog gilt `

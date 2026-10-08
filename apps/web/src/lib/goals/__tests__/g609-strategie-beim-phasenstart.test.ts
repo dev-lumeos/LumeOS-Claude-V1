@@ -43,7 +43,8 @@ describe('G-609 — vom Modal bis in die Phase', () => {
   })
 
   it('keine Stelle behauptet mehr, goal_phase_start nehme den Code nicht', () => {
-    for (const f of ['modale.tsx', 'strategie-vorschau.tsx', 'strategie-wahl.tsx']) {
+    // G-615: strategie-wahl.tsx ist geloescht.
+    for (const f of ['modale.tsx', 'strategie-vorschau.tsx']) {
       const roh = readFileSync(join(GOALS, f), 'utf8')
       assert.ok(!/goal_phase_start` nimmt (den Strategiecode|`?strategie_code`?|ihn) (heute )?nicht/.test(roh), f)
       assert.ok(!/goal_phase_start` hat keinen\s*\/\/\s*Parameter/.test(roh), f)

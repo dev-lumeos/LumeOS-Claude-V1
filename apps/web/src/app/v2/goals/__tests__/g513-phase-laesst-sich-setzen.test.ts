@@ -60,15 +60,20 @@ describe('G-513 — die Phase laesst sich setzen', () => {
 
   it('die Oberflaeche haengt an den Serveraktionen', () => {
     const s = SETZEN()
-    for (const a of ['phaseStartenAktion', 'phaseBeendenAktion',
-      'vorschlagBeantwortenAktion']) {
+    // G-615: Beginnen ist aus phase-setzen.tsx in den Planer gewandert
+    // (und ins Anlegemodal, G-610) — beide ueber phasenzielAnlegenAktion.
+    assert.match(lies(join(GOALS, 'planer.tsx')), /phasenzielAnlegenAktion\(/,
+      'der Planer legt nicht an')
+    for (const a of ['phaseBeendenAktion', 'vorschlagBeantwortenAktion']) {
       assert.match(s, new RegExp(`\\b${a}\\b`), `${a} wird nicht benutzt`)
     }
   })
 
   it('die Kacheln haengen im Reiter', () => {
     const a = ANSICHT()
-    for (const k of ['PhaseBeginnen', 'PhaseBeenden', 'PhaseVorschlag']) {
+    // G-615: PhaseBeginnen ist weg, der Planer ist der Einstieg.
+    assert.ok(!/<PhaseBeginnen[\s/>]/.test(a), 'die Phasenarten-Auswahl ist zurueck')
+    for (const k of ['Planer', 'PhaseBeenden', 'PhaseVorschlag']) {
       assert.match(a, new RegExp(`<${k}[\\s/>]`),
         `${k} wird nicht gerendert — gebaut und unerreichbar`)
     }
@@ -88,11 +93,12 @@ describe('G-513 — die Phase laesst sich setzen', () => {
   })
 
   // ── 3 · Die Sperre der Datenbank wird VORHER gezeigt ─────────────
-  it('ein laufende Phase sperrt das Raster', () => {
+  it('es gibt kein Raster zum Beginnen mehr (G-615)', () => {
+    // Hier stand: „eine laufende Phase sperrt das Raster" (23505). Das
+    // Raster ist weg — begonnen wird mit Ziel (Anlegemodal, Planer).
     const s = SETZEN()
-    assert.match(s, /pointerEvents:\s*aktiv\s*\?\s*'none'/,
-      'das Raster bleibt bedienbar, obwohl eine Phase laeuft — '
-      + 'der Nutzer laeuft in Fehler 23505')
+    assert.ok(!/export function (PhaseBeginnen|PhaseWechseln)/.test(s),
+      'das Raster aus G-513/G-534 ist zurueck')
   })
 
   it('23505 wird uebersetzt, nicht durchgereicht', () => {

@@ -794,7 +794,12 @@ test('das Goals-Modul kennzeichnet jede Kachel', () => {
     //
     // `[read]` **Der Leseweg lag daneben** (dieselbe Klasse wie die
     // neun Faelle aus G-355).
-    [path.join(process.cwd(), 'src/app/v2/goals/fehlende-kacheln.tsx'), 7],
+    //
+    // `[cmd]` **6 seit G-615:** die Attrappe „Phase state machine" ist
+    // gefallen — Tom (E-69): Anzeige statt Auswahl; sie steht echt als
+    // `PhasenZustand` in `planer.tsx` (aktive Phase des steuernden Ziels,
+    // empfohlen aus `next_codes`).
+    [path.join(process.cwd(), 'src/app/v2/goals/fehlende-kacheln.tsx'), 6],
     // `[cmd]` **Dieselbe Hilfskomponenten-Bauform wie in training:**
     // 2 Marken im Quelltext, 9 Kacheln am Schirm (cost).
     [path.join(process.cwd(), 'src/app/v2/supplements/fehlende-kacheln.tsx'), 12],

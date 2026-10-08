@@ -126,14 +126,12 @@ describe('G-564/A2 — die Anzeige sagt, wie viele', () => {
       'die Kacheln haben keinen stabilen Schluessel')
   })
 
-  it('„Phase beginnen" haengt an der ZAHL, nicht an einer Auswahl', () => {
-    // `[read]` **Bei zwei laufenden Phasen ist `laufendePhase` null**
-    // (die Wahl waere willkuerlich). `[read]` **Mit `!laufendePhase`
-    // stuende dort „Phase beginnen", obwohl zwei laufen.**
+  it('„Phase beginnen" ist weg — es gibt keinen Start ohne Ziel (G-615)', () => {
+    // Hier stand: der Startknopf haengt an der ZAHL der laufenden Phasen.
+    // G-615 hat ihn entfernt (Tom: Einzelstrategien im Anlegemodal,
+    // Plaene im Planer). Die Zusage dreht sich um: er kommt nicht zurueck.
     const q = A()
-    assert.match(q, /laufendePhasen\.length === 0 && \(/,
-      'der Startknopf haengt an einer Einzelphase — dann erscheint '
-      + 'er, obwohl mehrere laufen')
+    assert.ok(!/<PhaseBeginnen[\s/>]/.test(q), 'die Phasenarten-Auswahl ist zurueck')
     assert.ok(!/!echtAus && !laufendePhase && \(/.test(q),
       'die alte Bedingung steht wieder da')
   })

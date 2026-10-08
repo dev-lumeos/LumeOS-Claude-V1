@@ -32,7 +32,7 @@
 //     goals     fehlen  This week · Cross-module health
 //     metrics   fehlen  Body fat trend · Lean mass · 30 days
 //     phase     fehlen  4 Kennzahlen · Weekly auto-adjustment ·
-//                       Phase state machine · Expert BB annual
+//                       Expert BB annual (Phase state machine: G-615 echt)
 //
 // **Jede traegt den Grund, warum sie nicht angebunden ist** — E-68.
 //
@@ -162,78 +162,10 @@ export function FehlendePhaseKacheln() {
         </div>
       </Card>
 
-      {/* [cmd] module-goals-pro.jsx:261-317 — die sieben Phasen zum
-          Umschalten. Die Vorschau beim Anklicken ist Teil derselben
-          Kachel.
-
-          ══ G-421: DER GRUND WAR UEBERHOLT ═══════════════════════
-          `[cmd]` **Hier stand:** *„goal_phases wird gelesen, aber
-          nirgends geschrieben (G-357)"*.
-          `[cmd]` **Gemessen 2026-09-11 gegen `pg_proc`:** die
-          Schreibfunktionen GIBT es — `goals.goal_phase_start(…)`,
-          `goal_phase_end(p_phase_id, p_transition_reason, …)` und
-          `phase_transition_respond(…)`. **Sie stammen aus
-          `_pipeline/11_goals/111_goals_ziele_phasen.sql` und haben
-          eine eigene Pruefung** (`goals-g357-…test.ts`).
-          `[read]` **G-357 hat den Mangel BEHOBEN** — der Vermerk
-          nannte den Punkt, der ihn abgeschafft hat.
-          `[cmd]` **Was fehlt, ist der AUFRUF:** kein
-          `apps/web`-Pfad ruft eine der drei. */}
-      <Card title="Phase state machine"
-            sub="7 phases · click any phase to preview or switch"
-            // ══ G-534/A1: der Grund war UEBERHOLT ═══════════════
-            //
-            // `[cmd]` **Hier stand:** *,,die Oberflaeche ruft sie
-            // nur noch nicht"*. `[cmd]` **G-513 hat genau diesen
-            // Aufrufer gebaut** — `PhaseBeginnen` und
-            // `PhaseBeenden` rufen `goal_phase_start`/`_end`
-            // (`phase-setzen.tsx`).
-            //
-            // `[read]` **Was HIER fehlt, ist etwas anderes:** der
-            // Direktwechsel aus dem Raster heraus, den der Entwurf
-            // zeigt (`module-goals-pro.jsx:421`, „Switch to X").
-            // **Bei uns sind es zwei Handgriffe: beenden, dann
-            // beginnen.**
-            attrappe={marke(
-              'einen Wechsel in einem Zug — heute wird die Phase '
-              + 'beendet und die naechste begonnen')}>
-        <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8,
-        }}>
-          {Object.values(GOAL_PHASES).map(ph => {
-            const aktiv = ph.id === PHASE_STATE.current
-            const empfohlen = p?.next?.includes(ph.id)
-            return (
-              <div key={ph.id} style={{
-                padding: 10, borderRadius: 7,
-                background: aktiv
-                  ? `color-mix(in oklch, ${ph.color} 12%, var(--surface))`
-                  : 'var(--surface)',
-                border: `1px solid ${aktiv
-                  ? `color-mix(in oklch, ${ph.color} 40%, var(--border))`
-                  : empfohlen ? 'var(--border-strong)' : 'var(--border)'}`,
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                  <span style={{
-                    width: 7, height: 7, borderRadius: 999, background: ph.color,
-                  }} />
-                  <span style={{ fontSize: 11.5, fontWeight: 600 }}>{ph.name}</span>
-                </div>
-                {aktiv && <Pill variant="acc" style={{ fontSize: 9 }}>current</Pill>}
-                {!aktiv && empfohlen && (
-                  <span className="v2-mono" style={{ fontSize: 9.5, color: 'var(--pos)' }}>
-                    → recommended next
-                  </span>
-                )}
-                {!aktiv && !empfohlen && (
-                  <span className="v2-dim v2-mono" style={{ fontSize: 9.5 }}>switchable</span>
-                )}
-              </div>
-            )
-          })}
-        </div>
-      </Card>
-
+      {/* ══ G-615: „Phase state machine" ist keine Attrappe mehr ══
+          `[cmd]` **Hier stand die Mockup-Kachel** (sieben Phasen zum
+          Umschalten). **Tom, G-615: Anzeige statt Auswahl** — sie steht
+          jetzt echt als `PhasenZustand` (`planer.tsx`). */}
       {/* [cmd] module-goals-pro.jsx:470-489 */}
       <Card title="Expert BB annual" sub="12-month cycle · advanced only"
             attrappe={marke(

@@ -132,9 +132,8 @@ import {
 } from './fehlende-kacheln'
 import { GoalsPhysiqueView, GoalsPosesView } from './tab-physique'
 // G-513: Phase beginnen, beenden, Vorschlag beantworten.
-import { PhaseBeginnen, PhaseBeenden, PhaseVorschlag, PhaseWechseln } from './phase-setzen'
-// G-534/A7: die Phasenart fuer das Wechselraster.
-import type { Phasenart } from '../../../lib/goals/phase-regeln'
+import { PhaseBeenden, PhaseVorschlag } from './phase-setzen'
+import { Planer, PhasenZustand } from './planer'
 
 /** C-418/3: die Quelle unter der Trennlinie. */
 const QUELLE = 'theme-v1/module-goals-pro.jsx'
@@ -154,7 +153,6 @@ import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-re
 // von hier aus beantwortete die Seite mit HTTP 500 (A-30, G-412).
 import type { Strategie } from '../../../lib/goals/strategie-read'
 import type { Rateneinheit } from '../../../lib/goals/zielrate-einheit'
-import { StrategieWahl } from './strategie-wahl'
 // G-544: die Zeitachse des Phase-Reiters.
 import { PhasenZeitachse } from './phasen-zeitachse'
 // `[cmd]` **G-553/A1: reine Funktionen, kein I/O** — sie duerfen aus
@@ -543,10 +541,14 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                   Phasen ist `laufendePhase` null** (die Wahl waere
                   willkuerlich) — und dann haette hier ,,Phase
                   beginnen" gestanden, obwohl zwei laufen. */}
-              {!echtAus && laufendePhasen.length === 0 && (
-                <PhaseBeginnen stichtag={echt.stichtag} aktiv={null}
-                               gewichtKg={echt.profil?.body_weight_kg ?? null}
-                               einheitVorgabe={echt.einheit} />
+              {/* ══ G-615: die Phasenarten-Auswahl ist weg ═══════════
+                  `[cmd]` **Hier stand `PhaseBeginnen`** — neun Phasenarten
+                  zur Wahl, ohne Ziel. **Tom (G-615): Einzelstrategien
+                  waehlt man im Anlegemodal des Reiters Goals (G-610),
+                  Plaene im Planer unten.** */}
+              {!echtAus && (
+                <PhasenZustand ziele={echt.ziele} phasen={echt.offenePhasen}
+                               strategien={echt.strategien} />
               )}
               {/* ══ G-564/A2: bei mehreren sagt die Ansicht das ════
                   `[read]` **Beenden und Wechseln gelten je EINER
@@ -567,18 +569,10 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
               )}
               {!echtAus && laufendePhase && (
                 <>
-                  {/* `[cmd]` **G-534/A7: das Raster mit Vorschau** —
-                      die Geste des Entwurfs
-                      (`module-goals-pro.jsx:262-429`). `[read]` **Der
-                      Wechsel fuehrt zum Beenden**, weil
-                      `goal_phase_start` abweist, solange eine Phase
-                      laeuft. */}
-                  <PhaseWechseln
-                    laufend={laufendePhase.phase_type as Phasenart | null}
-                    onBeenden={() => {
-                      document.querySelector<HTMLButtonElement>(
-                        '[data-phase-beenden-oeffnen]')?.click()
-                    }} />
+                  {/* `[cmd]` **G-615: hier stand `PhaseWechseln`** (das
+                      Raster aus G-534/A7). **Beenden bleibt** — eine
+                      laufende Phase muss enden koennen; begonnen wird
+                      ueber das Anlegemodal (G-610) oder den Planer. */}
                   <PhaseBeenden phase={laufendePhase} stichtag={echt.stichtag} />
                   {/* `[cmd]` **Der Vorschlag kommt aus der SPALTE,
                       nicht aus dem Funktionsaufruf.**
@@ -634,9 +628,15 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                   einheit={echt.einheit}
                   onNeuesZiel={() => kontext.open({ typ: 'newGoal' })} />
               )}
+              {/* ══ G-615: der Planer statt der Strategie-Reiter ═══════
+                  `[cmd]` **Hier stand `StrategieWahl`** — fuenf fest
+                  codierte Reiter (`strategie-regeln.ts`), die Wahl wurde
+                  nicht gespeichert. **Tom: ,reiter phase engine ist doch
+                  genau der planner'.** */}
               {!echtAus && (
-                <StrategieWahl strategien={echt.strategien}
-                               profil={echt.strategieProfil} />
+                <Planer strategien={echt.strategien}
+                        erfahrung={echt.strategieProfil.experience}
+                        ziele={echt.ziele} heute={echt.stichtag} />
               )}
               <FehlendePhaseKacheln />
               {/* `[cmd]` G-365: die Linie stand unter `echt.phase &&`.

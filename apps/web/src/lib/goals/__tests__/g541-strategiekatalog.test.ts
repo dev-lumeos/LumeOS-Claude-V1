@@ -25,10 +25,8 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
-import {
-  REITER, ERREICHBARE_KATEGORIEN, strategienFuerReiter,
-  einfacheStrategien, istWaehlbar, merkmale, tdeeProzent,
-} from '../strategie-regeln'
+import { existsSync } from 'node:fs'
+import { tdeeProzent } from '../strategie-regeln'
 import type { Strategie } from '../strategie-read'
 
 const HIER = dirname(fileURLToPath(import.meta.url))
@@ -57,108 +55,25 @@ function strat(p: Partial<Strategie> = {}): Strategie {
   }
 }
 
-describe('G-541/A3 — die Auswahl zeigt tier und category', () => {
-  it('fuenf Reiter, wie im Altrepo', () => {
-    // [cmd] GoalSelector.tsx:19-23
-    assert.deepEqual(REITER.map(r => r.id),
-      ['fat_loss', 'muscle_gain', 'hybrid', 'contest', 'expert'],
-      'die Reiter weichen von der Vorlage ab')
+// ══ G-615: die Strategie-Reiter sind weg ═══════════════════════════
+//
+// `[cmd]` **Hier standen A3 (fuenf Reiter, Hybrid = hybrid+recovery,
+// `einfacheStrategien`) und A4 (`istWaehlbar` nach `requirements`).** Tom,
+// G-615: der Reiter Phase engine wird der Planer; Einzelstrategien gibt es
+// nur noch im Anlegemodal (G-610). **Die Zusage dreht sich um:** die Reiter
+// kommen nicht zurueck, und die Sperre hat EINE Quelle (`zielwahl.ts`).
+describe('G-615 — keine Strategie-Reiter, eine Sperrregel', () => {
+  it('die fest codierten Reiter sind weg', () => {
+    const q = lies(join(HIER, '..', 'strategie-regeln.ts'))
+    assert.ok(!/export const REITER|strategienFuerReiter|istWaehlbar/.test(q),
+      'die Strategie-Reiter aus G-541 sind zurueck')
+    assert.ok(!existsSync(join(GOALS, 'strategie-wahl.tsx')), 'strategie-wahl.tsx ist zurueck')
   })
 
-  it('der Reiter „contest" liest die Kategorie „contest_prep"', () => {
-    // `[read]` **Die Falle:** Reiterwert und Kategoriewert sind
-    // NICHT dasselbe (`GoalSelector.tsx:38`). Wer sie gleichsetzt,
-    // zeigt einen leeren Reiter — und der Leersatz sagt dann
-    // „keine Strategie", obwohl zwei dastehen.
-    const c = REITER.find(r => r.id === 'contest')
-    assert.deepEqual(c?.kategorien, ['contest_prep'],
-      'der Contest-Reiter liest die falsche Kategorie')
-  })
-
-  it('der Reiter „hybrid" sammelt ZWEI Kategorien', () => {
-    // [cmd] GoalSelector.tsx:37 — hybrid + recovery
-    const h = REITER.find(r => r.id === 'hybrid')
-    assert.deepEqual(h?.kategorien, ['hybrid', 'recovery'],
-      'ohne „recovery" waere reverse_diet ueber keinen Reiter '
-      + 'erreichbar')
-  })
-
-  it('alle sechs gemessenen Kategorien sind erreichbar', () => {
-    // `[cmd]` **Gemessen 2026-09-29:** contest_prep, expert,
-    // fat_loss, hybrid, muscle_gain, recovery.
-    for (const k of ['contest_prep', 'expert', 'fat_loss', 'hybrid',
-      'muscle_gain', 'recovery']) {
-      assert.ok(ERREICHBARE_KATEGORIEN.includes(k),
-        `die Kategorie „${k}" liegt unter keinem Reiter — ihre `
-        + 'Zeilen waeren unerreichbar')
-    }
-  })
-
-  it('ein Reiter zeigt nur advanced', () => {
-    // [cmd] GoalSelector.tsx:35-39 — jeder Zweig filtert auf advanced.
-    const alle = [
-      strat({ code: 'lose', tier: 'simple', category: 'fat_loss' }),
-      strat({ code: 'moderate_cut', tier: 'advanced', category: 'fat_loss' }),
-    ]
-    const r = strategienFuerReiter(alle, 'fat_loss')
-    assert.deepEqual(r.map(s => s.code), ['moderate_cut'],
-      'eine simple Strategie steht doppelt — oben und im Reiter')
-  })
-
-  it('die simplen stehen getrennt', () => {
-    const alle = [
-      strat({ code: 'lose', tier: 'simple' }),
-      strat({ code: 'moderate_cut', tier: 'advanced' }),
-    ]
-    assert.deepEqual(einfacheStrategien(alle).map(s => s.code), ['lose'])
-  })
-})
-
-describe('G-541/A4 — requirements sperrt, statt zu erklaeren', () => {
-  it('coach_approval ohne Coach sperrt', () => {
-    // [cmd] definitions.ts:292-294
-    const v = istWaehlbar({ coach_approval: true }, { hasCoach: false })
-    assert.equal(v.frei, false, 'peak_week waere ohne Coach waehlbar')
-    assert.ok(!v.frei && v.grund.includes('Coach'),
-      'der Grund nennt den Coach nicht')
-  })
-
-  it('coach_approval MIT Coach ist frei', () => {
-    // `[read]` **Die Gegenrichtung** — sonst sperrte die Regel immer
-    // und niemand saehe es.
-    assert.equal(istWaehlbar({ coach_approval: true }, { hasCoach: true }).frei,
-      true, 'mit Coach bleibt gesperrt')
-  })
-
-  it('min_experience sperrt NUR den Anfaenger', () => {
-    // [cmd] definitions.ts:289 — `=== 'beginner'`, nicht `!== advanced`.
-    const anf = { min_experience: 'advanced' }
-    assert.equal(istWaehlbar(anf, { experience: 'beginner' }).frei, false,
-      'ein Anfaenger kommt an aggressive_cut')
-    for (const e of ['advanced', 'pro', 'elite']) {
-      assert.equal(istWaehlbar(anf, { experience: e }).frei, true,
-        `„${e}" wird gesperrt — der CHECK kennt vier Stufen`)
-    }
-    // `[read]` **Ohne Angabe wird nicht gesperrt** — das ist die
-    // Regel des Altrepos und die vorsichtigere.
-    assert.equal(istWaehlbar(anf, {}).frei, true,
-      'wer nichts hinterlegt hat, wird ausgesperrt')
-  })
-
-  it('die Erfahrung wird ZUERST genannt', () => {
-    // `[read]` **contest_prep verlangt beides.** Wer als Anfaenger
-    // ohne Coach davorsteht, liest EINEN Satz — und zwar den, der
-    // im Altrepo zuerst steht (`:289` vor `:292`).
-    const v = istWaehlbar(
-      { min_experience: 'advanced', coach_approval: true },
-      { experience: 'beginner', hasCoach: false })
-    assert.ok(!v.frei && v.grund.includes('Trainingserfahrung'),
-      'die Reihenfolge weicht von der Vorlage ab')
-  })
-
-  it('ohne requirements ist alles frei', () => {
-    assert.equal(istWaehlbar({}, {}).frei, true,
-      '13 der 17 Zeilen waeren gesperrt')
+  it('der Planer sperrt mit derselben Regel wie das Anlegemodal', () => {
+    const q = lies(join(GOALS, 'planer.tsx'))
+    assert.match(q, /import \{ gesperrt, planStrategien \} from '\.\.\/\.\.\/\.\.\/lib\/goals\/zielwahl'/)
+    assert.ok(!/min_erfahrung\s*[<>]|EXPERIENCE_LEVELS/.test(q), 'der Planer vergleicht Grade selbst')
   })
 })
 
@@ -309,16 +224,15 @@ describe('G-541/A1 — der Katalog statt der Attrappe', () => {
     // `[cmd]` **Sie zeigte „conservative · moderate · aggressive"
     // als drei Woerter.** `[read]` **Die drei sind eigene
     // Katalogzeilen** — die Kachel loest sich auf.
-    const q = lies(join(GOALS, 'phase-vorschau.tsx'))
-    assert.ok(!/conservative · moderate · aggressive/.test(q),
-      'die Variantenkachel steht noch — sie ist jetzt drei Zeilen '
-      + 'im Katalog')
-    assert.ok(!/Baender je Variante/.test(q),
-      'die Attrappenmarke der Variantenkachel steht noch')
+    // `[cmd]` **G-615: `phase-vorschau.tsx` ist ganz weg** — mit dem
+    // Wechselraster, dessen Vorschau sie war.
+    assert.ok(!existsSync(join(GOALS, 'phase-vorschau.tsx')),
+      'phase-vorschau.tsx ist zurueck — und mit ihr die Variantenkachel')
   })
 
-  it('die Auswahl liest die Tabelle, nicht eine Liste im Quelltext', () => {
-    const q = lies(join(GOALS, 'strategie-wahl.tsx'))
+  it('die Plan-Auswahl liest die Tabelle, nicht eine Liste im Quelltext', () => {
+    // G-615: die Auswahl steht im Planer (vorher `strategie-wahl.tsx`).
+    const q = lies(join(GOALS, 'planer.tsx'))
     // `[read]` **Dieser Waechter nannte zuerst nur drei Codes.** Die
     // Sabotage setzte `s.code === 'lose'` ein und blieb GRUEN —
     // `lose` stand nicht auf der Liste. **Ein Waechter, der drei
@@ -338,7 +252,7 @@ describe('G-541/A1 — der Katalog statt der Attrappe', () => {
         `„${code}" steht als Literal in der Auswahl — dann haengt sie `
         + 'an einer Zeile statt an der Tabelle')
     }
-    assert.match(q, /strategien\.filter|strategienFuerReiter/,
+    assert.match(q, /planStrategien\(strategien\)/,
       'die Auswahl leitet sich nicht aus den uebergebenen Zeilen ab')
   })
 
@@ -352,10 +266,8 @@ describe('G-541/A1 — der Katalog statt der Attrappe', () => {
 })
 
 describe('G-541/A5 — die Grenze zu G-538 und G-539', () => {
-  const alleDateien = () => [
-    lies(join(GOALS, 'strategie-wahl.tsx')),
-    lies(join(GOALS, 'strategie-vorschau.tsx')),
-  ].join('\n')
+  // G-615: `strategie-wahl.tsx` ist weg; die Vorschau bleibt (Details im Planer).
+  const alleDateien = () => lies(join(GOALS, 'strategie-vorschau.tsx'))
 
   it('kein Schreibweg auf goal_phases', () => {
     // `[cmd]` **`goal_phase_start` nimmt keinen `strategie_code`** —
@@ -380,19 +292,3 @@ describe('G-541/A5 — die Grenze zu G-538 und G-539', () => {
   })
 })
 
-describe('G-541 — die Karte zeigt, was die Zeile traegt', () => {
-  it('die vier Merkmale kommen aus den vier Schaltern', () => {
-    // [cmd] GoalSelector.tsx:181-186
-    assert.deepEqual(merkmale(strat({
-      macro_cycling: true, refeed_schedule: true,
-      auto_adjust: true, peak_week: true,
-    })), ['Cycling', 'Refeed', 'Auto', 'Peak'])
-    assert.deepEqual(merkmale(strat()), [],
-      'eine Zeile ohne Schalter zeigt Merkmale')
-  })
-
-  it('nur der gesetzte Schalter erscheint', () => {
-    assert.deepEqual(merkmale(strat({ refeed_schedule: true })), ['Refeed'],
-      'die Merkmale haengen nicht am einzelnen Schalter')
-  })
-})

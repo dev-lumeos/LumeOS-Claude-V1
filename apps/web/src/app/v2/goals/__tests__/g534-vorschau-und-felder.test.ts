@@ -17,7 +17,7 @@
  */
 import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
@@ -101,84 +101,17 @@ describe('G-534/A2 — feste Felder statt JSON-Inhalt', () => {
   })
 })
 
-describe('G-534/A7 — das Vorschaupanel', () => {
-  const V = () => lies(join(GOALS, 'phase-vorschau.tsx'))
-  const S = () => lies(join(GOALS, 'phase-setzen.tsx'))
-
-  it('es gibt das Panel und den Wechselknopf', () => {
-    const q = V()
-    assert.match(q, /data-phase-vorschau/, 'kein Vorschaupanel')
-    assert.match(q, /data-vorschau-wechseln/, 'kein Wechselknopf')
-    assert.match(q, /data-vorschau-schliessen/, 'kein Schliessen-Knopf')
-  })
-
-  // ── ANGEBUNDEN: was eine Quelle hat ─────────────────────────────
-  it('die Uebergaenge kommen aus der Regel, nicht aus dem Entwurf', () => {
-    const q = V()
-    assert.match(q, /UEBERGAENGE\[art\]/,
-      'die Folgephasen sind nicht aus UEBERGAENGE — dann sind sie '
-      + 'abgetippt')
-    assert.match(q, /uebergangErlaubt\(/,
-      'die Pille „empfohlener Uebergang" ist nicht gerechnet')
-  })
-
-  it('die Ratenregel kommt aus den CHECKs', () => {
-    const q = V()
-    assert.match(q, /RATENPFLICHT\[art\]/,
-      'das Vorzeichen ist nicht aus dem CHECK gelesen')
-    assert.match(q, /RATE_MIN|RATE_MAX/,
-      'die Aussengrenze ist nicht aus dem CHECK gelesen')
-  })
-
-  // ── ATTRAPPE: was keine Quelle hat ──────────────────────────────
-  //
-  // `[cmd]` **G-541 hat diese zwei Pruefungen umgeschrieben.** Sie
-  // fragten, ob die VARIANTENKACHEL eine Marke traegt. `[cmd]` **Die
-  // Kachel gibt es nicht mehr** — `aggressive_cut`, `moderate_cut`
-  // und `conservative_cut` sind drei Zeilen in
-  // `goals.goal_strategies` und stehen als eigene Karten in der
-  // Auswahl. `[read]` **Eine Attrappe weniger, nicht eine Attrappe
-  // besser** — die Frage nach ihrer Marke ist damit beantwortet und
-  // nicht mehr stellbar.
-  //
-  // `[read]` **Was BLEIBT, ist die eigentliche Frage:** es darf
-  // keine Spanne dastehen, die keine Quelle hat. `[cmd]`
-  // **`goals.phase_rate_rules` hat weiterhin 0 Zeilen**, gemessen
-  // 2026-09-29 — die Zahlen der Spec sind also nach wie vor
-  // unbelegt.
-  it('im Panel steht keine unbelegte Spanne', () => {
-    const q = V()
-    assert.ok(!/-400|-600|\+200|\+400|1\.8|2\.4/.test(q),
-      'im Panel steht eine Spanne aus der Spec — `phase_rate_rules` '
-      + 'ist leer, sie hat keine Quelle')
-  })
-
-  it('die Variantenkachel ist aufgeloest, nicht entmarkt', () => {
-    const q = V()
-    // `[read]` **Die Gegenprobe zur Loeschung:** waere die Kachel
-    // ohne Marke wiedergekommen, faellt das hier auf.
-    assert.ok(!/conservative|Varianten/.test(q),
-      'die Variantenkachel steht wieder im Panel — die drei Varianten '
-      + 'sind eigene Katalogzeilen (G-541)')
-  })
-
-  // ── Das Raster ──────────────────────────────────────────────────
-  it('das Wechselraster zeigt alle neun Arten', () => {
-    assert.match(S(), /data-wechselwahl=\{ph\.id\}/,
-      'das Raster ist nicht ueber PHASENARTEN gebaut')
-  })
-
-  it('die laufende Art laesst sich nicht anklicken', () => {
-    assert.match(S(), /disabled=\{laeuftGerade\}/,
-      'die laufende Phase ist waehlbar — ein Wechsel auf sich selbst '
-      + 'ist kein Wechsel')
-  })
-
-  it('der Wechsel fuehrt zum Beenden, nicht zu einem erfundenen Weg', () => {
-    const q = S()
-    assert.match(q, /onWechseln=\{onBeenden\}/,
-      'der Wechselknopf ruft etwas anderes als den Beenden-Weg — '
-      + 'die Datenbank kennt keinen Direktwechsel (23505)')
+// ══ G-615: das Vorschaupanel und das Wechselraster sind weg ═════════
+//
+// Hier stand G-534/A7 (acht Proben auf `phase-vorschau.tsx` und das
+// Raster in `phase-setzen.tsx`). Tom, G-615: der Reiter Phase engine wird
+// der Planer — begonnen wird mit Ziel (Anlegemodal G-610, Planer).
+// Die Zusage dreht sich um: beides kommt nicht zurueck.
+describe('G-615 — kein Vorschaupanel, kein Wechselraster', () => {
+  it('phase-vorschau.tsx ist weg und wird nirgends importiert', () => {
+    assert.ok(!existsSync(join(GOALS, 'phase-vorschau.tsx')), 'phase-vorschau.tsx ist zurueck')
+    assert.ok(!/phase-vorschau'/.test(lies(join(GOALS, 'phase-setzen.tsx'))))
+    assert.ok(!/phase-vorschau'/.test(lies(join(GOALS, 'ansicht.tsx'))))
   })
 })
 
