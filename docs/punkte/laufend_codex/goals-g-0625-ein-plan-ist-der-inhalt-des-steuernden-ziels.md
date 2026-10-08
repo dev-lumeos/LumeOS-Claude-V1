@@ -46,3 +46,14 @@ Datenmodell, Lese- und Schreibfunktionen, Bestand umhängen (jedes bestehende st
     Bereich: supabase/_pipeline/ (Kette). Live erst nach Toms Freigabe.
     Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
     Stand:   2026-10-08, HEAD 3b58a278
+
+
+## Teil 1 committet - 2026-10-08, Commit `0ff58083`
+
+`[cmd]` 12 Dateien nur supabase/_pipeline: neun Schritte 625_* (model, runtime, execution, limits, phase_guard, goal_update_guard, custom_calculation, daily_targets, strategy_plan_values) + Probe goals-g625-plans.test.ts. Modell gelesen: status CHECK entwurf/aktiv/pausiert/abgeschlossen, UNIQUE(goal_id), Unique-Index ein aktiver Plan je Nutzer, Position CHECK Katalog XOR eigene Werte, Termine kind A/B/S/X. Gate grün.
+
+`[read]` Codex: 379 Schritte grün, G-625-Probe 14/14, testdaten-pruefen 186/0, Sabotage 2/2 rot. Live nur gelesen: 4 steuernde Ziele, 0 Pläne, 0 Positionen.
+
+Offen:
+1. Ändern einer laufenden Position braucht einen gemeinsamen Schreibweg für Position und Phase. Das ist Teil des Auftrags (Phase Engine editiert), also Teil 2.
+2. Katalogwerte für Fett g/kg, Cardio/Woche, Refeed/Woche fehlen und stehen auf NULL. `[cmd]` Der Katalog hat bereits fat_percent (Anteil kcal, 0,15-0,30) bei allen ausser expert_bb_annual, und refeeds als Rhythmus (moderate_cut alle 8 Wochen 1 Woche, aggressive_cut alle 4 Wochen 1 Woche). Cardio fehlt ganz. Entscheidung Tom.

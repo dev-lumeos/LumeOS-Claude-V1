@@ -62,3 +62,12 @@ Live seit 15:51: 613/617/617-Erweiterung/622/626 (G-613, G-617, G-622, G-626, G-
 ## Entschieden - 2026-10-08 15:57, Tom: beenden
 
 Kein neuer Status. `abandoned` heisst in der Anzeige "beendet" statt "abgebrochen" (Liste, Details, Verlauf).
+
+
+## Teil 2 Schirm + Teil 3 committet - 2026-10-08, Commit `6240bcd1`
+
+`[cmd]` 11 Dateien nur apps/web goals. Neu messziel-setzen.tsx, messziel.ts, messziel-io.ts (Anlegen nur per RPC `measurement_goal_create`, danach Rücklesen), g628-messziel.test.ts. Kein Grenzwert im Code. Gate grün, web 2771. test-user nachgemessen: G-559 Abbauziel active/controlling/Prio 1/primär/1 Phase, Aufbauziel on_hold; 0 Ziele mit "G-628" im Titel.
+
+`[read]` Claude Code: Teil 2 am Schirm sauber/Warnung/Sperre ("Frei ab pro"), Wächter in DB und UI als Satz, Umlaute richtig; Fotos backup/g628-t2live-*.png. Teil 3: je Kategorie ein Messziel (Gewicht 81,4 kg; Bench 1RM 105,41 kg; Trainings/Woche 0; eigene Einheit 1,5 l), alle measurement/0 Phasen; KFA ohne Wert -> "Erst messen". Unterwegs behoben: Tempo-Rundung (vorgehen_zu_langsam), Ziel-Editor schickte unveränderte Felder (G626_BLOCK beim Reaktivieren).
+
+Teil 4 (offen, Dossier 8.2): Messung direkt bei "erst messen", Vorschlag "Schnitt + 1" bei Gewohnheiten, Widerspruchshinweis (G-621), Anzeige "beendet". Startwert-Vorschau vor dem Anlegen: G-634. Zahlen mit Punkt in den G-626-Texten: G-633. Rohe Einheit/Quelle im Reiter: G-618.
