@@ -15,7 +15,7 @@
 import * as React from 'react'
 import { Card, Icon, Pill } from '@lumeos/ui'
 
-import { gesperrt, planStrategien } from '../../../lib/goals/zielwahl'
+import { gesperrt, naechsteNamen, planStrategien } from '../../../lib/goals/zielwahl'
 import { planvorschau } from '../../../lib/goals/planer'
 import { phasenartFuerStrategie } from '../../../lib/goals/strategie-regeln'
 import { unterartFuer } from '../../../lib/goals/ziel-arten'
@@ -213,7 +213,6 @@ export function PhasenZustand({ ziele, phasen, strategien }: {
   const ziel = ziele.find(z => z.status === 'active' && z.is_primary) ?? null
   const phase = ziel ? phasen.find(p => p.goal_id === ziel.goal_id) ?? null : null
   const s = phase?.strategie_code ? strategien.find(x => x.code === phase.strategie_code) ?? null : null
-  const name = (c: string) => strategien.find(x => x.code === c)?.label ?? phasenName(c)
   return (
     <Card title="Phase state machine" sub="wo du stehst · was empfohlen ist">
       <div data-phasenzustand style={{ fontSize: 12, lineHeight: 1.6 }}>
@@ -231,7 +230,7 @@ export function PhasenZustand({ ziele, phasen, strategien }: {
             <div data-phasenzustand-empfohlen>
               <span className="v2-eyebrow">Empfohlen danach</span>{' '}
               {s && s.next_codes.length > 0
-                ? s.next_codes.map(name).join(' · ')
+                ? naechsteNamen(s, strategien).join(' · ')
                 : <span className="v2-dim">die Strategie nennt keinen naechsten Schritt</span>}
             </div>
           </>

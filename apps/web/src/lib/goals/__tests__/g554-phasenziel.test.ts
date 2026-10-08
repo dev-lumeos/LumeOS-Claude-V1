@@ -421,68 +421,43 @@ describe('G-554/A4 — der Pace ist eine Rechnung', () => {
 // A1 — die Strategiewahl im Modal
 // ════════════════════════════════════════════════════════════════
 
-describe('G-554/A1 — die Strategie im Anlegen-Dialog', () => {
-  const M = () => lies(join(GOALS, 'modale.tsx'))
+// ══ G-628: „Ziel setzen" statt der Strategie im alten Dialog ════════
+//
+// Hier stand G-554/A1 (sechs Typ-Knoepfe, Strategie nur bei
+// body_composition und freiwillig mit „ohne"). **Tom 08.10., Dossier 8.1:**
+// Schritt 0 trennt Richtung (steuernd, immer mit Phase) und Messziel (ohne
+// Phase). „Ohne Richtung" ist damit der Weg B, kein Knopf mehr. Was gilt
+// weiter: der gemeinsame Schreibweg, der getrennte Sitzungsfehler (G-553),
+// keine „noch nicht gespeichert"-Marke (G-609).
+describe('G-628 — Weg A im Dialog „Ziel setzen"', () => {
+  const Z = () => lies(join(GOALS, 'ziel-setzen.tsx'))
 
-  it('die sechs Knoepfe stehen im Dialog', () => {
-    assert.match(M(), /ZIELKNOEPFE\.map/,
-      'der Dialog baut die Typen nicht aus ZIELKNOEPFE — dann ist es '
-      + 'wieder eine eigene Liste (G-354)')
-    assert.match(M(), /data-zieltyp=\{t\.id\}/,
-      'die Typknoepfe tragen keine Marke')
+  it('die sechs Typ-Knoepfe sind weg', () => {
+    assert.ok(!/ZIELKNOEPFE|data-zieltyp/.test(Z() + lies(join(GOALS, 'modale.tsx'))))
   })
 
-  it('die Wahl erscheint nur bei body_composition', () => {
-    const q = M()
-    assert.match(q, /traegtStrategie\(/,
-      'der Dialog entscheidet nicht ueber traegtStrategie')
-    assert.match(q, /\{zeigtStrategie && \(/,
-      'die Strategiewahl haengt nicht am Typ — sie erschiene auch '
-      + 'bei einem Kraftziel')
+  it('Schritt 0 trennt Richtung und Messziel', () => {
+    assert.match(Z(), /marke="richtung"/)
+    assert.match(Z(), /marke="messziel"/)
   })
 
-  it('sie ist freiwillig — es gibt ein „ohne"', () => {
-    // `[read]` **Ein body_composition-Ziel ohne Strategie bleibt
-    // gueltig:** es sagt wohin, nicht wie.
-    assert.match(M(), /data-zielstrategie=""/,
-      'es gibt keine Wahl „ohne Strategie" — dann waere sie Pflicht')
-    assert.match(M(), /React\.useState<string \| null>\(null\)/,
-      'die Vorbelegung ist nicht „keine Strategie"')
-  })
-
-  it('ohne Strategie wird keine Phase angelegt', () => {
-    const q = M()
-    assert.match(q, /phase: gewaehlteStrategie/,
-      'die Phase haengt nicht an der Strategiewahl — dann entstuende '
-      + 'zu jedem Ziel eine Phase')
+  it('eine Richtung legt immer Ziel UND Phase an — mit der Strategie', () => {
+    assert.match(Z(), /goal_type: 'body_composition'/)
+    assert.match(Z(), /phase: \{ phase_type: phasenart, strategie_code: p\.code,/)
   })
 
   it('der Dialog ruft den gemeinsamen Weg, nicht zwei', () => {
-    const q = M()
-    assert.match(q, /phasenzielAnlegenAktion\(/,
-      'der Dialog legt Ziel und Phase getrennt an — dann kann er '
-      + 'zwischen den Schritten abbrechen')
-    // `[read]` **Mit Wortgrenze** — `phasenzielAnlegenAktion`
-    // enthaelt `zielAnlegenAktion` als Teilkette und waere sonst
-    // ein Falschtreffer.
-    assert.ok(!/(?<![a-zA-Z])zielAnlegenAktion\(/.test(q),
-      'der alte Einzelweg wird noch gerufen — zwei Wege driften')
+    assert.match(Z(), /phasenzielAnlegenAktion\(/)
+    assert.ok(!/(?<![a-zA-Z])zielAnlegenAktion\(/.test(Z()), 'der alte Einzelweg wird gerufen')
   })
 
-  it('der Sitzungsfehler wird getrennt gezeigt', () => {
-    const q = M()
-    assert.match(q, /data-ziel-sitzungsfehler/,
-      'ein Tokenfehler sieht aus wie ein Eingabefehler (G-553)')
-    assert.match(q, /r\.art === 'sitzung'/,
-      'die Fehlerart wird nicht ausgewertet')
+  it('der Sitzungsfehler wird getrennt gezeigt (G-553)', () => {
+    assert.match(Z(), /data-ziel-sitzungsfehler/)
+    assert.match(Z(), /r\.art === 'sitzung'/)
   })
 
-  it('keine Marke „noch nicht gespeichert" mehr (G-609)', () => {
-    // `[read]` **Die Marke war richtig, solange der Code nicht ankam**
-    // — jetzt waere sie eine Falschaussage.
-    const q = M()
-    assert.ok(!/data-zielstrategie-marke|data-ziel-strategie-offen|strategieOffen/.test(q),
-      'das Modal behauptet noch, die Strategie werde nicht gespeichert')
+  it('keine Marke „noch nicht gespeichert" (G-609)', () => {
+    assert.ok(!/data-zielstrategie-marke|data-ziel-strategie-offen|strategieOffen/.test(Z()))
   })
 })
 
@@ -511,13 +486,14 @@ describe('G-557/A1 — subtype wird durchgereicht', () => {
   })
 
   it('der Dialog leitet ihn aus der Zuordnung ab', () => {
-    const q = lies(join(GOALS, 'modale.tsx'))
+    // G-628: der Dialog ist jetzt „Ziel setzen" (ziel-setzen.tsx).
+    const q = lies(join(GOALS, 'ziel-setzen.tsx'))
     assert.match(q, /subtype: unterartFuer\(/,
       'der Dialog setzt den subtype nicht — oder er tippt ihn, '
       + 'statt ihn abzuleiten')
     // `[read]` **Die Kategorie der Strategie, nicht der Code** —
     // sonst muesste die Tabelle 17 Zeilen kennen statt sechs.
-    assert.match(q, /\?\.category \?\? null/,
+    assert.match(q, /unterartFuer\('body_comp', p\.category\)/,
       'die Richtung kommt nicht aus der Kategorie')
   })
 

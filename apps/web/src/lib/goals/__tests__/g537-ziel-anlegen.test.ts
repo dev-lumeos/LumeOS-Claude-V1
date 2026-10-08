@@ -173,78 +173,31 @@ describe('G-537/A1 — der Schreibweg', () => {
   })
 })
 
-describe('G-537/A4 — der Dialog vermischt nichts', () => {
+// ══ G-628: das alte Anlegemodal ist ersetzt ════════════════════════
+//
+// Hier stand G-537/A4: kein Ernaehrungsziel im Dialog, „Linked modules"
+// mit Marke, fuenf Modulknoepfe. **Tom, 08.10. (Vorlage
+// `docs/spezifikation/goals-ziel-setzen/`, Dossier 8.2/8.3):** Weg A zeigt
+// das Tagesziel (kcal, Protein) aus einer Rechnung; „Linked modules",
+// Prioritaet, getippter Istwert und die sechs Typ-Knoepfe fallen weg.
+// Die Zusagen drehen sich um.
+describe('G-628 — das alte Anlegemodal kommt nicht zurueck', () => {
   const M = () => ohneKommentare(
     readFileSync(join(HIER, '..', '..', '..', 'app', 'v2', 'goals', 'modale.tsx'), 'utf8'))
+  const Z = () => ohneKommentare(
+    readFileSync(join(HIER, '..', '..', '..', 'app', 'v2', 'goals', 'ziel-setzen.tsx'), 'utf8'))
 
-  it('kein Ernaehrungsziel im Anlegedialog', () => {
-    const q = M()
-    const i = q.indexOf('function NewGoalModal')
-    const rumpf = q.slice(i, q.indexOf('function GoalDetailModal'))
-    // `[read]` **Ein `body_composition`-Ziel sagt WOHIN, eine
-    // Strategie sagt WIE** — und nur die zweite aendert die
-    // Tageswerte. **Der Dialog darf das nicht vermischen, auch
-    // nicht durch einen Hinweis.**
-    // ══ G-554/A1: „Strategie" ist hier nicht mehr verboten ════
-    //
-    // `[cmd]` G-537 schloss sie aus: **der Katalog war nicht live.**
-    // `[cmd]` **`goal_strategies` hat seit G-536 siebzehn Zeilen**,
-    // und G-554 bringt die Wahl in den Dialog — **aber nur bei
-    // `body_composition` und freiwillig.**
-    //
-    // `[read]` **Was verboten BLEIBT, ist Schicht 2:** konkrete
-    // Tageswerte. Ein Ziel sagt wohin, eine Strategie wie —
-    // **Kalorien und Makros rechnet weiterhin niemand hier.**
-    for (const wort of ['nutrition_targets', 'Kalorienziel', 'Tageswert',
-      'kcal']) {
-      assert.ok(!rumpf.includes(wort),
-        `der Dialog nennt „${wort}" — das ist Schicht 2 (G-536)`)
-    }
+  it('NewGoalModal und „Linked modules" sind weg', () => {
+    assert.ok(!/function NewGoalModal|data-zielmodul|const MODULE = /.test(M()))
+    assert.ok(!/data-zielmodul|Linked modules/.test(Z()))
   })
 
-  it('„Linked modules" traegt eine Marke, eine Zeile', () => {
-    const q = M()
-    assert.match(q, /attrappeAus\('theme-v1\/module-goals\.jsx',/,
-      'die Marke fehlt — dann sieht der Platz echt aus')
-    assert.match(q, /wartet auf: G-536/,
-      'die Marke nennt den Punkt nicht, auf den sie wartet')
+  it('keine Prioritaet, kein getippter Istwert im Dialog', () => {
+    assert.ok(!/aria-label="Priority"|aria-label="Current value"|data-zielfeld="ist"/.test(Z()))
   })
 
-  it('der Knopf ist gesperrt, solange die Eingabe nicht traegt', () => {
-    assert.match(M(), /disabled=\{laeuft \|\| felder\.length > 0\}/,
-      'der Knopf laesst sich druecken, obwohl die Pruefung faellt')
-  })
-
-  // ── Die Modulwahl ist BEDIENBAR ─────────────────────────────────
-  //
-  // `[read]` **Die verknuepften Module sind die Datenquelle:** der
-  // Entwurf gibt jedem Ziel `history[]` und `pace`, `user_goals`
-  // traegt `auto_update`. **Der Ist-Wert kommt aus den Modulen, er
-  // wird nicht getippt.**
-  //
-  // `[read]` **Ein Feld, das man nicht anklicken kann, prueft
-  // niemand** — deshalb ist die Wahl bedienbar, obwohl die Spalte
-  // fehlt.
-  it('die fuenf Module lassen sich anklicken', () => {
-    const q = M()
-    assert.match(q, /data-zielmodul=\{m\}/,
-      'die Module sind keine Knoepfe — dann prueft die Wahl niemand')
-    assert.ok(!/InEntwicklungKnopf key=\{m\}/.test(q),
-      'die Module sind wieder Noch-nicht-Knoepfe')
-  })
-
-  it('die Wahl wird gehalten', () => {
-    const q = M()
-    assert.match(q, /const \[module, setModule\] = React\.useState/,
-      'die Wahl wird nicht gehalten — sie waere nach einem Klick weg')
-    assert.match(q, /aria-pressed=\{an\}/,
-      'der gewaehlte Zustand ist nicht ablesbar')
-  })
-
-  it('es sind die fuenf aus dem Entwurf', () => {
-    const q = M()
-    assert.match(q,
-      /const MODULE = \['nutrition', 'training', 'recovery', 'supplements', 'medical'\]/,
-      'die Modulliste weicht vom Entwurf ab')
+  it('das Tagesziel kommt aus der einen Rechnung (zielrechnung.ts)', () => {
+    assert.match(Z(), /rechneZiel\(\{/)
+    assert.ok(!/kcalAusRate|E1_FAKTOR|7700/.test(Z()), 'der Dialog rechnet kcal selbst')
   })
 })

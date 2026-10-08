@@ -14,6 +14,7 @@
 // empfohlene naechste Schritt nach einem Abnehmziel; **`plan`** gehoert in
 // den Planer (Reiter Phase engine, G-615).
 import { EXPERIENCE_LEVELS } from '../profile/profile-model'
+import { phasenName } from './phase-regeln'
 import type { Strategie } from './strategie-read'
 
 /** Die Richtungen von Ebene 1 — gruppen mit einer Standardvariante. */
@@ -60,6 +61,15 @@ export function varianten(alle: Strategie[], gruppe: string): Strategie[] {
 /** Die Strategien, die in den Planer gehoeren (`plan`) — fuer den Hinweis. */
 export function planStrategien(alle: Strategie[]): Strategie[] {
   return alle.filter(s => s.auswahl_gruppe === 'plan')
+}
+
+/**
+ * Die Namen aus `next_codes` — teils Strategien, teils Phasenarten; beides
+ * wird benannt, nichts geraten. G-628: eine Stelle fuer Planer und „Ziel
+ * setzen" (A3 „Danach empfohlen").
+ */
+export function naechsteNamen(s: Strategie, alle: Strategie[]): string[] {
+  return s.next_codes.map(c => alle.find(x => x.code === c)?.label ?? phasenName(c))
 }
 
 /**

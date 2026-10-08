@@ -72,7 +72,8 @@ describe('G-615 — keine Strategie-Reiter, eine Sperrregel', () => {
 
   it('der Planer sperrt mit derselben Regel wie das Anlegemodal', () => {
     const q = lies(join(GOALS, 'planer.tsx'))
-    assert.match(q, /import \{ gesperrt, planStrategien \} from '\.\.\/\.\.\/\.\.\/lib\/goals\/zielwahl'/)
+    // G-628: der Import traegt jetzt auch `naechsteNamen`.
+    assert.match(q, /import \{[^}]*\bgesperrt\b[^}]*\} from '\.\.\/\.\.\/\.\.\/lib\/goals\/zielwahl'/)
     assert.ok(!/min_erfahrung\s*[<>]|EXPERIENCE_LEVELS/.test(q), 'der Planer vergleicht Grade selbst')
   })
 })

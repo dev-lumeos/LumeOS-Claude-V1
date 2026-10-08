@@ -15,7 +15,8 @@ import type { Koerpermessung } from '../../../lib/goals/lesen'
 
 /** Die sechs Modale des Rahmens. [cmd] module-goals.jsx:198-203. */
 export type ModalZustand =
-  | { typ: 'newGoal' }
+  // G-628: `start: 'B1'` — „+ Messziel" springt direkt zur Art.
+  | { typ: 'newGoal'; start?: 'B1' }
   | { typ: 'goalDet'; ziel: Ziel }
   // G-606: mit `messung` oeffnet dasselbe Modal im Aendern-Modus.
   | { typ: 'logWeight'; messung?: Koerpermessung }

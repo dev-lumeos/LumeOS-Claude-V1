@@ -389,8 +389,15 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
           <button type="button" className="v2-btn" onClick={() => kontext.open({ typ: 'logMeasure' })}>
             <Icon name="edit" className="v2-ic v2-ic-sm" /> Measurements
           </button>
-          <button type="button" className="v2-btn v2-btn-primary" onClick={() => kontext.open({ typ: 'newGoal' })}>
-            <Icon name="plus" className="v2-ic v2-ic-sm" /> New goal
+          {/* G-628: „+ Messziel" springt direkt zur Art (B1), „+ Ziel setzen"
+              beginnt bei Schritt 0 — Vorlage `entwurf/Main.dc.html`. */}
+          <button type="button" className="v2-btn" data-messziel-neu
+                  onClick={() => kontext.open({ typ: 'newGoal', start: 'B1' })}>
+            <Icon name="plus" className="v2-ic v2-ic-sm" /> Messziel
+          </button>
+          <button type="button" className="v2-btn v2-btn-primary" data-ziel-neu
+                  onClick={() => kontext.open({ typ: 'newGoal' })}>
+            <Icon name="plus" className="v2-ic v2-ic-sm" /> Ziel setzen
           </button>
         </div>
       </div>
@@ -714,7 +721,10 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
           `body_composition`. */}
       <GoalsModale modal={modal} onClose={kontext.close}
                    strategien={echt.strategien}
-                   erfahrung={echt.strategieProfil.experience} />
+                   erfahrung={echt.strategieProfil.experience}
+                   ziele={echt.ziele} phasen={echt.offenePhasen}
+                   messungen={echt.messungen} heute={echt.stichtag}
+                   tdee={echt.tdee?.adaptive_tdee_kcal ?? echt.tdee?.formula_tdee_kcal ?? null} />
     </GoalsKontext.Provider>
   )
 }

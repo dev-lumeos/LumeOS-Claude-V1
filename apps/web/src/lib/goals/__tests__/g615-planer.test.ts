@@ -104,6 +104,6 @@ describe('G-615 — der Reiter', () => {
   it('die Zustandsanzeige liest das aktive primaere Ziel und next_codes', () => {
     const q = lies(join(GOALS, 'planer.tsx'))
     assert.match(q, /z\.status === 'active' && z\.is_primary/)
-    assert.match(q, /s\.next_codes\.map\(name\)/)
+    assert.match(q, /naechsteNamen\(s, strategien\)/)
   })
 })

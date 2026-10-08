@@ -20,7 +20,8 @@ const lies = (p: string) => readFileSync(p, 'utf8')
 
 describe('G-609 — vom Modal bis in die Phase', () => {
   it('das Modal gibt die gewaehlte Strategie mit', () => {
-    assert.match(lies(join(GOALS, 'modale.tsx')), /strategie_code: gewaehlteStrategie,/)
+    // G-628: „Ziel setzen" ersetzt das alte Modal.
+    assert.match(lies(join(GOALS, 'ziel-setzen.tsx')), /strategie_code: p\.code,/)
   })
 
   it('phasenzielAnlegen reicht sie an phaseStarten', () => {

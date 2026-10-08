@@ -33,7 +33,7 @@ import { fotosessionAnlegenAktion } from './fotosession-aktionen'
 // nur der Aufrufer fehlte.
 import { messungAnlegenAktion, messungAendernAktion } from './koerpermass-aktionen'
 // G-606: der Aendern-Modus — Typ aus dem Leseweg, Router fuer das Neuladen.
-import type { Koerpermessung } from '../../../lib/goals/lesen'
+import type { Koerpermessung, ZielFortschritt, Zielphase } from '../../../lib/goals/lesen'
 import { useRouter } from 'next/navigation'
 // `[read]` **Nur Typ und Konstanten** — `koerpermass-rechnung.ts`
 // hat kein Server-I/O, aber die Regel bleibt: kein Wert-Import aus
@@ -42,24 +42,10 @@ import {
   BF_METHODEN, LEERE_MESSUNG, messungAlsEingabe, type KoerpermassEingabe,
 } from '../../../lib/goals/koerpermass-rechnung'
 
-import {
-  zielArtAuswahl, AKTIVE_PLAETZE, type ZielArt,
-  ZIELKNOEPFE, zielknopf, traegtStrategie, unterartFuer,
-} from '../../../lib/goals/ziel-arten'
-// G-554/A2: Ziel und Phase in einem Schritt.
-import { phasenzielAnlegenAktion } from './ziel-aktionen'
 // `[read]` **Nur der Typ** — der Leseweg bleibt auf dem Server.
 import type { Strategie } from '../../../lib/goals/strategie-read'
-import { phasenartFuerStrategie, tdeeProzent } from '../../../lib/goals/strategie-regeln'
-import { pruefeRate, type Phasenart } from '../../../lib/goals/phase-regeln'
-import {
-  gesperrt, planStrategien, richtungen, varianten,
-} from '../../../lib/goals/zielwahl'
-// G-537: die Pruefung, die auch der Schreibweg nutzt.
-import { pruefeNeuesZiel } from '../../../lib/goals/ziel-regeln'
-// G-537/A3: die Marke fuer „Linked modules" — E-68, eine Zeile.
-import { attrappeAus } from './ansicht'
-
+// G-628: „Ziel setzen" ersetzt das alte Anlegemodal.
+import { ZielSetzen } from './ziel-setzen'
 import { MEASUREMENTS, daysToDeadline, type Ziel } from './daten'
 import type { ModalZustand } from './kontext'
 // `[cmd]` **G-577: der Schreibweg fuer die Umfaenge.** Die Felder und
@@ -90,7 +76,7 @@ function jetztHHMM(): string {
 
 // ── Der Rahmen ──────────────────────────────────────────────────
 // [cmd] module-goals.jsx:659-681.
-function GModal({
+export function GModal({
   title, subtitle, eyebrow, accent, onClose, footer, children, width = 580,
 }: {
   title: React.ReactNode
@@ -141,7 +127,7 @@ function GModal({
 }
 
 // [cmd] module-goals.jsx:683-692.
-function GField({ label, sub, fehler, children }: {
+export function GField({ label, sub, fehler, children }: {
   label: React.ReactNode; sub?: React.ReactNode
   /** G-606: der Feldfehler steht AM Feld, nicht in einer Sammelliste. */
   fehler?: string
@@ -168,12 +154,15 @@ const FELD: React.CSSProperties = {
   borderRadius: 6, padding: '0 10px', fontSize: 12, outline: 'none', color: 'var(--fg)',
 }
 
-function GInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
+export function GInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} style={{ ...FELD, ...(props.style ?? {}) }} />
 }
 
 // ── Die Verteilung ──────────────────────────────────────────────
-export function GoalsModale({ modal, onClose, strategien = [], erfahrung = null }: {
+export function GoalsModale({
+  modal, onClose, strategien = [], erfahrung = null,
+  ziele = [], phasen = [], messungen = [], tdee = null, heute = tagIso(),
+}: {
   modal: ModalZustand | null
   onClose: () => void
   /**
@@ -185,10 +174,21 @@ export function GoalsModale({ modal, onClose, strategien = [], erfahrung = null 
   strategien?: Strategie[]
   /** G-610: `profiles.experience_level` — sperrt Varianten ueber dem Grad. */
   erfahrung?: string | null
+  /** G-628: was „Ziel setzen" braucht — Steuerung, Messung, TDEE, Stichtag. */
+  ziele?: ZielFortschritt[]
+  phasen?: Zielphase[]
+  messungen?: Koerpermessung[]
+  tdee?: number | null
+  heute?: string
 }) {
   if (!modal) return null
   switch (modal.typ) {
-    case 'newGoal': return <NewGoalModal onClose={onClose} strategien={strategien} erfahrung={erfahrung} />
+    // G-628: „Ziel setzen" ersetzt „New goal" vollstaendig.
+    case 'newGoal': return (
+      <ZielSetzen onClose={onClose} strategien={strategien} erfahrung={erfahrung}
+                  ziele={ziele} phasen={phasen} messungen={messungen} tdee={tdee}
+                  heute={heute} start={modal.start} />
+    )
     case 'goalDet': return <GoalDetailModal g={modal.ziel} onClose={onClose} />
     case 'logWeight': return <LogWeightModal onClose={onClose} messung={modal.messung} />
     case 'logMeasure': return <LogMeasureModal onClose={onClose} />
@@ -199,550 +199,10 @@ export function GoalsModale({ modal, onClose, strategien = [], erfahrung = null 
 }
 
 // ── NEW GOAL ────────────────────────────────────────────────────
-// [cmd] module-goals.jsx:694-744.
-
-/**
- * Beispieltexte je Zielart — G-354.
- *
- * `[read]` **Platzhalter, keine Werte:** sie stehen im `placeholder`
- * und werden nie gespeichert. **Sie zeigen die Form einer Eingabe,
- * nicht eine gemessene Zahl.**
- */
-/**
- * Die fuenf Module, die Daten zu einem Ziel beitragen.
- *
- * `[cmd]` **Aus dem Entwurf** (`module-goals.jsx:734-738`) — **und
- * dieselben fuenf, die `goal_contributions.module` im CHECK
- * nennt** (`DATABASE.md:149`).
- */
-const MODULE = ['nutrition', 'training', 'recovery', 'supplements', 'medical'] as const
-
-const BEISPIEL: Record<ZielArt, { titel: string; ist: string; ziel: string }> = {
-  body_composition: { titel: 'z. B. auf 12 % Körperfett', ist: '79.4', ziel: '78' },
-  performance: { titel: 'z. B. Bankdrücken 1RM · 130 kg', ist: '122.5', ziel: '130' },
-  health: { titel: 'z. B. Blutdruck unter 130/80', ist: '138', ziel: '130' },
-  lifestyle: { titel: 'z. B. dreimal pro Woche Ausdauer', ist: '1', ziel: '3' },
-}
-
-/** Der Stil der Wahlknoepfe — eine Stelle, damit er nicht driftet. */
-function knopfStil(an: boolean): React.CSSProperties {
-  return {
-    padding: '5px 10px', borderRadius: 6, fontSize: 11,
-    cursor: 'pointer',
-    background: an
-      ? 'color-mix(in oklch, var(--acc-goals) 14%, var(--surface))'
-      : 'var(--surface)',
-    border: `1px solid ${an
-      ? 'color-mix(in oklch, var(--acc-goals) 40%, var(--border))'
-      : 'var(--border)'}`,
-    color: an ? 'var(--acc-goals)' : 'var(--fg-muted)',
-  }
-}
-
-function NewGoalModal({ onClose, strategien, erfahrung }: {
-  onClose: () => void; strategien: Strategie[]; erfahrung: string | null
-}) {
-  // ══ G-354: die Arten kommen aus einer Quelle ═══════════════════
-  //
-  // `[cmd]` **Hier stand eine eigene Liste aus dem Altrepo**
-  // (`module-goals.jsx:694-744`) mit sechs Eintraegen: einer
-  // abgekuerzten Koerperzusammensetzung, `weight`, `strength`,
-  // `performance`, `habit`, `custom`.
-  //
-  // `[cmd]` **Die abgekuerzte Form kennt die Datenbank nicht** — der
-  // CHECK `user_goals_goal_type_check` laesst vier Werte zu, und
-  // `body_composition` ist ausgeschrieben. **Ein Ziel mit dem
-  // abgekuerzten Wert waere beim Anlegen abgewiesen worden.**
-  //
-  // `[read]` **Dieselbe Klasse wie die sechste Namensliste in
-  // `nutrition/modale.tsx`** (G-339) — **eine Liste, die niemand
-  // mitzaehlt, weil sie in einem Fenster steht.**
-  // ══ G-554/A3: SECHS Knoepfe, vier CHECK-Werte ══════════════════
-  //
-  // `[cmd]` **Der Entwurf zeigt sechs** (`module-goals.jsx:696-703`),
-  // **der CHECK kennt vier.** `[cmd]` **G-537 nahm die vier und
-  // meldete die Abweichung** — richtig, **aber ,,nach Vorgabe" war
-  // es damit nicht.**
-  //
-  // `[read]` **Die Bruecke ist `subtype`** — die Spalte hat keinen
-  // CHECK und traegt fuenf gelebte Werte. **Die Zuordnung steht in
-  // `ziel-arten.ts`**, samt der zwei Faelle, die dort ausdruecklich
-  // als Vorschlag gekennzeichnet sind (`weight`, `custom`).
-  const [knopf, setKnopf] = React.useState('body_comp')
-  const gewaehlt = zielknopf(knopf)
-  const type: ZielArt = gewaehlt?.art ?? 'body_composition'
-  // `[read]` **Das Sinnbild bleibt hier** — es ist Darstellung, kein
-  // Wert. `[cmd]` **Die Namen aus dem Entwurf**, `:696-703`.
-  const SINNBILD: Record<string, React.ComponentProps<typeof Icon>['name']> = {
-    body_comp: 'goals',
-    weight: 'trend_up',
-    strength: 'training',
-    performance: 'training',
-    habit: 'brain',
-    custom: 'edit',
-  }
-  const types = ZIELKNOEPFE.map(k => ({
-    id: k.id, label: k.label, icon: SINNBILD[k.id],
-  }))
-
-  // ══ G-537: der Dialog legt jetzt wirklich an ═══════════════════
-  //
-  // `[cmd]` **Hier stand ein `InEntwicklungKnopf` mit dem Grund**
-  // *,,Was fehlt, ist nur das ANLEGEN: `schreiben.ts` kennt genau
-  // eine Operation, `.update()`"*. `[cmd]` **`zielAnlegen()` gibt es
-  // seit G-537** — der Grund ist eingeloest.
-  const [titel, setTitel] = React.useState('')
-  const [ist, setIst] = React.useState('')
-  const [ziel, setZiel] = React.useState('')
-  const [einheit, setEinheit] = React.useState('')
-  const [start, setStart] = React.useState(tagIso())
-  const [deadline, setDeadline] = React.useState('')
-  const [prio, setPrio] = React.useState(1)
-  const [notiz, setNotiz] = React.useState('')
-  // `[cmd]` **G-537/A3: die Wahl wird GEHALTEN**, auch wenn sie
-  // noch nirgends ankommt — `user_goals` hat keine Spalte dafuer
-  // (G-536). `[read]` **Gehalten heisst: sie ist pruefbar.**
-  const [module, setModule] = React.useState<string[]>([])
-  // ══ G-554/A1: die Strategie ════════════════════════════════════
-  //
-  // `[read]` **Freiwillig.** Ein `body_composition`-Ziel ohne
-  // Strategie bleibt gueltig — **es sagt wohin, nicht wie.** Wer
-  // eine waehlt, legt ein PHASENZIEL an.
-  const [strategie, setStrategie] = React.useState<string | null>(null)
-  // ══ G-610: „Ziel setzen" in zwei Ebenen ══════════════════════════
-  //
-  // `[read]` **Ebene 1:** die Richtung — ihre Standardvariante ist damit
-  // gewaehlt, ein Anfaenger ist fertig. **Ebene 2** („Vorgehen
-  // anpassen"): die Varianten der Richtung, gesperrte sichtbar.
-  // `[cmd]` **Hier stand `strategien.filter(x => x.tier === 'simple')`**
-  // (G-554) — drei Knoepfe, keine Varianten, kein Grad.
-  const [vorgehenOffen, setVorgehenOffen] = React.useState(false)
-  const [tempo, setTempo] = React.useState('')
-  const [mitPhase, setMitPhase] = React.useState(false)
-  // `[cmd]` **G-553:** ein Tokenfehler ist kein Datenfehler.
-  const [sitzungsfehler, setSitzungsfehler] = React.useState(false)
-
-  // `[read]` **Die Wahl erscheint nur, wo sie etwas bedeutet.** Ein
-  // Bankdrueck-Ziel hat keine Ernaehrungsstrategie.
-  const zeigtStrategie = traegtStrategie(gewaehlt)
-  const richtungsListe = richtungen(strategien)
-  const strategieZeile = strategien.find(x => x.code === strategie) ?? null
-  const richtung = strategieZeile?.auswahl_gruppe ?? null
-  /** Eine Variante waehlen — das Tempo springt auf ihren Vorschlag. */
-  function waehle(v: Strategie | null) {
-    setStrategie(v?.code ?? null)
-    setTempo(v?.weight_change_target_percent != null ? String(v.weight_change_target_percent) : '')
-  }
-  const tempoZahl = tempo.trim() === '' ? null : Number(tempo)
-
-  /** Die Phasenart zum gewaehlten Code — aus der Katalogzeile. */
-  function phasenartFuer(code: string): Phasenart {
-    const z = strategien.find(x => x.code === code)
-    const a = z ? phasenartFuerStrategie(z.code, z.category) : null
-    // `[read]` **Ohne Zuordnung keine Phase** — der Aufrufer prueft
-    // vorher, dass eine Strategie gewaehlt ist.
-    return (a ?? 'maintenance') as Phasenart
-  }
-  const [laeuft, setLaeuft] = React.useState(false)
-  const [fehler, setFehler] = React.useState<string | null>(null)
-  const [fertig, setFertig] = React.useState(false)
-
-  const zahl = (s: string): number | null => {
-    const t = s.trim()
-    if (t === '') return null
-    const n = Number(t)
-    return Number.isFinite(n) ? n : null
-  }
-
-  // `[read]` **Die Pruefung liegt in `ziel-regeln.ts`** — dieselbe,
-  // die der Schreibweg nutzt. **Zwei Kopien driften.**
-  const felder = pruefeNeuesZiel({
-    goal_type: type, title: titel, gueltig_ab: start, priority: prio,
-    target_value: zahl(ziel), current_value: zahl(ist),
-    target_date: deadline || null,
-  })
-  // `[read]` **Das Tempo gegen dieselben CHECKs wie der Phasenstart** —
-  // die Pruefung steht in `phase-regeln.ts`.
-  if (zeigtStrategie && strategie) {
-    felder.push(...pruefeRate(phasenartFuer(strategie), tempoZahl))
-  }
-  const feldFehler = (f: string) => felder.find(x => x.feld === f)?.text
-
-  // `[cmd]` **G-554/A2: EIN Aufruf fuer Ziel UND Phase** — beides
-  // oder keines. `[read]` **Der Vorgaenger machte es genauso**
-  // (`GoalSetupDialog` -> ein `POST`): zwei Aufrufe aus dem Browser
-  // koennten zwischen den Schritten abbrechen.
-  async function anlegen() {
-    setLaeuft(true)
-    setFehler(null)
-    setSitzungsfehler(false)
-    const gewaehlteStrategie = zeigtStrategie ? strategie : null
-    const r = await phasenzielAnlegenAktion({
-      ziel: {
-        goal_type: type,
-        // `[cmd]` **G-557/A1/A2: die Unterart kommt aus der
-        // Zuordnung.** `[read]` **Der Knopf bringt sie mit, oder die
-        // Kategorie der Strategie sagt die Richtung** — bei
-        // `body_comp` ohne Strategie bleibt sie leer, statt `cut`
-        // zu raten.
-        subtype: unterartFuer(
-          knopf,
-          gewaehlteStrategie
-            ? strategien.find(x => x.code === gewaehlteStrategie)?.category ?? null
-            : null),
-        title: titel,
-        gueltig_ab: start,
-        priority: prio,
-        target_value: zahl(ziel),
-        current_value: zahl(ist),
-        start_value: zahl(ist),
-        target_unit: einheit || null,
-        target_date: deadline || null,
-        description: notiz || null,
-      },
-      // `[read]` **Ohne Strategie keine Phase** — ein Ziel ohne
-      // Strategie ist kein Phasenziel.
-      // `[cmd]` **Die Rate kommt aus der Katalogzeile**, nicht aus
-      // einer Eingabe: `weight_change_target_percent`. `[read]`
-      // **Zwei Phasenarten VERLANGEN sie** — `fat_loss` negativ,
-      // `lean_bulk` positiv (`goal_phases_zielrate_passt_zur_art`).
-      // **Der Katalog traegt genau die richtigen Vorzeichen:**
-      // `lose` -0,5 · `gain` +0,3 · `maintain` ohne.
-      phase: gewaehlteStrategie
-        ? {
-            phase_type: phasenartFuer(gewaehlteStrategie),
-            strategie_code: gewaehlteStrategie,
-            // G-610: das Tempo aus dem Feld — vorgeschlagen aus der
-            // Katalogzeile, vom Nutzer aenderbar.
-            zielrate_pct_kg_woche: tempoZahl,
-          }
-        : null,
-    })
-    setLaeuft(false)
-    if (r.ok) {
-      setMitPhase(r.phase_id !== null)
-      setFertig(true)
-      // `[read]` **Erst schliessen, wenn die Zeile da ist** — sonst
-      // sieht ein Fehlschlag aus wie Erfolg.
-      setTimeout(onClose, 900)
-    } else {
-      // `[cmd]` **G-553: Sitzungsfehler von Datenfehler trennen.**
-      // `[read]` **Sonst aendert der Nutzer seine Eingaben, und das
-      // Problem ist die Anmeldung.**
-      setSitzungsfehler(r.art === 'sitzung')
-      setFehler(r.fehler)
-    }
-  }
-
-  return (
-    <GModal title="New goal" subtitle="Choose type · set target · link modules"
-            eyebrow="plus" onClose={onClose}
-            footer={
-              <>
-                <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
-                <button type="button" className="v2-btn v2-btn-primary"
-                        data-ziel-anlegen
-                        disabled={laeuft || felder.length > 0}
-                        onClick={() => { void anlegen() }}>
-                  <Icon name="check" className="v2-ic v2-ic-sm" />
-                  {laeuft ? 'Legt an …' : 'Create goal'}
-                </button>
-              </>
-            }>
-      <GField label="Goal type">
-        <div className="v2-goals-typen">
-          {types.map(t => (
-            <button key={t.id} type="button" data-zieltyp={t.id}
-                    onClick={() => setKnopf(t.id)} aria-pressed={knopf === t.id}
-                    style={{
-                      padding: '10px 8px', borderRadius: 6,
-                      background: knopf === t.id ? 'color-mix(in oklch, var(--acc-goals) 12%, var(--surface))' : 'var(--surface)',
-                      border: `1px solid ${knopf === t.id ? 'color-mix(in oklch, var(--acc-goals) 35%, var(--border))' : 'var(--border)'}`,
-                      color: knopf === t.id ? 'var(--acc-goals)' : 'var(--fg-muted)',
-                      cursor: 'pointer', fontSize: 11.5,
-                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-                    }}>
-              <Icon name={t.icon as never} className="v2-ic" />
-              {t.label}
-            </button>
-          ))}
-        </div>
-      </GField>
-      {/* ══ G-354: die Beispiele folgen den vier Arten ═════════════
-          `[cmd]` **Hier stand `type === 'strength'`** — **`strength`
-          war in der Altrepo-Liste eine ART.** `[cmd]` **In der
-          Datenbank ist es ein `subtype` unter `performance`.**
-
-          `[read]` **Der Typecheck hat es gefunden, nicht ich** — die
-          drei Vergleiche hatten nach dem Anschluss keine
-          Ueberschneidung mehr. */}
-      <GField label="Title">
-        <GInput aria-label="Title" data-zielfeld="titel" value={titel}
-                placeholder={BEISPIEL[type].titel}
-                onChange={e => setTitel(e.target.value)} />
-      </GField>
-      <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
-        <GField label="Current value">
-          <GInput aria-label="Current value" data-zielfeld="ist" value={ist}
-                  placeholder={BEISPIEL[type].ist}
-                  onChange={e => setIst(e.target.value)} />
-        </GField>
-        <GField label="Target value">
-          <GInput aria-label="Target value" data-zielfeld="ziel" value={ziel}
-                  placeholder={BEISPIEL[type].ziel}
-                  onChange={e => setZiel(e.target.value)} />
-        </GField>
-      </div>
-      <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
-        <GField label="Unit">
-          <GInput aria-label="Unit" data-zielfeld="einheit" value={einheit}
-                  placeholder="kg · %  · min" onChange={e => setEinheit(e.target.value)} />
-        </GField>
-        {/* `[read]` **Die Prioritaet gehoert ins Anlegen** — sie
-            entscheidet, welchen der drei aktiven Plaetze das Ziel
-            belegt, und ist danach nur noch umzusortieren. */}
-        <GField label="Priority" sub={`${AKTIVE_PLAETZE} aktive Plätze, jeder einmal`}>
-          <select aria-label="Priority" data-zielfeld="prio" value={prio}
-                  onChange={e => setPrio(Number(e.target.value))}
-                  style={{
-                    width: '100%', padding: '7px 9px', fontSize: 12,
-                    background: 'var(--surface)', color: 'var(--fg)',
-                    border: '1px solid var(--border)', borderRadius: 5,
-                  }}>
-            {[1, 2, 3].map(p => <option key={p} value={p}>{p}</option>)}
-          </select>
-        </GField>
-      </div>
-      <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
-        <GField label="Start date">
-          <GInput type="date" aria-label="Start date" data-zielfeld="start"
-                  value={start} onChange={e => setStart(e.target.value)} />
-        </GField>
-        <GField label="Deadline">
-          <GInput type="date" aria-label="Deadline" data-zielfeld="deadline"
-                  value={deadline} min={start}
-                  onChange={e => setDeadline(e.target.value)} />
-        </GField>
-      </div>
-      {feldFehler('target_date') && (
-        <div data-zielfehler="target_date" style={{
-          marginTop: -4, marginBottom: 10, fontSize: 11.5,
-          color: 'var(--neg)',
-        }}>{feldFehler('target_date')}</div>
-      )}
-      {/* ══ G-554/A1: die Strategie — nur bei body_composition ═══
-          `[cmd]` **`goal_strategies`, 17 Zeilen, seit G-536.**
-          `[cmd]` **G-541 hat die Auswahl gebaut** — hier steht die
-          kurze Form, weil ein Anlegen-Dialog kein Katalogfenster
-          ist.
-
-          `[read]` **Die Wahl ist FREIWILLIG.** Ein
-          `body_composition`-Ziel ohne Strategie bleibt gueltig: es
-          sagt WOHIN, nicht WIE. **Wer eine waehlt, legt ein
-          Phasenziel an** — Ziel und Phase in einem Schritt.
-
-          `[read]` **Bei allen anderen Arten erscheint sie nicht.**
-          Ein Bankdrueck-Ziel hat keine Ernaehrungsstrategie. */}
-      {zeigtStrategie && (
-        <GField label="Richtung (optional) · macht daraus ein Phasenziel">
-          {/* ══ G-610 Ebene 1: die Richtungen aus dem Katalog ═════════ */}
-          <div data-zielstrategie-feld className="v2-grid v2-g-cols-3" style={{ gap: 8 }}>
-            {richtungsListe.map(r => {
-              const an = richtung === r.gruppe
-              return (
-                <button key={r.gruppe} type="button" data-zielrichtung={r.gruppe}
-                        aria-pressed={an}
-                        onClick={() => { waehle(an ? null : r.standard); setVorgehenOffen(false) }}
-                        style={{ ...knopfStil(an), padding: '12px 10px', fontSize: 13, fontWeight: 600 }}>
-                  {r.standard.label}
-                </button>
-              )
-            })}
-          </div>
-          {/* `[read]` **G-554/A1: die Wahl bleibt freiwillig** — ein
-              body_composition-Ziel ohne Richtung sagt wohin, nicht wie. */}
-          <div style={{ display: 'flex', gap: 8, alignItems: 'baseline', marginTop: 6 }}>
-            <button type="button" data-zielstrategie="" aria-pressed={strategie === null}
-                    onClick={() => { waehle(null); setVorgehenOffen(false) }}
-                    style={{ ...knopfStil(strategie === null), padding: '3px 8px', fontSize: 10.5 }}>
-              ohne Richtung
-            </button>
-            {strategie === null && (
-              <span className="v2-dim" style={{ fontSize: 10.5 }}>
-                Ziel ohne Phase.
-              </span>
-            )}
-          </div>
-          {strategieZeile && (
-            <>
-              <div className="v2-dim" data-zielstrategie-werte
-                   style={{ fontSize: 10.5, marginTop: 8, lineHeight: 1.5 }}>
-                <strong style={{ color: 'var(--fg)' }}>{strategieZeile.label}</strong>
-                {strategieZeile.standard && ' · Standard'} — {strategieZeile.description}
-                {strategieZeile.tdee_modifier !== null && <> · TDEE {tdeeProzent(strategieZeile)}</>}
-              </div>
-              {/* `[read]` **Das Tempo ist vorgeschlagen, nicht fest** —
-                  Halten traegt keines (der CHECK verlangt dort `null`). */}
-              {strategieZeile.weight_change_target_percent !== null && (
-                <div style={{ marginTop: 8, maxWidth: 240 }}>
-                  <GField label="Tempo · % Körpergewicht je Woche"
-                          sub={`Vorschlag ${strategieZeile.weight_change_target_percent}`}>
-                    <GInput aria-label="Tempo" data-zielfeld="tempo" value={tempo}
-                            inputMode="decimal" onChange={e => setTempo(e.target.value)} />
-                  </GField>
-                  {feldFehler('zielrate_pct_kg_woche') && (
-                    <div data-zielfehler="tempo" style={{ fontSize: 11, color: 'var(--neg)' }}>
-                      {feldFehler('zielrate_pct_kg_woche')}
-                    </div>
-                  )}
-                </div>
-              )}
-              {/* ══ G-610 Ebene 2: „Vorgehen anpassen" ═══════════════ */}
-              <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
-                      data-vorgehen-auf aria-expanded={vorgehenOffen}
-                      onClick={() => setVorgehenOffen(v => !v)} style={{ marginTop: 8 }}>
-                <Icon name={vorgehenOffen ? 'chevron_up' : 'chevron_down'} className="v2-ic v2-ic-sm" />
-                Vorgehen anpassen
-              </button>
-              {vorgehenOffen && richtung && (
-                <div data-vorgehen className="v2-col-gap" style={{ gap: 4, marginTop: 6 }}>
-                  {varianten(strategien, richtung).map(v => {
-                    const zu = gesperrt(v, erfahrung)
-                    const an = strategie === v.code
-                    const kern = [
-                      v.weight_change_target_percent !== null
-                        ? `Tempo ${v.weight_change_target_percent > 0 ? '+' : ''}${v.weight_change_target_percent} %/Wo`
-                        : null,
-                      v.protein_per_kg !== null ? `Protein ${v.protein_per_kg} g/kg` : null,
-                      v.max_duration_weeks !== null ? `bis ${v.max_duration_weeks} Wo` : null,
-                    ].filter(Boolean).join(' · ')
-                    return (
-                      <button key={v.code} type="button" data-zielvariante={v.code}
-                              aria-pressed={an} disabled={zu}
-                              onClick={() => waehle(v)}
-                              style={{
-                                ...knopfStil(an), textAlign: 'left', display: 'block', width: '100%',
-                                opacity: zu ? 0.55 : 1, cursor: zu ? 'not-allowed' : 'pointer',
-                              }}>
-                        <span style={{ fontWeight: 600 }}>{v.label}</span>
-                        {v.standard && <span className="v2-dim"> · Standard</span>}
-                        {zu && (
-                          <span data-variante-sperre style={{ marginLeft: 6, fontSize: 10.5 }}>
-                            · ab {v.min_erfahrung}
-                          </span>
-                        )}
-                        <span className="v2-dim" style={{ display: 'block', fontSize: 10.5, marginTop: 2 }}>
-                          {v.description}{kern && ` — ${kern}`}
-                        </span>
-                      </button>
-                    )
-                  })}
-                  {/* `[read]` **`plan` gehoert in den Planer (G-615)** —
-                      hier nur der Hinweis, keine Wahl. */}
-                  <div className="v2-dim" data-plan-hinweis style={{ fontSize: 10.5, marginTop: 4 }}>
-                    {planStrategien(strategien).map(x => x.label).join(', ')}: im Planer
-                    (Reiter Phase engine).
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-        </GField>
-      )}
-      {/* ══ G-537/A3: „Linked modules" bekommt einen Platz mit
-          MARKE ══════════════════════════════════════════════════
-          `[cmd]` **`goals.user_goals` hat keine Spalte dafuer** —
-          sie kommt mit G-536 von Codex.
-
-          `[read]` **Eine Zeile, Quelle und Grund** — kein Absatz
-          ueber die fehlende Spalte (das war G-534/A1). */}
-      {/* `[read]` **Die verknuepften Module sind die DATENQUELLE,
-          nicht Schmuck.** `[cmd]` **Der Entwurf gibt jedem Ziel
-          `history[]` und `pace`** (`module-goals.jsx:746-779`),
-          **und `user_goals` traegt `auto_update`** — **der
-          Ist-Wert kommt aus den Modulen, er wird nicht getippt.**
-
-          `[read]` **Deshalb ist die Auswahl BEDIENBAR, obwohl die
-          Spalte fehlt** — ein Feld, das man nicht anklicken kann,
-          prueft niemand. **Die Marke sagt, dass die Wahl noch
-          nirgends ankommt.** */}
-      <Card className="v2-card-tight" style={{ padding: 10, marginBottom: 10 }}
-            attrappe={attrappeAus('theme-v1/module-goals.jsx',
-              'eine Spalte fuer verknuepfte Module — wartet auf: G-536')}>
-        <div className="v2-eyebrow">Linked modules · auto-pull data</div>
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 6 }}>
-          {MODULE.map(m => {
-            const an = module.includes(m)
-            return (
-              <button key={m} type="button" className="v2-pill"
-                      data-zielmodul={m} aria-pressed={an}
-                      onClick={() => setModule(v => an
-                        ? v.filter(x => x !== m) : [...v, m])}
-                      style={{
-                        cursor: 'pointer', padding: '4px 10px', fontSize: 11,
-                        background: an
-                          ? 'color-mix(in oklch, var(--acc-goals) 14%, var(--surface))'
-                          : 'var(--surface)',
-                        borderColor: an
-                          ? 'color-mix(in oklch, var(--acc-goals) 40%, var(--border))'
-                          : 'var(--border)',
-                        color: an ? 'var(--acc-goals)' : 'var(--fg-muted)',
-                      }}>
-                {m}
-              </button>
-            )
-          })}
-        </div>
-      </Card>
-
-      <GField label="Notes (optional)">
-        <GInput aria-label="Notes" data-zielfeld="notiz" value={notiz}
-                placeholder="Context, sub-goals, reminders…"
-                onChange={e => setNotiz(e.target.value)} />
-      </GField>
-
-      {/* `[read]` **Der Satz zum belegten Platz kommt aus dem
-          Schreibweg** — dieselbe Meldung wie bei `zielAendern`,
-          damit der Nutzer eine kennt und nicht zwei. */}
-      {fehler && (
-        <div data-ziel-fehler style={{
-          marginTop: 10, padding: '8px 10px', borderRadius: 5, fontSize: 11.5,
-          lineHeight: 1.5,
-          background: 'color-mix(in oklch, var(--neg) 8%, var(--surface))',
-          border: '1px solid color-mix(in oklch, var(--neg) 30%, var(--border))',
-        }}>
-          {/* ══ G-553/G-554: der Sitzungsfehler sagt, was zu tun
-              ist ══════════════════════════════════════════════════
-              `[cmd]` **Faellt das Anlegen an einem abgelaufenen
-              Token, stand hier ,,Das Ziel konnte nicht angelegt
-              werden"** — **der Nutzer aendert dann seine Eingaben,
-              und das Problem ist die Sitzung.**
-
-              `[read]` **Der technische Text bleibt darunter**, wie
-              in G-553: er macht den naechsten Befund moeglich. */}
-          {sitzungsfehler && (
-            <div data-ziel-sitzungsfehler
-                 style={{ fontWeight: 600, marginBottom: 4 }}>
-              Die Sitzung ist nicht mehr gueltig. Melde dich neu an —
-              deine Eingaben sind noch da.
-            </div>
-          )}
-          <span data-ziel-fehler-text>{fehler}</span>
-        </div>
-      )}
-      {fertig && (
-        <div data-ziel-fertig style={{
-          marginTop: 10, padding: '8px 10px', borderRadius: 5, fontSize: 11.5,
-          lineHeight: 1.5,
-          background: 'color-mix(in oklch, var(--pos) 8%, var(--surface))',
-          border: '1px solid color-mix(in oklch, var(--pos) 30%, var(--border))',
-        }}>
-          {mitPhase ? 'Phasenziel angelegt.' : 'Ziel angelegt.'}
-        </div>
-      )}
-    </GModal>
-  )
-}
+// `[cmd]` **G-628: hier stand `NewGoalModal`** — sechs Typ-Knoepfe,
+// getippter Istwert, Einheit als Freitext, Prioritaet, Attrappe
+// „Linked modules". **Ersetzt durch „Ziel setzen" (`ziel-setzen.tsx`)**
+// nach der Vorlage `docs/spezifikation/goals-ziel-setzen/` (Tom 08.10.).
 
 // ── GOAL DETAIL ─────────────────────────────────────────────────
 // [cmd] module-goals.jsx:746-779.

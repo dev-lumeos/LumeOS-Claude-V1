@@ -145,7 +145,9 @@ describe('G-354 — eine Quelle fuer die Zielarten', () => {
     //
     // `[read]` **Verboten bleibt das Gefaehrliche:** dass die
     // Kennung als `goal_type` geschrieben wird.
-    const t = lies(join(V2, 'goals', 'modale.tsx'))
+    // G-628: der Anlegedialog ist jetzt ziel-setzen.tsx; die sechs Knoepfe
+    // sind weg. Verboten bleibt das Gefaehrliche, in beiden Dateien.
+    const t = lies(join(V2, 'goals', 'modale.tsx')) + lies(join(V2, 'goals', 'ziel-setzen.tsx'))
     for (const gefaehrlich of [
       /goal_type:\s*'body_comp'/,
       /goal_type:\s*"body_comp"/,
@@ -155,16 +157,18 @@ describe('G-354 — eine Quelle fuer die Zielarten', () => {
         `modale.tsx schreibt eine Knopfkennung als goal_type `
         + `(${gefaehrlich.source}) — der CHECK wiese sie ab`)
     }
-    // `[cmd]` **Der Typ kommt aus der Zuordnung, nicht aus dem Knopf.**
-    assert.match(t, /zielknopf\(/,
-      'modale.tsx bildet die Knopfkennung nicht mehr auf eine '
-      + 'Zielart ab — dann stuende die Kennung im goal_type')
+    // `[cmd]` **G-628: der Typ steht fest** — Weg A schreibt immer
+    // body_composition (Dossier 8.2), die Knopfkennung dient nur noch
+    // `unterartFuer`.
+    assert.match(t, /goal_type: 'body_composition'/)
   })
 
-  it('das New-goal-Modal holt die Arten aus ziel-arten', () => {
-    const t = lies(join(V2, 'goals', 'modale.tsx'))
-    assert.match(t, /zielArtAuswahl|ZIEL_ARTEN/,
-      'modale.tsx fuehrt wieder eine eigene Liste')
+  it('kein Dialog fuehrt eine eigene Zielartenliste (G-628)', () => {
+    // Hier stand: das New-goal-Modal holt die Arten aus ziel-arten. Das
+    // Modal ist ersetzt; „Ziel setzen" hat keine Artenliste mehr (Weg A
+    // = body_composition, Weg B folgt mit G-617).
+    const t = lies(join(V2, 'goals', 'modale.tsx')) + lies(join(V2, 'goals', 'ziel-setzen.tsx'))
+    assert.ok(!/'performance'|'lifestyle'|'health'/.test(t), 'eine eigene goal_type-Liste im Dialog')
   })
 
   it('und es zaehlt die Arten nicht selbst hoch', () => {

@@ -117,13 +117,16 @@ describe('G-610 — Verdrahtung', () => {
     assert.ok(!/tier === 'simple'/.test(M()), 'der alte Filter aus G-554 ist zurueck')
     assert.ok(!/\['beginner'/.test(M()), 'eine eigene Gradliste im Modal')
   })
+  // G-628: das Modal ist jetzt „Ziel setzen" (ziel-setzen.tsx); die Sperre
+  // kommt aus der Rechnung (`lagen`, die `gesperrt` aus zielwahl.ts ruft).
+  const Z = () => lies(join(GOALS, 'ziel-setzen.tsx'))
   it('Varianten sind gesperrt, aber sichtbar', () => {
-    assert.match(M(), /data-zielvariante=\{v\.code\}[\s\S]{0,80}disabled=\{zu\}/)
-    assert.match(M(), /const zu = gesperrt\(v, erfahrung\)/)
-    assert.match(M(), /data-variante-sperre/)
+    assert.match(Z(), /const zu = lage\?\.status === 'gesperrt'/)
+    assert.match(Z(), /data-zielvariante=\{v\.code\} disabled=\{zu\}/)
+    assert.match(lies(join(HIER, '..', 'zielrechnung.ts')), /if \(gesperrt\(v, e\.grad\)\)/)
   })
-  it('das Tempo aus dem Feld geht in die Phase', () => {
-    assert.match(M(), /zielrate_pct_kg_woche: tempoZahl,/)
+  it('das Tempo aus der Rechnung geht in die Phase', () => {
+    assert.match(Z(), /zielrate_pct_kg_woche: vz === 0 \? null : tempo/)
   })
   it('der Grad kommt vom Profil ins Modal', () => {
     assert.match(lies(join(GOALS, 'ansicht.tsx')), /erfahrung=\{echt\.strategieProfil\.experience\}/)
