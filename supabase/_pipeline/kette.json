@@ -3721,6 +3721,27 @@
       "kind": "tsx",
       "creates": "G-622 Gegenprobe: Max ohne Ziel, reaktiviertes Ziel und fehlendes Gewicht in allen Lesern.",
       "depends_on": ["622_daily_reference_maintenance", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "626_experience_goal_limits",
+      "path": "supabase/_pipeline/11_goals/626_experience_goal_limits.sql",
+      "kind": "sql",
+      "creates": "G-626: vier Erfahrungsgrad-Zeilen mit Tempo-, Dauer-, BMI-, Kalorien- und Fettgrenzen sowie eine gemeinsame Befundfunktion.",
+      "depends_on": ["614_goal_strategy_selection", "622_goal_free_maintenance"]
+    },
+    {
+      "id": "626_controlling_goal_write_guard",
+      "path": "supabase/_pipeline/11_goals/626_controlling_goal_write_guard.sql",
+      "kind": "sql",
+      "creates": "G-626: der Phasenschreibweg weist Sperren ab und verlangt bestaetigte Warnschluessel aus derselben Befundfunktion.",
+      "depends_on": ["626_experience_goal_limits", "617_measurement_goal_exercise_and_role"]
+    },
+    {
+      "id": "626_experience_goal_limits_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g626-experience-limits.test.ts",
+      "kind": "tsx",
+      "creates": "G-626: Gradfaelle, Gegenrichtung, Warnbestaetigung und Schreibsperre.",
+      "depends_on": ["626_controlling_goal_write_guard", "a86_testdaten_einspielen"]
     }
   ]
 }
