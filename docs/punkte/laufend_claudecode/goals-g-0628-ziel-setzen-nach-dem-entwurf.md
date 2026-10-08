@@ -58,3 +58,7 @@ Offen bis Live (613/617/622/626): Schirmnachweis mit echten Befunden, „frei ab
 ## Teil 2 Schirm + Teil 3 frei - 2026-10-08
 
 Live seit 15:51: 613/617/617-Erweiterung/622/626 (G-613, G-617, G-622, G-626, G-632 abgenommen). Teil 3 = Weg B "Messziel setzen" nach `entwurf/MesszielSetzen.dc.html` und Dossier 8.2, gegen `617_measurement_goal_expansion.sql`.
+
+## Entschieden - 2026-10-08 15:57, Tom: beenden
+
+Kein neuer Status. `abandoned` heisst in der Anzeige "beendet" statt "abgebrochen" (Liste, Details, Verlauf).

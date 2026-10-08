@@ -4,6 +4,8 @@ typ: aufgabe
 modul: goals
 schwere: hoch
 angelegt: 2026-10-08
+agent: codex
+beauftragt: 2026-10-08
 
 braucht: [G-617]
 kind_von: G-617
@@ -33,3 +35,14 @@ Jedes steuernde Ziel hat genau einen Plan (`goal_programs.goal_id` besteht). Ein
 
 Datenmodell, Lese- und Schreibfunktionen, Bestand umhängen (jedes bestehende steuernde Ziel bekommt seinen Plan), Tageszielrechnung liest eigene Werte.
 
+
+## Ist - 2026-10-08 [cmd]
+
+`goal_programs` hat nur id, goal_id (FK cascade), name; kein Status, keine Termine; live 0 Zeilen, `goal_program_positions` 0 Zeilen. 4 steuernde Ziele ohne Plan. `goal_strategies` traegt `requirements` und `min_erfahrung` nebeneinander.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER Codex - G-625: Ein Plan ist der Inhalt des steuernden Ziels
+    Bereich: supabase/_pipeline/ (Kette). Live erst nach Toms Freigabe.
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-08, HEAD 3b58a278

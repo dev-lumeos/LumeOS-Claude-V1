@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 282 |
+| `todos` | 281 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 685 |
 | **gesamt** | **969** |
@@ -687,7 +688,7 @@
 | `G-622` | fehler | hoch | [Ohne aktives Ziel gibt es keine Tagesziele](erledigt/goals-g-0622-ohne-aktives-ziel-gibt-es-keine-tagesziele.md) | erledigt | — | G-630 |
 | `G-623` | aufgabe | mittel | [Im Planer laesst sich eine einzelne Phase nicht verschieben](todos/goals-g-0623-im-planer-laesst-sich-eine-phase-nicht-verschieben.md) | offen | — | — |
 | `G-624` | fehler | mittel | [Custom und Expert BB Jahreszyklus haben im Planer keine Vorschau](todos/goals-g-0624-custom-und-expert-bb-haben-keine-vorschau.md) | offen | — | — |
-| `G-625` | aufgabe | hoch | [Ein Plan ist der Inhalt des steuernden Ziels](todos/goals-g-0625-ein-plan-ist-der-inhalt-des-steuernden-ziels.md) | offen | — | G-627 |
+| `G-625` | aufgabe | hoch | [Ein Plan ist der Inhalt des steuernden Ziels](laufend_codex/goals-g-0625-ein-plan-ist-der-inhalt-des-steuernden-ziels.md) | laeuft (codex) | — | G-627 |
 | `G-626` | aufgabe | hoch | [Grenzen nach Erfahrungsgrad](erledigt/goals-g-0626-grenzen-nach-erfahrungsgrad.md) | erledigt | — | G-632 |
 | `G-628` | aufgabe | hoch | [Ziel setzen nach dem Entwurf](laufend_claudecode/goals-g-0628-ziel-setzen-nach-dem-entwurf.md) | laeuft (claudecode) | — | G-631 |
 | `G-630` | fehler | hoch | [Die Warnung ohne aktives Ziel ist unsichtbar](todos/goals-g-0630-die-warnung-ohne-aktives-ziel-ist-unsichtbar.md) | offen | — | — |
