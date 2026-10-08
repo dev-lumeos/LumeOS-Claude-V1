@@ -108,9 +108,10 @@ test('G-561 A2/A3: die aktuelle Schwelle skaliert mit dem Gewicht, die 83,74-kg-
   ])
 })
 
-test('G-561 A5: aktive und geplante Zielphase behalten je Strategie den relativen Waechter', () => {
+test('G-561/G-613: beide Waechter bleiben gespeichert, nur die aktive Zielphase laeuft', () => {
   const result = one<{
-    openPhases: number
+    storedOpenPhases: number
+    runningPhases: number
     goalReferences: number
     guardRows: number
   }>(`
@@ -168,7 +169,10 @@ test('G-561 A5: aktive und geplante Zielphase behalten je Strategie den relative
        TIMESTAMPTZ '2099-01-01 09:00:00+00', 'lean_bulk', 0.250);
 
     SELECT json_build_object(
-      'openPhases', count(*),
+      'storedOpenPhases', (SELECT count(*) FROM goals.goal_phases
+        WHERE user_id = '56100000-0000-0000-0000-000000000001'
+          AND actual_end_date IS NULL),
+      'runningPhases', count(*),
       'goalReferences', count(DISTINCT p.goal_id),
       'guardRows', count(*) FILTER (
         WHERE EXISTS (
@@ -191,8 +195,9 @@ test('G-561 A5: aktive und geplante Zielphase behalten je Strategie den relative
   `)
 
   assert.deepEqual(result, {
-    openPhases: 2,
-    goalReferences: 2,
-    guardRows: 2,
+    storedOpenPhases: 2,
+    runningPhases: 1,
+    goalReferences: 1,
+    guardRows: 1,
   })
 })

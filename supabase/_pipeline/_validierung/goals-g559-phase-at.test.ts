@@ -21,7 +21,7 @@ function one<T>(sql: string): T {
   return JSON.parse(output.split(/\r?\n/).at(-1) ?? '') as T
 }
 
-test('G-559 A2/A3: zwei Ziele liefern zwei geordnete Nutzerphasen und je eine Zielphase', () => {
+test('G-559/G-613: nur das aktive Ziel liefert eine laufende Phase', () => {
   const result = one<{
     allCount: number
     allGoalIds: string[]
@@ -29,7 +29,7 @@ test('G-559 A2/A3: zwei Ziele liefern zwei geordnete Nutzerphasen und je eine Zi
     secondGoalCount: number
     phaseAmHasLimit: boolean
     goalPhaseHasLimit: boolean
-    ambiguousWriteMessage: string
+    singleWriteMessage: string
   }>(`
     BEGIN;
 
@@ -129,7 +129,7 @@ test('G-559 A2/A3: zwei Ziele liefern zwei geordnete Nutzerphasen und je eine Zi
       'goalPhaseHasLimit', position('LIMIT 1' IN pg_get_functiondef(
         'goals.phase_eines_ziels_am(uuid,date)'::regprocedure
       )) > 0,
-      'ambiguousWriteMessage', (
+      'singleWriteMessage', (
         SELECT wert FROM g559_result WHERE fall = 'ambiguous_write'
       )
     );
@@ -137,19 +137,15 @@ test('G-559 A2/A3: zwei Ziele liefern zwei geordnete Nutzerphasen und je eine Zi
     ROLLBACK;
   `)
 
-  assert.equal(result.allCount, 2)
+  assert.equal(result.allCount, 1)
   assert.deepEqual(result.allGoalIds, [
-    '55900000-0000-0000-0000-000000000102',
     '55900000-0000-0000-0000-000000000101',
   ])
   assert.equal(result.firstGoalCount, 1)
-  assert.equal(result.secondGoalCount, 1)
+  assert.equal(result.secondGoalCount, 0)
   assert.equal(result.phaseAmHasLimit, false)
   assert.equal(result.goalPhaseHasLimit, true)
-  assert.equal(
-    result.ambiguousWriteMessage,
-    'nutrition_targets: mehrere aktive Phasen am Gueltigkeitstag; Zielbezug fehlt',
-  )
+  assert.equal(result.singleWriteMessage, 'angenommen')
 })
 
 test('G-559 A4: der echte Seed enthaelt test-user mit zwei offenen Zielphasen', () => {

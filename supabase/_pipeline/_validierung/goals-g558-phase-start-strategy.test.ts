@@ -131,9 +131,13 @@ test('G-558 A1/A2: Strategie, Katalograte und persoenlicher Override kommen atom
 
     RESET ROLE;
 
-    -- Beide Zielphasen sind am Stichtag offen; nur das Katalogziel ist aktiv.
-    -- G-558 prueft den Override des geplanten zweiten Ziels ausdruecklich
-    -- ueber den zielbezogenen Vertrag.
+    -- Der Override wird erst nach dem Zielwechsel laufend. Beide Phasen
+    -- bleiben offen; G-604 erlaubt nur eine aktive Kalorienrichtung.
+    UPDATE goals.user_goals SET status = 'on_hold', priority = 4
+    WHERE id = '55800000-0000-0000-0000-000000000101';
+    UPDATE goals.user_goals SET status = 'active', priority = 2
+    WHERE id = '55800000-0000-0000-0000-000000000102';
+
     WITH calculated AS (
       SELECT z.*
       FROM goals.berechne_zielwerte(

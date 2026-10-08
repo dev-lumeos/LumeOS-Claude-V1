@@ -649,11 +649,12 @@ if (MODE === 'clean') {
       WHERE email = 'test-user@lumeos.local'
     ),
     zielwerte AS (
-      SELECT z.kcal, z.zielrate_pct_kg_woche
+      SELECT ug.status, z.kcal, z.zielrate_pct_kg_woche, z.hindernis
       FROM test_user u
       JOIN goals.goal_phases gp
         ON gp.user_id = u.id
        AND gp.actual_end_date IS NULL
+      JOIN goals.user_goals ug ON ug.id = gp.goal_id
       CROSS JOIN LATERAL goals.berechne_zielwerte(
         u.id, gp.goal_id, CURRENT_DATE
       ) z
@@ -661,11 +662,9 @@ if (MODE === 'clean') {
     SELECT 1
     FROM zielwerte
     HAVING count(*) = 2
-       AND min(zielrate_pct_kg_woche) = -0.400
-       AND max(zielrate_pct_kg_woche) = 0.400
-       AND count(kcal) = 2
-       AND round(max(kcal) - min(kcal)) = 716;`)) {
-    errors.push('G-604: aktives und geplantes test-user-Ziel liefern nicht zwei explizit zielbezogene kcal-Werte mit 716 kcal Abstand')
+       AND count(*) FILTER (WHERE status = 'active' AND zielrate_pct_kg_woche = -0.400 AND kcal IS NOT NULL AND hindernis IS NULL) = 1
+       AND count(*) FILTER (WHERE status = 'on_hold' AND zielrate_pct_kg_woche IS NULL AND kcal IS NULL AND hindernis = 'keine_aktive_phase') = 1;`)) {
+    errors.push('G-613: nur das aktive test-user-Ziel liefert berechnete Zielwerte')
   }
   // G-595: DIESE PROBE HATTE DIE FALSCHE RICHTUNG.
   // A-95 verlangte, dass die Zweiparameter-Fassung NICHT mehr existiert.
@@ -894,11 +893,11 @@ if (MODE === 'clean') {
     WHERE nutrient_code IN ('F18:2CN6', 'F18:3CN3')
       AND reference_kind = 'AI'
       AND reference_direction = 'target'
-      AND reference_status = 'complete'
-      AND reference_basis = 'goals_target_from_energy_percent'
-      AND reference_value_min IS NOT NULL
-      AND reference_pct IS NOT NULL;`) !== 2) {
-    errors.push('Fall essenzielle Fettsaeuren: Linolsaeure und Alpha-Linolensaeure werden nicht gegen Goals-Ziele bewertet')
+      AND reference_status = 'missing_goal'
+      AND reference_basis = 'energy_percent'
+      AND reference_value_min IS NULL
+      AND reference_pct IS NULL;`) !== 2) {
+    errors.push('G-613: Max ohne aktive Zielphase bekommt keine Goals-Fettsaeureziele')
   }
   if (!hasRows(`
     SELECT 1
@@ -934,11 +933,15 @@ if (MODE === 'clean') {
   if (!hasRows(`
     SELECT 1
     FROM nutrition.daily_summary ds
-    JOIN goals.zielwerte_am(ds.user_id, ds.entry_date) z ON true
+    JOIN goals.nutrition_targets nt ON nt.user_id = ds.user_id
+      AND nt.gueltig_ab <= ds.entry_date
     WHERE ds.user_id = '${max}'::uuid
       AND ds.entry_date = DATE '${relDate('2026-08-10')}'
-      AND ds.enercc / z.kcal * 100 > 140;`)) {
-    errors.push('Fall Kalorien ueber Ziel: Zielerreichung liegt nicht ueber 140 %')
+      AND ds.enercc / nt.kcal * 100 > 140
+      AND NOT EXISTS (
+        SELECT 1 FROM goals.zielwerte_am(ds.user_id, ds.entry_date)
+      );`)) {
+    errors.push('G-613: Max behielt seine historische Zielzeile, aber ohne aktives Ziel gilt sie nicht mehr als Tagesziel')
   }
   if (!hasRows(`
     SELECT 1

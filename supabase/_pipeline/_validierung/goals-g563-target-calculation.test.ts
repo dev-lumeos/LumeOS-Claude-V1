@@ -109,7 +109,7 @@ const fixture = `
   SET LOCAL ROLE authenticated;
 `
 
-test('G-563 A3/A4: die nutzerweite Vorschau bleibt bei aktiver und geplanter Zielphase explizit', () => {
+test('G-563/G-613: die nutzerweite Vorschau ignoriert die pausierte Zielphase', () => {
   const result = one<{ message: string }>(`
     BEGIN;
     ${fixture}
@@ -135,13 +135,10 @@ test('G-563 A3/A4: die nutzerweite Vorschau bleibt bei aktiver und geplanter Zie
     ROLLBACK;
   `)
 
-  assert.equal(
-    result.message,
-    'nutrition_targets: mehrere aktive Phasen am Gueltigkeitstag; Zielbezug fehlt',
-  )
+  assert.equal(result.message, 'angenommen')
 })
 
-test('G-563 A2/A4: dieselben Nutzerdaten liefern je Ziel ihre eigene Rate und Kalorienzahl', () => {
+test('G-563/G-613: nur das aktive Ziel liefert Rate und Kalorienzahl', () => {
   const result = one<{
     exists: boolean
     arguments: string | null
@@ -228,14 +225,13 @@ test('G-563 A2/A4: dieselben Nutzerdaten liefern je Ziel ihre eigene Rate und Ka
     'p_user_id uuid, p_goal_id uuid, p_stichtag date DEFAULT CURRENT_DATE',
   )
   assert.equal(result.cutRate, -0.5)
-  assert.equal(result.bulkRate, 0.25)
+  assert.equal(result.bulkRate, null)
   assert.equal(result.cutKcal, result.cutExpected)
-  assert.equal(result.bulkKcal, result.bulkExpected)
-  assert.notEqual(result.cutKcal, result.bulkKcal)
+  assert.equal(result.bulkKcal, null)
   assert.equal(result.cutObstacle, null)
-  assert.equal(result.bulkObstacle, null)
+  assert.equal(result.bulkObstacle, 'keine_aktive_phase')
   assert.equal(result.cutGoalId, '56300000-0000-0000-0000-000000000101')
-  assert.equal(result.bulkGoalId, '56300000-0000-0000-0000-000000000102')
+  assert.equal(result.bulkGoalId, null)
 })
 
 test('G-594 A1: eine genannte aktive Phase waehlt bei zwei Nutzerphasen ihr Ziel', () => {
@@ -275,7 +271,7 @@ test('G-594 A1: eine genannte aktive Phase waehlt bei zwei Nutzerphasen ihr Ziel
   assert.equal(typeof result.fatG, 'number')
 })
 
-test('G-594 A1: aktive und geplante Phase ohne genannte Phase bleiben mehrdeutig', () => {
+test('G-594/G-613: ohne genannte Phase wird das aktive Ziel gewaehlt', () => {
   const result = one<{ code: string, message: string }>(`
     BEGIN;
     ${fixture}
@@ -303,11 +299,8 @@ test('G-594 A1: aktive und geplante Phase ohne genannte Phase bleiben mehrdeutig
     ROLLBACK;
   `)
 
-  assert.equal(result.code, '23514')
-  assert.equal(
-    result.message,
-    'nutrition_targets: mehrere aktive Phasen am Gueltigkeitstag; Zielbezug fehlt',
-  )
+  assert.equal(result.code, '00000')
+  assert.equal(result.message, 'angenommen')
 })
 
 test('G-594 A1: eine genannte fremde Phase wird mit 23514 abgewiesen', () => {

@@ -3370,6 +3370,27 @@
       ]
     },
     {
+      "id": "613_paused_goal_phase_readers",
+      "path": "supabase/_pipeline/11_goals/613_paused_goal_phase_readers.sql",
+      "kind": "sql",
+      "creates": "G-613: Phasen, Zielwerte, Tagesziele und Uebergangsvorschlaege gelten nur fuer aktive Ziele; Pausieren behaelt den Phasensatz.",
+      "depends_on": [
+        "604_one_active_calorie_goal",
+        "563_target_scoped_calculation",
+        "422_schema"
+      ]
+    },
+    {
+      "id": "613_paused_goal_phase_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g613-paused-phase.test.ts",
+      "kind": "tsx",
+      "creates": "G-613 Gegenprobe: pausierte Phase fehlt in allen laufenden Lesern und Tageszielen, Reaktivierung bewahrt die Phase.",
+      "depends_on": [
+        "613_paused_goal_phase_readers",
+        "a86_testdaten_einspielen"
+      ]
+    },
+    {
       "id": "560_goal_programs_probe",
       "path": "supabase/_pipeline/_validierung/goals-g560-goal-programs.test.ts",
       "kind": "tsx",
@@ -3423,9 +3444,10 @@
       "id": "559_phase_at_scope_probe",
       "path": "supabase/_pipeline/_validierung/goals-g559-phase-at.test.ts",
       "kind": "tsx",
-      "creates": "G-559 Gegenprobe: zwei offene Phasen fuer test-user, deterministische Reihenfolge, zielbezogene Einzelphase und ausdrueckliches Hindernis im Zielwert-Schreibweg.",
+      "creates": "G-559/G-613 Gegenprobe: zwei gespeicherte Zielphasen, aber nur die aktive Phase wird gelesen und dem Tagesziel zugeordnet.",
       "depends_on": [
         "559_phase_at_scope",
+        "613_paused_goal_phase_readers",
         "a86_testdaten_einspielen"
       ]
     },
@@ -3433,9 +3455,10 @@
       "id": "561_relative_weight_guards_probe",
       "path": "supabase/_pipeline/_validierung/goals-g561-relative-weight-guards.test.ts",
       "kind": "tsx",
-      "creates": "G-561 Gegenprobe: sechs Katalogwaechter messen relativ; die umgerechnete Strenge skaliert an zwei Gewichten und gilt fuer zwei Zielphasen des test-user.",
+      "creates": "G-561/G-613 Gegenprobe: relative Katalogwaechter skalieren an zwei Gewichten; nur die aktive Zielphase gilt als laufend.",
       "depends_on": [
         "559_phase_at_scope",
+        "613_paused_goal_phase_readers",
         "a86_testdaten_einspielen"
       ]
     },
@@ -3443,9 +3466,10 @@
       "id": "563_target_scoped_calculation_probe",
       "path": "supabase/_pipeline/_validierung/goals-g563-target-calculation.test.ts",
       "kind": "tsx",
-      "creates": "G-563 Gegenprobe: test-user mit zwei Zielphasen erhaelt je Ziel andere Werte; die nutzerweite Vorschau wirft denselben Mehrdeutigkeitsfehler wie der Schreibweg.",
+      "creates": "G-563/G-613 Gegenprobe: zielbezogene und nutzerweite Rechnung liefern nur fuer aktive Zielphasen Werte; pausierte Phasen bleiben gespeichert.",
       "depends_on": [
         "563_target_scoped_calculation",
+        "613_paused_goal_phase_readers",
         "a86_testdaten_einspielen"
       ]
     },

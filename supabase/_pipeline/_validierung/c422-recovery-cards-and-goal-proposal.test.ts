@@ -29,6 +29,7 @@ test('G-363: eine ueberfaellige Phase mit Messreihe erzeugt einen begruendeten V
   const result = json<{ next: string, reason: string, response: string }>(`
     WITH chosen AS (
       SELECT gp.id, gp.user_id FROM goals.goal_phases gp
+      JOIN goals.user_goals ug ON ug.id = gp.goal_id AND ug.status = 'active'
       WHERE gp.actual_end_date IS NULL AND (SELECT count(*) FROM goals.body_measurements bm WHERE bm.user_id=gp.user_id) >= 2 LIMIT 1
     ), prepared AS (
       UPDATE goals.goal_phases SET projected_end_date=CURRENT_DATE-1 WHERE id=(SELECT id FROM chosen) RETURNING id,user_id
