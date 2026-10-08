@@ -3700,6 +3700,27 @@
       "kind": "tsx",
       "creates": "G-617/B Gegenprobe: Bankdruecken mit Umlaut, Kniebeuge, fuenf Messziele und Rollenwechsel durch Phase oder Plan.",
       "depends_on": ["617_measurement_goal_exercise_and_role"]
+    },
+    {
+      "id": "622_goal_free_maintenance",
+      "path": "supabase/_pipeline/11_goals/622_goal_free_maintenance.sql",
+      "kind": "sql",
+      "creates": "G-622: Ohne aktive Phase Erhaltung aus bestehender TDEE-Basis und maintain-Makroregel mit ausdruecklicher Herkunft.",
+      "depends_on": ["613_paused_goal_phase_readers", "617_measurement_goal_exercise_and_role", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "622_daily_reference_maintenance",
+      "path": "supabase/_pipeline/05_user_tabellen/622_daily_reference_maintenance.sql",
+      "kind": "sql",
+      "creates": "G-622: Fettssaeurenreferenzen unterscheiden Ziel, Erhaltung ohne Ziel und fehlende Erhaltungsgrundlage.",
+      "depends_on": ["622_goal_free_maintenance", "059"]
+    },
+    {
+      "id": "622_goal_free_maintenance_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g622-goal-free-maintenance.test.ts",
+      "kind": "tsx",
+      "creates": "G-622 Gegenprobe: Max ohne Ziel, reaktiviertes Ziel und fehlendes Gewicht in allen Lesern.",
+      "depends_on": ["622_daily_reference_maintenance", "a86_testdaten_einspielen"]
     }
   ]
 }

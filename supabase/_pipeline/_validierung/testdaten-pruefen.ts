@@ -550,8 +550,8 @@ if (MODE === 'clean') {
     errors.push(`Fall heutiger Tag: adaptive_tdee ist am ${TODAY_DATE} nicht complete`)
   }
 
-  if (numberScalar(`SELECT count(*) FROM goals.zielwerte_am('${tom}'::uuid, DATE '${relDate('2026-08-02')}');`) !== 0) {
-    errors.push('Fall Tag ohne Ziel: goals.zielwerte_am liefert vor gueltig_ab trotzdem eine Zeile')
+  if (numberScalar(`SELECT count(*) FROM goals.zielwerte_am('${tom}'::uuid, DATE '${relDate('2026-08-02')}') WHERE herkunft = 'kein_aktives_ziel' AND kcal IS NOT NULL;`) !== 1) {
+    errors.push('G-622: Tom vor dem ersten Ziel bekommt markierte Erhaltung')
   }
   if (numberScalar(`SELECT count(*) FROM goals.phase_eines_ziels_am('30000000-0000-0000-0000-000000000101'::uuid, DATE '${relDate('2026-08-02')}');`) !== 0) {
     errors.push('Fall Tag ohne Phase: phase_eines_ziels_am liefert vor erster gueltig_ab trotzdem eine Zeile')
@@ -893,11 +893,10 @@ if (MODE === 'clean') {
     WHERE nutrient_code IN ('F18:2CN6', 'F18:3CN3')
       AND reference_kind = 'AI'
       AND reference_direction = 'target'
-      AND reference_status = 'missing_goal'
-      AND reference_basis = 'energy_percent'
-      AND reference_value_min IS NULL
-      AND reference_pct IS NULL;`) !== 2) {
-    errors.push('G-613: Max ohne aktive Zielphase bekommt keine Goals-Fettsaeureziele')
+      AND reference_status = 'complete'
+      AND reference_basis = 'maintenance_no_active_goal'
+      AND reference_value_min IS NOT NULL;`) !== 2) {
+    errors.push('G-622: Max ohne aktive Zielphase bekommt markierte Erhaltungs-Fettsaeureziele')
   }
   if (!hasRows(`
     SELECT 1
@@ -938,10 +937,11 @@ if (MODE === 'clean') {
     WHERE ds.user_id = '${max}'::uuid
       AND ds.entry_date = DATE '${relDate('2026-08-10')}'
       AND ds.enercc / nt.kcal * 100 > 140
-      AND NOT EXISTS (
-        SELECT 1 FROM goals.zielwerte_am(ds.user_id, ds.entry_date)
+      AND EXISTS (
+        SELECT 1 FROM goals.zielwerte_am(ds.user_id, ds.entry_date) z
+        WHERE z.herkunft = 'kein_aktives_ziel' AND z.kcal IS NOT NULL
       );`)) {
-    errors.push('G-613: Max behielt seine historische Zielzeile, aber ohne aktives Ziel gilt sie nicht mehr als Tagesziel')
+    errors.push('G-622: Max behielt die historische Zielzeile, aber liest markierte Erhaltung')
   }
   if (!hasRows(`
     SELECT 1

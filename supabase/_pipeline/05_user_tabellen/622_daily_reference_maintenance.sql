@@ -1,0 +1,335 @@
+-- G-622: Tagesreferenzen tragen die Herkunft berechneter Erhaltung fuer Fettssaeuren durch.
+BEGIN;
+
+CREATE OR REPLACE FUNCTION nutrition.daily_reference_assessment(
+  p_user_id UUID,
+  p_entry_date DATE
+)
+RETURNS TABLE (
+  user_id UUID,
+  entry_date DATE,
+  nutrient_code TEXT,
+  nutrient_name_de TEXT,
+  nutrient_unit TEXT,
+  nutrient_display_tier INTEGER,
+  actual_value NUMERIC,
+  missing_count INTEGER,
+  value_complete BOOLEAN,
+  reference_kind TEXT,
+  reference_direction TEXT,
+  reference_value_min NUMERIC,
+  reference_value_max NUMERIC,
+  reference_unit TEXT,
+  reference_basis TEXT,
+  reference_applies_to_intake_sources TEXT[],
+  reference_pct NUMERIC,
+  reference_pct_min NUMERIC,
+  reference_pct_max NUMERIC,
+  reference_status TEXT,
+  profile_age_years INTEGER,
+  profile_biological_sex TEXT,
+  profile_is_pregnant BOOLEAN,
+  profile_is_lactating BOOLEAN,
+  source TEXT,
+  source_locator TEXT,
+  notes TEXT
+)
+LANGUAGE sql
+STABLE
+SECURITY INVOKER
+SET search_path = ''
+AS $$
+WITH profile AS (
+  SELECT
+    p_user_id AS user_id,
+    p_entry_date AS entry_date,
+    p.birth_date,
+    p.biological_sex,
+    -- GO-00 Teil 2: fuer Referenzwerte je Kilogramm Koerpergewicht.
+    -- Live gelesen, nicht in den Seed gerechnet — beim Gewichtswechsel
+    -- aendert sich der Wert damit mit, statt zu veralten.
+    p.body_weight_kg,
+    CASE
+      WHEN p.birth_date IS NULL THEN NULL
+      ELSE EXTRACT(YEAR FROM age(p_entry_date, p.birth_date))::INTEGER
+    END AS age_years,
+    (
+      p.pregnancy_started_on IS NOT NULL
+      AND p_entry_date >= p.pregnancy_started_on
+      AND (p.pregnancy_ended_on IS NULL OR p_entry_date <= p.pregnancy_ended_on)
+    ) AS is_pregnant,
+    (
+      p.lactation_started_on IS NOT NULL
+      AND p_entry_date >= p.lactation_started_on
+      AND (p.lactation_ended_on IS NULL OR p_entry_date <= p.lactation_ended_on)
+    ) AS is_lactating
+  FROM public.profiles p
+  WHERE p.id = p_user_id
+),
+profile_one AS (
+  SELECT
+    p_user_id AS user_id,
+    p_entry_date AS entry_date,
+    pr.birth_date,
+    pr.biological_sex,
+    pr.body_weight_kg,
+    pr.age_years,
+    COALESCE(pr.is_pregnant, false) AS is_pregnant,
+    COALESCE(pr.is_lactating, false) AS is_lactating,
+    (pr.birth_date IS NOT NULL AND pr.biological_sex IS NOT NULL) AS profile_complete
+  FROM (SELECT 1) seed
+  LEFT JOIN profile pr ON true
+),
+day_values AS (
+  SELECT
+    l.nutrient_code,
+    l.total_value AS actual_value,
+    l.missing_count
+  FROM nutrition.daily_nutrient_summary_long l
+  WHERE l.user_id = p_user_id
+    AND l.entry_date = p_entry_date
+),
+reference_candidates AS (
+  SELECT
+    dv.nutrient_code,
+    r.reference_kind,
+    r.value_min,
+    r.value_max,
+    r.unit,
+    r.basis,
+    r.applies_to_intake_sources,
+    r.source,
+    r.source_locator,
+    r.notes,
+    CASE
+      WHEN r.reference_kind IN ('UL', 'ALAP') THEN 'upper_limit'
+      WHEN r.reference_kind = 'RI' THEN 'range'
+      WHEN r.reference_kind IN ('NO_REFERENCE', 'NO_STANDALONE_REFERENCE') THEN 'not_applicable'
+      ELSE 'target'
+    END AS reference_direction,
+    ROW_NUMBER() OVER (
+      PARTITION BY dv.nutrient_code, r.reference_kind
+      ORDER BY
+        r.source_priority DESC,
+        CASE
+          WHEN r.is_pregnant = p.is_pregnant AND r.is_lactating = p.is_lactating THEN 2
+          WHEN NOT r.is_pregnant AND NOT r.is_lactating THEN 1
+          ELSE 0
+        END DESC,
+        CASE WHEN r.sex = p.biological_sex THEN 1 ELSE 0 END DESC,
+        COALESCE(r.age_max - r.age_min, 999) ASC
+    ) AS rn
+  FROM day_values dv
+  CROSS JOIN profile_one p
+  JOIN nutrition.nutrient_reference_values r
+    ON r.nutrient_code = dv.nutrient_code
+   AND p.profile_complete
+   AND (r.age_min IS NULL OR p.age_years >= r.age_min)
+   AND (r.age_max IS NULL OR p.age_years <= r.age_max)
+   AND (r.sex = 'both' OR r.sex = p.biological_sex)
+   AND (
+     (r.is_pregnant = p.is_pregnant AND r.is_lactating = p.is_lactating)
+     OR (NOT r.is_pregnant AND NOT r.is_lactating)
+   )
+),
+-- =============================================================
+-- GO-00 Teil 2: die Bezugsgroesse aufloesen
+-- =============================================================
+-- `[cmd]` 16 der 109 Referenzzeilen stehen nicht je Tag, sondern je
+-- Kilogramm Koerpergewicht (10), als Energieanteil (4) oder je
+-- Megajoule (2). Vorher hat die Funktion sie behandelt, als staenden
+-- sie je Tag — Protein zeigte 1.593 % statt rund 20 %, weil 13,22 g
+-- durch 0,83 geteilt wurde statt durch 0,83 x 78,4 kg.
+--
+-- WARUM HIER UND NICHT IM SEED:
+-- `[read]` 0,83 g/kg bleibt 0,83 g/kg — so schreibt es die EFSA, und
+-- der Seed bildet die Quelle ab. Ein Wert je Kilogramm laesst sich
+-- ausserdem gar nicht vorab ausrechnen: er haengt am Gewicht der
+-- Nutzerin, und das aendert sich. Umgerechnet wird beim Lesen.
+--
+-- WARUM ABSOLUT ANGEZEIGT WIRD:
+-- `[read]` Entscheidung Tom, 2026-08-15, nach einer Erhebung, wie
+-- etablierte Ernaehrungs-Apps es halten: keine zeigt eine Einheit je
+-- Kilogramm. MyFitnessPal nennt 1,2 g/kg als Zielsetzung in den
+-- Einstellungen; im Tagebuch stehen 120 g.
+--
+-- OHNE GEWICHT KEIN PROZENTWERT. Kein Standardgewicht, kein
+-- Ruecktritt — dieselbe Regel wie bei fehlendem Alter oder Geschlecht.
+-- `[read]` Ein erfundener Nenner waere schlimmer als keine Zahl: er
+-- sieht aus wie eine Messung.
+goals_targets AS (
+  SELECT
+    z.kcal,
+    z.herkunft AS zielherkunft,
+    COALESCE(
+      z.linoleic_acid_g,
+      CASE WHEN z.kcal IS NULL THEN NULL ELSE ROUND(z.kcal * 0.04 / 9, 1) END
+    ) AS linoleic_acid_g,
+    COALESCE(
+      z.alpha_linolenic_acid_g,
+      CASE WHEN z.kcal IS NULL THEN NULL ELSE ROUND(z.kcal * 0.005 / 9, 1) END
+    ) AS alpha_linolenic_acid_g
+  FROM (SELECT 1) seed
+  LEFT JOIN LATERAL goals.zielwerte_am(p_user_id, p_entry_date) z ON true
+),
+aufgeloeste_referenzen AS (
+  SELECT
+    rc.*,
+    p.body_weight_kg,
+    gt.linoleic_acid_g,
+    gt.zielherkunft,
+    gt.alpha_linolenic_acid_g,
+    CASE
+      WHEN rc.nutrient_code = 'F18:2CN6' AND rc.reference_kind = 'AI'
+        THEN gt.linoleic_acid_g
+      WHEN rc.nutrient_code = 'F18:3CN3' AND rc.reference_kind = 'AI'
+        THEN gt.alpha_linolenic_acid_g
+      -- Je Kilogramm Koerpergewicht: mit dem Gewicht multiplizieren.
+      -- `[cmd]` Neun der zehn Zeilen stehen in mg/kg, waehrend der
+      -- Naehrstoff selbst in g gefuehrt wird (die Aminosaeuren) —
+      -- deshalb zusaetzlich durch 1000. Protein steht in g/kg und
+      -- braucht nur die Multiplikation.
+      WHEN rc.basis = 'per_kg_bw_per_day' AND p.body_weight_kg IS NOT NULL THEN
+        rc.value_min * p.body_weight_kg
+        / CASE WHEN rc.unit LIKE 'mg/kg%' THEN 1000 ELSE 1 END
+      WHEN rc.basis = 'per_day' THEN rc.value_min
+      ELSE NULL
+    END AS abs_value_min,
+    CASE
+      WHEN rc.nutrient_code IN ('F18:2CN6', 'F18:3CN3') AND rc.reference_kind = 'AI'
+        THEN NULL
+      WHEN rc.basis = 'per_kg_bw_per_day' AND p.body_weight_kg IS NOT NULL THEN
+        rc.value_max * p.body_weight_kg
+        / CASE WHEN rc.unit LIKE 'mg/kg%' THEN 1000 ELSE 1 END
+      WHEN rc.basis = 'per_day' THEN rc.value_max
+      ELSE NULL
+    END AS abs_value_max,
+    -- Warum ein Wert NICHT als Prozent erscheint. NULL heisst: er darf.
+    CASE
+      WHEN rc.nutrient_code = 'F18:2CN6' AND rc.reference_kind = 'AI'
+        AND gt.linoleic_acid_g IS NULL THEN
+          CASE WHEN gt.zielherkunft = 'erhaltung_nicht_berechenbar'
+            THEN 'maintenance_unavailable' ELSE 'missing_goal' END
+      WHEN rc.nutrient_code = 'F18:3CN3' AND rc.reference_kind = 'AI'
+        AND gt.alpha_linolenic_acid_g IS NULL THEN
+          CASE WHEN gt.zielherkunft = 'erhaltung_nicht_berechenbar'
+            THEN 'maintenance_unavailable' ELSE 'missing_goal' END
+      WHEN rc.nutrient_code IN ('F18:2CN6', 'F18:3CN3') AND rc.reference_kind = 'AI'
+        THEN NULL
+      WHEN rc.basis = 'per_kg_bw_per_day' AND p.body_weight_kg IS NULL
+        THEN 'missing_weight'
+      -- `[read]` E% ist keine Naehrstoffempfehlung, sondern eine
+      -- Aussage ueber die Energieverteilung ("Fett soll 20-35 % der
+      -- Tagesenergie ausmachen"). Genau das rechnet GO-02 beim
+      -- Zielwert; hier ein zweites Mal zu rechnen hiesse zwei
+      -- Wahrheiten zu fuehren.
+      WHEN rc.basis IN ('energy_percent', 'as_low_as_possible')
+        THEN 'energy_share'
+      -- `[read]` Je Megajoule ist ein Fachmass fuer Naehrstoffdichte.
+      -- Es sagt nichts darueber, ob heute genug gegessen wurde.
+      WHEN rc.basis = 'per_mj' THEN 'nutrient_density'
+      ELSE NULL
+    END AS basis_hindernis
+  FROM reference_candidates rc
+  CROSS JOIN profile_one p
+  CROSS JOIN goals_targets gt
+),
+selected_references AS (
+  SELECT *
+  FROM aufgeloeste_referenzen
+  WHERE rn = 1
+)
+SELECT
+  p.user_id,
+  p.entry_date,
+  dv.nutrient_code,
+  nd.name_de AS nutrient_name_de,
+  nd.unit AS nutrient_unit,
+  nd.display_tier AS nutrient_display_tier,
+  dv.actual_value,
+  dv.missing_count::INTEGER,
+  (dv.missing_count = 0 AND dv.actual_value IS NOT NULL) AS value_complete,
+  sr.reference_kind,
+  sr.reference_direction,
+  -- GO-00 Teil 2: der AUFGELOESTE Wert, in der Einheit des
+  -- Naehrstoffs. Sonst staende bei Protein "0,83" als Referenz, und
+  -- niemand koennte die 20 % nachrechnen.
+  -- Ist die Bezugsgroesse nicht aufloesbar (E%, je MJ, Gewicht fehlt),
+  -- steht hier NULL — der Rohwert waere irrefuehrend.
+  ROUND(sr.abs_value_min, 3) AS reference_value_min,
+  ROUND(sr.abs_value_max, 3) AS reference_value_max,
+  -- Ebenso die Einheit: nach der Aufloesung gilt die des Naehrstoffs.
+  CASE
+    WHEN sr.abs_value_min IS NULL AND sr.abs_value_max IS NULL THEN sr.unit
+    ELSE nd.unit
+  END AS reference_unit,
+  CASE
+    WHEN sr.nutrient_code IN ('F18:2CN6', 'F18:3CN3')
+      AND sr.reference_kind = 'AI'
+      AND sr.basis_hindernis IS NULL
+      THEN CASE WHEN sr.zielherkunft = 'kein_aktives_ziel'
+        THEN 'maintenance_no_active_goal'
+        ELSE 'goals_target_from_energy_percent' END
+    ELSE sr.basis
+  END AS reference_basis,
+  sr.applies_to_intake_sources AS reference_applies_to_intake_sources,
+  -- GO-00 Teil 2: gerechnet wird gegen den AUFGELOESTEN Wert
+  -- (abs_value_*), nicht gegen die rohe Zahl aus der Tabelle.
+  -- Steht ein basis_hindernis, gibt es keinen Prozentwert.
+  CASE
+    WHEN dv.missing_count > 0 OR dv.actual_value IS NULL THEN NULL
+    WHEN sr.reference_kind IN ('NO_REFERENCE', 'NO_STANDALONE_REFERENCE') THEN NULL
+    WHEN sr.basis_hindernis IS NOT NULL THEN NULL
+    WHEN COALESCE(sr.abs_value_min, sr.abs_value_max) IS NULL
+      OR COALESCE(sr.abs_value_min, sr.abs_value_max) = 0 THEN NULL
+    ELSE ROUND(dv.actual_value / COALESCE(sr.abs_value_min, sr.abs_value_max) * 100, 1)
+  END AS reference_pct,
+  CASE
+    WHEN dv.missing_count > 0 OR dv.actual_value IS NULL THEN NULL
+    WHEN sr.basis_hindernis IS NOT NULL THEN NULL
+    WHEN sr.abs_value_min IS NULL OR sr.abs_value_min = 0 THEN NULL
+    ELSE ROUND(dv.actual_value / sr.abs_value_min * 100, 1)
+  END AS reference_pct_min,
+  CASE
+    WHEN dv.missing_count > 0 OR dv.actual_value IS NULL THEN NULL
+    WHEN sr.basis_hindernis IS NOT NULL THEN NULL
+    WHEN sr.abs_value_max IS NULL OR sr.abs_value_max = 0 THEN NULL
+    ELSE ROUND(dv.actual_value / sr.abs_value_max * 100, 1)
+  END AS reference_pct_max,
+  CASE
+    WHEN NOT p.profile_complete THEN 'missing_profile'
+    WHEN sr.reference_kind IS NULL THEN 'no_applicable_reference'
+    WHEN dv.missing_count > 0 THEN 'incomplete'
+    WHEN dv.actual_value IS NULL THEN 'no_value'
+    WHEN sr.reference_kind IN ('NO_REFERENCE', 'NO_STANDALONE_REFERENCE') THEN 'not_applicable'
+    -- Drei neue Zustaende, je mit eigenem Grund. `[read]` Sie treten an
+    -- die Stelle eines falschen Prozentwerts, nicht an die Stelle von
+    -- 'complete' — die Zeile bleibt sichtbar, nur ohne Balken.
+    WHEN sr.basis_hindernis = 'missing_weight' THEN 'missing_weight'
+    WHEN sr.basis_hindernis = 'maintenance_unavailable' THEN 'maintenance_unavailable'
+    WHEN sr.basis_hindernis = 'missing_goal' THEN 'missing_goal'
+    WHEN sr.basis_hindernis = 'energy_share' THEN 'energy_share'
+    WHEN sr.basis_hindernis = 'nutrient_density' THEN 'nutrient_density'
+    ELSE 'complete'
+  END AS reference_status,
+  p.age_years AS profile_age_years,
+  p.biological_sex AS profile_biological_sex,
+  p.is_pregnant AS profile_is_pregnant,
+  p.is_lactating AS profile_is_lactating,
+  sr.source,
+  sr.source_locator,
+  sr.notes
+FROM day_values dv
+CROSS JOIN profile_one p
+JOIN nutrition.nutrient_defs nd ON nd.code = dv.nutrient_code
+LEFT JOIN selected_references sr ON sr.nutrient_code = dv.nutrient_code
+ORDER BY nd.display_tier, nd.sort_index, sr.reference_kind NULLS LAST;
+$$;
+
+COMMENT ON FUNCTION nutrition.daily_reference_assessment(uuid, date) IS
+  'G-622: Fettssaeurenreferenz kennzeichnet Erhaltung ohne aktives Ziel und fehlende Erhaltungsgrundlage.';
+
+REVOKE ALL ON FUNCTION nutrition.daily_reference_assessment(uuid, date) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION nutrition.daily_reference_assessment(uuid, date) TO authenticated, service_role;
+
+COMMIT;

@@ -5,7 +5,7 @@
     "user_id": "10000000-0000-0000-0000-000000000101",
     "date": "2026-08-02",
     "case": "Tag ohne Ziel",
-    "expected": "goals.zielwerte_am liefert vor dem ersten gueltig_ab keine Zeile; daily_summary hat trotzdem Mahlzeiten."
+    "expected": "goals.zielwerte_am liefert vor dem ersten Ziel markierte Erhaltungswerte (herkunft kein_aktives_ziel); daily_summary hat trotzdem Mahlzeiten."
   },
   {
     "user": "Max Schmidt",
