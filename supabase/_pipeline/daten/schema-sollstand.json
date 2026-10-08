@@ -1387,6 +1387,13 @@
       "name": "g626_guard_controlling_goal_update",
       "schritt": "626_controlling_goal_write_guard"
     },
+    {"schema":"goals","tabelle":"user_goals","name":"b617_measurement_goal_snapshot","schritt":"617_measurement_goal_expansion"},
+    {"schema":"goals","tabelle":"user_goals","name":"c617_measurement_snapshot_immutable","schritt":"617_measurement_goal_expansion"},
+    {"schema":"goals","tabelle":"manual_goal_values","name":"g617_manual_value_guard","schritt":"617_measurement_goal_expansion"},
+    {"schema":"goals","tabelle":"manual_goal_values","name":"g617_manual_value_progress","schritt":"617_measurement_goal_expansion"},
+    {"schema":"goals","tabelle":"body_circumferences","name":"g617_circumference_progress","schritt":"617_measurement_goal_expansion"},
+    {"schema":"training","tabelle":"workout_sessions","name":"g617_training_session_progress","schritt":"617_measurement_goal_expansion"},
+    {"schema":"recovery","tabelle":"checkins","name":"g617_recovery_checkin_progress","schritt":"617_measurement_goal_expansion"},
     {
       "schema": "training",
       "tabelle": "muscle_origins",
@@ -2480,9 +2487,16 @@
         "goal_role",
         "exercise_id",
         "measurement_type",
-        "measurement_reps"
+        "measurement_reps",
+        "measurement_site",
+        "measurement_rhythm",
+        "better_direction",
+        "start_source",
+        "start_source_id",
+        "start_measured_at"
       ]
     },
+    {"schema":"goals","name":"manual_goal_values","schritt":"617_measurement_goal_expansion","rls":true,"policies":["SELECT","INSERT","UPDATE","DELETE"],"grants":{"authenticated":["SELECT","INSERT","UPDATE","DELETE"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"G-617: nur eigene Handwerte an eigenen Zielen der Messart custom.","zeilenschutzart":"eigene_zeilen","spalten":["id","goal_id","user_id","measured_on","value","recorded_at"]},
     {
       "schema": "goals",
       "name": "goal_phases",
@@ -6512,6 +6526,13 @@
       "name": "goal_progress_at",
       "schritt": "113"
     },
+    {"schema":"goals","name":"measurement_points","schritt":"617_measurement_goal_expansion"},
+    {"schema":"goals","name":"measurement_weeks","schritt":"617_measurement_goal_expansion"},
+    {"schema":"goals","name":"measurement_goal_create","schritt":"617_measurement_goal_expansion"},
+    {"schema":"goals","name":"g617_measurement_goal_snapshot","schritt":"617_measurement_goal_expansion"},
+    {"schema":"goals","name":"g617_measurement_snapshot_immutable","schritt":"617_measurement_goal_expansion"},
+    {"schema":"goals","name":"g617_manual_value_guard","schritt":"617_measurement_goal_expansion"},
+    {"schema":"goals","name":"g617_refresh_from_measurement_source","schritt":"617_measurement_goal_expansion"},
     {
       "schema": "goals",
       "name": "refresh_user_goal_progress",
@@ -6844,6 +6865,8 @@
     }
   ],
   "fremde_sichten": [
+    {"schema":"goals","name":"measurement_source_options","schritt":"617_measurement_goal_expansion","security_invoker":true,"security_barrier":false,"grants":{"authenticated":["SELECT"],"service_role":["SELECT"]},"grants_herkunft":"G-617: lesbare Verfuegbarkeit der Messquellen ohne Nutzerdaten.","spalten":["measurement_type","availability","source_name"]},
+    {"schema":"goals","name":"measurement_circumference_sites","schritt":"617_measurement_goal_expansion","security_invoker":true,"security_barrier":false,"grants":{"authenticated":["SELECT"],"service_role":["SELECT"]},"grants_herkunft":"G-617: 13 Stellen passend zu body_circumferences.","spalten":["site"]},
     {
       "schema": "supplements",
       "name": "supplier_product_nutrient_serving_options",

@@ -3702,11 +3702,25 @@
       "depends_on": ["617_measurement_goal_exercise_and_role"]
     },
     {
+      "id": "617_measurement_goal_expansion",
+      "path": "supabase/_pipeline/11_goals/617_measurement_goal_expansion.sql",
+      "kind": "sql",
+      "creates": "G-617 erweitert: Koerper-, Kraft-, Gewohnheits- und eigene Messziele mit Start-Snapshot, Datenpunkten und Wochenserie.",
+      "depends_on": ["617_measurement_goal_exercise_and_role_probe", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "617_measurement_goal_expansion_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g617-measurement-expansion.test.ts",
+      "kind": "tsx",
+      "creates": "G-617 erweitert: alle Messquellen, Umfangstelle, erst messen, erster Kraftwert, Gewohnheitsserie und Handwert.",
+      "depends_on": ["617_measurement_goal_expansion"]
+    },
+    {
       "id": "622_goal_free_maintenance",
       "path": "supabase/_pipeline/11_goals/622_goal_free_maintenance.sql",
       "kind": "sql",
       "creates": "G-622: Ohne aktive Phase Erhaltung aus bestehender TDEE-Basis und maintain-Makroregel mit ausdruecklicher Herkunft.",
-      "depends_on": ["613_paused_goal_phase_readers", "617_measurement_goal_exercise_and_role", "a86_testdaten_einspielen"]
+      "depends_on": ["613_paused_goal_phase_readers", "617_measurement_goal_expansion_probe", "a86_testdaten_einspielen"]
     },
     {
       "id": "622_daily_reference_maintenance",
