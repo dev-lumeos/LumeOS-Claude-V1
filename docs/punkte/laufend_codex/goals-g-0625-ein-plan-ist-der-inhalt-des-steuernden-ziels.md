@@ -61,3 +61,10 @@ Offen:
 ## Entschieden - 2026-10-08 17:40, Tom: Katalogwerte
 
 Katalog behaelt Fett als Anteil kcal (fat_percent) und seinen Refeed-Rhythmus (refeeds). Die neuen Spalten Fett g/kg, Cardio/Woche, Refeed/Woche bleiben im Katalog NULL = "keine Vorgabe" und gelten nur fuer eigene Werte. Keine doppelte Fett-Wahrheit.
+
+
+## Kette committet - 2026-10-08, Commit `72ca5fb3` (mit G-625 Teil 2, G-633, G-634)
+
+`[cmd]` 7 Dateien nur supabase/_pipeline, neue Schritte 625_goal_plan_position_revision, 633_goal_limit_german_numbers, 634_measurement_goal_start_preview (+ je Probe). Gelesen: 634 – der Snapshot-Trigger `g617_measurement_goal_snapshot` ruft `measurement_goal_start_preview` (eine Abfrage, `auth.uid()`, Kennung `erst_messen`). 633 – Wrapper um `ziel_grenzen_pruefen` (Basis umbenannt), Regex nur auf den Hinweistext, Schlüssel gleich. 625 Teil 2 – Position mit `FOR UPDATE` nur für `auth.uid()`. Gate grün.
+
+`[read]` Codex: 385 Schritte grün, Proben G-625 2/2, G-633 1/1 (Hex 31 36 2c 38 = "16,8"), G-634 1/1 (Gewicht, Umfang, e1RM, Gewicht×Wdh, Training, Schlaf, eigener Wert), testdaten-pruefen 186/0, Sabotage 3/3 rot. Katalog: 17 Programme mit NULL in den neuen Spalten, Rechnung mit fat_percent belegt. Erledigt erst nach Live.
