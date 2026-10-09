@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 282 |
-| `laufend_codex` | 1 |
+| `todos` | 281 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 693 |
 | **gesamt** | **977** |
@@ -700,7 +700,7 @@
 | `G-634` | frage | mittel | [Startwert eines Messziels erst nach dem Anlegen sichtbar](erledigt/goals-g-0634-startwert-eines-messziels-erst-nach-dem-anlegen.md) | erledigt | — | — |
 | `G-636` | fehler | niedrig | [Der Goals-Kopf zählt Phasen eines pausierten Ziels als laufend](erledigt/goals-g-0636-kopf-zaehlt-phasen-eines-pausierten-ziels.md) | erledigt | — | — |
 | `G-637` | fehler | mittel | [Ein aktives Ziel ohne laufende Phase heisst "kein aktives Ziel"](erledigt/goals-g-0637-aktives-ziel-ohne-laufende-phase-heisst-kein-aktives-ziel.md) | erledigt | — | — |
-| `G-638` | fehler | mittel | [Fortsetzen eines Ziels aktiviert seinen Plan nicht](todos/goals-g-0638-fortsetzen-aktiviert-den-plan-nicht.md) | offen | — | — |
+| `G-638` | fehler | mittel | [Fortsetzen eines Ziels aktiviert seinen Plan nicht](laufend_codex/goals-g-0638-fortsetzen-aktiviert-den-plan-nicht.md) | laeuft (codex) | — | — |
 | `G-639` | aufgabe | mittel | [Reiter Goals – Reste nach dem Entwurf](todos/goals-g-0639-reiter-goals-reste-nach-entwurf.md) | offen | — | — |
 
 ### wartet auf Blocker — 7

@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: mittel
 angelegt: 2026-10-09
+agent: codex
+beauftragt: 2026-10-09
 
 braucht: []
 kind_von: G-625
@@ -28,3 +30,9 @@ beruehrt:
 ## Was zu tun ist (Codex)
 
 Ziel `paused`/`on_hold` → `active`: Der Plan geht von `pausiert` auf `aktiv`, soweit kein anderer Plan des Nutzers aktiv ist. Sonst weist der Wechsel ab mit Hinweis. Gemeinsam mit G-611 prüfen (eingefroren, archiviert). Probe beide Richtungen, Sabotage rot.
+## Auftrag - Kopf
+
+    AUFTRAG FUER Codex - G-638: Planstatus folgt dem Ziel in beide Richtungen
+    Bereich: supabase/_pipeline/ (Kette). Live mit G-611 nach Freigabe.
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-09, HEAD 158ad807
