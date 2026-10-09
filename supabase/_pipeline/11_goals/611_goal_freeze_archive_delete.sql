@@ -1,5 +1,5 @@
 -- G-611: Frist und Zielerreichung wirken auch ohne Schreibereignis.
--- Der gespeicherte Status bleibt fuer Verlauf/Plan erhalten; Leser nutzen
+-- Der gespeicherte Status bleibt für Verlauf/Plan erhalten; Leser nutzen
 -- goal_state_at. Archivieren und Neustart materialisieren den Abschluss.
 BEGIN;
 
@@ -220,7 +220,7 @@ RETURNS trigger LANGUAGE plpgsql SECURITY INVOKER SET search_path='' AS $$
 BEGIN
   IF EXISTS (SELECT 1 FROM goals.goal_state_at(NEW.goal_id,CURRENT_DATE)
     WHERE state='eingefroren') THEN
-    RAISE EXCEPTION 'G611_BLOCK:ziel_eingefroren' USING ERRCODE='23514';
+    RAISE EXCEPTION 'G611_BLOCK:ziel_eingefroren: Dieses Ziel ist eingefroren und kann nicht mehr geändert werden.' USING ERRCODE='23514';
   END IF;
   RETURN NEW;
 END $$;
@@ -237,7 +237,7 @@ BEGIN
   IF NEW.status='aktiv' AND EXISTS (
     SELECT 1 FROM goals.goal_state_at(NEW.goal_id,CURRENT_DATE)
     WHERE state='eingefroren') THEN
-    RAISE EXCEPTION 'G611_BLOCK:ziel_eingefroren' USING ERRCODE='23514';
+    RAISE EXCEPTION 'G611_BLOCK:ziel_eingefroren: Dieses Ziel ist eingefroren und kann nicht mehr geändert werden.' USING ERRCODE='23514';
   END IF;
   RETURN NEW;
 END $$;
@@ -278,8 +278,8 @@ BEGIN
   RETURN FOUND;
 END $$;
 
--- Direkte DELETE-Rechte wuerden die Bestätigung umgehen. Die Funktion
--- prueft die Identitaet selbst; Quellmessungen anderer Ziele bleiben stehen.
+-- Direkte DELETE-Rechte würden die Bestätigung umgehen. Die Funktion
+-- prüft die Identität selbst; Quellmessungen anderer Ziele bleiben stehen.
 REVOKE DELETE ON goals.user_goals FROM authenticated;
 ALTER TABLE goals.goal_phases DROP CONSTRAINT goal_phases_goal_id_fkey;
 ALTER TABLE goals.goal_phases ADD CONSTRAINT goal_phases_goal_id_fkey
@@ -300,12 +300,12 @@ DECLARE v_goal goals.user_goals%ROWTYPE; v_reason text; v_frozen_on date;
 BEGIN
   SELECT * INTO v_goal FROM goals.user_goals
   WHERE id=p_goal_id AND user_id=auth.uid() FOR UPDATE;
-  IF NOT FOUND THEN RAISE EXCEPTION 'G611_BLOCK:ziel_fremd' USING ERRCODE='42501'; END IF;
+  IF NOT FOUND THEN RAISE EXCEPTION 'G611_BLOCK:ziel_fremd: Das Ziel fehlt oder gehört nicht zu deinem Konto.' USING ERRCODE='42501'; END IF;
   SELECT reason,frozen_on INTO v_reason,v_frozen_on
     FROM goals.goal_state_at(p_goal_id,CURRENT_DATE)
     WHERE state='eingefroren';
   IF v_reason IS NULL THEN
-    RAISE EXCEPTION 'G611_BLOCK:erst_beenden' USING ERRCODE='23514';
+    RAISE EXCEPTION 'G611_BLOCK:erst_beenden: Dieses Ziel ist noch nicht abgeschlossen. Bitte erst beenden.' USING ERRCODE='23514';
   END IF;
   UPDATE goals.user_goals SET archived_at=now(),
     status=CASE v_reason WHEN 'erreicht' THEN 'achieved'
@@ -319,7 +319,7 @@ RETURNS trigger LANGUAGE plpgsql SECURITY INVOKER SET search_path='' AS $$
 BEGIN
   IF NEW.archived_at IS DISTINCT FROM OLD.archived_at
      AND current_user <> 'postgres' THEN
-    RAISE EXCEPTION 'G611_BLOCK:archiv_nur_funktion' USING ERRCODE='42501';
+    RAISE EXCEPTION 'G611_BLOCK:archiv_nur_funktion: Bitte die Archivfunktion verwenden.' USING ERRCODE='42501';
   END IF;
   RETURN NEW;
 END $$;
@@ -334,7 +334,7 @@ DECLARE v_goal goals.user_goals%ROWTYPE; v_history boolean;
 BEGIN
   SELECT * INTO v_goal FROM goals.user_goals
   WHERE id=p_goal_id AND user_id=auth.uid() FOR UPDATE;
-  IF NOT FOUND THEN RAISE EXCEPTION 'G611_BLOCK:ziel_fremd' USING ERRCODE='42501'; END IF;
+  IF NOT FOUND THEN RAISE EXCEPTION 'G611_BLOCK:ziel_fremd: Das Ziel fehlt oder gehört nicht zu deinem Konto.' USING ERRCODE='42501'; END IF;
   SELECT coalesce(v_goal.progress_pct,0)>0
     OR v_goal.current_value IS NOT NULL
     OR v_goal.achievement_date IS NOT NULL
@@ -347,7 +347,7 @@ BEGIN
       WHERE measured_on>=v_goal.gueltig_ab)
     INTO v_history;
   IF v_history AND p_confirm_history IS DISTINCT FROM true THEN
-    RAISE EXCEPTION 'G611_CONFIRM:beenden_statt_loeschen'
+    RAISE EXCEPTION 'G611_CONFIRM:beenden_statt_loeschen: Dieses Ziel hat einen Verlauf. Bitte beenden statt löschen oder das Löschen ausdrücklich bestätigen.'
       USING ERRCODE='23514';
   END IF;
   DELETE FROM goals.user_goals WHERE id=p_goal_id;
@@ -362,16 +362,16 @@ DECLARE v_old goals.user_goals%ROWTYPE; v_new uuid; v_reason text;
 BEGIN
   SELECT * INTO v_old FROM goals.user_goals
   WHERE id=p_goal_id AND user_id=auth.uid() FOR UPDATE;
-  IF NOT FOUND THEN RAISE EXCEPTION 'G611_BLOCK:ziel_fremd' USING ERRCODE='42501'; END IF;
+  IF NOT FOUND THEN RAISE EXCEPTION 'G611_BLOCK:ziel_fremd: Das Ziel fehlt oder gehört nicht zu deinem Konto.' USING ERRCODE='42501'; END IF;
   SELECT reason,frozen_on INTO v_reason,v_frozen_on
     FROM goals.goal_state_at(p_goal_id,CURRENT_DATE)
     WHERE state='eingefroren';
   IF v_reason IS NULL THEN
-    RAISE EXCEPTION 'G611_BLOCK:nur_eingefroren_neustarten' USING ERRCODE='23514';
+    RAISE EXCEPTION 'G611_BLOCK:nur_eingefroren_neustarten: Nur eingefrorene Ziele können neu gestartet werden.' USING ERRCODE='23514';
   END IF;
   IF p_start_date IS NULL OR p_start_date<CURRENT_DATE
      OR p_target_date IS NULL OR p_target_date<p_start_date THEN
-    RAISE EXCEPTION 'G611_BLOCK:neue_frist' USING ERRCODE='23514';
+    RAISE EXCEPTION 'G611_BLOCK:neue_frist: Der neue Zeitraum muss heute oder später beginnen und das Ende darf nicht vor dem Start liegen.' USING ERRCODE='23514';
   END IF;
   UPDATE goals.user_goals SET status=CASE v_reason WHEN 'erreicht'
       THEN 'achieved' WHEN 'frist_abgelaufen' THEN 'missed' ELSE 'abandoned' END,

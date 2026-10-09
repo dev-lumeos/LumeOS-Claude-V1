@@ -10,7 +10,7 @@ BEGIN
       SELECT 1 FROM goals.goal_state_at(OLD.id,CURRENT_DATE)
       WHERE state='eingefroren'
     ) THEN
-      RAISE EXCEPTION 'G638_BLOCK:ziel_eingefroren_oder_archiviert: Eingefrorene oder archivierte Ziele koennen keinen Plan aktivieren; bitte neu starten.'
+      RAISE EXCEPTION 'G638_BLOCK:ziel_eingefroren_oder_archiviert: Eingefrorene oder archivierte Ziele können keinen Plan aktivieren; bitte neu starten.'
         USING ERRCODE='23514';
     END IF;
     IF OLD.status IN ('paused','on_hold') AND EXISTS (
@@ -48,5 +48,5 @@ BEGIN
   RETURN NULL;
 END $$;
 COMMENT ON FUNCTION goals.g625_sync_plan_after_goal_status() IS
-  'G-638: pausiertes Ziel pausiert seinen aktiven Plan, Fortsetzen aktiviert den pausierten Plan, Abschluss schliesst jeden Planstatus.';
+  'G-638: pausiertes Ziel pausiert seinen aktiven Plan, Fortsetzen aktiviert den pausierten Plan, Abschluss schließt jeden Planstatus.';
 COMMIT;
