@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 280 |
+| `todos` | 281 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 690 |
-| **gesamt** | **974** |
+| **gesamt** | **975** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 108
+## goals — 109
 
-### beauftragbar — 102
+### beauftragbar — 103
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -688,7 +688,7 @@
 | `G-622` | fehler | hoch | [Ohne aktives Ziel gibt es keine Tagesziele](erledigt/goals-g-0622-ohne-aktives-ziel-gibt-es-keine-tagesziele.md) | erledigt | — | G-630, G-637 |
 | `G-623` | aufgabe | mittel | [Im Planer laesst sich eine einzelne Phase nicht verschieben](todos/goals-g-0623-im-planer-laesst-sich-eine-phase-nicht-verschieben.md) | offen | — | — |
 | `G-624` | fehler | mittel | [Custom und Expert BB Jahreszyklus haben im Planer keine Vorschau](todos/goals-g-0624-custom-und-expert-bb-haben-keine-vorschau.md) | offen | — | — |
-| `G-625` | aufgabe | hoch | [Ein Plan ist der Inhalt des steuernden Ziels](erledigt/goals-g-0625-ein-plan-ist-der-inhalt-des-steuernden-ziels.md) | erledigt | — | G-627 |
+| `G-625` | aufgabe | hoch | [Ein Plan ist der Inhalt des steuernden Ziels](erledigt/goals-g-0625-ein-plan-ist-der-inhalt-des-steuernden-ziels.md) | erledigt | — | G-627, G-638 |
 | `G-626` | aufgabe | hoch | [Grenzen nach Erfahrungsgrad](erledigt/goals-g-0626-grenzen-nach-erfahrungsgrad.md) | erledigt | — | G-632, G-633 |
 | `G-627` | aufgabe | mittel | [Die wöchentliche Anpassung hat kein Protokoll](todos/goals-g-0627-die-woechentliche-anpassung-hat-kein-protokoll.md) | offen | — | — |
 | `G-628` | aufgabe | hoch | [Ziel setzen nach dem Entwurf](laufend_claudecode/goals-g-0628-ziel-setzen-nach-dem-entwurf.md) | laeuft (claudecode) | — | G-631, G-634 |
@@ -700,6 +700,7 @@
 | `G-634` | frage | mittel | [Startwert eines Messziels erst nach dem Anlegen sichtbar](erledigt/goals-g-0634-startwert-eines-messziels-erst-nach-dem-anlegen.md) | erledigt | — | — |
 | `G-636` | fehler | niedrig | [Der Goals-Kopf zählt Phasen eines pausierten Ziels als laufend](todos/goals-g-0636-kopf-zaehlt-phasen-eines-pausierten-ziels.md) | offen | — | — |
 | `G-637` | fehler | mittel | [Ein aktives Ziel ohne laufende Phase heisst "kein aktives Ziel"](erledigt/goals-g-0637-aktives-ziel-ohne-laufende-phase-heisst-kein-aktives-ziel.md) | erledigt | — | — |
+| `G-638` | fehler | mittel | [Fortsetzen eines Ziels aktiviert seinen Plan nicht](todos/goals-g-0638-fortsetzen-aktiviert-den-plan-nicht.md) | offen | — | — |
 
 ### wartet auf Blocker — 6
 

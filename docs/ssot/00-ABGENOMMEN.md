@@ -7,9 +7,9 @@ Hand aendern** ? **die Quelle ist `docs/punkte/erledigt/`.**
 gebaut IST, beschreiben die Modul-Dateien in diesem Ordner** ? **das
 bleibt Handarbeit, aber sie hat jetzt eine Grundlage.**
 
-`[cmd]` **Stand: 2026-09-08, 326 Punkte.**
+`[cmd]` **Stand: 2026-10-09, 676 Punkte.**
 
-## coach ? 16 Punkte
+## coach ? 39 Punkte
 
 | Datum | Nr | Titel | Commit |
 |---|---|---|---|
@@ -27,10 +27,33 @@ bleibt Handarbeit, aber sie hat jetzt eine Grundlage.**
 | 2026-09-02 | G-169 | `coach.checkins` und `checkin_templates` liegen ungelesen | `7a6e77a7` |
 | 2026-09-08 | C-268 | Beim Einladen gibt es keine Namensaufloesung | `1d5f8785` |
 | 2026-09-08 | C-269 | Eine Einladung laesst sich nicht zuruecknehmen | `0e8cdc8f` |
+| 2026-09-08 | C-428 | das Onboarding fuer Unregistrierte | `cd006c98` |
+| 2026-09-08 | C-434 | die Coach-Sicht auf die neuen Tabellen | `34f1ef09` |
+| 2026-09-08 | C-435 | C-434 einspielen | `452206f7` |
+| 2026-09-08 | C-436 | der Test scheitert am Schutztrigger | `f4393eff` |
+| 2026-09-08 | C-437 | der Snapshot wird nicht gefuellt | `9afaa804` |
+| 2026-09-08 | C-438 | C-428 einspielen | `9afaa804` |
+| 2026-09-08 | C-439 | ein Coach ohne Profil kann nicht einladen | `c3cd8fe5` |
+| 2026-09-08 | C-440 | das Coach-Onboarding | `ed84ca6f` |
+| 2026-09-08 | C-442 | C-440 einspielen | `03e0bfe0` |
+| 2026-09-08 | C-449 | eine offene Einladung ohne Namen | `fcfecf19` |
+| 2026-09-08 | C-450 | wer vergibt die Coach-Rolle? | `067e58b5` |
+| 2026-09-08 | C-459 | der Alarm-Erzeuger | `d582052b` |
+| 2026-09-08 | C-460 | welcher Coach für welches Modul | `68b626d9` |
+| 2026-09-08 | C-71 | Permissions und Autonomy sind zwei verschiedene Sachen | `452206f7` |
 | 2026-09-08 | G-324 | der Browser ruft den alten Schreibweg | `0e8cdc8f` |
-| 2026-09-08 | G-379 | brauchen Originale eine eigene Freigabe? | `OFFEN` |
+| 2026-09-08 | G-379 | brauchen Originale eine eigene Freigabe? | `c6cd778a` |
+| 2026-09-08 | G-391 | das Coach-Grundgeruest aus den Vorlagen | `a5e8b344` |
+| 2026-09-08 | G-398 | die Portalkarten gehoeren nach 3220 | `91181203` |
+| 2026-09-08 | G-402 | Klienten, Check-ins, Alerts | `4a973e7b` |
+| 2026-09-08 | G-405 | Das Portal als Mockup der Vorlage | `eeab96ae` |
+| 2026-09-08 | G-407 | den Draft fertigbauen | `fa73c641` |
+| 2026-09-08 | G-409 | die Tiefe und jeder Klick | `1d5cfc03` |
+| 2026-09-08 | G-410 | der Kalender und das Athletendetail | `1deb19b9` |
+| 2026-09-08 | G-461 | ein nicht maskiertes Anfuehrungszeichen | `96e80560` |
+| 2026-10-02 | G-582 | coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md | `fd2a086c` |
 
-## goals ? 5 Punkte
+## goals ? 71 Punkte
 
 | Datum | Nr | Titel | Commit |
 |---|---|---|---|
@@ -39,8 +62,87 @@ bleibt Handarbeit, aber sie hat jetzt eine Grundlage.**
 | 2026-09-08 | C-425 | die Vorgabe von `priority` faellt durch den CHECK | `9a9a7564` |
 | 2026-09-08 | C-432 | der freie Platz fuer ein neues Ziel | `9a9a7564` |
 | 2026-09-08 | C-433 | C-432 einspielen | `cf1eae2a` |
+| 2026-09-08 | C-463 | drei Modale ohne Ziel | `db75b776` |
+| 2026-09-08 | G-421 | die vier fehlenden Reiter in Goals & Body | `5d9b300a` |
+| 2026-09-08 | G-510 | Bestandsaufnahme Goals, gegen alle vier Quellen | `abf33847` |
+| 2026-09-26 | G-512 | die FFMI-Kachel zeigte eine erfundene Zahl als echte | `abf33847` |
+| 2026-09-27 | G-513 | die Phase laesst sich nirgends setzen | `9681b6f8` |
+| 2026-09-28 | G-422 | Schreibwege ohne Aufrufer | `0483f080` |
+| 2026-09-28 | G-511 | die Phase entscheidet nicht ueber die Kalorien | `c572fbab` |
+| 2026-09-28 | G-523 | der adaptive TDEE glaettet nicht, er springt | `c572fbab` |
+| 2026-09-28 | G-524 | vier der zehn Spec-Tabellen und beide Ansichten fehlen | `e22a7c03` |
+| 2026-09-28 | G-527 | der Schreibweg kennt die neuen Hindernisse nicht | `0483f080` |
+| 2026-09-28 | G-528 | die Variantenachse und mini_cut sind nicht definiert | `c572fbab` |
+| 2026-09-29 | G-514 | die Modulverrechnung, der Zweck des Moduls, fehlt ganz | `309db7e1` |
+| 2026-09-29 | G-519 | die Phasenansicht ist gegen die falsche Quelle gebaut | `8312c1d6` |
+| 2026-09-29 | G-520 | der Anpassungsalgorithmus und die sieben Uebergangswaechter fehlen | `cde1aa2e` |
+| 2026-09-29 | G-531 | `goal_phase_start` kann drei der neun Phasenarten nicht anlegen | `309db7e1` |
+| 2026-09-29 | G-533 | die laufenden Phasen sind vor E1, und drei Funktionen sind aus der Oberflaeche nicht erreichbar | `46b73f6f` |
+| 2026-09-29 | G-534 | der Phase-Reiter zeigt Daten und plant nichts | `6dd3932b` |
+| 2026-09-29 | G-536 | goals-g-0536-der-strategiekatalog-fehlt-ganz.md | `46b73f6f` |
+| 2026-09-29 | G-537 | goals-g-0537-ziele-sind-nicht-anlegbar.md | `6dd3932b` |
+| 2026-09-29 | G-538 | goals-g-0538-phasen-haengen-an-keinem-ziel.md | `6dd3932b` |
+| 2026-09-29 | G-541 | goals-g-0541-das-vorschaupanel-liest-den-katalog.md | `6dd3932b` |
+| 2026-09-30 | G-539 | goals-g-0539-der-phasen-editor-fehlt.md | `9ed19b12` |
+| 2026-09-30 | G-543 | goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md | `20992639` |
+| 2026-09-30 | G-544 | goals-g-0544-der-phase-reiter-zeigt-keine-zeitachse.md | `82b3973b` |
+| 2026-09-30 | G-545 | goals-g-0545-der-katalog-hat-die-form-nicht-den-inhalt.md | `56cbc87f` |
+| 2026-09-30 | G-553 | goals-g-0553-ein-tokenfehler-sieht-aus-wie-ein-datenfehler.md | `20992639` |
+| 2026-09-30 | G-554 | goals-g-0554-phasenziele-sind-nicht-anlegbar.md | `8553e5b2` |
+| 2026-09-30 | G-556 | goals-g-0556-der-kettenlauf-faellt-am-eigenen-check.md | `89e71386` |
+| 2026-09-30 | G-557 | goals-g-0557-die-zuordnung-erreicht-die-datenbank-nicht.md | `db2a7a21` |
+| 2026-09-30 | G-558 | goals-g-0558-goal-phase-start-nimmt-den-strategiecode-nicht.md | `a0be641d` |
+| 2026-09-30 | G-559 | goals-g-0559-phase-am-deckelt-auf-eine-phase.md | `f03dfbe8` |
+| 2026-10-01 | G-560 | goals-g-0560-die-reihenfolge-eines-programms-ist-nirgends-speicherbar.md | `79f9dd06` |
+| 2026-10-01 | G-561 | goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md | `605a27d8` |
+| 2026-10-01 | G-563 | goals-g-0563-berechne-zielwerte-waehlt-selbst-eine-phase.md | `f0af9194` |
+| 2026-10-01 | G-564 | goals-g-0564-ladephase-nimmt-die-erste-fuer-die-einzige.md | `6ae14c93` |
+| 2026-10-01 | G-565 | goals-g-0565-die-einheit-ist-eine-nutzerwahl.md | `bdaea479` |
+| 2026-10-01 | G-568 | goals-g-0568-die-zielwerte-brauchen-ihr-ziel.md | `57b88381` |
+| 2026-10-01 | G-569 | 520 prueft Kilogramm in der Anwendung | `daf0f217` |
+| 2026-10-01 | G-573 | goals-g-0573-rateauskcal-gibt-es-zweimal-mit-verschiedener-rundung.md | `8b9f82f0` |
+| 2026-10-01 | G-576 | goals-g-0576-weight-als-untertyp-eigenes-ohne.md | `45583c3c` |
+| 2026-10-02 | G-572 | goals-g-0572-der-dateikopf-nennt-phase-engine-als-attrappe.md | `8cbbd36d` |
+| 2026-10-02 | G-577 | goals-g-0577-die-umfangserfassung-hat-keinen-schreibweg.md | `a640e7af` |
+| 2026-10-03 | G-570 | goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md | `96518958` |
+| 2026-10-03 | G-594 | goals-g-0594-ein-ernaehrungsziel-kennt-seine-phase-aber-nicht-sein-ziel.md | `dc04902a` |
+| 2026-10-03 | G-595 | goals-g-0595-der-zweiparameter-mantel-war-kein-ueberrest.md | `c73a95c1` |
+| 2026-10-04 | G-591 | goals-g-0591-zwei-goals-aktionen-ohne-aufrufer.md | `85afa021` |
+| 2026-10-04 | G-602 | goals-g-0602-die-reihenfolge-aktiver-ziele-wird-atomar-getauscht.md | `5e399987` |
+| 2026-10-05 | G-604 | goals-g-0604-hoechstens-ein-aktives-kalorienziel.md | `306378cb` |
+| 2026-10-05 | G-606 | goals-g-0606-eine-messung-laesst-sich-nicht-aendern.md | `f87e49bc` |
+| 2026-10-06 | G-562 | goals-g-0562-die-teilphasen-haben-keine-zeitachse-mehr.md | `fff8a82a` |
+| 2026-10-06 | G-607 | goals-g-0607-der-ankerplan-rechnet-aus-dem-dauer-anteil.md | `638397cd` |
+| 2026-10-07 | G-608 | goals-g-0608-die-stufenwochen-sind-im-programm-editierbar.md | `080cc8fc` |
+| 2026-10-07 | G-609 | goals-g-0609-die-strategie-wird-beim-phasenstart-nicht-durchgereicht.md | `6197e81c` |
+| 2026-10-07 | G-614 | goals-g-0614-der-strategiekatalog-kennt-karte-und-mindestgrad.md | `f5ca5398` |
+| 2026-10-08 | G-610 | goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md | `f7e57ebc` |
+| 2026-10-08 | G-613 | goals-g-0613-ein-pausiertes-ziel-laesst-seine-phase-laufen.md | `e50f1fcf` |
+| 2026-10-08 | G-615 | goals-g-0615-der-planer-legt-plaene-vom-termin-rueckwaerts-an.md | `17ed5c9d` |
+| 2026-10-08 | G-617 | goals-g-0617-ein-kraftziel-findet-seine-uebung-nur-ueber-den-titel.md | `4961f7ba` |
+| 2026-10-08 | G-622 | goals-g-0622-ohne-aktives-ziel-gibt-es-keine-tagesziele.md | `4f84b025` |
+| 2026-10-08 | G-626 | goals-g-0626-grenzen-nach-erfahrungsgrad.md | `11cb4e44` |
+| 2026-10-08 | G-630 | goals-g-0630-die-warnung-ohne-aktives-ziel-ist-unsichtbar.md | `113fbfae` |
+| 2026-10-08 | G-632 | goals-g-0632-pruefungstexte-ohne-umlaute.md | `488420c4` |
+| 2026-10-09 | G-625 | goals-g-0625-ein-plan-ist-der-inhalt-des-steuernden-ziels.md | `5fc802b5` |
+| 2026-10-09 | G-633 | goals-g-0633-pruefungstexte-zahlen-mit-punkt.md | `72ca5fb3` |
+| 2026-10-09 | G-634 | goals-g-0634-startwert-eines-messziels-erst-nach-dem-anlegen.md | `72ca5fb3` |
+| 2026-10-09 | G-637 | goals-g-0637-aktives-ziel-ohne-laufende-phase-heisst-kein-aktives-ziel.md | `5fc802b5` |
 
-## medical ? 15 Punkte
+## market ? 2 Punkte
+
+| Datum | Nr | Titel | Commit |
+|---|---|---|---|
+| 2026-09-08 | C-444 | das Wallet ist nicht live | `e38078fe` |
+| 2026-09-08 | C-452 | ein Kauf kommt nirgends an | `2e4d2b04` |
+
+## marketplace ? 1 Punkte
+
+| Datum | Nr | Titel | Commit |
+|---|---|---|---|
+| 2026-09-08 | C-465 | die Auslieferung bauen | `f0e277d4` |
+
+## medical ? 20 Punkte
 
 | Datum | Nr | Titel | Commit |
 |---|---|---|---|
@@ -54,13 +156,18 @@ bleibt Handarbeit, aber sie hat jetzt eine Grundlage.**
 | 2026-09-01 | A-33 | Der Medical-Abgleich, den der Orchestrator nachgeholt hat | `a33ca39c` |
 | 2026-09-02 | C-385 | das Datenmodell fuer Injektionsstellen | `f9db161b` |
 | 2026-09-08 | C-136 | Medikamente und Conditions brauchen die Coach-Freigabeschicht | `cf1eae2a` |
+| 2026-09-08 | C-171 | Medical — neun Konstanten ohne Tabelle | `302b6294` |
 | 2026-09-08 | C-429 | die zentrale Zeitachse fehlt | `9ef63179` |
 | 2026-09-08 | C-431 | C-429 einspielen | `6ba3d57f` |
+| 2026-09-08 | C-457 | OCR fehlt in `lab_reports` | `2fa1e5fc` |
+| 2026-09-08 | C-506 | der Medikamentenkatalog IST da | `5e970b18` |
 | 2026-09-08 | G-241 | zwei Reiterschnitte im Medical-Mockup | `10a330e4` |
 | 2026-09-08 | G-256 | die Originaldatei zum Laborbericht | `1df88b1d` |
 | 2026-09-08 | G-376 | die Medical-Oberflaeche fuer Dokumente | `1df88b1d` |
+| 2026-09-08 | G-378 | das Hochladen scheitert | `c6cd778a` |
+| 2026-10-02 | G-578 | medical-g-0578-der-laborimport-hat-keine-oberflaeche.md | `31ebb74e` |
 
-## nutrition ? 197 Punkte
+## nutrition ? 237 Punkte
 
 | Datum | Nr | Titel | Commit |
 |---|---|---|---|
@@ -256,13 +363,53 @@ bleibt Handarbeit, aber sie hat jetzt eine Grundlage.**
 | 2026-09-07 | G-348 | `wieGestern` ueberspringt manuelle Posten | `dd20f24c` |
 | 2026-09-07 | G-350 | ein zweiter Schreibweg fuer `is_checked` | `dd20f24c` |
 | 2026-09-07 | G-351 | `other` hat keine Karte | `de9f4351` |
+| 2026-09-08 | C-464 | das Ballaststoffziel fehlt | `c5efd107` |
+| 2026-09-08 | C-466 | Naehrstoffe aus Supplementen in der Nutrients-Ansicht | `c7cf2d91` |
+| 2026-09-08 | C-507 | die Suchtiefe nach Erfahrungsgrad | `aufgeteilt` |
+| 2026-09-08 | C-526 | aktive Meal-Pläne dürfen nicht überlappen | `c5df20c0` |
+| 2026-09-08 | C-534 | welche Lebensmittelgruppen gibt es? | `e1532050` |
+| 2026-09-08 | C-535 | parent_id fuer nutrition.foods | `zurueckgestellt` |
+| 2026-09-08 | C-537 | days_count zieht beim Rollover mit | `a975287a` |
+| 2026-09-08 | C-538 | das MealCam-Gedaechtnis: Bild, Ergebnis, Deklaration | `14e9933b` |
+| 2026-09-08 | C-539 | Trigramme verwechseln Pute mit Huhn | `1bc924c1` |
+| 2026-09-08 | C-540 | die Tierarten kurieren | `56d2c4ed` |
+| 2026-09-08 | C-542 | eine Abwesenheit ist keine Luecke | `102522ee` |
+| 2026-09-08 | E-87 | was bedeutet days_count nach einem Rollover? | `entschieden` |
+| 2026-09-08 | G-126 | Drei Reste aus G-122 | `c3cd8fe5` |
 | 2026-09-08 | G-152 | Der Aktivitaetsstrom des Dashboards | `64937c89` |
 | 2026-09-08 | G-17 | Datum beim Modulwechsel mitgeben | `b3bb6420` |
+| 2026-09-08 | G-223 | Recalculate-UI in SPEC_10 fehlt (bekanntes Open Item) | `4cc4c7cb` |
 | 2026-09-08 | G-338 | eine freie Mahlzeit hat keinen Namen | `b3bb6420` |
 | 2026-09-08 | G-344 | Einkaufslisten koennen mehr, als die Spec sagt | `d4d2689a` |
 | 2026-09-08 | G-353 | Setup-Karten nach dem Onboarding | `d8b7cc58` |
+| 2026-09-08 | G-412 | die letzten Attrappen in Nutrition | `22a53856` |
+| 2026-09-08 | G-413 | reine Filtersuche liefert nichts | `93509aac` |
+| 2026-09-08 | G-415 | die vier Stufen und die Ballaststoffe | `05af2f75` |
+| 2026-09-08 | G-416 | Hoehen, Flaechen, Deckkraft | `937bd02e` |
+| 2026-09-08 | G-417 | zwei Spalten und der Score | `58726c65` |
+| 2026-09-08 | G-419 | der Insights-Block ist abgenommen | `5171fc3f` |
+| 2026-09-08 | G-426 | die Supplementspalte in Nutrients | `a33bf493` |
+| 2026-09-08 | G-439 | der Sollstand kennt fiber_g nicht | `7e7e37b7` |
+| 2026-09-08 | G-475 | Supplemente in die Mahlzeit, in der Oberflaeche | `e21a7a13` |
+| 2026-09-08 | G-478 | die Kacheln fuer Supplemente in der Mahlzeit | `1a5d3539` |
+| 2026-09-08 | G-480 | ein Modal statt zwei | `452590fd` |
+| 2026-09-08 | G-481 | die Suche benutzt die Suche nicht | `56a6977a` |
+| 2026-09-08 | G-482 | die Planeintraege sind da und werden nicht gezeigt | `56a6977a` |
+| 2026-09-08 | G-483 | Planner und Rezepte kennen keine Supplemente | `79dbc910` |
+| 2026-09-08 | G-485 | das Tagebuch ist nicht lesbar | `48c4c695` |
+| 2026-09-08 | G-486 | erfuellte Ghostentries bleiben stehen | `087f0543` |
+| 2026-09-08 | G-488 | drei Zahlen zum Plan, keine zwei passen | `a6bdeecf` |
+| 2026-09-08 | G-489 | die Ghost-UI kennt keine Supplemente | `3ed2eac5` |
+| 2026-09-19 | C-521 | die Tagessumme uebersieht die Supplemente | `a26c2c4b` |
+| 2026-09-21 | C-524 | Planeinträge können Supplemente vorsehen | `nicht-committet` |
+| 2026-10-02 | G-579 | nutrition-g-0579-der-plansprung-hat-keinen-aufrufer.md | `d8008745` |
+| 2026-10-02 | G-581 | nutrition-g-0581-ein-modal-ohne-aufrufer-mit-eigener-wahrheit.md | `7b37e6a2` |
+| 2026-10-04 | G-603 | nutrition-g-0603-ein-leerer-wassertag-ist-nicht-null-getrunken.md | `3a3ac5e6` |
+| 2026-10-05 | G-592 | nutrition-g-0592-die-hydration-zusammenfassung-hat-keinen-leser.md | `a646fd80` |
+| 2026-10-05 | G-605 | nutrition-g-0605-der-14-tage-schnitt-ohne-eintraege-ist-nicht-null.md | `1a4b79d3` |
+| 2026-10-07 | A-107 | nutrition-a-0107-der-rezeptkatalog-hat-live-keine-sprachspalten.md | `080cc8fc` |
 
-## quer ? 53 Punkte
+## quer ? 167 Punkte
 
 | Datum | Nr | Titel | Commit |
 |---|---|---|---|
@@ -317,10 +464,124 @@ bleibt Handarbeit, aber sie hat jetzt eine Grundlage.**
 | 2026-09-08 | C-422 | die Lesewege fuer elf Kacheln | `d40e847e` |
 | 2026-09-08 | C-424 | eine Leser-Registry | `a5b1f323` |
 | 2026-09-08 | C-430 | die Sicht traegt nur Deutsch | `9ef63179` |
+| 2026-09-08 | C-446 | eine Migration fehlt in der Kette | `d883ef7e` |
+| 2026-09-08 | C-447 | die drei Live-Luecken schliessen | `2c53f468` |
+| 2026-09-08 | C-448 | acht tote Migrationen | `12bf9f2a` |
+| 2026-09-08 | C-468 | eine Muskelhierarchie fuer alle Karten | `a824cf95` |
+| 2026-09-08 | C-470 | - pg_default_acl vergibt in public alles | `2b67acb1` |
+| 2026-09-08 | C-471 | die Struktur gehoert nach migrations/ | `220275b4` |
+| 2026-09-08 | C-472 | der Datenlogik-Waechter ist rot | `b31cb284` |
+| 2026-09-08 | C-473 | fuenf Abweichungen, die der Waechter jetzt sieht | `af742778` |
+| 2026-09-08 | C-479 | fuenf Flaechen und achtundsiebzig Muskeln | `4d95d7f7` |
+| 2026-09-08 | C-481 | vier Flaechen und lat_l | `10ff0c83` |
+| 2026-09-08 | C-482 | Muskelnamen zur aufgeteilten Karte | `8cd5c6bf` |
+| 2026-09-08 | C-483 | die fuenfte Ebene | `e6e4eda0` |
+| 2026-09-08 | C-484 | koerperflaechen nach E-81 | `934d2ae1` |
+| 2026-09-08 | C-486 | UTF-8 beim Einspielen verloren | `b31cb284` |
+| 2026-09-08 | C-488 | sechzehn Tabellen ohne Thai | `adf6face` |
+| 2026-09-08 | C-498 | Allergien global, nicht in food_preferences | `68c69158` |
+| 2026-09-08 | C-501 | Seed fuer die leeren Module | `e6577da4` |
+| 2026-09-08 | C-502 | die Allergene ohne Aliase treffen nichts | `8ec84645` |
+| 2026-09-08 | C-503 | die Vorschlaege kommen aus den Katalogen | `f59e991f` |
+| 2026-09-08 | C-508 | eine Zaehlfunktion fuer die Allergietreffer | `8ec84645` |
+| 2026-09-08 | C-513 | ein Supplement in eine Mahlzeit | `72ed6318` |
+| 2026-09-08 | C-517 | Backups gehoeren nicht in git | `36cc2cb0` |
+| 2026-09-08 | C-541 | der Erfahrungsgrad darf nicht leer sein | `31fffcbb` |
+| 2026-09-08 | C-544 | der Ort am Koerper als Begriff | `b51b080e` |
+| 2026-09-08 | E-83 | ein Weg fuer Lebensmittel UND Supplemente | `452590fd` |
+| 2026-09-08 | E-84 | ein Supplement bleibt ein Supplement | `entschieden` |
+| 2026-09-08 | E-86 | gilt die Suchtiefe modulweit? | `entschieden` |
+| 2026-09-08 | E-90 | der Koerper ist die Grundlage, nicht die Uebung | `entschieden` |
+| 2026-09-08 | E-91 | das Zielbild: ein Tag komplett erfassbar | `entschieden` |
 | 2026-09-08 | G-363 | wer schlaegt die naechste Phase vor? | `d40e847e` |
 | 2026-09-08 | G-375 | der Tageswechsler gehoert in die Schale | `84bb575f` |
+| 2026-09-08 | G-380 | eine tote Zweitfassung und ein fehlender Hinweis | `7b8602e5` |
+| 2026-09-08 | G-381 | das verwaiste Speicherobjekt und 135 ungemessene Dateien | `2f107963` |
+| 2026-09-08 | G-382 | fuenf SSOT-Dateien inhaltlich pruefen | `c7d1085b` |
+| 2026-09-08 | G-383 | der Erzeuger fuer die Modultabellen | `c7d1085b` |
+| 2026-09-08 | G-384 | die Modulbeschreibungen nachziehen | `cddc9ce7` |
+| 2026-09-08 | G-385 | `@abwesend`-Marken in die SSOT | `69b91897` |
+| 2026-09-08 | G-386 | die SSOT in den Abwesenheitswaechter | `53c90915` |
+| 2026-09-08 | G-387 | die neun Marken in die SSOT | `67b896ee` |
+| 2026-09-08 | G-395 | sechs Injektionsorte ohne Punkt auf der Figur | `21c54ef9` |
+| 2026-09-08 | G-396 | die Beschriftung der Koerperkarte | `21c54ef9` |
+| 2026-09-08 | G-397 | zwei Vorlagen kennt die Zaehlung nicht | `91181203` |
+| 2026-09-08 | G-406 | `.v2-empty` zweimal definiert | `8f5709cb` |
+| 2026-09-08 | G-411 | LumeOS hat keinen Abmeldeknopf | `40018063` |
+| 2026-09-08 | G-424 | latissimus ist waehlbar und nicht zeichenbar | `8a60059a` |
+| 2026-09-08 | G-425 | die sechs Pfade einzeln sehen | `879a548e` |
+| 2026-09-08 | G-427 | sechzehn Orte gegen einundzwanzig Flaechen | `8a60059a` |
+| 2026-09-08 | G-430 | die Muskelhierarchie zu Ende bringen | `d1f6b2ac` |
+| 2026-09-08 | G-431 | die restlichen Buendel und die Modale | `741638c3` |
+| 2026-09-08 | G-432 | jeder gezeichnete Muskel ist anwaehlbar | `10ff0c83` |
+| 2026-09-08 | G-434 | die Karte, direkt mit Tom erledigt | `4b38da12` |
+| 2026-09-08 | G-435 | die Hierarchie an den richtigen Ort | `e22f4d49` |
+| 2026-09-08 | G-444 | drei Abwesenheitsbehauptungen, die C-461 ueberholt hat | `e6577da4` |
+| 2026-09-08 | G-451 | der Testdatenlauf scheitert vor C-493 | `e6577da4` |
+| 2026-09-08 | G-455 | Allergien in Settings, Filter in Produkten | `5b98ac0c` |
+| 2026-09-08 | G-458 | neun Migrationen schreiben Daten | `c685ea16` |
+| 2026-09-08 | G-459 | die Allergiekachel aufraeumen | `43ecac13` |
+| 2026-09-08 | G-460 | vier Lesestellen auf die gefallene Spalte ebene | `96e80560` |
+| 2026-09-08 | G-462 | bedingtes React.useId | `96e80560` |
+| 2026-09-08 | G-469 | 7,7 Sekunden, und die Daten sind es nicht | `3691405b` |
+| 2026-09-08 | G-470 | der Produktionsbau ist nicht anmeldefaehig | `498f7b5b` |
+| 2026-09-08 | G-471 | der Browserreiter stuerzt im Produktionsbau ab | `5751ceea` |
+| 2026-09-08 | G-473 | der Absturzpunkt im unverkleinerten Code | `cbe4b928` |
+| 2026-09-08 | G-474 | der Absturz auf der Anstrichebene | `43654699` |
+| 2026-09-08 | G-476 | der Produktionsbau nimmt den Dev-Server mit | `855916ed` |
+| 2026-09-08 | G-479 | zwei Klassen mit 2,88:1 in packages/ui | `b57782f5` |
+| 2026-09-08 | G-487 | der Tageswechsler startet nicht auf heute | `3a3c09b5` |
+| 2026-09-08 | G-490 | der Spaltenwaechter kennt die Tabelle nicht | `a975287a` |
+| 2026-09-08 | G-498 | .v2-hinweis liegt unter 4,5:1 | `e4acf138` |
+| 2026-09-08 | G-501 | der Ruecknahmeklick beim Erfahrungsgrad | `ef84a2c1` |
+| 2026-09-19 | C-519 | ein Supplement bleibt ein Supplement | `6fb06234` |
+| 2026-09-19 | C-523 | welche Aliase fehlen noch? | `kein-codechange` |
+| 2026-09-21 | C-525 | Suchwortschatz für Ausschluss-Tags | `nicht-committet` |
+| 2026-09-22 | C-533 | der Sollstand unterschlaegt service_role-Rechte | `"kein Commit (Tom-Vorgabe)"` |
+| 2026-09-27 | G-517 | die Probe meldet die Zeitueberschreitung, nicht die Ursache | `37a0eb15` |
+| 2026-09-27 | G-518 | der Dev-Server liefert HTML ohne JavaScript | `a6aa15ad` |
+| 2026-09-28 | G-368 | Attrappen-Vermerke mit falschem Grund | `7399aca3` |
+| 2026-09-28 | G-394 | sechs Module ohne Ladezustand | `7399aca3` |
+| 2026-09-29 | A-81 | der Zyklus steht seit dem 30.08. geschrieben und laeuft nicht | `85b62cd3` |
+| 2026-09-29 | C-554 | das Migrationsregister sagt nicht, was in der Datenbank steht | `71dfc23d` |
+| 2026-10-01 | A-77 | vier Werkzeugtests liefen nirgends | `1222ff7c` |
+| 2026-10-01 | A-82 | quer-a-0082-die-migrationskette-prueft-den-arbeitsbaum.md | `724cfd29` |
+| 2026-10-01 | A-84 | quer-a-0084-der-pruefumfang-haengt-am-staging.md | `724cfd29` |
+| 2026-10-01 | A-85 | Claude Code, 2026-10-01 | `c62bd149` |
+| 2026-10-01 | A-86 | quer-a-0086-die-kette-spielt-die-testdaten-nicht-ein.md | `7bfd101b` |
+| 2026-10-01 | G-535 | quer-g-0535-sechs-funktionen-lesen-den-alten-sitzungsnamen.md | `79d50c60` |
+| 2026-10-01 | G-555 | quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md | `bec132b6` |
+| 2026-10-02 | A-87 | quer-a-0087-46-zeugen-nach-ursache-gestaffelt.md | `9abc2b8d` |
+| 2026-10-02 | A-88 | quer-a-0088-31-proben-fallen-still-auf-postgres-zurueck.md | `6b3f1c2c` |
+| 2026-10-02 | A-90 | quer-a-0090-grunddaten-als-dump-statt-als-import.md | `3868434` |
+| 2026-10-02 | A-92 | quer-a-0092-die-g558-probe-ruft-ohne-zielbezug.md | `d1a82c24` |
+| 2026-10-02 | A-94 | quer-a-0094-die-pruefsumme-sperrt-den-standardlauf.md | `e80b766c` |
+| 2026-10-02 | C-295 | die Kette liest aus zwei Kimi-Pfaden | `f4be19e2` |
+| 2026-10-02 | G-567 | quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md | `8c591000` |
+| 2026-10-02 | G-571 | quer-g-0571-sechs-schreibwege-ohne-aufrufer.md | `fd2a086c` |
+| 2026-10-02 | G-583 | quer-g-0583-drei-reste-ohne-aufrufer.md | `63332192` |
+| 2026-10-02 | G-585 | quer-g-0585-die-inventur-der-ausfuhren-ohne-aufrufer.md | `f4be19e2` |
+| 2026-10-03 | A-95 | quer-a-0095-zwei-fehlen-eine-steht-doppelt-der-seed-fehlt.md | `df9cd8aa` |
+| 2026-10-03 | A-97 | quer-a-0097-der-a88-vertrag-hat-eine-tuer-und-der-waechter-sieht-sie-nicht.md | `01039c80` |
+| 2026-10-03 | A-98 | quer-a-0098-zwei-waechter-pruefen-gestalt-statt-verhalten.md | `6127f57` |
+| 2026-10-03 | G-586 | quer-g-0586-ein-uhrensprung-wirft-den-nutzer-raus.md | `adc9db69` |
+| 2026-10-04 | A-100 | quer-a-0100-der-gate-prueft-nicht-was-er-sagt.md | `f31585ba` |
+| 2026-10-04 | A-91 | quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md | `38684342` |
+| 2026-10-04 | A-99 | quer-a-0099-der-testdatenpruefer-brach-ab-statt-rot-zu-werden.md | `48a9ab4c` |
+| 2026-10-04 | C-560 | quer-c-0560-der-testdatenpruefer-wird-gruen.md | `404e181c` |
+| 2026-10-04 | G-600 | quer-g-0600-heute-ist-an-32-stellen-der-utc-vortag.md | `f31585ba` |
+| 2026-10-05 | A-101 | quer-a-0101-der-kurzlauf-der-kette-ist-in-schritt-027-rot.md | `a02e947f` |
+| 2026-10-05 | A-102 | pruefen ist rot und steht nicht im Gate | `1671b760` |
+| 2026-10-05 | C-561 | quer-c-0561-zwei-testproben-beschreiben-den-bestand-nicht-das-soll.md | `306378cb` |
+| 2026-10-05 | G-588 | quer-g-0588-sechs-serveraktionen-ohne-aufrufer.md | `f87e49bc` |
+| 2026-10-06 | A-103 | pruefen sieht coach und packages nicht | `dbb76215` |
+| 2026-10-06 | A-104 | quer-a-0104-live-hinkt-der-kette-hinterher.md | `89844a2d` |
+| 2026-10-06 | A-96 | quer-a-0096-der-nachtlauf-verwirft-seinen-eigenen-grund.md | `7819aa89` |
+| 2026-10-06 | G-587 | quer-g-0587-ein-service-client-ohne-aufrufer-umgeht-die-rls.md | `89844a2d` |
+| 2026-10-07 | A-105 | quer-a-0105-der-live-nachzug-der-sieben-schritte.md | `91c4d766` |
+| 2026-10-07 | C-522 | die Allergiesuche kennt nur den Tagnamen | `6197e81c` |
 
-## recovery ? 12 Punkte
+## recovery ? 29 Punkte
 
 | Datum | Nr | Titel | Commit |
 |---|---|---|---|
@@ -336,8 +597,25 @@ bleibt Handarbeit, aber sie hat jetzt eine Grundlage.**
 | 2026-09-07 | G-364 | die Muskelkacheln waren angebunden | `a880e92b` |
 | 2026-09-07 | G-367 | Stunden und Saetze je Muskel | `c3067369` |
 | 2026-09-07 | G-371 | `modalities` nimmt den Leseweg nicht | `259d7d0f` |
+| 2026-09-08 | C-462 | vier Ansichten ohne Tabelle | `bd8c7873` |
+| 2026-09-08 | C-469 | die sechsundzwanzig Recovery-Formeln | `7d9181f4` |
+| 2026-09-08 | C-492 | Basiszeit je Muskel und der RPE-Faktor | `299be535` |
+| 2026-09-08 | G-436 | die Hierarchie als Ansicht | `e22f4d49` |
+| 2026-09-08 | G-438 | Karte und Liste widersprechen sich | `29c1a23e` |
+| 2026-09-08 | G-440 | MUSCLE_STATE ist eine Attrappe, die Kachel sagt „echte Daten" | `abc0698f` |
+| 2026-09-08 | G-443 | zehn Muskeln ohne Flaechenziel | `7e7e37b7` |
+| 2026-09-08 | G-445 | ein nie trainierter Muskel ist ERHOLT, nicht unbekannt | `74a2fdfc` |
+| 2026-09-08 | G-446 | die Vererbung laeuft nur nach unten | `6a0c5926` |
+| 2026-09-08 | G-450 | der Tageswechsler aendert das Datum, nicht die Rechnung | `1ce1e8c2` |
+| 2026-10-03 | G-590 | recovery-g-0590-der-checkin-ist-der-einzige-pflichtgriff-und-er-schreibt-nicht.md | `b1c4c540` |
+| 2026-10-03 | G-593 | recovery-g-0593-die-attrappe-nennt-eine-tabelle-die-es-unter-anderem-namen-gibt.md | `c3e2c7fd` |
+| 2026-10-04 | G-597 | recovery-g-0597-zwei-aktive-protokolle-sind-erlaubt.md | `459ad101` |
+| 2026-10-04 | G-598 | recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md | `a1a825b0` |
+| 2026-10-04 | G-601 | recovery-g-0601-nicht-geladen-heisst-hier-leer.md | `824d6ad4` |
+| 2026-10-07 | G-433 | Per-muscle detail liest motor.ts | `c5bf1cc6` |
+| 2026-10-07 | G-441 | die Today-Kachel rechnet weiter aus der Attrappe | `b56e7cee` |
 
-## supplements ? 24 Punkte
+## supplements ? 89 Punkte
 
 | Datum | Nr | Titel | Commit |
 |---|---|---|---|
@@ -362,11 +640,76 @@ bleibt Handarbeit, aber sie hat jetzt eine Grundlage.**
 | 2026-09-01 | C-207 | Vier Entscheidungen aus dem 035-Handoff | `fa117b20` |
 | 2026-09-02 | C-393 | `substance_group_memberships` ist leer | `f9db161b` |
 | 2026-09-08 | C-423 | `stack_templates` hat null Zeilen | `a47dbb65` |
+| 2026-09-08 | C-441 | sechzehn Injektionsorte statt vier | `7bb3eb7a` |
+| 2026-09-08 | C-445 | C-441 einspielen und die Protokollspalten | `9ecba75e` |
+| 2026-09-08 | C-453 | Peptide haben keinen Injektionsweg | `d41c841f` |
+| 2026-09-08 | C-454 | der Nutzer waehlt seine Punkte | `2fa1e5fc` |
+| 2026-09-08 | C-455 | der Injektionsplaner, vollstaendig | `2fa1e5fc` |
+| 2026-09-08 | C-456 | Zyklen und Protokolle zuerst | `e6e76606` |
+| 2026-09-08 | C-467 | Lieferantenprodukte | `e7d858c9` |
+| 2026-09-08 | C-485 | die DSLD-Datenbank einlesen | `7f57ac48` |
+| 2026-09-08 | C-489 | der Produktname ist englisch und heisst `name` | `25364531` |
+| 2026-09-08 | C-495 | die Leseseite fuer 214.780 Produkte | `ce10f276` |
+| 2026-09-08 | C-496 | die Naehrwerte auf unsere Makros und Mikros | `ad775929` |
+| 2026-09-08 | C-497 | Daumen hoch und runter fuer Supplementprodukte | `ad775929` |
+| 2026-09-08 | C-499 | Off-Market-Produkte stilllegen | `68c69158` |
+| 2026-09-08 | C-500 | die Vitamin-E-Form herausfinden | `68c69158` |
+| 2026-09-08 | C-504 | die Filter gehoeren in die Datenbank | `5e970b18` |
+| 2026-09-08 | C-505 | die Mehrheit der Zutaten ist nicht verknuepft | `5e970b18` |
+| 2026-09-08 | C-509 | der Substanzkatalog ist zu klein | `43654699` |
+| 2026-09-08 | C-510 | das Mapping ist buchstabengenau | `7f42bc6b` |
+| 2026-09-08 | C-511 | Supplement-Vorlieben, mit Lieblingsmarken | `1188b4f0` |
+| 2026-09-08 | C-512 | die Naehrwerte werden summiert statt getrennt | `8a1588bb` |
+| 2026-09-08 | C-514 | vier Stoffe stehen im Katalog und sind offen | `1a5d3539` |
+| 2026-09-08 | C-515 | die Wirkstoffe kuratieren | `855916ed` |
+| 2026-09-08 | C-516 | Naehrwerte ohne Mapping | `1a5d3539` |
+| 2026-09-08 | C-518 | 518 – keine Produkt-Substanz-Brücke | `56a6977a` |
+| 2026-09-08 | C-520 | drei Luecken in search_supplier_products | `4fa2ec08` |
+| 2026-09-08 | C-527 | 527 – die DSLD-Quelle trägt mehr als wir lesen | `3ed2eac5` |
+| 2026-09-08 | C-529 | der Stackeintrag kennt sein Produkt nicht | `c2ef18dc` |
+| 2026-09-08 | E-85 | kein Zwischenspeicher fuer die DSLD-Bilder | `entschieden` |
+| 2026-09-08 | E-88 | die Entwurfsreferenz zeigt PED-Protokolle ohne Gradpruefung | `entschieden` |
+| 2026-09-08 | E-89 | Wissen ist offen, das Protokoll ist gesperrt | `entschieden` |
+| 2026-09-08 | G-117 | Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad | `a8c6fda9` |
+| 2026-09-08 | G-118 | Der Extended-Code liegt im Buendel | `zusammengelegt` |
 | 2026-09-08 | G-372 | die Stack-Kachel kann nichts | `994de555` |
 | 2026-09-08 | G-373 | Stacks editieren und anlegen | `989500e0` |
 | 2026-09-08 | G-374 | Zyklen brauchen eine eigene Eingabe | `9ef63179` |
+| 2026-09-08 | G-388 | `InjektionsKarte` und die Reste | `c3cd8fe5` |
+| 2026-09-08 | G-389 | der Schreibweg fuer Injektionen | `05425238` |
+| 2026-09-08 | G-390 | `new Date()` zerlegt die Hydration | `59c7ae21` |
+| 2026-09-08 | G-392 | der Hydrationsfehler am Wechslerplatz | `bde44418` |
+| 2026-09-08 | G-393 | die Rotationskarte ist leer | `d49c547b` |
+| 2026-09-08 | G-423 | Zyklen, Protokolle und die Injektionskarte | `6e3348bf` |
+| 2026-09-08 | G-428 | der Injektionsreiter ist leer | `9b8cd692` |
+| 2026-09-08 | G-437 | tabs.tsx hat vierzehn Karten verloren | `afd24124` |
+| 2026-09-08 | G-452 | der Produkte-Reiter | `6ddc968e` |
+| 2026-09-08 | G-453 | die Produkttafel | `09541b5e` |
+| 2026-09-08 | G-454 | Suche und Filter schliessen sich aus | `a3a91527` |
+| 2026-09-08 | G-463 | die Suche deckelt bei 100, die Liste will 500 | `8ec84645` |
+| 2026-09-08 | G-464 | die Tafel fragt die falsche Spalte | `dba58ce5` |
+| 2026-09-08 | G-465 | fuenf Anfragen je Suche | `f8815993` |
+| 2026-09-08 | G-466 | amount_qualifier wird nicht gelesen | `8ec84645` |
+| 2026-09-08 | G-467 | die Filter werden nicht gespeichert | `caac75f3` |
+| 2026-09-08 | G-468 | der Vorlieben-Reiter fuer Supplements | `1264ad04` |
+| 2026-09-08 | G-472 | die Tafel zeigt die Portionswahl nicht | `9ec68b84` |
+| 2026-09-08 | G-484 | keine Aktion im Produkte-Reiter | `00e94b7c` |
+| 2026-09-08 | G-491 | die Produkttabelle bleibt im Browser leer | `d47e68cb` |
+| 2026-09-08 | G-492 | Hinzufuegen ist eine Aktion, keine Detailseite | `321bacb5` |
+| 2026-09-08 | G-493 | das Hinzufuegen-Modal nachbessern | `2ff9be65` |
+| 2026-09-08 | G-494 | die Form-Nachlese aus G-492 entfernen | `a6bdeecf` |
+| 2026-09-08 | G-495 | das Etikettenbild beim Oeffnen abrufen | `2ff9be65` |
+| 2026-09-08 | G-496 | das Etikett als PDF, Toms Fund | `213c7cf3` |
+| 2026-09-08 | G-499 | die Entwurfsreferenz hinter die Gradpruefung | `7bffb776` |
+| 2026-09-08 | G-500 | das Injektionsprotokoll ist der sechste Weg | `fdba3937` |
+| 2026-09-08 | G-53 | `InjektionsKarte` in `packages/ui` hat keinen Aufrufer | `c3cd8fe5` |
+| 2026-09-22 | C-532 | die Label Statements roh importieren | `"kein Commit (Tom-Vorgabe)"` |
+| 2026-10-02 | C-556 | supplements-c-0556-zwei-fachliche-folgen-des-neuen-kimi-bestands.md | `16fd9c9c` |
+| 2026-10-03 | C-557 | supplements-c-0557-vierzehn-von-siebzehn-naehrstoffzuordnungen-finden-ihre-substanz-nicht.md | `022f6f61` |
+| 2026-10-04 | C-558 | supplements-c-0558-die-kette-laeuft-gruen.md | `4dd9aa11` |
+| 2026-10-04 | C-559 | supplements-c-0559-45-supplements-weniger-als-live.md | `4dd9aa11` |
 
-## training ? 4 Punkte
+## training ? 21 Punkte
 
 | Datum | Nr | Titel | Commit |
 |---|---|---|---|
@@ -374,3 +717,20 @@ bleibt Handarbeit, aber sie hat jetzt eine Grundlage.**
 | 2026-08-28 | G-217 | der Trainings-Schreibweg hat keine Oberflaeche | `942e9259` |
 | 2026-08-30 | G-173 | Ein falscher Punktverweis in `scores-read.ts` | `851fa077` |
 | 2026-09-07 | G-366 | die Uebungsliste der Sitzung | `259d7d0f` |
+| 2026-09-08 | C-461 | Programme und Plaene | `bd8c7873` |
+| 2026-09-08 | C-487 | exercise_muscles auf Blattebene | `0e8969e8` |
+| 2026-09-08 | C-490 | der Faktor an der Zuordnung | `299be535` |
+| 2026-09-08 | C-491 | die Zuordnungen zeigen auf die falsche Ebene | `299be535` |
+| 2026-09-08 | C-493 | Seed-Sitzungen, die die Karte fuellen | `f612a20f` |
+| 2026-09-08 | C-528 | die Muskelhierarchie ist unsauber | `d47e68cb` |
+| 2026-09-08 | C-530 | die Muskelhierarchie bereinigen und vervollstaendigen | `dca49d15` |
+| 2026-09-08 | C-531 | Muskel-Aliase sind nicht als Aliase erkennbar | `04ab0120` |
+| 2026-09-08 | C-536 | drei Abwesenheitsaussagen sind ueberholt | `e1532050` |
+| 2026-09-08 | C-543 | ein Muskel erbt die Uebungen seiner Eltern | `89ad933a` |
+| 2026-09-08 | C-545 | difficulty ist ein Wert fuer alles | `89ad933a` |
+| 2026-09-08 | C-547 | 6.723 Pauschalen sehen aus wie Messwerte | `89ad933a` |
+| 2026-09-08 | C-548 | fuenf Spalten mit einem Wert fuer 1.416 Uebungen | `89ad933a` |
+| 2026-09-08 | G-25 | Training an echte Daten anschliessen | `8c27dfd9` |
+| 2026-09-08 | G-68 | `e1RM` deckt 6 von 1.416 | `ueberholt` |
+| 2026-09-28 | C-546 | Sehnen und Nerven je Muskel | `4972b27e` |
+| 2026-09-28 | C-551 | Rollenregel und Messfaktor trennen | `4972b27e` |
