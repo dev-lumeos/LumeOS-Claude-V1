@@ -8,12 +8,7 @@
 | Claude Code | G-618 | Der Reiter Goals trennt das steuernde Ziel von den messenden | **laeuft**, raus 08.10. |
 | Claude Code | G-628 | Ziel setzen nach dem Entwurf | **laeuft**, raus 08.10. |
 | Claude Code | G-635 | Dev-Server liefert die Schrift mit falschem Hash | **laeuft**, raus 08.10. |
-| Codex | G-625 | Ein Plan ist der Inhalt des steuernden Ziels | **laeuft**, raus 08.10. |
-| Codex | G-633 | Prüfungstexte schreiben Zahlen mit Punkt | **laeuft**, raus 08.10. |
-| Codex | G-634 | Startwert eines Messziels erst nach dem Anlegen sichtbar | **laeuft**, raus 08.10. |
-| Codex | G-637 | Ein aktives Ziel ohne laufende Phase heisst "kein aktives Ziel" | **laeuft**, raus 08.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
-| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 ## Plan ab 06.10. - von Tom freigegeben, 17:03

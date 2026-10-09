@@ -6,9 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 281 |
-| `laufend_codex` | 4 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 686 |
+| `erledigt` | 690 |
 | **gesamt** | **974** |
 
 ## medical — 50
@@ -594,7 +593,7 @@
 
 ## goals — 108
 
-### beauftragbar — 100
+### beauftragbar — 102
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -688,18 +687,20 @@
 | `G-622` | fehler | hoch | [Ohne aktives Ziel gibt es keine Tagesziele](erledigt/goals-g-0622-ohne-aktives-ziel-gibt-es-keine-tagesziele.md) | erledigt | — | G-630, G-637 |
 | `G-623` | aufgabe | mittel | [Im Planer laesst sich eine einzelne Phase nicht verschieben](todos/goals-g-0623-im-planer-laesst-sich-eine-phase-nicht-verschieben.md) | offen | — | — |
 | `G-624` | fehler | mittel | [Custom und Expert BB Jahreszyklus haben im Planer keine Vorschau](todos/goals-g-0624-custom-und-expert-bb-haben-keine-vorschau.md) | offen | — | — |
-| `G-625` | aufgabe | hoch | [Ein Plan ist der Inhalt des steuernden Ziels](laufend_codex/goals-g-0625-ein-plan-ist-der-inhalt-des-steuernden-ziels.md) | laeuft (codex) | — | G-627 |
+| `G-625` | aufgabe | hoch | [Ein Plan ist der Inhalt des steuernden Ziels](erledigt/goals-g-0625-ein-plan-ist-der-inhalt-des-steuernden-ziels.md) | erledigt | — | G-627 |
 | `G-626` | aufgabe | hoch | [Grenzen nach Erfahrungsgrad](erledigt/goals-g-0626-grenzen-nach-erfahrungsgrad.md) | erledigt | — | G-632, G-633 |
+| `G-627` | aufgabe | mittel | [Die wöchentliche Anpassung hat kein Protokoll](todos/goals-g-0627-die-woechentliche-anpassung-hat-kein-protokoll.md) | offen | — | — |
 | `G-628` | aufgabe | hoch | [Ziel setzen nach dem Entwurf](laufend_claudecode/goals-g-0628-ziel-setzen-nach-dem-entwurf.md) | laeuft (claudecode) | — | G-631, G-634 |
+| `G-629` | aufgabe | hoch | [Die Phase engine zeigt Pläne](todos/goals-g-0629-die-phase-engine-zeigt-plaene.md) | offen | — | — |
 | `G-630` | fehler | hoch | [Die Warnung ohne aktives Ziel ist unsichtbar](erledigt/goals-g-0630-die-warnung-ohne-aktives-ziel-ist-unsichtbar.md) | erledigt | — | G-636 |
 | `G-631` | aufgabe | mittel | [Es gibt kein Trendgewicht](todos/goals-g-0631-es-gibt-kein-trendgewicht.md) | offen | — | — |
 | `G-632` | fehler | niedrig | [Prüfungstexte ohne Umlaute](erledigt/goals-g-0632-pruefungstexte-ohne-umlaute.md) | erledigt | — | — |
-| `G-633` | fehler | niedrig | [Prüfungstexte schreiben Zahlen mit Punkt](laufend_codex/goals-g-0633-pruefungstexte-zahlen-mit-punkt.md) | laeuft (codex) | — | — |
-| `G-634` | frage | mittel | [Startwert eines Messziels erst nach dem Anlegen sichtbar](laufend_codex/goals-g-0634-startwert-eines-messziels-erst-nach-dem-anlegen.md) | laeuft (codex) | — | — |
+| `G-633` | fehler | niedrig | [Prüfungstexte schreiben Zahlen mit Punkt](erledigt/goals-g-0633-pruefungstexte-zahlen-mit-punkt.md) | erledigt | — | — |
+| `G-634` | frage | mittel | [Startwert eines Messziels erst nach dem Anlegen sichtbar](erledigt/goals-g-0634-startwert-eines-messziels-erst-nach-dem-anlegen.md) | erledigt | — | — |
 | `G-636` | fehler | niedrig | [Der Goals-Kopf zählt Phasen eines pausierten Ziels als laufend](todos/goals-g-0636-kopf-zaehlt-phasen-eines-pausierten-ziels.md) | offen | — | — |
-| `G-637` | fehler | mittel | [Ein aktives Ziel ohne laufende Phase heisst "kein aktives Ziel"](laufend_codex/goals-g-0637-aktives-ziel-ohne-laufende-phase-heisst-kein-aktives-ziel.md) | laeuft (codex) | — | — |
+| `G-637` | fehler | mittel | [Ein aktives Ziel ohne laufende Phase heisst "kein aktives Ziel"](erledigt/goals-g-0637-aktives-ziel-ohne-laufende-phase-heisst-kein-aktives-ziel.md) | erledigt | — | — |
 
-### wartet auf Blocker — 8
+### wartet auf Blocker — 6
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -709,8 +710,6 @@
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
-| `G-627` | aufgabe | mittel | [Die wöchentliche Anpassung hat kein Protokoll](todos/goals-g-0627-die-woechentliche-anpassung-hat-kein-protokoll.md) | offen | G-625 | — |
-| `G-629` | aufgabe | hoch | [Die Phase engine zeigt Pläne](todos/goals-g-0629-die-phase-engine-zeigt-plaene.md) | offen | G-625 | — |
 
 ## coach — 58
 
