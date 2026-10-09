@@ -10,9 +10,11 @@ import type { ZielAenderung, ZielNeu } from '../../../lib/goals/ziel-regeln'
 import { zielGrenzenPruefen, type Pruefeingabe } from '../../../lib/goals/zielpruefung-read'
 import type { Pruefung } from '../../../lib/goals/zielpruefung'
 import {
-  ladeMessquellen, messzielAnlegen, sucheUebungen, type Messquellen, type Uebung,
+  ladeMessquellen, messzielAnlegen, startVorschau, sucheUebungen, type Messquellen, type Uebung,
 } from '../../../lib/goals/messziel-io'
-import { messzielParameter, type Messformular, type Startstand } from '../../../lib/goals/messziel'
+import {
+  messzielParameter, vorschauParameter, type Messformular, type Startstand, type Vorschau,
+} from '../../../lib/goals/messziel'
 import { ladeVerlauf, type Verlauf } from '../../../lib/goals/reiter-read'
 import {
   phasenzielAnlegen, type PhasenzielNeu, type PhasenzielErgebnis,
@@ -98,4 +100,11 @@ export async function verlaufAktion(goalId: string, stichtag: string, woechentli
   } catch (f) {
     return { ok: false, fehler: f instanceof Error ? f.message : String(f) }
   }
+}
+
+/** G-628 Teil 4: Startwert-Vorschau (G-634) mit den Eingaben des Dialogs. */
+export async function messzielVorschauAktion(f: Messformular, heute: string):
+  Promise<{ ok: true; vorschau: Vorschau } | { ok: false; fehler: string } | null> {
+  const p = vorschauParameter(f, heute)
+  return p ? startVorschau(p) : null
 }

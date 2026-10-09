@@ -12,8 +12,8 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 import {
-  MESSARTEN, STELLEN, artenVon, messzielParameter, messzielSatz, startSatz,
-  type Messart, type Messformular,
+  MESSARTEN, STELLEN, alsVorschau, artenVon, gewohnheitsVorschlag, messzielParameter, messzielSatz, startSatz,
+  vorschauParameter, widerspruch, type Messart, type Messformular,
 } from '../messziel'
 
 const HIER = dirname(fileURLToPath(import.meta.url))
@@ -128,6 +128,83 @@ describe('G-628/3 — die Parameter', () => {
   })
 })
 
+describe('G-628/4 — die Vorschau gegen 634', () => {
+  const S634 = readFileSync(join(WURZEL, 'supabase', '_pipeline', '11_goals', '634_measurement_goal_start_preview.sql'), 'utf8')
+  it('die sechs Parameter in der Reihenfolge der Signatur', () => {
+    const sig = S634.slice(S634.indexOf('CREATE FUNCTION goals.measurement_goal_start_preview('), S634.indexOf('RETURNS TABLE'))
+    const soll = Array.from(sig.matchAll(/\b(p_[a-z_]+)\s+[a-z]/g)).map(m => m[1]!)
+    assert.deepEqual(soll, ['p_measurement_type', 'p_as_of', 'p_exercise_id', 'p_measurement_site', 'p_measurement_reps', 'p_manual_start'])
+    const p = vorschauParameter(F({ art: 'body_weight' }), '2026-10-09')
+    assert.deepEqual(Object.keys(p!), soll)
+  })
+  it('die Rueckgabe und jede Kennung der Funktion', () => {
+    assert.match(S634, /RETURNS TABLE \(\s*wert numeric,datum date,quelle text,quelle_id uuid,kennung text/)
+    // `[cmd]` Zwei Stellen in 634: `'vorgemerkt'::text` und der Schluss-CASE.
+    const fall = /CASE WHEN v_wert IS NULL THEN '([a-z_]+)' ELSE '([a-z_]+)' END::text/.exec(S634)
+    assert.ok(fall, 'der Schluss-CASE der Kennung ist nicht mehr da')
+    const vorgemerkt = /'([a-z_]+)'::text;\s*RETURN;/.exec(S634)
+    assert.ok(vorgemerkt, 'die vorgemerkte Kennung ist nicht mehr da')
+    const kennungen = [fall[1]!, fall[2]!, vorgemerkt[1]!]
+    assert.deepEqual([...kennungen].sort(), ['erst_messen', 'gemessen', 'vorgemerkt'])
+    for (const k of kennungen) assert.equal(alsVorschau({ wert: null, datum: null, quelle: null, kennung: k })?.kennung, k)
+    assert.equal(alsVorschau({ kennung: 'neu' }), null, 'eine unbekannte Kennung wird nicht geraten')
+    assert.deepEqual(alsVorschau({ wert: '81.40', datum: '2026-05-19', quelle: 'goals.body_measurements', quelle_id: 'x', kennung: 'gemessen' }),
+      { wert: 81.4, datum: '2026-05-19', quelle: 'goals.body_measurements', kennung: 'gemessen' })
+  })
+  it('Parameter je Art — und keine Vorschau ohne Pflichtangabe', () => {
+    const H = '2026-10-09'
+    assert.equal(vorschauParameter(F({ art: 'circumference' }), H), null, 'Umfang ohne Stelle')
+    assert.equal(vorschauParameter(F({ art: 'e1rm' }), H), null, 'Kraft ohne Uebung')
+    assert.equal(vorschauParameter(F({ art: 'weight_reps', uebungId: 'u', wdh: '0' }), H), null)
+    const u = vorschauParameter(F({ art: 'circumference', stelle: 'waist_cm', uebungId: 'u' }), H)!
+    assert.equal(u.p_measurement_site, 'waist_cm'); assert.equal(u.p_exercise_id, null)
+    const w = vorschauParameter(F({ art: 'weight_reps', uebungId: 'u', wdh: '8' }), H)!
+    assert.equal(w.p_measurement_reps, 8); assert.equal(w.p_exercise_id, 'u')
+    const c = vorschauParameter(F({ art: 'custom', start: '1,5' }), H)!
+    assert.equal(c.p_manual_start, 1.5)
+    assert.equal(vorschauParameter(F({ art: 'body_weight', start: '9' }), H)!.p_manual_start, null, 'Handwert nur bei Eigenes')
+    assert.equal(vorschauParameter(F({ art: 'body_weight' }), H)!.p_as_of, H)
+  })
+  it('Gewohnheit: Schnitt + 1, editierbar — reine Anzeige', () => {
+    assert.equal(gewohnheitsVorschlag('training_sessions_week', 0), 1)
+    assert.equal(gewohnheitsVorschlag('training_sessions_week', 2.75), 4)
+    assert.equal(gewohnheitsVorschlag('sleep_hours_night', 6.1), 7)
+    assert.equal(gewohnheitsVorschlag('sleep_hours_night', 13.8), 14, 'der Trigger erlaubt hoechstens 14 h')
+    assert.equal(gewohnheitsVorschlag('training_sessions_week', null), null)
+  })
+  it('G-621: Widerspruch zur Richtung — Hinweis, keine Sperre', () => {
+    const W = (art: Messart, ziel: number, start: number, gruppe: string | null) =>
+      widerspruch({ art, ziel, start, gruppe, steuerName: 'Lean Bulk' })
+    assert.match(W('body_weight', 78, 81.4, 'aufbauen')!, /^Gewicht senken widerspricht deiner Richtung „Aufbauen · Lean Bulk“\. Möglich, aber langsam\./)
+    assert.match(W('body_fat', 12, 16.2, 'aufbauen')!, /^Körperfett senken/)
+    assert.match(W('body_weight', 85, 81.4, 'abnehmen')!, /^Gewicht steigern/)
+    assert.equal(W('body_weight', 78, 81.4, 'abnehmen'), null, 'gleiche Richtung')
+    assert.equal(W('body_weight', 81, 81.4, 'halten'), null, 'innerhalb ±1 kg')
+    assert.match(W('body_weight', 78, 81.4, 'halten')!, /^Gewicht senken/)
+    assert.equal(W('body_weight', 78, 81.4, 'plan'), null, 'ohne Richtung kein Hinweis')
+    assert.equal(W('body_weight', 78, 81.4, null), null)
+    assert.equal(W('circumference', 70, 80, 'aufbauen'), null, 'Umfang haengt an der Stelle — kein Urteil')
+  })
+  it('Verdrahtung: Vorschau aus der Kette, Messen ueber die bestehenden Wege, Anlegen gesperrt ohne Wert', () => {
+    const io = lies(join(HIER, '..', 'messziel-io.ts'))
+    assert.match(io, /\.rpc\('measurement_goal_start_preview', p\)/)
+    const akt = lies(join(GOALS, 'ziel-aktionen.ts'))
+    assert.match(akt, /const p = vorschauParameter\(f, heute\)\s*return p \? startVorschau\(p\) : null/)
+    const d = lies(join(GOALS, 'messziel-setzen.tsx'))
+    assert.match(d, /messzielVorschauAktion\(f, heute\)/)
+    assert.match(d, /\[schritt, art, stelle, uebung\?\.id, wdh, start, heute, neuMessen\]/, 'die Vorschau wird nach dem Messen nicht neu gelesen')
+    assert.match(d, /await umfangAnlegenAktion\(/)
+    assert.match(d, /await messungAnlegenAktion\(/)
+    assert.match(d, /onGemessen=\{\(\) => setNeuMessen\(n => n \+ 1\)\}/)
+    assert.match(d, /disabled=\{laeuft \|\| koerperOhneWert\}/)
+    assert.match(d, /data-messziel-widerspruch/)
+    // keine Startwertlogik im Dialog: er liest keine Messtabelle selbst
+    assert.ok(!/body_measurements|workout_sets|\.sort\(|Math\.max\(/.test(d), 'der Dialog rechnet den Startwert selbst')
+    const z = lies(join(GOALS, 'ziel-setzen.tsx'))
+    assert.match(z, /steuerung=\{steuerVariante \? \{ gruppe: steuerVariante\.auswahl_gruppe, name: steuerVariante\.label \} : null\}/)
+  })
+})
+
 describe('G-628/3 — der Startwert, wie die Kette ihn festhaelt', () => {
   it('in Worten, mit Datum', () => {
     assert.equal(startSatz({ start_value: 81.4, start_source: 'goals.body_measurements', start_measured_at: '2026-10-08', target_unit: 'kg' }),
@@ -145,7 +222,9 @@ describe('G-628/3 — die Verdrahtung', () => {
   const aktionen = lies(join(GOALS, 'ziel-aktionen.ts'))
   it('angelegt wird nur ueber measurement_goal_create', () => {
     assert.match(io, /\.rpc\('measurement_goal_create', p\)/)
-    assert.equal((io.match(/\.rpc\(/g) ?? []).length, 1)
+    // G-628 Teil 4: dazu genau EIN lesender Aufruf, die Vorschau (G-634).
+    assert.deepEqual(Array.from(io.matchAll(/\.rpc\('([a-z_]+)'/g)).map(m => m[1]).sort(),
+      ['measurement_goal_create', 'measurement_goal_start_preview'])
     assert.match(aktionen, /const p = messzielParameter\(f, heute\)[\s\S]{0,80}messzielAnlegen\(p\.p\)/)
   })
   it('ein Messziel bekommt nie Phase oder Strategie', () => {

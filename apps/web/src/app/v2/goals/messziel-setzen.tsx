@@ -12,11 +12,16 @@ import * as React from 'react'
 import { Icon } from '@lumeos/ui'
 
 import { GField, GInput, GModal, Karte } from './modale'
-import { messquellenAktion, messzielAnlegenAktion, uebungenAktion } from './ziel-aktionen'
+import { messquellenAktion, messzielAnlegenAktion, messzielVorschauAktion, uebungenAktion } from './ziel-aktionen'
+import { messungAnlegenAktion } from './koerpermass-aktionen'
+import { umfangAnlegenAktion } from './umfang-aktionen'
 import {
-  MESSARTEN, STELLEN, artenVon, einheitLesbar, startSatz,
-  type Kategorie, type Messart, type Messformular, type Rhythmus,
+  MESSARTEN, STELLEN, artenVon, einheitLesbar, gewohnheitsVorschlag, startSatz, widerspruch,
+  type Kategorie, type Messart, type Messformular, type Rhythmus, type Vorschau,
 } from '../../../lib/goals/messziel'
+import { quelleLesbar, wertMitEinheit } from '../../../lib/goals/reiter'
+import { BF_METHODEN } from '../../../lib/goals/koerpermass-rechnung'
+import type { Umfangsfeld } from '../../../lib/goals/umfang-rechnung'
 import type { Messquellen, Uebung } from '../../../lib/goals/messziel-io'
 
 const KATEGORIEN: Array<[Kategorie | 'endurance' | 'health', string, string]> = [
@@ -37,11 +42,80 @@ const Chip = ({ an, aus, onClick, children, ...rest }: {
   </button>
 )
 
-export function MesszielSetzen({ heute, onClose, zurueck }: {
+const datumDe = (iso: string | null) => (iso ? iso.split('-').reverse().join('.') : '')
+const zahlAus = (s: string) => { const n = Number(s.replace(',', '.')); return s.trim() !== '' && Number.isFinite(n) ? n : null }
+const jetztZeit = () => { const d = new Date(); return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}` }
+
+/**
+ * „Jetzt messen" — ueber die BESTEHENDEN Messwege (`messungAnlegenAktion`,
+ * `umfangAnlegenAktion`), dieselben Regeln wie im Modal „Log weight" /
+ * „Measurements". `[read]` **Koerperfett braucht ein Gewicht** (`weight_kg`
+ * NOT NULL) und eine Methode — der Messweg verlangt beides.
+ */
+function JetztMessen({ art, stelle, heute, onGemessen }: {
+  art: 'body_weight' | 'body_fat' | 'circumference'; stelle: string | null; heute: string; onGemessen: () => void
+}) {
+  const [kg, setKg] = React.useState('')
+  const [kfa, setKfa] = React.useState('')
+  const [methode, setMethode] = React.useState('')
+  const [cm, setCm] = React.useState('')
+  const [laeuft, setLaeuft] = React.useState(false)
+  const [fehler, setFehler] = React.useState<string | null>(null)
+  const speichern = async () => {
+    setLaeuft(true); setFehler(null)
+    const r = art === 'circumference'
+      ? await umfangAnlegenAktion({ measurement_date: heute, measurement_time: jetztZeit(), measurement_source: 'manual',
+          notes: '', werte: { [stelle as Umfangsfeld]: cm } })
+      : await messungAnlegenAktion({ measurement_date: heute, measurement_time: jetztZeit(), weight_kg: kg,
+          body_fat_pct: art === 'body_fat' ? kfa : '', bf_method: art === 'body_fat' ? methode : '', notes: '' })
+    setLaeuft(false)
+    if (r.ok) onGemessen()
+    else setFehler([r.text, ...r.felder.map(f => f.text)].join(' '))
+  }
+  return (
+    <div data-jetzt-messen={art} className="v2-col-gap" style={{ gap: 6, marginTop: 6 }}>
+      <div className="v2-grid v2-g-cols-3" style={{ gap: 8 }}>
+        {art !== 'circumference' && (
+          <GField label="Gewicht heute (kg)">
+            <GInput aria-label="Gewicht heute" data-messen-feld="weight_kg" value={kg} inputMode="decimal" onChange={e => setKg(e.target.value)} />
+          </GField>
+        )}
+        {art === 'body_fat' && <>
+          <GField label="Körperfett (%)">
+            <GInput aria-label="Körperfett heute" data-messen-feld="body_fat_pct" value={kfa} inputMode="decimal" onChange={e => setKfa(e.target.value)} />
+          </GField>
+          <GField label="Methode">
+            <select className="v2-feld" style={{ width: '100%' }} data-messen-feld="bf_method" value={methode} onChange={e => setMethode(e.target.value)}>
+              <option value="">wählen …</option>
+              {BF_METHODEN.map(m => <option key={m} value={m}>{m}</option>)}
+            </select>
+          </GField>
+        </>}
+        {art === 'circumference' && (
+          <GField label={`${stelle ? STELLEN[stelle] ?? stelle : 'Stelle'} heute (cm)`}>
+            <GInput aria-label="Umfang heute" data-messen-feld="umfang" value={cm} inputMode="decimal" onChange={e => setCm(e.target.value)} />
+          </GField>
+        )}
+      </div>
+      <div>
+        <button type="button" className="v2-btn v2-btn-sm v2-btn-primary" data-jetzt-messen-speichern disabled={laeuft}
+                onClick={() => { void speichern() }}>{laeuft ? 'Speichert …' : 'Jetzt messen'}</button>
+      </div>
+      {fehler && <div data-jetzt-messen-fehler style={{ fontSize: 11.5, color: 'var(--neg)' }}>{fehler}</div>}
+    </div>
+  )
+}
+
+export function MesszielSetzen({ heute, onClose, zurueck, steuerung = null }: {
   heute: string
   onClose: () => void
   /** null, wenn der Dialog direkt bei B1 begann („+ Messziel"). */
   zurueck: (() => void) | null
+  /**
+   * G-621: die Richtung des aktiven steuernden Ziels — `auswahl_gruppe` der
+   * Strategie aus `strategie_code` seiner laufenden Phase.
+   */
+  steuerung?: { gruppe: string | null; name: string | null } | null
 }) {
   const [schritt, setSchritt] = React.useState<'B1' | 'B2' | 'fertig'>('B1')
   const [quellen, setQuellen] = React.useState<Messquellen | null>(null)
@@ -62,6 +136,10 @@ export function MesszielSetzen({ heute, onClose, zurueck }: {
   const [laeuft, setLaeuft] = React.useState(false)
   const [fehler, setFehler] = React.useState<string | null>(null)
   const [fertigSatz, setFertigSatz] = React.useState('')
+  // G-628 Teil 4: der Startwert vor dem Anlegen (G-634).
+  const [vorschau, setVorschau] = React.useState<Vorschau | null>(null)
+  const [vorschauFehler, setVorschauFehler] = React.useState<string | null>(null)
+  const [neuMessen, setNeuMessen] = React.useState(0)
 
   React.useEffect(() => { void messquellenAktion().then(setQuellen) }, [])
   React.useEffect(() => {
@@ -78,7 +156,34 @@ export function MesszielSetzen({ heute, onClose, zurueck }: {
   }
   const waehleArt = (a: Messart) => { setArt(a); setRhythmus(MESSARTEN[a].rhythmus ?? rhythmus) }
 
+  React.useEffect(() => {
+    if (schritt !== 'B2' || !art) return
+    setVorschau(null); setVorschauFehler(null)
+    const f: Messformular = { art, titel: '', ziel: '', frist: '', rhythmus, stelle, uebungId: uebung?.id ?? null, wdh, einheit, richtung, start }
+    const t = setTimeout(() => {
+      void messzielVorschauAktion(f, heute).then(r => {
+        if (!r) return
+        if (r.ok) setVorschau(r.vorschau)
+        else setVorschauFehler(r.fehler)
+      })
+    }, 300)
+    return () => clearTimeout(t)
+    // `rhythmus`, `einheit`, `richtung` aendern den Startwert nicht — nur die sechs Parameter der Vorschau.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schritt, art, stelle, uebung?.id, wdh, start, heute, neuMessen])
+
+  // Gewohnheit: „Schnitt + 1" ins leere Feld — editierbar, reine Anzeige.
+  const vorschlagWert = art && MESSARTEN[art].kategorie === 'gewohnheit' && vorschau?.kennung === 'gemessen'
+    ? gewohnheitsVorschlag(art, vorschau.wert) : null
+  React.useEffect(() => {
+    if (vorschlagWert !== null && ziel === '') setZiel(String(vorschlagWert).replace('.', ','))
+  }, [vorschlagWert]) // eslint-disable-line react-hooks/exhaustive-deps
+
   const m = art ? MESSARTEN[art] : null
+  const koerperOhneWert = !!m && m.kategorie === 'koerper' && vorschau?.kennung !== 'gemessen'
+  const hinweis = art && vorschau?.kennung === 'gemessen'
+    ? widerspruch({ art, ziel: zahlAus(ziel), start: vorschau.wert, gruppe: steuerung?.gruppe ?? null, steuerName: steuerung?.name ?? null })
+    : null
   const einheitZiel = art === 'custom' ? einheit : einheitLesbar(m?.einheit ?? null)
   const vorschlag = !art ? '' : art === 'custom' ? ''
     : [m!.kategorie === 'kraft' ? uebung?.name : m!.name,
@@ -109,7 +214,7 @@ export function MesszielSetzen({ heute, onClose, zurueck }: {
       </>}
       {schritt === 'B2' && <>
         <button type="button" className="v2-btn v2-btn-ghost" onClick={() => { setFehler(null); setSchritt('B1') }}>Zurück</button>
-        <button type="button" className="v2-btn v2-btn-primary" data-messziel-anlegen disabled={laeuft}
+        <button type="button" className="v2-btn v2-btn-primary" data-messziel-anlegen disabled={laeuft || koerperOhneWert}
                 onClick={() => { void anlegen() }}>
           <Icon name="check" className="v2-ic v2-ic-sm" /> {laeuft ? 'Legt an …' : 'Messziel anlegen'}
         </button>
@@ -205,6 +310,34 @@ export function MesszielSetzen({ heute, onClose, zurueck }: {
                 </GField>
               </div>
             )}
+            {/* ══ G-628 Teil 4: der Startwert VOR dem Anlegen (G-634) ══════
+                `[read]` **Wert, Datum, Quelle kommen aus
+                `measurement_goal_start_preview`** — dieselbe Abfrage, die der
+                Snapshot beim Anlegen nutzt. Keine Startwertlogik hier. */}
+            <div data-messziel-vorschau={vorschau?.kennung ?? (vorschauFehler ? 'fehler' : 'laedt')}
+                 style={{ background: 'var(--surface-2)', borderRadius: 8, padding: '9px 12px', fontSize: 12, margin: '4px 0 8px' }}>
+              {vorschauFehler ? <span style={{ color: 'var(--neg)' }}>{vorschauFehler}</span>
+                : !vorschau ? <span className="v2-dim">Startwert wird gelesen …</span>
+                : vorschau.kennung === 'gemessen' ? (
+                  <>Start <b className="v2-num" data-vorschau-wert>{wertMitEinheit(vorschau.wert, art === 'custom' ? einheit || null : m.einheit)}</b>
+                    <span className="v2-dim"> · {quelleLesbar(vorschau.quelle) ?? 'Quelle unbekannt'}{vorschau.datum ? ` am ${datumDe(vorschau.datum)}` : ''} · wird beim Anlegen festgehalten</span></>
+                ) : m.kategorie === 'kraft' ? (
+                  <span data-vorschau-erstes-training>Noch kein Wert mit dieser Übung — Start ist dein erstes Training danach.</span>
+                ) : m.kategorie === 'koerper' ? (
+                  <>
+                    <b data-vorschau-erst-messen>Erst messen:</b> für {m.name}{art === 'circumference' && stelle ? ` (${STELLEN[stelle]})` : ''} gibt es noch keinen Wert.
+                    <JetztMessen art={art as 'body_weight' | 'body_fat' | 'circumference'} stelle={stelle} heute={heute}
+                                 onGemessen={() => setNeuMessen(n => n + 1)} />
+                  </>
+                ) : art === 'custom' ? <span className="v2-dim">Trag unten deinen Startwert ein.</span>
+                : <span className="v2-dim">Noch kein Wert.</span>}
+              {vorschlagWert !== null && (
+                <div data-gewohnheit-vorschlag={vorschlagWert} style={{ marginTop: 4 }}>
+                  Dein Schnitt der letzten 4 Wochen: <b className="v2-num">{wertMitEinheit(vorschau!.wert, m.einheit)}</b>.
+                  {' '}Vorschlag: <b className="v2-num">{wertMitEinheit(vorschlagWert, m.einheit)}</b> (Schnitt + 1). Wiederkehrend jede Woche, mit Serie.
+                </div>
+              )}
+            </div>
             <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
               <GField label={`Zielwert${einheitZiel ? ` (${einheitZiel})` : ''}`}>
                 <GInput aria-label="Zielwert" data-messfeld="ziel" value={ziel} inputMode="decimal"
@@ -229,11 +362,16 @@ export function MesszielSetzen({ heute, onClose, zurueck }: {
               <GInput aria-label="Titel" data-messfeld="titel" value={titel} placeholder={vorschlag || 'z. B. Wasser pro Tag'}
                       onChange={e => setTitel(e.target.value)} />
             </GField>
-            <div className="v2-dim" style={{ fontSize: 11 }} data-messziel-start>
-              {art === 'custom' ? 'Den Startwert trägst du selbst ein.'
-                : 'Den Startwert hält LumeOS beim Anlegen aus deinen Daten fest — ohne Wert heißt es „erst messen“.'}
-              {' '}Ein Messziel steuert nichts.
-            </div>
+            {hinweis && (
+              <div data-messziel-widerspruch role="note" style={{
+                // Gelb wie im Entwurf. `[cmd]` **In srgb gemischt:** `in oklch` interpolierte den
+                // Farbton zwischen `--warn` (80) und der neutralen Flaeche (0) — am Schirm rosa.
+                background: 'color-mix(in srgb, var(--warn) 16%, var(--surface))',
+                border: '1px solid color-mix(in srgb, var(--warn) 55%, var(--border))',
+                borderRadius: 8, padding: '9px 12px', fontSize: 12, marginTop: 4,
+              }}><b>Hinweis:</b> {hinweis}</div>
+            )}
+            <div className="v2-dim" style={{ fontSize: 11 }} data-messziel-start>Ein Messziel steuert nichts.</div>
           </div>
         )}
 

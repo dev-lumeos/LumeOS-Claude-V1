@@ -327,7 +327,8 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
 
   // G-628 Teil 3: Weg B ist ein eigener Dialog — er teilt mit Weg A nur den Einstieg.
   if (schritt === 'B1') {
-    return <MesszielSetzen heute={heute} onClose={onClose} zurueck={start === 'B1' ? null : () => setSchritt('s0')} />
+    return <MesszielSetzen heute={heute} onClose={onClose} zurueck={start === 'B1' ? null : () => setSchritt('s0')}
+                           steuerung={steuerVariante ? { gruppe: steuerVariante.auswahl_gruppe, name: steuerVariante.label } : null} />
   }
 
   return (

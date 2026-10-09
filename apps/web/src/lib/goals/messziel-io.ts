@@ -3,10 +3,11 @@
 // `[read]` **Was waehlbar ist, sagt die Kette:** `measurement_source_options`
 // (available / pending) und `measurement_circumference_sites` (13 Stellen).
 // `[read]` **Den Startwert haelt der Trigger fest** — hier wird er nach dem
-// Anlegen nur zurueckgelesen, nicht gerechnet.
+// Anlegen nur zurueckgelesen, nicht gerechnet. Seit G-634 liest
+// `startVorschau` denselben Wert VORHER (`measurement_goal_start_preview`).
 import { createSessionClient } from '@lumeos/shared/session'
 
-import { messzielSatz, type Startstand } from './messziel'
+import { alsVorschau, messzielSatz, type Startstand, type Vorschau } from './messziel'
 
 const goals = () => createSessionClient().schema('goals')
 
@@ -62,4 +63,16 @@ export async function messzielAnlegen(p: Record<string, string | number | null>)
     .select('start_value, start_source, start_measured_at, target_unit').eq('id', id as string).single()
   if (e2 || !data) return { ok: false, fehler: `Angelegt, aber nicht lesbar: ${e2?.message ?? 'keine Zeile'}` }
   return { ok: true, start: { ...data, start_value: data.start_value === null ? null : Number(data.start_value) } as Startstand }
+}
+
+/** G-634: der Startwert, wie der Snapshot ihn beim Anlegen festhalten wuerde. */
+export async function startVorschau(p: Record<string, string | number | null>):
+  Promise<{ ok: true; vorschau: Vorschau } | { ok: false; fehler: string }> {
+  const { data, error } = await goals().rpc('measurement_goal_start_preview', p)
+  if (error) return { ok: false, fehler: messzielSatz(error.message) }
+  const z = (Array.isArray(data) ? data[0] : null) as Record<string, unknown> | null
+  // `[cmd]` Ohne `auth.uid()` liefert die Funktion keine Zeile (634, Zeile 20).
+  if (!z) return { ok: false, fehler: 'Deine Anmeldung ist abgelaufen. Bitte neu anmelden.' }
+  const v = alsVorschau(z)
+  return v ? { ok: true, vorschau: v } : { ok: false, fehler: `Unbekannte Kennung „${String(z.kennung)}“.` }
 }

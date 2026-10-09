@@ -137,3 +137,88 @@ export function startSatz(s: Startstand): string {
   const am = s.start_measured_at ? ` am ${s.start_measured_at.split('-').reverse().join('.')}` : ''
   return `Startwert ${wert} festgehalten (${woher}${am}).`
 }
+
+// ══ G-628 Teil 4: Startwert VOR dem Anlegen (G-634) ══════════════════
+//
+// `[cmd]` **`goals.measurement_goal_start_preview(p_measurement_type, p_as_of,
+// p_exercise_id, p_measurement_site, p_measurement_reps, p_manual_start)`**
+// — dieselbe Abfrage, die der Snapshot-Trigger beim Anlegen nutzt. Hier
+// stehen nur die Parameter; den Wert rechnet die Kette.
+
+export type Kennung = 'gemessen' | 'erst_messen' | 'vorgemerkt'
+export interface Vorschau {
+  wert: number | null
+  datum: string | null
+  quelle: string | null
+  kennung: Kennung
+}
+
+/**
+ * Eine Zeile von `measurement_goal_start_preview` als `Vorschau`.
+ * `[read]` **Eine unbekannte Kennung wird `null`** — der Dialog zeigt dann
+ * einen Fehler statt zu raten, ob gemessen wurde.
+ */
+export function alsVorschau(z: Record<string, unknown> | null | undefined): Vorschau | null {
+  if (!z) return null
+  const k = z.kennung
+  if (k !== 'gemessen' && k !== 'erst_messen' && k !== 'vorgemerkt') return null
+  return {
+    wert: z.wert === null || z.wert === undefined ? null : Number(z.wert),
+    datum: typeof z.datum === 'string' ? z.datum : null,
+    quelle: typeof z.quelle === 'string' ? z.quelle : null,
+    kennung: k,
+  }
+}
+
+/** Die sechs Parameter der Vorschau — `null`, solange eine Pflichtangabe fehlt. */
+export function vorschauParameter(f: Pick<Messformular, 'art' | 'stelle' | 'uebungId' | 'wdh' | 'start'>, heute: string):
+  Record<string, string | number | null> | null {
+  const a = MESSARTEN[f.art]
+  if (f.art === 'circumference' && !f.stelle) return null
+  if (a.kategorie === 'kraft' && !f.uebungId) return null
+  const wdh = f.art === 'weight_reps' ? zahl(f.wdh) : null
+  if (f.art === 'weight_reps' && (wdh === null || !Number.isInteger(wdh) || wdh < 1)) return null
+  return {
+    p_measurement_type: f.art,
+    p_as_of: heute,
+    p_exercise_id: a.kategorie === 'kraft' ? f.uebungId : null,
+    p_measurement_site: f.art === 'circumference' ? f.stelle : null,
+    p_measurement_reps: wdh,
+    p_manual_start: f.art === 'custom' ? zahl(f.start) : null,
+  }
+}
+
+/**
+ * Gewohnheit: Vorschlag „Schnitt + 1" (Dossier 8.3) — **reine Anzeige**, das
+ * Feld bleibt editierbar. Einheiten pro Woche ganzzahlig, Schlaf auf 0,5 h.
+ */
+export function gewohnheitsVorschlag(art: Messart, schnitt: number | null): number | null {
+  if (schnitt === null) return null
+  if (art === 'sleep_hours_night') return Math.min(14, Math.round((schnitt + 1) * 2) / 2)
+  return Math.round(schnitt + 1)
+}
+
+export const RICHTUNG_NAME: Record<string, string> = { abnehmen: 'Abnehmen', halten: 'Halten', aufbauen: 'Aufbauen' }
+
+/**
+ * G-621: ein Koerper-Messziel gegen die Richtung des steuernden Ziels — ein
+ * **gelber Hinweis, keine Sperre** (Dossier 7/8.3). `null` heisst: kein
+ * Widerspruch oder keine Richtung (`plan`, `uebergang`, kein Steuerziel).
+ */
+export function widerspruch(e: {
+  art: Messart; ziel: number | null; start: number | null
+  gruppe: string | null; steuerName: string | null
+}): string | null {
+  if (e.ziel === null || e.start === null || !e.gruppe || !(e.gruppe in RICHTUNG_NAME)) return null
+  if (e.art !== 'body_weight' && e.art !== 'body_fat') return null
+  const runter = e.ziel < e.start, rauf = e.ziel > e.start
+  const was = e.art === 'body_weight' ? 'Gewicht' : 'Körperfett'
+  const name = `„${RICHTUNG_NAME[e.gruppe]}${e.steuerName ? ` · ${e.steuerName}` : ''}“`
+  let tun: string | null = null
+  if (e.gruppe === 'aufbauen' && runter) tun = 'senken'
+  if (e.gruppe === 'abnehmen' && rauf) tun = 'steigern'
+  if (e.gruppe === 'halten' && e.art === 'body_weight' && Math.abs(e.ziel - e.start) > 1) tun = runter ? 'senken' : 'steigern'
+  if (!tun) return null
+  return `${was} ${tun} widerspricht deiner Richtung ${name}. Möglich, aber langsam. `
+    + 'Das Messziel steuert nichts; die Kalorien folgen weiter dem steuernden Ziel.'
+}
