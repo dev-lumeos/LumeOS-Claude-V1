@@ -3896,6 +3896,20 @@
       "kind": "tsx",
       "creates": "G-611: Frist stoppt Phase und Fortschritt, Erhaltung ist markiert, bestaetigtes Loeschen kaskadiert.",
       "depends_on": ["611_goal_freeze_archive_delete", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "638_goal_plan_status_follows_goal",
+      "path": "supabase/_pipeline/11_goals/638_goal_plan_status_follows_goal.sql",
+      "kind": "sql",
+      "creates": "G-638: Planstatus folgt Zielstatus auch beim Fortsetzen und nach pausiertem Abschluss.",
+      "depends_on": ["611_goal_freeze_archive_delete_probe", "625_goal_plan_runtime"]
+    },
+    {
+      "id": "638_goal_plan_status_follows_goal_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g638-plan-status-sync.test.ts",
+      "kind": "tsx",
+      "creates": "G-638: Plan folgt Pause, Fortsetzung und Abschluss; Konflikt, Einfrieren, Archiv und Neustart bleiben geschuetzt.",
+      "depends_on": ["638_goal_plan_status_follows_goal", "a86_testdaten_einspielen"]
     }
   ]
 }
