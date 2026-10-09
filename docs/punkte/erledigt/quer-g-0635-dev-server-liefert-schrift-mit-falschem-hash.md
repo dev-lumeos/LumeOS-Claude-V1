@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-08
 agent: claudecode
 beauftragt: 2026-10-08
+erledigt: 2026-10-09
+commit: 8390b67c
 
 braucht: []
 kind_von: null
@@ -40,3 +42,12 @@ Finden, wer um 16:18 in `apps/web/.next` geschrieben hat (Gate, Test, Typecheck,
     Bereich: tools/, apps/web (Build-Konfiguration, Tests)
     Fremd:   supabase/_pipeline/ (Codex). docs/ gehoert dem Orchestrator.
     Stand:   2026-10-08, HEAD 113fbfae
+
+
+## Erledigt - 2026-10-09, Commit `8390b67c`
+
+`[read]` Claude Code: Die Ursache war Turbo. `turbo.json` meldete für build die Ausgaben `.next/**`. Der Gate-Lauf am 08.10. 16:18:45 hatte einen Cache-Treffer (`49586e6a`), dessen Artefakt 1.912 Dateien unter `apps/web/.next` enthielt, darunter `layout.css` mit `__variable_8b3a0b`. Zweiter Schreiber war der `next lint`-Cache.
+
+`[cmd]` Orchestrator: Der Diff von `turbo.json` entfernt `.next/**`. Lint läuft jetzt mit `--cache-location .next-gate/cache/eslint/`. Wächter `tools/__tests__/g635-next-nur-dev.test.mjs`. Gate grün.
+
+`[read]` Gegenprobe 5/5 rot. Ein Cache-Treffer danach schrieb 0 Dateien nach `.next`.

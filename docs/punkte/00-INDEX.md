@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 281 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 690 |
-| **gesamt** | **975** |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 693 |
+| **gesamt** | **976** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 109
+## goals — 110
 
-### beauftragbar — 103
+### beauftragbar — 104
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -681,7 +681,7 @@
 | `G-615` | fehler | hoch | [Der Planer legt Plaene vom Termin rueckwaerts an](erledigt/goals-g-0615-der-planer-legt-plaene-vom-termin-rueckwaerts-an.md) | erledigt | — | G-623, G-624, G-629 |
 | `G-616` | fehler | mittel | [Der G-536-Test ist rot und steht nicht in der Kette](todos/goals-g-0616-der-g536-test-ist-rot-und-steht-nicht-in-der-kette.md) | offen | — | — |
 | `G-617` | fehler | hoch | [Ein Kraftziel findet seine Uebung nur ueber den Titel](erledigt/goals-g-0617-ein-kraftziel-findet-seine-uebung-nur-ueber-den-titel.md) | erledigt | — | G-618, G-620, G-621, G-625 |
-| `G-618` | aufgabe | mittel | [Der Reiter Goals trennt das steuernde Ziel von den messenden](laufend_claudecode/goals-g-0618-der-reiter-goals-trennt-steuerndes-und-messende-ziele.md) | laeuft (claudecode) | — | — |
+| `G-618` | aufgabe | mittel | [Der Reiter Goals trennt das steuernde Ziel von den messenden](erledigt/goals-g-0618-der-reiter-goals-trennt-steuerndes-und-messende-ziele.md) | erledigt | — | G-639 |
 | `G-619` | fehler | niedrig | [Das Tempo im Anlegemodal kennt nur Prozent Koerpergewicht](todos/goals-g-0619-das-tempo-im-anlegemodal-kennt-nur-prozent.md) | offen | — | — |
 | `G-620` | fehler | niedrig | [Zeit- und Pace-Ziele messen in die falsche Richtung](todos/goals-g-0620-zeit-und-pace-ziele-messen-in-die-falsche-richtung.md) | offen | — | — |
 | `G-621` | aufgabe | mittel | [Ein Messziel kann der Richtung widersprechen, ohne dass es jemand sagt](todos/goals-g-0621-ein-messziel-kann-der-richtung-widersprechen.md) | offen | — | — |
@@ -698,9 +698,10 @@
 | `G-632` | fehler | niedrig | [Prüfungstexte ohne Umlaute](erledigt/goals-g-0632-pruefungstexte-ohne-umlaute.md) | erledigt | — | — |
 | `G-633` | fehler | niedrig | [Prüfungstexte schreiben Zahlen mit Punkt](erledigt/goals-g-0633-pruefungstexte-zahlen-mit-punkt.md) | erledigt | — | — |
 | `G-634` | frage | mittel | [Startwert eines Messziels erst nach dem Anlegen sichtbar](erledigt/goals-g-0634-startwert-eines-messziels-erst-nach-dem-anlegen.md) | erledigt | — | — |
-| `G-636` | fehler | niedrig | [Der Goals-Kopf zählt Phasen eines pausierten Ziels als laufend](todos/goals-g-0636-kopf-zaehlt-phasen-eines-pausierten-ziels.md) | offen | — | — |
+| `G-636` | fehler | niedrig | [Der Goals-Kopf zählt Phasen eines pausierten Ziels als laufend](erledigt/goals-g-0636-kopf-zaehlt-phasen-eines-pausierten-ziels.md) | erledigt | — | — |
 | `G-637` | fehler | mittel | [Ein aktives Ziel ohne laufende Phase heisst "kein aktives Ziel"](erledigt/goals-g-0637-aktives-ziel-ohne-laufende-phase-heisst-kein-aktives-ziel.md) | erledigt | — | — |
 | `G-638` | fehler | mittel | [Fortsetzen eines Ziels aktiviert seinen Plan nicht](todos/goals-g-0638-fortsetzen-aktiviert-den-plan-nicht.md) | offen | — | — |
+| `G-639` | aufgabe | mittel | [Reiter Goals – Reste nach dem Entwurf](todos/goals-g-0639-reiter-goals-reste-nach-entwurf.md) | offen | — | — |
 
 ### wartet auf Blocker — 6
 
@@ -1034,7 +1035,7 @@
 | `G-589` | befund | niedrig | [328 Ausfuhren zu viel — und wie die Zahl 385 zu 56 wurde](todos/quer-g-0589-dreihundertachtundzwanzig-ausfuhren-zu-viel.md) | offen | — | — |
 | `G-599` | befund | mittel | [Die SSOT nennt Tabellen abwesend, die es gibt — und der Waechter sieht den Fast-Treffer nicht](todos/quer-g-0599-die-ssot-nennt-tabellen-abwesend-die-es-gibt.md) | offen | — | — |
 | `G-600` | fehler | hoch | [„Heute" ist an 32 Stellen der UTC-Vortag](erledigt/quer-g-0600-heute-ist-an-32-stellen-der-utc-vortag.md) | erledigt | — | — |
-| `G-635` | fehler | mittel | [Dev-Server liefert die Schrift mit falschem Hash](laufend_claudecode/quer-g-0635-dev-server-liefert-schrift-mit-falschem-hash.md) | laeuft (claudecode) | — | — |
+| `G-635` | fehler | mittel | [Dev-Server liefert die Schrift mit falschem Hash](erledigt/quer-g-0635-dev-server-liefert-schrift-mit-falschem-hash.md) | erledigt | — | — |
 
 ### wartet auf Blocker — 1
 
