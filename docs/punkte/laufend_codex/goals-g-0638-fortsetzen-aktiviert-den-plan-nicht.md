@@ -36,3 +36,18 @@ Ziel `paused`/`on_hold` → `active`: Der Plan geht von `pausiert` auf `aktiv`, 
     Bereich: supabase/_pipeline/ (Kette). Live mit G-611 nach Freigabe.
     Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
     Stand:   2026-10-09, HEAD 158ad807
+
+
+## Kette committet - 2026-10-09, Commit `ba11b66c`
+
+`[cmd]` 3 Dateien nur Kette. Gelesen:
+- BEFORE-Trigger `g638_plan_resume_preflight` auf `user_goals.status`: `G638_BLOCK:anderer_aktiver_plan`, `G638_BLOCK:ziel_eingefroren_oder_archiviert`.
+- `g625_sync_plan_after_goal_status` erweitert.
+
+`[cmd]` Live nachgemessen: Ziel active → Plan aktiv 3, on_hold → pausiert 1, kein Widerspruch. Gate grün.
+
+`[read]` Codex: 391 Schritte grün, Probe 6/6, Sabotage 2× rot.
+
+Befund: Die Satztexte in den G638-Fehlern stehen ohne Umlaute ("koennen"), wie früher bei G-632. Die Korrektur gehört ins Live-Paket.
+
+Live erst mit G-611 und G-640.
