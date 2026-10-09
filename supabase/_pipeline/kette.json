@@ -3882,6 +3882,20 @@
       "kind": "tsx",
       "creates": "G-637: aktive Zielluecke, Erhaltung, Phasenkontext und Tagesreferenz; ohne Ziel bleibt der G-622-Marker.",
       "depends_on": ["637_active_goal_phase_gap", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "611_goal_freeze_archive_delete",
+      "path": "supabase/_pipeline/11_goals/611_goal_freeze_archive_delete.sql",
+      "kind": "sql",
+      "creates": "G-611: wirksames Einfrieren, Archiv, Neustart und bestaetigtes Loeschen mit Kaskade.",
+      "depends_on": ["637_active_goal_phase_gap_probe"]
+    },
+    {
+      "id": "611_goal_freeze_archive_delete_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g611-freeze-archive-delete.test.ts",
+      "kind": "tsx",
+      "creates": "G-611: Frist stoppt Phase und Fortschritt, Erhaltung ist markiert, bestaetigtes Loeschen kaskadiert.",
+      "depends_on": ["611_goal_freeze_archive_delete", "a86_testdaten_einspielen"]
     }
   ]
 }
