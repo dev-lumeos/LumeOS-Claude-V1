@@ -37,3 +37,10 @@ Claude Code: eigener Satz, z. B. "„Lean Bulk bis September“ ist aktiv, hat a
     Bereich: supabase/_pipeline/ (Kette). Live erst nach Pruefung durch den Orchestrator.
     Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
     Stand:   2026-10-08, HEAD 54f39567
+
+
+## Backfill B + G-637 committet - 2026-10-09, Commit `5fc802b5`
+
+`[cmd]` 5 Dateien nur Kette. Backfill gelesen: alle Phasen je Ziel per row_number nach gueltig_ab, Planstatus active→aktiv, on_hold/paused→pausiert, sonst abgeschlossen; Prüfung Positionen = Phasen der steuernden Ziele. Live gemessen: 6 Phasen an steuernden Zielen (fat_loss 1, lean_bulk 3, maintenance 2) → 6 Positionen, dev 2. Richtung über phase_type (fat_loss/mini_cut→abnehmen, lean_bulk→aufbauen, sonst halten); für die Live-Typen korrekt, contest_prep/reverse_diet wären "halten" – nur für diesen Einmal-Backfill, kommt live nicht vor. 637 gelesen: `ziel_ohne_laufende_phase_am`; `berechne_zielwerte` als Hülle über `_g637_basis` mit drei zusätzlichen Spalten. Gate grün.
+
+Hinweis: `ziel_grenzen_pruefen` und `berechne_zielwerte` sind jetzt umbenannte Basis + Hülle (G-633, G-637). Beim nächsten Umbau zusammenführen.
