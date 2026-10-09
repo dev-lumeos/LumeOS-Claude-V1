@@ -3868,6 +3868,20 @@
       "kind": "tsx",
       "creates": "G-634: Vorschau gleich Snapshot fuer Koerper, Kraft, Gewohnheit und Eigenes; fehlende und fremde Daten.",
       "depends_on": ["634_measurement_goal_start_preview", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "637_active_goal_phase_gap",
+      "path": "supabase/_pipeline/11_goals/637_active_goal_phase_gap.sql",
+      "kind": "sql",
+      "creates": "G-637: aktives Steuerziel ohne laufende Phase bekommt Erhaltung mit eigenem Hindernis und letztem Phasenkontext.",
+      "depends_on": ["634_measurement_goal_start_preview_probe", "625_goal_plan_daily_targets"]
+    },
+    {
+      "id": "637_active_goal_phase_gap_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g637-phase-gap.test.ts",
+      "kind": "tsx",
+      "creates": "G-637: aktive Zielluecke, Erhaltung, Phasenkontext und Tagesreferenz; ohne Ziel bleibt der G-622-Marker.",
+      "depends_on": ["637_active_goal_phase_gap", "a86_testdaten_einspielen"]
     }
   ]
 }

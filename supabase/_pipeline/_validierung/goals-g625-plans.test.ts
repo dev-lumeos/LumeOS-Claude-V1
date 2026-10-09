@@ -22,6 +22,17 @@ test('G-625: jedes bestehende Steuerziel hat genau einen Plan', () => {
   assert.equal(result, '3/3/3')
   assert.equal(sql(`SELECT count(*) FROM goals.goal_program_positions
     WHERE position=1 AND goal_phase_id IS NOT NULL`), '3')
+  assert.equal(sql(`SELECT count(*) FROM goals.goal_program_positions`), '4')
+  assert.equal(sql(`SELECT string_agg(pos.position || ':' || ph.strategie_code || ':' ||
+      coalesce(ph.actual_end_date::text, 'offen'), ',' ORDER BY pos.position)
+    FROM goals.goal_program_positions pos
+    JOIN goals.goal_phases ph ON ph.id=pos.goal_phase_id
+    WHERE pos.program_id='62500000-0000-0000-0000-000000000101'`),
+    '1:maintain:2026-06-03,2:lean_bulk:offen')
+  assert.equal(sql(`SELECT p.status FROM goals.goal_programs p
+    WHERE p.id='62500000-0000-0000-0000-000000000101'`), 'aktiv')
+  assert.equal(sql(`SELECT p.status FROM goals.goal_programs p
+    WHERE p.id='62500000-0000-0000-0000-000000000902'`), 'pausiert')
 })
 
 test('G-625: Planstatus, Termine und Eigenwerte sind im Schema', () => {

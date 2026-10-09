@@ -180,25 +180,24 @@ CREATE TRIGGER goal_program_positions_validate
   FOR EACH ROW EXECUTE FUNCTION goals.goal_program_position_validate();
 
 DO $g625_backfill$
-DECLARE v_count integer;
+DECLARE v_count integer; v_phase_count integer;
 BEGIN
   CREATE TEMP TABLE g625_expected (
-    goal_id uuid PRIMARY KEY, phase_id uuid NOT NULL, plan_id uuid NOT NULL
+    goal_id uuid PRIMARY KEY, plan_id uuid NOT NULL
   ) ON COMMIT DROP;
   INSERT INTO g625_expected VALUES
     ('30000000-0000-0000-0000-000000000101',
-     '31000000-0000-0000-0000-000000000102',
      '62500000-0000-0000-0000-000000000101'),
     ('30000000-0000-0000-0000-000000000901',
-     '31000000-0000-0000-0000-000000000901',
      '62500000-0000-0000-0000-000000000901'),
     ('30000000-0000-0000-0000-000000000902',
-     '31000000-0000-0000-0000-000000000902',
      '62500000-0000-0000-0000-000000000902'),
     ('dc5f4d6f-9df0-45f4-bbf8-f1e0620ef50b',
-     '53ae9232-4749-4350-9a58-60dfc159ff1c',
      '62500000-0000-0000-0000-000000000903');
   SELECT count(*) INTO v_count FROM goals.user_goals WHERE goal_role='controlling';
+  SELECT count(*) INTO v_phase_count FROM goals.goal_phases p
+    JOIN goals.user_goals g ON g.id=p.goal_id
+    WHERE g.goal_role='controlling';
   IF v_count NOT IN (3,4)
      OR EXISTS (
        SELECT 1 FROM goals.user_goals g
@@ -209,22 +208,22 @@ BEGIN
        SELECT 1 FROM g625_expected e
        JOIN goals.user_goals g ON g.id=e.goal_id
        WHERE g.goal_role<>'controlling'
-         OR NOT EXISTS (
-           SELECT 1 FROM goals.goal_phases p
-           WHERE p.id=e.phase_id AND p.goal_id=e.goal_id
-         )
      ) THEN
     RAISE EXCEPTION 'G-625: Steuerziel-/Phasenbestand weicht vom gemessenen Satz ab';
   END IF;
   INSERT INTO goals.goal_programs(id,goal_id,user_id,name,status)
   SELECT e.plan_id,g.id,g.user_id,g.title,
-    CASE WHEN g.status='active' THEN 'aktiv' ELSE 'pausiert' END
+    CASE WHEN g.status='active' THEN 'aktiv'
+      WHEN g.status IN ('on_hold','paused') THEN 'pausiert'
+      ELSE 'abgeschlossen' END
   FROM g625_expected e JOIN goals.user_goals g ON g.id=e.goal_id;
   INSERT INTO goals.goal_program_positions(
     program_id,position,strategie_code,richtung,phase_type,
     duration_weeks,goal_phase_id,gueltig_ab,projected_end_date
   )
-  SELECT e.plan_id,1,p.strategie_code,
+  SELECT e.plan_id,
+    row_number() OVER (PARTITION BY p.goal_id ORDER BY p.gueltig_ab,p.created_at,p.id)::smallint,
+    p.strategie_code,
     CASE p.phase_type
       WHEN 'fat_loss' THEN 'abnehmen'
       WHEN 'mini_cut' THEN 'abnehmen'
@@ -237,9 +236,9 @@ BEGIN
     p.id,p.gueltig_ab,p.projected_end_date
   FROM g625_expected e
   JOIN goals.user_goals g ON g.id=e.goal_id
-  JOIN goals.goal_phases p ON p.id=e.phase_id;
+  JOIN goals.goal_phases p ON p.goal_id=e.goal_id;
   IF (SELECT count(*) FROM goals.goal_programs)<>v_count
-     OR (SELECT count(*) FROM goals.goal_program_positions)<>v_count THEN
+     OR (SELECT count(*) FROM goals.goal_program_positions)<>v_phase_count THEN
     RAISE EXCEPTION 'G-625: Backfill unvollstaendig';
   END IF;
 END $g625_backfill$;
