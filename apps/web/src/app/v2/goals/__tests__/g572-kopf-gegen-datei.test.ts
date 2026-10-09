@@ -51,7 +51,7 @@ function rumpf(): string {
  * echten Teil** — er ist Attrappe, und der Kopf darf ihn so nennen.
  */
 const REITER: Array<[string, string | null]> = [
-  ['Goals', 'ZielKarten'],
+  ['Goals', 'ReiterGoals'],
   ['Phase engine', 'PhaseEcht'],
   ['Adaptive TDEE', 'GoalsTDEEView'],
   ['Cross-module', null],

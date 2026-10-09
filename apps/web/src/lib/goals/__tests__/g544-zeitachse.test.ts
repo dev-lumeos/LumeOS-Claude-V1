@@ -361,12 +361,15 @@ describe('G-544 — die Kopfmarke verschweigt keine Phase', () => {
     //
     // `[read]` **Eine von zwei zu nennen heisst, die andere zu
     // verschweigen.**
+    // `[cmd]` **G-636 (2026-10-09): die Quelle ist jetzt `phase_am`** — ohne
+    // `LIMIT 1` und nur Phasen AKTIVER Ziele (Rumpf live gelesen). Die
+    // Tabelle (`offenePhasen`) zaehlte die Phase eines pausierten Ziels mit.
     const q = lies(join(GOALS, 'ansicht.tsx'))
-    assert.match(q, /echt\.offenePhasen\.length > 0 && \(/,
+    assert.match(q, /laufendePhasen\.length > 0 && \(/,
       'die Kopfmarke haengt nicht an der Zahl der offenen Phasen')
     assert.match(q, /Phasen laufen/,
       'bei mehreren Phasen wird immer noch EINE genannt')
-    assert.match(q, /data-kopf-phasen=\{echt\.offenePhasen\.length\}/,
+    assert.match(q, /data-kopf-phasen=\{laufendePhasen\.length\}/,
       'die Zahl ist nicht am Schirm nachzaehlbar')
   })
 })

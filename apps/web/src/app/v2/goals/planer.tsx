@@ -24,6 +24,7 @@ import type { Strategie } from '../../../lib/goals/strategie-read'
 import type { ZielFortschritt, Zielphase } from '../../../lib/goals/lesen'
 import { phasenzielAnlegenAktion } from './ziel-aktionen'
 import { StrategieVorschau } from './strategie-vorschau'
+import { steuerziel } from '../../../lib/goals/reiter'
 
 const feld: React.CSSProperties = {
   width: '100%', height: 30, background: 'var(--surface)', color: 'var(--fg)',
@@ -47,13 +48,12 @@ export function Planer({ strategien, erfahrung, ziele, heute }: {
   const plan = plaene.find(p => p.code === code) ?? null
   const vorschau = plan && termin ? planvorschau(plan, termin, heute) : null
   const phasenart = plan ? phasenartFuerStrategie(plan.code, plan.category) as Phasenart | null : null
-  // `[cmd]` **`uq_user_goals_active_slot`: je aktivem Ziel ein Platz 1–3.**
-  // `[read]` Der Plan nimmt den ersten freien — sonst lehnt die Datenbank ab.
-  const belegt = new Set(ziele.filter(z => z.status === 'active').map(z => z.priority))
-  const platz = [1, 2, 3].find(p => !belegt.has(p)) ?? null
+  // `[cmd]` **G-618: kein Platz 1–3 mehr** — der Index ist live weg
+  // (2026-10-09). Drei aktive Messziele sperrten hier den Plan.
+  const platz = 1
 
   async function anlegen() {
-    if (!plan || !phasenart || !vorschau?.ok || platz === null) return
+    if (!plan || !phasenart || !vorschau?.ok) return
     setLaeuft(true)
     setMeldung(null)
     const r = await phasenzielAnlegenAktion({
@@ -168,16 +168,10 @@ export function Planer({ strategien, erfahrung, ziele, heute }: {
         {plan && (
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <button type="button" className="v2-btn v2-btn-primary v2-btn-sm" data-planer-anlegen
-                    disabled={laeuft || !vorschau?.ok || !phasenart || platz === null}
+                    disabled={laeuft || !vorschau?.ok || !phasenart}
                     onClick={() => { void anlegen() }}>
               <Icon name="check" className="v2-ic v2-ic-sm" /> {laeuft ? 'Legt an …' : 'Plan anlegen'}
             </button>
-            {platz === null && (
-              <span className="v2-dim" style={{ fontSize: 10.5 }}>
-                Alle drei aktiven Plaetze sind belegt — erst ein Ziel zurueckstellen.
-              </span>
-            )}
-            {platz !== null && <Pill>Prio {platz}</Pill>}
           </div>
         )}
         {meldung && (
@@ -210,7 +204,8 @@ export function PhasenZustand({ ziele, phasen, strategien }: {
   phasen: Zielphase[]
   strategien: Strategie[]
 }) {
-  const ziel = ziele.find(z => z.status === 'active' && z.is_primary) ?? null
+  // G-618: steuernd heisst `goal_role`, nicht `is_primary`.
+  const ziel = steuerziel(ziele)
   const phase = ziel ? phasen.find(p => p.goal_id === ziel.goal_id) ?? null : null
   const s = phase?.strategie_code ? strategien.find(x => x.code === phase.strategie_code) ?? null : null
   return (

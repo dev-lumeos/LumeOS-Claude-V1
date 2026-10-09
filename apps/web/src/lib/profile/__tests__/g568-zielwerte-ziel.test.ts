@@ -124,9 +124,12 @@ describe('G-568/A3 — die Zahl nennt ihr Ziel', () => {
     // `LIMIT 1`. `[read]` **Die Tabelle stimmt heute UND nach dem
     // Einspielen.**
     const q = lies(join(WEB, 'app', 'v2', 'goals', 'ansicht.tsx'))
-    assert.match(q, /laufendePhasen: echt\.offenePhasen\.length/,
-      'die Zahl kommt aus der gedeckelten Quelle — dann nennt die '
-      + 'Anzeige bei zwei Phasen kein Ziel')
+    // `[cmd]` **G-636 (2026-10-09): die Quelle ist jetzt `phase_am`** — ohne
+    // `LIMIT 1` und nur Phasen AKTIVER Ziele (Rumpf live gelesen). Die
+    // Tabelle (`offenePhasen`) zaehlte die Phase eines pausierten Ziels mit.
+    assert.match(q, /laufendePhasen: echt\.phasen\.length/,
+      'die Zahl kommt nicht aus phase_am — dann zaehlt die Anzeige '
+      + 'die Phase eines pausierten Ziels mit (G-636)')
   })
 
   it('der Titel wird nicht geraten', () => {

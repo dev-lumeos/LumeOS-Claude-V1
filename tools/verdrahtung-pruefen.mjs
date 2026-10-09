@@ -173,7 +173,8 @@ const GEDULDET = new Set([
   // war schon da, nur lag er ausserhalb des Lesebereichs.
   'tabelle:biomarker_aliases',
   'tabelle:biomarker_catalog', 'tabelle:biomarker_reference_ranges',
-  'tabelle:body_circumferences',
+  // `[cmd]` **G-618 strich `body_circumferences`:** die Quelle der
+  // Umfangsziele steht in `apps/web/src/lib/goals/__tests__/g618-reiter.test.ts`.
   'tabelle:equipment', 'tabelle:food_groups', 'tabelle:foods_portions',
   'tabelle:goal_milestones', 'tabelle:nutrient_details',
   'tabelle:nutrient_reference_values', 'tabelle:nutrient_search_aliases',

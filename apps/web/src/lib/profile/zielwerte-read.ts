@@ -41,6 +41,14 @@ export type Zielwerte = {
    * `on_hold`: der Dialog „pausieren" schreibt `on_hold`.
    */
   ruhendes_ziel: { goal_id: string; title: string } | null
+  /**
+   * `[cmd]` **G-637: die Phasenluecke** aus `goals.ziel_ohne_laufende_phase_am`
+   * — nur gelesen, wenn die Herkunft `ziel_ohne_laufende_phase` ist.
+   */
+  luecke: {
+    goal_id: string; title: string | null
+    letzte_phase_ende: string | null; recommended_next: string | null
+  } | null
 }
 
 /** Was die Formel aus dem Profil macht — inklusive Grund, wenn nicht. */
@@ -202,6 +210,20 @@ export async function getZielwerteAm(stichtag: string): Promise<Zielwerte | null
     const g = (z ?? [])[0] as { id: string; title: string } | undefined
     ruhendes_ziel = g ? { goal_id: g.id, title: g.title } : null
   }
+  let luecke: Zielwerte['luecke'] = null
+  if (herkunft === 'ziel_ohne_laufende_phase') {
+    const { data: l } = await supabase.schema('goals')
+      .rpc('ziel_ohne_laufende_phase_am', { p_user_id: userId, p_stichtag: stichtag })
+    const z = (Array.isArray(l) ? l[0] : null) as Record<string, unknown> | null
+    if (z && text(z.goal_id)) {
+      const { data: t } = await supabase.schema('goals').from('user_goals')
+        .select('title').eq('id', text(z.goal_id)!).maybeSingle()
+      luecke = {
+        goal_id: text(z.goal_id)!, title: text((t as { title?: unknown } | null)?.title),
+        letzte_phase_ende: text(z.letzte_phase_ende), recommended_next: text(z.recommended_next),
+      }
+    }
+  }
   return {
     gueltig_ab: text(r.gueltig_ab) ?? stichtag,
     kcal: zahl(r.kcal),
@@ -215,6 +237,7 @@ export async function getZielwerteAm(stichtag: string): Promise<Zielwerte | null
     tdee: zahl(r.tdee),
     nutrition_goal: text(r.nutrition_goal),
     ruhendes_ziel,
+    luecke,
   }
 }
 
@@ -331,6 +354,7 @@ export async function getZielwertVorschlag(
     // verschwand „kein aktives Ziel" hier ein zweites Mal.
     hindernis: h === 'profil_unvollstaendig' || h === 'zielrichtung_ohne_faktor'
       || h === 'kein_aktives_ziel' || h === 'erhaltung_nicht_berechenbar'
+      || h === 'ziel_ohne_laufende_phase'
       ? h
       : null,
     fehlende_felder: Array.isArray(zeile.fehlende_felder)

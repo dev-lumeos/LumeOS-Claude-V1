@@ -4,7 +4,7 @@
 import { revalidatePath } from 'next/cache'
 
 import {
-  zielAendern, reihenfolgeSetzen, zielAnlegen,
+  zielAendern, zielAnlegen,
 } from '../../../lib/goals/schreiben'
 import type { ZielAenderung, ZielNeu } from '../../../lib/goals/ziel-regeln'
 import { zielGrenzenPruefen, type Pruefeingabe } from '../../../lib/goals/zielpruefung-read'
@@ -13,6 +13,7 @@ import {
   ladeMessquellen, messzielAnlegen, sucheUebungen, type Messquellen, type Uebung,
 } from '../../../lib/goals/messziel-io'
 import { messzielParameter, type Messformular, type Startstand } from '../../../lib/goals/messziel'
+import { ladeVerlauf, type Verlauf } from '../../../lib/goals/reiter-read'
 import {
   phasenzielAnlegen, type PhasenzielNeu, type PhasenzielErgebnis,
 } from '../../../lib/goals/phasenziel-write'
@@ -61,14 +62,6 @@ export async function zielSpeichern(zielId: string, aenderung: ZielAenderung): P
   return e.ok ? { ok: true, fehler: null } : { ok: false, fehler: e.fehler }
 }
 
-export async function prioritaetenSpeichern(
-  paare: Array<{ id: string; priority: number }>,
-): Promise<{ ok: boolean; fehler: string | null }> {
-  const e = await reihenfolgeSetzen(paare)
-  if (e.ok) revalidatePath('/v2/goals')
-  return e.ok ? { ok: true, fehler: null } : { ok: false, fehler: e.fehler }
-}
-
 /**
  * G-628 Teil 2 — die Pruefungen nach Grad fuer die Vorschau in A2.
  * `[read]` **Dieselbe Funktion wie der Schreib-Waechter** (G-626).
@@ -95,4 +88,14 @@ export async function messzielAnlegenAktion(f: Messformular, heute: string):
   const r = await messzielAnlegen(p.p)
   if (r.ok) revalidatePath('/v2/goals')
   return r
+}
+
+/** G-618: der Verlauf eines Ziels fuer „Details" — erst beim Aufklappen gelesen. */
+export async function verlaufAktion(goalId: string, stichtag: string, woechentlich: boolean):
+  Promise<{ ok: true; verlauf: Verlauf } | { ok: false; fehler: string }> {
+  try {
+    return { ok: true, verlauf: await ladeVerlauf(goalId, stichtag, woechentlich) }
+  } catch (f) {
+    return { ok: false, fehler: f instanceof Error ? f.message : String(f) }
+  }
 }

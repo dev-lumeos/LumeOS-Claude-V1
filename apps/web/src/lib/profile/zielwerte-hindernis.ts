@@ -55,6 +55,9 @@ export type Hindernis =
   // und `zielwerte_am` reicht dasselbe Wort als `herkunft` weiter.
   | 'kein_aktives_ziel'
   | 'erhaltung_nicht_berechenbar'
+  // `[cmd]` **G-637 (`637_active_goal_phase_gap.sql`):** das Steuerziel ist
+  // aktiv, aber keine Phase laeuft — Erhaltung bleibt die Rechnung.
+  | 'ziel_ohne_laufende_phase'
 
 /**
  * Woher die geltenden Zielwerte kommen — G-630.
@@ -65,8 +68,11 @@ export type Hindernis =
  * auf `formel`** — damit sah Erhaltung ohne Ziel aus wie ein Plan.
  */
 export type Herkunft = 'formel' | 'manuell' | 'kein_aktives_ziel' | 'erhaltung_nicht_berechenbar'
+  | 'ziel_ohne_laufende_phase'
 
-const HERKUENFTE: readonly Herkunft[] = ['formel', 'manuell', 'kein_aktives_ziel', 'erhaltung_nicht_berechenbar']
+const HERKUENFTE: readonly Herkunft[] = [
+  'formel', 'manuell', 'kein_aktives_ziel', 'erhaltung_nicht_berechenbar', 'ziel_ohne_laufende_phase',
+]
 
 /** Unbekanntes faellt auf `formel` — nur so lange, bis eine fuenfte Herkunft auftaucht; der Test liest die Kette. */
 export function alsHerkunft(v: unknown): Herkunft {
@@ -75,7 +81,7 @@ export function alsHerkunft(v: unknown): Herkunft {
 
 /** Laeuft der Tag ohne aktives Ziel? */
 export const ohneZiel = (h: Herkunft | null | undefined): boolean =>
-  h === 'kein_aktives_ziel' || h === 'erhaltung_nicht_berechenbar'
+  h === 'kein_aktives_ziel' || h === 'erhaltung_nicht_berechenbar' || h === 'ziel_ohne_laufende_phase'
 
 /**
  * Der Warnsatz ohne Ziel — Tom 2026-10-08: *„der user muss wissen dass
@@ -83,6 +89,7 @@ export const ohneZiel = (h: Herkunft | null | undefined): boolean =>
  */
 export function ohneZielSatz(h: Herkunft | null | undefined): string | null {
   if (h === 'kein_aktives_ziel') return 'Kein aktives Ziel – du läufst auf Erhaltung.'
+  if (h === 'ziel_ohne_laufende_phase') return 'Dein Ziel ist aktiv, hat aber keine laufende Phase – du läufst auf Erhaltung.'
   if (h === 'erhaltung_nicht_berechenbar') {
     return 'Kein aktives Ziel – und die Erhaltung lässt sich nicht berechnen, deshalb gibt es heute kein Tagesziel.'
   }
@@ -128,6 +135,7 @@ export function hindernisSatz(h: Hindernis, fehlende: string[] = []): string {
         + 'eine von zweien.'
     case 'kein_aktives_ziel':
     case 'erhaltung_nicht_berechenbar':
+    case 'ziel_ohne_laufende_phase':
       return ohneZielSatz(h)!
   }
 }

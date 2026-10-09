@@ -32,7 +32,7 @@ import { fehlerart, fehlertexte } from '../fehler/ladefehler'
  * `on_hold` als ruhende Zustaende.
  */
 export const STATUS_WERTE = [
-  'active', 'paused', 'achieved', 'abandoned', 'on_hold',
+  'active', 'paused', 'achieved', 'missed', 'abandoned', 'on_hold',
 ] as const
 export type ZielStatus = typeof STATUS_WERTE[number]
 
@@ -42,13 +42,14 @@ export type ZielStatus = typeof STATUS_WERTE[number]
  * `[read]` `paused` gehoert NICHT dazu — ein pausiertes Ziel laeuft
  * weiter, es ruht nur. Nur `achieved` und `abandoned` sind vorbei.
  */
-export const ABGESCHLOSSEN: ZielStatus[] = ['achieved', 'abandoned']
+export const ABGESCHLOSSEN: ZielStatus[] = ['achieved', 'missed', 'abandoned']
 
 export const STATUS_LABEL: Record<ZielStatus, string> = {
   active: 'aktiv',
   paused: 'pausiert',
   on_hold: 'zurückgestellt',
   achieved: 'erreicht',
+  missed: 'verfehlt', // G-618: der CHECK kennt `missed`, die Liste kannte es nicht
   abandoned: 'beendet', // G-630, Tom 08.10. 15:57: „beendet“ statt „abgebrochen“
 }
 
@@ -240,78 +241,11 @@ export function pruefeNeuesZiel(z: ZielNeu): ZielFeldfehler[] {
   return f
 }
 
-// ══ G-591: DIE REIHENFOLGE AKTIVER ZIELE ════════════════════════════
+// ══ G-591: die Reihenfolge — mit G-618 entfallen ════════════════════
 //
-// `[cmd]` **Gemessen 2026-10-04:** `uq_user_goals_active_slot` ist ein
-// eindeutiger, NICHT aufschiebbarer Teilindex auf `(user_id, priority)
-// WHERE status = 'active'`, und `user_goals_check1` erlaubt aktiv nur
-// 1-3. **Ein Tausch Zeile fuer Zeile scheitert deshalb immer an
-// `23505`** — und bei drei aktiven Zielen gibt es keinen freien Platz.
-//
-// `[cmd]` **Tom, 2026-10-04:** die Datenbank tauscht atomar —
-// `goals.ziel_reihenfolge_setzen(p_reihenfolge jsonb)` (G-602, Codex).
-// **Alle aktiven Ziele muessen genannt sein**, Fehler `42501` (fremdes
-// oder inaktives Ziel) und `23514` (ungueltige Menge).
-
-export type Platz = { id: string; priority: number }
-
-/**
- * Ein aktives Ziel einen Platz hoch (`-1`) oder runter (`+1`) — mit
- * seinem Nachbarn getauscht. **Gibt ALLE aktiven Ziele zurueck**, wie
- * der Vertrag es verlangt, oder `null`, wenn es keinen Nachbarn gibt.
- */
-export function tauschePlatz(
-  aktive: readonly Platz[], id: string, richtung: -1 | 1,
-): Platz[] | null {
-  const sortiert = [...aktive].sort((a, b) => a.priority - b.priority)
-  const i = sortiert.findIndex(p => p.id === id)
-  const j = i + richtung
-  if (i < 0 || j < 0 || j >= sortiert.length) return null
-  const neu = sortiert.map(p => ({ ...p }))
-  neu[i].priority = sortiert[j].priority
-  neu[j].priority = sortiert[i].priority
-  return neu
-}
-
-/**
- * Vorpruefung vor dem Aufruf — dieselben Regeln wie die Datenbank,
- * damit der Nutzer einen Satz bekommt statt eines Codes.
- */
-export function pruefeReihenfolge(paare: readonly Platz[]): string | null {
-  if (paare.length === 0) return 'Keine Ziele zum Ordnen.'
-  if (paare.length > PRIO_MAX_AKTIV) {
-    return `Aktive Ziele belegen höchstens ${PRIO_MAX_AKTIV} Plätze.`
-  }
-  const plaetze = paare.map(p => p.priority)
-  if (plaetze.some(p => !Number.isInteger(p) || p < PRIO_MIN_AKTIV || p > PRIO_MAX_AKTIV)) {
-    return `Ein aktives Ziel trägt Priorität ${PRIO_MIN_AKTIV} bis ${PRIO_MAX_AKTIV}.`
-  }
-  if (new Set(plaetze).size !== plaetze.length) return 'Jeder Platz nur einmal.'
-  if (new Set(paare.map(p => p.id)).size !== paare.length) return 'Jedes Ziel nur einmal.'
-  return null
-}
-
-/**
- * Der Satz zu einem Fehler aus `ziel_reihenfolge_setzen`.
- *
- * `[read]` **Kennt die Datenbank die Funktion noch nicht** (G-602 nicht
- * eingespielt oder Cache veraltet), steht der Satz aus `ladefehler.ts`
- * da — dieselbe Erkennung wie G-570, kein zweiter Text.
- */
-export function reihenfolgeFehler(code: string | null | undefined, text: string): string {
-  if (code === '42501') {
-    return 'Ein Ziel in der Liste gehört nicht zu dir oder ist nicht mehr aktiv. '
-      + 'Lade die Seite neu.'
-  }
-  if (code === '23514') {
-    return 'Die Reihenfolge muss alle aktiven Ziele nennen und die Plätze '
-      + `${PRIO_MIN_AKTIV} bis ${PRIO_MAX_AKTIV} je einmal vergeben. Lade die Seite neu.`
-  }
-  if (fehlerart(text, code) === 'schema') return fehlertexte('schema').satz
-  return text
-}
-
-/** Die Argumente fuer `ziel_reihenfolge_setzen` — der Vertrag aus G-602. */
-export function reihenfolgeArgumente(paare: readonly Platz[]) {
-  return { p_reihenfolge: paare.map(p => ({ goal_id: p.id, priority: p.priority })) }
-}
+// `[cmd]` **Hier standen `tauschePlatz`, `pruefeReihenfolge`,
+// `reihenfolgeFehler` und `reihenfolgeArgumente`** fuer den Griff hoch/runter.
+// `[cmd]` **Gemessen 2026-10-09: `uq_user_goals_active_slot` und
+// `user_goals_check1` gibt es live nicht mehr** (`pg_indexes`,
+// `pg_constraint`); steuernd ist `goal_role` (G-617), Messziele sind
+// unbegrenzt (Dossier 8.4). Ohne Plaetze keine Reihenfolge.

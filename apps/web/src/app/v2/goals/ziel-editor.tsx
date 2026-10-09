@@ -16,8 +16,9 @@ import { Icon } from '@lumeos/ui'
 
 import { zielSpeichern } from './ziel-aktionen'
 import { waechterSatz } from '../../../lib/goals/zielpruefung'
+import { einheitLesbar } from '../../../lib/goals/messziel'
 import {
-  STATUS_WERTE, STATUS_LABEL, PRIO_MIN_AKTIV, PRIO_MAX_AKTIV,
+  STATUS_WERTE, STATUS_LABEL,
   pruefeAenderung, type ZielStatus, type ZielAenderung,
 } from '../../../lib/goals/ziel-regeln'
 import type { ZielFortschritt } from '../../../lib/goals/lesen'
@@ -31,19 +32,15 @@ export function ZielEditor({
   const [titel, setTitel] = React.useState(ziel.title)
   const [status, setStatus] = React.useState<ZielStatus>(
     (ziel.status as ZielStatus) ?? 'active')
-  const [prio, setPrio] = React.useState(ziel.priority ?? 1)
   const [zielwert, setZielwert] = React.useState(
     ziel.target_value == null ? '' : String(ziel.target_value))
   const [frist, setFrist] = React.useState(ziel.target_date ?? '')
   const [laeuft, setLaeuft] = React.useState(false)
   const [fehler, setFehler] = React.useState<string | null>(null)
 
-  // `[cmd]` `user_goals_check1` — aktive Ziele tragen 1–3. Wechselt
-  // der Status auf aktiv und die Prioritaet liegt darueber, wird sie
-  // mitgezogen; sonst lehnt die Datenbank ab.
-  React.useEffect(() => {
-    if (status === 'active' && prio > PRIO_MAX_AKTIV) setPrio(PRIO_MAX_AKTIV)
-  }, [status, prio])
+  // `[cmd]` **G-618: kein Prioritaetsfeld mehr.** `user_goals_check1`
+  // (aktiv nur 1–3) und `uq_user_goals_active_slot` gibt es live nicht
+  // mehr (gemessen 2026-10-09); steuernd ist `goal_role`.
 
   const speichern = async () => {
     // `[cmd]` **G-628, gemessen 2026-10-08:** der Editor schickte IMMER
@@ -57,7 +54,6 @@ export function ZielEditor({
     const a: ZielAenderung = {
       ...(titel !== ziel.title ? { title: titel } : {}),
       ...(status !== ziel.status ? { status } : {}),
-      ...(prio !== ziel.priority ? { priority: prio } : {}),
       ...(neuWert !== (ziel.target_value ?? null) ? { target_value: neuWert } : {}),
       ...(neuFrist !== (ziel.target_date ?? null) ? { target_date: neuFrist } : {}),
     }
@@ -74,7 +70,6 @@ export function ZielEditor({
     else setFehler(e.fehler ? waechterSatz(e.fehler, []) ?? e.fehler : e.fehler)
   }
 
-  const prioMax = status === 'active' ? PRIO_MAX_AKTIV : 10
 
   return (
     <div style={{
@@ -110,22 +105,12 @@ export function ZielEditor({
               ))}
             </select>
           </label>
-
-          <label style={{ flex: 1, minWidth: 130 }}>
-            <span className="v2-eyebrow">
-              Priorität {status === 'active' ? `(${PRIO_MIN_AKTIV}–${PRIO_MAX_AKTIV})` : '(1–10)'}
-            </span>
-            <input className="v2-feld" type="number" style={{ width: '100%', marginTop: 3 }}
-                   min={PRIO_MIN_AKTIV} max={prioMax} step={1}
-                   value={prio}
-                   onChange={e => setPrio(Number(e.target.value))} />
-          </label>
         </div>
 
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
           <label style={{ flex: 1, minWidth: 130 }}>
             <span className="v2-eyebrow">
-              Zielwert{ziel.target_unit ? ` (${ziel.target_unit})` : ''}
+              Zielwert{ziel.target_unit ? ` (${einheitLesbar(ziel.target_unit)})` : ''}
             </span>
             <input className="v2-feld" type="number" step="0.1"
                    style={{ width: '100%', marginTop: 3 }}
@@ -138,14 +123,6 @@ export function ZielEditor({
           </label>
         </div>
 
-        {/* `[read]` Der Hinweis steht DA, wo er greift — die Regel ist
-            eine Datenbankbedingung, keine Erfindung der Oberflaeche. */}
-        {status === 'active' && (
-          <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.45 }}>
-            Ein aktives Ziel trägt Priorität {PRIO_MIN_AKTIV} bis {PRIO_MAX_AKTIV};
-            die Übersicht sortiert danach. Abgeschlossene Ziele dürfen bis 10 tragen.
-          </div>
-        )}
 
         {fehler && (
           <div style={{ fontSize: 11.5, color: 'var(--neg)' }}>{fehler}</div>

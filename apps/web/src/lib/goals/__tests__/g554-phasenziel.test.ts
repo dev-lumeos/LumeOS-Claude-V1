@@ -390,28 +390,36 @@ describe('G-554/A4 — der Pace ist eine Rechnung', () => {
   })
 
   // ── Die Karte ───────────────────────────────────────────────────
+  // `[cmd]` **G-618: die Karte ist im Reiter nach dem Entwurf aufgegangen**
+  // — die Rechnung liegt in `lib/goals/reiter.ts` (`lageVon`), die Anzeige
+  // in `reiter-goals.tsx`. Die Regeln gelten fuer beide.
+  const REITER = () => lies(join(GOALS, 'reiter-goals.tsx'))
+  const LOGIK = () => lies(join(HIER, '..', 'reiter.ts'))
   it('die Karte rechnet den Pace, sie behauptet ihn nicht', () => {
-    const q = lies(join(GOALS, 'ziel-karten.tsx'))
-    assert.match(q, /berechnePace\(/,
+    assert.match(LOGIK(), /berechnePace\(/,
       'die Karte zeigt einen Pace ohne Rechnung — das waere das '
       + 'Urteil aus der Attrappe')
-    assert.match(q, /heute: stichtag/,
+    assert.match(LOGIK(), /start: g\.gueltig_ab, deadline: g\.target_date, heute,/)
+    assert.match(REITER(), /lageVon\(g, stichtag\)/,
       'die Karte rechnet gegen ein anderes Heute als den Stichtag')
-    assert.ok(!/Date\.now\(\)|new Date\(\)/.test(q),
-      'die Karte holt sich die Zeit selbst — der Stichtag kommt von aussen')
+    for (const q of [REITER(), LOGIK()]) {
+      assert.ok(!/Date\.now\(\)|new Date\(\)/.test(q),
+        'die Karte holt sich die Zeit selbst — der Stichtag kommt von aussen')
+    }
   })
 
   it('ohne Grundlage steht der Grund, kein Urteil', () => {
-    const q = lies(join(GOALS, 'ziel-karten.tsx'))
-    assert.match(q, /p\.grund === null \?/,
+    assert.match(LOGIK(), /if \(p\.grund !== null \|\| p\.pace === 'unbekannt'\) return \{ lage: null, grund:/,
       'die Karte zeigt den Pace auch ohne Grundlage — dann saehe '
-      + '„on-track" wie eine Messung aus')
+      + '„im Plan" wie eine Messung aus')
+    assert.match(REITER(), /if \(!lage\) return <span className="v2-dim" data-lage="" [^>]*>\{grund\}/,
+      'ohne Grundlage steht kein Grund am Schirm')
   })
 
   it('history wird nicht erfunden', () => {
     // `[cmd]` **Der Entwurf hat dafuer einen Satz:** *„No data
     // points logged yet."* `[read]` **Kein Platzhalterverlauf.**
-    const q = lies(join(GOALS, 'ziel-karten.tsx'))
+    const q = REITER()
     assert.ok(!/history\s*[:=]\s*\[/.test(q),
       'ein Verlauf wird erfunden — die Module liefern noch keine Werte')
   })
@@ -573,13 +581,16 @@ describe('G-557/A2 — body_comp traegt kein null', () => {
     assert.equal(unterartFuer('custom', null), null)
   })
 
-  it('die Karte sagt, wenn die Unterart fehlt', () => {
-    const q = lies(join(GOALS, 'ziel-karten.tsx'))
-    assert.match(q, /data-ziel-unterart/,
-      'die Karte zeigt die Unterart nicht')
-    assert.match(q, /ohne Unterart/,
-      'eine fehlende Unterart bleibt unsichtbar — dann sieht das '
-      + 'Ziel vollstaendig aus, ist es aber nicht')
+  it('die Steuerungskarte sagt, wenn die Variante fehlt', () => {
+    // `[cmd]` **G-618: hier stand „die Karte sagt, wenn die Unterart
+    // fehlt".** Der Entwurf (Dossier 8.4, Tom 08.10.) zeigt keine Unterart
+    // mehr, sondern Richtung · Variante aus `goal_phases.strategie_code`
+    // (G-609). `[read]` **Die Regel bleibt:** was fehlt, steht da — sonst
+    // sieht das Ziel vollstaendig aus, ist es aber nicht.
+    const q = lies(join(GOALS, 'reiter-goals.tsx'))
+    assert.match(q, /\{!variante && \(/)
+    assert.match(q, /data-steuerung-ohne-variante[\s\S]{0,200}ohne Variante/,
+      'eine fehlende Variante bleibt unsichtbar')
   })
 
   it('weight und custom sind entschieden — E-89', () => {

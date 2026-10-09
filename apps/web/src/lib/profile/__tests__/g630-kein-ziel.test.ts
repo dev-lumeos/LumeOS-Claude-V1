@@ -17,6 +17,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 
 import { alsHerkunft, hindernisSatz, ohneZiel, ohneZielSatz } from '../zielwerte-hindernis'
 import { STATUS_LABEL } from '../../goals/ziel-regeln'
+import { ABSCHLUSS } from '../../goals/reiter'
 import { KeinZielWarnung } from '../../../app/v2/kein-ziel-warnung'
 import { Zielhinweis } from '../../../app/v2/nutrition/zielhinweis'
 import type { Zielwerte } from '../zielwerte-read'
@@ -31,7 +32,7 @@ const lies = (p: string) => readFileSync(join(SRC, p), 'utf8')
 const ZW = (o: Partial<Zielwerte>): Zielwerte => ({
   gueltig_ab: '2026-10-08', kcal: 2753.6, protein_g: 162.8, carbs_g: null, fat_g: null, fiber_g: null,
   linoleic_acid_g: null, alpha_linolenic_acid_g: null, herkunft: 'kein_aktives_ziel', tdee: 2753.6,
-  nutrition_goal: 'maintain', ruhendes_ziel: null, ...o,
+  nutrition_goal: 'maintain', ruhendes_ziel: null, luecke: null, ...o,
 })
 
 describe('G-630 — gegen die Kette', () => {
@@ -106,8 +107,12 @@ describe('G-630 — bis in die Anzeige', () => {
     assert.match(lesen, /herkunft: ziele\.herkunft,\s*ruhend: ziele\.ruhendes_ziel,/)
     const dash = lies('app/v2/dashboard/dashboard-echt.tsx')
     assert.match(dash, /<KeinZielWarnung herkunft=\{d\.nutrition\.ziele\.herkunft\}/)
+    // G-618: die Karte sitzt jetzt in der Steuerung des Reiters — die Kette
+    // ansicht → ReiterGoals → Steuerung → SteuerungOhneZiel reicht `zielwerte` durch.
     const goals = lies('app/v2/goals/ansicht.tsx')
-    assert.match(goals, /<SteuerungOhneZiel zielwerte=\{echt\.zielwerte\}/)
+    assert.match(goals, /zielwerte=\{echt\.zielwerte\}/)
+    const reiter = lies('app/v2/goals/reiter-goals.tsx')
+    assert.match(reiter, /<SteuerungOhneZiel zielwerte=\{zielwerte\}/)
     const karte = lies('app/v2/goals/steuerung-ohne-ziel.tsx')
     assert.match(karte, /zielSpeichern\(ruhend\.goal_id, \{ status: 'active' \}\)/)
     assert.match(karte, /<KeinZielWarnung herkunft=\{zielwerte\.herkunft\}/)
@@ -117,6 +122,8 @@ describe('G-630 — bis in die Anzeige', () => {
 describe('G-630 — „beendet" statt „abgebrochen" (Tom 15:57)', () => {
   it('der Statusname', () => {
     assert.equal(STATUS_LABEL.abandoned, 'beendet')
-    assert.ok(!/abgebrochen/.test(lies('app/v2/goals/ziel-karten.tsx')))
+    // G-618: „Abgeschlossen" steht im Reiter (`ABSCHLUSS` aus lib/goals/reiter.ts).
+    assert.equal(ABSCHLUSS.abandoned, 'beendet')
+    assert.ok(!/abgebrochen/.test(lies('app/v2/goals/reiter-goals.tsx')))
   })
 })

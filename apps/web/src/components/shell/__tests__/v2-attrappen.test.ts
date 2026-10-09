@@ -959,7 +959,9 @@ test('Goals wuerfelt seine Verlaufsdaten nicht', () => {
 
 const GOALS_LESEN = path.join(process.cwd(), 'src/lib/goals/lesen.ts')
 const GOALS_COMP = path.join(process.cwd(), 'src/app/v2/goals/tab-composition.tsx')
-const GOALS_KARTEN = path.join(process.cwd(), 'src/app/v2/goals/ziel-karten.tsx')
+// G-618: die Zielkarten sind im Reiter nach dem Entwurf aufgegangen.
+const GOALS_KARTEN = path.join(process.cwd(), 'src/app/v2/goals/reiter-goals.tsx')
+const GOALS_REITER_LOGIK = path.join(process.cwd(), 'src/lib/goals/reiter.ts')
 const GOALS_TDEE = path.join(process.cwd(), 'src/app/v2/goals/tdee-kopf.tsx')
 const GOALS_KOERPER = path.join(process.cwd(), 'src/app/v2/goals/tab-koerper.tsx')
 
@@ -1109,11 +1111,15 @@ test('Goals bewertet nicht, es zeigt', () => {
   //
   // `[read]` **Die Karte ZEIGT einen Pace** (A4 aus G-554). **Also
   // wird unbedingt gefordert, dass sie ihn rechnet.**
+  // `[cmd]` **G-618: die Rechnung liegt in `lib/goals/reiter.ts`
+  // (`lageVon` → `berechnePace`), die Anzeige im Reiter (`data-lage`).**
+  // Beide Enden werden gefordert.
   const karten = ohneKommentar(fs.readFileSync(GOALS_KARTEN, 'utf8'))
-  assert.ok(/berechnePace\(/.test(karten),
-    'ziel-karten.tsx rechnet den Pace nicht — entweder er fehlt '
+  const logik = ohneKommentar(fs.readFileSync(GOALS_REITER_LOGIK, 'utf8'))
+  assert.ok(/berechnePace\(/.test(logik) && /lageVon\(/.test(karten),
+    'der Reiter rechnet den Pace nicht — entweder er fehlt '
     + 'ganz, oder er ist wieder das Urteil aus der Attrappe.')
-  assert.ok(/data-ziel-pace/.test(karten),
+  assert.ok(/data-lage/.test(karten),
     'die Karte zeigt keinen Pace mehr — G-554/A4 verlangt ihn, und '
     + 'ein Waechter, der bei Abwesenheit schweigt, misst nichts.')
 
@@ -1126,7 +1132,7 @@ test('Goals bewertet nicht, es zeigt', () => {
     /unrealistisch/i, /gib (dir|mehr)/i,
   ]) {
     assert.ok(!wendung.test(karten),
-      `ziel-karten.tsx: ${wendung.source} bewertet statt zu nennen `
+      `reiter-goals.tsx: ${wendung.source} bewertet statt zu nennen `
       + '(C-108/F-02).')
   }
 })

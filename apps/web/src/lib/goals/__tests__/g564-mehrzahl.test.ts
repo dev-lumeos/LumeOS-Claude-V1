@@ -155,9 +155,12 @@ describe('G-564/A2 — die Anzeige sagt, wie viele', () => {
     // `[read]` **Zwei Quellen, zwei Zahlen** — `echt.phasen` kommt
     // aus `phase_am` (live noch `LIMIT 1`), `echt.offenePhasen` liest
     // die Tabelle. **Die Tabelle entscheidet, wie viele laufen.**
-    assert.match(q, /const laufendePhasen = echt\.offenePhasen/,
-      'die Zahl kommt aus der gedeckelten Quelle — dann widerspricht '
-      + 'der Kopf den Bedienkacheln, solange phase_am LIMIT 1 traegt')
+    // `[cmd]` **G-636 (2026-10-09): die Quelle ist jetzt `phase_am`** — ohne
+    // `LIMIT 1` und nur Phasen AKTIVER Ziele (Rumpf live gelesen). Die
+    // Tabelle (`offenePhasen`) zaehlte die Phase eines pausierten Ziels mit.
+    assert.match(q, /const laufendePhasen = echt\.phasen\b/,
+      'die Zahl kommt nicht aus phase_am — dann zaehlt der Kopf die '
+      + 'Phase eines pausierten Ziels (G-636)')
   })
 
   it('die Zeitachse zaehlt, was sie bekommt', () => {
@@ -270,7 +273,7 @@ describe('G-564/A4 — zwei Zeilen werden zwei Phasen', () => {
     // beide liefert, steht dort 2, ohne dass hier etwas zu aendern
     // waere.
     const a = A()
-    assert.match(a, /echt\.offenePhasen\.length === 1/,
+    assert.match(a, /laufendePhasen\.length === 1/,
       'die Kopfmarke unterscheidet Einzahl und Mehrzahl nicht')
     assert.match(a, /Phasen laufen/,
       'bei mehreren wird immer noch EINE genannt')

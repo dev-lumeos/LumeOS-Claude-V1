@@ -208,6 +208,16 @@ export type ZielFortschritt = {
   status: string | null
   is_primary: boolean
   priority: number | null
+  /**
+   * `[cmd]` **G-618: steuernd heisst `goal_role`** (G-617,
+   * `uq_user_goals_one_active_controlling`) — nicht mehr Prioritaet 1
+   * oder `is_primary`.
+   */
+  goal_role: 'controlling' | 'measurement' | null
+  measurement_type: string | null
+  measurement_rhythm: string | null
+  measurement_site: string | null
+  achievement_date: string | null
 }
 
 /**
@@ -231,9 +241,11 @@ export async function ladeZiele(userId: string, stichtag: string): Promise<ZielF
     // Module als Pillen.
     .select('id, goal_type, subtype, title, target_value, target_unit, start_value, '
       + 'current_value, target_date, gueltig_ab, linked_modules, status, '
-      + 'is_primary, priority, progress_pct')
+      + 'is_primary, priority, progress_pct, goal_role, measurement_type, '
+      + 'measurement_rhythm, measurement_site, achievement_date')
     .eq('user_id', userId)
-    .order('priority', { ascending: true })
+    // G-618: keine Rangfolge mehr — gruppiert wird nach Rolle und Kategorie.
+    .order('created_at', { ascending: true })
   if (error) throw new GoalsLeseFehler('READ_FAILED', `user_goals: ${error.message}`)
 
   const zeilen = (ziele ?? []) as unknown as Array<Record<string, unknown>>
@@ -270,6 +282,11 @@ export async function ladeZiele(userId: string, stichtag: string): Promise<ZielF
       status: text(z.status),
       is_primary: z.is_primary === true,
       priority: zahl(z.priority),
+      goal_role: z.goal_role === 'controlling' || z.goal_role === 'measurement' ? z.goal_role : null,
+      measurement_type: text(z.measurement_type),
+      measurement_rhythm: text(z.measurement_rhythm),
+      measurement_site: text(z.measurement_site),
+      achievement_date: text(z.achievement_date),
     }
   })
 }
@@ -278,6 +295,8 @@ export async function ladeZiele(userId: string, stichtag: string): Promise<ZielF
 
 export type Meilenstein = {
   milestone_id: string
+  /** G-618: Meilensteine stehen in den Details ihres Ziels (Dossier 8.4). */
+  goal_id: string | null
   title: string
   target_value: number | null
   target_unit: string | null
@@ -324,6 +343,7 @@ export async function ladeMeilensteine(userId: string, stichtag: string): Promis
 
   return zeilen.filter((z): z is Record<string, unknown> => z != null).map(z => ({
     milestone_id: text(z.milestone_id) ?? '',
+    goal_id: text(z.goal_id),
     title: text(z.title) ?? '—',
     target_value: zahl(z.target_value),
     target_unit: text(z.target_unit),

@@ -101,9 +101,11 @@ describe('G-615 — der Reiter', () => {
     assert.match(q, /data-plan=\{p\.code\} disabled=\{zu\}/)
     assert.match(q, /\{zu && <span data-plan-sperre/)
   })
-  it('die Zustandsanzeige liest das aktive primaere Ziel und next_codes', () => {
+  it('die Zustandsanzeige liest das aktive steuernde Ziel und next_codes', () => {
+    // `[cmd]` **G-618: steuernd heisst `goal_role`, nicht `is_primary`**
+    // (G-617, `uq_user_goals_one_active_controlling`).
     const q = lies(join(GOALS, 'planer.tsx'))
-    assert.match(q, /z\.status === 'active' && z\.is_primary/)
+    assert.match(q, /const ziel = steuerziel\(ziele\)/)
     assert.match(q, /naechsteNamen\(s, strategien\)/)
   })
 })

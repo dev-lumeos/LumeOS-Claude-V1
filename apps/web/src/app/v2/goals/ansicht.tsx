@@ -81,8 +81,8 @@
 //
 // **Die fuenf Reiter, die GO-16 angebunden hat** (Stand 2026-08-18,
 // unveraendert gueltig):
-//   Goals        `ziel-karten.tsx`     user_goals · goal_progress_at
-//                                      goal_milestones · _status
+//   Goals        `reiter-goals.tsx`    user_goals · goal_progress_at · phase_am
+//                                      goal_contributions · measurement_points (G-618)
 //   Adaptive TDEE `tdee-kopf.tsx`      adaptive_tdee (nur die Kopfkachel)
 //   Body metrics `tab-koerper.tsx`     body_measurements
 //   Measurements `tab-koerper.tsx`     body_circumferences
@@ -127,7 +127,7 @@ import {
   GoalsTdeeReferenz, GoalsCrossReferenz,
 } from './mockup-referenz'
 import {
-  FehlendePhaseKacheln, FehlendeZielKacheln, FehlendeMetrikKacheln,
+  FehlendePhaseKacheln, FehlendeMetrikKacheln,
   FehlendeMessKacheln, FehlendePhysiqueKacheln,
 } from './fehlende-kacheln'
 import { GoalsPhysiqueView, GoalsPosesView } from './tab-physique'
@@ -141,14 +141,14 @@ import { PhaseEcht } from './phase-echt'
 import { PhysiqueEcht } from './physique-echt'
 import { CompositionTab, type CompDaten } from './tab-composition'
 import { KoerperMetriken, KoerperUmfaenge } from './tab-koerper'
-import { ZielKarten } from './ziel-karten'
 import type {
   AdaptiverTdee, Fotosession, Koerpermessung, Koerperzusammensetzung,
   Meilenstein, Phase, ProfilEingaben, Umfangssatz, ZielFortschritt,
   Zielphase, Programmwochen,
 } from '../../../lib/goals/lesen'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
-import { SteuerungOhneZiel } from './steuerung-ohne-ziel'
+import { ReiterGoals } from './reiter-goals'
+import type { Wochendaten } from '../../../lib/goals/reiter-read'
 // `[read]` **Nur der TYP** — `strategie-read.ts` zieht
 // `createSessionClient` und damit `next/headers`; ein Wert-Import
 // von hier aus beantwortete die Seite mit HTTP 500 (A-30, G-412).
@@ -256,6 +256,8 @@ export type EchteDaten = {
   offenePhasen: Zielphase[]
   /** G-608: je Ziel die gespeicherten Stufenwochen. */
   programme: Record<string, Programmwochen>
+  /** G-618: Trainings dieser Woche und Modulbeitraege des Steuerziels. */
+  woche: Wochendaten
   /**
    * `[cmd]` **G-565/A4: die gewaehlte Einheit** — aus
    * `user_display_preferences`, eine Einstellung des NUTZERS
@@ -288,7 +290,8 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
     // `[read]` **Die Zahl kommt aus `offenePhasen`** (die Tabelle),
     // nicht aus `phasen` — dieselbe Wahl wie in G-564: die Quelle,
     // die heute UND nach dem Einspielen stimmt.
-    laufendePhasen: echt.offenePhasen.length,
+    // `[cmd]` **G-636: aus `phase_am`** — siehe `laufendePhasen` unten.
+    laufendePhasen: echt.phasen.length,
     // `[read]` **Der Titel zum gerechneten Ziel**, wenn er in den
     // geladenen Zielen steht — sonst `null`, kein geratener Name.
     zielTitel: echt.vorschlag?.goal_id
@@ -322,7 +325,14 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
   // ist heute UND nach dem Einspielen richtig. **`echt.phasen` traegt
   // weiterhin die Anzeige je Phase**, und sobald `phase_am` beide
   // liefert, stimmen beide Wege ueberein.
-  const laufendePhasen = echt.offenePhasen
+  // ══ G-636: laufend ist, was die Kette liefert ══════════════════
+  //
+  // `[cmd]` **`phase_am` traegt seit G-613 kein `LIMIT 1` mehr und liefert
+  // nur Phasen AKTIVER Ziele** (Rumpf gelesen 2026-10-09). `offenePhasen`
+  // (Tabelle, `actual_end_date IS NULL`) zaehlte die Phase eines pausierten
+  // Ziels mit — am Schirm: „0 active goals · 2 Phasen laufen" (G-630).
+  // **Kopf, Bedienung und Composition lesen jetzt dieselbe Menge.**
+  const laufendePhasen = echt.phasen
   // `[read]` **Beenden und Vorschlag brauchen EINE bestimmte Phase.**
   // **Bei mehreren waere jede Wahl eine stille Entscheidung** —
   // deshalb nur, wenn es genau eine gibt; sonst sagt die Ansicht, dass
@@ -331,9 +341,7 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
   // Uebergangsspalten und Zielrate) — die traegt `echt.phasen`.
   // **Nur wenn BEIDE Wege genau eine sehen**, ist die Wahl
   // eindeutig.
-  const laufendePhase = laufendePhasen.length === 1
-    ? echt.phasen.find(p => !p.actual_end_date) ?? null
-    : null
+  const laufendePhase = laufendePhasen.length === 1 ? laufendePhasen[0]! : null
 
   const kontext = React.useMemo(() => ({
     open: (m: ModalZustand) => setModal(m),
@@ -362,13 +370,13 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                 offene Phase JE ZIEL erlaubt** — die Marke sagt jetzt,
                 wie viele laufen, und nennt die Art nur, wenn es
                 genau eine ist. */}
-            {echt.offenePhasen.length > 0 && (
-              <span data-kopf-phasen={echt.offenePhasen.length}>
+            {laufendePhasen.length > 0 && (
+              <span data-kopf-phasen={laufendePhasen.length}>
                 <Pill>
                   <span className="v2-dot" style={{ background: 'var(--pos)' }} />
-                  {echt.offenePhasen.length === 1
-                    ? `Phase ${(echt.offenePhasen[0].phase_type ?? '').replace(/_/g, ' ')}`
-                    : `${echt.offenePhasen.length} Phasen laufen`}
+                  {laufendePhasen.length === 1
+                    ? `Phase ${(laufendePhasen[0]!.phase_type ?? '').replace(/_/g, ' ')}`
+                    : `${laufendePhasen.length} Phasen laufen`}
                 </Pill>
               </span>
             )}
@@ -449,15 +457,17 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
         <>
           {tab === 'goals' && (
             <>
+              {/* G-618: Steuerung, Diese Woche, Module, Messziele, Abgeschlossen
+                  (Entwurf `Main.dc.html`). „This week" und „Cross-module health"
+                  sind damit angebunden; ihre Attrappen fallen, die Referenz bleibt unten. */}
               {!echtAus && (
-                <>
-                  <SteuerungOhneZiel zielwerte={echt.zielwerte}
-                                     onZielSetzen={() => kontext.open({ typ: 'newGoal' })} />
-                  <ZielKarten
-                    ziele={echt.ziele} meilensteine={echt.meilensteine} stichtag={echt.stichtag}
-                    phasen={echt.offenePhasen} strategien={echt.strategien} />
-                  <FehlendeZielKacheln />
-                </>
+                <ReiterGoals ziele={echt.ziele} phasen={echt.phasen} offenePhasen={echt.offenePhasen}
+                             zielwerte={echt.zielwerte} vorschlag={echt.vorschlag} messungen={echt.messungen}
+                             meilensteine={echt.meilensteine} strategien={echt.strategien} woche={echt.woche}
+                             stichtag={echt.stichtag}
+                             onZielSetzen={() => kontext.open({ typ: 'newGoal' })}
+                             onMessziel={() => kontext.open({ typ: 'newGoal', start: 'B1' })}
+                             onPhaseEngine={() => setTab('phase')} />
               )}
               <GoalsGoalsReferenz />
             </>
@@ -736,8 +746,8 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
 // sie echte Daten und liegen in eigenen Dateien — die Trennung ist an
 // der Datei ablesbar, nicht nur am Kommentar:
 //
-//   Goals        -> `ziel-karten.tsx`   (user_goals + goal_progress_at,
-//                                        goal_milestones + _status)
+//   Goals        -> `reiter-goals.tsx`  (user_goals + goal_progress_at,
+//                                        phase_am, goal_contributions; G-618)
 //   Body metrics -> `tab-koerper.tsx`   (body_measurements, 43 Zeilen)
 //   Measurements -> `tab-koerper.tsx`   (body_circumferences, 7 Saetze)
 //   Composition  -> `tab-composition.tsx` (body_composition_navy,

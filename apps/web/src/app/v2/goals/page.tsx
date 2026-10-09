@@ -24,6 +24,8 @@
 //
 // `[read]` Was noch Attrappe bleibt und warum, steht in
 // docs/ssot/116-goals-anbindung.md.
+import { ladeWoche, type Wochendaten } from '../../../lib/goals/reiter-read'
+import { steuerziel } from '../../../lib/goals/reiter'
 import type { Metadata } from 'next'
 
 import { heute } from '../../../lib/datum'
@@ -109,6 +111,8 @@ export default async function V2GoalsPage({
   // gilt die Vorgabe, nicht ein Fehler.
   let einheit: Rateneinheit = 'prozent'
   let ladefehler: string | null = null
+  // G-618: „Diese Woche" und „Module" — nur, was die Kette liefert.
+  let woche: Wochendaten = { trainings: null, beitraege: [] }
 
   try {
     const userId = await angemeldeteNutzerin()
@@ -148,6 +152,8 @@ export default async function V2GoalsPage({
     // raten zu lassen.** `[read]` **Bei genau einer offenen Phase
     // ist es deren Ziel; bei mehreren bleibt es offen**, und die
     // Datenbank meldet die Mehrdeutigkeit als Zustand (A4).
+    woche = await ladeWoche(userId, stichtag, steuerziel(ziele)?.goal_id ?? null)
+
     const einzigesZiel = offenePhasen.length === 1
       ? offenePhasen[0].goal_id
       : null
@@ -183,6 +189,7 @@ export default async function V2GoalsPage({
         programme,
         einheit,
         ladefehler,
+        woche,
       }}
     />
     </>

@@ -131,11 +131,15 @@ describe('G-610 — Verdrahtung', () => {
   it('der Grad kommt vom Profil ins Modal', () => {
     assert.match(lies(join(GOALS, 'ansicht.tsx')), /erfahrung=\{echt\.strategieProfil\.experience\}/)
   })
-  it('die Zielkarte zeigt Richtung und Variante aus der Phase', () => {
-    const q = lies(join(GOALS, 'ziel-karten.tsx'))
-    assert.match(q, /phasen\.find\(p => p\.goal_id === goalId\)\?\.strategie_code/)
+  it('die Steuerungskarte zeigt Richtung und Variante aus der Phase', () => {
+    // `[cmd]` **G-618: die Zielkarte ist in der Steuerungskarte aufgegangen**
+    // (`reiter-goals.tsx`). Die Regel bleibt: Variante aus
+    // `goal_phases.strategie_code`, Richtung und „danach empfohlen" sichtbar.
+    const q = lies(join(GOALS, 'reiter-goals.tsx'))
+    assert.match(q, /offenePhasen\.find\(o => o\.phase_id === p\.phase_id\)\?\.strategie_code/)
     assert.match(q, /data-ziel-richtung/)
     assert.match(q, /data-ziel-naechster/)
+    assert.match(q, /empfohlenDanach\(variante, strategien\)/)
   })
   it('die Zeitachse rechnet das Ende ueber planende', () => {
     assert.match(lies(join(GOALS, 'phasen-zeitachse.tsx')), /planende\(g\.gueltig_ab, g\.target_date, stufen\.summe\)/)

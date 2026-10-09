@@ -29,7 +29,7 @@ import { ladeBefundwerte, ladeMarkerStamm } from '../medical/lesen'
 import { zuReihen } from '../medical/reihe'
 import { zaehleLagen } from '../medical/lagezaehlung'
 // Die Tagesziele — dieselbe Quelle wie im Nutrition-Modul.
-import { getZielwerteAm, type Herkunft } from '../profile/zielwerte-read'
+import { getZielwerteAm, type Herkunft, type Zielwerte } from '../profile/zielwerte-read'
 
 function zahl(v: unknown): number | null {
   if (v === null || v === undefined) return null
@@ -131,6 +131,7 @@ export type NutritionKachel = {
     /** `[cmd]` **G-630:** die Herkunft aus `zielwerte_am`, ungeglaettet. */
     herkunft: Herkunft | null
     ruhend: { title: string } | null
+    luecke: Zielwerte['luecke']
   } | null
 }
 
@@ -374,6 +375,7 @@ export async function ladeDashboard(stichtag: string): Promise<DashboardDaten> {
         carbs: ziele.carbs_g, fat: ziele.fat_g,
         herkunft: ziele.herkunft,
         ruhend: ziele.ruhendes_ziel,
+        luecke: ziele.luecke,
       }
     }
   } catch {

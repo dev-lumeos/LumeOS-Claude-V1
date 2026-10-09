@@ -69,7 +69,7 @@ export function Zielhinweis({
   if (ziele && ohneZiel(ziele.herkunft)) {
     return (
       <KeinZielWarnung herkunft={ziele.herkunft} kcal={ziele.kcal} protein={ziele.protein_g}
-                       ruhend={ziele.ruhendes_ziel} />
+                       ruhend={ziele.ruhendes_ziel} luecke={ziele.luecke} />
     )
   }
   // Fall 1: Es gelten Ziele. Dann braucht es keinen Hinweis, sondern

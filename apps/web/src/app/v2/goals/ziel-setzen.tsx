@@ -241,9 +241,10 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
       if (!r.ok) { setLaeuft(false); setFehler(r.fehler); return }
     }
     // ── 2 · Ziel und Phase in einem Schritt (G-554) ────────────────
-    // `[cmd]` `uq_user_goals_active_slot`: der erste freie aktive Platz.
-    const belegt = new Set(ziele.filter(z => z.status === 'active' && z.goal_id !== steuerung?.goal_id).map(z => z.priority))
-    const platz = [1, 2, 3].find(x => !belegt.has(x)) ?? 1
+    // `[cmd]` **G-618: kein Platz mehr** — `uq_user_goals_active_slot` gibt
+    // es live nicht (2026-10-09); `priority` ist NOT NULL ohne Vorgabe, das
+    // eine Steuerziel traegt 1. Messziele begrenzt das nicht.
+    const platz = 1
     const r = await phasenzielAnlegenAktion({
       ziel: {
         goal_type: 'body_composition',

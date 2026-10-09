@@ -16,10 +16,12 @@ import {
   PRIO_MIN_AKTIV, PRIO_MAX_AKTIV, PRIO_MAX,
 } from '../ziel-regeln'
 
-test('die fuenf Status sind die der CHECK-Bedingung', () => {
-  // `[cmd]` user_goals_status_check.
+test('die sechs Status sind die der CHECK-Bedingung', () => {
+  // `[cmd]` user_goals_status_check. **G-618, live gemessen 2026-10-09:
+  // der CHECK fuehrt SECHS Werte** — `missed` fehlte hier und in
+  // `STATUS_WERTE`; zwei Messziele trugen ihn.
   assert.deepEqual([...STATUS_WERTE].sort(),
-    ['abandoned', 'achieved', 'active', 'on_hold', 'paused'])
+    ['abandoned', 'achieved', 'active', 'missed', 'on_hold', 'paused'])
 })
 
 test('erreicht und abgebrochen gelten als abgeschlossen', () => {
