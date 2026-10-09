@@ -24,7 +24,6 @@ beruehrt:
     - goals.goal_strategies
   dateien:
     - apps/web/src/app/v2/goals/modale.tsx
-    - apps/web/src/app/v2/goals/ziel-karten.tsx
     - apps/web/src/lib/goals/schreiben.ts
     - apps/web/src/lib/goals/ziel-regeln.ts
 

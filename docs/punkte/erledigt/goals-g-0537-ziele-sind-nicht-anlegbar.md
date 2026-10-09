@@ -23,7 +23,6 @@ beruehrt:
     - apps/web/src/lib/goals/schreiben.ts
     - apps/web/src/lib/goals/ziel-regeln.ts
     - apps/web/src/app/v2/goals/modale.tsx
-    - apps/web/src/app/v2/goals/ziel-karten.tsx
 
 zahlen:
   gemessen: 2026-09-29
