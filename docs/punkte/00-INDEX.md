@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 281 |
+| `todos` | 282 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 694 |
-| **gesamt** | **978** |
+| **gesamt** | **979** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 111
+## goals — 112
 
-### beauftragbar — 104
+### beauftragbar — 105
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -695,13 +695,14 @@
 | `G-629` | aufgabe | hoch | [Die Phase engine zeigt Pläne](todos/goals-g-0629-die-phase-engine-zeigt-plaene.md) | offen | — | — |
 | `G-630` | fehler | hoch | [Die Warnung ohne aktives Ziel ist unsichtbar](erledigt/goals-g-0630-die-warnung-ohne-aktives-ziel-ist-unsichtbar.md) | erledigt | — | G-636 |
 | `G-631` | aufgabe | mittel | [Es gibt kein Trendgewicht](todos/goals-g-0631-es-gibt-kein-trendgewicht.md) | offen | — | — |
-| `G-632` | fehler | niedrig | [Prüfungstexte ohne Umlaute](erledigt/goals-g-0632-pruefungstexte-ohne-umlaute.md) | erledigt | — | — |
+| `G-632` | fehler | niedrig | [Prüfungstexte ohne Umlaute](erledigt/goals-g-0632-pruefungstexte-ohne-umlaute.md) | erledigt | — | G-642 |
 | `G-633` | fehler | niedrig | [Prüfungstexte schreiben Zahlen mit Punkt](erledigt/goals-g-0633-pruefungstexte-zahlen-mit-punkt.md) | erledigt | — | — |
 | `G-634` | frage | mittel | [Startwert eines Messziels erst nach dem Anlegen sichtbar](erledigt/goals-g-0634-startwert-eines-messziels-erst-nach-dem-anlegen.md) | erledigt | — | — |
 | `G-636` | fehler | niedrig | [Der Goals-Kopf zählt Phasen eines pausierten Ziels als laufend](erledigt/goals-g-0636-kopf-zaehlt-phasen-eines-pausierten-ziels.md) | erledigt | — | — |
 | `G-637` | fehler | mittel | [Ein aktives Ziel ohne laufende Phase heisst "kein aktives Ziel"](erledigt/goals-g-0637-aktives-ziel-ohne-laufende-phase-heisst-kein-aktives-ziel.md) | erledigt | — | — |
 | `G-638` | fehler | mittel | [Fortsetzen eines Ziels aktiviert seinen Plan nicht](laufend_codex/goals-g-0638-fortsetzen-aktiviert-den-plan-nicht.md) | laeuft (codex) | — | — |
 | `G-639` | aufgabe | mittel | [Reiter Goals – Reste nach dem Entwurf](todos/goals-g-0639-reiter-goals-reste-nach-entwurf.md) | offen | — | — |
+| `G-642` | fehler | niedrig | [Ältere Goals-Schritte schreiben Nutzertexte ohne Umlaute](todos/goals-g-0642-aeltere-goals-schritte-ohne-umlaute.md) | offen | — | — |
 
 ### wartet auf Blocker — 7
 

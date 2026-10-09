@@ -28,3 +28,22 @@ Der Entwurf (Dossier 8.x) rechnet Start und Tempo vom Trendgewicht aus. Eine ein
 ## Was zu tun ist (Codex)
 
 Eine Trendfunktion in der Kette (z. B. gleitender oder exponentiell geglätteter Mittelwert über `body`-Messungen, mit Mindestanzahl Messungen und Fallback auf die letzte Messung), die zurückgibt, welche Quelle sie benutzt hat. Die Formel legt Codex vor; Tom entscheidet vor dem Bau. Danach liest Claude Code sie in „Ziel setzen“ und Fortschritt.
+
+
+## Vorschlag Codex - 2026-10-09
+
+`[read]` Gemessen bis 09.10.:
+- dev: 143 Messungen an 143 Tagen, ohne Lücke. Mittlere Tagesänderung 0,131 kg, Median 0,090 kg, 95. Perzentil 0,320 kg.
+- tom.seed: identische Reihe.
+- test-user: 1 Messung am 19.05.
+
+Kandidaten:
+- EMA mit α = 0,25. Mindestens 4 Messungen in 14 Tagen, bei Lücken gilt α_k = 1 − 0,75^k.
+- 7-Tage-Mittel. Mindestens 3 Messtage.
+- 14-Tage-Regression. Mindestens 5 Messungen über mindestens 7 Tage.
+
+Rückfall für alle drei: die letzte Messung mit Datum, ausdrücklich gekennzeichnet, wenn zu wenige Daten vorliegen oder seit mehr als 7 Tagen keine Messung kam.
+
+Auf dev am 09.10.: Messung 84,75, EMA 84,709, 7-Tage-Mittel 84,716, Regression 84,724.
+
+Empfehlung: EMA mit α = 0,25 und ausgewiesener Quelle (`trend_ema` | `letzte_messung`), Datum und Anzahl der Messungen. Entscheidung Tom offen.
