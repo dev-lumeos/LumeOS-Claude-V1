@@ -46,3 +46,23 @@ Frist abgelaufen oder Ziel erreicht: das Ziel wird eingefroren (Status sichtbar,
     Bereich: supabase/_pipeline/ (Kette). Live erst nach Freigabe.
     Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
     Stand:   2026-10-09, HEAD b2cfb4bb
+
+
+## Kette committet - 2026-10-09, Commit `b1d2c0af`
+
+`[cmd]` 5 Dateien nur in der Kette. Gelesen:
+- `goal_state_at` und `goal_list_at` liefern den wirksamen Zustand am Stichtag. Gespeichert wird nichts, der Status bleibt.
+- `berechne_zielwerte` liefert Hindernis `ziel_eingefroren`.
+- Wächter `G611_BLOCK:ziel_eingefroren` auf Phase und Plan.
+- `goal_archive`, `goal_restart` und `goal_delete(p_goal_id, p_confirm_history)` prüfen alle `auth.uid()`. Bei Verlauf ohne Bestätigung kommt `G611_CONFIRM:beenden_statt_loeschen`.
+- FKs auf `ON DELETE CASCADE`.
+- Die G-625-Probe ist datumsfest (`CURRENT_DATE` statt 2026-10-08).
+
+Gate grün.
+
+`[read]` Codex:
+- 389 Schritte grün, G-611-Probe 5/5, Sabotage rot.
+- Live würden zwei aktive Bankdrück-Messziele einfrieren (dev, tom.seed, Frist 18.08.2026).
+- Bei der Kaskade zu beachten: 5 FKs auf `user_goals` und 3 auf `goal_phases`.
+
+Live erst, wenn die App den Zustand kennt (`ziel_eingefroren`, `goal_state_at`): G-640. Zusammen mit G-638.

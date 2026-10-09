@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 281 |
+| `todos` | 282 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 693 |
-| **gesamt** | **976** |
+| **gesamt** | **977** |
 
 ## medical — 50
 
@@ -592,7 +592,7 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 110
+## goals — 111
 
 ### beauftragbar — 104
 
@@ -674,7 +674,7 @@
 | `G-608` | fehler | hoch | [Die Stufenwochen sind im Programm editierbar - und am Schirm belegt](erledigt/goals-g-0608-die-stufenwochen-sind-im-programm-editierbar.md) | erledigt | — | G-609, G-610, G-611 |
 | `G-609` | fehler | hoch | [Die Strategie wird beim Phasenstart nicht durchgereicht](erledigt/goals-g-0609-die-strategie-wird-beim-phasenstart-nicht-durchgereicht.md) | erledigt | — | — |
 | `G-610` | fehler | mittel | [contest_prep ist in der App nicht anlegbar](erledigt/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md) | erledigt | — | G-612, G-619, G-626, G-628 |
-| `G-611` | fehler | mittel | [Ein Ziel laesst sich nicht loeschen](laufend_codex/goals-g-0611-ein-ziel-laesst-sich-nicht-loeschen.md) | laeuft (codex) | — | — |
+| `G-611` | fehler | mittel | [Ein Ziel laesst sich nicht loeschen](laufend_codex/goals-g-0611-ein-ziel-laesst-sich-nicht-loeschen.md) | laeuft (codex) | — | G-640 |
 | `G-612` | entscheidung | hoch | [Drei Auswahlen auf einer Seite, und keine folgt dem Mockup](todos/goals-g-0612-drei-auswahlen-und-keine-ordnung.md) | offen | — | G-614, G-615 |
 | `G-613` | fehler | hoch | [Ein pausiertes Ziel laesst seine Phase laufen](erledigt/goals-g-0613-ein-pausiertes-ziel-laesst-seine-phase-laufen.md) | erledigt | — | G-622 |
 | `G-614` | fehler | hoch | [Der Strategiekatalog kennt seine Karte und seinen Mindestgrad](erledigt/goals-g-0614-der-strategiekatalog-kennt-karte-und-mindestgrad.md) | erledigt | — | G-616 |
@@ -703,7 +703,7 @@
 | `G-638` | fehler | mittel | [Fortsetzen eines Ziels aktiviert seinen Plan nicht](todos/goals-g-0638-fortsetzen-aktiviert-den-plan-nicht.md) | offen | — | — |
 | `G-639` | aufgabe | mittel | [Reiter Goals – Reste nach dem Entwurf](todos/goals-g-0639-reiter-goals-reste-nach-entwurf.md) | offen | — | — |
 
-### wartet auf Blocker — 6
+### wartet auf Blocker — 7
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -713,6 +713,7 @@
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
+| `G-640` | aufgabe | hoch | [Die App liest den wirksamen Zielzustand](todos/goals-g-0640-app-liest-den-wirksamen-zielzustand.md) | offen | G-611 | — |
 
 ## coach — 58
 
