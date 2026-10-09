@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: mittel
 angelegt: 2026-10-07
+agent: codex
+beauftragt: 2026-10-09
 
 braucht: []
 kind_von: G-608
@@ -37,3 +39,10 @@ Archivieren mit Historie.
 `[read]` Tom 08.10.2026 12:16: „dieser stand ist fuer mich vertretbar kannst umsetzen“. Vorlage: `docs/spezifikation/goals-ziel-setzen/` (Dossier Kapitel 8/9 gilt vor dem Entwurf).
 
 Frist abgelaufen oder Ziel erreicht: das Ziel wird eingefroren (Status sichtbar, keine weitere Wertung), Details bleiben lesbar; Aktionen Neustart (neue Eingabe, vorbelegt) und Löschen. Ein eingefrorenes steuerndes Ziel heißt: Erhaltung mit Warnung (G-622). Dazu Archivieren für abgeschlossene Ziele. Löschen eines Ziels mit Verlauf: Bestätigung, Hinweis auf Beenden.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER Codex - G-611: Ziel einfrieren, archivieren, loeschen
+    Bereich: supabase/_pipeline/ (Kette). Live erst nach Freigabe.
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-09, HEAD b2cfb4bb

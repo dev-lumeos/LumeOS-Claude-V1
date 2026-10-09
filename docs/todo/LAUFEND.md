@@ -8,7 +8,9 @@
 | Claude Code | G-618 | Der Reiter Goals trennt das steuernde Ziel von den messenden | **laeuft**, raus 08.10. |
 | Claude Code | G-628 | Ziel setzen nach dem Entwurf | **laeuft**, raus 08.10. |
 | Claude Code | G-635 | Dev-Server liefert die Schrift mit falschem Hash | **laeuft**, raus 08.10. |
+| Codex | G-611 | Ein Ziel laesst sich nicht loeschen | **laeuft**, raus 09.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
+| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 ## Plan ab 06.10. - von Tom freigegeben, 17:03
