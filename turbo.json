@@ -5,7 +5,7 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/packages/shared/src/**"],
       "env": ["LUMEOS_DIST_DIR"],
-      "outputs": [".next-gate/**", ".next/**", "dist/**"]
+      "outputs": [".next-gate/**", "dist/**"]
     },
     "dev": {
       "cache": false,

@@ -23,6 +23,12 @@
  * und repariert sich selbst. **Ein Neustart zeigt Gruen — und
  * loescht den Beweis.**
  *
+ * `[cmd]` **G-635 (2026-10-09): „dicht" stimmte nicht.** Turbo sicherte
+ * `.next/**` als Build-Ausgabe und schrieb die Dateien des Dev-Servers bei
+ * einem Cache-Treffer zurueck — ganz ohne `next build`, an dieser Sperre
+ * vorbei. Behoben in `turbo.json`, bewacht von
+ * `tools/__tests__/g635-next-nur-dev.test.mjs`.
+ *
  * `[read]` **Die Sperre greift NUR beim Bauen.** `next dev` braucht
  * `.next` und bleibt unberuehrt, `next start` liest nur.
  *
