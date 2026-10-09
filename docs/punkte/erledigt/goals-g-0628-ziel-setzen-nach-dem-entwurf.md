@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-08
 agent: claudecode
 beauftragt: 2026-10-08
+erledigt: 2026-10-09
+commit: ef94fc37
 
 braucht: [G-626, G-617]
 kind_von: G-610
@@ -71,3 +73,17 @@ Kein neuer Status. `abandoned` heisst in der Anzeige "beendet" statt "abgebroche
 `[read]` Claude Code: Teil 2 am Schirm sauber/Warnung/Sperre ("Frei ab pro"), Wächter in DB und UI als Satz, Umlaute richtig; Fotos backup/g628-t2live-*.png. Teil 3: je Kategorie ein Messziel (Gewicht 81,4 kg; Bench 1RM 105,41 kg; Trainings/Woche 0; eigene Einheit 1,5 l), alle measurement/0 Phasen; KFA ohne Wert -> "Erst messen". Unterwegs behoben: Tempo-Rundung (vorgehen_zu_langsam), Ziel-Editor schickte unveränderte Felder (G626_BLOCK beim Reaktivieren).
 
 Teil 4 (offen, Dossier 8.2): Messung direkt bei "erst messen", Vorschlag "Schnitt + 1" bei Gewohnheiten, Widerspruchshinweis (G-621), Anzeige "beendet". Startwert-Vorschau vor dem Anlegen: G-634. Zahlen mit Punkt in den G-626-Texten: G-633. Rohe Einheit/Quelle im Reiter: G-618.
+
+## Teil 4 committet - 2026-10-09, Commit `ef94fc37` - erledigt
+
+`[cmd]` 6 Dateien nur apps/web goals. Gate grün, web 2801. test-user nachgemessen: 0 Messziele, 1 Messung, Abbauziel active, Aufbauziel on_hold.
+
+`[read]` Claude Code:
+- Die Vorschau kommt aus `measurement_goal_start_preview` und wird nach jeder Eingabe neu gelesen.
+- "Erst messen" führt über den vorhandenen Messweg zu "jetzt messen".
+- Gewohnheiten bekommen den Vorschlag "Schnitt + 1".
+- Der Widerspruchshinweis aus G-621 ist gelb und sperrt nicht. Die Richtung kommt aus der Phase des Steuerziels.
+- In 6 von 6 Fällen war die Vorschau gleich dem festgehaltenen Startwert.
+- 24 Tests, Gegenprobe 7/7 rot. Fotos `backup/g628-t4-*.png`.
+
+Damit ist G-628 vollständig (Teil 1-4). Nebenbefund Farbmischung: G-641.

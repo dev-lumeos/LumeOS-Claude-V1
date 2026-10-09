@@ -10,7 +10,7 @@ kind_von: G-628
 
 quellen:
   - docs/spezifikation/goals-ziel-setzen/README.md
-  - docs/punkte/laufend_claudecode/goals-g-0628-ziel-setzen-nach-dem-entwurf.md
+  - docs/punkte/erledigt/goals-g-0628-ziel-setzen-nach-dem-entwurf.md
 
 beruehrt:
   tabellen: []

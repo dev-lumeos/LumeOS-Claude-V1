@@ -4,6 +4,8 @@ typ: aufgabe
 modul: goals
 schwere: hoch
 angelegt: 2026-10-09
+agent: claudecode
+beauftragt: 2026-10-09
 
 braucht: [G-611]
 kind_von: G-611
@@ -33,3 +35,9 @@ beruehrt:
 - Löschen (`goal_delete`) mit Bestätigung. `G611_CONFIRM:beenden_statt_loeschen` wird zur Rückfrage "lieber beenden?", `G611_BLOCK` zu einem Satz.
 - Hindernis `ziel_eingefroren` in der Warnung (Today/Nutrition/Goals) und in der Steuerungskarte.
 - Löschknopf nachrüsten (G-639).
+## Auftrag - Kopf
+
+    AUFTRAG FUER Claude Code - G-640 (+ Loeschknopf aus G-639): App liest den wirksamen Zielzustand
+    Bereich: apps/web/src/lib/goals, apps/web/src/app/v2/goals, apps/web/src/lib/profile, apps/web/src/app/v2 (Warnung)
+    Fremd:   supabase/_pipeline/ (Codex). docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-09
