@@ -125,6 +125,10 @@ export type Strategie = {
   max_duration_weeks: number | null
   protein_per_kg: number | null
   fat_percent: number | null
+  /** `[cmd]` **G-625:** Fett g/kg, Cardio und Refeed-Tage je Woche — NULL heisst „keine Vorgabe" (alle 17 Zeilen NULL, gemessen 2026-10-10). */
+  fett_g_kg: number | null
+  cardio_pro_woche: number | null
+  refeed_pro_woche: number | null
   macro_cycling: boolean
   refeed_schedule: boolean
   auto_adjust: boolean
@@ -243,6 +247,9 @@ function zeile(r: Record<string, unknown>): Strategie {
     max_duration_weeks: zahl(r.max_duration_weeks),
     protein_per_kg: zahl(r.protein_per_kg),
     fat_percent: zahl(r.fat_percent),
+    fett_g_kg: zahl(r.fett_g_kg),
+    cardio_pro_woche: zahl(r.cardio_pro_woche),
+    refeed_pro_woche: zahl(r.refeed_pro_woche),
     macro_cycling: r.macro_cycling === true,
     refeed_schedule: r.refeed_schedule === true,
     auto_adjust: r.auto_adjust === true,

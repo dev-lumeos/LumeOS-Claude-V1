@@ -46,6 +46,7 @@ function strat(p: Partial<Strategie> = {}): Strategie {
     auswahl_gruppe: 'abnehmen', min_erfahrung: 'advanced', standard: false,
     tdee_modifier: -0.2, weight_change_target_percent: -0.75,
     max_duration_weeks: 12, protein_per_kg: 2.2, fat_percent: 0.25,
+    fett_g_kg: null, cardio_pro_woche: null, refeed_pro_woche: null,
     macro_cycling: false, refeed_schedule: false, auto_adjust: false,
     peak_week: false, badge: null, warnings: [], requirements: {},
     guards: [], next_codes: [], exits: [], success: [], best_for: [],

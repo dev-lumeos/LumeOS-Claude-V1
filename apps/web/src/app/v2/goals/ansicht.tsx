@@ -148,6 +148,9 @@ import type {
 } from '../../../lib/goals/lesen'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
 import { ReiterGoals } from './reiter-goals'
+import { PlanSeite } from './plan-seite'
+import { abPro } from '../../../lib/goals/plan'
+import type { Plan } from '../../../lib/goals/plan-read'
 import type { Wochendaten } from '../../../lib/goals/reiter-read'
 // `[read]` **Nur der TYP** — `strategie-read.ts` zieht
 // `createSessionClient` und damit `next/headers`; ein Wert-Import
@@ -258,6 +261,8 @@ export type EchteDaten = {
   programme: Record<string, Programmwochen>
   /** G-618: Trainings dieser Woche und Modulbeitraege des Steuerziels. */
   woche: Wochendaten
+  /** G-629: die Plaene (G-625) — Positionen, Termine, Zustand aus `phase_am`. */
+  plaene: Plan[]
   /**
    * `[cmd]` **G-565/A4: die gewaehlte Einheit** — aus
    * `user_display_preferences`, eine Einstellung des NUTZERS
@@ -333,6 +338,8 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
   // Ziels mit — am Schirm: „0 active goals · 2 Phasen laufen" (G-630).
   // **Kopf, Bedienung und Composition lesen jetzt dieselbe Menge.**
   const laufendePhasen = echt.phasen
+  // G-629: die Phase engine ist ab Pro frei (Dossier 8.7).
+  const proFrei = abPro(echt.strategieProfil.experience)
   // `[read]` **Beenden und Vorschlag brauchen EINE bestimmte Phase.**
   // **Bei mehreren waere jede Wahl eine stille Entscheidung** —
   // deshalb nur, wenn es genau eine gibt; sonst sagt die Ansicht, dass
@@ -527,6 +534,16 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
               gilt; darunter, was geplant ist, mit Marke. */}
           {tab === 'phase' && (
             <>
+              {/* ══ G-629: die Phase engine als Planer — ganze Seite ab Pro ═══
+                  `PlanSeite` zeigt darunter selbst die Sperre (Grad aus dem Profil).
+                  Die bisherigen Bauteile stehen nur noch ab Pro. */}
+              {!echtAus && (
+                <PlanSeite plaene={echt.plaene} strategien={echt.strategien} grad={echt.strategieProfil.experience}
+                           ziele={echt.ziele} stichtag={echt.stichtag}
+                           startKg={echt.messungen.filter(m => m.weight_kg !== null && m.measurement_date <= echt.stichtag).at(-1)?.weight_kg ?? null}
+                           onZuGoals={() => setTab('goals')} />
+              )}
+              {proFrei && (<>
               {/* ══ G-564/A2: JE PHASE eine Kachel ═════════════
                   `[cmd]` **Hier stand `echt.phase`** — die erste aus
                   `phase_am`. `[read]` **Bei zwei offenen Phasen
@@ -659,6 +676,7 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                         ziele={echt.ziele} heute={echt.stichtag} />
               )}
               <FehlendePhaseKacheln />
+              </>)}
               {/* `[cmd]` G-365: die Linie stand unter `echt.phase &&`.
                   Sabotageprobe 2026-09-07 — `phase` auf `null`: die
                   Linie verschwand, und `GoalsPhaseView` stand

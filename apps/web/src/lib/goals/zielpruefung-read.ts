@@ -19,9 +19,12 @@ export type Pruefeingabe = {
   zielKg: number | null
   startdatum: string
   zieldatum: string | null
-  programm: string
+  /** Katalogcode; `null` bei eigenen Werten (G-629). */
+  programm: string | null
   /** Vorzeichenbehaftet, wie `goal_phases.zielrate_pct_kg_woche`; Halten: `null`. */
   tempo: number | null
+  /** G-629: eigene Werte einer Planposition (ab Pro) — `goal_program_positions.eigene_werte`. */
+  eigeneWerte?: Record<string, unknown> | null
 }
 
 /** PostgREST meldet eine fehlende Funktion als PGRST202; Postgres als 42883. */
@@ -51,7 +54,7 @@ export async function zielGrenzenPruefen(e: Pruefeingabe): Promise<Pruefung> {
     p_startdatum: e.startdatum,
     p_zieldatum: e.zieldatum,
     p_programm_code: e.programm,
-    p_eigene_werte: null,
+    p_eigene_werte: e.eigeneWerte ?? null,
     p_geschlecht: p.biological_sex ?? null,
     p_groesse_cm: p.height_cm ?? null,
     p_tdee_kcal: tdeeWert,
