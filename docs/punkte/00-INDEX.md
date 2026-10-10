@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 281 |
+| `todos` | 280 |
 | `laufend_codex` | 4 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 694 |
+| `erledigt` | 695 |
 | **gesamt** | **980** |
 
 ## medical — 50
@@ -1039,7 +1039,7 @@
 | `G-599` | befund | mittel | [Die SSOT nennt Tabellen abwesend, die es gibt — und der Waechter sieht den Fast-Treffer nicht](todos/quer-g-0599-die-ssot-nennt-tabellen-abwesend-die-es-gibt.md) | offen | — | — |
 | `G-600` | fehler | hoch | [„Heute" ist an 32 Stellen der UTC-Vortag](erledigt/quer-g-0600-heute-ist-an-32-stellen-der-utc-vortag.md) | erledigt | — | — |
 | `G-635` | fehler | mittel | [Dev-Server liefert die Schrift mit falschem Hash](erledigt/quer-g-0635-dev-server-liefert-schrift-mit-falschem-hash.md) | erledigt | — | — |
-| `G-641` | fehler | niedrig | [Farbmischung in oklch färbt Flächen rosa](todos/quer-g-0641-farbmischung-oklch-faerbt-flaechen-rosa.md) | offen | — | — |
+| `G-641` | fehler | niedrig | [Farbmischung in oklch färbt Flächen rosa](erledigt/quer-g-0641-farbmischung-oklch-faerbt-flaechen-rosa.md) | erledigt | — | — |
 
 ### wartet auf Blocker — 1
 
