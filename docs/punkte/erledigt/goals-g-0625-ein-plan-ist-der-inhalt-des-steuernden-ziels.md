@@ -105,3 +105,17 @@ dev-Neustart (Variante b) gestoppt: `ziel_grenzen_pruefen` sperrt `vorgehen_zu_l
 ## Entschieden - 2026-10-10 07:34, Tom: dev-Neustart Variante B
 
 Lean Bulk (0,25 %/Woche) bis 88 kg; das Datum rechnet das System (etwa Mitte Januar 2027). Titel neu: "Lean Bulk auf 88 kg". Ausführung: Codex, Auftrag zu G-631.
+
+
+## dev-Neustart live - 2026-10-10, Codex
+
+`[cmd]` Orchestrator nachgemessen:
+- Ziel "Lean Bulk auf 88 kg": active, 88 kg, Frist 2027-01-17, is_primary true.
+- Plan mit 3 Positionen: maintain bis 03.06., lean_bulk bis 29.09., lean_bulk seit 10.10. laufend.
+- `berechne_zielwerte(dev)`: kein Hindernis, 2.714,0 kcal gegenüber TDEE 2.480,7, goal_id gesetzt.
+- Sicherung `backup/a105-dev-leanbulk-{vorher,nachher}.sql` (879.800 / 880.301 Byte).
+
+`[read]` Codex:
+- Die Rechnung geht vom Ziel-Startwert 85 aus: 98,8 Tage, aufgerundet 99, also bis 17.01.
+- Die Grenzprüfung ergab 0 Sperren und 0 Warnungen.
+- Der Phasenstart-Trigger hat is_primary auf true gesetzt.

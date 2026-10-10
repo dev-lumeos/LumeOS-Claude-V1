@@ -60,3 +60,12 @@ EMA mit alpha = 0,25 (Vorschlag Codex), Quelle ausgewiesen (trend_ema | letzte_m
     Bereich: Teil A Live-Daten dev (Freigabe Tom), Teil B supabase/_pipeline/
     Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
     Stand:   2026-10-10, HEAD 2e9e2906
+
+
+## Kette committet - 2026-10-10, Commit `660cc131` (nicht live, nicht eingebunden)
+
+`[cmd]` 3 Dateien nur Kette, neu `631_trendgewicht_ema.sql` und die Probe. Gate grün.
+
+`[read]` Codex: Probe 6/6. Ergebnisse: dev 09.10. = 84,709; Lückenfall 84,533; Rückfall bei 3 Messtagen und bei veralteten Daten; fremde Daten ausgeschlossen. Sabotage 2 rot. Kette 393 Schritte grün.
+
+Offen: live einspielen (mit dem nächsten Paket). Einbinden in Startwert, `ziel_grenzen_pruefen` und die App wird ein eigener Schritt, wenn die App mitzieht.
