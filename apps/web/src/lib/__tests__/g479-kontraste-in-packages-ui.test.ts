@@ -85,9 +85,11 @@ function tokenL(name: string): { hell: number; dunkel: number } {
   // `[read]` **`match` mit `g` statt `matchAll`** — das Ziel dieser
   // Anwendung steht unter ES2015, und ein Spread ueber den Iterator
   // von `matchAll` faellt dort (TS2802).
+  // `[cmd]` **G-641: die Neutralen stehen als `oklab(L 0 0)`** — L ist in
+  // OKLab und OKLCh dieselbe Helligkeit, die Rechnung bleibt gleich.
   const roh = THEMA.match(
-    new RegExp(`--${name}:\\s*oklch\\([0-9.]+`, 'g')) ?? []
-  const treffer = roh.map(t => Number(t.replace(/^.*oklch\(/, '')))
+    new RegExp(`--${name}:\\s*ok(?:lch|lab)\\([0-9.]+`, 'g')) ?? []
+  const treffer = roh.map(t => Number(t.replace(/^.*ok(?:lch|lab)\(/, '')))
   assert.equal(treffer.length, 2,
     `--${name} steht nicht genau zweimal in lume.css (${treffer.length}).`)
   return { dunkel: treffer[0], hell: treffer[1] }

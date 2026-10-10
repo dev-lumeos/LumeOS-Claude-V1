@@ -364,10 +364,10 @@ export function MesszielSetzen({ heute, onClose, zurueck, steuerung = null }: {
             </GField>
             {hinweis && (
               <div data-messziel-widerspruch role="note" style={{
-                // Gelb wie im Entwurf. `[cmd]` **In srgb gemischt:** `in oklch` interpolierte den
-                // Farbton zwischen `--warn` (80) und der neutralen Flaeche (0) — am Schirm rosa.
-                background: 'color-mix(in srgb, var(--warn) 16%, var(--surface))',
-                border: '1px solid color-mix(in srgb, var(--warn) 55%, var(--border))',
+                // Gelb wie im Entwurf. G-641: die srgb-Ausnahme aus G-628 Teil 4 ist
+                // zurueckgefuehrt — seit die neutralen Tokens `none` tragen, mischt oklch richtig.
+                background: 'color-mix(in oklch, var(--warn) 16%, var(--surface))',
+                border: '1px solid color-mix(in oklch, var(--warn) 55%, var(--border))',
                 borderRadius: 8, padding: '9px 12px', fontSize: 12, marginTop: 4,
               }}><b>Hinweis:</b> {hinweis}</div>
             )}

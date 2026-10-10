@@ -3,18 +3,28 @@
    Basisblock = Nachtmodus; [data-mode='light'] = Tagmodus.
    Vertrag: src/styles/themes/contract.ts */
 
+/* G-641 (2026-10-10): die neutralen Tokens sind ECHT neutral — `oklab(L 0 0)`.
+   Vorher trugen sie einen Farbton (hell 0, dunkel 270) bei Chroma 0–0,005:
+   unsichtbar an der Flaeche, aber `color-mix(in oklch, …)` interpoliert den
+   Farbton mit — gemessen: Goals-Gelb (H 90) + surface ergab hell H 13 (rosa),
+   dunkel H 248 (blau). Als oklab ohne Farbton wird der Farbton beim Mischen
+   machtlos; jede Mischung nimmt den des Akzents.
+   NICHT `oklch(L 0 none)`: Chromium traegt das `none` in `color-mix(in srgb, …)`
+   auf den Blaukanal — die Reiterleiste wurde damit knallgelb (srgb 0.98 0.97 -0.12).
+   Kosten: der Kaltstich faellt weg, max. 4/255 je Kanal.
+   Waechter: src/styles/themes/__tests__/g641-neutral-mischung.test.ts */
 [data-theme='lume'] {
-  --bg: oklch(0.155 0.005 270);
-  --bg-elev: oklch(0.185 0.005 270);
-  --surface: oklch(0.205 0.005 270);
-  --surface-2: oklch(0.235 0.005 270);
-  --surface-hover: oklch(0.255 0.005 270);
-  --border: oklch(0.280 0.005 270);
-  --border-strong: oklch(0.360 0.005 270);
-  --fg: oklch(0.970 0.000 0);
-  --fg-muted: oklch(0.720 0.005 270);
-  --fg-subtle: oklch(0.550 0.005 270);
-  --fg-dim: oklch(0.420 0.005 270);
+  --bg: oklab(0.155 0 0);
+  --bg-elev: oklab(0.185 0 0);
+  --surface: oklab(0.205 0 0);
+  --surface-2: oklab(0.235 0 0);
+  --surface-hover: oklab(0.255 0 0);
+  --border: oklab(0.280 0 0);
+  --border-strong: oklab(0.360 0 0);
+  --fg: oklab(0.970 0 0);
+  --fg-muted: oklab(0.720 0 0);
+  --fg-subtle: oklab(0.550 0 0);
+  --fg-dim: oklab(0.420 0 0);
   --pos: oklch(0.78 0.13 150);
   --warn: oklch(0.82 0.13 80);
   --neg: oklch(0.72 0.16 22);
@@ -77,17 +87,17 @@
 }
 
 [data-theme='lume'][data-mode='light'] {
-  --bg: oklch(0.985 0.002 270);
-  --bg-elev: oklch(1.000 0.000 0);
-  --surface: oklch(1.000 0.000 0);
-  --surface-2: oklch(0.975 0.003 270);
-  --surface-hover: oklch(0.955 0.003 270);
-  --border: oklch(0.910 0.003 270);
-  --border-strong: oklch(0.820 0.005 270);
-  --fg: oklch(0.200 0.005 270);
-  --fg-muted: oklch(0.400 0.005 270);
-  --fg-subtle: oklch(0.550 0.005 270);
-  --fg-dim: oklch(0.680 0.005 270);
+  --bg: oklab(0.985 0 0);
+  --bg-elev: oklab(1.000 0 0);
+  --surface: oklab(1.000 0 0);
+  --surface-2: oklab(0.975 0 0);
+  --surface-hover: oklab(0.955 0 0);
+  --border: oklab(0.910 0 0);
+  --border-strong: oklab(0.820 0 0);
+  --fg: oklab(0.200 0 0);
+  --fg-muted: oklab(0.400 0 0);
+  --fg-subtle: oklab(0.550 0 0);
+  --fg-dim: oklab(0.680 0 0);
   --acc-dash: oklch(0.48 0.06 240);
   --acc-nutri: oklch(0.55 0.13 60);
   --acc-train: oklch(0.50 0.16 290);

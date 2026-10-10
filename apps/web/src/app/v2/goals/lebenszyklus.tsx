@@ -64,7 +64,7 @@ export function LoeschenFluss({ ziel }: { ziel: { goal_id: string; title: string
   }
   return (
     <div data-loeschen-stufe={stufe} style={{
-      border: '1px solid color-mix(in srgb, var(--neg) 40%, var(--border))', borderRadius: 8, padding: '9px 12px',
+      border: '1px solid color-mix(in oklch, var(--neg) 40%, var(--border))', borderRadius: 8, padding: '9px 12px',
       fontSize: 12, marginTop: 6, width: '100%',
     }}>
       {stufe === 'frage' ? (
