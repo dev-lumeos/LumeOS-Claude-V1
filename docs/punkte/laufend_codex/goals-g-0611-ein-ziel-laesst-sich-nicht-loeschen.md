@@ -66,3 +66,11 @@ Gate grün.
 - Bei der Kaskade zu beachten: 5 FKs auf `user_goals` und 3 auf `goal_phases`.
 
 Live erst, wenn die App den Zustand kennt (`ziel_eingefroren`, `goal_state_at`): G-640. Zusammen mit G-638.
+
+## Live 611 - 2026-10-10, Codex gestoppt nach Schritt 611
+
+`[read]` Codex: `goal_list_at` liefert 8 eingefrorene Ziele statt der 2 aus dem Soll. Gestoppt, 638/631/642 nicht eingespielt. Sicherungen `backup/a105-paket-g611-vorher.sql` (1.393.558 Byte) und `-nachher.sql` (1.415.734 Byte). Rollen unverändert.
+
+`[cmd]` Orchestrator nachgemessen: Je 4 Ziele bei dev und tom.seed, nämlich "Bankdruecken stabilisieren" (active, Frist 18.08., neu eingefroren), "120 kg Bankdruecken bis Juli" (missed), "Fruehjahrs-Cut abgeschlossen" (achieved), "Vier Cardio-Einheiten pro Woche" (abandoned).
+
+Bewertung: 8 ist richtig, das Soll 2 im Auftrag war falsch (Fehler des Orchestrators). Nach Toms Regel (Dossier 9, 1/2) sind abgeschlossene Ziele ebenfalls eingefroren: Details lesbar, Neustart, Löschen. Weiter mit 638, 631, 642.
