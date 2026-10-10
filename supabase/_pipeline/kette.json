@@ -3924,6 +3924,20 @@
       "kind": "tsx",
       "creates": "G-631: EMA, Luecken, Mindestdaten, Rueckfall, Zukunftsgrenze und fremde Daten.",
       "depends_on": ["631_trendgewicht_ema", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "642_goal_user_texts_utf8",
+      "path": "supabase/_pipeline/11_goals/642_goal_user_texts_utf8.sql",
+      "kind": "sql",
+      "creates": "G-642: Wirksame Goals-Nutzertexte und vier Katalogbeschreibungen mit echten Umlauten.",
+      "depends_on": ["631_trendgewicht_ema_probe", "634_measurement_goal_start_preview"]
+    },
+    {
+      "id": "642_goal_user_texts_utf8_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g642-user-texts.test.ts",
+      "kind": "tsx",
+      "creates": "G-642: Installierte Nutzertexte ohne Ersatzschreibung, 622-Ausnahme und Katalogwerte geprueft.",
+      "depends_on": ["642_goal_user_texts_utf8", "a86_testdaten_einspielen"]
     }
   ]
 }
