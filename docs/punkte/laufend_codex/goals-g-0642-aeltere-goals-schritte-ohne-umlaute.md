@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: niedrig
 angelegt: 2026-10-09
+agent: codex
+beauftragt: 2026-10-10
 
 braucht: []
 kind_von: G-632
@@ -43,3 +45,9 @@ beruehrt:
 - Codex: neuer Kettenschritt, der die Texte ersetzt (Funktionen neu anlegen, keine alten Dateien umschreiben, die live sind).
 - Claude Code: im selben Zug den Test an den neuen Wortlaut anpassen.
 - Danach einen Wächter einbauen: Nutzertexte in `supabase/_pipeline/11_goals` ohne ae/oe/ue-Ersatz, Schlüssel ausgenommen.
+## Auftrag - Kopf
+
+    AUFTRAG FUER Codex - G-642: aeltere Goals-Schritte mit Umlauten
+    Bereich: supabase/_pipeline/ (Kette)
+    Fremd:   apps/ (Test g568 -> Claude Code). docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-10

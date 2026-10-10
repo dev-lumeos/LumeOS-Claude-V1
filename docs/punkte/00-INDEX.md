@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 281 |
-| `laufend_codex` | 3 |
+| `laufend_codex` | 4 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 694 |
-| **gesamt** | **979** |
+| **gesamt** | **980** |
 
 ## medical — 50
 
@@ -592,7 +592,7 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 112
+## goals — 113
 
 ### beauftragbar — 105
 
@@ -702,9 +702,9 @@
 | `G-637` | fehler | mittel | [Ein aktives Ziel ohne laufende Phase heisst "kein aktives Ziel"](erledigt/goals-g-0637-aktives-ziel-ohne-laufende-phase-heisst-kein-aktives-ziel.md) | erledigt | — | — |
 | `G-638` | fehler | mittel | [Fortsetzen eines Ziels aktiviert seinen Plan nicht](laufend_codex/goals-g-0638-fortsetzen-aktiviert-den-plan-nicht.md) | laeuft (codex) | — | — |
 | `G-639` | aufgabe | mittel | [Reiter Goals – Reste nach dem Entwurf](todos/goals-g-0639-reiter-goals-reste-nach-entwurf.md) | offen | — | — |
-| `G-642` | fehler | niedrig | [Ältere Goals-Schritte schreiben Nutzertexte ohne Umlaute](todos/goals-g-0642-aeltere-goals-schritte-ohne-umlaute.md) | offen | — | — |
+| `G-642` | fehler | niedrig | [Ältere Goals-Schritte schreiben Nutzertexte ohne Umlaute](laufend_codex/goals-g-0642-aeltere-goals-schritte-ohne-umlaute.md) | laeuft (codex) | — | — |
 
-### wartet auf Blocker — 7
+### wartet auf Blocker — 8
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -714,7 +714,8 @@
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
-| `G-640` | aufgabe | hoch | [Die App liest den wirksamen Zielzustand](laufend_claudecode/goals-g-0640-app-liest-den-wirksamen-zielzustand.md) | laeuft (claudecode) | G-611 | — |
+| `G-640` | aufgabe | hoch | [Die App liest den wirksamen Zielzustand](laufend_claudecode/goals-g-0640-app-liest-den-wirksamen-zielzustand.md) | laeuft (claudecode) | G-611 | G-643 |
+| `G-643` | aufgabe | mittel | [Lage "voraus / im Plan / hinterher" für einmalige Messziele](todos/goals-g-0643-lage-fuer-einmalige-messziele.md) | offen | G-611 | — |
 
 ## coach — 58
 

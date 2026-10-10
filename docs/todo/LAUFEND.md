@@ -9,6 +9,7 @@
 | Codex | G-611 | Ein Ziel laesst sich nicht loeschen | **laeuft**, raus 09.10. |
 | Codex | G-631 | Es gibt kein Trendgewicht | **laeuft**, raus 10.10. |
 | Codex | G-638 | Fortsetzen eines Ziels aktiviert seinen Plan nicht | **laeuft**, raus 09.10. |
+| Codex | G-642 | Ältere Goals-Schritte schreiben Nutzertexte ohne Umlaute | **laeuft**, raus 10.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->

@@ -41,3 +41,18 @@ beruehrt:
     Bereich: apps/web/src/lib/goals, apps/web/src/app/v2/goals, apps/web/src/lib/profile, apps/web/src/app/v2 (Warnung)
     Fremd:   supabase/_pipeline/ (Codex). docs/ gehoert dem Orchestrator.
     Stand:   2026-10-09
+
+
+## Gebaut und committet - 2026-10-10, Commit `8aa14cd9` (Rückfall, nicht live)
+
+`[cmd]` 20 Dateien, nur `apps/web/src`. Neu sind `zustand.ts`, `lebenszyklus.tsx`, `lebenszyklus-write.ts` und `g640-zustand.test.ts`. `berechnePace` steht nur noch in `pace.ts`, die Zielkacheln rufen es nicht mehr auf; `phasen-zeitachse` siehe G-629. Gate grün, web 2813. test-user nachgemessen: 0 Messziele, Abbauziel aktiv mit aktivem Plan, Aufbauziel on_hold mit pausiertem Plan.
+
+`[read]` Claude Code:
+- Die Zielliste liest `goal_list_at`. Archivierte Ziele fallen weg, eingefrorene stehen unter Abgeschlossen.
+- Neu starten, Archivieren und Löschen fragen nach, Löschen mit "lieber beenden?".
+- Alle 9 Schlüssel aus G-611/G-638 erscheinen als Satz.
+- Warnung `ziel_eingefroren`.
+- Fehlt G-611 live, greift der Rückfall: kein Löschknopf, Meldung "noch nicht eingespielt".
+- 12 Tests, Gegenprobe 8/8 rot.
+
+Erledigt erst nach Live G-611/G-638 und dem vollen Schirmnachweis. Einmalige Messziele zeigen derzeit keine Lage: G-643.

@@ -26,3 +26,8 @@ beruehrt:
 
 Vorlage: `entwurf/PhaseEngine.dc.html`, Dossier 8.7. Ganze Seite ab Pro, darunter gesperrt mit Hinweis. Aktiver Plan (Zeitachse, Details, Bearbeiten mit Terminen, Phasen, Werten des Programms bzw. editierbaren eigenen Werten), + Neuer Plan, Weitere Pläne (Aktivieren mit Rückfrage und Zweiwege-Bestätigung), Abgeschlossene Pläne, Vorlagen. Nimmt G-623 (Phase verschieben) und G-624 (Vorschau Custom/Expert) auf.
 
+
+
+## Ergänzt - 2026-10-10
+
+`[read]` Claude Code, G-640: `phasen-zeitachse.tsx` (Phase Engine) rechnet die Lage noch selbst mit `berechnePace`. Mit dem Umbau auf die Kette umstellen.
