@@ -5,6 +5,7 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
+| Claude Code | G-629 | Die Phase engine zeigt Pläne | **laeuft**, raus 10.10. |
 | Claude Code | G-640 | Die App liest den wirksamen Zielzustand | **laeuft**, raus 09.10. |
 | Codex | G-611 | Ein Ziel laesst sich nicht loeschen | **laeuft**, raus 09.10. |
 | Codex | G-631 | Es gibt kein Trendgewicht | **laeuft**, raus 10.10. |

@@ -4,6 +4,8 @@ typ: aufgabe
 modul: goals
 schwere: hoch
 angelegt: 2026-10-08
+agent: claudecode
+beauftragt: 2026-10-10
 
 braucht: [G-625, G-626]
 kind_von: G-615
@@ -31,3 +33,11 @@ Vorlage: `entwurf/PhaseEngine.dc.html`, Dossier 8.7. Ganze Seite ab Pro, darunte
 ## Ergänzt - 2026-10-10
 
 `[read]` Claude Code, G-640: `phasen-zeitachse.tsx` (Phase Engine) rechnet die Lage noch selbst mit `berechnePace`. Mit dem Umbau auf die Kette umstellen.
+
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER Claude Code - G-629: Phase Engine als Planer
+    Bereich: apps/web/src/app/v2/goals, apps/web/src/lib/goals
+    Fremd:   supabase/_pipeline/ (Codex). docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-10, HEAD 00e7aea6
