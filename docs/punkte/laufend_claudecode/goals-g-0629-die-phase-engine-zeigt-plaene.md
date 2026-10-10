@@ -41,3 +41,12 @@ Vorlage: `entwurf/PhaseEngine.dc.html`, Dossier 8.7. Ganze Seite ab Pro, darunte
     Bereich: apps/web/src/app/v2/goals, apps/web/src/lib/goals
     Fremd:   supabase/_pipeline/ (Codex). docs/ gehoert dem Orchestrator.
     Stand:   2026-10-10, HEAD 00e7aea6
+
+
+## Committet - 2026-10-10, Commit `49b68eec`
+
+`[cmd]` 13 Dateien, nur `apps/web/src`. Gate grün, web 2844. test-user nachgemessen: Abbauziel und Plan aktiv mit 1 Position, Aufbauziel on_hold und Plan pausiert. Bildschirmfoto dev `backup/orch-stand-phase.png`: aktiver Plan, Zeitachse Halten · Lean Bulk · Lean Bulk (läuft) bis 17.01.2027, Vorlagen "kommt".
+
+`[read]` Claude Code: 26 Tests, Gegenprobe 8/8 rot. Am Schirm mit Pro und Advanced geprüft, exakt zurückgebaut. Seine Aussage aus G-640 zu berechnePace war falsch und ist korrigiert.
+
+Lücken in der Kette: G-644. Befunde am Schirm: G-645.

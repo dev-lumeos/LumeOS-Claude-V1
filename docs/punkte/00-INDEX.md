@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 279 |
+| `todos` | 281 |
 | `laufend_codex` | 4 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 695 |
-| **gesamt** | **980** |
+| **gesamt** | **982** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 113
+## goals — 115
 
-### beauftragbar — 105
+### beauftragbar — 107
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -692,7 +692,7 @@
 | `G-626` | aufgabe | hoch | [Grenzen nach Erfahrungsgrad](erledigt/goals-g-0626-grenzen-nach-erfahrungsgrad.md) | erledigt | — | G-632, G-633 |
 | `G-627` | aufgabe | mittel | [Die wöchentliche Anpassung hat kein Protokoll](todos/goals-g-0627-die-woechentliche-anpassung-hat-kein-protokoll.md) | offen | — | — |
 | `G-628` | aufgabe | hoch | [Ziel setzen nach dem Entwurf](erledigt/goals-g-0628-ziel-setzen-nach-dem-entwurf.md) | erledigt | — | G-631, G-634, G-641 |
-| `G-629` | aufgabe | hoch | [Die Phase engine zeigt Pläne](laufend_claudecode/goals-g-0629-die-phase-engine-zeigt-plaene.md) | laeuft (claudecode) | — | — |
+| `G-629` | aufgabe | hoch | [Die Phase engine zeigt Pläne](laufend_claudecode/goals-g-0629-die-phase-engine-zeigt-plaene.md) | laeuft (claudecode) | — | G-644, G-645 |
 | `G-630` | fehler | hoch | [Die Warnung ohne aktives Ziel ist unsichtbar](erledigt/goals-g-0630-die-warnung-ohne-aktives-ziel-ist-unsichtbar.md) | erledigt | — | G-636 |
 | `G-631` | aufgabe | mittel | [Es gibt kein Trendgewicht](laufend_codex/goals-g-0631-es-gibt-kein-trendgewicht.md) | laeuft (codex) | — | — |
 | `G-632` | fehler | niedrig | [Prüfungstexte ohne Umlaute](erledigt/goals-g-0632-pruefungstexte-ohne-umlaute.md) | erledigt | — | G-642 |
@@ -703,6 +703,8 @@
 | `G-638` | fehler | mittel | [Fortsetzen eines Ziels aktiviert seinen Plan nicht](laufend_codex/goals-g-0638-fortsetzen-aktiviert-den-plan-nicht.md) | laeuft (codex) | — | — |
 | `G-639` | aufgabe | mittel | [Reiter Goals – Reste nach dem Entwurf](todos/goals-g-0639-reiter-goals-reste-nach-entwurf.md) | offen | — | — |
 | `G-642` | fehler | niedrig | [Ältere Goals-Schritte schreiben Nutzertexte ohne Umlaute](laufend_codex/goals-g-0642-aeltere-goals-schritte-ohne-umlaute.md) | laeuft (codex) | — | — |
+| `G-644` | aufgabe | hoch | [Planer: Lücken in der Kette](todos/goals-g-0644-planer-luecken-in-der-kette.md) | offen | — | — |
+| `G-645` | fehler | mittel | [Goals und Phase Engine: Befunde am Schirm (dev, 10.10.)](todos/goals-g-0645-goals-reiter-befunde-am-schirm.md) | offen | — | — |
 
 ### wartet auf Blocker — 8
 
