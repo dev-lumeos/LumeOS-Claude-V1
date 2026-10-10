@@ -51,3 +51,17 @@ beruehrt:
     Bereich: supabase/_pipeline/ (Kette)
     Fremd:   apps/ (Test g568 -> Claude Code). docs/ gehoert dem Orchestrator.
     Stand:   2026-10-10
+
+
+## Kette committet - 2026-10-10, Commit `224e40d9`
+
+`[cmd]` 3 Dateien nur Kette. `642_goal_user_texts_utf8.sql`: 14 Zeilen mit Umlauten in Zeichenketten. Nachgelaufenes `pnpm gate`: 18/18 Tasks, Exit 0. Der Commit lief ohne Hook, weil Codex' Gate an fremder WIP aus G-629 rot war. Danach war `verdrahtung` grün.
+
+`[read]` Codex:
+- 10 Sätze in 7 Funktionen und 4 Katalogbeschreibungen.
+- 2 zusätzliche Sätze aus `goal_phase_start`.
+- Der Wortlaut aus 622 ist ausgenommen (App-Test g568).
+- Probe 3/3, mit Ersatzschreibung rot.
+- Hex "Übung" C3 9C 62 75 6E 67.
+
+Offen: Der 622-Satz kommt zusammen mit Claude Code, wenn der App-Test g568 angepasst ist. Live mit dem Paket G-611.
