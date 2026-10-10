@@ -151,5 +151,6 @@ export async function setzeZielwerteAusFormel(): Promise<Zielwerte> {
     // Eine gespeicherte Zeile gehoert zu einer Phase — kein ruhendes Ziel (G-630).
     ruhendes_ziel: null,
     luecke: null,
+    eingefroren: null,
   }
 }

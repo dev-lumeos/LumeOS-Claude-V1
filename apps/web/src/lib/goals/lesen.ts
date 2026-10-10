@@ -20,6 +20,8 @@
 
 import { createSessionClient } from '@lumeos/shared/session'
 
+import { nichtEingespielt, zustandAusListe, zustandAusStatus, type Zustand } from './zustand'
+
 export class GoalsLeseFehler extends Error {
   constructor(public code: 'NO_SESSION' | 'READ_FAILED', message: string) {
     super(message)
@@ -218,6 +220,11 @@ export type ZielFortschritt = {
   measurement_rhythm: string | null
   measurement_site: string | null
   achievement_date: string | null
+  /**
+   * `[cmd]` **G-640: der wirksame Zustand** — aus `goal_list_at` (G-611) oder,
+   * solange die Funktion fehlt, aus dem gespeicherten Status (`quelle`).
+   */
+  zustand: Zustand
 }
 
 /**
@@ -248,7 +255,24 @@ export async function ladeZiele(userId: string, stichtag: string): Promise<ZielF
     .order('created_at', { ascending: true })
   if (error) throw new GoalsLeseFehler('READ_FAILED', `user_goals: ${error.message}`)
 
-  const zeilen = (ziele ?? []) as unknown as Array<Record<string, unknown>>
+  const alle = (ziele ?? []) as unknown as Array<Record<string, unknown>>
+  if (alle.length === 0) return []
+
+  // ══ G-640: der wirksame Zustand aus der Kette (G-611) ═══════════════
+  //
+  // `[cmd]` **`goal_list_at` liefert `effective_status` — Frist und
+  // Zielerreichung frieren dort ein, auch ohne Schreibereignis — und laesst
+  // archivierte Ziele weg.** `[read]` **Fehlt die Funktion (nicht
+  // eingespielt), gilt der gespeicherte Status wie bisher.**
+  const liste = await db.rpc('goal_list_at', { p_user_id: userId, p_stichtag: stichtag })
+  let zustaende: Map<string, Zustand> | null = null
+  if (liste.error) {
+    if (!nichtEingespielt(liste.error)) throw new GoalsLeseFehler('READ_FAILED', `goal_list_at: ${liste.error.message}`)
+  } else {
+    zustaende = new Map(((liste.data ?? []) as Array<Record<string, unknown>>)
+      .map(r => [String(r.goal_id), zustandAusListe(r)]))
+  }
+  const zeilen = zustaende ? alle.filter(z => zustaende!.has(z.id as string)) : alle
   if (zeilen.length === 0) return []
 
   const fortschritte = await Promise.all(zeilen.map(async z => {
@@ -287,6 +311,7 @@ export async function ladeZiele(userId: string, stichtag: string): Promise<ZielF
       measurement_rhythm: text(z.measurement_rhythm),
       measurement_site: text(z.measurement_site),
       achievement_date: text(z.achievement_date),
+      zustand: zustaende?.get(z.id as string) ?? zustandAusStatus(text(z.status)),
     }
   })
 }

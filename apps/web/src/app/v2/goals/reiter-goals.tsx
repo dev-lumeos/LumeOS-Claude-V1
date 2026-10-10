@@ -30,6 +30,8 @@ import {
 } from '../../../lib/goals/reiter'
 import { MESSARTEN, type Kategorie } from '../../../lib/goals/messziel'
 import { PHASENARTEN } from '../../../lib/goals/phase-regeln'
+import { GRUND_TEXT, aktionen } from '../../../lib/goals/zustand'
+import { ArchivierenKnopf, LoeschenFluss, NeuStartenFluss } from './lebenszyklus'
 import { empfohlenDanach, richtungen } from '../../../lib/goals/zielwahl'
 import type { Koerpermessung, Meilenstein, Phase, ZielFortschritt, Zielphase } from '../../../lib/goals/lesen'
 import type { Strategie } from '../../../lib/goals/strategie-read'
@@ -75,6 +77,24 @@ function Steuerung({ ziele, phasen, offenePhasen, zielwerte, vorschlag, strategi
     <span className="v2-eyebrow" style={{ fontSize: 10.5 }}>Steuerung · bestimmt Kalorien und Makros</span>
   )
 
+  if (zustand === 'eingefroren') {
+    // G-640: das Steuerziel ist eingefroren — Satz und „Neu starten" (G-611).
+    const e = zielwerte?.eingefroren ?? null
+    const alt = e ? ziele.find(z => z.goal_id === e.goal_id) ?? null : null
+    return (
+      <Card>
+        <div data-steuerung="eingefroren" className="v2-col-gap" style={{ gap: 8 }}>
+          {kopf}
+          <KeinZielWarnung herkunft="ziel_eingefroren" kcal={zielwerte?.kcal ?? null} protein={zielwerte?.protein_g ?? null}
+                           ruhend={null} eingefroren={e}
+                           weg={<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                             {alt && aktionen(alt.zustand).neuStarten && <NeuStartenFluss ziel={alt} heute={stichtag} />}
+                             <button type="button" className="v2-btn v2-btn-sm" data-kein-ziel-setzen onClick={onZielSetzen}>Ziel setzen</button>
+                           </div>} />
+        </div>
+      </Card>
+    )
+  }
   if (zustand === 'kein_ziel' || zustand === 'pausiert') {
     return (
       <Card>
@@ -111,7 +131,7 @@ function Steuerung({ ziele, phasen, offenePhasen, zielwerte, vorschlag, strategi
   const richtung = variante ? richtungen(strategien).find(r => r.gruppe === variante.auswahl_gruppe)?.standard.label ?? null : null
   const danach = variante ? empfohlenDanach(variante, strategien) : []
   const art = PHASENARTEN.find(a => a.id === p.phase_type)?.name ?? p.phase_type
-  const { lage, grund } = lageVon(g, stichtag)
+  const { lage, grund } = lageVon(g)
   const kcal = zielwerte?.kcal ?? vorschlag?.kcal ?? null
   const protein = zielwerte?.protein_g ?? vorschlag?.protein_g ?? null
   const woche = p.gueltig_ab ? Math.floor((Date.parse(stichtag) - Date.parse(p.gueltig_ab)) / (7 * 86400000)) + 1 : null
@@ -317,7 +337,8 @@ function MesszielKachel({ g, stichtag, meilensteine }: { g: ZielFortschritt; sti
   const [bearbeiten, setBearbeiten] = React.useState(false)
   if (bearbeiten) return <ZielEditor ziel={g} onFertig={() => setBearbeiten(false)} />
   const kat = kategorieVon(g)
-  const { lage, grund } = lageVon(g, stichtag)
+  const { lage, grund } = lageVon(g)
+  const darf = aktionen(g.zustand)
   const quelle = quelleLesbar(g.current_source)
   const pct = g.progress_status === 'measured' ? g.progress_pct : null
   const art = g.measurement_type && g.measurement_type in MESSARTEN
@@ -346,6 +367,8 @@ function MesszielKachel({ g, stichtag, meilensteine }: { g: ZielFortschritt; sti
                       aria-label={`${g.title} bearbeiten`} onClick={() => setBearbeiten(true)}>
                 <Icon name="edit" className="v2-ic v2-ic-sm" />
               </button>
+              {/* G-639: Loeschen je Kachel — nur mit Loeschweg (G-611), sonst kein Knopf. */}
+              {darf.loeschen && <LoeschenFluss ziel={g} />}
             </span>
           </div>
           <div style={{ fontSize: 14, fontWeight: 600, margin: '4px 0' }}>{g.title}</div>
@@ -404,8 +427,9 @@ function Messziele({ ziele, stichtag, meilensteine, onMessziel }: {
   )
 }
 
-function Abgeschlossen({ ziele }: { ziele: ZielFortschritt[] }) {
+function Abgeschlossen({ ziele, stichtag, meilensteine }: { ziele: ZielFortschritt[]; stichtag: string; meilensteine: Meilenstein[] }) {
   const [auf, setAuf] = React.useState(false)
+  const [details, setDetails] = React.useState<string | null>(null)
   const zu = ziele.filter(istAbgeschlossen)
   if (zu.length === 0) return null
   return (
@@ -417,21 +441,37 @@ function Abgeschlossen({ ziele }: { ziele: ZielFortschritt[] }) {
       </button>
       {auf && (
         <div className="v2-col-gap" style={{ gap: 6, marginTop: 8 }}>
-          {zu.map(g => (
-            <div key={g.goal_id} data-abgeschlossen-ziel={g.status} style={{ display: 'flex', gap: 10, alignItems: 'center', fontSize: 12, padding: '6px 0', borderBottom: '1px solid var(--border)' }}>
-              <Icon name={KAT_ICON[kategorieVon(g)]} className="v2-ic v2-ic-sm" />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontWeight: 600 }}>{g.title}</div>
-                <div className="v2-dim" style={{ fontSize: 10.5 }}>
-                  {g.achievement_date ? `am ${datumDe(g.achievement_date)}` : g.target_date ? `Frist ${datumDe(g.target_date)}` : ''}
-                  {g.target_value !== null
-                    ? `${g.achievement_date || g.target_date ? ' · ' : ''}${wertMitEinheit(g.current_value, g.target_unit)} von ${wertMitEinheit(g.target_value, g.target_unit)}`
-                    : (g.achievement_date || g.target_date ? '' : 'ohne Zielwert')}
+          {zu.map(g => {
+            // G-640: Grund und Datum aus der Kette (goal_list_at); ohne sie der gespeicherte Status.
+            const am = g.zustand.eingefroren_am ?? g.achievement_date
+            const grund = g.zustand.grund
+            const darf = aktionen(g.zustand)
+            return (
+              <div key={g.goal_id} data-abgeschlossen-ziel={grund ?? g.status} style={{ fontSize: 12, padding: '6px 0', borderBottom: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                  <Icon name={KAT_ICON[kategorieVon(g)]} className="v2-ic v2-ic-sm" />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 600 }}>{g.title}</div>
+                    <div className="v2-dim" style={{ fontSize: 10.5 }}>
+                      {am ? `am ${datumDe(am)}` : g.target_date ? `Frist ${datumDe(g.target_date)}` : ''}
+                      {g.target_value !== null
+                        ? `${am || g.target_date ? ' · ' : ''}${wertMitEinheit(g.current_value, g.target_unit)} von ${wertMitEinheit(g.target_value, g.target_unit)}`
+                        : (am || g.target_date ? '' : 'ohne Zielwert')}
+                    </div>
+                  </div>
+                  <span data-eingefroren-grund={grund ?? ''}>
+                    <Pill variant={grund === 'erreicht' ? 'pos' : undefined}>{grund ? GRUND_TEXT[grund] : ABSCHLUSS[g.status!] ?? g.status}</Pill>
+                  </span>
+                  <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm" data-abgeschlossen-details={g.goal_id}
+                          aria-expanded={details === g.goal_id} onClick={() => setDetails(d => (d === g.goal_id ? null : g.goal_id))}>Details</button>
+                  {darf.neuStarten && <NeuStartenFluss ziel={g} heute={stichtag} />}
+                  {darf.archivieren && <ArchivierenKnopf goalId={g.goal_id} />}
+                  {darf.loeschen && <LoeschenFluss ziel={g} />}
                 </div>
+                {details === g.goal_id && <Details g={g} stichtag={stichtag} meilensteine={meilensteine} />}
               </div>
-              <Pill variant={g.status === 'achieved' ? 'pos' : undefined}>{ABSCHLUSS[g.status!]}</Pill>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
     </Card>
@@ -454,7 +494,7 @@ export function ReiterGoals(p: {
         <Module ziele={p.ziele} woche={p.woche} />
       </div>
       <Messziele ziele={p.ziele} stichtag={p.stichtag} meilensteine={p.meilensteine} onMessziel={p.onMessziel} />
-      <Abgeschlossen ziele={p.ziele} />
+      <Abgeschlossen ziele={p.ziele} stichtag={p.stichtag} meilensteine={p.meilensteine} />
     </div>
   )
 }

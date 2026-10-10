@@ -23,6 +23,7 @@ import {
   quelleLesbar, steuerZustand, wertMitEinheit, wochenStart, type ReiterZiel,
 } from '../reiter'
 import { MESSARTEN } from '../messziel'
+import { zustandAusStatus } from '../zustand'
 import { ReiterGoals } from '../../../app/v2/goals/reiter-goals'
 import type { Phase, ZielFortschritt, Zielphase } from '../lesen'
 import type { Zielwerte } from '../../profile/zielwerte-read'
@@ -144,6 +145,8 @@ const Z = (o: Partial<ZielFortschritt>): ZielFortschritt => ({
   gueltig_ab: '2026-10-01', linked_modules: [], status: 'active', is_primary: false, priority: 1,
   goal_role: 'controlling', measurement_type: null, measurement_rhythm: 'once', measurement_site: null,
   achievement_date: null, ...o,
+  // G-640: ohne Angabe der Rueckfall — der Zustand folgt dem gespeicherten Status.
+  zustand: o.zustand ?? zustandAusStatus(o.status ?? 'active'),
 })
 
 describe('G-618 — die Bausteine', () => {
@@ -173,14 +176,16 @@ describe('G-618 — die Bausteine', () => {
     assert.equal(engpass(s)?.module, 'recovery')
     assert.equal(engpass(modulSchnitt([], ['nutrition'])), null)
   })
-  it('Lage: voraus / im Plan / hinterher, sonst ein Grund', () => {
-    const r = (o: Partial<ZielFortschritt>) => lageVon(Z(o) as ReiterZiel, '2026-11-15')
-    assert.equal(r({ current_value: 76 }).lage, 'voraus')
-    assert.equal(r({ current_value: 81.4 }).lage, 'hinterher')
-    assert.equal(r({ target_date: null }).lage, null)
-    assert.ok(r({ target_date: null }).grund)
+  it('Lage: nur aus goal_progress_at — Wochenquote; einmalig und eingefroren ohne Wertung (G-640)', () => {
+    const r = (o: Partial<ZielFortschritt>) => lageVon(Z(o) as ReiterZiel)
+    // `[cmd]` **G-640: keine eigene Rechnung** — einmalige Ziele haben in der
+    // Kette kein Feld voraus/im Plan/hinterher, also keine Lage.
+    assert.deepEqual(r({ current_value: 76 }), { lage: null, grund: null })
+    assert.deepEqual(r({ current_value: 81.4 }), { lage: null, grund: null })
     assert.equal(r({ measurement_rhythm: 'weekly', progress_pct: 100 }).lage, 'im_plan')
     assert.equal(r({ measurement_rhythm: 'weekly', progress_pct: 50 }).lage, 'hinterher')
+    assert.deepEqual(r({ measurement_rhythm: 'weekly', progress_pct: 50, status: 'achieved' }), { lage: null, grund: null }, 'eingefroren: keine Wertung')
+    assert.deepEqual(r({ measurement_rhythm: 'weekly', progress_pct: 50, progress_status: 'frozen' }), { lage: null, grund: null })
   })
   it('Einheit lesbar', () => {
     assert.equal(wertMitEinheit(3, 'sessions_per_week'), '3 pro Woche')
@@ -197,7 +202,7 @@ describe('G-618 — die Bausteine', () => {
 const ZW = (o: Partial<Zielwerte>): Zielwerte => ({
   gueltig_ab: '2026-10-09', kcal: 2753.6, protein_g: 162.8, carbs_g: null, fat_g: null, fiber_g: null,
   linoleic_acid_g: null, alpha_linolenic_acid_g: null, herkunft: 'formel', tdee: 2753.6,
-  nutrition_goal: 'cut', ruhendes_ziel: null, luecke: null, ...o,
+  nutrition_goal: 'cut', ruhendes_ziel: null, luecke: null, eingefroren: null, ...o,
 })
 const PH = (o: Partial<Phase>): Phase => ({
   phase_id: 'p1', goal_id: 'g1', phase_type: 'fat_loss', variant: null, parameters: {},
@@ -294,7 +299,8 @@ describe('G-618 — das Drei-Plaetze-Modell ist raus', () => {
   })
   it('steuernd heisst goal_role', () => {
     assert.ok(!/is_primary/.test(lies('app/v2/goals/planer.tsx').replace(/data-[a-z-]+/g, '')))
-    assert.match(lies('lib/goals/reiter.ts'), /g\.goal_role === 'controlling' && g\.status === 'active'/)
+    // G-640: wirksam aktiv (goal_state_at), nicht der gespeicherte Status.
+    assert.match(lies('lib/goals/reiter.ts'), /g\.goal_role === 'controlling' && g\.zustand\.zustand === 'active'/)
   })
   it('der Editor fuehrt keine Prioritaet mehr', () => {
     const q = lies('app/v2/goals/ziel-editor.tsx')

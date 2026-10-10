@@ -32,7 +32,7 @@ const lies = (p: string) => readFileSync(join(SRC, p), 'utf8')
 const ZW = (o: Partial<Zielwerte>): Zielwerte => ({
   gueltig_ab: '2026-10-08', kcal: 2753.6, protein_g: 162.8, carbs_g: null, fat_g: null, fiber_g: null,
   linoleic_acid_g: null, alpha_linolenic_acid_g: null, herkunft: 'kein_aktives_ziel', tdee: 2753.6,
-  nutrition_goal: 'maintain', ruhendes_ziel: null, luecke: null, ...o,
+  nutrition_goal: 'maintain', ruhendes_ziel: null, luecke: null, eingefroren: null, ...o,
 })
 
 describe('G-630 — gegen die Kette', () => {

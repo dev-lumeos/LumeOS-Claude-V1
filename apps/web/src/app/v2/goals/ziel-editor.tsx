@@ -15,6 +15,8 @@ import * as React from 'react'
 import { Icon } from '@lumeos/ui'
 
 import { zielSpeichern } from './ziel-aktionen'
+import { LoeschenFluss } from './lebenszyklus'
+import { aktionen } from '../../../lib/goals/zustand'
 import { waechterSatz } from '../../../lib/goals/zielpruefung'
 import { einheitLesbar } from '../../../lib/goals/messziel'
 import {
@@ -126,6 +128,15 @@ export function ZielEditor({
 
         {fehler && (
           <div style={{ fontSize: 11.5, color: 'var(--neg)' }}>{fehler}</div>
+        )}
+
+        {/* G-639/G-640: Loeschen im Bearbeiten-Modus, unten, mit Bestaetigung
+            (Dossier 8.6). Nur mit Loeschweg (G-611) — sonst kein Knopf. */}
+        {aktionen(ziel.zustand).loeschen && (
+          <div data-editor-loeschen style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+            <span className="v2-dim" style={{ fontSize: 11 }}>Ziel löschen</span>
+            <LoeschenFluss ziel={ziel} />
+          </div>
         )}
 
         <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>

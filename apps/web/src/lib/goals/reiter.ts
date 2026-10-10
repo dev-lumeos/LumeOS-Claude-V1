@@ -9,8 +9,8 @@
 // (nur Phasen aktiver Ziele, G-613). Der Kopf zaehlt genau diese (G-636).
 import { utcTagIso } from '@lumeos/shared/datum'
 
-import { berechnePace, type Pace } from './pace'
 import { MESSARTEN, STELLEN, einheitLesbar, type Kategorie } from './messziel'
+import { istEingefroren, type Zustand } from './zustand'
 import type { Herkunft } from '../profile/zielwerte-hindernis'
 
 /** Die Felder, die diese Datei braucht — Teilmenge von `ZielFortschritt`. */
@@ -33,11 +33,13 @@ export interface ReiterZiel {
   gueltig_ab: string | null
   target_date: string | null
   linked_modules: string[]
+  /** G-640: der wirksame Zustand (G-611) — nicht der gespeicherte Status. */
+  zustand: Zustand
 }
 
 // ── Steuerung ────────────────────────────────────────────────────
 
-export type SteuerZustand = 'laeuft' | 'kein_ziel' | 'pausiert' | 'ohne_phase'
+export type SteuerZustand = 'laeuft' | 'kein_ziel' | 'pausiert' | 'ohne_phase' | 'eingefroren'
 
 /**
  * Der Zustand der Steuerungskarte (Entwurf: Zustaende aktiv / pausiert /
@@ -55,6 +57,7 @@ export function steuerZustand(e: {
   steuerziel: ReiterZiel | null
   laufendePhaseZumZiel: boolean
 }): SteuerZustand {
+  if (e.herkunft === 'ziel_eingefroren') return 'eingefroren'
   if (e.herkunft === 'ziel_ohne_laufende_phase') return 'ohne_phase'
   if (e.herkunft === 'kein_aktives_ziel' || e.herkunft === 'erhaltung_nicht_berechenbar') {
     return e.ruhend ? 'pausiert' : 'kein_ziel'
@@ -64,9 +67,14 @@ export function steuerZustand(e: {
   return e.ruhend ? 'pausiert' : 'kein_ziel'
 }
 
-/** Das eine aktive steuernde Ziel — `uq_user_goals_one_active_controlling` erlaubt hoechstens eines. */
-export const steuerziel = <T extends ReiterZiel>(ziele: T[]): T | null =>
-  ziele.find(g => g.goal_role === 'controlling' && g.status === 'active') ?? null
+/**
+ * Das eine aktive steuernde Ziel — `uq_user_goals_one_active_controlling` erlaubt
+ * hoechstens eines. `[cmd]` **G-640: WIRKSAM aktiv** — ein Ziel mit
+ * abgelaufener Frist steht gespeichert auf `active`, ist in der Kette aber
+ * eingefroren (`goal_state_at`).
+ */
+export const steuerziel = <T extends Pick<ReiterZiel, 'goal_role' | 'zustand'>>(ziele: T[]): T | null =>
+  ziele.find(g => g.goal_role === 'controlling' && g.zustand.zustand === 'active') ?? null
 
 // ── Messziele ────────────────────────────────────────────────────
 
@@ -92,29 +100,36 @@ export function kategorieVon(g: Pick<ReiterZiel, 'measurement_type' | 'goal_type
 export const ABSCHLUSS: Record<string, string> = {
   achieved: 'erreicht', missed: 'verfehlt', abandoned: 'beendet',
 }
-export const istAbgeschlossen = (g: Pick<ReiterZiel, 'status'>) => !!g.status && g.status in ABSCHLUSS
+/**
+ * Abgeschlossen heisst **eingefroren** (G-611): erreicht, Frist abgelaufen
+ * oder beendet — auch ohne gespeicherten Abschluss. `[read]` **Die Kette
+ * entscheidet** (`goal_list_at.effective_status`); ohne sie der Status.
+ */
+export const istAbgeschlossen = (g: Pick<ReiterZiel, 'zustand'>) => istEingefroren(g.zustand)
 
 export type Lage = 'voraus' | 'im_plan' | 'hinterher'
 export const LAGE_TEXT: Record<Lage, string> = { voraus: 'voraus', im_plan: 'im Plan', hinterher: 'hinterher' }
-const AUS_PACE: Record<Exclude<Pace, 'unbekannt'>, Lage> = { ahead: 'voraus', 'on-track': 'im_plan', behind: 'hinterher' }
 
 /**
- * Voraus / im Plan / hinterher — aus `berechnePace` (G-554, Ist gegen den
- * gleichmaessigen Verlauf bis heute). Woechentliche Ziele: die Quote der
- * laufenden Woche aus `goal_progress_at` (>= 100 % im Plan).
- * `[read]` **Ohne Grundlage kein Status, sondern ein Grund** (E-72).
+ * Die Lage eines Ziels — **nur aus `goal_progress_at`, keine eigene Rechnung**
+ * (G-640). `[cmd]` **Hier stand `berechnePace` (G-554):** Ist gegen den
+ * gleichmaessigen Verlauf, in der App gerechnet. G-611 fordert: der Zustand
+ * kommt aus der Kette.
+ *
+ * `[cmd]` **`goal_progress_at` liefert eine Lage nur fuer Wochenziele** (die
+ * Quote der laufenden Woche, `progress_pct`). Fuer einmalige Ziele hat die
+ * Kette kein Feld voraus/im Plan/hinterher — **gemeldet, nicht nachgebaut**;
+ * die Kachel nennt dann den Fortschritt ohne Wertung.
+ *
+ * `[read]` **Eingefroren: keine Wertung** (`progress_status = 'frozen'`).
  */
-export function lageVon(g: ReiterZiel, heute: string): { lage: Lage | null; grund: string | null } {
+export function lageVon(g: ReiterZiel): { lage: Lage | null; grund: string | null } {
+  if (istEingefroren(g.zustand) || g.progress_status === 'frozen') return { lage: null, grund: null }
   if (g.measurement_rhythm === 'weekly') {
     if (g.progress_status !== 'measured' || g.progress_pct === null) return { lage: null, grund: 'diese Woche noch kein Wert' }
     return { lage: g.progress_pct >= 100 ? 'im_plan' : 'hinterher', grund: null }
   }
-  const p = berechnePace({
-    start_value: g.start_value, current_value: g.current_value, target_value: g.target_value,
-    start: g.gueltig_ab, deadline: g.target_date, heute,
-  })
-  if (p.grund !== null || p.pace === 'unbekannt') return { lage: null, grund: p.grund ?? 'kein Verlauf' }
-  return { lage: AUS_PACE[p.pace], grund: null }
+  return { lage: null, grund: null }
 }
 
 /**

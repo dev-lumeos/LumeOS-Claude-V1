@@ -132,6 +132,7 @@ export type NutritionKachel = {
     herkunft: Herkunft | null
     ruhend: { title: string } | null
     luecke: Zielwerte['luecke']
+    eingefroren: Zielwerte['eingefroren']
   } | null
 }
 
@@ -376,6 +377,7 @@ export async function ladeDashboard(stichtag: string): Promise<DashboardDaten> {
         herkunft: ziele.herkunft,
         ruhend: ziele.ruhendes_ziel,
         luecke: ziele.luecke,
+        eingefroren: ziele.eingefroren,
       }
     }
   } catch {

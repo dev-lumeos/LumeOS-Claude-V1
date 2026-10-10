@@ -148,7 +148,7 @@ export function DashboardEcht({ d }: { d: DashboardDaten }) {
               <div style={{ marginBottom: 10 }}>
                 <KeinZielWarnung herkunft={d.nutrition.ziele.herkunft} kcal={d.nutrition.ziele.kcal}
                                  protein={d.nutrition.ziele.protein} ruhend={d.nutrition.ziele.ruhend}
-                                 luecke={d.nutrition.ziele.luecke} />
+                                 luecke={d.nutrition.ziele.luecke} eingefroren={d.nutrition.ziele.eingefroren} />
               </div>
             )}
             <div className="v2-grid v2-g-cols-4" style={{ gap: 10 }}>

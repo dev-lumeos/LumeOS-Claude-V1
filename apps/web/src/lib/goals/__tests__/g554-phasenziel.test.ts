@@ -395,13 +395,13 @@ describe('G-554/A4 — der Pace ist eine Rechnung', () => {
   // in `reiter-goals.tsx`. Die Regeln gelten fuer beide.
   const REITER = () => lies(join(GOALS, 'reiter-goals.tsx'))
   const LOGIK = () => lies(join(HIER, '..', 'reiter.ts'))
-  it('die Karte rechnet den Pace, sie behauptet ihn nicht', () => {
-    assert.match(LOGIK(), /berechnePace\(/,
-      'die Karte zeigt einen Pace ohne Rechnung — das waere das '
-      + 'Urteil aus der Attrappe')
-    assert.match(LOGIK(), /start: g\.gueltig_ab, deadline: g\.target_date, heute,/)
-    assert.match(REITER(), /lageVon\(g, stichtag\)/,
-      'die Karte rechnet gegen ein anderes Heute als den Stichtag')
+  it('die Karte behauptet keine Lage — sie kommt aus der Kette (G-640)', () => {
+    // `[cmd]` **Hier stand: „die Karte rechnet den Pace" (`berechnePace`).**
+    // G-640: keine eigene Rechnung; `goal_progress_at` liefert die Lage nur
+    // fuer Wochenziele. `[read]` **Regel bleibt: keine Lage ohne Grundlage.**
+    assert.ok(!/berechnePace\(/.test(LOGIK()), 'die App rechnet die Lage wieder selbst')
+    assert.match(LOGIK(), /if \(g\.measurement_rhythm === 'weekly'\) \{/)
+    assert.match(REITER(), /lageVon\(g\)/)
     for (const q of [REITER(), LOGIK()]) {
       assert.ok(!/Date\.now\(\)|new Date\(\)/.test(q),
         'die Karte holt sich die Zeit selbst — der Stichtag kommt von aussen')
@@ -409,9 +409,11 @@ describe('G-554/A4 — der Pace ist eine Rechnung', () => {
   })
 
   it('ohne Grundlage steht der Grund, kein Urteil', () => {
-    assert.match(LOGIK(), /if \(p\.grund !== null \|\| p\.pace === 'unbekannt'\) return \{ lage: null, grund:/,
-      'die Karte zeigt den Pace auch ohne Grundlage — dann saehe '
+    assert.match(LOGIK(), /if \(g\.progress_status !== 'measured' \|\| g\.progress_pct === null\) return \{ lage: null, grund:/,
+      'die Karte zeigt eine Lage auch ohne Messwert — dann saehe '
       + '„im Plan" wie eine Messung aus')
+    assert.match(LOGIK(), /if \(istEingefroren\(g\.zustand\) \|\| g\.progress_status === 'frozen'\) return \{ lage: null, grund: null \}/,
+      'ein eingefrorenes Ziel wird bewertet')
     assert.match(REITER(), /if \(!lage\) return <span className="v2-dim" data-lage="" [^>]*>\{grund\}/,
       'ohne Grundlage steht kein Grund am Schirm')
   })

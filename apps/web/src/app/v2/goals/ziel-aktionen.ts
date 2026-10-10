@@ -17,6 +17,10 @@ import {
 } from '../../../lib/goals/messziel'
 import { ladeVerlauf, type Verlauf } from '../../../lib/goals/reiter-read'
 import {
+  zielArchivieren, zielLoeschen, zielNeuStarten, type Lebenszyklus,
+} from '../../../lib/goals/lebenszyklus-write'
+import { fehlerSatz } from '../../../lib/goals/zustand'
+import {
   phasenzielAnlegen, type PhasenzielNeu, type PhasenzielErgebnis,
 } from '../../../lib/goals/phasenziel-write'
 
@@ -61,7 +65,10 @@ export async function zielSpeichern(zielId: string, aenderung: ZielAenderung): P
   // Die Uebersicht liest serverseitig — nach dem Schreiben neu holen,
   // sonst steht die alte Reihenfolge bis zum naechsten Laden.
   if (e.ok) revalidatePath('/v2/goals')
-  return e.ok ? { ok: true, fehler: null } : { ok: false, fehler: e.fehler }
+  // G-640: G611_BLOCK / G638_BLOCK als Satz (z. B. Fortsetzen eines
+  // eingefrorenen Ziels). G626_* bleibt roh — der Dialog setzt daraus selbst
+  // den Satz mit den Hinweisen der Pruefung zusammen (G-628 Teil 2).
+  return e.ok ? { ok: true, fehler: null } : { ok: false, fehler: fehlerSatz(e.fehler) }
 }
 
 /**
@@ -107,4 +114,21 @@ export async function messzielVorschauAktion(f: Messformular, heute: string):
   Promise<{ ok: true; vorschau: Vorschau } | { ok: false; fehler: string } | null> {
   const p = vorschauParameter(f, heute)
   return p ? startVorschau(p) : null
+}
+
+/** G-640: Archivieren, Loeschen, Neu starten — die Kette prueft, die App fragt. */
+export async function zielArchivierenAktion(id: string): Promise<Lebenszyklus> {
+  const r = await zielArchivieren(id)
+  if (r.ok) revalidatePath('/v2/goals')
+  return r
+}
+export async function zielLoeschenAktion(id: string, verlaufBestaetigt: boolean): Promise<Lebenszyklus> {
+  const r = await zielLoeschen(id, verlaufBestaetigt)
+  if (r.ok) revalidatePath('/v2/goals')
+  return r
+}
+export async function zielNeuStartenAktion(id: string, start: string, ende: string): Promise<Lebenszyklus> {
+  const r = await zielNeuStarten(id, start, ende)
+  if (r.ok) revalidatePath('/v2/goals')
+  return r
 }

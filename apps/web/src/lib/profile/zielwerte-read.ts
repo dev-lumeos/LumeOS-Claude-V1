@@ -49,6 +49,11 @@ export type Zielwerte = {
     goal_id: string; title: string | null
     letzte_phase_ende: string | null; recommended_next: string | null
   } | null
+  /**
+   * `[cmd]` **G-640: das eingefrorene Steuerziel** aus `goals.goal_list_at`
+   * (G-611) — nur gelesen, wenn die Herkunft `ziel_eingefroren` ist.
+   */
+  eingefroren: { goal_id: string; title: string; grund: string | null; am: string | null } | null
 }
 
 /** Was die Formel aus dem Profil macht — inklusive Grund, wenn nicht. */
@@ -210,6 +215,17 @@ export async function getZielwerteAm(stichtag: string): Promise<Zielwerte | null
     const g = (z ?? [])[0] as { id: string; title: string } | undefined
     ruhendes_ziel = g ? { goal_id: g.id, title: g.title } : null
   }
+  let eingefroren: Zielwerte['eingefroren'] = null
+  if (herkunft === 'ziel_eingefroren') {
+    // `[read]` **Dieselbe Wahl wie `berechne_zielwerte`** (611, Zeile 131–137):
+    // das zuletzt eingefrorene Steuerziel.
+    const { data: l } = await supabase.schema('goals')
+      .rpc('goal_list_at', { p_user_id: userId, p_stichtag: stichtag })
+    const z = ((l ?? []) as Array<Record<string, unknown>>)
+      .filter(r => r.goal_role === 'controlling' && r.effective_status === 'eingefroren')
+      .sort((a, b) => String(b.frozen_on ?? '').localeCompare(String(a.frozen_on ?? '')))[0]
+    if (z) eingefroren = { goal_id: String(z.goal_id), title: String(z.title), grund: text(z.freeze_reason), am: text(z.frozen_on) }
+  }
   let luecke: Zielwerte['luecke'] = null
   if (herkunft === 'ziel_ohne_laufende_phase') {
     const { data: l } = await supabase.schema('goals')
@@ -238,6 +254,7 @@ export async function getZielwerteAm(stichtag: string): Promise<Zielwerte | null
     nutrition_goal: text(r.nutrition_goal),
     ruhendes_ziel,
     luecke,
+    eingefroren,
   }
 }
 

@@ -1111,17 +1111,19 @@ test('Goals bewertet nicht, es zeigt', () => {
   //
   // `[read]` **Die Karte ZEIGT einen Pace** (A4 aus G-554). **Also
   // wird unbedingt gefordert, dass sie ihn rechnet.**
-  // `[cmd]` **G-618: die Rechnung liegt in `lib/goals/reiter.ts`
-  // (`lageVon` → `berechnePace`), die Anzeige im Reiter (`data-lage`).**
-  // Beide Enden werden gefordert.
+  // `[cmd]` **G-640 dreht den Anlass, nicht die Regel:** hier stand „die
+  // Rechnung liegt in `lageVon` → `berechnePace`" (G-554/G-618). G-611/G-640:
+  // **der Zustand kommt aus der Kette, keine eigene Rechnung in der App.**
+  // `[read]` **Die Regel bleibt — nennen, nicht bewerten — und eine Lage
+  // steht nur, wo die Kette sie liefert** (`goal_progress_at`: Wochenquote).
   const karten = ohneKommentar(fs.readFileSync(GOALS_KARTEN, 'utf8'))
   const logik = ohneKommentar(fs.readFileSync(GOALS_REITER_LOGIK, 'utf8'))
-  assert.ok(/berechnePace\(/.test(logik) && /lageVon\(/.test(karten),
-    'der Reiter rechnet den Pace nicht — entweder er fehlt '
-    + 'ganz, oder er ist wieder das Urteil aus der Attrappe.')
+  assert.ok(!/berechnePace\(/.test(logik) && !/berechnePace\(/.test(karten),
+    'der Reiter rechnet die Lage wieder selbst — G-640 verlangt sie aus der Kette')
+  assert.ok(/g\.progress_pct >= 100 \? 'im_plan' : 'hinterher'/.test(logik) && /lageVon\(g\)/.test(karten),
+    'die Lage haengt nicht mehr an goal_progress_at')
   assert.ok(/data-lage/.test(karten),
-    'die Karte zeigt keinen Pace mehr — G-554/A4 verlangt ihn, und '
-    + 'ein Waechter, der bei Abwesenheit schweigt, misst nichts.')
+    'die Karte zeigt keine Lage mehr — wo die Kette eine liefert, muss sie stehen.')
 
   // `[cmd]` **Und die Zahl bleibt eine Zahl:** kein Satz, der aus ihr
   // ein Urteil ueber die Person macht. `[read]` **Die Wendungen
