@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 282 |
-| `laufend_codex` | 2 |
+| `todos` | 281 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 694 |
 | **gesamt** | **979** |
@@ -694,7 +694,7 @@
 | `G-628` | aufgabe | hoch | [Ziel setzen nach dem Entwurf](erledigt/goals-g-0628-ziel-setzen-nach-dem-entwurf.md) | erledigt | — | G-631, G-634, G-641 |
 | `G-629` | aufgabe | hoch | [Die Phase engine zeigt Pläne](todos/goals-g-0629-die-phase-engine-zeigt-plaene.md) | offen | — | — |
 | `G-630` | fehler | hoch | [Die Warnung ohne aktives Ziel ist unsichtbar](erledigt/goals-g-0630-die-warnung-ohne-aktives-ziel-ist-unsichtbar.md) | erledigt | — | G-636 |
-| `G-631` | aufgabe | mittel | [Es gibt kein Trendgewicht](todos/goals-g-0631-es-gibt-kein-trendgewicht.md) | offen | — | — |
+| `G-631` | aufgabe | mittel | [Es gibt kein Trendgewicht](laufend_codex/goals-g-0631-es-gibt-kein-trendgewicht.md) | laeuft (codex) | — | — |
 | `G-632` | fehler | niedrig | [Prüfungstexte ohne Umlaute](erledigt/goals-g-0632-pruefungstexte-ohne-umlaute.md) | erledigt | — | G-642 |
 | `G-633` | fehler | niedrig | [Prüfungstexte schreiben Zahlen mit Punkt](erledigt/goals-g-0633-pruefungstexte-zahlen-mit-punkt.md) | erledigt | — | — |
 | `G-634` | frage | mittel | [Startwert eines Messziels erst nach dem Anlegen sichtbar](erledigt/goals-g-0634-startwert-eines-messziels-erst-nach-dem-anlegen.md) | erledigt | — | — |

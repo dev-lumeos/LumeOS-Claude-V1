@@ -4,6 +4,8 @@ typ: aufgabe
 modul: goals
 schwere: mittel
 angelegt: 2026-10-08
+agent: codex
+beauftragt: 2026-10-10
 
 braucht: []
 kind_von: G-628
@@ -47,3 +49,14 @@ Rückfall für alle drei: die letzte Messung mit Datum, ausdrücklich gekennzeic
 Auf dev am 09.10.: Messung 84,75, EMA 84,709, 7-Tage-Mittel 84,716, Regression 84,724.
 
 Empfehlung: EMA mit α = 0,25 und ausgewiesener Quelle (`trend_ema` | `letzte_messung`), Datum und Anzahl der Messungen. Entscheidung Tom offen.
+
+## Entschieden - 2026-10-10 07:34, Tom
+
+EMA mit alpha = 0,25 (Vorschlag Codex), Quelle ausgewiesen (trend_ema | letzte_messung), Datum und Anzahl Messungen.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER Codex - dev Lean Bulk B (live) + G-631 Trendgewicht EMA (Kette)
+    Bereich: Teil A Live-Daten dev (Freigabe Tom), Teil B supabase/_pipeline/
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-10, HEAD 2e9e2906

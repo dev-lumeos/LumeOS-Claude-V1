@@ -101,3 +101,7 @@ Hinweis: `ziel_grenzen_pruefen` und `berechne_zielwerte` sind jetzt umbenannte B
 `[read]` Codex: Rollen und test-user-Tageswerte unverändert, pnpm gate grün.
 
 dev-Neustart (Variante b) gestoppt: `ziel_grenzen_pruefen` sperrt `vorgehen_zu_langsam`. lean_bulk mit 0,25 %/Woche erreicht 85 → 88 kg bis 16.12. nicht. Das ist eine Datenentscheidung von Tom, kein Kettenfehler.
+
+## Entschieden - 2026-10-10 07:34, Tom: dev-Neustart Variante B
+
+Lean Bulk (0,25 %/Woche) bis 88 kg; das Datum rechnet das System (etwa Mitte Januar 2027). Titel neu: "Lean Bulk auf 88 kg". Ausführung: Codex, Auftrag zu G-631.
