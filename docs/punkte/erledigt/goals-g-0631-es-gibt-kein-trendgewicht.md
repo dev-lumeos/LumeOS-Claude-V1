@@ -18,7 +18,8 @@ quellen:
 
 beruehrt:
   tabellen: []
-  dateien: []
+  dateien:
+    - supabase/_pipeline/11_goals/631_trendgewicht_ema.sql
 ---
 
 # Es gibt kein Trendgewicht
