@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-08
 agent: codex
 beauftragt: 2026-10-10
+erledigt: 2026-10-16
+commit: 660cc131
 
 braucht: []
 kind_von: G-628
@@ -69,3 +71,17 @@ EMA mit alpha = 0,25 (Vorschlag Codex), Quelle ausgewiesen (trend_ema | letzte_m
 `[read]` Codex: Probe 6/6. Ergebnisse: dev 09.10. = 84,709; Lückenfall 84,533; Rückfall bei 3 Messtagen und bei veralteten Daten; fremde Daten ausgeschlossen. Sabotage 2 rot. Kette 393 Schritte grün.
 
 Offen: live einspielen (mit dem nächsten Paket). Einbinden in Startwert, `ziel_grenzen_pruefen` und die App wird ein eigener Schritt, wenn die App mitzieht.
+
+## Live - 2026-10-16, Codex (Paket 611 → 638 → 631 → 642)
+
+`[cmd]` Orchestrator nachgemessen: Die Funktionen `trendgewicht_am`, `g638_plan_resume_preflight`, `goal_delete` und `goal_list_at` sind live. Sicherung `backup/a105-paket-g611-nachher2.sql` hat 1.420.942 Byte.
+
+`[read]` Codex:
+- goal_list_at: 8 Ziele eingefroren, wie im korrigierten Soll.
+- dev: kein Hindernis, 2.714 kcal.
+- test-user: Ziele und Pläne konsistent, 0 Widersprüche.
+- trendgewicht_am: dev `trend_ema` 84,739, test-user `letzte_messung` 81,40.
+- goal_delete: ohne Verlauf gelöscht, mit Verlauf `G611_CONFIRM`.
+- Rollen unverändert.
+- G-642 per Hex C3 9C …
+- Gate 18/18 grün, web 2844.

@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-07
 agent: codex
 beauftragt: 2026-10-09
+erledigt: 2026-10-16
+commit: b1d2c0af
 
 braucht: []
 kind_von: G-608
@@ -74,3 +76,17 @@ Live erst, wenn die App den Zustand kennt (`ziel_eingefroren`, `goal_state_at`):
 `[cmd]` Orchestrator nachgemessen: Je 4 Ziele bei dev und tom.seed, nämlich "Bankdruecken stabilisieren" (active, Frist 18.08., neu eingefroren), "120 kg Bankdruecken bis Juli" (missed), "Fruehjahrs-Cut abgeschlossen" (achieved), "Vier Cardio-Einheiten pro Woche" (abandoned).
 
 Bewertung: 8 ist richtig, das Soll 2 im Auftrag war falsch (Fehler des Orchestrators). Nach Toms Regel (Dossier 9, 1/2) sind abgeschlossene Ziele ebenfalls eingefroren: Details lesbar, Neustart, Löschen. Weiter mit 638, 631, 642.
+
+## Live - 2026-10-16, Codex (Paket 611 → 638 → 631 → 642)
+
+`[cmd]` Orchestrator nachgemessen: Die Funktionen `trendgewicht_am`, `g638_plan_resume_preflight`, `goal_delete` und `goal_list_at` sind live. Sicherung `backup/a105-paket-g611-nachher2.sql` hat 1.420.942 Byte.
+
+`[read]` Codex:
+- goal_list_at: 8 Ziele eingefroren, wie im korrigierten Soll.
+- dev: kein Hindernis, 2.714 kcal.
+- test-user: Ziele und Pläne konsistent, 0 Widersprüche.
+- trendgewicht_am: dev `trend_ema` 84,739, test-user `letzte_messung` 81,40.
+- goal_delete: ohne Verlauf gelöscht, mit Verlauf `G611_CONFIRM`.
+- Rollen unverändert.
+- G-642 per Hex C3 9C …
+- Gate 18/18 grün, web 2844.

@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-09
 agent: codex
 beauftragt: 2026-10-09
+erledigt: 2026-10-16
+commit: ba11b66c
 
 braucht: []
 kind_von: G-625
@@ -51,3 +53,17 @@ Ziel `paused`/`on_hold` → `active`: Der Plan geht von `pausiert` auf `aktiv`, 
 Befund: Die Satztexte in den G638-Fehlern stehen ohne Umlaute ("koennen"), wie früher bei G-632. Die Korrektur gehört ins Live-Paket.
 
 Live erst mit G-611 und G-640.
+
+## Live - 2026-10-16, Codex (Paket 611 → 638 → 631 → 642)
+
+`[cmd]` Orchestrator nachgemessen: Die Funktionen `trendgewicht_am`, `g638_plan_resume_preflight`, `goal_delete` und `goal_list_at` sind live. Sicherung `backup/a105-paket-g611-nachher2.sql` hat 1.420.942 Byte.
+
+`[read]` Codex:
+- goal_list_at: 8 Ziele eingefroren, wie im korrigierten Soll.
+- dev: kein Hindernis, 2.714 kcal.
+- test-user: Ziele und Pläne konsistent, 0 Widersprüche.
+- trendgewicht_am: dev `trend_ema` 84,739, test-user `letzte_messung` 81,40.
+- goal_delete: ohne Verlauf gelöscht, mit Verlauf `G611_CONFIRM`.
+- Rollen unverändert.
+- G-642 per Hex C3 9C …
+- Gate 18/18 grün, web 2844.

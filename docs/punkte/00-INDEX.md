@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 281 |
-| `laufend_codex` | 4 |
+| `todos` | 283 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 695 |
-| **gesamt** | **982** |
+| `erledigt` | 699 |
+| **gesamt** | **984** |
 
 ## medical — 50
 
@@ -592,9 +591,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 115
+## goals — 117
 
-### beauftragbar — 107
+### beauftragbar — 111
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -674,7 +673,7 @@
 | `G-608` | fehler | hoch | [Die Stufenwochen sind im Programm editierbar - und am Schirm belegt](erledigt/goals-g-0608-die-stufenwochen-sind-im-programm-editierbar.md) | erledigt | — | G-609, G-610, G-611 |
 | `G-609` | fehler | hoch | [Die Strategie wird beim Phasenstart nicht durchgereicht](erledigt/goals-g-0609-die-strategie-wird-beim-phasenstart-nicht-durchgereicht.md) | erledigt | — | — |
 | `G-610` | fehler | mittel | [contest_prep ist in der App nicht anlegbar](erledigt/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md) | erledigt | — | G-612, G-619, G-626, G-628 |
-| `G-611` | fehler | mittel | [Ein Ziel laesst sich nicht loeschen](laufend_codex/goals-g-0611-ein-ziel-laesst-sich-nicht-loeschen.md) | laeuft (codex) | — | G-640 |
+| `G-611` | fehler | mittel | [Ein Ziel laesst sich nicht loeschen](erledigt/goals-g-0611-ein-ziel-laesst-sich-nicht-loeschen.md) | erledigt | — | G-640 |
 | `G-612` | entscheidung | hoch | [Drei Auswahlen auf einer Seite, und keine folgt dem Mockup](todos/goals-g-0612-drei-auswahlen-und-keine-ordnung.md) | offen | — | G-614, G-615 |
 | `G-613` | fehler | hoch | [Ein pausiertes Ziel laesst seine Phase laufen](erledigt/goals-g-0613-ein-pausiertes-ziel-laesst-seine-phase-laufen.md) | erledigt | — | G-622 |
 | `G-614` | fehler | hoch | [Der Strategiekatalog kennt seine Karte und seinen Mindestgrad](erledigt/goals-g-0614-der-strategiekatalog-kennt-karte-und-mindestgrad.md) | erledigt | — | G-616 |
@@ -694,19 +693,23 @@
 | `G-628` | aufgabe | hoch | [Ziel setzen nach dem Entwurf](erledigt/goals-g-0628-ziel-setzen-nach-dem-entwurf.md) | erledigt | — | G-631, G-634, G-641 |
 | `G-629` | aufgabe | hoch | [Die Phase engine zeigt Pläne](laufend_claudecode/goals-g-0629-die-phase-engine-zeigt-plaene.md) | laeuft (claudecode) | — | G-644, G-645 |
 | `G-630` | fehler | hoch | [Die Warnung ohne aktives Ziel ist unsichtbar](erledigt/goals-g-0630-die-warnung-ohne-aktives-ziel-ist-unsichtbar.md) | erledigt | — | G-636 |
-| `G-631` | aufgabe | mittel | [Es gibt kein Trendgewicht](laufend_codex/goals-g-0631-es-gibt-kein-trendgewicht.md) | laeuft (codex) | — | — |
+| `G-631` | aufgabe | mittel | [Es gibt kein Trendgewicht](erledigt/goals-g-0631-es-gibt-kein-trendgewicht.md) | erledigt | — | G-646 |
 | `G-632` | fehler | niedrig | [Prüfungstexte ohne Umlaute](erledigt/goals-g-0632-pruefungstexte-ohne-umlaute.md) | erledigt | — | G-642 |
 | `G-633` | fehler | niedrig | [Prüfungstexte schreiben Zahlen mit Punkt](erledigt/goals-g-0633-pruefungstexte-zahlen-mit-punkt.md) | erledigt | — | — |
 | `G-634` | frage | mittel | [Startwert eines Messziels erst nach dem Anlegen sichtbar](erledigt/goals-g-0634-startwert-eines-messziels-erst-nach-dem-anlegen.md) | erledigt | — | — |
 | `G-636` | fehler | niedrig | [Der Goals-Kopf zählt Phasen eines pausierten Ziels als laufend](erledigt/goals-g-0636-kopf-zaehlt-phasen-eines-pausierten-ziels.md) | erledigt | — | — |
 | `G-637` | fehler | mittel | [Ein aktives Ziel ohne laufende Phase heisst "kein aktives Ziel"](erledigt/goals-g-0637-aktives-ziel-ohne-laufende-phase-heisst-kein-aktives-ziel.md) | erledigt | — | — |
-| `G-638` | fehler | mittel | [Fortsetzen eines Ziels aktiviert seinen Plan nicht](laufend_codex/goals-g-0638-fortsetzen-aktiviert-den-plan-nicht.md) | laeuft (codex) | — | — |
+| `G-638` | fehler | mittel | [Fortsetzen eines Ziels aktiviert seinen Plan nicht](erledigt/goals-g-0638-fortsetzen-aktiviert-den-plan-nicht.md) | erledigt | — | — |
 | `G-639` | aufgabe | mittel | [Reiter Goals – Reste nach dem Entwurf](todos/goals-g-0639-reiter-goals-reste-nach-entwurf.md) | offen | — | — |
-| `G-642` | fehler | niedrig | [Ältere Goals-Schritte schreiben Nutzertexte ohne Umlaute](laufend_codex/goals-g-0642-aeltere-goals-schritte-ohne-umlaute.md) | laeuft (codex) | — | — |
+| `G-640` | aufgabe | hoch | [Die App liest den wirksamen Zielzustand](laufend_claudecode/goals-g-0640-app-liest-den-wirksamen-zielzustand.md) | laeuft (claudecode) | — | G-643 |
+| `G-642` | fehler | niedrig | [Ältere Goals-Schritte schreiben Nutzertexte ohne Umlaute](erledigt/goals-g-0642-aeltere-goals-schritte-ohne-umlaute.md) | erledigt | — | G-647 |
+| `G-643` | aufgabe | mittel | [Lage "voraus / im Plan / hinterher" für einmalige Messziele](todos/goals-g-0643-lage-fuer-einmalige-messziele.md) | offen | — | — |
 | `G-644` | aufgabe | hoch | [Planer: Lücken in der Kette](todos/goals-g-0644-planer-luecken-in-der-kette.md) | offen | — | — |
 | `G-645` | fehler | mittel | [Goals und Phase Engine: Befunde am Schirm (dev, 10.10.)](todos/goals-g-0645-goals-reiter-befunde-am-schirm.md) | offen | — | — |
+| `G-646` | aufgabe | mittel | [Trendgewicht einbinden](todos/goals-g-0646-trendgewicht-einbinden.md) | offen | — | — |
+| `G-647` | fehler | niedrig | [Der Satz aus 622 steht noch ohne Umlaute](todos/goals-g-0647-622-satz-mit-umlauten.md) | offen | — | — |
 
-### wartet auf Blocker — 8
+### wartet auf Blocker — 6
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -716,8 +719,6 @@
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
-| `G-640` | aufgabe | hoch | [Die App liest den wirksamen Zielzustand](laufend_claudecode/goals-g-0640-app-liest-den-wirksamen-zielzustand.md) | laeuft (claudecode) | G-611 | G-643 |
-| `G-643` | aufgabe | mittel | [Lage "voraus / im Plan / hinterher" für einmalige Messziele](todos/goals-g-0643-lage-fuer-einmalige-messziele.md) | offen | G-611 | — |
 
 ## coach — 58
 
