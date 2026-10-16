@@ -60,3 +60,16 @@ Claude Code baut die Seite nach `PhaseEngine.dc.html` um, Abnahme wie G-648 mit 
 - Cardio steht auf "–", im Entwurf auf "1×".
 
 Entscheidung (Entwurf ist verbindlich): Die alten Bauteile fallen weg. Hängt an einem davon eine Funktion, die im Entwurf woanders liegt (z. B. Phase beenden → Bearbeiten), dann dorthin verschieben, sonst melden.
+
+## Feinschliff - 2026-10-16, Commit `0a960089` (Gate grün)
+
+`[read]` Claude Code:
+- Unter dem aktiven Plan stehen 0 alte Bauteile.
+- Phase beenden liegt jetzt im Bearbeiten-Panel.
+- Der Wechselvorschlag steht unter "Als nächstes".
+- Cardio bleibt "–", weil `goal_strategies.cardio_pro_woche` in allen 22 Zeilen NULL ist (laut Spaltenkommentar gewollt).
+
+Noch offen:
+- Segmentbalken nach Programm färben, wie im Entwurf
+- Plantyp, Neu starten, Löschen anbinden (G-644 Teil 2 ist jetzt live)
+- Chip "Termin gehalten / erreicht" braucht ein Feld (G-655)

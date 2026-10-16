@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 282 |
-| `laufend_codex` | 2 |
+| `todos` | 284 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 704 |
-| **gesamt** | **991** |
+| `erledigt` | 706 |
+| **gesamt** | **993** |
 
 ## medical — 50
 
@@ -592,9 +591,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 124
+## goals — 126
 
-### beauftragbar — 118
+### beauftragbar — 120
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -705,17 +704,19 @@
 | `G-640` | aufgabe | hoch | [Die App liest den wirksamen Zielzustand](erledigt/goals-g-0640-app-liest-den-wirksamen-zielzustand.md) | erledigt | — | G-643 |
 | `G-642` | fehler | niedrig | [Ältere Goals-Schritte schreiben Nutzertexte ohne Umlaute](erledigt/goals-g-0642-aeltere-goals-schritte-ohne-umlaute.md) | erledigt | — | G-647 |
 | `G-643` | aufgabe | mittel | [Lage "voraus / im Plan / hinterher" für einmalige Messziele](todos/goals-g-0643-lage-fuer-einmalige-messziele.md) | offen | — | — |
-| `G-644` | aufgabe | hoch | [Planer: Lücken in der Kette](laufend_codex/goals-g-0644-planer-luecken-in-der-kette.md) | laeuft (codex) | — | — |
+| `G-644` | aufgabe | hoch | [Planer: Lücken in der Kette](erledigt/goals-g-0644-planer-luecken-in-der-kette.md) | erledigt | — | — |
 | `G-645` | fehler | mittel | [Goals und Phase Engine: Befunde am Schirm (dev, 10.10.)](todos/goals-g-0645-goals-reiter-befunde-am-schirm.md) | offen | — | — |
 | `G-646` | aufgabe | mittel | [Trendgewicht einbinden](todos/goals-g-0646-trendgewicht-einbinden.md) | offen | — | — |
 | `G-647` | fehler | niedrig | [Der Satz aus 622 steht noch ohne Umlaute](todos/goals-g-0647-622-satz-mit-umlauten.md) | offen | — | — |
 | `G-648` | fehler | hoch | [Reiter Goals weicht vom freigegebenen Entwurf ab](laufend_claudecode/goals-g-0648-reiter-goals-weicht-vom-entwurf-ab.md) | laeuft (claudecode) | — | G-652 |
-| `G-649` | fehler | hoch | [Phase Engine weicht vom freigegebenen Entwurf ab](laufend_claudecode/goals-g-0649-phase-engine-weicht-vom-entwurf-ab.md) | laeuft (claudecode) | — | — |
+| `G-649` | fehler | hoch | [Phase Engine weicht vom freigegebenen Entwurf ab](laufend_claudecode/goals-g-0649-phase-engine-weicht-vom-entwurf-ab.md) | laeuft (claudecode) | — | G-656 |
 | `G-650` | aufgabe | hoch | [Leser für Verlauf, Prognose und Wochenwerte des steuernden Ziels](erledigt/goals-g-0650-leser-fuer-verlauf-prognose-wochen.md) | erledigt | — | G-653, G-654 |
 | `G-651` | befund | mittel | [Probe hängt am Datum: Tageskettenlauf 16.10. rot](erledigt/goals-g-0651-g617-probe-haengt-am-datum.md) | erledigt | — | — |
-| `G-652` | aufgabe | hoch | [Testdaten nach Entwurf: Messziele, Pläne, Termine, Umlaute](erledigt/goals-g-0652-seeds-nach-entwurf.md) | erledigt | — | — |
+| `G-652` | aufgabe | hoch | [Testdaten nach Entwurf: Messziele, Pläne, Termine, Umlaute](erledigt/goals-g-0652-seeds-nach-entwurf.md) | erledigt | — | G-655 |
 | `G-653` | befund | hoch | ["Nach Plan erreicht" zeigt ein vergangenes Datum](erledigt/goals-g-0653-nach-plan-erreicht-liegt-in-der-vergangenheit.md) | erledigt | — | — |
-| `G-654` | aufgabe | hoch | [Leser für die Lage des Steuerziels und die Wochenwerte der Messziele](laufend_codex/goals-g-0654-leser-fuer-lage-und-messziel-woche.md) | laeuft (codex) | — | — |
+| `G-654` | aufgabe | hoch | [Leser für die Lage des Steuerziels und die Wochenwerte der Messziele](erledigt/goals-g-0654-leser-fuer-lage-und-messziel-woche.md) | erledigt | — | — |
+| `G-655` | aufgabe | mittel | [Testdaten plausibel nach Entwurf, Ergebnis abgeschlossener Pläne, keine Prognose für Gewohnheiten](todos/goals-g-0655-testdaten-plausibel-und-planergebnis.md) | offen | — | — |
+| `G-656` | aufgabe | niedrig | [Tote Phasen-Bauteile nach G-649 löschen](todos/goals-g-0656-tote-phasen-bauteile-loeschen.md) | offen | — | — |
 
 ### wartet auf Blocker — 6
 

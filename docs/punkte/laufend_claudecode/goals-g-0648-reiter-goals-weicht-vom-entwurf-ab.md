@@ -85,3 +85,15 @@ Claude Code baut den Reiter Abschnitt für Abschnitt nach `Main.dc.html` (Aufbau
 - Tempo und "voraussichtlich" der Messziele
 
 Das geht an Codex (G-654). Die Modulbeiträge gehören zu G-522.
+
+## Feinschliff - 2026-10-16, Commit `0a960089` (Gate grün)
+
+`[cmd]` Bild dev nach dem Commit (`.git/o-goals2.png`):
+- Die Kennzahlen überlappen nicht mehr.
+- Die Reiterleiste bricht in zwei Zeilen um.
+- Die Prognose steht auf einer Zeile.
+- Die Phase rutscht in eine zweite Zeile.
+- Die Messziel-Titel enden auf "…".
+
+Grundursache für beides: Die Inhaltsfläche ist etwa 810 px breit, im Entwurf 1.240 px. Die Kontextleiste rechts (Buddy-Attrappe) belegt 340 px. Entscheidung bei Tom.
+Noch "kommt (offen)": Diese Woche je Messziel, Lage-Pille, Messziel-Kennzahlen. Der Leser ist jetzt live (G-654), die Anbindung folgt.

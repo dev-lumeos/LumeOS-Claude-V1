@@ -8,10 +8,7 @@
 | Claude Code | G-629 | Die Phase engine zeigt Pläne | **laeuft**, raus 10.10. |
 | Claude Code | G-648 | Reiter Goals weicht vom freigegebenen Entwurf ab | **laeuft**, raus 16.10. |
 | Claude Code | G-649 | Phase Engine weicht vom freigegebenen Entwurf ab | **laeuft**, raus 16.10. |
-| Codex | G-644 | Planer: Lücken in der Kette | **laeuft**, raus 16.10. |
-| Codex | G-654 | Leser für die Lage des Steuerziels und die Wochenwerte der Messziele | **laeuft**, raus 16.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
-| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 ## Plan ab 06.10. - von Tom freigegeben, 17:03

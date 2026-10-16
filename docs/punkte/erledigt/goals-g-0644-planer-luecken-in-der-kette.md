@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-10
 agent: codex
 beauftragt: 2026-10-16
+erledigt: 2026-10-16
+commit: fca2b3f0
 
 braucht: []
 kind_von: G-629
@@ -110,3 +112,14 @@ Danach zurückgebaut.
 - Abgeschlossene Pläne: "Neu starten" und "Löschen"
 - Plantyp ("Einfacher Plan · aus Goals", "Contest Prep"): Die App zeigt "N Phasen", weil die Kette keinen Typ kennt
 - Soll-Linie über dem Ziel: Laut Claude Code steigt sie auf 89,5 kg, obwohl das Ziel 88 kg ist. Sie muss am Zielwert enden.
+
+## Teil 2 erledigt - 2026-10-16, Commit `fca2b3f0` (live)
+
+`[read]` Codex, dev:
+- Wachen: Kraftverlust ok (−3,7 %), Trend neben Soll ausgelöst (3 Wochen), Körperfett ok (16,18 / 18)
+- Plantyp lesbar: prep, annual, einfach
+- Programmwechsel und Wochen an einem Entwurf geprüft, A-Termin bleibt; Neustart und Löschen geprüft. Alles zurückgerollt; dev hat 5 Pläne, 18 Positionen, 5 Termine.
+- Die Soll-Linie endet bei 88,000 kg, vorher 89,536.
+
+Proben 5/5, Sabotage rot.
+Abschluss: Die Wochenanpassung bleibt bei G-627. Die Coach-Freigabe kommt mit dem Coach-Modul (im Entwurf "Vom Coach · später").

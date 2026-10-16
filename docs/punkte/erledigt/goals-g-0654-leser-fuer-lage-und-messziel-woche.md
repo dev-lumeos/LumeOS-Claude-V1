@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-16
 agent: codex
 beauftragt: 2026-10-16
+erledigt: 2026-10-16
+commit: fca2b3f0
 
 braucht: []
 kind_von: G-650
@@ -42,3 +44,15 @@ beruehrt:
     Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
     Stand:   2026-10-16, HEAD 8550adf7
 
+## Erledigt - 2026-10-16, Commit `fca2b3f0` (live)
+
+`[read]` Codex, dev:
+- Lage "hinterher": 84,824 gegen 88,000 kg, Toleranz 0,300 kg (10 % des Zielwegs, wie G-643)
+- Kniebeuge: Δ +3, Soll-Δ +0,942, Tempo +3,92/Wo, voraussichtlich 21.11.2026
+- Körperfett: Δ +0,93 Punkte, Soll-Δ −0,062, nicht absehbar
+- Kreuzheben: +5, ohne Frist, 30.10.2026
+- Training: −1, nicht absehbar
+
+Kette 418 grün, Proben 3/3, Sabotage rot. Sicherung: `backup/a105-g654-g644-*`.
+`[cmd]` Gate grün beim Commit.
+Folgebefund G-655: Die Werte stammen aus Testdaten, die nicht zum Entwurf passen (Körperfett steigt um 0,93 Punkte pro Woche). Eine Gewohnheit bekommt Tempo und Prognose.
