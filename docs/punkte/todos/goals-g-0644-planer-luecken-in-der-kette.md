@@ -37,3 +37,19 @@ beruehrt:
 ## Was zu tun ist
 
 Codex legt eine Reihenfolge vor. Mein Vorschlag: zuerst 3, 9 und 10 (klein, machen die Bedienung vollständig), dann 5 mit G-627, dann 6, dann 1 mit 7, zuletzt 2, 4 und 8. Zu 9 entscheidet Tom.
+
+## Entschieden - 2026-10-16 08:21, Tom
+
+"ja nach entwurf und allfaellig die ausgangspunkte erweitern falls wir mehr haben"
+
+Es gilt `PhaseEngine.dc.html`. Neuer Plan heisst: Dialog mit Name und Ausgangspunkt, angelegt als Entwurf am steuernden Ziel, aktiv erst über "Aktivieren". Damit fällt "ein Plan je Ziel"; aktiv bleibt einer je Nutzer.
+
+Ausgangspunkte laut Entwurf (Zeile 362):
+- Contest Prep 16 Wochen (4 Stufen early/mid/late/Peak Week, rückwärts vom A-Termin)
+- Expert BB Jahreszyklus 52 Wochen (Reverse Diet 8, Lean Bulk 20, Mini Cut 4, Lean Bulk 12, Halten 8)
+- Mini-Cut-Block 4 Wochen
+- Leerer Plan
+- Eigene Vorlage
+- Vom Coach (kommt)
+
+Gibt der Katalog weitere sinnvolle Vorlagen her, kommen sie dazu (Tom).
