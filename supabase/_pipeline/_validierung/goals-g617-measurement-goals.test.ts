@@ -35,7 +35,8 @@ test('G-617/B: gespeicherte Rolle entspricht fuer jeden Bestandsdatensatz Phase 
 
 test('G-617: Bankdruecken mit Umlaut und gewaehlte Kniebeuge lesen die Uebungs-ID', () => {
   const result = one<{
-    mapped: number; unmapped: string[]; benchValue: number; benchSource: string
+    mapped: number; unmapped: string[]; benchValue: number; expectedBench: number
+    benchLater: number; expectedBenchLater: number; benchSource: string
     squatValue: number; wrongExerciseValue: number | null; wrongExerciseStatus: string
     restoredValue: number
   }>(`
@@ -78,6 +79,24 @@ test('G-617: Bankdruecken mit Umlaut und gewaehlte Kniebeuge lesen die Uebungs-I
         FROM goals.user_goals WHERE title = 'Mehr Trainingsleistung'
           AND exercise_id IS NULL),
       'benchValue', (SELECT current_value FROM g617_before),
+      'expectedBench', (SELECT max(ws.estimated_1rm)
+        FROM training.workout_sessions s
+        JOIN training.workout_exercises we ON we.workout_session_id = s.id
+        JOIN training.workout_sets ws ON ws.workout_exercise_id = we.id
+        WHERE s.user_id = (SELECT id FROM auth.users
+          WHERE email = 'tom.seed@example.com')
+          AND s.status = 'completed' AND s.session_date <= DATE '2026-10-08'
+          AND we.exercise_id = '765e7a54-1bfe-4bb0-b1d3-e029994d81d7'),
+      'benchLater', (SELECT current_value FROM goals.goal_progress_at(
+        '30000000-0000-0000-0000-000000000102', DATE '2026-10-16')),
+      'expectedBenchLater', (SELECT max(ws.estimated_1rm)
+        FROM training.workout_sessions s
+        JOIN training.workout_exercises we ON we.workout_session_id = s.id
+        JOIN training.workout_sets ws ON ws.workout_exercise_id = we.id
+        WHERE s.user_id = (SELECT id FROM auth.users
+          WHERE email = 'tom.seed@example.com')
+          AND s.status = 'completed' AND s.session_date <= DATE '2026-10-16'
+          AND we.exercise_id = '765e7a54-1bfe-4bb0-b1d3-e029994d81d7'),
       'benchSource', (SELECT current_source FROM g617_before),
       'squatValue', (SELECT current_value FROM g617_squat),
       'wrongExerciseValue', (SELECT current_value FROM g617_wrong),
@@ -90,6 +109,8 @@ test('G-617: Bankdruecken mit Umlaut und gewaehlte Kniebeuge lesen die Uebungs-I
   assert.equal(result.mapped, 2)
   assert.deepEqual(result.unmapped, ['Mehr Trainingsleistung'])
   assert.ok(result.benchValue > 0)
+  assert.equal(result.benchValue, result.expectedBench)
+  assert.equal(result.benchLater, result.expectedBenchLater)
   assert.equal(result.benchSource, 'training.workout_sets.estimated_1rm')
   assert.equal(result.squatValue, 126)
   assert.equal(result.wrongExerciseValue, null)
@@ -237,7 +258,8 @@ test('G-617/B: Koerperfettziel wechselt mit Phase oder Plan; aktive Steuerung bl
 
 test('G-617: Messart statt Titel waehlt Gewicht mal Wiederholungen und Cardio-Metriken', () => {
   const result = one<{
-    weightReps: number; duration: number; distance: number; pace: number;
+    weightReps: number; expectedWeightReps: number;
+    duration: number; distance: number; pace: number;
     invalidRepsState: string
   }>(`
     BEGIN;
@@ -290,6 +312,15 @@ test('G-617: Messart statt Titel waehlt Gewicht mal Wiederholungen und Cardio-Me
     END $probe$;
     SELECT json_build_object(
       'weightReps', (SELECT current_value FROM g617_weight),
+      'expectedWeightReps', (SELECT max(ws.weight_kg)
+        FROM training.workout_sessions s
+        JOIN training.workout_exercises we ON we.workout_session_id = s.id
+        JOIN training.workout_sets ws ON ws.workout_exercise_id = we.id
+        WHERE s.user_id = (SELECT id FROM auth.users
+          WHERE email = 'tom.seed@example.com')
+          AND s.status = 'completed' AND s.session_date <= DATE '2026-10-08'
+          AND we.exercise_id = '765e7a54-1bfe-4bb0-b1d3-e029994d81d7'
+          AND ws.reps >= 5),
       'duration', (SELECT value FROM g617_cardio WHERE kind = 'duration'),
       'distance', (SELECT value FROM g617_cardio WHERE kind = 'distance'),
       'pace', (SELECT value FROM g617_cardio WHERE kind = 'pace'),
@@ -298,6 +329,7 @@ test('G-617: Messart statt Titel waehlt Gewicht mal Wiederholungen und Cardio-Me
     ROLLBACK;
   `)
   assert.ok(result.weightReps > 0)
+  assert.equal(result.weightReps, result.expectedWeightReps)
   assert.equal(result.duration, 600)
   assert.equal(result.distance, 2000)
   assert.equal(result.pace, 300)
