@@ -4,6 +4,8 @@ typ: aufgabe
 modul: goals
 schwere: hoch
 angelegt: 2026-10-16
+agent: codex
+beauftragt: 2026-10-16
 
 braucht: []
 kind_von: G-650
@@ -32,3 +34,11 @@ beruehrt:
 - **Tempo und voraussichtlich:** aus dem Verlauf. Ist das Tempo ≤ 0 oder fehlt der Verlauf: "nicht absehbar", kein Datum.
 - Je Wert eine Quelle angeben.
 - Proben mit Sabotage. Live auf dev nach A-105.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - G-654 Leser Lage + Messziel-Woche, danach G-644 Teil 2
+    Bereich: supabase/_pipeline/ (Kette), Live auf dev nach A-105
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-16, HEAD 8550adf7
+

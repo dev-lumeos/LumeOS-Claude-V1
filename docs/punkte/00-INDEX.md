@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 283 |
-| `laufend_codex` | 1 |
+| `todos` | 282 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 704 |
 | **gesamt** | **991** |
@@ -715,7 +715,7 @@
 | `G-651` | befund | mittel | [Probe hängt am Datum: Tageskettenlauf 16.10. rot](erledigt/goals-g-0651-g617-probe-haengt-am-datum.md) | erledigt | — | — |
 | `G-652` | aufgabe | hoch | [Testdaten nach Entwurf: Messziele, Pläne, Termine, Umlaute](erledigt/goals-g-0652-seeds-nach-entwurf.md) | erledigt | — | — |
 | `G-653` | befund | hoch | ["Nach Plan erreicht" zeigt ein vergangenes Datum](erledigt/goals-g-0653-nach-plan-erreicht-liegt-in-der-vergangenheit.md) | erledigt | — | — |
-| `G-654` | aufgabe | hoch | [Leser für die Lage des Steuerziels und die Wochenwerte der Messziele](todos/goals-g-0654-leser-fuer-lage-und-messziel-woche.md) | offen | — | — |
+| `G-654` | aufgabe | hoch | [Leser für die Lage des Steuerziels und die Wochenwerte der Messziele](laufend_codex/goals-g-0654-leser-fuer-lage-und-messziel-woche.md) | laeuft (codex) | — | — |
 
 ### wartet auf Blocker — 6
 
