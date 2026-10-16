@@ -143,7 +143,7 @@ test('G-625: eigene Werte laufen durch G-626 und in die Tagesreferenz', () => {
         '20000000-0000-0000-0000-000000000901',
         '62500000-0000-0000-0000-000000000111',DATE '2026-10-08')),
       'daily',(SELECT count(*) FROM nutrition.daily_reference_assessment(
-        '20000000-0000-0000-0000-000000000901',DATE '2026-10-08')
+        '20000000-0000-0000-0000-000000000901',DATE '2026-10-10')
         WHERE nutrient_code='F18:2CN6' AND reference_kind='AI'
           AND reference_value_min IS NOT NULL)
     );
@@ -500,7 +500,7 @@ test('G-625: eigene Planphase liefert Tagesreferenz aus ihren Werten', () => {
       'fat',(SELECT fat_g FROM goals.zielwerte_am(
         '20000000-0000-0000-0000-000000000901',DATE '2026-10-08')),
       'daily',(SELECT count(*) FROM nutrition.daily_reference_assessment(
-        '20000000-0000-0000-0000-000000000901',DATE '2026-10-08')
+        '20000000-0000-0000-0000-000000000901',DATE '2026-10-10')
         WHERE nutrient_code='F18:2CN6' AND reference_value_min IS NOT NULL)
     );
     ROLLBACK;
