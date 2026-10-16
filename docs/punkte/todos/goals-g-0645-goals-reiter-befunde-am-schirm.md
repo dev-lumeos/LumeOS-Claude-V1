@@ -32,3 +32,7 @@ beruehrt:
 ## Was zu tun ist
 
 Claude Code: 2, 3 und 5. 4 nach Toms Abnahme des Reiters. Codex: 1 und 6.
+
+## App-Teil committet - 2026-10-16, Commit `f5f94c2f`
+
+Punkte 2, 3 und 5 sind erledigt (Woche 1 von 15 überall, alte Bauteile aufgelöst, Kopf nach Rolle). Punkt 1 (Planname) und Punkt 6 (Beiträge) kommen von Codex: G-645 Datenteil ist committet in `e61f5c42` und noch nicht live. Punkt 4 (Mockup-Referenz) geht mit G-648.

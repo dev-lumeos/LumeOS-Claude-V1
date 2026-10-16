@@ -6,7 +6,6 @@
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
 | Claude Code | G-629 | Die Phase engine zeigt Pläne | **laeuft**, raus 10.10. |
-| Claude Code | G-640 | Die App liest den wirksamen Zielzustand | **laeuft**, raus 09.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 

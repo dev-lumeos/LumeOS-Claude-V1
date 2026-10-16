@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-09
 agent: claudecode
 beauftragt: 2026-10-09
+erledigt: 2026-10-16
+commit: f5f94c2f
 
 braucht: [G-611]
 kind_von: G-611
@@ -56,3 +58,17 @@ beruehrt:
 - 12 Tests, Gegenprobe 8/8 rot.
 
 Erledigt erst nach Live G-611/G-638 und dem vollen Schirmnachweis. Einmalige Messziele zeigen derzeit keine Lage: G-643.
+
+## Erledigt - 2026-10-16, Commit `f5f94c2f` (Nachweis am Live-Bestand)
+
+`[read]` Claude Code: Folgendes ist am Live-Bestand belegt, mit 12 Fotos in `backup/g640-live-*`:
+- Eingefroren unter Abgeschlossen ohne Lage
+- Neu starten vorbelegt
+- Archivieren
+- Löschen ohne und mit Verlauf (Rückfrage)
+- Pausieren und Fortsetzen mit Plan
+- dev: 4 eingefrorene Ziele
+
+`[cmd]` test-user nachgemessen: Abbau aktiv mit aktivem Plan, Aufbau on_hold mit pausiertem Plan. Gate grün, web 2855.
+
+Reste aus dem Bildschirmabgleich (Codes statt Namen, "Lieber beenden?" doppelt, Zeitfenster mit eingefrorenen Zielen, Lage-Pille ohne Istwert) gehen mit G-648/G-649.

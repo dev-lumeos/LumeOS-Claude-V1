@@ -6,8 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 286 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 699 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 700 |
 | **gesamt** | **987** |
 
 ## medical — 50
@@ -701,7 +701,7 @@
 | `G-637` | fehler | mittel | [Ein aktives Ziel ohne laufende Phase heisst "kein aktives Ziel"](erledigt/goals-g-0637-aktives-ziel-ohne-laufende-phase-heisst-kein-aktives-ziel.md) | erledigt | — | — |
 | `G-638` | fehler | mittel | [Fortsetzen eines Ziels aktiviert seinen Plan nicht](erledigt/goals-g-0638-fortsetzen-aktiviert-den-plan-nicht.md) | erledigt | — | — |
 | `G-639` | aufgabe | mittel | [Reiter Goals – Reste nach dem Entwurf](todos/goals-g-0639-reiter-goals-reste-nach-entwurf.md) | offen | — | — |
-| `G-640` | aufgabe | hoch | [Die App liest den wirksamen Zielzustand](laufend_claudecode/goals-g-0640-app-liest-den-wirksamen-zielzustand.md) | laeuft (claudecode) | — | G-643 |
+| `G-640` | aufgabe | hoch | [Die App liest den wirksamen Zielzustand](erledigt/goals-g-0640-app-liest-den-wirksamen-zielzustand.md) | erledigt | — | G-643 |
 | `G-642` | fehler | niedrig | [Ältere Goals-Schritte schreiben Nutzertexte ohne Umlaute](erledigt/goals-g-0642-aeltere-goals-schritte-ohne-umlaute.md) | erledigt | — | G-647 |
 | `G-643` | aufgabe | mittel | [Lage "voraus / im Plan / hinterher" für einmalige Messziele](todos/goals-g-0643-lage-fuer-einmalige-messziele.md) | offen | — | — |
 | `G-644` | aufgabe | hoch | [Planer: Lücken in der Kette](todos/goals-g-0644-planer-luecken-in-der-kette.md) | offen | — | — |
