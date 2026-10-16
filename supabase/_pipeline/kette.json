@@ -3966,6 +3966,20 @@
       "kind": "tsx",
       "creates": "G-645: Titeländerung, eigener Planname und Rückkehr zum automatischen Namen.",
       "depends_on": ["645_plan_name_follows_goal", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "650_controlling_goal_outlook",
+      "path": "supabase/_pipeline/11_goals/650_controlling_goal_outlook.sql",
+      "kind": "sql",
+      "creates": "G-650: Wochenverlauf, Kennzahlen und Prognose mit Quellen aus Trendgewicht und Tagesprotokoll.",
+      "depends_on": ["645_plan_name_follows_goal_probe", "631_trendgewicht_ema"]
+    },
+    {
+      "id": "650_controlling_goal_outlook_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g650-controlling-outlook.test.ts",
+      "kind": "tsx",
+      "creates": "G-650: dev-Seed, Wochenwerte, Prognose, Quellen und Zugriff auf nur eigene Steuerziele.",
+      "depends_on": ["650_controlling_goal_outlook", "a86_testdaten_einspielen"]
     }
   ]
 }
