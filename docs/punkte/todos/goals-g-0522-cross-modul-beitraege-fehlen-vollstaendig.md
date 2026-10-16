@@ -371,3 +371,24 @@ liesse es sich nur gegen erfundene Zahlen pruefen. **Das ist die richtige
 Entscheidung** — es gehoert in denselben Zug wie die Tabelle.
 
 `[cmd]` **Gebaut in `dc55728a`.**
+
+## Entschieden - Tom 2026-10-16 19:18
+
+`[read]` Tom: Codex rechnet die Modulbeiträge.
+`[cmd]` Die Tabelle und die Schreiber gibt es inzwischen (`11_goals/514_goal_contribution_writers.sql`). Es fehlt der laufende Lauf, deshalb sind die Kacheln auf dev leer.
+
+Der Entwurf (Main.dc.html) gibt die vier Kacheln vor:
+- Ernährung: kcal-Treue 7 Tage
+- Training: Einheiten diese Woche gegen das Wochenziel
+- Recovery: Score Ø 7 Tage
+- Supplements: Einnahme-Treue
+
+Dazu kommt der Engpass, z. B. "Schlaf Ø 6,1 h, Recovery 71". Damit ist auch A5 durch den Entwurf entschieden, und Medical ist keine Kachel.
+
+Vorgehen nach dem Vorschlag von Codex vom 16.10.:
+- eine Rechenfunktion über einen Datumsbereich
+- einmaliges Nachfüllen
+- für eingefrorene Ziele kein Schreiben nach dem Freeze
+- `tag <= stichtag` wie im Vertrag A3
+
+Den täglichen Lauf übernimmt der vorhandene Ablauf; pg_cron fehlt. Wo er angehängt wird, schlägt Codex vor.
