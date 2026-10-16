@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-16
 agent: codex
 beauftragt: 2026-10-16
+erledigt: 2026-10-16
+commit: 8efe2be9
 
 braucht: []
 kind_von: G-650
@@ -47,3 +49,9 @@ Erreicht der Plan das Ziel nicht vor seinem Ende, wird das ausgewiesen ("nicht i
     Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
     Stand:   2026-10-16, HEAD 7f83d0b2
 
+## Erledigt - 2026-10-16, Commit `8efe2be9` (live)
+
+`[read]` Codex auf dev: Ergebnis ist `nicht_im_plan`, ohne Datum. Der Plan endet am 17.01.2027, bevor seine Linie 88 kg erreicht. Meine Erwartung "Ende Januar" war eine Annahme und ist damit widerlegt.
+`[read]` Kette 413 grün, die Gegenprobe mit der alten Rechnung wird rot. Sicherungen: `backup/a105-g653-*`.
+`[cmd]` Gate grün beim Commit.
+`[cmd]` Der Bildschirm zeigt "Plan endet vor dem Ziel".

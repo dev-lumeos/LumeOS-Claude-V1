@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-16
 agent: codex
 beauftragt: 2026-10-16
+erledigt: 2026-10-16
+commit: 8efe2be9
 
 braucht: []
 kind_von: G-648
@@ -64,3 +66,20 @@ Live auf dev nach Muster A-105. Tom hat am 16.10. zugestimmt.
     Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
     Stand:   2026-10-16, HEAD 7f83d0b2
 
+## Erledigt - 2026-10-16, Commit `8efe2be9` (live)
+
+`[read]` Codex auf dev, Zählung vorher → nachher:
+- Ziele 5 → 11
+- Pläne 1 → 5
+- Positionen 3 → 18
+- Termine 0 → 5
+- Sitzungen 40 → 55
+
+Gemessene Werte:
+- Kniebeuge 140
+- Kreuzheben 140 × 5
+- Körperfett 16,18
+- Training 3 diese Woche
+
+Hex-Probe: `Frü` = `4672c3bc`. testdaten-pruefen: 186 Proben, keine rot. Sicherungen: `backup/a105-g652-*`.
+`[cmd]` Bildschirm dev: In "Diese Woche" stehen Kniebeuge, Kreuzheben, Körperfett und Training 3 / 4.

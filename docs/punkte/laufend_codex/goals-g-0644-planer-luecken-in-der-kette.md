@@ -92,3 +92,21 @@ Offen:
 - dev hat genau 1 aktiven Plan.
 
 Offen bleiben der App-Anschluss (G-649), die Wachen, die Wochenanpassung (G-627) und die Coach-Freigabe.
+
+## App angeschlossen - 2026-10-16, Commit `62cf1bfb`
+
+`[read]` Claude Code hat auf test-user bedient:
+- Neuer Plan aus Mini-Cut
+- Zwei Pläne an einem Ziel
+- Als Vorlage speichern
+- Position löschen
+- Contest Prep rückwärts vom A-Termin 04.03.27
+
+Danach zurückgebaut.
+
+**Teil 2 noch offen** (in der App als "kommt (G-644)"):
+- Leser für die Wachen der aktuellen Phase
+- "Speichern und neu berechnen" für bestehende Positionen, mit Programmwechsel und Wochen −/+
+- Abgeschlossene Pläne: "Neu starten" und "Löschen"
+- Plantyp ("Einfacher Plan · aus Goals", "Contest Prep"): Die App zeigt "N Phasen", weil die Kette keinen Typ kennt
+- Soll-Linie über dem Ziel: Laut Claude Code steigt sie auf 89,5 kg, obwohl das Ziel 88 kg ist. Sie muss am Zielwert enden.

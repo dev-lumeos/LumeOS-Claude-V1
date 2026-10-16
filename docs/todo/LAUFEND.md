@@ -9,8 +9,6 @@
 | Claude Code | G-648 | Reiter Goals weicht vom freigegebenen Entwurf ab | **laeuft**, raus 16.10. |
 | Claude Code | G-649 | Phase Engine weicht vom freigegebenen Entwurf ab | **laeuft**, raus 16.10. |
 | Codex | G-644 | Planer: Lücken in der Kette | **laeuft**, raus 16.10. |
-| Codex | G-652 | Testdaten nach Entwurf: Messziele, Pläne, Termine, Umlaute | **laeuft**, raus 16.10. |
-| Codex | G-653 | "Nach Plan erreicht" zeigt ein vergangenes Datum | **laeuft**, raus 16.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->

@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 282 |
-| `laufend_codex` | 3 |
+| `todos` | 283 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 702 |
-| **gesamt** | **990** |
+| `erledigt` | 704 |
+| **gesamt** | **991** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 123
+## goals — 124
 
-### beauftragbar — 117
+### beauftragbar — 118
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -711,10 +711,11 @@
 | `G-647` | fehler | niedrig | [Der Satz aus 622 steht noch ohne Umlaute](todos/goals-g-0647-622-satz-mit-umlauten.md) | offen | — | — |
 | `G-648` | fehler | hoch | [Reiter Goals weicht vom freigegebenen Entwurf ab](laufend_claudecode/goals-g-0648-reiter-goals-weicht-vom-entwurf-ab.md) | laeuft (claudecode) | — | G-652 |
 | `G-649` | fehler | hoch | [Phase Engine weicht vom freigegebenen Entwurf ab](laufend_claudecode/goals-g-0649-phase-engine-weicht-vom-entwurf-ab.md) | laeuft (claudecode) | — | — |
-| `G-650` | aufgabe | hoch | [Leser für Verlauf, Prognose und Wochenwerte des steuernden Ziels](erledigt/goals-g-0650-leser-fuer-verlauf-prognose-wochen.md) | erledigt | — | G-653 |
+| `G-650` | aufgabe | hoch | [Leser für Verlauf, Prognose und Wochenwerte des steuernden Ziels](erledigt/goals-g-0650-leser-fuer-verlauf-prognose-wochen.md) | erledigt | — | G-653, G-654 |
 | `G-651` | befund | mittel | [Probe hängt am Datum: Tageskettenlauf 16.10. rot](erledigt/goals-g-0651-g617-probe-haengt-am-datum.md) | erledigt | — | — |
-| `G-652` | aufgabe | hoch | [Testdaten nach Entwurf: Messziele, Pläne, Termine, Umlaute](laufend_codex/goals-g-0652-seeds-nach-entwurf.md) | laeuft (codex) | — | — |
-| `G-653` | befund | hoch | ["Nach Plan erreicht" zeigt ein vergangenes Datum](laufend_codex/goals-g-0653-nach-plan-erreicht-liegt-in-der-vergangenheit.md) | laeuft (codex) | — | — |
+| `G-652` | aufgabe | hoch | [Testdaten nach Entwurf: Messziele, Pläne, Termine, Umlaute](erledigt/goals-g-0652-seeds-nach-entwurf.md) | erledigt | — | — |
+| `G-653` | befund | hoch | ["Nach Plan erreicht" zeigt ein vergangenes Datum](erledigt/goals-g-0653-nach-plan-erreicht-liegt-in-der-vergangenheit.md) | erledigt | — | — |
+| `G-654` | aufgabe | hoch | [Leser für die Lage des Steuerziels und die Wochenwerte der Messziele](todos/goals-g-0654-leser-fuer-lage-und-messziel-woche.md) | offen | — | — |
 
 ### wartet auf Blocker — 6
 

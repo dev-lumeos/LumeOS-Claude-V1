@@ -70,3 +70,18 @@ Claude Code baut den Reiter Abschnitt für Abschnitt nach `Main.dc.html` (Aufbau
 - Die Zahl am Reiter "Goals 5" gibt es im Entwurf nicht.
 - In Texten der App fehlen Umlaute ("Koerpermessungen").
 - Die Kontextleiste rechts (Buddy-Attrappe) nimmt 340 px weg. Ein eigener Punkt wäre nötig, falls Tom das will.
+
+## Stand 16.10. 16:45, Commit `62cf1bfb` (Gate grün, nicht abgenommen)
+
+`[cmd]` Bildschirm dev (`.git/o-goals.png`) nach G-652:
+- "Tagesziel 2.714 kcal · 170 g P" läuft in die Spalte Phase hinein ("PWoche 1 von 15"). Der Umbruch ist also nicht behoben.
+- "Plan endet vor dem Ziel" bricht über zwei Zeilen um, in Monospace.
+- Die Reiterleiste ist abgeschnitten ("Phy…").
+- Messziel-Titel in "Diese Woche" brechen um.
+
+`[read]` Was noch fehlt, weil die Kette es nicht liefert:
+- Lage-Pille des Steuerziels
+- Wochenbewegung je Messziel
+- Tempo und "voraussichtlich" der Messziele
+
+Das geht an Codex (G-654). Die Modulbeiträge gehören zu G-522.

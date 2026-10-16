@@ -51,3 +51,12 @@ Claude Code baut die Seite nach `PhaseEngine.dc.html` um, Abnahme wie G-648 mit 
 - "Bearbeiten" steht unter dem jeweiligen Plan, nicht als Aktion unten an der Seite. So zeigt es PhaseEngine.dc.html (edit je Plan).
 - Die Seite muss wie der Entwurf aussehen. Die Abnahme läuft über Bildpaare.
 - Die Seed-Pläne kommen aus G-652 (Codex).
+
+## Stand 16.10. 16:45, Commit `62cf1bfb` (Gate grün, nicht abgenommen)
+
+`[read]` Laut Claude Code entsprechen Kopf, Phasentabelle, Bearbeiten je Plan, Neuer Plan und Vorlagen dem Entwurf.
+`[read]` Bild `g649-ist-dev-seite.png` (vor G-652):
+- Unter dem aktiven Plan stehen weiterhin die alten G-645-Bauteile: Laufende Phase, Phase beenden, Wechselvorschlag, Ziele und ihre Zeitfenster. Im Entwurf gibt es sie nicht.
+- Cardio steht auf "–", im Entwurf auf "1×".
+
+Entscheidung (Entwurf ist verbindlich): Die alten Bauteile fallen weg. Hängt an einem davon eine Funktion, die im Entwurf woanders liegt (z. B. Phase beenden → Bearbeiten), dann dorthin verschieben, sonst melden.
