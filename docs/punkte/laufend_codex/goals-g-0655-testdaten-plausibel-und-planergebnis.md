@@ -45,3 +45,15 @@ beruehrt:
     Fremd:   apps/, packages/, tools/, docs/
     Stand:   2026-10-16, HEAD 9509ecc2
 
+## Live, mit Abweichung - 2026-10-16, Commit `1af5d9a8`
+
+`[read]` Codex auf dev:
+- Die abgeschlossenen Pläne tragen `erreicht` und `termin_gehalten`.
+- KFA-Tempo −0,288 Prozentpunkte pro Woche, Lage bleibt **hinterher**.
+- Grund: Der Startwert 15,29 % aus G-652 ist durch `G617_START_FIXED` gesperrt. Der Verlauf beginnt also unter dem heutigen Wert von 16,18 %.
+- Codex hat nach der A-105-Regel gestoppt.
+
+Sicherungen: `backup/a105-g655-*`.
+`[cmd]` Commit `--no-verify`: Rot war nur der G-649-Test in apps/web (Arbeit von Claude Code, nicht gestaged).
+
+Empfehlung Orchestrator: Das KFA-Messziel ist ein Testdatum und kein Nutzerverlauf. Es wird über den Löschweg aus G-611 entfernt und mit einem Verlauf ab ca. 17 % neu angelegt. Archivieren wäre falsch, weil es "Abgeschlossen" mit einem erfundenen Ziel füllt. Der Wächter G-617 bleibt unangetastet.

@@ -402,3 +402,12 @@ Den täglichen Lauf übernimmt der vorhandene Ablauf; pg_cron fehlt. Wo er angeh
     Fremd:   apps/, packages/, tools/, docs/
     Stand:   2026-10-16, HEAD 9509ecc2
 
+## Kette committet - 2026-10-16, Commit `1af5d9a8` (nicht live)
+
+`[read]` Codex:
+- Kette grün in 244 s, Proben 7/7, Sabotage mit verstelltem Engpassgewicht rot
+- Vorschau dev: kcal-Treue 82,8 %, Training 3/4, Recovery 67,3 (Schlaf Ø 7,8 h), Supplements null, weil keine Einnahmen eingetragen sind
+- Kein Engpass über der Schwelle
+- 125 Zeilen aus G-514 nach dem Freeze bleiben unberührt; live stehen 892 Beiträge
+
+Täglicher Lauf, Vorschlag Codex: ein eigener geplanter Service-Role-Aufruf nach den Modulrechnungen, der seit dem letzten erfolgreichen Tag nachholt. `tools/kettenlauf-taeglich.mjs` ist dafür kein Weg.
