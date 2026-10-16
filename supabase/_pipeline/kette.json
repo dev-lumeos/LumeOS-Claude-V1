@@ -4099,6 +4099,55 @@
       "kind": "tsx",
       "creates": "G-644 Teil 2: Herkunft, Wachen, Neuberechnung und fertige Plaene.",
       "depends_on": ["644_plan_guards_target_cap"]
+    },
+    {
+      "id": "655_plan_result_and_habit_week",
+      "path": "supabase/_pipeline/11_goals/655_plan_result_and_habit_week.sql",
+      "kind": "sql",
+      "creates": "G-655: Planergebnis und Wochengewohnheiten ohne Prognose.",
+      "depends_on": ["644_plan_editor_part2_probe"]
+    },
+    {
+      "id": "655_design_history_correction",
+      "path": "supabase/_pipeline/11_goals/655_design_history_correction.sql",
+      "kind": "sql",
+      "creates": "G-655: plausible KFA- und Kniebeuge-Testreihe.",
+      "depends_on": ["655_plan_result_and_habit_week"]
+    },
+    {
+      "id": "655_plausibility_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g655-plausibility.test.ts",
+      "kind": "tsx",
+      "creates": "G-655: KFA-Trend, Fristlosigkeit, Gewohnheitswoche und Planergebnis.",
+      "depends_on": ["655_design_history_correction"]
+    },
+    {
+      "id": "522_goal_contribution_weights",
+      "path": "supabase/_pipeline/11_goals/522_goal_contribution_weights.sql",
+      "kind": "sql",
+      "creates": "G-522: vier Gewichtungsreihen und Engpass-Schwelle aus SCORING.md.",
+      "depends_on": ["655_plausibility_probe"]
+    },
+    {
+      "id": "522_goal_contribution_range",
+      "path": "supabase/_pipeline/11_goals/522_goal_contribution_range.sql",
+      "kind": "sql",
+      "creates": "G-522: Bereichslauf fuer vier Module, nur aktive Tage bis zum Stichtag.",
+      "depends_on": ["522_goal_contribution_weights"]
+    },
+    {
+      "id": "522_goal_module_cards",
+      "path": "supabase/_pipeline/11_goals/522_goal_module_cards.sql",
+      "kind": "sql",
+      "creates": "G-522: vier belegte Kacheln und gewichteter Engpass.",
+      "depends_on": ["522_goal_contribution_range"]
+    },
+    {
+      "id": "522_goal_contributions_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g522-contributions.test.ts",
+      "kind": "tsx",
+      "creates": "G-522: Stichtag, Freeze, Quellen, Nullgruende und Gewichtssabotage.",
+      "depends_on": ["522_goal_module_cards"]
     }
   ]
 }
