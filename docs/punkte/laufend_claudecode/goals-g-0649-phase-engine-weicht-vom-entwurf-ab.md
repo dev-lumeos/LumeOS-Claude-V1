@@ -45,3 +45,9 @@ Claude Code baut die Seite nach `PhaseEngine.dc.html` um, Abnahme wie G-648 mit 
     Bereich: siehe Auftrag im Chat 16.10.
     Fremd:   siehe Auftrag. docs/ gehoert dem Orchestrator.
     Stand:   2026-10-16, HEAD 19435919
+
+## Nachtrag Tom 16.10. 15:32
+
+- "Bearbeiten" steht unter dem jeweiligen Plan, nicht als Aktion unten an der Seite. So zeigt es PhaseEngine.dc.html (edit je Plan).
+- Die Seite muss wie der Entwurf aussehen. Die Abnahme läuft über Bildpaare.
+- Die Seed-Pläne kommen aus G-652 (Codex).

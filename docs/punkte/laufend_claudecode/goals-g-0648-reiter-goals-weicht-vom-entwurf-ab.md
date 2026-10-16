@@ -47,3 +47,26 @@ Claude Code baut den Reiter Abschnitt für Abschnitt nach `Main.dc.html` (Aufbau
     Bereich: siehe Auftrag im Chat 16.10.
     Fremd:   siehe Auftrag. docs/ gehoert dem Orchestrator.
     Stand:   2026-10-16, HEAD 19435919
+
+## Nachtrag Tom 16.10. 15:32 - Kopf, Aktionen, Lücken
+
+`[read]` Ich habe die Bilder `g648-soll-seite.png` und `g648-ist-dev-seite.png` nebeneinander gelegt.
+
+**Kopf und Aktionen (Tom: "nicht wirklich logisch"):**
+- Soll: Eyebrow "GOALS & BODY", Titel "Ziele", rechts genau ein Knopf "+ Ziel setzen". "+ Messziel" steht nur am Abschnitt Messziele.
+- Ist: Statuschips, Phasen-Pille, Stand-Zeile, Datumsleiste und vier Knöpfe (Log weight, Measurements, + Messziel, Ziel setzen). "+ Messziel" ist doppelt.
+- Regel ab jetzt: Der Kopf zeigt nur die Hauptaktion des offenen Reiters.
+  - Goals: "+ Ziel setzen"
+  - Phase engine: "+ Neuer Plan" (Entwurf)
+  - Body metrics: "Gewicht eintragen"
+  - Measurements: "Messung eintragen"
+  - Sonst kein Knopf
+- Chips, Phasen-Pille und Stand-Zeile fallen weg, die Karte zeigt das bereits.
+
+**Weitere Lücken am Bild:**
+- Das Tagesziel "2.714 kcal · 170 g P" bricht um.
+- "Diese Woche": Training ohne Soll-Balken und ohne "x / 4".
+- Abgeschlossen: Die Knöpfe brechen bei 810 px um. Im Entwurf stehen Chip und Knöpfe in einer Zeile.
+- Die Zahl am Reiter "Goals 5" gibt es im Entwurf nicht.
+- In Texten der App fehlen Umlaute ("Koerpermessungen").
+- Die Kontextleiste rechts (Buddy-Attrappe) nimmt 340 px weg. Ein eigener Punkt wäre nötig, falls Tom das will.

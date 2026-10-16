@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 283 |
+| `todos` | 284 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 700 |
-| **gesamt** | **988** |
+| **gesamt** | **989** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 121
+## goals — 122
 
-### beauftragbar — 115
+### beauftragbar — 116
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -709,10 +709,11 @@
 | `G-645` | fehler | mittel | [Goals und Phase Engine: Befunde am Schirm (dev, 10.10.)](todos/goals-g-0645-goals-reiter-befunde-am-schirm.md) | offen | — | — |
 | `G-646` | aufgabe | mittel | [Trendgewicht einbinden](todos/goals-g-0646-trendgewicht-einbinden.md) | offen | — | — |
 | `G-647` | fehler | niedrig | [Der Satz aus 622 steht noch ohne Umlaute](todos/goals-g-0647-622-satz-mit-umlauten.md) | offen | — | — |
-| `G-648` | fehler | hoch | [Reiter Goals weicht vom freigegebenen Entwurf ab](laufend_claudecode/goals-g-0648-reiter-goals-weicht-vom-entwurf-ab.md) | laeuft (claudecode) | — | — |
+| `G-648` | fehler | hoch | [Reiter Goals weicht vom freigegebenen Entwurf ab](laufend_claudecode/goals-g-0648-reiter-goals-weicht-vom-entwurf-ab.md) | laeuft (claudecode) | — | G-652 |
 | `G-649` | fehler | hoch | [Phase Engine weicht vom freigegebenen Entwurf ab](laufend_claudecode/goals-g-0649-phase-engine-weicht-vom-entwurf-ab.md) | laeuft (claudecode) | — | — |
 | `G-650` | aufgabe | hoch | [Leser für Verlauf, Prognose und Wochenwerte des steuernden Ziels](laufend_codex/goals-g-0650-leser-fuer-verlauf-prognose-wochen.md) | laeuft (codex) | — | — |
 | `G-651` | befund | mittel | [Probe hängt am Datum: Tageskettenlauf 16.10. rot](todos/goals-g-0651-g617-probe-haengt-am-datum.md) | offen | — | — |
+| `G-652` | aufgabe | hoch | [Testdaten nach Entwurf: Messziele, Pläne, Termine, Umlaute](todos/goals-g-0652-seeds-nach-entwurf.md) | offen | — | — |
 
 ### wartet auf Blocker — 6
 
