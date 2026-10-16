@@ -109,10 +109,10 @@ export function koerperfettSatz(
   wert: number, schwelle: number, geschlecht: string,
 ): string {
   const g = geschlecht === 'male' ? 'maennlich' : 'weiblich'
-  return `Gemessen ${wert} % Koerperfett. Die Phasenspec setzt fuer `
+  return `Gemessen ${wert} % Körperfett. Die Phasenspec setzt für `
     + `${g} eine Aufmerksamkeitsgrenze bei ${schwelle} % `
-    + '(PHASE_MODELS.md:133). Was das fuer dich bedeutet, gehoert '
-    + 'in aerztliche Haende — LumeOS bewertet es nicht.'
+    + '(PHASE_MODELS.md:133). Was das für dich bedeutet, gehört '
+    + 'in ärztliche Hände — LumeOS bewertet es nicht.'
 }
 
 /**
@@ -143,16 +143,16 @@ export function pruefeWaechter(
   // ── 1 · Gewichtsverlust zu schnell ──────────────────────────────
   if (d.weightTrend === null) {
     raus.push(fehlt('verlust_zu_schnell', 'PHASE_MODELS.md:223',
-      'Verlusttempo nicht geprueft.',
-      'Kein Gewichtstrend — die Messreihe traegt keinen.'))
+      'Verlusttempo nicht geprüft.',
+      'Kein Gewichtstrend — die Messreihe trägt keinen.'))
   } else if (d.gewichtAmStichtagKg === null) {
     // `[cmd]` **G-569/A2: fehlt das Gewicht am Stichtag, ist das ein
     // HINDERNIS** — kein Rueckfall auf Profil- oder Startgewicht
     // (G-561/A2, von Codex begruendet).
     raus.push(fehlt('verlust_zu_schnell', 'PHASE_MODELS.md:223',
-      'Verlusttempo nicht geprueft.',
+      'Verlusttempo nicht geprüft.',
       'Kein Gewicht am Stichtag — die Schwelle ist relativ zum '
-      + 'Koerpergewicht und laesst sich ohne es nicht pruefen.'))
+      + 'Körpergewicht und lässt sich ohne es nicht prüfen.'))
   } else {
     const greift = lage.art === 'fat_loss' && d.weightTrend < 0
       && schwelleGreift('verlustZuSchnell',
@@ -172,13 +172,13 @@ export function pruefeWaechter(
   if (d.weightTrend === null || d.calorieAdherence === null
       || d.gewichtAmStichtagKg === null) {
     raus.push(fehlt('verlust_zu_langsam', 'PHASE_MODELS.md:224',
-      'Stillstand nicht geprueft.',
+      'Stillstand nicht geprüft.',
       d.weightTrend === null
         ? 'Kein Gewichtstrend.'
         : d.calorieAdherence === null
           ? 'Keine Kalorieneinhaltung.'
           : 'Kein Gewicht am Stichtag — die Schwelle ist relativ '
-            + 'zum Koerpergewicht.'))
+            + 'zum Körpergewicht.'))
   } else {
     const greift = lage.art === 'fat_loss' && d.calorieAdherence > 85
       && schwelleUnterschritten('verlustZuLangsam',
@@ -196,16 +196,16 @@ export function pruefeWaechter(
   // ── 3 · Kraft schwindet ─────────────────────────────────────────
   if (d.strengthTrend === null) {
     raus.push(fehlt('kraft_schwindet', 'PHASE_MODELS.md:225',
-      'Kraftverlauf nicht geprueft.',
-      'Kein Kraftverlauf — zu wenige Saetze mit geschaetztem 1RM.'))
+      'Kraftverlauf nicht geprüft.',
+      'Kein Kraftverlauf — zu wenige Sätze mit geschätztem 1RM.'))
   } else {
     const greift = d.strengthTrend < -10
     raus.push({
       kennung: 'kraft_schwindet', regel: 'PHASE_MODELS.md:225', greift,
       satz: greift
-        ? `Die Kraft auf den Grunduebungen liegt ${d.strengthTrend} %. `
+        ? `Die Kraft auf den Grundübungen liegt ${d.strengthTrend} %. `
           + 'Die Spec sieht 20 g Protein mehr vor.'
-        : 'Die Kraft haelt sich.',
+        : 'Die Kraft hält sich.',
     })
   }
 
@@ -214,11 +214,11 @@ export function pruefeWaechter(
   // `[cmd]` **Die Spec verlangt „5+ Tage"** — nicht einen Tag.
   if (d.hrvBaseline === null) {
     raus.push(fehlt('uebertraining', 'PHASE_MODELS.md:226',
-      'Erholung nicht geprueft.',
-      'Eine HRV-Vergleichsgroesse ist nirgends gespeichert.'))
+      'Erholung nicht geprüft.',
+      'Eine HRV-Vergleichsgröße ist nirgends gespeichert.'))
   } else if (d.hrv7d === null || lage.hrvTageUnterGrenze === null) {
     raus.push(fehlt('uebertraining', 'PHASE_MODELS.md:226',
-      'Erholung nicht geprueft.', 'Keine HRV-Reihe.'))
+      'Erholung nicht geprüft.', 'Keine HRV-Reihe.'))
   } else {
     const greift = d.hrv7d < d.hrvBaseline * 0.85
       && lage.hrvTageUnterGrenze >= 5
@@ -226,7 +226,7 @@ export function pruefeWaechter(
       kennung: 'uebertraining', regel: 'PHASE_MODELS.md:226', greift,
       satz: greift
         ? `Die HRV liegt seit ${lage.hrvTageUnterGrenze} Tagen unter `
-          + '85 % der Vergleichsgroesse. Die Spec sieht eine '
+          + '85 % der Vergleichsgröße. Die Spec sieht eine '
           + 'Entlastungswoche vor.'
         : 'Die Erholung liegt im vorgesehenen Rahmen.',
     })
@@ -239,15 +239,15 @@ export function pruefeWaechter(
   // gebaut**, sondern als nicht rechenbar gemeldet. **G-529/A3.**
   if (lage.maxDauerWochen === null || lage.wochen === null) {
     raus.push(fehlt('phasendauer', 'PHASE_MODELS.md:227',
-      'Phasendauer nicht geprueft.',
-      'Eine Hoechstdauer je Phasenart ist nirgends gespeichert '
+      'Phasendauer nicht geprüft.',
+      'Eine Höchstdauer je Phasenart ist nirgends gespeichert '
       + '(G-529/A3).'))
   } else {
     const greift = lage.wochen >= lage.maxDauerWochen
     raus.push({
       kennung: 'phasendauer', regel: 'PHASE_MODELS.md:227', greift,
       satz: greift
-        ? `Die Phase laeuft seit ${lage.wochen} Wochen, vorgesehen `
+        ? `Die Phase läuft seit ${lage.wochen} Wochen, vorgesehen `
           + `sind ${lage.maxDauerWochen}. Die Spec sieht einen `
           + 'Uebergang vor.'
         : `Woche ${lage.wochen} von ${lage.maxDauerWochen}.`,
@@ -259,9 +259,9 @@ export function pruefeWaechter(
     ? BF_SCHWELLE[lage.biologischesGeschlecht] : undefined
   if (lage.koerperfettPct === null || schwelle === undefined) {
     raus.push(fehlt('koerperfett_niedrig', 'PHASE_MODELS.md:228',
-      'Koerperfett nicht geprueft.',
+      'Körperfett nicht geprüft.',
       lage.koerperfettPct === null
-        ? 'Kein Koerperfettwert in der Messreihe.'
+        ? 'Kein Körperfettwert in der Messreihe.'
         : 'Kein biologisches Geschlecht im Profil — die Spec setzt '
           + 'je Geschlecht eine andere Grenze.'))
   } else {
@@ -271,7 +271,7 @@ export function pruefeWaechter(
       satz: greift
         ? koerperfettSatz(lage.koerperfettPct, schwelle,
           lage.biologischesGeschlecht!)
-        : `Koerperfett ${lage.koerperfettPct} %, oberhalb der `
+        : `Körperfett ${lage.koerperfettPct} %, oberhalb der `
           + `Aufmerksamkeitsgrenze von ${schwelle} %.`,
     })
   }
@@ -279,13 +279,13 @@ export function pruefeWaechter(
   // ── 7 · Zu schnelle Masse ───────────────────────────────────────
   if (d.weightTrend === null) {
     raus.push(fehlt('masse_zu_schnell', 'PHASE_MODELS.md:229',
-      'Zunahmetempo nicht geprueft.', 'Kein Gewichtstrend.'))
+      'Zunahmetempo nicht geprüft.', 'Kein Gewichtstrend.'))
   } else if (d.gewichtAmStichtagKg === null) {
     // `[cmd]` **G-569/A2: ein Hindernis, keine stille Null.**
     raus.push(fehlt('masse_zu_schnell', 'PHASE_MODELS.md:229',
-      'Zunahmetempo nicht geprueft.',
+      'Zunahmetempo nicht geprüft.',
       'Kein Gewicht am Stichtag — die Schwelle ist relativ zum '
-      + 'Koerpergewicht und laesst sich ohne es nicht pruefen.'))
+      + 'Körpergewicht und lässt sich ohne es nicht prüfen.'))
   } else {
     const greift = lage.art === 'lean_bulk' && d.weightTrend > 0
       && schwelleGreift('zunahmeZuSchnell',

@@ -121,7 +121,7 @@ export async function phasenzielAnlegen(
     return {
       ok: false,
       fehler: 'Das Ziel wurde angelegt, aber ohne Kennung — '
-        + 'die Phase laesst sich nicht daran haengen.',
+        + 'die Phase lässt sich nicht daran hängen.',
       art: 'daten', zurueckgenommen: false,
     }
   }
@@ -160,7 +160,7 @@ export async function phasenzielAnlegen(
       ok: false,
       fehler: zurueck
         ? text
-        : `${text} — Achtung: das Ziel konnte nicht zurueckgenommen `
+        : `${text} — Achtung: das Ziel konnte nicht zurückgenommen `
           + 'werden und steht ohne Phase.',
       art,
       zurueckgenommen: zurueck,

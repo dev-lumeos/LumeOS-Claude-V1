@@ -38,6 +38,29 @@ export interface Plan {
   termine: Plantermin[]
 }
 
+/** G-649: eine Zeile aus `goals.goal_plan_templates` (Kette G-644). */
+export interface Vorlage {
+  code: string
+  name: string
+  quelle: 'lumeos' | 'eigen' | 'coach'
+  anker_art: 'start' | 'A'
+  positionen: Array<{ strategie_code?: string; unterphase?: string; dauer_wochen: number; eigene_werte?: Record<string, unknown>; phase_type?: string }>
+}
+
+/**
+ * `null` heisst: die Tabelle ist noch nicht eingespielt (G-644 nicht live) — dann
+ * steht „Ausgangspunkt" als „kommt". **Nur dieser Fehler**; jeder andere wirft.
+ */
+export async function ladeVorlagen(): Promise<Vorlage[] | null> {
+  const { data, error } = await createSessionClient().schema('goals').from('goal_plan_templates')
+    .select('code, name, quelle, anker_art, positionen').order('created_at', { ascending: true })
+  if (error) {
+    if (error.code === 'PGRST205' || error.code === '42P01') return null
+    throw new Error(`goal_plan_templates: ${error.message}`)
+  }
+  return (data ?? []) as Vorlage[]
+}
+
 const zahl = (v: unknown) => (v === null || v === undefined ? null : Number(v))
 const text = (v: unknown) => (typeof v === 'string' && v !== '' ? v : null)
 

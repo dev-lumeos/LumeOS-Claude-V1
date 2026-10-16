@@ -89,8 +89,10 @@ function heute(stichtag: string): string {
 // Einzelstrategien waehlt man im Anlegemodal des Reiters Goals (G-610),
 // Plaene im Planer (`planer.tsx`). Beenden und der Vorschlag bleiben.
 
-export function PhaseBeenden({ phase, stichtag }: {
+export function PhaseBeenden({ phase, stichtag, name }: {
   phase: Phase; stichtag: string
+  /** G-648: der Name aus `phaseAnzeige` — ohne ihn die Phasenart, nie der Code. */
+  name?: string
 }) {
   const [offen, setOffen] = React.useState(false)
   const [grund, setGrund] = React.useState('')
@@ -117,8 +119,8 @@ export function PhaseBeenden({ phase, stichtag }: {
         ? (
           <>
             <div className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.55 }}>
-              <strong>{phasenName(phase.phase_type)}</strong>
-              {phase.gueltig_ab && ` läuft seit ${phase.gueltig_ab}`}.
+              <strong>{name ?? phasenName(phase.phase_type)}</strong>
+              {phase.gueltig_ab && ` läuft seit ${phase.gueltig_ab.split('-').reverse().join('.')}`}.
               Nach dem Beenden kann eine neue Phase beginnen.
             </div>
             <div style={{ marginTop: 10 }}>
@@ -206,7 +208,7 @@ export function PhaseVorschlag({ phase, vorschlag }: {
   }
 
   return (
-    <Card title="Wechselvorschlag" sub="aus phase_transition_recommendation">
+    <Card title="Wechselvorschlag" sub="aus der Regel am geplanten Ende">
       {!vorschlag?.recommended_next
         ? (
           // `[read]` **Ein benannter Leerhinweis, keine Null** (E-72)

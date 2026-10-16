@@ -45,7 +45,7 @@ export function EinheitenSchalter({ einheit, gewichtKg, onWechsel }: {
           <button key={e} type="button" data-einheit={e}
                   aria-pressed={an} disabled={gesperrt}
                   title={gesperrt
-                    ? 'Ohne Koerpergewicht laesst sich kein Tagesbetrag rechnen.'
+                    ? 'Ohne Körpergewicht lässt sich kein Tagesbetrag rechnen.'
                     : `Als ${EINHEIT_ZEICHEN[e]} anzeigen`}
                   onClick={() => onWechsel(e)}
                   style={{

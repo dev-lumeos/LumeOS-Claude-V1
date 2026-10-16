@@ -105,7 +105,7 @@ export async function phaseStarten(e: Phasenstart): Promise<string> {
   ]
   if (felder.length) {
     throw new PhaseFehler('VALIDATION_FAILED',
-      'Die Eingabe ist unvollstaendig.', felder)
+      'Die Eingabe ist unvollständig.', felder)
   }
 
   // ── G-534/A4: EIN Aufruf, atomar ───────────────────────────────
@@ -140,7 +140,7 @@ export async function phaseStarten(e: Phasenstart): Promise<string> {
     // Nutzer soll wissen, was zu tun ist** — nicht „Fehler 23505".
     if (error.code === '23505' || /laufende Phase beenden/.test(error.message)) {
       throw new PhaseFehler('PHASE_LAEUFT',
-        'Es laeuft bereits eine Phase. Beende sie zuerst — '
+        'Es läuft bereits eine Phase. Beende sie zuerst — '
         + 'mit einem Grund, damit der Verlauf lesbar bleibt.')
     }
     if (error.code === '42501') {
@@ -150,7 +150,7 @@ export async function phaseStarten(e: Phasenstart): Promise<string> {
   }
   if (!data) {
     throw new PhaseFehler('WRITE_FAILED',
-      'Die Phase wurde nicht angelegt — keine Kennung zurueck.')
+      'Die Phase wurde nicht angelegt — keine Kennung zurück.')
   }
   return data as string
 }

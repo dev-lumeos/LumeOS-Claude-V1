@@ -25,7 +25,7 @@
 // `[read]` Was noch Attrappe bleibt und warum, steht in
 // docs/ssot/116-goals-anbindung.md.
 import { ladeWoche, type Wochendaten } from '../../../lib/goals/reiter-read'
-import { ladePlaene, type Plan } from '../../../lib/goals/plan-read'
+import { ladePlaene, ladeVorlagen, type Plan, type Vorlage } from '../../../lib/goals/plan-read'
 import { steuerziel } from '../../../lib/goals/reiter'
 import type { Metadata } from 'next'
 
@@ -113,8 +113,9 @@ export default async function V2GoalsPage({
   let einheit: Rateneinheit = 'prozent'
   let ladefehler: string | null = null
   // G-618: „Diese Woche" und „Module" — nur, was die Kette liefert.
-  let woche: Wochendaten = { trainings: null, beitraege: [] }
+  let woche: Wochendaten = { trainings: null, beitraege: [], trend: { heute: null, vorwoche: null } }
   let plaene: Plan[] = []
+  let vorlagen: Vorlage[] | null = null
 
   try {
     const userId = await angemeldeteNutzerin()
@@ -156,7 +157,7 @@ export default async function V2GoalsPage({
     // Datenbank meldet die Mehrdeutigkeit als Zustand (A4).
     woche = await ladeWoche(userId, stichtag, steuerziel(ziele)?.goal_id ?? null)
     // G-629: laufend ist, was `phase_am` liefert (echt.phasen).
-    plaene = await ladePlaene(userId, stichtag, phasen.map(p => p.phase_id))
+    ;[plaene, vorlagen] = await Promise.all([ladePlaene(userId, stichtag, phasen.map(p => p.phase_id)), ladeVorlagen()])
 
     const einzigesZiel = offenePhasen.length === 1
       ? offenePhasen[0].goal_id
@@ -195,6 +196,7 @@ export default async function V2GoalsPage({
         ladefehler,
         woche,
         plaene,
+        vorlagen,
       }}
     />
     </>

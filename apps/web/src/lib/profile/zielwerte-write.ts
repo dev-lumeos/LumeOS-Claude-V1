@@ -125,7 +125,7 @@ export async function setzeZielwerteAusFormel(): Promise<Zielwerte> {
     if (h) throw new ProfileWriteError('INVALID_INPUT', hindernisSatz(h))
     throw new ProfileWriteError('WRITE_FAILED', error.message)
   }
-  if (!data) throw new ProfileWriteError('WRITE_FAILED', 'Upsert lieferte keine Zeile zurueck.')
+  if (!data) throw new ProfileWriteError('WRITE_FAILED', 'Upsert lieferte keine Zeile zurück.')
 
   const r = data as Record<string, unknown>
   const zahl = (v: unknown): number | null => {

@@ -765,7 +765,10 @@ test('das Goals-Modul kennzeichnet jede Kachel', () => {
     // Kennzahlkachel stehen in Schleifen und tragen je Element eine.
     // `[cmd]` **29 seit der Berichtigung** (2026-09-07): `tdee`,
     // `cross` und `poses` kamen dazu — 14 Kacheln mit `ATTRAPPE_PRO`.
-    [path.join(process.cwd(), 'src/app/v2/goals/mockup-referenz.tsx'), 29],
+    // `[cmd]` **25 seit G-648** (2026-10-16): die Referenz des Reiters Goals
+    // (`GoalsGoalsReferenz`, vier Kacheln) ist gefallen — Tom: „Mockup-Referenz
+    // und Reste entfernen"; die Vorlage des Reiters ist `entwurf/Main.dc.html`.
+    [path.join(process.cwd(), 'src/app/v2/goals/mockup-referenz.tsx'), 25],
     // `[cmd]` **G-365: die Kacheln, die OBERHALB der Linie fehlen.**
     //
     // **Tom, 2026-09-07:** *,,oben wird alles angezeigt das angebunden
@@ -971,7 +974,8 @@ test('die angebundenen Goals-Kacheln tragen keine Marke mehr', () => {
   // zaehlt, was BLEIBT, das hier haelt fest, was GEHT.
   for (const datei of [GOALS_COMP, GOALS_KARTEN, GOALS_TDEE, GOALS_KOERPER]) {
     const quelle = fs.readFileSync(datei, 'utf8')
-    assert.ok((quelle.match(/<Card\b/g) ?? []).length > 0,
+    // G-648: der Reiter Goals baut seine Karten nach dem Entwurf (`className="ge-card"`).
+    assert.ok((quelle.match(/<Card\b|className="ge-card"/g) ?? []).length > 0,
       `${path.basename(datei)}: keine Karte gefunden.`)
     assert.ok(!/attrappe=/.test(quelle),
       `${path.basename(datei)}: traegt eine Attrappenmarke, ist aber angebunden.`)
@@ -1120,7 +1124,9 @@ test('Goals bewertet nicht, es zeigt', () => {
   const logik = ohneKommentar(fs.readFileSync(GOALS_REITER_LOGIK, 'utf8'))
   assert.ok(!/berechnePace\(/.test(logik) && !/berechnePace\(/.test(karten),
     'der Reiter rechnet die Lage wieder selbst — G-640 verlangt sie aus der Kette')
-  assert.ok(/g\.progress_pct >= 100 \? 'im_plan' : 'hinterher'/.test(logik) && /lageVon\(g\)/.test(karten),
+  // G-648: einmalig liefert die Kette die Lage selbst (`goal_progress_at.lage`, G-643),
+  // woechentlich bleibt es die Quote der Woche.
+  assert.ok(/const l = g\.lage/.test(logik) && /g\.progress_pct >= 100 \? \{ lage: 'voraus'/.test(logik) && /lageVon\(g\)/.test(karten),
     'die Lage haengt nicht mehr an goal_progress_at')
   assert.ok(/data-lage/.test(karten),
     'die Karte zeigt keine Lage mehr — wo die Kette eine liefert, muss sie stehen.')
@@ -1147,11 +1153,21 @@ test('Goals erfasst nicht — die Uebersicht zeigt nur', () => {
   // markiert (Toms Entscheidung zu GO-16). Die ANGEBUNDENEN Dateien
   // duerfen keines haben — sonst entstuende genau der Erfassungspfad,
   // den die Vision ausschliesst.
-  for (const datei of [GOALS_COMP, GOALS_KARTEN, GOALS_TDEE, GOALS_KOERPER]) {
+  for (const datei of [GOALS_COMP, GOALS_TDEE, GOALS_KOERPER]) {
     const q = fs.readFileSync(datei, 'utf8')
     assert.ok(!/<input|<textarea|<select/.test(q),
       `${path.basename(datei)}: hat ein Eingabefeld — Goals erfasst nicht.`)
   }
+  // `[cmd]` **G-648: Anlass ersetzt, Regel behalten.** Der Entwurf (`Main.dc.html`)
+  // fuehrt das Bearbeiten IN der Karte — Titel, Zielwert, Frist: die Beschreibung
+  // des ZIELS, kein Messwert. Erfasst wird dort weiter nichts: jedes Feld hat eine
+  // der sechs Kennungen der zwei Bearbeiten-Bloecke, und kein Messwert-Schreibweg.
+  const karten = fs.readFileSync(GOALS_KARTEN, 'utf8')
+  const felder = karten.match(/<input[^>]*>/g) ?? []
+  assert.equal(felder.length, 6, `reiter-goals.tsx: ${felder.length} Eingabefelder, erwartet 6 (Bearbeiten Steuerung 3, Messziel 3)`)
+  for (const f of felder) assert.ok(/id="st-(titel|ziel|datum)"|id=\{`[tzf]-\$\{g\.goal_id\}`\}/.test(f), `reiter-goals.tsx: fremdes Eingabefeld ${f.slice(0, 60)}`)
+  assert.ok(!/<textarea|<select|messungSpeichern|manual_goal_values|body_measurements/.test(karten),
+    'reiter-goals.tsx: ein Erfassungsweg fuer Messwerte — Goals erfasst nicht.')
   // Und der Lesepfad hat keinen Schreibweg.
   const lesen = fs.readFileSync(GOALS_LESEN, 'utf8')
   for (const schreib of [/\.insert\(/, /\.update\(/, /\.upsert\(/, /\.delete\(/]) {

@@ -55,7 +55,7 @@ export function doppelterZeitpunkt(
   code: string | undefined, text: string,
 ): Feldfehler | null {
   if (code === '23505' && text.includes('user_date_time_uq')) {
-    return { feld: 'measurement_time', text: 'Zu Datum und Uhrzeit liegt schon eine Messung — andere Uhrzeit waehlen.' }
+    return { feld: 'measurement_time', text: 'Zu Datum und Uhrzeit liegt schon eine Messung — andere Uhrzeit wählen.' }
   }
   return null
 }

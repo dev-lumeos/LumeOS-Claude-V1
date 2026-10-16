@@ -93,15 +93,3 @@ export const fehlerSatz = (text: string) => kettenfehler(text)?.satz ?? text
 export const nichtEingespielt = (e: { code?: string | null; message?: string | null } | null) =>
   !!e && (e.code === 'PGRST202' || e.code === '42883')
 
-/**
- * G-645/5 — der Kopf zaehlt nach Rolle. `[cmd]` **Am Schirm 10.10.: „2 active
- * goals"** — das steuernde und das messende Ziel zusammengezaehlt, englisch.
- * `[read]` **Gezaehlt wird der wirksame Zustand** (`goal_list_at`): ein
- * eingefrorenes Messziel mit gespeichertem `active` laeuft nicht mehr.
- */
-export function kopfZiele(ziele: ReadonlyArray<{ goal_role: string | null; zustand: Pick<Zustand, 'zustand'> }>): string {
-  const aktiv = ziele.filter(z => z.zustand.zustand === 'active')
-  const s = aktiv.filter(z => z.goal_role === 'controlling').length
-  const m = aktiv.filter(z => z.goal_role === 'measurement').length
-  return `${s} ${s === 1 ? 'steuerndes Ziel' : 'steuernde Ziele'} · ${m} ${m === 1 ? 'Messziel' : 'Messziele'}`
-}

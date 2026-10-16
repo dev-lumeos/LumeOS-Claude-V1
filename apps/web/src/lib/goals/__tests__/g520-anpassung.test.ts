@@ -238,7 +238,7 @@ describe('G-520 — die sechs Regeln, Grenze von beiden Seiten', () => {
     const ohne = wochenAnpassung('recomp', null, 80,
       { ...RUHE, hrv7d: 50, hrvBaseline: null })
     assert.equal(ohne.art, 'keine_aenderung')
-    assert.match(ohne.grund, /Vergleichsgroesse/,
+    assert.match(ohne.grund, /Vergleichsgröße/,
       'die fehlende Vergleichsgroesse wird verschwiegen')
   })
 
@@ -246,7 +246,7 @@ describe('G-520 — die sechs Regeln, Grenze von beiden Seiten', () => {
     const r = wochenAnpassung('fat_loss', -0.5, null,
       { ...RUHE, weightTrend: -0.05, calorieAdherence: 90 })
     assert.equal(r.rate_delta, null)
-    assert.match(r.hindernis ?? '', /Koerpergewicht/)
+    assert.match(r.hindernis ?? '', /Körpergewicht/)
   })
 })
 
@@ -348,7 +348,7 @@ describe('G-520/A4 — die Gesundheitswarnung folgt E-74', () => {
   })
 
   it('sie verweist auf aerztliche Einordnung', () => {
-    assert.match(satz, /aerztliche/,
+    assert.match(satz, /ärztliche/,
       'der Satz ordnet selbst ein, statt es abzugeben')
   })
 })

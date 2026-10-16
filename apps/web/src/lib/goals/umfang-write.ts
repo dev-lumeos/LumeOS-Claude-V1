@@ -84,7 +84,7 @@ export async function umfangAnlegen(e: UmfangEingabe): Promise<string> {
   const felder = pruefeUmfang(e)
   if (felder.length) {
     throw new UmfangFehler('VALIDATION_FAILED',
-      'Die Eingabe ist unvollstaendig.', felder)
+      'Die Eingabe ist unvollständig.', felder)
   }
 
   const { data, error } = await db()
@@ -96,8 +96,8 @@ export async function umfangAnlegen(e: UmfangEingabe): Promise<string> {
     // Sitzungsfall hier** — alles andere ist fachlich.
     if (error.code === '42501' || fehlerart(error.message, error.code) === 'sitzung') {
       throw new UmfangFehler('NO_SESSION',
-        'Die Sitzung ist nicht mehr gueltig. Melde dich neu an — '
-        + 'deine Daten sind unveraendert.')
+        'Die Sitzung ist nicht mehr gültig. Melde dich neu an — '
+        + 'deine Daten sind unverändert.')
     }
     // `[cmd]` **`23505` ist der Eindeutigkeitsschluessel**
     // `(user_id, measurement_date, measurement_time)`. `[read]`
@@ -124,7 +124,7 @@ export async function umfangAnlegen(e: UmfangEingabe): Promise<string> {
 
   if (!data) {
     throw new UmfangFehler('WRITE_FAILED',
-      'Der Umfangssatz wurde nicht geschrieben — keine Kennung zurueck.')
+      'Der Umfangssatz wurde nicht geschrieben — keine Kennung zurück.')
   }
   return data as string
 }

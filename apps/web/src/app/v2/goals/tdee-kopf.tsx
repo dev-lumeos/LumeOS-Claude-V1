@@ -36,7 +36,7 @@ import type { AdaptiverTdee } from '../../../lib/goals/lesen'
 /** Was die Statuswerte der Funktion auf Deutsch heissen. */
 const STATUS_TEXT: Record<string, string> = {
   ok: 'belastbar',
-  insufficient_intake_days: 'nicht genug vollstaendige Zufuhrtage',
+  insufficient_intake_days: 'nicht genug vollständige Zufuhrtage',
   insufficient_weight_measurements: 'nicht genug Gewichtsmessungen',
   insufficient_span: 'Messzeitraum zu kurz',
   no_profile: 'kein Profil',
@@ -100,7 +100,7 @@ export function TdeeKopf({ t }: { t: AdaptiverTdee | null }) {
 
         <div style={{ flex: 1, minWidth: 0 }}>
           <Row
-            label="Formula baseline (Mifflin × Aktivitaetsfaktor)"
+            label="Formula baseline (Mifflin × Aktivitätsfaktor)"
             value={t.formula_tdee_kcal != null
               ? `${t.formula_tdee_kcal.toLocaleString('de-DE', { maximumFractionDigits: 0 })} kcal`
               : '—'}
@@ -130,7 +130,7 @@ export function TdeeKopf({ t }: { t: AdaptiverTdee | null }) {
       {!hat && (
         <div className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.55, marginBottom: 8 }}>
           {`Der adaptive Wert braucht ${z(t.window_days)} von ${z(t.window_days)} Tagen mit `}
-          {`vollstaendiger Zufuhr; vorliegen ${z(t.complete_intake_days)}`}
+          {`vollständiger Zufuhr; vorliegen ${z(t.complete_intake_days)}`}
           {fehlendeTage != null && fehlendeTage > 0 ? ` (es fehlen ${fehlendeTage})` : ''}
           {`. Gewichtsmessungen im Zeitraum: ${z(t.weight_measurement_count)}. `}
           <strong>Die Formelgrundlage steht daneben und ist gerechnet, nicht geschaetzt.</strong>
@@ -147,9 +147,9 @@ export function TdeeKopf({ t }: { t: AdaptiverTdee | null }) {
                 von einer Glaettung bleibt nichts. Der Zusatz stimmte
                 nur fuer alpha < 1 und ist deshalb weg. */}
             {t.alpha >= 1
-              ? `EMA-Glaettung α = ${t.alpha}: keine Glaettung — der adaptive Wert ist der gemessene. `
-              : `EMA-Glaettung α = ${t.alpha}: der adaptive Wert uebernimmt je Schritt `
-                + `${Math.round(t.alpha * 100)} % aus der Messung und behaelt `
+              ? `EMA-Glättung α = ${t.alpha}: keine Glättung — der adaptive Wert ist der gemessene. `
+              : `EMA-Glättung α = ${t.alpha}: der adaptive Wert übernimmt je Schritt `
+                + `${Math.round(t.alpha * 100)} % aus der Messung und behält `
                 + `${Math.round((1 - t.alpha) * 100)} % des Vorwerts. `}
           </>
         ) : null}

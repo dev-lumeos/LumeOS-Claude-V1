@@ -103,9 +103,9 @@ export function FehlendePhaseKacheln() {
             // WAS fehlt — nicht, wo es fehlt.
             'einen gespeicherten Gewichtstrend je Phase'],
           ['Strength', `+${PHASE_STATE.strengthTrend}%`,
-            'Kraftzuwachs je Phase braucht training.sets ueber den Phasenzeitraum'],
+            'Kraftzuwachs je Phase braucht training.sets über den Phasenzeitraum'],
           ['Body fat', `${PHASE_STATE.bfTrend} %/wk`,
-            'Koerperfett je Woche braucht body_composition_navy im Phasenfenster'],
+            'Körperfett je Woche braucht body_composition_navy im Phasenfenster'],
           ['Adherence', `${PHASE_STATE.adherence}%`,
             'Einhaltung ist nirgends gespeichert — kein Feld, keine Ableitung'],
         ] as Array<[string, string, string]>).map(([l, v, w]) => (
@@ -215,8 +215,8 @@ export function FehlendeZielKacheln() {
       {/* [cmd] module-goals.jsx, GoalsTab — die Wochenbewegung. */}
       <Card title="This week" sub="movement toward all goals"
             attrappe={marke(
-              'eine Bewegung je Ziel ueber sieben Tage — `goal_progress_at` '
-              + 'haelt Staende, aber keine Wochendifferenz je Ziel')}>
+              'eine Bewegung je Ziel über sieben Tage — `goal_progress_at` '
+              + 'hält Stände, aber keine Wochendifferenz je Ziel')}>
         <div className="v2-col-gap" style={{ gap: 5 }}>
           {WOCHENBEWEGUNG.map(([was, wert, richtung]) => (
             <div key={was} style={{
@@ -238,7 +238,7 @@ export function FehlendeZielKacheln() {
       <Card title="Cross-module health"
             sub="how goals are doing in linked modules"
             attrappe={marke(
-              'eine gemeinsame Sicht ueber vier Module — Nutrition, '
+              'eine gemeinsame Sicht über vier Module — Nutrition, '
               + 'Training, Sleep und Recovery liegen in eigenen Schemata (E-52)')}>
         <div className="v2-col-gap" style={{ gap: 7 }}>
           {MODULGESUNDHEIT.map(([modul, wert, pct]) => (
@@ -540,7 +540,7 @@ export function FehlendePhysiqueKacheln({ ffmi }: { ffmi: number | null }) {
   return (
     <Card title="FFMI" sub="fat-free mass index"
           attrappe={marke(
-            'belegte Einordnungsbaender — 18-20 „Developing" bis 25+ '
+            'belegte Einordnungsbänder — 18-20 „Developing" bis 25+ '
             + '„Elite / assisted" haben im Repo keine Quelle (GO-21). '
             + 'Der WERT ist seit G-512 echt.')}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 12 }}>

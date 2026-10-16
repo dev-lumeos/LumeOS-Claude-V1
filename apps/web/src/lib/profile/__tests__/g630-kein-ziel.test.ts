@@ -107,15 +107,16 @@ describe('G-630 — bis in die Anzeige', () => {
     assert.match(lesen, /herkunft: ziele\.herkunft,\s*ruhend: ziele\.ruhendes_ziel,/)
     const dash = lies('app/v2/dashboard/dashboard-echt.tsx')
     assert.match(dash, /<KeinZielWarnung herkunft=\{d\.nutrition\.ziele\.herkunft\}/)
-    // G-618: die Karte sitzt jetzt in der Steuerung des Reiters — die Kette
-    // ansicht → ReiterGoals → Steuerung → SteuerungOhneZiel reicht `zielwerte` durch.
+    // G-648: die Steuerungskarte des Entwurfs fuehrt Herkunft und ruhendes Ziel selbst —
+    // ansicht → ReiterGoals → Steuerung; Fortsetzen „mit den alten Daten" setzt den Status.
     const goals = lies('app/v2/goals/ansicht.tsx')
     assert.match(goals, /zielwerte=\{echt\.zielwerte\}/)
     const reiter = lies('app/v2/goals/reiter-goals.tsx')
-    assert.match(reiter, /<SteuerungOhneZiel zielwerte=\{zielwerte\}/)
-    const karte = lies('app/v2/goals/steuerung-ohne-ziel.tsx')
-    assert.match(karte, /zielSpeichern\(ruhend\.goal_id, \{ status: 'active' \}\)/)
-    assert.match(karte, /<KeinZielWarnung herkunft=\{zielwerte\.herkunft\}/)
+    assert.match(reiter, /herkunft: p\.zielwerte\?\.herkunft \?\? null, ruhend: !!p\.zielwerte\?\.ruhendes_ziel,/)
+    assert.match(reiter, /const gid = zustand === 'pausiert' \? p\.zielwerte\?\.ruhendes_ziel\?\.goal_id/)
+    assert.match(reiter, /data-kein-ziel-fortsetzen onClick=\{async \(\) => \{\s*setFehler\(null\)\s*const r = await zielSpeichern\(z\.goal_id, \{ status: 'active' \}\)/)
+    // die Warnung mit Herkunft bleibt fuer den Zustand, den der Entwurf nicht kennt (G-637)
+    assert.match(reiter, /<KeinZielWarnung herkunft="ziel_ohne_laufende_phase" kcal=\{kcalErh\}/)
   })
 })
 

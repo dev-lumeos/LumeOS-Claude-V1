@@ -53,7 +53,7 @@ function cardioText(c: unknown): string | null {
 export function planvorschau(
   s: Strategie, termin: string, zielbeginn: string,
 ): Planvorschau {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(termin)) return { ok: false, grund: 'Ohne Termin laesst sich nichts rueckwaerts rechnen.' }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(termin)) return { ok: false, grund: 'Ohne Termin lässt sich nichts rückwärts rechnen.' }
   if (termin < zielbeginn) return { ok: false, grund: 'Der Termin liegt vor dem Zielbeginn.' }
 
   const teil = s.sub_phases.length > 0

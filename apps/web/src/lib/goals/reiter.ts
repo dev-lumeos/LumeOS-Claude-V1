@@ -111,25 +111,25 @@ export type Lage = 'voraus' | 'im_plan' | 'hinterher'
 export const LAGE_TEXT: Record<Lage, string> = { voraus: 'voraus', im_plan: 'im Plan', hinterher: 'hinterher' }
 
 /**
- * Die Lage eines Ziels — **nur aus `goal_progress_at`, keine eigene Rechnung**
- * (G-640). `[cmd]` **Hier stand `berechnePace` (G-554):** Ist gegen den
- * gleichmaessigen Verlauf, in der App gerechnet. G-611 fordert: der Zustand
- * kommt aus der Kette.
+ * Die Lage eines Ziels — **nur aus der Kette, keine eigene Rechnung** (G-640).
  *
- * `[cmd]` **`goal_progress_at` liefert eine Lage nur fuer Wochenziele** (die
- * Quote der laufenden Woche, `progress_pct`). Fuer einmalige Ziele hat die
- * Kette kein Feld voraus/im Plan/hinterher — **gemeldet, nicht nachgebaut**;
- * die Kachel nennt dann den Fortschritt ohne Wertung.
+ * `[cmd]` **G-648: `goal_progress_at.lage` (G-643) ist eingespielt** — fuer
+ * einmalige Messziele `offen` · `voraus` · `im_plan` · `hinterher`. Wochenziele:
+ * die Quote der laufenden Woche (`progress_pct`), im Entwurf „diese Woche offen".
+ *
+ * `[cmd]` **Keine Pille ohne Istwert** (Schirm G-640, 16.10.: ein Schlafziel ohne
+ * jeden Wert trug „hinterher"). `offen` heisst: die Kette kann nicht werten.
  *
  * `[read]` **Eingefroren: keine Wertung** (`progress_status = 'frozen'`).
  */
-export function lageVon(g: ReiterZiel): { lage: Lage | null; grund: string | null } {
-  if (istEingefroren(g.zustand) || g.progress_status === 'frozen') return { lage: null, grund: null }
+export function lageVon(g: ReiterZiel & { lage?: string | null }): { lage: Lage | null; text: string | null } {
+  if (istEingefroren(g.zustand) || g.progress_status === 'frozen' || g.current_value === null) return { lage: null, text: null }
   if (g.measurement_rhythm === 'weekly') {
-    if (g.progress_status !== 'measured' || g.progress_pct === null) return { lage: null, grund: 'diese Woche noch kein Wert' }
-    return { lage: g.progress_pct >= 100 ? 'im_plan' : 'hinterher', grund: null }
+    if (g.progress_status !== 'measured' || g.progress_pct === null) return { lage: null, text: null }
+    return g.progress_pct >= 100 ? { lage: 'voraus', text: 'diese Woche erreicht' } : { lage: 'hinterher', text: 'diese Woche offen' }
   }
-  return { lage: null, grund: null }
+  const l = g.lage
+  return l === 'voraus' || l === 'im_plan' || l === 'hinterher' ? { lage: l, text: LAGE_TEXT[l] } : { lage: null, text: null }
 }
 
 /**

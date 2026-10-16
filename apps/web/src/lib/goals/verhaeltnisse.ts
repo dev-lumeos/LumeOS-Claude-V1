@@ -278,7 +278,7 @@ export function bmiLage(gewichtKg: number | null, groesseCm: number | null): {
     wert,
     klasse,
     quelle: grenzquelleAus('BP-BMI-004'),
-    vorbehalt: 'Bevoelkerungsmass — bei hoher Muskelmasse ohne Aussage; Taille mitlesen.',
+    vorbehalt: 'Bevölkerungsmaß — bei hoher Muskelmasse ohne Aussage; Taille mitlesen.',
   }
 }
 
@@ -328,7 +328,7 @@ export const PROPORTION_HEURISTIKEN: ProportionsHeuristik[] = [
     name: 'Steve-Reeves-Proportionen',
     herkunft: 'Steve Reeves, Golden Era (1940er–50er)',
     zielwert: null,
-    formeln: ['Arm = 252 % Handgelenk', 'Wade = 192 % Knoechel', 'Brust = 148 % Becken'],
+    formeln: ['Arm = 252 % Handgelenk', 'Wade = 192 % Knöchel', 'Brust = 148 % Becken'],
   }),
   heuristik('BP-MCCALLUM-009', {
     name: 'McCallum („Keys to Progress")',
@@ -340,7 +340,7 @@ export const PROPORTION_HEURISTIKEN: ProportionsHeuristik[] = [
     name: 'Klassische Konventionen',
     herkunft: 'Golden-Era-Bodybuilding-Literatur',
     zielwert: null,
-    formeln: ['Arm = Hals = Wade', 'Brust 25–30 cm ueber Taille'],
+    formeln: ['Arm = Hals = Wade', 'Brust 25–30 cm über Taille'],
   }),
 ]
 

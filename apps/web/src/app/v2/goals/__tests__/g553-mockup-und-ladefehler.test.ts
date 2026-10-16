@@ -55,8 +55,9 @@ const KACHEL = () => lies(join(GOALS, '..', '..', '..',
  * `physique`), **drei nicht** (`cross`, `timeline`, `poses`) — und
  * genau die drei haben ihren Entwurf behalten.
  */
+// `[cmd]` **G-648: `goals` hat keine Referenz mehr** — Tom 16.10.: „Mockup-Referenz
+// und Reste entfernen"; die Vorlage des Reiters ist `entwurf/Main.dc.html` selbst.
 const REITER: Array<[string, string]> = [
-  ['goals', 'GoalsGoalsReferenz'],
   ['phase', 'GoalsPhaseView'],
   ['tdee', 'GoalsTdeeReferenz'],
   ['cross', 'GoalsCrossReferenz'],
@@ -73,17 +74,19 @@ describe('G-553/A2 — jeder Reiter zeigt seinen Mockup-Teil', () => {
     // `[read]` **Die Wurzelmarke:** waechst die Reiterliste, ohne
     // dass diese Pruefung nachzieht, misst sie den neuen nicht.
     const q = A()
-    const i = q.indexOf('function tabs(')
+    // Tom 16.10.: ohne Zahl am Reiter ist die Liste eine Konstante
+    const i = q.indexOf('const TABS: TabItem[] = [')
     // `[read]` **Bis zum Ende des ARRAYS, nicht bis zur ersten `}`**
     // — die schliesst das erste Reiterobjekt, und die Pruefung sah
     // genau einen Reiter.
-    const block = q.slice(i, q.indexOf(']', q.indexOf('return [', i)))
+    const block = q.slice(i, q.indexOf(']', q.indexOf('= [', i) + 3))
     // `[read]` **`match` statt `matchAll`** — ein Spread ueber
     // `matchAll` faellt im Gate mit TS2802 (dieselbe Stelle wie in
     // G-422).
     const ids = (block.match(/id: '[a-z]+'/g) ?? [])
       .map(t => t.slice(5, -1))
-    assert.deepEqual(ids.sort(), REITER.map(([r]) => r).sort(),
+    // G-648: `goals` steht in tabs(), hat aber keine Referenz mehr (siehe REITER)
+    assert.deepEqual(ids.sort(), REITER.map(([r]) => r).concat(['goals']).sort(),
       'die Reiterliste weicht von dieser Pruefung ab')
   })
 

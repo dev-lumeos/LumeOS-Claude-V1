@@ -122,7 +122,7 @@ import { ReferenzTrenner } from '../../../components/shell/referenz-trenner'
 // `[cmd]` G-365: die vier angebundenen Reiter bekommen ihren
 // Mockup-Reiter darunter — sie hatten keine Linie.
 import {
-  GoalsGoalsReferenz, GoalsMetricsReferenz,
+  GoalsMetricsReferenz,
   GoalsMeasureReferenz, GoalsCompReferenz,
   GoalsTdeeReferenz, GoalsCrossReferenz,
 } from './mockup-referenz'
@@ -133,7 +133,7 @@ import {
 import { GoalsPhysiqueView, GoalsPosesView } from './tab-physique'
 // G-513: Phase beginnen, beenden, Vorschlag beantworten.
 import { PhaseEcht } from './phase-echt'
-import { kopfZiele } from '../../../lib/goals/zustand'
+import { phaseAnzeige } from '../../../lib/goals/phase-regeln'
 import { PhaseBeenden, PhaseVorschlag } from './phase-setzen'
 import { Planer } from './planer'
 
@@ -151,7 +151,7 @@ import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-re
 import { ReiterGoals } from './reiter-goals'
 import { PlanSeite } from './plan-seite'
 import { abPro } from '../../../lib/goals/plan'
-import type { Plan } from '../../../lib/goals/plan-read'
+import type { Plan, Vorlage } from '../../../lib/goals/plan-read'
 import type { Wochendaten } from '../../../lib/goals/reiter-read'
 // `[read]` **Nur der TYP** — `strategie-read.ts` zieht
 // `createSessionClient` und damit `next/headers`; ein Wert-Import
@@ -168,8 +168,8 @@ import { LadefehlerKachel } from '../../../components/shell/ladefehler-kachel'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
-  'Aus dem Entwurf uebernommen. Diese Kachel ist noch nicht an die vorhandenen '
-  + 'Goals- und Koerperdaten angebunden - die Zahlen sind erfunden.'
+  'Aus dem Entwurf übernommen. Diese Kachel ist noch nicht an die vorhandenen '
+  + 'Goals- und Körperdaten angebunden - die Zahlen sind erfunden.'
 
 /**
  * Eine Attrappenmarke nach E-68 — Quelle UND Grund.
@@ -193,11 +193,9 @@ export function attrappeAus(quelle: string, wartet: string): string {
 
 // [cmd] module-goals.jsx:172-183, in dieser Reihenfolge.
 //
-// `[cmd]` Der Zaehler an „Goals" ist seit GO-16 echt — die Ziele der
-// angemeldeten Nutzerin statt der fuenf erfundenen der Vorlage.
-function tabs(zielZahl: number): TabItem[] {
-  return [
-  { id: 'goals', label: 'Goals', count: zielZahl },
+// Tom 16.10.: keine Zahl am Reiter (Entwurf `Main.dc.html`).
+const TABS: TabItem[] = [
+  { id: 'goals', label: 'Goals' },
   { id: 'phase', label: 'Phase engine' },
   { id: 'tdee', label: 'Adaptive TDEE' },
   { id: 'cross', label: 'Cross-module' },
@@ -207,7 +205,12 @@ function tabs(zielZahl: number): TabItem[] {
   { id: 'comp', label: 'Composition' },
   { id: 'physique', label: 'Physique ratios' },
   { id: 'poses', label: 'Pose sessions' },
-  ]
+]
+/** Titel je Reiter wie im Entwurf (`Main.dc.html` „Ziele“, `PhaseEngine.dc.html` „Phase engine · Pläne“). */
+const TITEL: Partial<Record<string, string>> = { phase: 'Phase engine · Pläne' }
+/** Die eine Aktion im Kopf je Reiter (Tom 16.10.); andere Reiter haben keine. */
+const HAUPTAKTION: Partial<Record<string, string>> = {
+  goals: '+ Ziel setzen', phase: '+ Neuer Plan', metrics: 'Gewicht eintragen', measure: 'Messung eintragen',
 }
 
 /**
@@ -264,6 +267,8 @@ export type EchteDaten = {
   woche: Wochendaten
   /** G-629: die Plaene (G-625) — Positionen, Termine, Zustand aus `phase_am`. */
   plaene: Plan[]
+  /** G-649: `null` = Kette G-644 noch nicht eingespielt. */
+  vorlagen?: Vorlage[] | null
   /**
    * `[cmd]` **G-565/A4: die gewaehlte Einheit** — aus
    * `user_display_preferences`, eine Einstellung des NUTZERS
@@ -282,6 +287,8 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
   // G-117: Tab in der Adresse — Drop-in aus lib/tab-url.
   const [tab, setTab] = useTabParam('goals')
   const [modal, setModal] = React.useState<ModalZustand | null>(null)
+  // G-649: „+ Neuer Plan" steht im Kopf, der Dialog in der Phase engine
+  const [neuerPlan, setNeuerPlan] = React.useState(false)
 
   const comp: CompDaten = {
     navy: echt.navy,
@@ -351,6 +358,17 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
   // eindeutig.
   const laufendePhase = laufendePhasen.length === 1 ? laufendePhasen[0]! : null
 
+  // Die eine Aktion je Reiter — `switch`, damit kein „tab === '…'" vor den Reiterbloecken steht
+  // (`entwurf-wird-nicht-verdraengt` schneidet die Bloecke an diesem Muster).
+  const kopfAktion = (t: string) => {
+    switch (t) {
+      case 'goals': return setModal({ typ: 'newGoal' })
+      case 'phase': return setNeuerPlan(true)
+      case 'metrics': return setModal({ typ: 'logWeight' })
+      case 'measure': return setModal({ typ: 'logMeasure' })
+    }
+  }
+
   const kontext = React.useMemo(() => ({
     open: (m: ModalZustand) => setModal(m),
     close: () => setModal(null),
@@ -358,41 +376,13 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
 
   return (
     <GoalsKontext.Provider value={kontext}>
-      <div className="v2-module-header v2-module-hero-lite">
-        <div className="v2-module-title-block">
-          <div className="v2-module-title-row">
-            <span className="v2-module-title">Goals &amp; Body</span>
-            {/* `[cmd]` Echt seit GO-16: die Ziele der angemeldeten
-                Nutzerin, nicht die fuenf der Vorlage. */}
-            <Pill variant="acc">
-              {kopfZiele(echt.ziele)}
-            </Pill>
-            {/* ══ G-544: die Kopfmarke zaehlt, statt EINE zu nennen ══
-                `[cmd]` **Am Bild gefunden** (2026-09-30): bei zwei
-                offenen Phasen stand hier *„Phase lean bulk"* — die
-                Marke las `echt.phase` aus `phase_am()`, und deren
-                Rumpf endet auf `LIMIT 1`.
-
-                `[read]` **Eine von zwei zu nennen heisst, die andere
-                zu verschweigen.** `[cmd]` **Seit G-538 ist eine
-                offene Phase JE ZIEL erlaubt** — die Marke sagt jetzt,
-                wie viele laufen, und nennt die Art nur, wenn es
-                genau eine ist. */}
-            {laufendePhasen.length > 0 && (
-              <span data-kopf-phasen={laufendePhasen.length}>
-                <Pill>
-                  <span className="v2-dot" style={{ background: 'var(--pos)' }} />
-                  {laufendePhasen.length === 1
-                    ? `Phase ${(laufendePhasen[0]!.phase_type ?? '').replace(/_/g, ' ')}`
-                    : `${laufendePhasen.length} Phasen laufen`}
-                </Pill>
-              </span>
-            )}
-          </div>
-          <div className="v2-module-sub">
-            {`Stand ${echt.stichtag} · ${echt.meilensteine.length} Meilensteine · `}
-            {`${echt.messungen.length} Koerpermessungen`}
-          </div>
+      {/* ══ Tom 16.10. 15:32 (G-648/G-649): Kopf wie im Entwurf — Titel „Ziele" und
+          nur die Hauptaktion des offenen Reiters. Chips, Phasen-Pille, Stand-Zeile und
+          „+ Messziel" (steht im Abschnitt Messziele) entfallen. */}
+      <div className="v2-module-header v2-module-hero-lite" data-goals-kopf={tab}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <span className="ge-eb">Goals &amp; Body</span>
+          <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: '-.01em' }}>{TITEL[tab] ?? 'Ziele'}</h1>
         </div>
 
         {/* `[cmd]` **G-376: der Platz fuer den Tageswechsler.**
@@ -400,26 +390,16 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
             gehoert dem Modul, der Wechsler der Schale. */}
         <div className="v2-kopf-mitte" data-tageswechsler />
         <div className="v2-module-actions">
-          <button type="button" className="v2-btn" onClick={() => kontext.open({ typ: 'logWeight' })}>
-            <Icon name="plus" className="v2-ic v2-ic-sm" /> Log weight
-          </button>
-          <button type="button" className="v2-btn" onClick={() => kontext.open({ typ: 'logMeasure' })}>
-            <Icon name="edit" className="v2-ic v2-ic-sm" /> Measurements
-          </button>
-          {/* G-628: „+ Messziel" springt direkt zur Art (B1), „+ Ziel setzen"
-              beginnt bei Schritt 0 — Vorlage `entwurf/Main.dc.html`. */}
-          <button type="button" className="v2-btn" data-messziel-neu
-                  onClick={() => kontext.open({ typ: 'newGoal', start: 'B1' })}>
-            <Icon name="plus" className="v2-ic v2-ic-sm" /> Messziel
-          </button>
-          <button type="button" className="v2-btn v2-btn-primary" data-ziel-neu
-                  onClick={() => kontext.open({ typ: 'newGoal' })}>
-            <Icon name="plus" className="v2-ic v2-ic-sm" /> Ziel setzen
-          </button>
+          {HAUPTAKTION[tab] && (tab !== 'phase' || proFrei) && (
+            <button type="button" className="ge-btn ge-btn-p" style={{ minHeight: 40 }} data-kopf-aktion={tab}
+                    onClick={() => kopfAktion(tab)}>
+              {HAUPTAKTION[tab]}
+            </button>
+          )}
         </div>
       </div>
 
-      <Tabs items={tabs(echt.ziele.length)} active={tab} onChange={setTab} />
+      <Tabs items={TABS} active={tab} onChange={setTab} />
 
       {/* `[cmd]` FUENF TABS SIND SEIT GO-16 ECHT. Der Ladefehler
           ersetzt sie, statt eine leere Kachel zu zeigen — sonst saehe
@@ -465,9 +445,10 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
         <>
           {tab === 'goals' && (
             <>
-              {/* G-618: Steuerung, Diese Woche, Module, Messziele, Abgeschlossen
-                  (Entwurf `Main.dc.html`). „This week" und „Cross-module health"
-                  sind damit angebunden; ihre Attrappen fallen, die Referenz bleibt unten. */}
+              {/* G-648: der Reiter 1:1 nach `Main.dc.html` — Steuerung, Diese Woche,
+                  Module, Messziele, Abgeschlossen. **Die Mockup-Referenz darunter ist
+                  gefallen** (Auftrag G-648, Tom 16.10.: „Mockup-Referenz und Reste
+                  entfernen") — die Vorlage ist der Entwurf selbst. */}
               {!echtAus && (
                 <ReiterGoals ziele={echt.ziele} phasen={echt.phasen} offenePhasen={echt.offenePhasen}
                              zielwerte={echt.zielwerte} vorschlag={echt.vorschlag} messungen={echt.messungen}
@@ -475,9 +456,10 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                              stichtag={echt.stichtag}
                              onZielSetzen={() => kontext.open({ typ: 'newGoal' })}
                              onMessziel={() => kontext.open({ typ: 'newGoal', start: 'B1' })}
-                             onPhaseEngine={() => setTab('phase')} />
+                             plaene={echt.plaene}
+                             onPhaseEngine={() => setTab('phase')}
+                             onCrossModule={() => setTab('cross')} />
               )}
-              <GoalsGoalsReferenz />
             </>
           )}
           {tab === 'tdee' && (
@@ -551,7 +533,7 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
               {!echtAus && (
                 <PlanSeite vomTermin={<Planer strategien={echt.strategien} erfahrung={echt.strategieProfil.experience}
                                               ziele={echt.ziele} heute={echt.stichtag} />}
-                           plaene={echt.plaene} strategien={echt.strategien} grad={echt.strategieProfil.experience}
+                           plaene={echt.plaene} neu={neuerPlan} onNeu={setNeuerPlan} vorlagen={echt.vorlagen ?? null} ausblick={echt.woche.ausblick ?? null} strategien={echt.strategien} grad={echt.strategieProfil.experience}
                            ziele={echt.ziele} stichtag={echt.stichtag}
                            startKg={echt.messungen.filter(m => m.weight_kg !== null && m.measurement_date <= echt.stichtag).at(-1)?.weight_kg ?? null}
                            onZuGoals={() => setTab('goals')}
@@ -579,7 +561,8 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                                  Vorschlag kommt aus der Spalte — eine Leseseite ruft nicht
                                  `phase_transition_recommendation` (die schreibt). */}
                              {laufendePhase && <>
-                               <PhaseBeenden phase={laufendePhase} stichtag={echt.stichtag} />
+                               <PhaseBeenden phase={laufendePhase} stichtag={echt.stichtag}
+                                             name={phaseAnzeige(laufendePhase.phase_type, echt.offenePhasen.find(o => o.phase_id === laufendePhase.phase_id)?.strategie_code, echt.strategien)} />
                                <PhaseVorschlag phase={laufendePhase}
                                                vorschlag={{
                                                  recommended_next: laufendePhase.recommended_next,

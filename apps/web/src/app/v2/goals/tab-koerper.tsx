@@ -124,7 +124,7 @@ export function KoerperMetriken({ messungen, zukunft, stichtag }: {
                 <tr>
                   <th style={{ width: 110 }}>Datum</th>
                   <th style={{ textAlign: 'right' }}>Gewicht</th>
-                  <th style={{ textAlign: 'right' }}>Koerperfett</th>
+                  <th style={{ textAlign: 'right' }}>Körperfett</th>
                   <th style={{ textAlign: 'right' }}>Magermasse</th>
                   <th style={{ textAlign: 'right' }}>BMI</th>
                   <th style={{ textAlign: 'right' }}>FFMI</th>
@@ -173,7 +173,7 @@ export function KoerperMetriken({ messungen, zukunft, stichtag }: {
             <div className="v2-divider" />
             <div className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.55 }}>
               {`${zukunft} weitere Messungen tragen ein Datum nach dem ${stichtag} und `}
-              {'stehen deshalb nicht in der Kurve — sie waeren Messungen, die es '}
+              {'stehen deshalb nicht in der Kurve — sie wären Messungen, die es '}
               {'noch nicht gibt. Sie bleiben in der Datenbank.'}
             </div>
           </>
@@ -286,7 +286,7 @@ export function KoerperUmfaenge({ saetze, stichtag }: {
           )}
         </Card>
 
-        <Card title="Messreihe" sub={`${saetze.length} Saetze bis ${stichtag}`}>
+        <Card title="Messreihe" sub={`${saetze.length} Sätze bis ${stichtag}`}>
           {saetze.slice().reverse().map(s => (
             <Row
               key={s.measurement_date}

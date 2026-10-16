@@ -409,13 +409,14 @@ describe('G-554/A4 — der Pace ist eine Rechnung', () => {
   })
 
   it('ohne Grundlage steht der Grund, kein Urteil', () => {
-    assert.match(LOGIK(), /if \(g\.progress_status !== 'measured' \|\| g\.progress_pct === null\) return \{ lage: null, grund:/,
+    // G-648: keine Pille ohne Istwert (Schirm G-640: Schlafziel ohne Wert trug „hinterher")
+    assert.match(LOGIK(), /if \(istEingefroren\(g\.zustand\) \|\| g\.progress_status === 'frozen' \|\| g\.current_value === null\) return \{ lage: null, text: null \}/,
       'die Karte zeigt eine Lage auch ohne Messwert — dann saehe '
-      + '„im Plan" wie eine Messung aus')
-    assert.match(LOGIK(), /if \(istEingefroren\(g\.zustand\) \|\| g\.progress_status === 'frozen'\) return \{ lage: null, grund: null \}/,
-      'ein eingefrorenes Ziel wird bewertet')
-    assert.match(REITER(), /if \(!lage\) return <span className="v2-dim" data-lage="" [^>]*>\{grund\}/,
-      'ohne Grundlage steht kein Grund am Schirm')
+      + '„im Plan" wie eine Messung aus; oder ein eingefrorenes Ziel wird bewertet')
+    assert.match(LOGIK(), /if \(g\.progress_status !== 'measured' \|\| g\.progress_pct === null\) return \{ lage: null, text: null \}/)
+    // am Schirm: ohne Lage KEIN Chip (Entwurf) — kein Ersatztext, der wie eine Wertung aussieht
+    assert.match(REITER(), /\{lage && <span className=\{`ge-chip ge-lage-\$\{lage\}`\} data-lage=\{lage\}>/,
+      'ohne Grundlage steht ein Chip am Schirm')
   })
 
   it('history wird nicht erfunden', () => {
@@ -590,7 +591,7 @@ describe('G-557/A2 — body_comp traegt kein null', () => {
     // (G-609). `[read]` **Die Regel bleibt:** was fehlt, steht da — sonst
     // sieht das Ziel vollstaendig aus, ist es aber nicht.
     const q = lies(join(GOALS, 'reiter-goals.tsx'))
-    assert.match(q, /\{!variante && \(/)
+    assert.match(q, /\{!variante && <span/)
     assert.match(q, /data-steuerung-ohne-variante[\s\S]{0,200}ohne Variante/,
       'eine fehlende Variante bleibt unsichtbar')
   })

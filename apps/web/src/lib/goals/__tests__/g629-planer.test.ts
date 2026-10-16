@@ -174,14 +174,15 @@ describe('G-629 — bis in die Anzeige', () => {
   it('ab Pro: aktiver Plan mit Zeitachse, Termin, aktueller Phase', () => {
     const h = seite('pro')
     assert.match(h, /data-aktiver-plan="p1"/)
-    assert.match(h, /Aktuelle Phase: <b>Moderate Cut<\/b> seit 01\.10\.2026/)
+    // G-649: Entwurf „Aktuelle Phase: <b>…</b> · Woche x von y · steuert dein Ziel in Goals"
+    assert.match(h, /Aktuelle Phase: <b>Moderate Cut<\/b> · <span data-plan-woche="true">Woche 2 von 8<\/span> · steuert dein Ziel in/)
     assert.equal((h.match(/data-segment=/g) ?? []).length, 2)
     assert.match(h, /data-segment="laufend"/); assert.match(h, /data-segment="geplant"/)
     assert.match(h, /data-termin-marke="A"[^>]*>▲ A Landesmeisterschaft/)
   })
   it('was der Kette fehlt, steht als „kommt" — keine Attrappe', () => {
     const h = seite('elite')
-    assert.match(h, /data-kommt="vorlagen"/)
+    assert.match(h, /data-vorlagen="kommt"[\s\S]*?data-kommt="G-644"/, 'ohne Tabelle (G-644 nicht live) stehen die Vorlagen als „kommt"')
     assert.ok(!/attrappe|Attrappe/.test(h))
   })
   it('kein aktiver Plan: Erhaltung', () => {
@@ -189,8 +190,10 @@ describe('G-629 — bis in die Anzeige', () => {
   })
   it('Details zeigen Programmwerte und „keine Vorgabe" (Quelltext der Details)', () => {
     const q = lies('app/v2/goals/plan-seite.tsx')
-    assert.match(q, /z\.wert === null \? <i className="v2-dim" data-keine-vorgabe>keine Vorgabe<\/i>/)
-    for (const b of ['wachen', 'wochenanpassung', 'position_loeschen', 'neu_berechnen', 'vorlage_speichern', 'zweiwege_coach', 'termine_rechnen'])
-      assert.match(q, new RegExp(`befund="${b}"`), `kommt-Marke ${b} fehlt`)
+    assert.match(q, /z\.wert === null \? <i data-keine-vorgabe>keine Vorgabe<\/i>/)
+    // G-649: „kommt" nennt den Punkt — Wachen/Neu berechnen/Coach G-644, Wochenwerte G-650, Anpassung G-627
+    for (const [was, punkt] of [['Regeln mit Stand', 'G-644'], ['Speichern und neu berechnen', 'G-644'], ['Freigabe durch den Coach', 'G-644'],
+      ['Wochenwerte', 'G-650'], ['Anpassung mit Protokoll', 'G-627']])
+      assert.match(q, new RegExp(`<Kommt was="${was}" punkt="${punkt}" />`), `kommt-Marke ${was} fehlt`)
   })
 })

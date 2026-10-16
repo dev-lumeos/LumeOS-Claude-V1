@@ -28,8 +28,8 @@ export const PHASENARTEN = [
   { id: 'maintenance', name: 'Maintenance', zweck: 'Gewicht halten' },
   { id: 'recomp', name: 'Recomp', zweck: 'Fett runter, Muskel rauf' },
   { id: 'contest_prep', name: 'Contest prep', zweck: 'Auf einen Termin hin' },
-  { id: 'reverse_diet', name: 'Reverse diet', zweck: 'Nach einer Diaet hoch' },
-  { id: 'expert_bb_annual', name: 'Expert BB annual', zweck: 'Zwoelfmonatszyklus' },
+  { id: 'reverse_diet', name: 'Reverse diet', zweck: 'Nach einer Diät hoch' },
+  { id: 'expert_bb_annual', name: 'Expert BB annual', zweck: 'Zwölfmonatszyklus' },
   { id: 'mini_cut', name: 'Mini cut', zweck: 'Kurz und scharf' },
   { id: 'peak_week', name: 'Peak week', zweck: 'Die Woche vor dem Termin' },
 ] as const
@@ -290,7 +290,7 @@ export function pruefeRate(
   if (pflicht === 'keine') {
     f.push({
       feld: 'zielrate_pct_kg_woche',
-      text: 'Diese Phasenart traegt keine Rate.',
+      text: 'Diese Phasenart trägt keine Rate.',
     })
   }
   return f
@@ -323,7 +323,7 @@ export function pruefePhasenstart(e: Phasenstart): Feldfehler[] {
   // `[cmd]` CHECK: `projected_end_date IS NULL OR >= gueltig_ab`
   if (e.projected_end_date) {
     if (!ISO_TAG.test(e.projected_end_date)) {
-      f.push({ feld: 'projected_end_date', text: 'Kein gueltiges Datum.' })
+      f.push({ feld: 'projected_end_date', text: 'Kein gültiges Datum.' })
     } else if (ISO_TAG.test(e.gueltig_ab ?? '')
       && e.projected_end_date < e.gueltig_ab) {
       f.push({
@@ -337,6 +337,16 @@ export function pruefePhasenstart(e: Phasenstart): Feldfehler[] {
 }
 
 /** `lean_bulk` -> `Lean bulk`. Faellt auf den Schluessel zurueck. */
+/**
+ * G-648: der Name einer laufenden Phase — das Programm (`goal_strategies.label`,
+ * „Lean Bulk") vor der Phasenart („Lean bulk"), nie der Code (`lean_bulk`).
+ */
+export function phaseAnzeige(phaseType: string | null | undefined, strategieCode: string | null | undefined,
+  strategien: ReadonlyArray<{ code: string; label: string }>): string {
+  const s = strategieCode ? strategien.find(x => x.code === strategieCode) : null
+  return s?.label ?? phasenName(phaseType)
+}
+
 export function phasenName(id: string | null | undefined): string {
   if (!id) return '—'
   return PHASENARTEN.find(p => p.id === id)?.name ?? id.replace(/_/g, ' ')

@@ -171,7 +171,7 @@ describe('G-568/A4 — Mehrdeutigkeit als Zustand, nicht als 500', () => {
 
   it('der Satz sagt, was zu tun ist', () => {
     const s = hindernisSatz('mehrere_phasen')
-    assert.match(s, /Waehle das Ziel/,
+    assert.match(s, /Wähle das Ziel/,
       'der Satz nennt die Handlung nicht')
     assert.ok(!/Fehler|fehlgeschlagen|500/.test(s),
       'der Satz klingt nach einem technischen Fehler')

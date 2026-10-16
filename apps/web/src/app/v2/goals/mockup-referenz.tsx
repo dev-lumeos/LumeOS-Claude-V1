@@ -50,7 +50,7 @@ import {
 
 import { ReferenzTrenner } from '@/components/shell/referenz-trenner'
 import {
-  ACTIVE_GOALS, COMPLETED_GOALS, BODY_METRICS, MEASUREMENTS,
+  BODY_METRICS, MEASUREMENTS,
   PHOTO_PROGRESSION, TDEE_STATE, POSE_SETS,
 } from './daten'
 
@@ -62,134 +62,6 @@ const QUELLE = 'theme-v1/module-goals.jsx'
 const ATTRAPPE =
   `Attrappe — ${QUELLE} · wartet auf: nichts — Referenz zum Vergleich, `
   + 'faellt mit Toms Abnahme'
-
-/** Die Zielkarte der Vorlage — `module-goals.jsx`, `GoalCard`. */
-function ZielKarteEntwurf({ g }: { g: (typeof ACTIVE_GOALS)[number] }) {
-  const paceColor = g.pace === 'ahead' ? 'var(--pos)'
-    : g.pace === 'on-track' ? 'var(--acc-recov)' : 'var(--warn)'
-  return (
-    <Card attrappe={ATTRAPPE}>
-      <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-        <div style={{
-          width: 40, height: 40, borderRadius: 8,
-          background: `color-mix(in oklch, ${g.color} 16%, transparent)`,
-          border: `1px solid color-mix(in oklch, ${g.color} 32%, var(--border))`,
-          color: g.color, display: 'grid', placeItems: 'center', flexShrink: 0,
-        }}>
-          <Icon name={g.icon as never} className="v2-ic v2-ic-lg" />
-        </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: 8,
-            marginBottom: 4, flexWrap: 'wrap',
-          }}>
-            <span className="v2-mono" style={{
-              fontSize: 11, color: 'var(--fg-dim)',
-              letterSpacing: '0.06em', textTransform: 'uppercase',
-            }}>{g.type}</span>
-            <Pill style={{
-              borderColor: `color-mix(in oklch, ${paceColor} 35%, var(--border))`,
-              color: paceColor,
-              background: `color-mix(in oklch, ${paceColor} 8%, transparent)`,
-            }}>{g.pace}</Pill>
-            <span className="v2-dim v2-mono" style={{ marginLeft: 'auto', fontSize: 10 }}>
-              deadline {g.deadline}
-            </span>
-          </div>
-          <div style={{
-            fontSize: 15, fontWeight: 600,
-            letterSpacing: '-0.01em', marginBottom: 8,
-          }}>{g.title}</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-            <div style={{ flex: 1 }}>
-              <div style={{
-                height: 6, background: 'var(--surface-2)',
-                borderRadius: 999, overflow: 'hidden', position: 'relative',
-              }}>
-                <div style={{
-                  position: 'absolute', top: 0, left: 0, bottom: 0,
-                  width: `${g.progress * 100}%`,
-                  background: g.color, borderRadius: 999,
-                }} />
-              </div>
-            </div>
-            <span className="v2-num" style={{
-              fontSize: 13, fontWeight: 500, color: g.color,
-              width: 44, textAlign: 'right',
-            }}>{(g.progress * 100).toFixed(0)}%</span>
-          </div>
-          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-            {g.linkedModules.map(m => (
-              <Pill key={m}><Icon name={m as never} className="v2-ic v2-ic-sm" />{m}</Pill>
-            ))}
-          </div>
-        </div>
-      </div>
-    </Card>
-  )
-}
-
-/** Der Reiter `goals`, wie er im Mockup steht — `GoalsTab`. */
-export function GoalsGoalsReferenz() {
-  return (
-    <>
-      <ReferenzTrenner reiter="Goals" quelle={QUELLE} />
-      <div className="v2-grid" style={{ gridTemplateColumns: '1.5fr 1fr', gap: 16 }}>
-        <div className="v2-col-gap" style={{ gap: 14 }}>
-          {ACTIVE_GOALS.map(g => <ZielKarteEntwurf key={g.id} g={g} />)}
-        </div>
-        <div className="v2-col-gap" style={{ gap: 14 }}>
-          <Card title="This week" sub="movement toward all goals" attrappe={ATTRAPPE}>
-            <div className="v2-col-gap" style={{ gap: 8 }}>
-              <Row label="Bench Press" value="+0 kg (next session Mon)" />
-              <Row label="Weight" value="−0.2 kg" />
-              <Row label="Body fat" value="−0.1 %" />
-              <Row label="10k pace" value="−5 s/km avg (3 runs)" />
-              <Row label="Meditation" value="3 of 5 sessions" />
-            </div>
-          </Card>
-
-          <Card title="Recently closed" sub="3 in last 90 days" attrappe={ATTRAPPE}>
-            <div className="v2-col-gap" style={{ gap: 6 }}>
-              {COMPLETED_GOALS.map(g => (
-                <div key={g.id} style={{
-                  display: 'flex', alignItems: 'center', gap: 10,
-                  padding: '8px 10px', background: 'var(--bg-elev)',
-                  border: '1px solid var(--border)', borderRadius: 5,
-                }}>
-                  <Icon name={g.icon as never} className="v2-ic"
-                        style={{ color: g.color, flexShrink: 0 }} />
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 12, fontWeight: 500 }}>{g.title}</div>
-                    <div className="v2-dim v2-mono" style={{ fontSize: 10 }}>
-                      completed {g.completedOn} · deadline was {g.deadline}
-                    </div>
-                  </div>
-                  <Pill variant="pos">
-                    <Icon name="check" className="v2-ic v2-ic-sm" />done
-                  </Pill>
-                </div>
-              ))}
-            </div>
-          </Card>
-
-          <Card title="Cross-module health"
-                sub="how goals are doing in linked modules" attrappe={ATTRAPPE}>
-            <Row label="Nutrition adherence" value="94% · 30d" />
-            <Row label="Training compliance" value="22 / 24 sessions" />
-            <Row label="Sleep quality avg" value="84 / 100" />
-            <Row label="Recovery avg" value="78 / 100" />
-            <div className="v2-divider" />
-            <div className="v2-dim" style={{ fontSize: 11, lineHeight: 1.45 }}>
-              Buddy: All four inputs trend supportive. Body-comp goal pace is
-              sustainable if compliance holds.
-            </div>
-          </Card>
-        </div>
-      </div>
-    </>
-  )
-}
 
 /** Eine Kennzahlkachel der Vorlage — `MetricKPI`. */
 function KennzahlEntwurf({ label, value, unit, delta, color, history }: {

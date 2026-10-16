@@ -197,6 +197,11 @@ export type ZielFortschritt = {
    * `training`, und die verknüpft niemand. **Gezeigt, nicht versteckt.**
    */
   progress_status: string | null
+  /**
+   * G-648: die Lage aus der Kette (`goal_progress_at.lage`, G-643) — nur fuer
+   * einmalige Messziele: `offen` · `voraus` · `im_plan` · `hinterher`; sonst NULL.
+   */
+  lage: string | null
   measured_at: string | null
   target_date: string | null
   /** `[cmd]` **G-554/A4: das Startdatum** — der Pace braucht es. */
@@ -297,6 +302,7 @@ export async function ladeZiele(userId: string, stichtag: string): Promise<ZielF
       current_source: text(f.current_source),
       progress_pct: zahl(f.progress_pct),
       progress_status: text(f.progress_status),
+      lage: text(f.lage),
       measured_at: text(f.measured_at),
       target_date: text(z.target_date),
       gueltig_ab: text(z.gueltig_ab),

@@ -113,7 +113,7 @@ describe('G-640 — Rueckfall, solange G-611 fehlt', () => {
 const Z = (o: Partial<ZielFortschritt>): ZielFortschritt => ({
   goal_id: 'm1', goal_type: 'body_composition', subtype: null, title: 'Gewicht 78', target_value: 78,
   target_unit: 'kg', start_value: 81.4, current_value: 80, current_source: 'goals.body_measurements',
-  progress_pct: 40, progress_status: 'measured', measured_at: '2026-10-08', target_date: '2026-12-31',
+  progress_pct: 40, progress_status: 'measured', lage: null, measured_at: '2026-10-08', target_date: '2026-12-31',
   gueltig_ab: '2026-10-01', linked_modules: [], status: 'active', is_primary: false, priority: 5,
   goal_role: 'measurement', measurement_type: 'body_weight', measurement_rhythm: 'once', measurement_site: null,
   achievement_date: null, zustand: zustandAusStatus('active'), ...o,
@@ -127,16 +127,24 @@ const ROUTER = { push() {}, replace() {}, refresh() {}, back() {}, forward() {},
 const reiter = (ziele: ZielFortschritt[], zielwerte: Zielwerte, phasen: Phase[] = []) => renderToStaticMarkup(
   React.createElement(AppRouterContext.Provider, { value: ROUTER as never }, React.createElement(ReiterGoals, {
     ziele, phasen, offenePhasen: [], zielwerte, vorschlag: null, messungen: [], meilensteine: [], strategien: [],
-    woche: { trainings: 0, beitraege: [] }, stichtag: '2026-10-09',
+    woche: { trainings: 0, beitraege: [], trend: { heute: null, vorwoche: null } }, stichtag: '2026-10-09',
     onZielSetzen: () => {}, onMessziel: () => {}, onPhaseEngine: () => {},
   })))
 
 describe('G-640 — bis in die Anzeige', () => {
-  it('Loeschknopf je Kachel nur mit Loeschweg (G-639)', () => {
-    const mit = reiter([Z({ zustand: zustandAusListe({ effective_status: 'active' }) })], ZW({ herkunft: 'kein_aktives_ziel' }))
-    assert.match(mit, /data-ziel-loeschen="m1"/)
-    const ohne = reiter([Z({})], ZW({ herkunft: 'kein_aktives_ziel' }))
-    assert.ok(!/data-ziel-loeschen/.test(ohne), 'ohne G-611 ein Knopf ohne Weg')
+  it('Loeschknopf nur mit Loeschweg (G-639) — an jeder Stelle', () => {
+    // G-648: Loeschen steht im Entwurf im Bearbeiten der Karte bzw. Kachel und im
+    // Kasten des eingefrorenen Steuerziels; jeder Knopf haengt an `aktionen(...).loeschen`.
+    const q = lies('app/v2/goals/reiter-goals.tsx')
+    const knoepfe = q.match(/<button[^>]*data-ziel-loeschen=/g) ?? []
+    const gesperrt = q.match(/\{aktionen\((?:z|g)\.zustand\)\.loeschen && <button[^>]*data-ziel-loeschen=/g) ?? []
+    assert.equal(knoepfe.length, 4)
+    assert.equal(gesperrt.length, 3, 'ein Loeschknopf ohne Weg (G-611)')
+    assert.match(q, /\{darf\.loeschen && <button[^>]*data-ziel-loeschen=\{g\.goal_id\}/, 'Abgeschlossen: nur mit Weg')
+    // Abgeschlossen ist offen — mit Kette ein Knopf, ohne keiner
+    const eis = (z: ReturnType<typeof zustandAusListe> | ReturnType<typeof zustandAusStatus>) => reiter([Z({ status: 'achieved', zustand: z })], ZW({ herkunft: 'kein_aktives_ziel' }))
+    assert.match(eis(zustandAusListe({ effective_status: 'eingefroren', freeze_reason: 'erreicht' })), /data-ziel-loeschen="m1"/)
+    assert.ok(!/data-ziel-loeschen/.test(eis(zustandAusStatus('achieved'))), 'ohne G-611 ein Knopf ohne Weg')
   })
   it('eingefroren ohne gespeicherten Abschluss: steht unter Abgeschlossen, nicht bei den Messzielen, ohne Wertung', () => {
     const eis = Z({ status: 'active', progress_status: 'frozen', zustand: zustandAusListe({ effective_status: 'eingefroren', freeze_reason: 'frist_abgelaufen', frozen_on: '2026-10-01' }) })
@@ -150,20 +158,18 @@ describe('G-640 — bis in die Anzeige', () => {
       zustand: zustandAusListe({ effective_status: 'eingefroren', freeze_reason: 'erreicht', frozen_on: '2026-10-05' }) })
     const h = reiter([st], ZW({ herkunft: 'ziel_eingefroren', eingefroren: { goal_id: 'c1', title: 'Lean Bulk', grund: 'erreicht', am: '2026-10-05' } }))
     assert.match(h, /data-steuerung="eingefroren"/)
-    assert.match(h, /„Lean Bulk“ ist abgeschlossen \(erreicht am 05\.10\.2026\)/)
+    assert.match(h, /Erreicht am 05\.10\.2026 mit 80 kg\.<\/b> Das Ziel ist eingefroren; seitdem gilt Erhaltung/)
     assert.match(h, /data-ziel-neu-starten="c1"/)
     assert.ok(!/data-steuerung="laeuft"/.test(h), 'ein eingefrorenes Steuerziel laeuft weiter (gespeichert active)')
   })
-  it('der Editor fuehrt Loeschen, wenn der Weg existiert', () => {
-    const e = lies('app/v2/goals/ziel-editor.tsx')
-    assert.match(e, /\{aktionen\(ziel\.zustand\)\.loeschen && \(/)
-    assert.match(e, /<LoeschenFluss ziel=\{ziel\} \/>/)
-  })
-  it('Loeschen: Rueckfrage bei Verlauf mit beiden Wegen; Speichern-Fehler als Satz', () => {
+  it('Loeschen: EINE Frage wie im Entwurf, sie bestaetigt den Verlauf; Steuerziel mit „Stattdessen beenden"', () => {
+    // `[cmd]` **G-648: Vorher zwei Stufen, und der Satz der Kette wiederholte „Lieber beenden?"**
+    // (Schirm 16.10.). Der Entwurf fragt einmal und nennt den Verlust im Satz.
     const l = lies('app/v2/goals/lebenszyklus.tsx')
-    assert.match(l, /if \(!x\.ok && x\.art === 'confirm'\) \{ setStufe\('verlauf'\)/)
-    assert.match(l, /data-loeschen-stattdessen=\{eis \? 'archivieren' : 'beenden'\}/)
-    assert.match(l, /void loeschen\(stufe === 'verlauf'\)/, 'Trotzdem loeschen bestaetigt den Verlauf nicht')
+    assert.match(l, /const x = await zielLoeschenAktion\(ziel\.goal_id, true\)/)
+    assert.match(l, /Verlauf und Meilensteine gehen verloren/)
+    assert.match(l, /data-loeschen-stattdessen="beenden"[\s\S]{0,120}?>Stattdessen beenden</)
+    assert.ok(!/Lieber beenden/.test(l.replace(/^\s*\/\/.*$/gm, '')), 'die zweite Stufe ist zurueck')
     assert.match(lies('app/v2/goals/ziel-aktionen.ts'), /fehler: fehlerSatz\(e\.fehler\)/)
   })
 })

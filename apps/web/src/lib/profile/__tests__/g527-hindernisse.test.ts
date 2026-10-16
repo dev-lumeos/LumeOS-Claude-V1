@@ -57,7 +57,7 @@ describe('G-527 — vier Hindernisse, vier Texte', () => {
   // steht eine Handlung. **Beim vierten waere eine Handlung eine
   // Luege**, er kann nichts tun.
   it('die drei aufloesbaren Faelle nennen eine Handlung', () => {
-    const handlung = /Ergaenze|Waehle|Trag/
+    const handlung = /Ergänze|Wähle|Trag/
     for (const h of ['profil_unvollstaendig', 'keine_aktive_phase',
       'phasenparameter_fehlt'] as Hindernis[]) {
       assert.match(hindernisSatz(h), handlung,
@@ -112,7 +112,7 @@ describe('G-527 — vier Hindernisse, vier Texte', () => {
       assert.ok(s && s.length > 20, `${p} hat keinen eigenen Satz`)
       // `[read]` **Kein Fehlerton, keine Handlung** — hier gibt es
       // nichts zu tun.
-      assert.doesNotMatch(s!, /fehlt|Fehler|Ergaenze|Waehle|Trag/,
+      assert.doesNotMatch(s!, /fehlt|Fehler|Ergänze|Wähle|Trag/,
         `${p}: der Satz klingt nach Mangel, ist aber ein Zustand`)
     }
   })

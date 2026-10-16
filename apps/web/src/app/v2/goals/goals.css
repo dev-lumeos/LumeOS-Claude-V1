@@ -179,3 +179,64 @@
   font-size: 11px;
   margin-bottom: 4px;
 }
+
+/* ══ G-648/G-649: die Klassen des Entwurfs (`entwurf/Main.dc.html`,
+ * `PhaseEngine.dc.html`) — Masse 1:1, Farben aus den Tokens von
+ * `styles/themes/lume.css` statt der festen oklch-Werte der Vorlage.
+ * Zuordnung: Text 0.25/0.40/0.50 -> --fg/--fg-muted/--fg-subtle, Rahmen
+ * 0.91/0.85 -> --border/--border-strong, Gelb 90 -> --acc-goals, Violett 290
+ * -> --acc-train, Gruen 160 -> --acc-recov, Orange 60 -> --acc-nutri,
+ * Rot 25 -> --neg, Gruen 150 -> --pos, Orange 70 -> --warn. */
+.ge { display: flex; flex-direction: column; gap: 18px; }
+.ge-num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.ge-eb { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--fg-subtle); }
+.ge-typ { font-size: 10.5px; font-family: var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--fg-subtle); }
+.ge-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
+.ge-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 36px; padding: 0 14px; border-radius: 8px;
+  border: 1px solid var(--border-strong); background: var(--surface); font: inherit; font-size: 13px; color: var(--fg); cursor: pointer; text-decoration: none; }
+.ge-btn:hover { background: var(--surface-hover); }
+.ge-btn:disabled { opacity: .5; cursor: default; }
+.ge-btn-p { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.ge-btn-p:hover { background: var(--fg-muted); }
+.ge-btn-r { color: var(--neg); border-color: color-mix(in oklab, var(--neg) 45%, var(--border)); }
+.ge-btn-g { border-color: transparent; background: transparent; }
+.ge-ico { width: 36px; padding: 0; }
+.ge-chip { display: inline-flex; align-items: center; gap: 5px; min-height: 22px; padding: 0 9px; border-radius: 999px; font-size: 11px; font-weight: 500;
+  border: 1px solid var(--border); color: var(--fg-muted); background: var(--surface); font-family: inherit; }
+button.ge-chip { cursor: pointer; min-height: 28px; }
+.ge-chip-an { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.ge-pill { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 11px;
+  border: 1px solid var(--border); color: var(--fg-muted); background: var(--bg); }
+.ge-pill svg { width: 12px; height: 12px; }
+.ge-sq { width: 40px; height: 40px; border-radius: 8px; display: grid; place-items: center; flex-shrink: 0; }
+.ge-sq svg { width: 20px; height: 20px; }
+.ge-mi { width: 28px; height: 28px; border-radius: 7px; display: grid; place-items: center; flex-shrink: 0; }
+.ge-mi svg { width: 15px; height: 15px; }
+.ge-inp { height: 36px; border: 1px solid var(--border-strong); border-radius: 8px; padding: 0 10px; font: inherit; font-size: 13px;
+  background: var(--surface); color: var(--fg); width: 100%; box-sizing: border-box; }
+.ge-lbl { font-size: 11px; font-weight: 600; color: var(--fg-muted); display: block; margin-bottom: 4px; }
+.ge-tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+.ge-tbl th { text-align: left; font-weight: 600; color: var(--fg-subtle); font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em;
+  padding: 6px 8px; border-bottom: 1px solid var(--border-strong); }
+.ge-tbl td { padding: 7px 8px; border-bottom: 1px solid var(--border); }
+.ge-bar { height: 6px; border-radius: 999px; background: var(--surface-2); overflow: hidden; position: relative; }
+.ge-bar > div { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; }
+.ge-link { color: var(--acc-goals); background: none; border: 0; padding: 0; font: inherit; cursor: pointer; text-decoration: underline; }
+.ge-kasten { background: var(--bg); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.ge-kommt { color: var(--fg-subtle); font-style: italic; font-weight: 400; font-size: 12px; }
+/* Toene je Kategorie — Quadrat/Kreis mit Rahmen, Schrift in der Kategoriefarbe */
+.ge-ton-goals { background: color-mix(in oklab, var(--acc-goals) 10%, var(--surface)); border: 1px solid color-mix(in oklab, var(--acc-goals) 32%, var(--border)); color: var(--acc-goals); }
+.ge-ton-train { background: color-mix(in oklab, var(--acc-train) 8%, var(--surface)); border: 1px solid color-mix(in oklab, var(--acc-train) 28%, var(--border)); color: var(--acc-train); }
+.ge-ton-recov { background: color-mix(in oklab, var(--acc-recov) 9%, var(--surface)); border: 1px solid color-mix(in oklab, var(--acc-recov) 28%, var(--border)); color: var(--acc-recov); }
+.ge-ton-nutri { background: color-mix(in oklab, var(--acc-nutri) 10%, var(--surface)); color: var(--acc-nutri); }
+.ge-ton-suppl { background: color-mix(in oklab, var(--acc-suppl) 9%, var(--surface)); color: var(--acc-suppl); }
+/* Lage-Chips: voraus / im Plan / hinterher (Entwurf PACE) */
+.ge-lage-voraus { color: var(--pos); border-color: color-mix(in oklab, var(--pos) 40%, var(--border)); background: color-mix(in oklab, var(--pos) 7%, var(--surface)); }
+.ge-lage-im_plan { color: var(--acc-recov); border-color: color-mix(in oklab, var(--acc-recov) 35%, var(--border)); background: color-mix(in oklab, var(--acc-recov) 6%, var(--surface)); }
+.ge-lage-hinterher { color: var(--warn); border-color: color-mix(in oklab, var(--warn) 45%, var(--border)); background: color-mix(in oklab, var(--warn) 8%, var(--surface)); }
+.ge-grau { color: var(--fg-muted); background: var(--surface-2); }
+.ge-rot { color: var(--neg); border-color: color-mix(in oklab, var(--neg) 40%, var(--border)); }
+.ge-hinweis-rot { background: color-mix(in oklab, var(--neg) 6%, var(--surface)); border: 1px solid color-mix(in oklab, var(--neg) 30%, var(--border)); border-radius: 8px; }
+.ge-hinweis-grau { background: var(--bg); border: 1px solid var(--border-strong); border-radius: 8px; }
+.ge-hinweis-gruen { background: color-mix(in oklab, var(--pos) 8%, var(--surface)); border: 1px solid color-mix(in oklab, var(--pos) 35%, var(--border)); border-radius: 8px; }
+.ge-hinweis-gelb { background: color-mix(in oklab, var(--warn) 9%, var(--surface)); border-radius: 8px; }

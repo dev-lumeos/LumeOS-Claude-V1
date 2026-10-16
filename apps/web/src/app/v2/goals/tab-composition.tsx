@@ -206,7 +206,7 @@ export function CompositionTab({ d }: { d: CompDaten }) {
           <CalcRow
             label="FFMI" value={z(ffmi, 2)} unit="kg/m²" fehlt={ffmi == null}
             range="18–22 natural · 22–25 advanced"
-            note="Fat-free mass index. Aus Umfangsverfahren abgeleitet — traegt dessen Unsicherheit."
+            note="Fat-free mass index. Aus Umfangsverfahren abgeleitet — trägt dessen Unsicherheit."
           />
           <CalcRow
             label="BMR" value={z(vorschlag?.bmr, 0)} unit="kcal/day"
@@ -218,11 +218,11 @@ export function CompositionTab({ d }: { d: CompDaten }) {
             label="TDEE" value={z(vorschlag?.tdee, 0)} unit="kcal/day"
             fehlt={vorschlag?.tdee == null}
             range={faktor ? `× ${faktor.toFixed(3)} (${profil?.activity_level ?? '—'})` : ''}
-            note="Total daily expenditure — Mifflin-St Jeor mal Aktivitaetsfaktor, gerechnet von goals.berechne_zielwerte."
+            note="Total daily expenditure — Mifflin-St Jeor mal Aktivitätsfaktor, gerechnet von goals.berechne_zielwerte."
           />
           <CalcRow
             label="Lean mass" value={z(lean, 2)} unit="kg" fehlt={lean == null}
-            range="" note="Aus Gewicht und Koerperfettanteil des Umfangsverfahrens."
+            range="" note="Aus Gewicht und Körperfettanteil des Umfangsverfahrens."
           />
           <CalcRow
             label="Fat mass" value={z(fett, 2)} unit="kg" fehlt={fett == null}
@@ -240,7 +240,7 @@ export function CompositionTab({ d }: { d: CompDaten }) {
         {vorschlag?.goal_id && d.laufendePhasen > 1 && (
           <div className="v2-dim" data-zielwerte-ziel={vorschlag.goal_id}
                style={{ fontSize: 10.5, marginTop: 6, lineHeight: 1.5 }}>
-            {`Gerechnet fuer ${d.zielTitel ?? 'ein Ziel'} — es laufen `
+            {`Gerechnet für ${d.zielTitel ?? 'ein Ziel'} — es laufen `
               + 'mehrere Phasen.'}
           </div>
         )}
@@ -298,7 +298,7 @@ export function CompositionTab({ d }: { d: CompDaten }) {
             <div style={{ flex: 1, minWidth: 0 }}>
               <Row label="Zielwert (kcal)" value={zielwerte?.kcal != null ? `${zielwerte.kcal.toFixed(0)} kcal` : '—'} />
               <Row label="Herkunft" value={zielwerte?.herkunft ?? '—'} />
-              <Row label="Gueltig ab" value={zielwerte?.gueltig_ab ?? '—'} />
+              <Row label="Gültig ab" value={zielwerte?.gueltig_ab ?? '—'} />
               <Row label="Zielrichtung" value={zielwerte?.nutrition_goal ?? '—'} />
             </div>
           </div>

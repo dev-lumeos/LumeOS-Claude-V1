@@ -9,6 +9,12 @@ import type { Planergebnis, Positionsdaten } from '../../../lib/goals/plan-write
 const neu = (r: Planergebnis) => { if (r.ok) revalidatePath('/v2/goals'); return r }
 
 export async function planAnlegenAktion(goalId: string, name: string) { return neu(await w.planAnlegen(goalId, name)) }
+export async function planAnlegenAusAktion(goalId: string, name: string, ausgangspunkt: string, anker: string) {
+  return neu(await w.planAnlegenAus(goalId, name, ausgangspunkt, anker))
+}
+export async function planAlsVorlageAktion(id: string, name: string) { return neu(await w.planAlsVorlage(id, name)) }
+export async function positionLoeschenAktion(id: string) { return neu(await w.positionLoeschen(id)) }
+export async function planUmbenennenAktion(id: string, name: string) { return neu(await w.planUmbenennen(id, name)) }
 export async function planAktivierenAktion(id: string) { return neu(await w.planAktivieren(id)) }
 export async function planPausierenAktion(id: string) { return neu(await w.planPausieren(id)) }
 export async function planBeendenAktion(id: string) { return neu(await w.planBeenden(id)) }

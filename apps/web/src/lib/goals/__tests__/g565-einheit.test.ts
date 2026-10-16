@@ -207,7 +207,7 @@ describe('G-565/A1 — eine Groesse, zwei Einheiten', () => {
     assert.match(q, /const gesperrt = e === 'kcal' && ohneGewicht/,
       'ohne Gewicht laesst sich auf kcal schalten — dann stuende '
       + 'dort eine erfundene Zahl')
-    assert.match(q, /Ohne Koerpergewicht/,
+    assert.match(q, /Ohne Körpergewicht/,
       'die Sperre nennt keinen Grund')
   })
 

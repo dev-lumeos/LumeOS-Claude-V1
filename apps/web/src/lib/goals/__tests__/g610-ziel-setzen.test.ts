@@ -136,10 +136,15 @@ describe('G-610 — Verdrahtung', () => {
     // (`reiter-goals.tsx`). Die Regel bleibt: Variante aus
     // `goal_phases.strategie_code`, Richtung und „danach empfohlen" sichtbar.
     const q = lies(join(GOALS, 'reiter-goals.tsx'))
-    assert.match(q, /offenePhasen\.find\(o => o\.phase_id === p\.phase_id\)\?\.strategie_code/)
+    // G-648: die Phase des Ziels — laufend aus `phase_am`, die Variante aus der offenen Zeile
+    // (`goal_phases.strategie_code`), auch fuer ein pausiertes Ziel.
+    assert.match(q, /const o = offene\.find\(x => x\.goal_id === goalId\) \?\? null/)
+    assert.match(q, /strategie_code: o\?\.strategie_code \?\? null/)
+    assert.match(q, /const variante = ph\?\.strategie_code \? p\.strategien\.find\(s => s\.code === ph\.strategie_code\)/)
     assert.match(q, /data-ziel-richtung/)
-    assert.match(q, /data-ziel-naechster/)
-    assert.match(q, /empfohlenDanach\(variante, strategien\)/)
+    // „danach empfohlen" steht seit G-645 im aktiven Plan der Phase engine — die
+    // Steuerungskarte des Entwurfs (`Main.dc.html`) fuehrt es nicht.
+    assert.match(lies(join(GOALS, 'plan-seite.tsx')), /data-plan-danach[^>]*>Danach empfohlen:/)
   })
   it('die Zeitachse rechnet das Ende ueber planende', () => {
     assert.match(lies(join(GOALS, 'phasen-zeitachse.tsx')), /planende\(g\.gueltig_ab, g\.target_date, stufen\.summe\)/)

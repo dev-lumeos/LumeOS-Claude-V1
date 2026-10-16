@@ -206,7 +206,7 @@ export function GoalsPhaseView() {
           title="Phase parameters" sub={p.name}
           attrappe={attrappeAus('theme-v1/module-goals-pro.jsx',
             'feste Felder je Phasenart statt freier Werte — '
-            + 'Rate, Hoechstdauer, Protein (G-534)')}
+            + 'Rate, Höchstdauer, Protein (G-534)')}
           actions={
             <>
               <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm" onClick={() => setLibrary(true)}>
@@ -427,7 +427,7 @@ function PhasenVorschau({ ph, aktuell, onClose, onEdit }: {
 
       <div style={{ display: 'flex', gap: 6, marginTop: 12, flexWrap: 'wrap' }}>
         <InEntwicklungKnopf titel={`Switch to ${ph.name}`} className="v2-btn v2-btn-primary v2-btn-sm"
-                            grund="`goals.goal_phases` gibt es seit GO-07 und traegt alles fuer einen Wechsel: `transitioned_from`, `recommended_next`, `transition_reason`, `actual_end_date`. Was fehlt, ist der Schreibweg — die Tabelle wird bisher nur gelesen.">
+                            grund="`goals.goal_phases` gibt es seit GO-07 und trägt alles für einen Wechsel: `transitioned_from`, `recommended_next`, `transition_reason`, `actual_end_date`. Was fehlt, ist der Schreibweg — die Tabelle wird bisher nur gelesen.">
           Switch to {ph.name}
         </InEntwicklungKnopf>
         <button type="button" className="v2-btn v2-btn-sm" onClick={onEdit}>

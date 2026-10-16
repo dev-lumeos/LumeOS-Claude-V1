@@ -46,7 +46,7 @@ import type { Strategie } from '../../../lib/goals/strategie-read'
  * fuehrt nichts. **Das ist keine Attrappe** — es ist ein gemessener
  * Leerstand, und deshalb traegt er keine Attrappenmarke.
  */
-const LEER = 'im Katalog fuer diese Strategie nicht hinterlegt'
+const LEER = 'im Katalog für diese Strategie nicht hinterlegt'
 
 /**
  * Der kurze Grund fuer die Zahlenzeile.
@@ -102,9 +102,9 @@ function Zeile({ label, children }: {
  * gefuellten von den leeren trennen, ohne die Namen zu verdoppeln.
  */
 const LISTEN = [
-  ['Wofuer', 'best_for'],
+  ['Wofür', 'best_for'],
   ['Zweck', 'purpose'],
-  ['Waechter', 'guards'],
+  ['Wächter', 'guards'],
   ['Ausstiege', 'exits'],
   ['Erfolgsmerkmale', 'success'],
   ['Warnungen', 'warnings'],
@@ -178,7 +178,7 @@ export function StrategieVorschau({ s, onSchliessen }: {
             ? `${s.weight_change_target_percent > 0 ? '+' : ''}${s.weight_change_target_percent} % KG/Woche`
             : <Strich kurz />}
         </Zeile>
-        <Zeile label="Hoechstdauer">
+        <Zeile label="Höchstdauer">
           {s.max_duration_weeks !== null
             ? `${s.max_duration_weeks} Wochen`
             : <Strich kurz grund="unbegrenzt" />}
@@ -306,7 +306,7 @@ export function StrategieVorschau({ s, onSchliessen }: {
       {/* ── Folgestrategien ────────────────────────────────────────
           `[read]` **Genannt, nicht verlinkt** — ein Wechsel schriebe
           `strategie_code`, und den Weg gibt es noch nicht (G-538). */}
-      <Liste titel="Danach moeglich" werte={s.next_codes} marke="next_codes" />
+      <Liste titel="Danach möglich" werte={s.next_codes} marke="next_codes" />
 
       {/* ── Was diese Anzeige NICHT tut ────────────────────────────
           `[cmd]` **G-609: `goal_phase_start` nimmt den Code seit

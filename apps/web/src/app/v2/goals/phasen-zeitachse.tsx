@@ -32,6 +32,8 @@ import {
   type Ankerzeile, type Stufenplan,
 } from '../../../lib/goals/anker'
 import { phasenName } from '../../../lib/goals/phase-regeln'
+import { naechsteNamen } from '../../../lib/goals/zielwahl'
+import { istEingefroren } from '../../../lib/goals/zustand'
 import type { Programmwochen, ZielFortschritt, Zielphase } from '../../../lib/goals/lesen'
 import type { Strategie } from '../../../lib/goals/strategie-read'
 import type { Rateneinheit } from '../../../lib/goals/zielrate-einheit'
@@ -138,8 +140,8 @@ function Ankertafel({ zeilen, anker, stufen, verschobenAuf }: {
  *
  * `[read]` **Titel, Fenster, laufende Strategie** — was A1 verlangt.
  */
-function Zielzeile({ z, heute, onBearbeiten }: {
-  z: Zeile; heute: string; onBearbeiten: (z: Zeile) => void
+function Zielzeile({ z, heute, strategien, onBearbeiten }: {
+  z: Zeile; heute: string; strategien: Strategie[]; onBearbeiten: (z: Zeile) => void
 }) {
   const [offen, setOffen] = React.useState(false)
   const g = z.ziel
@@ -248,7 +250,7 @@ function Zielzeile({ z, heute, onBearbeiten }: {
       {z.strategie && z.strategie.next_codes.length > 0 && (
         <div className="v2-dim" data-zielfolge={z.strategie.code}
              style={{ fontSize: 10.5, marginTop: 6 }}>
-          Danach möglich: {z.strategie.next_codes.join(' · ')}
+          Danach möglich: {naechsteNamen(z.strategie, strategien).join(' · ')}
         </div>
       )}
     </div>
@@ -284,7 +286,8 @@ export function PhasenZeitachse({
   const [bearbeitet, setBearbeitet] = React.useState<Zeile | null>(null)
   const [meldung, setMeldung] = React.useState<string | null>(null)
 
-  const zeilen: Zeile[] = ziele.map(z => {
+  // G-648: eingefrorene Ziele (erreicht, Frist abgelaufen, beendet) haben kein Zeitfenster mehr.
+  const zeilen: Zeile[] = ziele.filter(z => !istEingefroren(z.zustand)).map(z => {
     const p = phasen.find(x => x.goal_id === z.goal_id) ?? null
     // `[read]` **Der Code, wenn er da ist** — bis G-558 traegt ihn
     // keine Phase, dann greift die Phasenart als Rueckfall.
@@ -324,7 +327,7 @@ export function PhasenZeitachse({
       ) : (
         <div className="v2-col-gap" data-zeitachse style={{ gap: 8 }}>
           {zeilen.map(z => (
-            <Zielzeile key={z.ziel.goal_id} z={z} heute={heute}
+            <Zielzeile key={z.ziel.goal_id} z={z} heute={heute} strategien={strategien}
                        onBearbeiten={setBearbeitet} />
           ))}
         </div>

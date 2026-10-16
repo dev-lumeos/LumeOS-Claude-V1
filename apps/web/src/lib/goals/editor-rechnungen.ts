@@ -59,7 +59,7 @@ export function zyklusmittel(z: Zyklus, tdee: number | null): Zyklusergebnis {
     return leer('Trainingstage liegen zwischen 0 und 7.')
   }
   if (!Number.isFinite(z.training) || !Number.isFinite(z.ruhe)) {
-    return leer('Die Tagesdeltas muessen Zahlen sein.')
+    return leer('Die Tagesdeltas müssen Zahlen sein.')
   }
 
   const ruhetage = 7 - z.trainingstage

@@ -42,6 +42,16 @@ export interface Positionsdaten {
 }
 
 export const planAnlegen = (goalId: string, name: string) => rufe('goal_plan_create', { p_goal_id: goalId, p_name: name })
+// G-649 (Kette G-644): Ausgangspunkt = `goal_plan_templates.code`, Anker = Beginn bzw. A-Termin.
+export const planAnlegenAus = (goalId: string, name: string, ausgangspunkt: string, anker: string) =>
+  rufe('goal_plan_create', { p_goal_id: goalId, p_name: name, p_ausgangspunkt: ausgangspunkt, p_anker_datum: anker })
+export const planAlsVorlage = (id: string, name: string) => rufe('goal_plan_save_as_template', { p_plan_id: id, p_name: name })
+export const positionLoeschen = (id: string) => rufe('goal_plan_position_delete', { p_position_id: id })
+/** Umbenennen: `goal_programs` (RLS `goal_programs_owner`); `name_is_custom` setzt der Trigger G-645. */
+export async function planUmbenennen(id: string, name: string): Promise<Planergebnis> {
+  const { error } = await createSessionClient().schema('goals').from('goal_programs').update({ name }).eq('id', id)
+  return error ? { ok: false, fehler: planFehler(error.message).satz, roh: error.message, schluessel: null } : { ok: true, id }
+}
 export const planAktivieren = (id: string) => rufe('goal_plan_activate', { p_plan_id: id })
 export const planPausieren = (id: string) => rufe('goal_plan_pause', { p_plan_id: id })
 export const planBeenden = (id: string) => rufe('goal_plan_complete', { p_plan_id: id })

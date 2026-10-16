@@ -181,10 +181,10 @@ export function haltInGrenzen(
   // `[read]` **Das Vorzeichen darf nicht kippen** — sonst liefe der
   // Vorschlag gegen `goal_phases_zielrate_passt_zur_art`.
   if (pflicht === 'negativ' && r >= 0) {
-    return { rate: neueRate, gekappt: 'nicht anwendbar — die Rate wuerde ihr Vorzeichen verlieren' }
+    return { rate: neueRate, gekappt: 'nicht anwendbar — die Rate würde ihr Vorzeichen verlieren' }
   }
   if (pflicht === 'positiv' && r <= 0) {
-    return { rate: neueRate, gekappt: 'nicht anwendbar — die Rate wuerde ihr Vorzeichen verlieren' }
+    return { rate: neueRate, gekappt: 'nicht anwendbar — die Rate würde ihr Vorzeichen verlieren' }
   }
   if (pflicht === 'nahe_null' && Math.abs(r) > 0.1) {
     return { rate: neueRate, gekappt: 'nicht anwendbar — beim Halten bleibt die Rate zwischen -0,1 und +0,1' }
@@ -218,14 +218,14 @@ export function wochenAnpassung(
     if (delta === null) {
       return {
         art: artVorschlag, rate_delta: null, kcal_delta: kcal, regel, grund,
-        hindernis: 'Ohne Koerpergewicht im Profil laesst sich der '
+        hindernis: 'Ohne Körpergewicht im Profil lässt sich der '
           + 'Kalorienbetrag nicht in eine Rate umrechnen.',
       }
     }
     if (rateJetzt === null) {
       return {
         art: artVorschlag, rate_delta: delta, kcal_delta: kcal, regel, grund,
-        hindernis: 'Diese Phase traegt keine Rate — es gibt nichts zu '
+        hindernis: 'Diese Phase trägt keine Rate — es gibt nichts zu '
           + 'verstellen.',
       }
     }
@@ -268,13 +268,13 @@ export function wochenAnpassung(
       && schwelleGreift('verlustZuSchnell',
         d.weightTrend, d.gewichtAmStichtagKg) === true) {
       return ausKcal(+150, 'PHASE_MODELS.md:191-192',
-        'Der Verlust laeuft schneller als vorgesehen.', 'rate_heben')
+        'Der Verlust läuft schneller als vorgesehen.', 'rate_heben')
     }
     if (d.strengthTrend !== null && d.strengthTrend < -10) {
       return {
         art: 'protein_heben', rate_delta: null, kcal_delta: null,
         regel: 'PHASE_MODELS.md:193-194',
-        grund: 'Die Kraft auf den Grunduebungen geht zurueck.',
+        grund: 'Die Kraft auf den Grundübungen geht zurück.',
         // `[read]` **Die Spec nennt +20 g Protein** — das ist KEINE
         // Rate. `[cmd]` **`goal_phases` hat keine Proteinspalte**,
         // und `nutrition_targets.protein_g` rechnet
@@ -294,7 +294,7 @@ export function wochenAnpassung(
       && schwelleGreift('zunahmeZuSchnell',
         d.weightTrend, d.gewichtAmStichtagKg) === true) {
       return ausKcal(-100, 'PHASE_MODELS.md:198-199',
-        'Die Zunahme laeuft schneller als vorgesehen.', 'rate_senken')
+        'Die Zunahme läuft schneller als vorgesehen.', 'rate_senken')
     }
     // `[cmd]` **G-569: `0,119 %` statt `0.1` kg/Woche.**
     if (d.calorieAdherence !== null && d.calorieAdherence > 85
@@ -316,12 +316,12 @@ export function wochenAnpassung(
       art: 'erholung_pruefen', rate_delta: null, kcal_delta: null,
       regel: 'PHASE_MODELS.md:204-205',
       grund: 'Die HRV der letzten sieben Tage liegt unter 85 % der '
-        + 'Vergleichsgroesse.',
+        + 'Vergleichsgröße.',
     }
   }
   if (d.hrv7d !== null && d.hrvBaseline === null) {
-    return keine('Die HRV-Regel liesse sich nicht pruefen — eine '
-      + 'Vergleichsgroesse ist nirgends gespeichert.')
+    return keine('Die HRV-Regel ließe sich nicht prüfen — eine '
+      + 'Vergleichsgröße ist nirgends gespeichert.')
   }
 
   return keine('Alles im vorgesehenen Rahmen.')

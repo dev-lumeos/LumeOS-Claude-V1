@@ -40,7 +40,8 @@ export type Zielwerte = {
    * gelesen** — fuer „Fortsetzen" statt „Ziel setzen". `paused` UND
    * `on_hold`: der Dialog „pausieren" schreibt `on_hold`.
    */
-  ruhendes_ziel: { goal_id: string; title: string } | null
+  /** G-648: `seit` = `updated_at` des ruhenden Ziels — der Statuswechsel ist sein letztes Schreibereignis. */
+  ruhendes_ziel: { goal_id: string; title: string; seit?: string | null } | null
   /**
    * `[cmd]` **G-637: die Phasenluecke** aus `goals.ziel_ohne_laufende_phase_am`
    * — nur gelesen, wenn die Herkunft `ziel_ohne_laufende_phase` ist.
@@ -164,7 +165,7 @@ export const PHASEN_OHNE_TAGESZIEL: ReadonlySet<string> = new Set([
 export function ohneTageszielSatz(phaseType: string): string | null {
   switch (phaseType) {
     case 'peak_week':
-      return 'Die Peak Week laeuft nach Protokoll, nicht nach '
+      return 'Die Peak Week läuft nach Protokoll, nicht nach '
         + 'Tagesziel — Entladen, Laden, Natrium.'
     case 'expert_bb_annual':
       return 'Der Jahreszyklus ist eine Vorlage: er erzeugt Phasen, '
@@ -210,10 +211,10 @@ export async function getZielwerteAm(stichtag: string): Promise<Zielwerte | null
   let ruhendes_ziel: Zielwerte['ruhendes_ziel'] = null
   if (ohneZiel(herkunft)) {
     const { data: z } = await supabase.schema('goals').from('user_goals')
-      .select('id, title').eq('user_id', userId).eq('goal_role', 'controlling')
+      .select('id, title, updated_at').eq('user_id', userId).eq('goal_role', 'controlling')
       .in('status', ['paused', 'on_hold']).order('updated_at', { ascending: false }).limit(1)
-    const g = (z ?? [])[0] as { id: string; title: string } | undefined
-    ruhendes_ziel = g ? { goal_id: g.id, title: g.title } : null
+    const g = (z ?? [])[0] as { id: string; title: string; updated_at: string | null } | undefined
+    ruhendes_ziel = g ? { goal_id: g.id, title: g.title, seit: g.updated_at ? g.updated_at.slice(0, 10) : null } : null
   }
   let eingefroren: Zielwerte['eingefroren'] = null
   if (herkunft === 'ziel_eingefroren') {

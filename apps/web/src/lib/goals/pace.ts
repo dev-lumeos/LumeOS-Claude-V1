@@ -132,7 +132,7 @@ export function berechnePace(e: PaceEingabe): PaceErgebnis {
   })
 
   if (e.start_value === null || e.target_value === null) {
-    return leer('ohne Start- und Zielwert laesst sich kein Verlauf rechnen')
+    return leer('ohne Start- und Zielwert lässt sich kein Verlauf rechnen')
   }
   if (e.current_value === null) {
     return leer('noch kein Ist-Wert erfasst')

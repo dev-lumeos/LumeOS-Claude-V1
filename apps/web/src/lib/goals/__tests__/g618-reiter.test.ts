@@ -99,8 +99,8 @@ describe('G-618 — gegen die Kette', () => {
     // und der Kopf zaehlt genau diese Menge
     const a = lies('app/v2/goals/ansicht.tsx')
     assert.match(a, /const laufendePhasen = echt\.phasen\b/)
-    assert.match(a, /data-kopf-phasen=\{laufendePhasen\.length\}/)
-    assert.ok(!/data-kopf-phasen=\{echt\.offenePhasen/.test(a))
+    // Tom 16.10.: die Phasen-Pille im Kopf entfaellt — die Menge zeigt die Phase engine
+    assert.ok(!/data-kopf-phasen/.test(a), 'die Phasen-Pille steht wieder im Kopf')
   })
 })
 
@@ -141,7 +141,7 @@ describe('G-618 — die Lesewege gegen ihre Signaturen', () => {
 const Z = (o: Partial<ZielFortschritt>): ZielFortschritt => ({
   goal_id: 'g1', goal_type: 'body_composition', subtype: null, title: 'Ziel', target_value: 76,
   target_unit: 'kg', start_value: 81.4, current_value: 80, current_source: 'goals.body_measurements',
-  progress_pct: 25, progress_status: 'measured', measured_at: '2026-10-08', target_date: '2026-12-31',
+  progress_pct: 25, progress_status: 'measured', lage: null, measured_at: '2026-10-08', target_date: '2026-12-31',
   gueltig_ab: '2026-10-01', linked_modules: [], status: 'active', is_primary: false, priority: 1,
   goal_role: 'controlling', measurement_type: null, measurement_rhythm: 'once', measurement_site: null,
   achievement_date: null, ...o,
@@ -176,16 +176,20 @@ describe('G-618 — die Bausteine', () => {
     assert.equal(engpass(s)?.module, 'recovery')
     assert.equal(engpass(modulSchnitt([], ['nutrition'])), null)
   })
-  it('Lage: nur aus goal_progress_at — Wochenquote; einmalig und eingefroren ohne Wertung (G-640)', () => {
+  it('Lage: nur aus goal_progress_at — einmalig aus `lage` (G-643), Woche aus der Quote; ohne Istwert keine Pille', () => {
     const r = (o: Partial<ZielFortschritt>) => lageVon(Z(o) as ReiterZiel)
-    // `[cmd]` **G-640: keine eigene Rechnung** — einmalige Ziele haben in der
-    // Kette kein Feld voraus/im Plan/hinterher, also keine Lage.
-    assert.deepEqual(r({ current_value: 76 }), { lage: null, grund: null })
-    assert.deepEqual(r({ current_value: 81.4 }), { lage: null, grund: null })
-    assert.equal(r({ measurement_rhythm: 'weekly', progress_pct: 100 }).lage, 'im_plan')
-    assert.equal(r({ measurement_rhythm: 'weekly', progress_pct: 50 }).lage, 'hinterher')
-    assert.deepEqual(r({ measurement_rhythm: 'weekly', progress_pct: 50, status: 'achieved' }), { lage: null, grund: null }, 'eingefroren: keine Wertung')
-    assert.deepEqual(r({ measurement_rhythm: 'weekly', progress_pct: 50, progress_status: 'frozen' }), { lage: null, grund: null })
+    const keine = { lage: null, text: null }
+    // `[cmd]` **G-648: einmalig liest die Kette selbst** (`goal_progress_at.lage`, G-643).
+    assert.deepEqual(r({ lage: 'hinterher' }), { lage: 'hinterher', text: 'hinterher' })
+    assert.deepEqual(r({ lage: 'im_plan' }), { lage: 'im_plan', text: 'im Plan' })
+    assert.deepEqual(r({ lage: 'offen' }), keine, '„offen" heisst: die Kette kann nicht werten')
+    assert.deepEqual(r({ lage: null }), keine, 'keine eigene Rechnung, wo die Kette schweigt')
+    assert.deepEqual(r({ lage: 'voraus', current_value: null }), keine, 'keine Pille ohne Istwert (Schirm G-640)')
+    assert.deepEqual(r({ measurement_rhythm: 'weekly', progress_pct: 100 }), { lage: 'voraus', text: 'diese Woche erreicht' })
+    assert.deepEqual(r({ measurement_rhythm: 'weekly', progress_pct: 50 }), { lage: 'hinterher', text: 'diese Woche offen' })
+    assert.deepEqual(r({ measurement_rhythm: 'weekly', progress_pct: 50, current_value: null }), keine)
+    assert.deepEqual(r({ measurement_rhythm: 'weekly', progress_pct: 50, status: 'achieved' }), keine, 'eingefroren: keine Wertung')
+    assert.deepEqual(r({ measurement_rhythm: 'weekly', progress_pct: 50, progress_status: 'frozen' }), keine)
   })
   it('Einheit lesbar', () => {
     assert.equal(wertMitEinheit(3, 'sessions_per_week'), '3 pro Woche')
@@ -232,7 +236,7 @@ const reiter = (o: { ziele?: ZielFortschritt[]; phasen?: Phase[]; zielwerte?: Zi
   React.createElement(AppRouterContext.Provider, { value: ROUTER as never }, React.createElement(ReiterGoals, {
     ziele: o.ziele ?? [Z({}), ...MESS], phasen: o.phasen ?? [PH({})], offenePhasen: [OP],
     zielwerte: o.zielwerte === undefined ? ZW({}) : o.zielwerte, vorschlag: null, messungen: [], meilensteine: [],
-    strategien: [], woche: { trainings: 2, beitraege: [] }, stichtag: '2026-10-09',
+    strategien: [], woche: { trainings: 2, beitraege: [], trend: { heute: 80.2, vorwoche: null } }, stichtag: '2026-10-09',
     onZielSetzen: () => {}, onMessziel: () => {}, onPhaseEngine: () => {},
   })))
 
@@ -240,18 +244,21 @@ describe('G-618 — bis in die Anzeige', () => {
   it('laeuft: Ziel, Phase, Tempo, Tagesziel', () => {
     const h = reiter({})
     assert.match(h, /data-steuerung="laeuft"/)
-    assert.match(h, /−0,50 % \/ Woche|-0,50 % \/ Woche/)
-    assert.match(h, /2\.754 kcal · 163 g Protein/)
+    // G-648: Entwurf — Start · Trend · Ziel, Tagesziel „kcal · g P"; das Tempo steht als Soll in den Details
+    assert.match(h, /Trend <\/span><span class="ge-num"[^>]*>80,2 kg/)
+    assert.match(h, /white-space:nowrap">2\.754 kcal · 163 g P</, 'Tagesziel ohne Umbruch (Tom 16.10.)')
     assert.match(h, /Woche 2 von 12/)
     assert.match(h, /ohne Variante/, 'die fehlende Variante steht da')
   })
   it('kein Ziel / pausiert / ohne laufende Phase', () => {
     const kein = reiter({ ziele: MESS, phasen: [], zielwerte: ZW({ herkunft: 'kein_aktives_ziel' }) })
     assert.match(kein, /data-steuerung="kein_ziel"/)
-    assert.match(kein, /Kein aktives Ziel – du läufst auf Erhaltung/)
-    const ruht = reiter({ ziele: MESS, phasen: [], zielwerte: ZW({ herkunft: 'kein_aktives_ziel', ruhendes_ziel: { goal_id: 'g1', title: 'Abbau' } }) })
+    assert.match(kein, /Kein Ziel aktiv – du läufst auf Erhaltung/)
+    const ruht = reiter({ ziele: [Z({ status: 'paused' }), ...MESS], phasen: [],
+      zielwerte: ZW({ herkunft: 'kein_aktives_ziel', ruhendes_ziel: { goal_id: 'g1', title: 'Abbau', seit: '2026-10-01' } }) })
     assert.match(ruht, /data-steuerung="pausiert"/)
-    assert.match(ruht, /data-kein-ziel-fortsetzen/)
+    assert.match(ruht, /Pausiert seit 01\.10\.<\/b> – du läufst auf Erhaltung/)
+    assert.match(ruht, /data-fortsetzen[^>]*>Fortsetzen …/, 'Fortsetzen fragt zuerst „Wie fortsetzen?" (Entwurf)')
     const luecke = reiter({ phasen: [], zielwerte: ZW({ herkunft: 'ziel_ohne_laufende_phase',
       luecke: { goal_id: 'g1', title: 'Lean Bulk bis September', letzte_phase_ende: '2026-09-29', recommended_next: 'maintenance' } }) })
     assert.match(luecke, /data-steuerung="ohne_phase"/)
@@ -259,11 +266,11 @@ describe('G-618 — bis in die Anzeige', () => {
     assert.match(luecke, /Empfohlen als nächste Phase: Maintenance/)
     assert.match(luecke, /data-steuerung-phase[^>]*>Nächste Phase wählen/)
   })
-  it('Messziele: je Kategorie, lesbare Einheit und Quelle, Details und Bearbeiten, kein Loeschen', () => {
+  it('Messziele: je Kategorie, lesbare Einheit und Quelle, Details und Bearbeiten; Loeschen erst im Bearbeiten', () => {
     const h = reiter({})
     assert.match(h, /data-messziel-gruppe="kraft"[\s\S]*data-messziel-gruppe="koerper"[\s\S]*data-messziel-gruppe="gewohnheit"/)
     assert.equal((h.match(/data-messziel-kachel=/g) ?? []).length, 3, 'abgeschlossene stehen nicht bei den offenen')
-    assert.match(h, /3 pro Woche/)
+    assert.match(h, /3× \/ Wo/, 'Entwurf: „4× \/ Wo"')
     assert.match(h, /Training · geschätztes 1RM/)
     assert.match(h, /Umfangmessung · Taille/)
     assert.equal((h.match(/data-messziel-details=/g) ?? []).length, 3)
@@ -271,20 +278,21 @@ describe('G-618 — bis in die Anzeige', () => {
     for (const roh of ['sessions_per_week', 'goals.body_measurements', 'training.workout_sets', 'goals.body_circumferences', 'h/night']) {
       assert.ok(!h.includes(roh), `Rohkennung „${roh}" am Schirm`)
     }
-    assert.ok(!/Löschen|Loeschen|data-[a-z-]*loeschen/i.test(h), 'Loeschen ohne Loeschweg (G-611) waere eine Attrappe')
+    const kacheln = h.slice(h.indexOf('data-messziel-kachel='), h.indexOf('aria-label="Abgeschlossen"'))
+    assert.ok(!/Löschen|data-[a-z-]*loeschen/i.test(kacheln), 'Loeschen steht im Entwurf erst im Bearbeiten der Kachel')
     assert.match(h, /data-lage="hinterher"/, 'die Gewohnheit 1 von 3 liegt hinterher')
   })
   it('Diese Woche und Module: nur Daten, was fehlt „kommt"', () => {
     const h = reiter({})
     assert.match(h, /Diese Woche · KW 41/)
-    assert.match(h, /data-woche="trainings"[^]*?2 abgeschlossen/)
-    assert.match(h, /diese Woche noch nicht gewogen/)
+    assert.match(h, /data-woche="trainings"[^]*?>2 \/ 3</, 'Trainings gegen das Wochenziel')
+    assert.match(h, /keine Messung vor dieser Woche/, 'Trend ohne Vorwoche: Grund statt Zahl')
     assert.match(h, /data-kommt/)
     assert.equal((h.match(/data-modul="[a-z]+"/g) ?? []).length, 4)
     assert.match(h, /noch keine Beiträge — kommt/)
     assert.ok(!/\d+ \/ 100/.test(h), 'eine Modulzahl ohne Beitrag')
   })
-  it('Abgeschlossen: eingeklappt mit Zahl', () => {
+  it('Abgeschlossen: mit Zahl, offen wie im Entwurf', () => {
     assert.match(reiter({}), /Abgeschlossen · 3/)
   })
 })
@@ -302,8 +310,9 @@ describe('G-618 — das Drei-Plaetze-Modell ist raus', () => {
     // G-640: wirksam aktiv (goal_state_at), nicht der gespeicherte Status.
     assert.match(lies('lib/goals/reiter.ts'), /g\.goal_role === 'controlling' && g\.zustand\.zustand === 'active'/)
   })
-  it('der Editor fuehrt keine Prioritaet mehr', () => {
-    const q = lies('app/v2/goals/ziel-editor.tsx')
+  it('das Bearbeiten fuehrt keine Prioritaet mehr', () => {
+    // G-648: Bearbeiten steht in der Karte (Entwurf), `ziel-editor.tsx` ist weg.
+    const q = lies('app/v2/goals/reiter-goals.tsx')
     assert.ok(!/priority|Priorität|PRIO_/.test(q))
   })
 })

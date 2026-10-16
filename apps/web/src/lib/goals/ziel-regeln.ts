@@ -136,14 +136,14 @@ export function pruefeAenderung(a: ZielAenderung): string | null {
  * die Schluessel.
  */
 export const ZIELARTEN = [
-  { id: 'body_composition', name: 'Koerperzusammensetzung',
-    zweck: 'Gewicht, Koerperfett, Muskelmasse' },
+  { id: 'body_composition', name: 'Körperzusammensetzung',
+    zweck: 'Gewicht, Körperfett, Muskelmasse' },
   { id: 'performance', name: 'Leistung',
     zweck: 'Kraft, Ausdauer, ein Wettkampf' },
   { id: 'health', name: 'Gesundheit',
     zweck: 'Blutwerte, Blutdruck, Schlaf' },
   { id: 'lifestyle', name: 'Lebensstil',
-    zweck: 'Gewohnheiten, Regelmaessigkeit' },
+    zweck: 'Gewohnheiten, Regelmäßigkeit' },
 ] as const
 
 export type Zielart = typeof ZIELARTEN[number]['id']
@@ -209,7 +209,7 @@ export function pruefeNeuesZiel(z: ZielNeu): ZielFeldfehler[] {
   // [cmd] user_goals_check: target_date IS NULL OR >= gueltig_ab
   if (z.target_date) {
     if (!ISO_TAG.test(z.target_date)) {
-      f.push({ feld: 'target_date', text: 'Kein gueltiges Datum.' })
+      f.push({ feld: 'target_date', text: 'Kein gültiges Datum.' })
     } else if (ISO_TAG.test(z.gueltig_ab ?? '')
       && z.target_date < z.gueltig_ab) {
       f.push({
@@ -221,11 +221,11 @@ export function pruefeNeuesZiel(z: ZielNeu): ZielFeldfehler[] {
 
   // [cmd] user_goals_check1 — ein neues Ziel ist immer `active`.
   if (!Number.isInteger(z.priority)) {
-    f.push({ feld: 'priority', text: 'Die Prioritaet muss eine ganze Zahl sein.' })
+    f.push({ feld: 'priority', text: 'Die Priorität muss eine ganze Zahl sein.' })
   } else if (z.priority < PRIO_MIN_AKTIV || z.priority > PRIO_MAX_AKTIV) {
     f.push({
       feld: 'priority',
-      text: `Ein aktives Ziel traegt Prioritaet ${PRIO_MIN_AKTIV} bis ${PRIO_MAX_AKTIV}.`,
+      text: `Ein aktives Ziel trägt Priorität ${PRIO_MIN_AKTIV} bis ${PRIO_MAX_AKTIV}.`,
     })
   }
 

@@ -14,7 +14,7 @@ import * as React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 
 import { phasenLauf, wocheText } from '../plan'
-import { kopfZiele, zustandAusListe } from '../zustand'
+import { zustandAusListe } from '../zustand'
 import { PlanSeite } from '../../../app/v2/goals/plan-seite'
 import type { Plan } from '../plan-read'
 
@@ -39,7 +39,7 @@ describe('G-645/2 — „Woche x von y" aus EINER Rechnung', () => {
     assert.equal(wocheText(phasenLauf({ gueltig_ab: '2026-11-01', projected_end_date: null, actual_end_date: null }, '2026-10-16')), null)
   })
   it('Steuerungskarte und Planer rufen dieselbe Funktion — keine zweite Formel', () => {
-    assert.match(sichtbar('reiter-goals.tsx'), /const woche = wocheText\(phasenLauf\(p, stichtag\)\)/)
+    assert.match(sichtbar('reiter-goals.tsx'), /const woche = ph \? wocheText\(phasenLauf\(ph, p\.stichtag\), variante\?\.max_duration_weeks \?\? null\) : null/)
     assert.match(readFileSync(join(HIER, '..', 'plan-read.ts'), 'utf8'), /woche: phaseId && ende\.get\(phaseId\) \? wocheText\(phasenLauf\(ende\.get\(phaseId\)!, stichtag\)\)/)
     for (const f of ['reiter-goals.tsx', 'plan-seite.tsx', 'phase-echt.tsx'])
       assert.ok(!/7 \* 86_?400_?000|\/ 7\)/.test(sichtbar(f)), `${f} rechnet Wochen selbst`)
@@ -89,18 +89,11 @@ describe('G-645/3 — die alten Phasen-Bauteile sind im Planer', () => {
   })
 })
 
-describe('G-645/5 — der Kopf zaehlt nach Rolle', () => {
-  const z = (rolle: string, status: string) => ({ goal_role: rolle, zustand: zustandAusListe({ effective_status: status }) })
-  it('1 steuerndes Ziel · n Messziele, eingefrorene zaehlen nicht', () => {
-    assert.equal(kopfZiele([z('controlling', 'active'), z('measurement', 'active')]), '1 steuerndes Ziel · 1 Messziel')
-    assert.equal(kopfZiele([z('controlling', 'active'), z('measurement', 'active'), z('measurement', 'active'), z('measurement', 'eingefroren'),
-      z('controlling', 'on_hold')]), '1 steuerndes Ziel · 2 Messziele')
-    assert.equal(kopfZiele([z('controlling', 'paused')]), '0 steuernde Ziele · 0 Messziele')
-  })
-  it('der Kopf ruft sie — „active goals" ist weg', () => {
+describe('G-645/5 — der Kopf zaehlt nach Rolle (ersetzt durch Tom 16.10.)', () => {
+  it('der Kopf traegt keinen Zaehl-Chip mehr — nur die Hauptaktion des Reiters', () => {
     const a = sichtbar('ansicht.tsx')
-    assert.match(a, /<Pill variant="acc">\s*\{kopfZiele\(echt\.ziele\)\}\s*<\/Pill>/)
-    assert.ok(!/active goals/.test(a))
+    assert.ok(!/kopfZiele|active goals|<Pill variant="acc">/.test(a))
+    assert.match(a, /goals: '\+ Ziel setzen', phase: '\+ Neuer Plan', metrics: 'Gewicht eintragen', measure: 'Messung eintragen'/)
   })
   it('die Mockup-Referenz ist unberuehrt (wartet auf Toms Abnahme)', () => {
     assert.match(roh('mockup-referenz.tsx'), /active goals|Mockup/)

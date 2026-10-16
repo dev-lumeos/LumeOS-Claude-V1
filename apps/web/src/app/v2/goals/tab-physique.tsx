@@ -217,7 +217,7 @@ export function GoalsPosesView() {
           <Icon name="copy" className="v2-ic v2-ic-sm" />Compare sessions
         </InEntwicklungKnopf>
         <InEntwicklungKnopf titel="New photo session" className="v2-btn v2-btn-primary"
-                            grund={'Fotosessions brauchen eine Dateiablage — der Umsetzungsplan fuehrt sie unter „Was nicht gebaut wird".'}>
+                            grund={'Fotosessions brauchen eine Dateiablage — der Umsetzungsplan führt sie unter „Was nicht gebaut wird".'}>
           <Icon name="camera" className="v2-ic v2-ic-sm" />New photo session
         </InEntwicklungKnopf>
       </div>

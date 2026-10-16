@@ -118,26 +118,26 @@ export function hindernisSatz(h: Hindernis, fehlende: string[] = []): string {
   switch (h) {
     case 'profil_unvollstaendig':
       return fehlende.length
-        ? `Ergaenze dein Profil: ${fehlende.join(', ')} fehlt noch.`
-        : 'Ergaenze dein Profil — es fehlen noch Angaben.'
+        ? `Ergänze dein Profil: ${fehlende.join(', ')} fehlt noch.`
+        : 'Ergänze dein Profil — es fehlen noch Angaben.'
     case 'keine_aktive_phase':
-      return 'Waehle eine Phase. Ohne sie gibt es kein Kalorienziel, '
+      return 'Wähle eine Phase. Ohne sie gibt es kein Kalorienziel, '
         + 'weil die Phase das Tempo bestimmt.'
     case 'phasenparameter_fehlt':
-      return 'Fuer diese Phase fehlt der Kalorienwert. Trag ihn an der '
+      return 'Für diese Phase fehlt der Kalorienwert. Trag ihn an der '
         + 'Phase nach, dann rechnet das Ziel.'
     case 'zielrichtung_ohne_faktor':
       // `[read]` **Der einzige Fall, den der Nutzer NICHT aufloesen
       // kann** — der Katalog kennt die Zielrichtung nicht. **Das
       // sagt der Satz, statt eine Handlung vorzutaeuschen.**
-      return 'Fuer diese Zielrichtung ist noch kein Kalorienzuschlag '
+      return 'Für diese Zielrichtung ist noch kein Kalorienzuschlag '
         + 'hinterlegt. Das liegt nicht an deinen Angaben.'
     case 'mehrere_phasen':
       // `[cmd]` **Die Ausnahme aus G-563** — die alte Fassung wirft,
       // statt still eine Phase zu waehlen. `[read]` **Der Satz sagt,
       // was zu tun ist:** das Ziel nennen, nicht raten.
-      return 'Es laufen mehrere Phasen. Waehle das Ziel, fuer das '
-        + 'gerechnet werden soll — ohne Zielbezug waere jede Zahl '
+      return 'Es laufen mehrere Phasen. Wähle das Ziel, für das '
+        + 'gerechnet werden soll — ohne Zielbezug wäre jede Zahl '
         + 'eine von zweien.'
     case 'kein_aktives_ziel':
     case 'erhaltung_nicht_berechenbar':

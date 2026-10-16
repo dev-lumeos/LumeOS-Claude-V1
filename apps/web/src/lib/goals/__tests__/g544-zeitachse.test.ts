@@ -279,7 +279,9 @@ describe('G-544/A3 — planen heisst Reihenfolge', () => {
     // `[read]` **Gemessen wird die AUSGABE**, und dass kein Code als
     // Literal danebensteht.
     const q = lies(join(GOALS, 'phasen-zeitachse.tsx'))
-    assert.match(q, /\{z\.strategie\.next_codes\.join\(/,
+    // G-648: Namen statt Codes (Auftrag „Danach möglich — Waechter anpassen") —
+    // `naechsteNamen` liest dieselbe Katalogzeile (`next_codes`) und nennt Label/Phasenart.
+    assert.match(q, /\{naechsteNamen\(z\.strategie, strategien\)\.join\(/,
       'die Folgephasen werden nicht aus der Katalogzeile ausgegeben')
     assert.match(q, /data-zielfolge/, 'sie tragen keine Marke')
     // `[cmd]` **Die 17 Codes, gemessen 2026-09-30** — keiner davon
@@ -365,11 +367,8 @@ describe('G-544 — die Kopfmarke verschweigt keine Phase', () => {
     // `LIMIT 1` und nur Phasen AKTIVER Ziele (Rumpf live gelesen). Die
     // Tabelle (`offenePhasen`) zaehlte die Phase eines pausierten Ziels mit.
     const q = lies(join(GOALS, 'ansicht.tsx'))
-    assert.match(q, /laufendePhasen\.length > 0 && \(/,
-      'die Kopfmarke haengt nicht an der Zahl der offenen Phasen')
-    assert.match(q, /Phasen laufen/,
-      'bei mehreren Phasen wird immer noch EINE genannt')
-    assert.match(q, /data-kopf-phasen=\{laufendePhasen\.length\}/,
-      'die Zahl ist nicht am Schirm nachzaehlbar')
+    // Tom 16.10. (G-648/G-649): der Kopf traegt nur noch die Hauptaktion — die
+    // Kopfmarke entfaellt. Damit kann sie auch keine Phase verschweigen.
+    assert.ok(!/data-kopf-phasen|\} Phasen laufen`/.test(q), 'die Kopfmarke steht wieder im Kopf')
   })
 })

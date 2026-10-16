@@ -206,9 +206,24 @@ const SAETZE: Record<string, string> = {
   phase_richtung: 'Die Phasenart passt nicht zur Richtung.',
   erhaltung_nicht_berechenbar: 'Die Erhaltung lässt sich nicht berechnen — es fehlt eine TDEE-Basis.',
 }
+/** G-649: jeder `G644_BLOCK`-Schluessel aus `644_goal_plan_*.sql` (Test). */
+export const SAETZE_644: Record<string, string> = {
+  steuerziel_fremd: 'Ein Plan braucht ein steuerndes Ziel — setze in Goals eine Richtung.',
+  vorlage_fehlt: 'Diese Vorlage gibt es nicht (mehr).',
+  anker_datum_fehlt: 'Wähle das Datum, von dem aus der Plan rechnet.',
+  plan_fremd: 'Der Plan fehlt oder gehört nicht zu deinem Konto.',
+  vorlage_braucht_dauer: 'Als Vorlage braucht jede Phase eine Dauer in Wochen.',
+  nur_geplante_position: 'Nur eine geplante Phase lässt sich löschen — eine gestartete nicht.',
+  eigener_vorlagencode: 'Die Vorlage hat keinen gültigen Schlüssel.',
+  vorlage_programm_oder_dauer: 'Eine Phase der Vorlage hat kein Programm oder keine gültige Dauer.',
+  vorlage_unterphase: 'Eine Stufe der Vorlage gehört nicht zu ihrem Programm.',
+  aktive_position_fehlt: 'Die Phase gehört zu keinem aktiven Plan.',
+}
 
 export function planFehler(text: string): { satz: string; schluessel: string | null } {
   const m = /G625_BLOCK:([a-z_]+)/.exec(text)
+  const n = /G644_BLOCK:([a-z_]+)/.exec(text)
+  if (n) return { satz: SAETZE_644[n[1]!] ?? 'Die Datenbank hat das abgelehnt.', schluessel: n[1]! }
   if (!m) return { satz: text, schluessel: null }
   return { satz: SAETZE[m[1]!] ?? 'Die Datenbank hat das abgelehnt.', schluessel: m[1]! }
 }
@@ -250,8 +265,62 @@ export function phasenLauf(p: { gueltig_ab: string | null; projected_end_date: s
  * Der Satz dazu. `[cmd]` **„Woche 12 von 7" stand zuerst da** (G-5xx) — ueber
  * das geplante Ende hinaus gibt es kein „von", die Phase laeuft laenger.
  */
-export function wocheText(l: ReturnType<typeof phasenLauf>): string | null {
+export function wocheText(l: ReturnType<typeof phasenLauf>, maxWochen: number | null = null): string | null {
   if (l.woche == null) return null
-  if (l.wochenGesamt == null || l.tageRest == null) return `Woche ${l.woche}`
+  // G-648: offenes Ende — der Entwurf nennt die Hoechstdauer des Programms („Woche 17 von max 52")
+  if (l.wochenGesamt == null || l.tageRest == null) return maxWochen ? `Woche ${l.woche} von max ${maxWochen}` : `Woche ${l.woche}`
   return l.tageRest >= 0 ? `Woche ${l.woche} von ${l.wochenGesamt}` : `Woche ${l.woche} · ${Math.abs(l.tageRest)} Tage über das geplante Ende`
+}
+
+// ══ G-649: Spalten und Achse des Entwurfs (`PhaseEngine.dc.html`) ═══
+//
+// `[cmd]` **„Defizit / Überschuss" ist `goal_strategies.tdee_modifier`** (lean_bulk
+// 0,10 → „+10 %", mini_cut −0,25 → „−25 %", gemessen 16.10.) — genau die Zahlen
+// des Entwurfs. Stufen (contest_prep early/mid/late) tragen `tdee_multiplier` in
+// `sub_phases`, eigene Werte `kcal_pct_erhaltung`. Ohne Quelle: „–".
+
+type Katalogzeile = { code: string; label: string; tdee_modifier: number | null; cardio_pro_woche: number | null; sub_phases: Array<{ name: string; roh: Record<string, unknown> }> }
+type Pos = { strategie_code: string | null; sub_phase_code: string | null; eigene_werte: Record<string, unknown> | null; phase_type: string }
+
+const vz = (n: number) => `${n > 0 ? '+' : n < 0 ? '−' : ''}${z(Math.abs(n), 1)}`
+const stufe = (p: Pos, k: Katalogzeile[]) => p.sub_phase_code ? k.find(s => s.code === p.strategie_code)?.sub_phases.find(t => t.name === p.sub_phase_code)?.roh ?? null : null
+
+/** Name einer Position: Stufe („early"), sonst Programm, eigene Werte, zuletzt die Phasenart in Worten. */
+export function phasenname(p: Pos, k: Katalogzeile[]): string {
+  if (p.eigene_werte) return 'Eigene Werte'
+  if (p.sub_phase_code) return p.sub_phase_code
+  return k.find(s => s.code === p.strategie_code)?.label ?? p.phase_type.replace(/_/g, ' ')
+}
+
+export function defizitText(p: Pos, k: Katalogzeile[]): string {
+  const e = p.eigene_werte?.kcal_pct_erhaltung
+  if (typeof e === 'number') return `${vz(e)} % · eigene`
+  const m = stufe(p, k)?.tdee_multiplier
+  if (typeof m === 'number') return `${vz(Math.round((m - 1) * 100))} %`
+  const t = k.find(s => s.code === p.strategie_code)?.tdee_modifier
+  return typeof t === 'number' ? `${vz(Math.round(t * 100))} %` : '–'
+}
+
+export function cardioText(p: Pos, k: Katalogzeile[]): string {
+  const e = p.eigene_werte?.cardio_pro_woche
+  if (typeof e === 'number') return `${z(e, 1)}×`
+  const c = stufe(p, k)?.cardio as { sessions_per_week?: number[] } | undefined
+  if (Array.isArray(c?.sessions_per_week)) return `${c.sessions_per_week.join('–')}×`
+  const s = k.find(x => x.code === p.strategie_code)?.cardio_pro_woche
+  return typeof s === 'number' ? `${z(s, 1)}×` : '–'
+}
+
+const MONAT = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
+/** Ganze Monate von `von` bis `bis` — Spalten wie im Entwurf („Jun … Jan 27"), `pos` in Prozent. */
+export function monatsachse(von: string, bis: string) {
+  const j0 = Number(von.slice(0, 4)), m0 = Number(von.slice(5, 7)) - 1
+  const j1 = Number(bis.slice(0, 4)), m1 = Number(bis.slice(5, 7)) - 1
+  const anzahl = (j1 - j0) * 12 + (m1 - m0) + 1
+  const monate = Array.from({ length: anzahl }, (_, i) => {
+    const m = (m0 + i) % 12, j = j0 + Math.floor((m0 + i) / 12)
+    return j === j0 ? MONAT[m]! : `${MONAT[m]} ${String(j).slice(2)}`
+  })
+  const a = Date.UTC(j0, m0, 1), b = Date.UTC(j0, m0 + anzahl, 1)
+  const pos = (tag: string) => Math.max(0, Math.min(100, (Date.parse(`${tag}T00:00:00Z`) - a) / (b - a) * 100))
+  return { monate, pos }
 }
