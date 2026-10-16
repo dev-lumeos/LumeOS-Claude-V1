@@ -6,5 +6,12 @@
     "tools/mockup-deckung.mjs zieht diese Eintraege von der",
     "Fehlmenge ab -- was uebrig bleibt, ist wirklich verschwunden."
   ],
-  "verworfen": []
+  "verworfen": [
+    {
+      "modul": "goals",
+      "element": "Recently closed",
+      "grund": "ersetzt durch Abgeschlossen (Main.dc.html, G-648)",
+      "freigabe": "Tom, 2026-10-16"
+    }
+  ]
 }
