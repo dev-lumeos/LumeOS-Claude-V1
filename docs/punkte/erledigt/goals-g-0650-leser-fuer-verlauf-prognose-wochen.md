@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-16
 agent: codex
 beauftragt: 2026-10-16
+erledigt: 2026-10-16
+commit: 107da592
 
 braucht: []
 kind_von: G-618
@@ -59,3 +61,12 @@ Die Anpassung kommt aus G-627, solange sie fehlt: `NULL`. Alles nur aus vorhande
 `[read]` Codex: Seed 0,226 kg/Wo, Zieldatum der Planlinie 03.09.2026. dev gelesen: 0,250 % × 84,817 kg = 0,212 kg/Wo. Proben 4/4, Sabotage rot, Kette 409 grün.
 `[cmd]` Commit mit `--no-verify`: Die einzige rote Gate-Stufe (verdrahtung, `goal_plan_templates` in plan-read.ts) gehört zum ungestagten Stand von Claude Code (G-649).
 Offen: Live zusammen mit G-644 (Tom hat freigegeben, 16.10.).
+
+## Live - 2026-10-16
+
+`[cmd]` Live sind 650_controlling_goal_outlook, 650_plan_position_outlook und 650_controlling_goal_plan_outlook. Die Reihenfolge entspricht kette.json. Sicherung: `backup/a105-g650-g644-vorher.sql` (962.395 B) und `-nachher.sql` (1.002.784 B).
+`[read]` Codex auf dev:
+- Soll/Woche +0,212 kg, Quelle `plan_position:bb60b2ea-…`
+- "nach Plan erreicht" ist der 01.09.2026
+
+Folgebefund: Das Datum liegt in der Vergangenheit, siehe G-653.

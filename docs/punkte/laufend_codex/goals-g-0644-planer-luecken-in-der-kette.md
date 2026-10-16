@@ -84,3 +84,11 @@ Offen:
 - App-Anschluss in G-649 (Claude Code)
 - Wachen, Wochenanpassung (G-627), Coach-Freigabe
 
+## Teil 1 live - 2026-10-16
+
+`[cmd]` Live gemessen:
+- `goal_plan_templates` hat 4 Zeilen mit Quelle lumeos.
+- `goal_plan_create` gibt es mit 2 und mit 4 Argumenten.
+- dev hat genau 1 aktiven Plan.
+
+Offen bleiben der App-Anschluss (G-649), die Wachen, die Wochenanpassung (G-627) und die Coach-Freigabe.

@@ -4,6 +4,8 @@ typ: aufgabe
 modul: goals
 schwere: hoch
 angelegt: 2026-10-16
+agent: codex
+beauftragt: 2026-10-16
 
 braucht: []
 kind_von: G-648
@@ -54,3 +56,11 @@ Allgemein:
 - Nur über vorhandene Kettenfunktionen anlegen, keine Abkürzung an den Wächtern vorbei
 
 Live auf dev nach Muster A-105. Tom hat am 16.10. zugestimmt.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - G-652 Testdaten nach Entwurf
+    Bereich: supabase/_pipeline/ (Kette, Testdaten), Live auf dev nach A-105
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-16, HEAD 7f83d0b2
+

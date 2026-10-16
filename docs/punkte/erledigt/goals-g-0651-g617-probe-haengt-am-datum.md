@@ -4,6 +4,10 @@ typ: befund
 modul: goals
 schwere: mittel
 angelegt: 2026-10-16
+agent: codex
+beauftragt: 2026-10-16
+erledigt: 2026-10-16
+commit: 7f83d0b2
 
 braucht: []
 kind_von: G-617
@@ -36,3 +40,17 @@ Die Wegwerf-Datenbank `lumeos_tageskette_20261016` ist zur Prüfung erhalten geb
 - Die Probe mit festem Stichtag rechnen. Den Wert nicht nachziehen.
 - Gegenprobe: Mit verschobenem Datum muss die Probe grün bleiben. Mit eingebautem Fehler muss sie rot werden.
 - Danach die Wegwerf-Datenbank verwerfen.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - G-651 G-617-Probe haengt am Datum
+    Bereich: supabase/_pipeline/_validierung/
+    Fremd:   apps/, docs/
+    Stand:   2026-10-16, HEAD 5137e69f
+
+## Erledigt - 2026-10-16, Commit `7f83d0b2`
+
+Ursache: Der Trainings-Seed wächst mit `--today` mit. Die Einheit vom 12.10. hebt 98,81 auf 99,30 und 82,06 auf 82,48.
+Lösung: Die Probe prüft jetzt mit festen Stichtagen, am 08.10. und am 16.10.
+`[read]` Codex: Kette 409/409 grün. Ein absichtlich um 1 erhöhter Erwartungswert macht G-617 rot. Wegwerf-Datenbanken: 0.
+`[cmd]` `pg_database` like `lumeos_%`: 0 Zeilen.
