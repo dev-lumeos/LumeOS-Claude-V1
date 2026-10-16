@@ -7,7 +7,7 @@
 // (`echt.phasen`), nicht aus einer zweiten Regel hier.
 import { createSessionClient } from '@lumeos/shared/session'
 
-import { positionszustand, type Planstatus, type Positionszustand, type Terminart } from './plan'
+import { phasenLauf, positionszustand, wocheText, type Planstatus, type Positionszustand, type Terminart } from './plan'
 
 export interface Planposition {
   id: string
@@ -24,6 +24,8 @@ export interface Planposition {
   sub_phase_code: string | null
   confirmed_warnings: string[]
   zustand: Positionszustand
+  /** G-645/2: „Woche x von y" aus der Phase — dieselbe Rechnung wie die Steuerungskarte. */
+  woche: string | null
 }
 export interface Plantermin { id: string; name: string; kind: Terminart; event_date: string }
 export interface Plan {
@@ -55,13 +57,13 @@ export async function ladePlaene(userId: string, stichtag: string, laufendePhase
   for (const r of [pos, ter, ziele]) if (r.error) throw new Error(`Plan lesen: ${r.error.message}`)
   const phasenIds = ((pos.data ?? []) as Array<Record<string, unknown>>).map(p => text(p.goal_phase_id)).filter((x): x is string => !!x)
   const phasen = phasenIds.length
-    ? await db.from('goal_phases').select('id, actual_end_date, zielrate_pct_kg_woche').in('id', phasenIds)
+    ? await db.from('goal_phases').select('id, gueltig_ab, projected_end_date, actual_end_date, zielrate_pct_kg_woche').in('id', phasenIds)
     : { data: [], error: null }
   if (phasen.error) throw new Error(`goal_phases: ${phasen.error.message}`)
   // `[read]` **Die Rate einer gestarteten Position steht in ihrer Phase** — Positionen
   // aus dem Backfill (G-625) tragen sie nicht; ohne diesen Rueckgriff stuende der
   // Katalogwert (z. B. -0,75) statt der gespeicherten Rate (-0,4) da.
-  const ende = new Map(((phasen.data ?? []) as Array<Record<string, unknown>>).map(p => [String(p.id), { actual_end_date: text(p.actual_end_date), zielrate: zahl(p.zielrate_pct_kg_woche) }]))
+  const ende = new Map(((phasen.data ?? []) as Array<Record<string, unknown>>).map(p => [String(p.id), { gueltig_ab: text(p.gueltig_ab), projected_end_date: text(p.projected_end_date), actual_end_date: text(p.actual_end_date), zielrate: zahl(p.zielrate_pct_kg_woche) }]))
   const laufend = new Set(laufendePhasen)
 
   return (plaene ?? []).map(p => {
@@ -79,6 +81,7 @@ export async function ladePlaene(userId: string, stichtag: string, laufendePhase
           goal_phase_id: phaseId, zielrate_pct_kg_woche: zahl(x.zielrate_pct_kg_woche) ?? (phaseId ? ende.get(phaseId)?.zielrate ?? null : null), sub_phase_code: text(x.sub_phase_code),
           confirmed_warnings: Array.isArray(x.confirmed_warnings) ? (x.confirmed_warnings as unknown[]).map(String) : [],
           zustand: positionszustand({ goal_phase_id: phaseId, gueltig_ab: text(x.gueltig_ab) }, phaseId ? ende.get(phaseId) ?? null : null, laufend, stichtag),
+          woche: phaseId && ende.get(phaseId) ? wocheText(phasenLauf(ende.get(phaseId)!, stichtag)) : null,
         }
       }),
       termine: ((ter.data ?? []) as Array<Record<string, unknown>>).filter(t => t.program_id === p.id)

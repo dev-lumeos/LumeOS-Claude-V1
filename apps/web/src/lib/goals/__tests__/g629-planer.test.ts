@@ -152,10 +152,10 @@ const PLAN: Plan = {
   ziel: { title: 'Abbau', status: 'active', target_value: 76, target_date: '2026-12-31' },
   positionen: [
     { id: 'a', position: 1, strategie_code: 'moderate_cut', eigene_werte: null, richtung: 'abnehmen', phase_type: 'fat_loss', duration_weeks: 8,
-      gueltig_ab: '2026-10-01', projected_end_date: '2026-11-25', goal_phase_id: 'ph1', zielrate_pct_kg_woche: -0.5, sub_phase_code: null, confirmed_warnings: [], zustand: 'laufend' },
+      gueltig_ab: '2026-10-01', projected_end_date: '2026-11-25', goal_phase_id: 'ph1', zielrate_pct_kg_woche: -0.5, sub_phase_code: null, confirmed_warnings: [], zustand: 'laufend', woche: 'Woche 2 von 8' },
     { id: 'b', position: 2, strategie_code: null, eigene_werte: { kcal_pct_erhaltung: 0, protein_g_kg: 2, fett_g_kg: 1, cardio_pro_woche: 0, refeed_pro_woche: 0 },
       richtung: 'halten', phase_type: 'maintenance', duration_weeks: 4, gueltig_ab: '2026-11-26', projected_end_date: '2026-12-23',
-      goal_phase_id: null, zielrate_pct_kg_woche: null, sub_phase_code: null, confirmed_warnings: [], zustand: 'geplant' },
+      goal_phase_id: null, zielrate_pct_kg_woche: null, sub_phase_code: null, confirmed_warnings: [], zustand: 'geplant', woche: null },
   ],
   termine: [{ id: 't1', name: 'Landesmeisterschaft', kind: 'A', event_date: '2026-12-20' }],
 }

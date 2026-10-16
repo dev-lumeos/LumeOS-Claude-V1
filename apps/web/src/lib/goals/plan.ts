@@ -212,3 +212,46 @@ export function planFehler(text: string): { satz: string; schluessel: string | n
   if (!m) return { satz: text, schluessel: null }
   return { satz: SAETZE[m[1]!] ?? 'Die Datenbank hat das abgelehnt.', schluessel: m[1]! }
 }
+
+// ══ G-645/2: „Woche x von y" — EINE Rechnung ═══════════════════════
+//
+// `[cmd]` **Am Schirm 10.10.: Steuerungskarte „Woche 1 von 14", Phase engine
+// „Woche 1 von 15"** — dieselbe Phase, zwei Rechnungen (`Math.round` gegen
+// `Math.ceil` ueber die Gesamttage). Beide lesen jetzt diese Funktion, aus
+// derselben Zeile `goal_phases` (Steuerung ueber `phase_am`, Planer ueber
+// `goal_program_positions.goal_phase_id`).
+
+/** Tage zwischen zwei ISO-Tagen, ohne Zeitzonenfalle. */
+function tageZwischen(vonISO: string, bisISO: string): number | null {
+  const von = Date.parse(`${vonISO}T12:00:00Z`)
+  const bis = Date.parse(`${bisISO}T12:00:00Z`)
+  if (!Number.isFinite(von) || !Number.isFinite(bis)) return null
+  return Math.round((bis - von) / 86_400_000)
+}
+
+/** Was sich aus den Daten einer Phase rechnen laesst — und nur das. */
+export function phasenLauf(p: { gueltig_ab: string | null; projected_end_date: string | null; actual_end_date: string | null }, stichtag: string) {
+  const start = p.gueltig_ab
+  const ende = p.actual_end_date ?? p.projected_end_date
+  const tageBisher = start ? tageZwischen(start, stichtag) : null
+  const tageGesamt = start && ende ? tageZwischen(start, ende) : null
+  return {
+    tageBisher,
+    tageGesamt,
+    /** Woche 1 ist die erste — Tag 0 bis 6. */
+    woche: tageBisher != null && tageBisher >= 0 ? Math.floor(tageBisher / 7) + 1 : null,
+    wochenGesamt: tageGesamt != null && tageGesamt > 0 ? Math.ceil(tageGesamt / 7) : null,
+    tageRest: tageGesamt != null && tageBisher != null ? tageGesamt - tageBisher : null,
+    beendet: Boolean(p.actual_end_date),
+  }
+}
+
+/**
+ * Der Satz dazu. `[cmd]` **„Woche 12 von 7" stand zuerst da** (G-5xx) — ueber
+ * das geplante Ende hinaus gibt es kein „von", die Phase laeuft laenger.
+ */
+export function wocheText(l: ReturnType<typeof phasenLauf>): string | null {
+  if (l.woche == null) return null
+  if (l.wochenGesamt == null || l.tageRest == null) return `Woche ${l.woche}`
+  return l.tageRest >= 0 ? `Woche ${l.woche} von ${l.wochenGesamt}` : `Woche ${l.woche} · ${Math.abs(l.tageRest)} Tage über das geplante Ende`
+}

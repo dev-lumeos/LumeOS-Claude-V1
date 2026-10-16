@@ -13,18 +13,17 @@
 // einem Schritt. Die Stufenwochen sind danach der Vorschlag aus dem
 // Verhaeltnis — aenderbar im Editor an der Zielzeile (G-608).
 import * as React from 'react'
-import { Card, Icon, Pill } from '@lumeos/ui'
+import { Card, Icon } from '@lumeos/ui'
 
-import { gesperrt, naechsteNamen, planStrategien } from '../../../lib/goals/zielwahl'
+import { gesperrt, planStrategien } from '../../../lib/goals/zielwahl'
 import { planvorschau } from '../../../lib/goals/planer'
 import { phasenartFuerStrategie } from '../../../lib/goals/strategie-regeln'
 import { unterartFuer } from '../../../lib/goals/ziel-arten'
-import { phasenName, type Phasenart } from '../../../lib/goals/phase-regeln'
+import { type Phasenart } from '../../../lib/goals/phase-regeln'
 import type { Strategie } from '../../../lib/goals/strategie-read'
-import type { ZielFortschritt, Zielphase } from '../../../lib/goals/lesen'
+import type { ZielFortschritt } from '../../../lib/goals/lesen'
 import { phasenzielAnlegenAktion } from './ziel-aktionen'
 import { StrategieVorschau } from './strategie-vorschau'
-import { steuerziel } from '../../../lib/goals/reiter'
 
 const feld: React.CSSProperties = {
   width: '100%', height: 30, background: 'var(--surface)', color: 'var(--fg)',
@@ -74,11 +73,11 @@ export function Planer({ strategien, erfahrung, ziele, heute }: {
   }
 
   return (
-    <Card title="Planer" sub="Termin setzen · Phasen rueckwaerts">
+    <Card title="Plan vom Termin aus" sub="Termin setzen · Phasen rückwärts · legt Ziel und Plan an">
       <div data-planer className="v2-col-gap" style={{ gap: 10 }}>
         <div className="v2-dim" style={{ fontSize: 11.5, lineHeight: 1.55 }}>
-          Ein Plan hat mehrere Phasen. Sie werden vom Termin aus rueckwaerts gelegt —
-          Einzelstrategien waehlst du beim Anlegen eines Ziels im Reiter Goals.
+          Ein Plan hat mehrere Phasen. Sie werden vom Termin aus rückwärts gelegt —
+          Einzelstrategien wählst du beim Anlegen eines Ziels im Reiter Goals.
         </div>
 
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -183,54 +182,6 @@ export function Planer({ strategien, erfahrung, ziele, heute }: {
         )}
       </div>
       {details && plan && <StrategieVorschau s={plan} onSchliessen={() => setDetails(false)} />}
-    </Card>
-  )
-}
-
-/**
- * G-615/3 — „Phase state machine" als ANZEIGE.
- *
- * `[cmd]` **Hier stand eine Attrappe** (`fehlende-kacheln.tsx`): sieben
- * Mockup-Phasen zum Umschalten. **Tom: Anzeige, keine Auswahl** — wo stehe
- * ich, was ist empfohlen.
- *
- * `[read]` **Das steuernde Ziel ist das aktive primaere** — G-604 bindet
- * `is_primary` an das eine aktive Kalorienziel. Empfohlen ist, was
- * `next_codes` seiner Strategie nennt; die Codes sind teils Strategien,
- * teils Phasenarten — beides wird benannt, nichts geraten.
- */
-export function PhasenZustand({ ziele, phasen, strategien }: {
-  ziele: ZielFortschritt[]
-  phasen: Zielphase[]
-  strategien: Strategie[]
-}) {
-  // G-618: steuernd heisst `goal_role`, nicht `is_primary`.
-  const ziel = steuerziel(ziele)
-  const phase = ziel ? phasen.find(p => p.goal_id === ziel.goal_id) ?? null : null
-  const s = phase?.strategie_code ? strategien.find(x => x.code === phase.strategie_code) ?? null : null
-  return (
-    <Card title="Phase state machine" sub="wo du stehst · was empfohlen ist">
-      <div data-phasenzustand style={{ fontSize: 12, lineHeight: 1.6 }}>
-        {!ziel ? (
-          <span className="v2-dim">Kein steuerndes Ziel — kein aktives primaeres Ziel.</span>
-        ) : !phase ? (
-          <span className="v2-dim">{ziel.title}: keine laufende Phase.</span>
-        ) : (
-          <>
-            <div>
-              <span className="v2-eyebrow">Aktuell</span>{' '}
-              <strong>{phasenName(phase.phase_type)}</strong>
-              {s && <> · {s.label}</>} <span className="v2-dim">— {ziel.title}</span>
-            </div>
-            <div data-phasenzustand-empfohlen>
-              <span className="v2-eyebrow">Empfohlen danach</span>{' '}
-              {s && s.next_codes.length > 0
-                ? naechsteNamen(s, strategien).join(' · ')
-                : <span className="v2-dim">die Strategie nennt keinen naechsten Schritt</span>}
-            </div>
-          </>
-        )}
-      </div>
     </Card>
   )
 }

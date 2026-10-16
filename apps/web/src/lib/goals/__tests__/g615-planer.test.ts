@@ -79,9 +79,13 @@ describe('G-615 — der Reiter', () => {
   it('Strategie-Reiter und Phasenarten-Auswahl sind weg', () => {
     assert.ok(!/<StrategieWahl|<PhaseBeginnen|<PhaseWechseln/.test(A()))
   })
+  // `[cmd]` **G-645/3: `PhasenZustand` ist im aktiven Plan aufgegangen**
+  // (,,Danach empfohlen" unter der aktuellen Phase), der Planer G-615 ist der
+  // Weg ,,vom Termin aus" im Planer. Regel bleibt: beides steht im Reiter.
   it('der Planer und die Zustandsanzeige stehen im Reiter', () => {
-    assert.match(A(), /<Planer strategien=\{echt\.strategien\}/)
-    assert.match(A(), /<PhasenZustand ziele=\{echt\.ziele\}/)
+    assert.match(A(), /vomTermin=\{<Planer strategien=\{echt\.strategien\}/)
+    assert.ok(!/<PhasenZustand/.test(A()), 'die zweite Zustandsanzeige ist zurueck')
+    assert.match(lies(join(GOALS, 'plan-seite.tsx')), /data-plan-danach[^>]*>Danach empfohlen: \{danach\.join/)
   })
   it('die Attrappe „Phase state machine" ist gefallen', () => {
     assert.ok(!/title="Phase state machine"/.test(lies(join(GOALS, 'fehlende-kacheln.tsx'))))
@@ -101,11 +105,12 @@ describe('G-615 — der Reiter', () => {
     assert.match(q, /data-plan=\{p\.code\} disabled=\{zu\}/)
     assert.match(q, /\{zu && <span data-plan-sperre/)
   })
-  it('die Zustandsanzeige liest das aktive steuernde Ziel und next_codes', () => {
-    // `[cmd]` **G-618: steuernd heisst `goal_role`, nicht `is_primary`**
-    // (G-617, `uq_user_goals_one_active_controlling`).
-    const q = lies(join(GOALS, 'planer.tsx'))
-    assert.match(q, /const ziel = steuerziel\(ziele\)/)
-    assert.match(q, /naechsteNamen\(s, strategien\)/)
+  it('die Zustandsanzeige liest den aktiven Plan und next_codes', () => {
+    // `[cmd]` **G-618: steuernd heisst `goal_role`, nicht `is_primary`.**
+    // G-645/3: der aktive Plan (`goal_programs`, einer je Nutzer aktiv)
+    // traegt das Steuerziel — seine laufende Position nennt die Variante.
+    const q = lies(join(GOALS, 'plan-seite.tsx'))
+    assert.match(q, /const laufend = aktiv\?\.positionen\.find\(p => p\.zustand === 'laufend'\)/)
+    assert.match(q, /naechsteNamen\(variante, strategien\)/)
   })
 })

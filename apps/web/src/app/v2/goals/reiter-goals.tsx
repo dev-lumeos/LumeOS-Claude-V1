@@ -29,6 +29,7 @@ import {
   type Lage, type Modul,
 } from '../../../lib/goals/reiter'
 import { MESSARTEN, type Kategorie } from '../../../lib/goals/messziel'
+import { phasenLauf, wocheText } from '../../../lib/goals/plan'
 import { PHASENARTEN } from '../../../lib/goals/phase-regeln'
 import { GRUND_TEXT, aktionen } from '../../../lib/goals/zustand'
 import { ArchivierenKnopf, LoeschenFluss, NeuStartenFluss } from './lebenszyklus'
@@ -134,9 +135,8 @@ function Steuerung({ ziele, phasen, offenePhasen, zielwerte, vorschlag, strategi
   const { lage, grund } = lageVon(g)
   const kcal = zielwerte?.kcal ?? vorschlag?.kcal ?? null
   const protein = zielwerte?.protein_g ?? vorschlag?.protein_g ?? null
-  const woche = p.gueltig_ab ? Math.floor((Date.parse(stichtag) - Date.parse(p.gueltig_ab)) / (7 * 86400000)) + 1 : null
-  const wochenGesamt = p.gueltig_ab && p.projected_end_date
-    ? Math.round((Date.parse(p.projected_end_date) - Date.parse(p.gueltig_ab)) / (7 * 86400000)) : null
+  // G-645/2: dieselbe Rechnung wie der Planer (`phasenLauf`), nicht eine zweite.
+  const woche = wocheText(phasenLauf(p, stichtag))
   const rest = tageBis(g.target_date, stichtag)
   const pct = g.progress_status === 'measured' ? g.progress_pct : null
 
@@ -194,7 +194,7 @@ function Steuerung({ ziele, phasen, offenePhasen, zielwerte, vorschlag, strategi
           <div data-steuerung-kcal><div className="v2-dim" style={{ fontSize: 10.5 }}>Tagesziel</div>
             {kcal !== null ? `${zahl(kcal)} kcal${protein !== null ? ` · ${zahl(protein)} g Protein` : ''}` : 'kein Tagesziel gerechnet'}</div>
           <div data-steuerung-woche><div className="v2-dim" style={{ fontSize: 10.5 }}>Phase</div>
-            {woche !== null ? `Woche ${woche}${wochenGesamt ? ` von ${wochenGesamt}` : ''}` : '—'}</div>
+            {woche ?? '—'}</div>
         </div>
       </div>
     </Card>

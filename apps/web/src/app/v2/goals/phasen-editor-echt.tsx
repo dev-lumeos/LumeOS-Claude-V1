@@ -246,7 +246,7 @@ export function PhasenEditor({
     if (!goalId) return
     const r = await stufenwochenZuruecksetzenAktion(goalId)
     if (r.ok) setEingabe({})
-    setStufenMeldung(r.ok ? 'Zurueck zum Vorschlag.' : r.fehler)
+    setStufenMeldung(r.ok ? 'Zurück zum Vorschlag.' : r.fehler)
   }
 
   // ── Das Kalorienradeln ──────────────────────────────────────────
@@ -283,7 +283,7 @@ export function PhasenEditor({
           </div>
           {geaendert > 0 && (
             <span data-editor-geaendert={geaendert}>
-              <Pill variant="acc">{geaendert} geaendert</Pill>
+              <Pill variant="acc">{geaendert} geändert</Pill>
             </span>
           )}
           <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
@@ -359,7 +359,7 @@ export function PhasenEditor({
                                      }} />
                 </div>
               </Feld>
-              <Feld label="Protein" sub="je kg Koerpergewicht">
+              <Feld label="Protein" sub="je kg Körpergewicht">
                 <Zahlfeld marke="protein_per_kg" wert={zahl('protein_per_kg')}
                           katalog={strategie.protein_per_kg} einheit="g/kg"
                           onChange={v => setzen('protein_per_kg', v === '' ? null : Number(v))} />
@@ -375,7 +375,7 @@ export function PhasenEditor({
           {/* ── DURATION ─────────────────────────────────────────── */}
           {tab === 'duration' && (
             <div data-editorblock="duration">
-              <Feld label="Hoechstdauer" sub="Wochen">
+              <Feld label="Höchstdauer" sub="Wochen">
                 <Zahlfeld marke="max_duration_weeks" wert={zahl('max_duration_weeks')}
                           katalog={strategie.max_duration_weeks} einheit="Wo"
                           onChange={v => setzen('max_duration_weeks', v === '' ? null : Number(v))} />
@@ -383,8 +383,8 @@ export function PhasenEditor({
               {strategie.max_duration_weeks === null && (
                 <div className="v2-dim" data-editor-leerhinweis
                      style={{ fontSize: 10.5, lineHeight: 1.5 }}>
-                  Der Katalog fuehrt fuer diese Strategie keine Hoechstdauer.
-                  Was hier steht, gilt nur fuer dich.
+                  Der Katalog führt für diese Strategie keine Höchstdauer.
+                  Was hier steht, gilt nur für dich.
                 </div>
               )}
             </div>
@@ -443,8 +443,8 @@ export function PhasenEditor({
           {tab === 'anchor' && (
             <div data-editorblock="anchor">
               <div className="v2-dim" style={{ fontSize: 11.5, marginBottom: 12, lineHeight: 1.55 }}>
-                Setz den Zieltag. Alles davor rechnet sich rueckwaerts —
-                die Gesamtdauer verteilt sich im Verhaeltnis der Teilphasen.
+                Setz den Zieltag. Alles davor rechnet sich rückwärts —
+                die Gesamtdauer verteilt sich im Verhältnis der Teilphasen.
               </div>
               {/* `[cmd]` **Der Entwurf zeigt daneben „Total prep length"**
                   (`module-goals-editor.jsx`, anchor-Reiter). `[read]`
@@ -507,7 +507,7 @@ export function PhasenEditor({
               {plan.length > 1 ? (
                 <Card className="v2-card-tight" style={{ padding: 12 }}>
                   <div className="v2-eyebrow" style={{ marginBottom: 6 }}>
-                    {`Rueckwaerts gerechnet · ${gesamtWochen(plan)} Wochen`}
+                    {`Rückwärts gerechnet · ${gesamtWochen(plan)} Wochen`}
                   </div>
                   <table className="v2-tbl" style={{ margin: 0 }}>
                     <tbody>
@@ -534,15 +534,15 @@ export function PhasenEditor({
                       letzte gilt, bis G-562 live ist: die Teilphasen
                       SIND da, aber ohne `dauer_anteil`. */}
                   {!anker
-                    ? 'Ohne Zieltag laesst sich nichts rueckwaerts rechnen.'
+                    ? 'Ohne Zieltag lässt sich nichts rückwärts rechnen.'
                     : strategie.sub_phases.length === 0
-                      ? 'Diese Strategie fuehrt keine Teilphasen — es gibt nichts zurueckzurechnen.'
+                      ? 'Diese Strategie führt keine Teilphasen — es gibt nichts zurückzurechnen.'
                       : gesamt === null
-                        ? 'Ohne Gesamtdauer laesst sich nichts aufteilen — der Katalog nennt keine.'
+                        ? 'Ohne Gesamtdauer lässt sich nichts aufteilen — der Katalog nennt keine.'
                         : gesamt < strategie.sub_phases.length || !Number.isInteger(gesamt)
                           ? `Die Gesamtdauer braucht ganze Wochen, mindestens eine je Teilphase (${strategie.sub_phases.length}).`
                           : `${strategie.sub_phases.length} Teilphasen, aber ohne `
-                            + 'Dauer-Anteil — ohne Verhaeltnis laesst sich die '
+                            + 'Dauer-Anteil — ohne Verhältnis lässt sich die '
                             + 'Gesamtdauer nicht aufteilen.'}
                 </div>
               )}
@@ -572,7 +572,7 @@ export function PhasenEditor({
                 </div>
               ) : (
                 <div className="v2-dim" data-editor-leerhinweis style={{ fontSize: 10.5 }}>
-                  Der Katalog fuehrt fuer diese Strategie keine Teilphasen.
+                  Der Katalog führt für diese Strategie keine Teilphasen.
                 </div>
               )}
             </div>
@@ -598,7 +598,7 @@ export function PhasenEditor({
           {tab === 'guards' && (
             <div data-editorblock="guards">
               <div className="v2-dim" style={{ fontSize: 11.5, marginBottom: 12, lineHeight: 1.55 }}>
-                Waechter sind die Regeln, die eine Anpassung ausloesen.
+                Wächter sind die Regeln, die eine Anpassung auslösen.
               </div>
               {strategie.guards.length > 0 ? (
                 <div className="v2-col-gap" style={{ gap: 6 }}>
@@ -622,7 +622,7 @@ export function PhasenEditor({
                 </div>
               ) : (
                 <div className="v2-dim" data-editor-leerhinweis style={{ fontSize: 10.5 }}>
-                  Der Katalog fuehrt fuer diese Strategie keine Waechter.
+                  Der Katalog führt für diese Strategie keine Wächter.
                 </div>
               )}
               {/* ══ G-539/5: der BEFUND statt eines Schiebers ═══════
@@ -642,8 +642,8 @@ export function PhasenEditor({
                 paddingTop: 8, borderTop: '1px solid var(--border)',
               }}>
                 Die Schwellen lassen sich hier nicht verstellen. Die
-                Waechter aus G-520 rechnen mit festen Grenzen aus der
-                Phasenspec — ein Schieber haette keine Wirkung.
+                Wächter aus G-520 rechnen mit festen Grenzen aus der
+                Phasenspec — ein Schieber hätte keine Wirkung.
               </div>
             </div>
           )}
@@ -660,7 +660,7 @@ export function PhasenEditor({
                 </ul>
               ) : (
                 <div className="v2-dim" data-editor-leerhinweis style={{ fontSize: 10.5 }}>
-                  Der Katalog fuehrt fuer diese Strategie keine Ausstiege.
+                  Der Katalog führt für diese Strategie keine Ausstiege.
                 </div>
               )}
             </div>
@@ -700,7 +700,7 @@ export function PhasenEditor({
                 </>
               ) : (
                 <div className="v2-dim" data-editor-leerhinweis style={{ fontSize: 10.5 }}>
-                  Der Katalog fuehrt fuer diese Strategie keinen Jahreszyklus.
+                  Der Katalog führt für diese Strategie keinen Jahreszyklus.
                 </div>
               )}
             </div>
@@ -737,7 +737,7 @@ export function PhasenEditor({
               ) : (
                 <div className="v2-dim" data-editor-leerhinweis style={{ fontSize: 10.5 }}>
                   Noch keine Abweichung. Was hier nicht steht, kommt aus
-                  dem Katalog und aendert sich mit ihm.
+                  dem Katalog und ändert sich mit ihm.
                 </div>
               )}
             </div>
@@ -757,8 +757,8 @@ export function PhasenEditor({
                   onClick={() => onAnwenden(abweichung)}>
             <Icon name="check" className="v2-ic v2-ic-sm" />
             {geaendert > 0
-              ? `${geaendert} Aenderung${geaendert === 1 ? '' : 'en'} uebernehmen`
-              : 'Uebernehmen'}
+              ? `${geaendert} Änderung${geaendert === 1 ? '' : 'en'} übernehmen`
+              : 'Übernehmen'}
           </button>
         </div>
       </div>
@@ -783,7 +783,7 @@ function FreieForm({ werte, ohne = [] }: {
   if (paare.length === 0) {
     return (
       <div className="v2-dim" data-editor-leerhinweis style={{ fontSize: 10.5 }}>
-        Der Katalog fuehrt dazu nichts fuer diese Strategie.
+        Der Katalog führt dazu nichts für diese Strategie.
       </div>
     )
   }

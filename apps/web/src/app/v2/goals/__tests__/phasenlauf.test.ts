@@ -13,7 +13,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import { phasenLauf } from '../phase-echt'
+import { phasenLauf } from '../../../../lib/goals/plan'
 import type { Phase } from '../../../../lib/goals/lesen'
 
 function phase(teil: Partial<Phase>): Phase {

@@ -102,7 +102,7 @@ function Ankertafel({ zeilen, anker, stufen, verschobenAuf }: {
       <div style={{
         display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 6,
       }}>
-        <span className="v2-eyebrow">Rueckwaerts gerechnet</span>
+        <span className="v2-eyebrow">Rückwärts gerechnet</span>
         {gesamt !== null && (
           <span className="v2-dim v2-num" style={{ fontSize: 10.5 }}>
             {gesamt} Wochen ab {anker}
@@ -199,7 +199,7 @@ function Zielzeile({ z, heute, onBearbeiten }: {
           marginLeft: 'auto', fontSize: 10,
         }}>
           {g.gueltig_ab ?? '—'} → {g.target_date ?? '—'}
-          {rest !== null && ` · ${rest >= 0 ? `noch ${rest}` : `${-rest} ueberfaellig`} Tage`}
+          {rest !== null && ` · ${rest >= 0 ? `noch ${rest} Tage` : `${-rest} Tage überfällig`}`}
         </span>
       </div>
 
@@ -248,7 +248,7 @@ function Zielzeile({ z, heute, onBearbeiten }: {
       {z.strategie && z.strategie.next_codes.length > 0 && (
         <div className="v2-dim" data-zielfolge={z.strategie.code}
              style={{ fontSize: 10.5, marginTop: 6 }}>
-          Danach moeglich: {z.strategie.next_codes.join(' · ')}
+          Danach möglich: {z.strategie.next_codes.join(' · ')}
         </div>
       )}
     </div>
@@ -341,7 +341,7 @@ export function PhasenZeitachse({
         fontSize: 10.5, lineHeight: 1.5, marginTop: 10, paddingTop: 8,
         borderTop: '1px solid var(--border)',
       }}>
-        Eine Anpassung gilt fuer deine Phase, nicht fuer den Katalog.
+        Eine Anpassung gilt für deine Phase, nicht für den Katalog.
         Sie als eigene Vorlage zu sichern, braucht G-540.
       </div>
       {/* `[read]` **Was der Schreibweg gemeldet hat** — Erfolg wie
@@ -372,7 +372,7 @@ export function PhasenZeitachse({
             const r = await phasenOverrideAktion(phaseId, abweichung)
             setBearbeitet(null)
             setMeldung(r.ok
-              ? `Uebernommen — ${Object.keys(abweichung).length} Abweichung(en) gespeichert.`
+              ? `Übernommen — ${Object.keys(abweichung).length} Abweichung(en) gespeichert.`
               : r.text)
           }} />
       )}

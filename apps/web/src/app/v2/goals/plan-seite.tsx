@@ -28,6 +28,7 @@ import {
 } from '../../../lib/goals/plan'
 import { bestaetigteSchluessel, waechterSatz, weiterErlaubt, type Pruefung } from '../../../lib/goals/zielpruefung'
 import { phasenartFuerStrategie } from '../../../lib/goals/strategie-regeln'
+import { naechsteNamen } from '../../../lib/goals/zielwahl'
 import type { Plan, Planposition } from '../../../lib/goals/plan-read'
 import type { Planergebnis } from '../../../lib/goals/plan-write'
 import type { Strategie } from '../../../lib/goals/strategie-read'
@@ -231,7 +232,7 @@ function PositionFormular({ plan, strategien, startKg, stichtag, art, position, 
       </div>
       {d.s && !d.eigen && <Werte p={{ id: 'vorschau', position: 0, strategie_code: d.s.code, eigene_werte: null, richtung: d.richtung, phase_type: d.phase_type,
         duration_weeks: d.duration_weeks, gueltig_ab: beginn, projected_end_date: ende, goal_phase_id: null, zielrate_pct_kg_woche: d.zielrate,
-        sub_phase_code: null, confirmed_warnings: [], zustand: 'geplant' }} strategien={strategien} />}
+        sub_phase_code: null, confirmed_warnings: [], zustand: 'geplant', woche: null }} strategien={strategien} />}
       {d.eigen && (
         <div data-eigene-werte className="v2-grid v2-g-cols-3" style={{ gap: 6 }}>
           {EIGENE_WERTE.map(w => (
@@ -361,7 +362,7 @@ function Bearbeiten({ plan, strategien, startKg, stichtag, onFertig }: {
   )
 }
 
-function NeuerPlan({ ziele, plaene, onFertig }: { ziele: ZielFortschritt[]; plaene: Plan[]; onFertig: () => void }) {
+function NeuerPlan({ ziele, plaene, onFertig, vomTermin }: { ziele: ZielFortschritt[]; plaene: Plan[]; onFertig: () => void; vomTermin?: React.ReactNode }) {
   // `[cmd]` **`goal_plan_create(p_goal_id, p_name)`**: ein Plan gehoert zu einem Ziel,
   // `goal_programs_one_per_goal` — nur Steuerziele ohne Plan kommen in Frage.
   const frei = ziele.filter(z => z.goal_role === 'controlling' && !plaene.some(p => p.goal_id === z.goal_id))
@@ -388,6 +389,9 @@ function NeuerPlan({ ziele, plaene, onFertig }: { ziele: ZielFortschritt[]; plae
         </>}
         <span>Ausgangspunkt: <Kommt was="LumeOS-Vorlage, eigene Vorlage, vom Coach" befund="vorlagen" /></span>
         <Satz r={r} />
+        {/* G-645/3: der Weg „vom Termin aus" (G-615) stand als eigener Block unter dem
+            Planer — er legt Ziel und Phase in einem Schritt an, die Kette macht den Plan. */}
+        {vomTermin}
       </div>
     </Card>
   )
@@ -433,9 +437,11 @@ function PlanKachel({ plan, aktiv, strategien, onBearbeiten }: {
   )
 }
 
-export function PlanSeite({ plaene, strategien, grad, ziele, stichtag, startKg, onZuGoals }: {
+export function PlanSeite({ plaene, strategien, grad, ziele, stichtag, startKg, onZuGoals, vomTermin, werkzeuge }: {
   plaene: Plan[]; strategien: Strategie[]; grad: string | null; ziele: ZielFortschritt[]
   stichtag: string; startKg: number | null; onZuGoals: () => void
+  /** G-645/3: was die alten Bauteile konnten und der Planer nicht — als Einschub, nicht daneben. */
+  vomTermin?: React.ReactNode; werkzeuge?: React.ReactNode
 }) {
   const [bearbeitet, setBearbeitet] = React.useState<string | null>(null)
   const [neu, setNeu] = React.useState(false)
@@ -458,6 +464,9 @@ export function PlanSeite({ plaene, strategien, grad, ziele, stichtag, startKg, 
   }
   const aktiv = plaene.find(p => p.status === 'aktiv') ?? null
   const laufend = aktiv?.positionen.find(p => p.zustand === 'laufend') ?? null
+  const variante = laufend?.strategie_code ? strategien.find(s => s.code === laufend.strategie_code) ?? null : null
+  // G-645/3: aus `PhasenZustand` uebernommen — `next_codes` mit Namen (Strategie oder Phasenart)
+  const danach = variante ? naechsteNamen(variante, strategien) : []
   const weitere = plaene.filter(p => p.status === 'entwurf' || p.status === 'pausiert')
   const fertig = plaene.filter(p => p.status === 'abgeschlossen')
   const imBearbeiten = plaene.find(p => p.id === bearbeitet) ?? null
@@ -466,7 +475,7 @@ export function PlanSeite({ plaene, strategien, grad, ziele, stichtag, startKg, 
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <button type="button" className="v2-btn v2-btn-sm" data-neuer-plan-oeffnen onClick={() => setNeu(true)}>+ Neuer Plan</button>
       </div>
-      {neu && <NeuerPlan ziele={ziele} plaene={plaene} onFertig={() => setNeu(false)} />}
+      {neu && <NeuerPlan ziele={ziele} plaene={plaene} onFertig={() => setNeu(false)} vomTermin={vomTermin} />}
       {aktiv ? (
         <Card>
           <div data-aktiver-plan={aktiv.id} className="v2-col-gap" style={{ gap: 6 }}>
@@ -482,8 +491,13 @@ export function PlanSeite({ plaene, strategien, grad, ziele, stichtag, startKg, 
             <div style={{ fontSize: 17, fontWeight: 700 }}>{aktiv.name}</div>
             <div className="v2-dim" style={{ fontSize: 12 }}>
               Aktuelle Phase: <b>{laufend ? phaseName(laufend, strategien) : 'keine laufende Phase'}</b>
-              {laufend?.gueltig_ab ? ` seit ${datumDe(laufend.gueltig_ab)}` : ''}{aktiv.ziel ? ` · steuert „${aktiv.ziel.title}“` : ''}
+              {laufend?.gueltig_ab ? ` seit ${datumDe(laufend.gueltig_ab)}` : ''}
+              {laufend?.woche && <> · <span data-plan-woche>{laufend.woche}</span></>}
+              {aktiv.ziel ? ` · steuert „${aktiv.ziel.title}“` : ''}
             </div>
+            {danach.length > 0 && (
+              <div className="v2-dim" data-plan-danach style={{ fontSize: 11.5 }}>Danach empfohlen: {danach.join(' · ')}</div>
+            )}
             <Zeitachse plan={aktiv} stichtag={stichtag} strategien={strategien} />
             {details && <Details plan={aktiv} strategien={strategien} />}
           </div>
@@ -491,6 +505,7 @@ export function PlanSeite({ plaene, strategien, grad, ziele, stichtag, startKg, 
       ) : (
         <Card><div data-kein-aktiver-plan style={{ fontSize: 12.5 }}><b>Kein Plan aktiv – du läufst auf Erhaltung.</b> Aktiviere unten einen Plan, lege einen neuen an oder setze in Goals eine Richtung.</div></Card>
       )}
+      {werkzeuge}
       {imBearbeiten && <Bearbeiten plan={imBearbeiten} strategien={strategien} startKg={startKg} stichtag={stichtag} onFertig={() => setBearbeitet(null)} />}
       <Card title="Weitere Pläne" sub="Entwürfe und pausierte · immer nur einer aktiv">
         <div className="v2-col-gap" style={{ gap: 8 }}>

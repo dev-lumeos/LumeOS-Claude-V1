@@ -21,6 +21,8 @@ import { existsSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
+import { katalogwerte } from '../../../../lib/goals/plan'
+
 const HIER = dirname(fileURLToPath(import.meta.url))
 const GOALS = join(HIER, '..')
 const LIB = join(HIER, '..', '..', '..', '..', 'lib', 'goals')
@@ -66,10 +68,18 @@ describe('G-534/A4 — der Umweg ist weg', () => {
 describe('G-534/A2 — feste Felder statt JSON-Inhalt', () => {
   const ECHT = () => lies(join(GOALS, 'phase-echt.tsx'))
 
+  // `[cmd]` **G-645/3: Anlass ersetzt, Regel behalten.** Hier standen
+  // Hoechstdauer und Protein als Strich in `phase-echt.tsx` — Grund damals:
+  // `phase_rate_rules` hatte 0 Zeilen. **Seit G-541 fuehrt der Katalog beide**
+  // (`protein_per_kg`, `max_duration_weeks`), der Planer zeigt sie in den
+  // Details, und der Strich daneben widersprach ihnen. Die drei Felder stehen
+  // jetzt im Planer: Tempo aus `katalogwerte`, die Rate mit Einheit hier.
   it('die drei Felder aus PHASE_MODELS.md stehen da', () => {
-    const q = ECHT()
-    for (const feld of ['Zielrate', 'Hoechstdauer', 'Protein']) {
-      assert.ok(q.includes(feld), `das Feld „${feld}" fehlt`)
+    assert.ok(ECHT().includes('Zielrate'), 'das Feld „Zielrate" fehlt')
+    const labels = katalogwerte({ weight_change_target_percent: -0.5, protein_per_kg: 2, fat_percent: null, fett_g_kg: null,
+      cardio_pro_woche: null, refeed_pro_woche: null, max_duration_weeks: 12, refeeds: null }, null).map(z => z.label)
+    for (const feld of ['Tempo', 'Höchstdauer', 'Protein']) {
+      assert.ok(labels.includes(feld), `das Feld „${feld}" fehlt im Planer`)
     }
   })
 
@@ -81,12 +91,15 @@ describe('G-534/A2 — feste Felder statt JSON-Inhalt', () => {
       'die Kachel zeigt wieder die Rohform aus `parameters`')
   })
 
-  it('wo ein Wert fehlt, steht ein Grund', () => {
-    const q = ECHT()
-    assert.match(q, /data-grund="baender"/,
-      'der Strich bei Hoechstdauer und Protein traegt keinen Grund')
-    assert.match(q, /noch nicht hinterlegt/,
-      'der Grund nennt nicht, dass die Werte fehlen')
+  it('wo ein Wert fehlt, steht ein Grund — und kein Strich gegen den Katalog', () => {
+    // fehlt der Katalogwert, heisst die Zeile im Planer „keine Vorgabe" (G-629)
+    const z = katalogwerte({ weight_change_target_percent: null, protein_per_kg: null, fat_percent: null, fett_g_kg: null,
+      cardio_pro_woche: null, refeed_pro_woche: null, max_duration_weeks: null, refeeds: null }, null)
+    assert.equal(z.find(x => x.label === 'Protein')?.wert, null)
+    assert.equal(z.find(x => x.label === 'Höchstdauer')?.wert, null)
+    assert.match(lies(join(GOALS, 'plan-seite.tsx')), /data-keine-vorgabe>keine Vorgabe</)
+    assert.ok(!/label="H(oe|ö)chstdauer"|label="Protein"/.test(ECHT()),
+      'phase-echt.tsx zeigt wieder einen eigenen Strich neben dem Katalogwert')
   })
 
   it('die Rate kommt aus der Spalte, nicht aus parameters', () => {

@@ -42,8 +42,8 @@
 //     Reiter            oben  unten   was oben steht
 //     ----------------------------------------------------------------
 //     Goals                2      7   Zielkarten + Meilensteine echt
-//     Phase engine         7      5   PhaseEcht, Editor, Zeitachse,
-//                                     Einheitenschalter — alles echt
+//     Phase engine         7      5   PlanSeite (G-629), darin Editor,
+//                                     Zeitachse, Beenden — alles echt
 //     Adaptive TDEE        4      6   Kopfkachel echt, Kurve Entwurf
 //     Cross-module         5      5   KEIN echter Teil
 //     Timeline             0      1   Zeitachse echt (G-79)
@@ -132,12 +132,13 @@ import {
 } from './fehlende-kacheln'
 import { GoalsPhysiqueView, GoalsPosesView } from './tab-physique'
 // G-513: Phase beginnen, beenden, Vorschlag beantworten.
+import { PhaseEcht } from './phase-echt'
+import { kopfZiele } from '../../../lib/goals/zustand'
 import { PhaseBeenden, PhaseVorschlag } from './phase-setzen'
-import { Planer, PhasenZustand } from './planer'
+import { Planer } from './planer'
 
 /** C-418/3: die Quelle unter der Trennlinie. */
 const QUELLE = 'theme-v1/module-goals-pro.jsx'
-import { PhaseEcht } from './phase-echt'
 import { PhysiqueEcht } from './physique-echt'
 import { CompositionTab, type CompDaten } from './tab-composition'
 import { KoerperMetriken, KoerperUmfaenge } from './tab-koerper'
@@ -364,7 +365,7 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
             {/* `[cmd]` Echt seit GO-16: die Ziele der angemeldeten
                 Nutzerin, nicht die fuenf der Vorlage. */}
             <Pill variant="acc">
-              {`${echt.ziele.filter(g => g.status === 'active').length} active goals`}
+              {kopfZiele(echt.ziele)}
             </Pill>
             {/* ══ G-544: die Kopfmarke zaehlt, statt EINE zu nennen ══
                 `[cmd]` **Am Bild gefunden** (2026-09-30): bei zwei
@@ -537,63 +538,33 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
               {/* ══ G-629: die Phase engine als Planer — ganze Seite ab Pro ═══
                   `PlanSeite` zeigt darunter selbst die Sperre (Grad aus dem Profil).
                   Die bisherigen Bauteile stehen nur noch ab Pro. */}
+              {/* ══ G-645/3: die alten Phasen-Bauteile sind IM Planer ═══════
+                  `[cmd]` **Am Schirm 10.10.: unter dem Planer standen sie weiter**,
+                  teils englisch (,,Phase parameters", ,,Hoechstdauer"). Weg ist, was
+                  der Planer selbst zeigt: `PhaseEcht` (Kopf, Woche, Programmwerte —
+                  Woche jetzt aus `phasenLauf`, Werte in den Details) und
+                  `PhasenZustand` (,,empfohlen danach" steht im aktiven Plan).
+                  **Was nur sie konnten, steckt als Einschub im Planer:** Beenden mit
+                  Grund, Wechselvorschlag, Anpassen je Phase (G-608) und ,,vom Termin
+                  aus" (G-615). Die Planer-Seite zeigt unter Pro die Sperre und
+                  rendert die Einschuebe dann nicht. */}
               {!echtAus && (
-                <PlanSeite plaene={echt.plaene} strategien={echt.strategien} grad={echt.strategieProfil.experience}
+                <PlanSeite vomTermin={<Planer strategien={echt.strategien} erfahrung={echt.strategieProfil.experience}
+                                              ziele={echt.ziele} heute={echt.stichtag} />}
+                           plaene={echt.plaene} strategien={echt.strategien} grad={echt.strategieProfil.experience}
                            ziele={echt.ziele} stichtag={echt.stichtag}
                            startKg={echt.messungen.filter(m => m.weight_kg !== null && m.measurement_date <= echt.stichtag).at(-1)?.weight_kg ?? null}
-                           onZuGoals={() => setTab('goals')} />
-              )}
-              {proFrei && (<>
-              {/* ══ G-564/A2: JE PHASE eine Kachel ═════════════
-                  `[cmd]` **Hier stand `echt.phase`** — die erste aus
-                  `phase_am`. `[read]` **Bei zwei offenen Phasen
-                  zeigte das eine und verschwieg die andere**, und
-                  welche, entschied die Sortierung. */}
-              {!echtAus && echt.phasen.map(p => (
-                <PhaseEcht key={p.phase_id} phase={p} stichtag={echt.stichtag}
-                           gewichtKg={echt.profil?.body_weight_kg ?? null}
-                           einheit={echt.einheit} />
-              ))}
-              {/* ══ G-513: der Knopf, der gefehlt hat ══════════════
-                  `[cmd]` **Fuenf Funktionen in der Datenbank, null
-                  Aufrufer** — `goal_phase_start`, `goal_phase_end`,
-                  `phase_transition_recommendation`,
-                  `phase_transition_respond`, `phase_am`.
-
-                  `[cmd]` **`phase_am` liefert auch eine BEENDETE
-                  Phase**, wenn sie am Stichtag noch galt
-                  (`111_…sql:198`). `[read]` **Laufend heisst
-                  `actual_end_date == null`** — wer nur auf
-                  `echt.phase` prueft, sperrt den Start hinter einer
-                  Phase, die laengst vorbei ist. */}
-              {/* `[cmd]` **G-519/A5: das Gewicht aus dem Profil** —
-                  es traegt die kcal-Anzeige neben der Rate. */}
-              {/* `[cmd]` **G-534/A7: nur, wenn KEINE Phase laeuft.**
-                  `[read]` **Vorher standen zwei Raster
-                  uebereinander** — ein ausgegrautes ,,Phase
-                  beginnen" und darunter ,,Phase wechseln" mit
-                  derselben Auswahl. **Der Entwurf hat EINES.** */}
-              {/* `[cmd]` **G-564: `laufendePhasen.length`, nicht
-                  `!laufendePhase`.** `[read]` **Bei ZWEI laufenden
-                  Phasen ist `laufendePhase` null** (die Wahl waere
-                  willkuerlich) — und dann haette hier ,,Phase
-                  beginnen" gestanden, obwohl zwei laufen. */}
-              {/* ══ G-615: die Phasenarten-Auswahl ist weg ═══════════
-                  `[cmd]` **Hier stand `PhaseBeginnen`** — neun Phasenarten
-                  zur Wahl, ohne Ziel. **Tom (G-615): Einzelstrategien
-                  waehlt man im Anlegemodal des Reiters Goals (G-610),
-                  Plaene im Planer unten.** */}
-              {!echtAus && (
-                <PhasenZustand ziele={echt.ziele} phasen={echt.offenePhasen}
-                               strategien={echt.strategien} />
-              )}
-              {/* ══ G-564/A2: bei mehreren sagt die Ansicht das ════
-                  `[read]` **Beenden und Wechseln gelten je EINER
-                  Phase.** **Welche, kann die Ansicht nicht raten** —
-                  also nennt sie die Zahl und verweist auf die
-                  Zeitachse, wo jede Phase an ihrem Ziel steht. */}
-              {!echtAus && laufendePhasen.length > 1 && (
-                <Card title="Mehrere Phasen laufen"
+                           onZuGoals={() => setTab('goals')}
+                           werkzeuge={<>
+                             {/* G-564/A2: JE PHASE eine Kachel — bei zwei offenen Phasen
+                                 verschwiege eine die andere. */}
+                             {echt.phasen.map(p => (
+                               <PhaseEcht key={p.phase_id} phase={p} stichtag={echt.stichtag}
+                                          gewichtKg={echt.profil?.body_weight_kg ?? null}
+                                          einheit={echt.einheit} />
+                             ))}
+                             {laufendePhasen.length > 1 && (
+                               <Card title="Mehrere Phasen laufen"
                       sub={`${laufendePhasen.length} offene Phasen an `
                         + `${laufendePhasen.length} Zielen`}>
                   <div className="v2-dim" data-mehrere-phasen={laufendePhasen.length}
@@ -603,59 +574,19 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                     unten.
                   </div>
                 </Card>
-              )}
-              {!echtAus && laufendePhase && (
-                <>
-                  {/* `[cmd]` **G-615: hier stand `PhaseWechseln`** (das
-                      Raster aus G-534/A7). **Beenden bleibt** — eine
-                      laufende Phase muss enden koennen; begonnen wird
-                      ueber das Anlegemodal (G-610) oder den Planer. */}
-                  <PhaseBeenden phase={laufendePhase} stichtag={echt.stichtag} />
-                  {/* `[cmd]` **Der Vorschlag kommt aus der SPALTE,
-                      nicht aus dem Funktionsaufruf.**
-                      `phase_transition_recommendation` macht ein
-                      `UPDATE` (`422_…sql:50`) — **eine Leseseite darf
-                      nicht schreiben.** `[read]` **Die Funktion
-                      hinterlegt ihr Ergebnis in `recommended_next`
-                      und `transition_reason`; genau die zeigt die
-                      Kachel.** */}
-                  <PhaseVorschlag phase={laufendePhase}
-                                  vorschlag={{
-                                    recommended_next: laufendePhase.recommended_next,
-                                    transition_reason: laufendePhase.transition_reason,
-                                  }} />
-                </>
-              )}
-              {/* `[cmd]` G-365: die sechs Mockup-Kacheln, die oben
-                  fehlen — OBERHALB der Linie, weil sie zum Soll des
-                  Reiters gehoeren. Tom, 2026-09-07: „oben wird alles
-                  angezeigt das angebunden ist plus attrappen aus dem
-                  mockup welche oben noch fehlen". */}
-              {/* ══ G-541: der Strategiekatalog ═══════════════════
-                  `[cmd]` **`goals.goal_strategies`, 17 Zeilen, seit
-                  G-538** — und damit OBERHALB der Linie: die Karten
-                  lesen eine Tabelle, nicht den Entwurf.
-
-                  `[cmd]` **In G-534 meldete ich zehn Elemente des
-                  Vorschaupanels ohne Quelle.** `[read]` **Alle zehn
-                  haben jetzt eine Spalte** — was die einzelne ZEILE
-                  nicht fuehrt, ist ein Strich mit Grund (A2), keine
-                  Attrappe: die Quelle steht, der Wert fehlt. */}
-              {/* ══ G-544/A1: der Reiter zeigt ZIELE ═══════════════
-                  `[cmd]` **Er zeigte neun Phasentypen und null
-                  Ziele** — er konnte nicht terminieren, weil er
-                  nicht wusste, WAS.
-
-                  `[cmd]` **Seit G-538 erlaubt
-                  `uq_goal_phases_one_open` eine offene Phase JE
-                  ZIEL** — deshalb `ladeOffenePhasen` und nicht
-                  `phase_am()`, deren Rumpf auf `LIMIT 1` endet. */}
-              {/* `[read]` **Der angepasste TDEE, sonst der
-                  gerechnete** — `adaptive_tdee_kcal` ist null,
-                  solange zu wenige Zufuhrtage vorliegen (G-539,
-                  `cycling`-Reiter). */}
-              {!echtAus && (
-                <PhasenZeitachse
+                             )}
+                             {/* Beenden und Vorschlag brauchen EINE bestimmte Phase (G-564). Der
+                                 Vorschlag kommt aus der Spalte — eine Leseseite ruft nicht
+                                 `phase_transition_recommendation` (die schreibt). */}
+                             {laufendePhase && <>
+                               <PhaseBeenden phase={laufendePhase} stichtag={echt.stichtag} />
+                               <PhaseVorschlag phase={laufendePhase}
+                                               vorschlag={{
+                                                 recommended_next: laufendePhase.recommended_next,
+                                                 transition_reason: laufendePhase.transition_reason,
+                                               }} />
+                             </>}
+                             <PhasenZeitachse
                   ziele={echt.ziele} phasen={echt.offenePhasen}
                   strategien={echt.strategien} heute={echt.stichtag}
                   programme={echt.programme}
@@ -664,19 +595,9 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                   gewichtKg={echt.profil?.body_weight_kg ?? null}
                   einheit={echt.einheit}
                   onNeuesZiel={() => kontext.open({ typ: 'newGoal' })} />
+                           </>} />
               )}
-              {/* ══ G-615: der Planer statt der Strategie-Reiter ═══════
-                  `[cmd]` **Hier stand `StrategieWahl`** — fuenf fest
-                  codierte Reiter (`strategie-regeln.ts`), die Wahl wurde
-                  nicht gespeichert. **Tom: ,reiter phase engine ist doch
-                  genau der planner'.** */}
-              {!echtAus && (
-                <Planer strategien={echt.strategien}
-                        erfahrung={echt.strategieProfil.experience}
-                        ziele={echt.ziele} heute={echt.stichtag} />
-              )}
-              <FehlendePhaseKacheln />
-              </>)}
+              {proFrei && <FehlendePhaseKacheln />}
               {/* `[cmd]` G-365: die Linie stand unter `echt.phase &&`.
                   Sabotageprobe 2026-09-07 — `phase` auf `null`: die
                   Linie verschwand, und `GoalsPhaseView` stand

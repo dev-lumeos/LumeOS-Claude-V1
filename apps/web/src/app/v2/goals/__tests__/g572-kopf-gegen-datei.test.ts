@@ -52,7 +52,8 @@ function rumpf(): string {
  */
 const REITER: Array<[string, string | null]> = [
   ['Goals', 'ReiterGoals'],
-  ['Phase engine', 'PhaseEcht'],
+  // G-645/3: `PhaseEcht` ist im Planer aufgegangen (Kopf, Woche, Werte)
+  ['Phase engine', 'PlanSeite'],
   ['Adaptive TDEE', 'GoalsTDEEView'],
   ['Cross-module', null],
   ['Timeline', 'ZeitachseTab'],
