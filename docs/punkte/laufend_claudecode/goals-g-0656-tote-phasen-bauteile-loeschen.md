@@ -4,6 +4,8 @@ typ: aufgabe
 modul: goals
 schwere: niedrig
 angelegt: 2026-10-16
+agent: claudecode
+beauftragt: 2026-10-16
 
 braucht: []
 kind_von: G-649
@@ -32,3 +34,11 @@ Davon sind 12 Testdateien betroffen.
 - Ohne Aufrufer: löschen, Aufrufer zuvor mit `rg` belegen.
 - Tests: Prüft ein Test eine Regel, die weiter gilt, wird er auf den neuen Ort umgezogen. Gilt die Regel nicht mehr, fällt er weg, mit Begründung.
 - Das Gate bleibt grün.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER claudecode - G-656 Tote Phasen-Bauteile loeschen
+    Bereich: apps/web
+    Fremd:   supabase/, docs/
+    Stand:   2026-10-16, HEAD 9509ecc2
+

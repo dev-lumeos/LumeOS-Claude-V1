@@ -4,6 +4,8 @@ typ: aufgabe
 modul: quer
 schwere: mittel
 angelegt: 2026-10-16
+agent: claudecode
+beauftragt: 2026-10-16
 
 braucht: []
 kind_von: G-648
@@ -35,3 +37,11 @@ Folgen in Goals:
 - Eingeklappt als Grundzustand. Ein schmaler Griff oder Knopf klappt sie auf.
 - Merkt sich die Wahl je Nutzer, wenn es dafür schon einen Ort gibt. Sonst nur für die Sitzung, und das wird gemeldet.
 - Nachweis mit Bildpaaren Goals und Phase Engine bei 1.440 px: Die Kennzahlen stehen in einer Zeile wie im Entwurf, die Titel sind ungekürzt.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER claudecode - G-657 Kontextleiste standardmaessig eingeklappt
+    Bereich: apps/web (Shell)
+    Fremd:   supabase/, docs/
+    Stand:   2026-10-16, HEAD 9509ecc2
+

@@ -9,6 +9,8 @@ quellen:
   - docs/specs/Goals/STRATEGY.md
   - docs/specs/Goals/SCORING.md
   - apps/web/src/app/v2/goals/daten.ts:378
+agent: codex
+beauftragt: 2026-10-16
 
 beruehrt:
   tabellen:
@@ -392,3 +394,11 @@ Vorgehen nach dem Vorschlag von Codex vom 16.10.:
 - `tag <= stichtag` wie im Vertrag A3
 
 Den täglichen Lauf übernimmt der vorhandene Ablauf; pg_cron fehlt. Wo er angehängt wird, schlägt Codex vor.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - G-522 Modulbeitraege rechnen (nach G-655)
+    Bereich: supabase/_pipeline/, Live auf dev und test-user nach A-105
+    Fremd:   apps/, packages/, tools/, docs/
+    Stand:   2026-10-16, HEAD 9509ecc2
+

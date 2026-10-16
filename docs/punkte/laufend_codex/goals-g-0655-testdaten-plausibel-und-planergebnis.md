@@ -4,6 +4,8 @@ typ: aufgabe
 modul: goals
 schwere: mittel
 angelegt: 2026-10-16
+agent: codex
+beauftragt: 2026-10-16
 
 braucht: []
 kind_von: G-652
@@ -35,3 +37,11 @@ beruehrt:
 2. Gewohnheiten (wiederkehrend) haben kein Tempo und kein "voraussichtlich", stattdessen Serie und Wochenstand.
 3. Feld für das Ergebnis eines abgeschlossenen Plans (erreicht / Termin gehalten / beendet) und Leser dafür. Die Testdaten setzen es.
 4. Live auf dev nach A-105.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - G-655 Testdaten plausibel nach Entwurf, Planergebnis, Gewohnheiten
+    Bereich: supabase/_pipeline/ (Kette, Testdaten), Live auf dev nach A-105
+    Fremd:   apps/, packages/, tools/, docs/
+    Stand:   2026-10-16, HEAD 9509ecc2
+

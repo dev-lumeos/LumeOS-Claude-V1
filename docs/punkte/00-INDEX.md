@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 285 |
-| `laufend_claudecode` | 3 |
+| `todos` | 281 |
+| `laufend_codex` | 2 |
+| `laufend_claudecode` | 5 |
 | `erledigt` | 706 |
 | **gesamt** | **994** |
 
@@ -620,7 +621,7 @@
 | `G-519` | befund | hoch | [die Phasenansicht ist gegen die falsche Quelle gebaut](erledigt/goals-g-0519-phasen-nach-der-massgeblichen-quelle.md) | erledigt | — | G-520, G-521, G-534 |
 | `G-520` | feature | hoch | [der Anpassungsalgorithmus und die sieben Uebergangswaechter fehlen](erledigt/goals-g-0520-anpassungsalgorithmus-und-uebergangswaechter.md) | erledigt | — | G-574 |
 | `G-521` | feature | mittel | [wie modelliert man Ernaehrungsphasen, ihre Varianten und Parameter](todos/goals-g-0521-phasenmodellierung-tiefenrecherche.md) | offen | — | G-529, G-530 |
-| `G-522` | befund | hoch | [der erste USP ist nirgends gebaut](todos/goals-g-0522-cross-modul-beitraege-fehlen-vollstaendig.md) | offen | — | — |
+| `G-522` | befund | hoch | [der erste USP ist nirgends gebaut](laufend_codex/goals-g-0522-cross-modul-beitraege-fehlen-vollstaendig.md) | laeuft (codex) | — | — |
 | `G-523` | fehler | hoch | [der adaptive TDEE glaettet nicht, er springt](erledigt/goals-g-0523-adaptive-tdee-glaettet-nicht.md) | erledigt | — | — |
 | `G-524` | befund | mittel | [vier der zehn Spec-Tabellen und beide Ansichten fehlen](erledigt/goals-g-0524-vier-tabellen-und-beide-ansichten-fehlen.md) | erledigt | — | — |
 | `G-525` | befund | mittel | [Meilensteine gibt es nur als Seed](todos/goals-g-0525-meilensteine-entstehen-nicht.md) | offen | — | — |
@@ -715,8 +716,8 @@
 | `G-652` | aufgabe | hoch | [Testdaten nach Entwurf: Messziele, Pläne, Termine, Umlaute](erledigt/goals-g-0652-seeds-nach-entwurf.md) | erledigt | — | G-655 |
 | `G-653` | befund | hoch | ["Nach Plan erreicht" zeigt ein vergangenes Datum](erledigt/goals-g-0653-nach-plan-erreicht-liegt-in-der-vergangenheit.md) | erledigt | — | — |
 | `G-654` | aufgabe | hoch | [Leser für die Lage des Steuerziels und die Wochenwerte der Messziele](erledigt/goals-g-0654-leser-fuer-lage-und-messziel-woche.md) | erledigt | — | — |
-| `G-655` | aufgabe | mittel | [Testdaten plausibel nach Entwurf, Ergebnis abgeschlossener Pläne, keine Prognose für Gewohnheiten](todos/goals-g-0655-testdaten-plausibel-und-planergebnis.md) | offen | — | — |
-| `G-656` | aufgabe | niedrig | [Tote Phasen-Bauteile nach G-649 löschen](todos/goals-g-0656-tote-phasen-bauteile-loeschen.md) | offen | — | — |
+| `G-655` | aufgabe | mittel | [Testdaten plausibel nach Entwurf, Ergebnis abgeschlossener Pläne, keine Prognose für Gewohnheiten](laufend_codex/goals-g-0655-testdaten-plausibel-und-planergebnis.md) | laeuft (codex) | — | — |
+| `G-656` | aufgabe | niedrig | [Tote Phasen-Bauteile nach G-649 löschen](laufend_claudecode/goals-g-0656-tote-phasen-bauteile-loeschen.md) | laeuft (claudecode) | — | — |
 
 ### wartet auf Blocker — 6
 
@@ -1052,7 +1053,7 @@
 | `G-600` | fehler | hoch | [„Heute" ist an 32 Stellen der UTC-Vortag](erledigt/quer-g-0600-heute-ist-an-32-stellen-der-utc-vortag.md) | erledigt | — | — |
 | `G-635` | fehler | mittel | [Dev-Server liefert die Schrift mit falschem Hash](erledigt/quer-g-0635-dev-server-liefert-schrift-mit-falschem-hash.md) | erledigt | — | — |
 | `G-641` | fehler | niedrig | [Farbmischung in oklch färbt Flächen rosa](erledigt/quer-g-0641-farbmischung-oklch-faerbt-flaechen-rosa.md) | erledigt | — | — |
-| `G-657` | aufgabe | mittel | [Kontextleiste (Buddy) standardmäßig eingeklappt](todos/quer-g-0657-kontextleiste-standardmaessig-eingeklappt.md) | offen | — | — |
+| `G-657` | aufgabe | mittel | [Kontextleiste (Buddy) standardmäßig eingeklappt](laufend_claudecode/quer-g-0657-kontextleiste-standardmaessig-eingeklappt.md) | laeuft (claudecode) | — | — |
 
 ### wartet auf Blocker — 1
 
