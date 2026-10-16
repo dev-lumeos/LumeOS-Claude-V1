@@ -45,3 +45,10 @@ Die Anpassung kommt aus G-627, solange sie fehlt: `NULL`. Alles nur aus vorhande
     Bereich: siehe Auftrag im Chat 16.10.
     Fremd:   siehe Auftrag. docs/ gehoert dem Orchestrator.
     Stand:   2026-10-16, HEAD 19435919
+
+
+## Kette committet - 2026-10-16, Commit `ef4b3cf2` (nicht live)
+
+`[cmd]` 3 Dateien Kette, Gate grün. Gelesen: Die Soll-Linie verbindet Start und Ziel linear über die ganze Laufzeit des Ziels (Zeile 2: `goals.user_goals:lineare_soll_linie`). Daraus ergibt sich für dev ein Soll von +0,10 kg/Woche. Der Entwurf rechnet das Soll aus dem Plan: Die laufende Phase Lean Bulk 0,25 %/Woche ergibt etwa +0,21 kg/Woche, und "nach Plan erreicht" folgt den Phasen. Eine Erhaltungsphase am Anfang verzerrt die lineare Linie. Korrektur in G-644 Teil 1 (Teil 0).
+
+`[read]` Codex: Live sind G-643 und G-645 (Sicherung `a105-g643-*`). Der dev-Plan heisst "Lean Bulk auf 88 kg". Lage bei eingefrorenen Zielen ist NULL. Rollen unverändert.
