@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 286 |
-| `laufend_claudecode` | 1 |
+| `todos` | 283 |
+| `laufend_codex` | 1 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 700 |
 | **gesamt** | **987** |
 
@@ -708,9 +709,9 @@
 | `G-645` | fehler | mittel | [Goals und Phase Engine: Befunde am Schirm (dev, 10.10.)](todos/goals-g-0645-goals-reiter-befunde-am-schirm.md) | offen | — | — |
 | `G-646` | aufgabe | mittel | [Trendgewicht einbinden](todos/goals-g-0646-trendgewicht-einbinden.md) | offen | — | — |
 | `G-647` | fehler | niedrig | [Der Satz aus 622 steht noch ohne Umlaute](todos/goals-g-0647-622-satz-mit-umlauten.md) | offen | — | — |
-| `G-648` | fehler | hoch | [Reiter Goals weicht vom freigegebenen Entwurf ab](todos/goals-g-0648-reiter-goals-weicht-vom-entwurf-ab.md) | offen | — | — |
-| `G-649` | fehler | hoch | [Phase Engine weicht vom freigegebenen Entwurf ab](todos/goals-g-0649-phase-engine-weicht-vom-entwurf-ab.md) | offen | — | — |
-| `G-650` | aufgabe | hoch | [Leser für Verlauf, Prognose und Wochenwerte des steuernden Ziels](todos/goals-g-0650-leser-fuer-verlauf-prognose-wochen.md) | offen | — | — |
+| `G-648` | fehler | hoch | [Reiter Goals weicht vom freigegebenen Entwurf ab](laufend_claudecode/goals-g-0648-reiter-goals-weicht-vom-entwurf-ab.md) | laeuft (claudecode) | — | — |
+| `G-649` | fehler | hoch | [Phase Engine weicht vom freigegebenen Entwurf ab](laufend_claudecode/goals-g-0649-phase-engine-weicht-vom-entwurf-ab.md) | laeuft (claudecode) | — | — |
+| `G-650` | aufgabe | hoch | [Leser für Verlauf, Prognose und Wochenwerte des steuernden Ziels](laufend_codex/goals-g-0650-leser-fuer-verlauf-prognose-wochen.md) | laeuft (codex) | — | — |
 
 ### wartet auf Blocker — 6
 

@@ -4,6 +4,8 @@ typ: aufgabe
 modul: goals
 schwere: hoch
 angelegt: 2026-10-16
+agent: codex
+beauftragt: 2026-10-16
 
 braucht: []
 kind_von: G-618
@@ -37,3 +39,9 @@ Eine Lesefunktion je steuerndem Ziel:
 - Prognose bei aktuellem Tempo (Datum oder "nicht absehbar")
 
 Die Anpassung kommt aus G-627, solange sie fehlt: `NULL`. Alles nur aus vorhandenen Daten, keine Schätzung ohne Kennzeichnung.
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - G-650 Leser Verlauf/Prognose/Wochen + Live G-643/G-645
+    Bereich: siehe Auftrag im Chat 16.10.
+    Fremd:   siehe Auftrag. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-16, HEAD 19435919

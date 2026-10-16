@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: hoch
 angelegt: 2026-10-16
+agent: claudecode
+beauftragt: 2026-10-16
 
 braucht: []
 kind_von: G-618
@@ -39,3 +41,9 @@ Ursache: Der Orchestrator hat Berichte nach Funktion abgenommen und nie Bildschi
 ## Was zu tun ist
 
 Claude Code baut den Reiter Abschnitt für Abschnitt nach `Main.dc.html` (Aufbau, Reihenfolge, Texte, Tokens). Abnahme je Abschnitt mit Bildpaar: Entwurf gerendert neben der App. Fehlende Daten werden sichtbar mit "kommt" markiert und G-650 zugeordnet.
+## Auftrag - Kopf
+
+    AUFTRAG FUER claudecode - G-648 + G-649: Goals und Phase Engine 1:1 nach Entwurf
+    Bereich: siehe Auftrag im Chat 16.10.
+    Fremd:   siehe Auftrag. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-16, HEAD 19435919
