@@ -4064,6 +4064,41 @@
       "kind": "tsx",
       "creates": "G-652: Istwerte, Wochenserie, Vorlagenplaene, Termine und echte Umlaute.",
       "depends_on": ["652_goals_design_seed"]
+    },
+    {
+      "id": "654_goal_lage_measurement_week",
+      "path": "supabase/_pipeline/11_goals/654_goal_lage_measurement_week.sql",
+      "kind": "sql",
+      "creates": "G-654: Planlage mit benannter Toleranz und Messziel-Woche mit Tempo und Prognose.",
+      "depends_on": ["652_goals_design_seed_probe"]
+    },
+    {
+      "id": "654_goal_lage_measurement_week_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g654-readers.test.ts",
+      "kind": "tsx",
+      "creates": "G-654: Lage nur mit Trend, Wochenbewegung, Soll und Prognose mit Quellen.",
+      "depends_on": ["654_goal_lage_measurement_week"]
+    },
+    {
+      "id": "644_plan_editor_part2",
+      "path": "supabase/_pipeline/11_goals/644_plan_editor_part2.sql",
+      "kind": "sql",
+      "creates": "G-644 Teil 2: Plantyp, Neuberechnung, Neustart und bestaetigtes Loeschen.",
+      "depends_on": ["654_goal_lage_measurement_week_probe"]
+    },
+    {
+      "id": "644_plan_guards_target_cap",
+      "path": "supabase/_pipeline/11_goals/644_plan_guards_target_cap.sql",
+      "kind": "sql",
+      "creates": "G-644 Teil 2: drei Phasenwachen und am Ziel gekappte Soll-Linie.",
+      "depends_on": ["644_plan_editor_part2"]
+    },
+    {
+      "id": "644_plan_editor_part2_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g644-plan-editor-part2.test.ts",
+      "kind": "tsx",
+      "creates": "G-644 Teil 2: Herkunft, Wachen, Neuberechnung und fertige Plaene.",
+      "depends_on": ["644_plan_guards_target_cap"]
     }
   ]
 }
