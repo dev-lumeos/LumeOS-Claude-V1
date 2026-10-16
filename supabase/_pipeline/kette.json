@@ -3980,6 +3980,62 @@
       "kind": "tsx",
       "creates": "G-650: dev-Seed, Wochenwerte, Prognose, Quellen und Zugriff auf nur eigene Steuerziele.",
       "depends_on": ["650_controlling_goal_outlook", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "650_plan_position_outlook",
+      "path": "supabase/_pipeline/11_goals/650_plan_position_outlook.sql",
+      "kind": "sql",
+      "creates": "G-650 Korrektur: Sollwert und Plandatum aus Positionen des aktiven Plans.",
+      "depends_on": ["650_controlling_goal_outlook_probe"]
+    },
+    {
+      "id": "650_controlling_goal_plan_outlook",
+      "path": "supabase/_pipeline/11_goals/650_controlling_goal_plan_outlook.sql",
+      "kind": "sql",
+      "creates": "G-650 Korrektur: Wochenserie und Kennzahlen verwenden die Planlinie.",
+      "depends_on": ["650_plan_position_outlook"]
+    },
+    {
+      "id": "650_controlling_goal_plan_outlook_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g650-plan-line.test.ts",
+      "kind": "tsx",
+      "creates": "G-650 Korrektur: aktuelles Wochensoll und Quellen aus der Planposition.",
+      "depends_on": ["650_controlling_goal_plan_outlook", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "644_goal_plan_templates",
+      "path": "supabase/_pipeline/11_goals/644_goal_plan_templates.sql",
+      "kind": "sql",
+      "creates": "G-644: Mehrere Entwurfsplaene, vier Katalogvorlagen, Instanziierung, eigene Vorlage und Positionsloeschung.",
+      "depends_on": ["650_controlling_goal_plan_outlook"]
+    },
+    {
+      "id": "644_goal_plan_runtime",
+      "path": "supabase/_pipeline/11_goals/644_goal_plan_runtime.sql",
+      "kind": "sql",
+      "creates": "G-644: Phasen- und Status-Trigger waehlen bei mehreren Plaenen eindeutig.",
+      "depends_on": ["644_goal_plan_templates"]
+    },
+    {
+      "id": "644_goal_plan_phase_limits",
+      "path": "supabase/_pipeline/11_goals/644_goal_plan_phase_limits.sql",
+      "kind": "sql",
+      "creates": "G-644: G-626 prueft jede Planphase mit ihrem lokalen Ziel und Termin.",
+      "depends_on": ["644_goal_plan_runtime"]
+    },
+    {
+      "id": "644_goal_restart_plan_choice",
+      "path": "supabase/_pipeline/11_goals/644_goal_restart_plan_choice.sql",
+      "kind": "sql",
+      "creates": "G-644: Zielneustart kopiert den zuletzt tatsaechlich gelaufenen Plan.",
+      "depends_on": ["644_goal_plan_phase_limits"]
+    },
+    {
+      "id": "644_goal_plan_templates_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g644-plan-templates.test.ts",
+      "kind": "tsx",
+      "creates": "G-644: vier Vorlagen, zwei Plaene je Ziel, A-Anker, eigene Vorlage und geschuetzte Position.",
+      "depends_on": ["644_goal_restart_plan_choice", "a86_testdaten_einspielen"]
     }
   ]
 }
