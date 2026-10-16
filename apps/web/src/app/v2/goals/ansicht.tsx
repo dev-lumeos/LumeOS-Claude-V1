@@ -132,9 +132,6 @@ import {
 } from './fehlende-kacheln'
 import { GoalsPhysiqueView, GoalsPosesView } from './tab-physique'
 // G-513: Phase beginnen, beenden, Vorschlag beantworten.
-import { PhaseEcht } from './phase-echt'
-import { phaseAnzeige } from '../../../lib/goals/phase-regeln'
-import { PhaseBeenden, PhaseVorschlag } from './phase-setzen'
 import { Planer } from './planer'
 
 /** C-418/3: die Quelle unter der Trennlinie. */
@@ -159,7 +156,6 @@ import type { Wochendaten } from '../../../lib/goals/reiter-read'
 import type { Strategie } from '../../../lib/goals/strategie-read'
 import type { Rateneinheit } from '../../../lib/goals/zielrate-einheit'
 // G-544: die Zeitachse des Phase-Reiters.
-import { PhasenZeitachse } from './phasen-zeitachse'
 // `[cmd]` **G-553/A1: reine Funktionen, kein I/O** — sie duerfen aus
 // einer `'use client'`-Datei kommen (A-30).
 // `[cmd]` **G-555: die Kachel ist geteilt**, der Pfad liegt nicht
@@ -303,7 +299,7 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
     // `[read]` **Die Zahl kommt aus `offenePhasen`** (die Tabelle),
     // nicht aus `phasen` — dieselbe Wahl wie in G-564: die Quelle,
     // die heute UND nach dem Einspielen stimmt.
-    // `[cmd]` **G-636: aus `phase_am`** — siehe `laufendePhasen` unten.
+    // `[cmd]` **G-636: aus `phase_am`** — nur Phasen aktiver Ziele.
     laufendePhasen: echt.phasen.length,
     // `[read]` **Der Titel zum gerechneten Ziel**, wenn er in den
     // geladenen Zielen steht — sonst `null`, kein geratener Name.
@@ -312,51 +308,8 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
       : null,
   }
 
-  // `[cmd]` **G-513: laufend heisst `actual_end_date == null`.**
-  // `phase_am` gibt auch eine beendete Phase zurueck, solange sie am
-  // Stichtag noch galt — `PhaseEcht` zeigt sie deshalb mit der Pille
-  // „abgeschlossen" (`phase-echt.tsx:119`). **Beenden und Vorschlag
-  // gelten aber nur fuer eine, die wirklich laeuft.**
-  // ══ G-564/A2: die Menge, und was sie fuer die Bedienung heisst ══
-  //
-  // `[cmd]` **`phase_am` liefert seit G-559 alle Zielphasen.**
-  // `[read]` **Laufend heisst weiterhin `actual_end_date === null`**
-  // — `phase_am` gibt auch eine beendete zurueck, solange sie am
-  // Stichtag noch galt.
-  // ══ G-564: die Zahl kommt aus der ungedeckelten Quelle ══════
-  //
-  // `[cmd]` **Am Bild gefunden, 2026-09-30:** der Kopf sagte
-  // ,,2 Phasen laufen", und darunter standen ,,Phase beenden" und
-  // ,,Phase wechseln" fuer EINE — **zwei Quellen, zwei Zahlen auf
-  // demselben Schirm.**
-  //
-  // `[cmd]` **Der Grund:** `echt.phasen` kommt aus `phase_am`, das
-  // live noch `LIMIT 1` traegt; `echt.offenePhasen` liest die Tabelle
-  // direkt (G-544) und sieht beide.
-  //
-  // `[read]` **Also entscheidet die Tabelle, wie viele laufen** — sie
-  // ist heute UND nach dem Einspielen richtig. **`echt.phasen` traegt
-  // weiterhin die Anzeige je Phase**, und sobald `phase_am` beide
-  // liefert, stimmen beide Wege ueberein.
-  // ══ G-636: laufend ist, was die Kette liefert ══════════════════
-  //
-  // `[cmd]` **`phase_am` traegt seit G-613 kein `LIMIT 1` mehr und liefert
-  // nur Phasen AKTIVER Ziele** (Rumpf gelesen 2026-10-09). `offenePhasen`
-  // (Tabelle, `actual_end_date IS NULL`) zaehlte die Phase eines pausierten
-  // Ziels mit — am Schirm: „0 active goals · 2 Phasen laufen" (G-630).
-  // **Kopf, Bedienung und Composition lesen jetzt dieselbe Menge.**
-  const laufendePhasen = echt.phasen
   // G-629: die Phase engine ist ab Pro frei (Dossier 8.7).
   const proFrei = abPro(echt.strategieProfil.experience)
-  // `[read]` **Beenden und Vorschlag brauchen EINE bestimmte Phase.**
-  // **Bei mehreren waere jede Wahl eine stille Entscheidung** —
-  // deshalb nur, wenn es genau eine gibt; sonst sagt die Ansicht, dass
-  // die Wahl fehlt.
-  // `[read]` **Die Bedienkacheln brauchen die volle `Phase`** (mit
-  // Uebergangsspalten und Zielrate) — die traegt `echt.phasen`.
-  // **Nur wenn BEIDE Wege genau eine sehen**, ist die Wahl
-  // eindeutig.
-  const laufendePhase = laufendePhasen.length === 1 ? laufendePhasen[0]! : null
 
   // Die eine Aktion je Reiter — `switch`, damit kein „tab === '…'" vor den Reiterbloecken steht
   // (`entwurf-wird-nicht-verdraengt` schneidet die Bloecke an diesem Muster).
@@ -399,7 +352,8 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
         </div>
       </div>
 
-      <Tabs items={TABS} active={tab} onChange={setTab} />
+      {/* Entwurf: die Reiterleiste bricht um (`flex-wrap`) — die Schiene aus @lumeos/ui scrollt quer und schnitt „Physique" ab */}
+      <div className="ge-reiter"><Tabs items={TABS} active={tab} onChange={setTab} /></div>
 
       {/* `[cmd]` FUENF TABS SIND SEIT GO-16 ECHT. Der Ladefehler
           ersetzt sie, statt eine leere Kachel zu zeigen — sonst saehe
@@ -536,49 +490,7 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                            plaene={echt.plaene} neu={neuerPlan} onNeu={setNeuerPlan} vorlagen={echt.vorlagen ?? null} ausblick={echt.woche.ausblick ?? null} strategien={echt.strategien} grad={echt.strategieProfil.experience}
                            ziele={echt.ziele} stichtag={echt.stichtag}
                            startKg={echt.messungen.filter(m => m.weight_kg !== null && m.measurement_date <= echt.stichtag).at(-1)?.weight_kg ?? null}
-                           onZuGoals={() => setTab('goals')}
-                           werkzeuge={<>
-                             {/* G-564/A2: JE PHASE eine Kachel — bei zwei offenen Phasen
-                                 verschwiege eine die andere. */}
-                             {echt.phasen.map(p => (
-                               <PhaseEcht key={p.phase_id} phase={p} stichtag={echt.stichtag}
-                                          gewichtKg={echt.profil?.body_weight_kg ?? null}
-                                          einheit={echt.einheit} />
-                             ))}
-                             {laufendePhasen.length > 1 && (
-                               <Card title="Mehrere Phasen laufen"
-                      sub={`${laufendePhasen.length} offene Phasen an `
-                        + `${laufendePhasen.length} Zielen`}>
-                  <div className="v2-dim" data-mehrere-phasen={laufendePhasen.length}
-                       style={{ fontSize: 11.5, lineHeight: 1.55 }}>
-                    Beenden und Wechseln gelten je einer Phase. Welche
-                    gemeint ist, steht an ihrem Ziel — in der Zeitachse
-                    unten.
-                  </div>
-                </Card>
-                             )}
-                             {/* Beenden und Vorschlag brauchen EINE bestimmte Phase (G-564). Der
-                                 Vorschlag kommt aus der Spalte — eine Leseseite ruft nicht
-                                 `phase_transition_recommendation` (die schreibt). */}
-                             {laufendePhase && <>
-                               <PhaseBeenden phase={laufendePhase} stichtag={echt.stichtag}
-                                             name={phaseAnzeige(laufendePhase.phase_type, echt.offenePhasen.find(o => o.phase_id === laufendePhase.phase_id)?.strategie_code, echt.strategien)} />
-                               <PhaseVorschlag phase={laufendePhase}
-                                               vorschlag={{
-                                                 recommended_next: laufendePhase.recommended_next,
-                                                 transition_reason: laufendePhase.transition_reason,
-                                               }} />
-                             </>}
-                             <PhasenZeitachse
-                  ziele={echt.ziele} phasen={echt.offenePhasen}
-                  strategien={echt.strategien} heute={echt.stichtag}
-                  programme={echt.programme}
-                  tdee={echt.tdee?.adaptive_tdee_kcal
-                    ?? echt.tdee?.formula_tdee_kcal ?? null}
-                  gewichtKg={echt.profil?.body_weight_kg ?? null}
-                  einheit={echt.einheit}
-                  onNeuesZiel={() => kontext.open({ typ: 'newGoal' })} />
-                           </>} />
+                           onZuGoals={() => setTab('goals')} />
               )}
               {proFrei && <FehlendePhaseKacheln />}
               {/* `[cmd]` G-365: die Linie stand unter `echt.phase &&`.

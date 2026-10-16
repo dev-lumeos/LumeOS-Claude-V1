@@ -73,10 +73,14 @@ describe('G-513 — die Phase laesst sich setzen', () => {
     const a = ANSICHT()
     // G-615: PhaseBeginnen ist weg, der Planer ist der Einstieg.
     assert.ok(!/<PhaseBeginnen[\s/>]/.test(a), 'die Phasenarten-Auswahl ist zurueck')
-    for (const k of ['Planer', 'PhaseBeenden', 'PhaseVorschlag']) {
-      assert.match(a, new RegExp(`<${k}[\\s/>]`),
-        `${k} wird nicht gerendert — gebaut und unerreichbar`)
-    }
+    assert.match(a, /<Planer[\s/>]/, 'Planer wird nicht gerendert — gebaut und unerreichbar')
+    // G-649 (Tom 16.10.): die Kacheln fallen weg — Beenden steht im Bearbeiten
+    // unter der laufenden Phase, der Vorschlag unter „Als nächstes".
+    const p = ohneKommentare(lies(join(GOALS, 'plan-seite.tsx')))
+    assert.match(p, /<PhaseBeendenFormular phaseId=\{p\.goal_phase_id\}/, 'Phase beenden ist im Planer unerreichbar')
+    assert.match(p, /await phaseBeendenAktion\(phaseId, grund\.trim\(\), ende\)/)
+    assert.match(p, /data-phase-beenden disabled=\{laeuft \|\| !grund\.trim\(\)\}/, 'ohne Grund laesst sich beenden')
+    assert.match(p, /laufend\?\.empfohlen \? <span data-plan-empfohlen>/, 'der Wechselvorschlag fehlt unter „Als nächstes"')
   })
 
   // ── 2 · Nur die Serveraktion ueberquert die Grenze ───────────────

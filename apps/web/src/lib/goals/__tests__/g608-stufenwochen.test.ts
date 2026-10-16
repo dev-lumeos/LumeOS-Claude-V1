@@ -90,9 +90,10 @@ describe('G-608 — Lese- und Schreibweg', () => {
     assert.match(W(), /\.from\('goal_programs'\)\.delete\(\)\.eq\('goal_id', goalId\)/)
   })
 
-  it('die Seite laedt die Programme und reicht sie bis zur Zeitachse', () => {
+  it('die Seite laedt die Programme; die Zeitachse steht seit G-649 nicht mehr im Reiter', () => {
     assert.match(lies(join(GOALS, 'page.tsx')), /ladeProgrammwochen\(\)/)
-    assert.match(lies(join(GOALS, 'ansicht.tsx')), /programme=\{echt\.programme\}/)
+    // Tom 16.10.: die alten Bauteile unter dem aktiven Plan fallen weg
+    assert.ok(!/<PhasenZeitachse[\s/>]/.test(lies(join(GOALS, 'ansicht.tsx'))), 'die Zeitachse steht wieder im Reiter')
   })
 
   it('ein Programm einer anderen Strategie wird nicht angewandt', () => {

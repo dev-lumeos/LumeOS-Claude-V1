@@ -117,13 +117,9 @@ describe('G-564/A3 — kein data[0] auf phase_am', () => {
 // ════════════════════════════════════════════════════════════════
 
 describe('G-564/A2 — die Anzeige sagt, wie viele', () => {
-  it('der Phasenkopf zeigt JEDE Phase', () => {
-    // `[cmd]` **Hier stand `echt.phase`** — die erste aus `phase_am`.
-    const q = A()
-    assert.match(q, /echt\.phasen\.map\(p => \(/,
-      'der Phasenkopf zeigt nicht je Phase eine Kachel')
-    assert.match(q, /<PhaseEcht key=\{p\.phase_id\}/,
-      'die Kacheln haben keinen stabilen Schluessel')
+  it('G-649: keine Phasenkacheln mehr — die Phasen stehen im Plan (Tom 16.10.)', () => {
+    // Hier stand: der Phasenkopf zeigt JEDE Phase (`echt.phasen.map`).
+    assert.ok(!/<PhaseEcht[\s/>]|data-mehrere-phasen/.test(A()), 'die alten Phasenkacheln stehen wieder im Reiter')
   })
 
   it('„Phase beginnen" ist weg — es gibt keinen Start ohne Ziel (G-615)', () => {
@@ -136,20 +132,17 @@ describe('G-564/A2 — die Anzeige sagt, wie viele', () => {
       'die alte Bedingung steht wieder da')
   })
 
-  it('bei mehreren sagt die Ansicht die Zahl', () => {
-    const q = A()
-    assert.match(q, /laufendePhasen\.length > 1 && \(/,
-      'der Fall „mehrere laufen" wird nicht behandelt')
-    assert.match(q, /data-mehrere-phasen=\{laufendePhasen\.length\}/,
-      'die Zahl ist nicht am Schirm nachzaehlbar')
+  it('Beenden nur an EINER Phase: der laufenden des aktiven Plans', () => {
+    // `[read]` **Sonst waere jede Wahl eine stille Entscheidung.** G-649: hier stand
+    // „bei GENAU einer laufenden Phase" (`laufendePhasen.length === 1`) — Beenden haengt
+    // jetzt an der Position; je Plan laeuft eine, aktiv ist ein Plan.
+    assert.match(lies(join(GOALS, 'plan-seite.tsx')),
+      /\{p\.zustand === 'laufend' && plan\.status === 'aktiv' && <>[\s\S]{0,400}data-phase-beenden-oeffnen=\{p\.id\}/,
+      'Phase beenden steht an einer nicht laufenden Phase oder einem inaktiven Plan')
   })
 
-  it('Beenden und Wechseln nur bei GENAU einer', () => {
-    // `[read]` **Sonst waere jede Wahl eine stille Entscheidung** —
-    // genau der Fehler, den G-559 in der Datenbank beseitigt hat.
+  it('G-636: die Zahl laufender Phasen kommt aus phase_am', () => {
     const q = A()
-    assert.match(q, /laufendePhasen\.length === 1\s*\?/,
-      'bei mehreren Phasen wird eine beliebige zum Bedienen gewaehlt')
     // `[cmd]` **Am BILD gefunden:** der Kopf sagte „2 Phasen laufen",
     // darunter standen „Beenden" und „Wechseln" fuer EINE.
     // `[read]` **Zwei Quellen, zwei Zahlen** — `echt.phasen` kommt
@@ -158,7 +151,7 @@ describe('G-564/A2 — die Anzeige sagt, wie viele', () => {
     // `[cmd]` **G-636 (2026-10-09): die Quelle ist jetzt `phase_am`** — ohne
     // `LIMIT 1` und nur Phasen AKTIVER Ziele (Rumpf live gelesen). Die
     // Tabelle (`offenePhasen`) zaehlte die Phase eines pausierten Ziels mit.
-    assert.match(q, /const laufendePhasen = echt\.phasen\b/,
+    assert.match(q, /laufendePhasen: echt\.phasen\.length,/,
       'die Zahl kommt nicht aus phase_am — dann zaehlt der Kopf die '
       + 'Phase eines pausierten Ziels (G-636)')
   })
@@ -272,11 +265,9 @@ describe('G-564/A4 — zwei Zeilen werden zwei Phasen', () => {
     // `[read]` **Die Zahl kommt aus der Liste** — sobald `phase_am`
     // beide liefert, steht dort 2, ohne dass hier etwas zu aendern
     // waere.
-    const a = A()
-    assert.match(a, /laufendePhasen\.length === 1/,
-      'die Kopfmarke unterscheidet Einzahl und Mehrzahl nicht')
-    assert.match(a, /Phasen laufen/,
-      'bei mehreren wird immer noch EINE genannt')
+    // G-649: Kopfmarke und Kachel „Mehrere Phasen laufen" sind weg (Tom 16.10.);
+    // die Zahl geht als LAENGE an Composition.
+    assert.match(A(), /laufendePhasen: echt\.phasen\.length,/, 'die Zahl haengt nicht an der Laenge')
   })
 
   it('der Untertitel der Zeitachse zaehlt die Liste', () => {

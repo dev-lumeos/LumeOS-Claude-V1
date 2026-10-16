@@ -188,6 +188,7 @@
  * -> --acc-train, Gruen 160 -> --acc-recov, Orange 60 -> --acc-nutri,
  * Rot 25 -> --neg, Gruen 150 -> --pos, Orange 70 -> --warn. */
 .ge { display: flex; flex-direction: column; gap: 18px; }
+.ge-reiter .v2-tabs-rail { flex-wrap: wrap; overflow-x: visible; }
 .ge-num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 .ge-eb { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--fg-subtle); }
 .ge-typ { font-size: 10.5px; font-family: var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--fg-subtle); }

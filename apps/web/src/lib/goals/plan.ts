@@ -218,6 +218,17 @@ export const SAETZE_644: Record<string, string> = {
   vorlage_programm_oder_dauer: 'Eine Phase der Vorlage hat kein Programm oder keine gültige Dauer.',
   vorlage_unterphase: 'Eine Stufe der Vorlage gehört nicht zu ihrem Programm.',
   aktive_position_fehlt: 'Die Phase gehört zu keinem aktiven Plan.',
+  // G-644 Teil 2 (`644_plan_editor_part2.sql`, Kette — live noch nicht eingespielt am 16.10.)
+  position_fremd: 'Die Phase fehlt oder gehört nicht zu deinem Konto.',
+  programm_oder_dauer: 'Eine Phase braucht entweder ein Programm oder eigene Werte – und eine Dauer von 1 bis 520 Wochen.',
+  historische_position_nach_planung: 'Nach dieser Phase ist schon eine gestartet – neu berechnen geht nur bis dorthin.',
+  dauer_fehlt: 'Eine geplante Phase hat keine Dauer in Wochen.',
+  anker_mit_laufender_phase: 'Mit der laufenden Phase lässt sich der Termin nicht erreichen – passe die Dauer an.',
+  programm_fehlt: 'Dieses Programm gibt es nicht (mehr).',
+  nur_abgeschlossenen_plan_neustarten: 'Neu starten geht nur mit einem abgeschlossenen Plan.',
+  name_oder_start_fehlt: 'Gib dem neuen Plan einen Namen und ein Startdatum.',
+  neustart_braucht_dauer: 'Zum Neustart braucht jede Phase eine Dauer in Wochen.',
+  nur_eigenen_abgeschlossenen_plan_loeschen: 'Löschen geht hier nur mit einem eigenen abgeschlossenen Plan.',
 }
 
 export function planFehler(text: string): { satz: string; schluessel: string | null } {

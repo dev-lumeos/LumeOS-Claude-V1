@@ -115,18 +115,46 @@ const AUSBLICK: Ausblick = {
   prognose: { plan_datum: '2026-09-01', status: 'datum', datum: '2027-10-01', grund: null },
 }
 
+describe('G-648/G-649 Feinschliff nach Bild (16.10., dev nach G-652)', () => {
+  it('1 Tagesziel: Kennzahlen als umbrechendes Flex — kein Rasterfeld, in das der Wert hineinlaeuft', () => {
+    const h = reiter([Z({})], ZW({ kcal: 2714 }), [PH], AUSBLICK)
+    const k = /<div data-steuerung-kennzahlen="true" style="([^"]*)">([\s\S]*?)<div style="display:flex;gap:4px;flex-wrap:wrap" data-steuerung-module/.exec(h)
+    assert.ok(k, 'Kennzahlenzeile nicht gefunden')
+    assert.match(k![1]!, /display:flex;flex-wrap:wrap/)
+    assert.ok(!/grid-template-columns/.test(k![1]!), 'wieder ein Raster: eine Spalte waechst nicht mit dem Text')
+    assert.equal((k![2]!.match(/style="flex:1 1 170px"/g) ?? []).length, 4, 'nicht alle vier Kennzahlen sind Flex-Kinder')
+    assert.match(k![2]!, /data-steuerung-kcal="true"[^>]*><div class="ge-eb">Tagesziel<\/div><div class="ge-num" style="[^"]*white-space:nowrap">2\.714 kcal · 170 g P</)
+  })
+  it('2 Plan-Status in Fliesstext und einzeilig, nicht in Monospace', () => {
+    const o = reiter([Z({})], ZW({}), [PH], { ...AUSBLICK, prognose: { ...AUSBLICK.prognose, plan_datum: null, plan_status: 'nicht_im_plan' } })
+    const z = /data-prognose-plan="true"[^>]*><div class="ge-eb">nach Plan erreicht<\/div>(<div[^>]*>)Plan endet vor dem Ziel</.exec(o)
+    assert.ok(z, 'Plan-Status nicht gefunden')
+    assert.ok(!/ge-num/.test(z![1]!), 'der Satz steht in Monospace')
+    assert.match(z![1]!, /white-space:nowrap/)
+  })
+  it('3 Reiterleiste bricht um statt abzuschneiden', () => {
+    assert.match(lies('app/v2/goals/ansicht.tsx'), /<div className="ge-reiter"><Tabs items=\{TABS\}/)
+    assert.match(lies('app/v2/goals/goals.css'), /^\.ge-reiter \.v2-tabs-rail \{ flex-wrap: wrap; overflow-x: visible; \}$/m)
+  })
+  it('4 Messziel-Titel in Diese Woche: eine Zeile, ganz im title', () => {
+    const lang = 'Kreuzheben 150 kg × 5 Wiederholungen sauber'
+    const h = reiter([Z({}), Z({ goal_id: 'm1', goal_role: 'measurement', title: lang, measurement_type: 'e1rm' })])
+    assert.match(h, new RegExp(`<span data-woche-titel="true" title="${lang}" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">${lang}</span>`))
+  })
+})
+
 describe('G-648 Rest — Werte aus controlling_goal_outlook statt „kommt (G-650)"', () => {
   it('Prognose: nach Plan und bei deinem Tempo als Datum; sonst der Grund', () => {
     const h = reiter([Z({})], ZW({}), [PH], AUSBLICK)
-    assert.match(h, /data-prognose-plan="true"><div class="ge-eb">nach Plan erreicht<\/div><div class="ge-num"[^>]*>01\.09\.2026</)
-    assert.match(h, /data-prognose-tempo="datum">[\s\S]*?<span class="ge-num">01\.10\.2027<\/span>/)
+    assert.match(h, /data-prognose-plan="true"[^>]*><div class="ge-eb">nach Plan erreicht<\/div><div class="ge-num"[^>]*>01\.09\.2026</)
+    assert.match(h, /data-prognose-tempo="datum"[^>]*>[\s\S]*?<span class="ge-num">01\.10\.2027<\/span>/)
     assert.ok(!/data-kommt="G-650"/.test(h), 'mit Kette steht noch „kommt (G-650)"')
     const n = reiter([Z({})], ZW({}), [PH], { ...AUSBLICK, prognose: { plan_datum: null, status: 'nicht_absehbar', datum: null, grund: 'tempo_entgegen_ziel' } })
-    assert.match(n, /data-prognose-tempo="nicht_absehbar">[\s\S]*?nicht absehbar – Tempo gegen das Ziel/)
+    assert.match(n, /data-prognose-tempo="nicht_absehbar"[^>]*>[\s\S]*?nicht absehbar – Tempo gegen das Ziel/)
     assert.match(reiter([Z({})]), /data-kommt="G-650"/, 'ohne Kette bleibt „kommt (G-650)"')
     // G-653: ohne Plandatum nennt die Kette den Grund
     const o = reiter([Z({})], ZW({}), [PH], { ...AUSBLICK, prognose: { ...AUSBLICK.prognose, plan_datum: null, plan_status: 'nicht_im_plan' } })
-    assert.match(o, /data-prognose-plan="true">[\s\S]*?Plan endet vor dem Ziel/)
+    assert.match(o, /data-prognose-plan="true"[^>]*>[\s\S]*?Plan endet vor dem Ziel/)
     for (const k of ['kein_aktiver_plan', 'nicht_im_plan', 'nicht_absehbar']) assert.ok(PLAN_STATUS[k], `plan_status ${k} ohne Satz`)
   })
   it('jeder Grund der Kette hat einen Satz', () => {
@@ -230,9 +258,8 @@ describe('G-648 — Reste weg, Restbefunde', () => {
     assert.equal(phaseAnzeige('lean_bulk', null, []), 'Lean bulk')
     assert.ok(!/lean_bulk|_/.test(phaseAnzeige('reverse_diet', 'unbekannt', [])))
     const a = ohneKommentar(lies('app/v2/goals/ansicht.tsx'))
-    // Tom 16.10.: keine Phasen-Pille im Kopf mehr; der Name steht in Steuerung und Beenden
+    // Tom 16.10.: keine Phasen-Pille im Kopf mehr; die Beenden-Kachel ist weg (G-649: Beenden im Bearbeiten)
     assert.ok(!/phase_type \?\? ''\)\.replace\(\/_\/g/.test(a), 'der Kopf zeigt wieder den Code')
-    assert.match(a, /<PhaseBeenden phase=\{laufendePhase\} stichtag=\{echt\.stichtag\}\s*name=\{phaseAnzeige\(/)
     const s = ohneKommentar(lies('app/v2/goals/phase-setzen.tsx'))
     assert.ok(!/sub="aus phase_transition_recommendation"/.test(s), 'Funktionsname im Untertitel')
     assert.match(s, /läuft seit \$\{phase\.gueltig_ab\.split\('-'\)\.reverse\(\)\.join\('\.'\)\}/)

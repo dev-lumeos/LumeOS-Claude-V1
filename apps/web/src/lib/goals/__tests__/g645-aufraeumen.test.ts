@@ -54,25 +54,24 @@ const PLAN: Plan = {
 }
 const seite = (grad: string) => renderToStaticMarkup(React.createElement(PlanSeite, {
   plaene: [PLAN], strategien: [], grad, ziele: [], stichtag: '2026-10-10', startKg: null, onZuGoals: () => {},
-  werkzeuge: React.createElement('div', { 'data-probe-werkzeug': '' }),
+  vomTermin: React.createElement('div', { 'data-probe-werkzeug': '' }),
 }))
 
 describe('G-645/3 — die alten Phasen-Bauteile sind im Planer', () => {
   it('der Planer zeigt die Woche der laufenden Phase', () => {
     assert.match(seite('pro'), /<span data-plan-woche="true">Woche 1 von 15<\/span>/)
   })
-  it('die Einschuebe stehen IN der Planer-Seite — und unter Pro nicht', () => {
-    const h = seite('pro')
-    assert.ok(h.indexOf('data-probe-werkzeug') > h.indexOf('data-plan-seite'), 'der Einschub steht nicht im Planer')
-    assert.ok(!seite('advanced').includes('data-probe-werkzeug'), 'unter Pro erscheinen die Werkzeuge trotz Sperre')
+  it('unter Pro erscheint kein Einschub (Sperre)', () => {
+    assert.ok(!seite('advanced').includes('data-probe-werkzeug'), 'unter Pro erscheinen die Einschuebe trotz Sperre')
   })
-  it('im Reiter steht kein altes Bauteil mehr neben dem Planer', () => {
+  it('G-649 (Tom 16.10.): die alten Bauteile unter dem aktiven Plan fallen weg', () => {
     const a = sichtbar('ansicht.tsx')
-    const i = a.indexOf('<PlanSeite'), j = a.indexOf('</>} />', i)
-    assert.ok(i > 0 && j > i, 'PlanSeite mit Einschub nicht gefunden')
-    const rest = a.slice(0, i) + a.slice(j)
-    for (const b of ['PhaseEcht', 'PhaseBeenden', 'PhaseVorschlag', 'PhasenZeitachse', 'Planer', 'PhasenZustand'])
-      assert.ok(!new RegExp(`<${b}\\b`).test(rest), `<${b}> steht ausserhalb des Planers`)
+    for (const b of ['PhaseEcht', 'PhaseBeenden', 'PhaseVorschlag', 'PhasenZeitachse', 'PhasenZustand'])
+      assert.ok(!new RegExp(`<${b}\\b`).test(a), `<${b}> steht wieder im Reiter`)
+    assert.ok(!/werkzeuge/.test(sichtbar('plan-seite.tsx')), 'PlanSeite nimmt wieder einen Werkzeug-Einschub')
+    // „vom Termin aus" bleibt als Einschub im Planer — nur solange die Vorlagen fehlen
+    assert.equal((a.match(/<Planer\b/g) ?? []).length, 1)
+    assert.match(a, /<PlanSeite vomTermin=\{<Planer /)
   })
   it('doppelt Gezeigtes ist weg: Kopf, Start/Ende, Strich-Werte, Zustandsanzeige', () => {
     const e = sichtbar('phase-echt.tsx')

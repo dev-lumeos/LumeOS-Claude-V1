@@ -98,7 +98,7 @@ describe('G-618 — gegen die Kette', () => {
     assert.match(bis, /ug\.status = 'active'/, `${mit.at(-1)}: phase_am liefert auch Phasen ruhender Ziele`)
     // und der Kopf zaehlt genau diese Menge
     const a = lies('app/v2/goals/ansicht.tsx')
-    assert.match(a, /const laufendePhasen = echt\.phasen\b/)
+    assert.match(a, /laufendePhasen: echt\.phasen\.length,/)
     // Tom 16.10.: die Phasen-Pille im Kopf entfaellt — die Menge zeigt die Phase engine
     assert.ok(!/data-kopf-phasen/.test(a), 'die Phasen-Pille steht wieder im Kopf')
   })

@@ -197,6 +197,29 @@ describe('G-649 — die Abschnitte des Entwurfs', () => {
     assert.match(seite(), /Abgeschlossene Pläne · 1[\s\S]*?✓ erreicht[\s\S]*?Frühjahrs-Cut[\s\S]*?data-plan-als-vorlage="pf"/)
     assert.ok(!/data-plan-als-vorlage="pf"/.test(seite({ vorlagen: null })))
   })
+  it('Feinschliff 5: Wechselvorschlag der laufenden Phase unter „Als nächstes" (vorher Kachel PhaseVorschlag)', () => {
+    const mit: Plan = { ...AKTIV, positionen: [POS('a1', { goal_phase_id: 'ph', zustand: 'laufend', empfohlen: { next: 'lean_bulk', grund: 'Körperfett steigt' } })] }
+    assert.match(seite({ plaene: [mit] }), /data-als-naechstes="true"[^>]*><span data-plan-empfohlen="true">Empfohlen ab 29\.10\.26: <b>Lean Bulk<\/b>\. Grund: Körperfett steigt\. Übernehmen = Phase im Plan ergänzen \(✎\)\.<\/span>/)
+    assert.ok(!/data-plan-empfohlen/.test(seite()), 'ohne recommended_next steht ein Vorschlag')
+    assert.match(lies('lib/goals/plan-read.ts'), /select\('id, gueltig_ab, projected_end_date, actual_end_date, zielrate_pct_kg_woche, recommended_next, transition_reason'\)/)
+  })
+  it('Feinschliff 7: Abgeschlossene zeigen Start → Stand des Ziels; ohne beide die Wochen', () => {
+    const mit: Plan = { ...FERTIG, ziel: { ...FERTIG.ziel!, start_value: 88.6, current_value: 84 } }
+    assert.match(seite({ plaene: [mit] }), /data-plan-ergebnis="true"[^>]*>12\.06\.26 – 29\.10\.26 · 88,6 → 84,0 kg</)
+    assert.match(seite(), /data-plan-ergebnis="true"[^>]*>12\.06\.26 – 29\.10\.26 · 20 Wochen</)
+    assert.match(lies('lib/goals/plan-read.ts'), /select\('id, title, status, target_value, target_date, start_value, current_value'\)/)
+  })
+  it('Feinschliff 7: Termin-Art und Zeitraum der Phase brechen nicht um', () => {
+    const q = lies('app/v2/goals/plan-seite.tsx')
+    assert.match(q, /data-termin=\{t\.id\} style=\{\{ display: 'grid', gridTemplateColumns: 'minmax\(0,2fr\) minmax\(260px,1\.3fr\) minmax\(150px,1fr\) 36px'/)
+    assert.match(q, /data-position-zeitraum style=\{\{ fontSize: 12, color: 'var\(--fg-muted\)', whiteSpace: 'nowrap' \}\}/)
+  })
+  it('Feinschliff 6: Cardio aus dem Katalog — „1×" nur, wenn cardio_pro_woche belegt ist', () => {
+    const mitCardio = { ...ST, cardio_pro_woche: 1 } as unknown as Strategie
+    const h = renderToStaticMarkup(React.createElement(AppRouterContext.Provider, { value: ROUTER as never }, React.createElement(PlanSeite, {
+      plaene: [AKTIV], vorlagen: VORLAGEN, strategien: [mitCardio], grad: 'pro', ziele: [ZIEL], stichtag: '2026-10-16', startKg: 84.8, onZuGoals: () => {} })))
+    assert.match(h, /data-cardio="true">1×</)
+  })
   it('Vorlagen: LumeOS, Eigene, Vom Coach — ohne Tabelle „kommt (G-644)"', () => {
     const h = seite()
     assert.match(h, /data-vorlagen="3"[\s\S]*?Contest Prep 16 Wochen[\s\S]*?16 Wochen[\s\S]*?Mini-Cut-Block[\s\S]*?Meine Off-Season[\s\S]*?kommt mit dem Coach-Modul/)

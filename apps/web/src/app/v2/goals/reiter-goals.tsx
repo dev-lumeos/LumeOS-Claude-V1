@@ -285,17 +285,20 @@ function Steuerung(p: SteuerProps) {
               <div className="ge-bar" style={{ flex: 1, height: 8 }}><div style={{ width: `${pct ?? 0}%`, background: 'var(--acc-goals)' }} /></div>
               <span className="ge-num" style={{ fontSize: 13, fontWeight: 600, color: 'var(--acc-goals)', width: 44, textAlign: 'right' }}>{pct !== null ? `${zahl(pct)} %` : '—'}</span>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(170px,1fr))', gap: 10 }}>
-              <div data-prognose-plan><div className="ge-eb">nach Plan erreicht</div><div className="ge-num" style={{ fontSize: 15, fontWeight: 600 }}>
-                {ausblick === null ? <Kommt punkt="G-650" /> : ausblick.prognose.plan_datum ? datumDe(ausblick.prognose.plan_datum)
-                  : <span style={{ fontSize: 13, color: 'var(--fg-muted)' }}>{PLAN_STATUS[ausblick.prognose.plan_status ?? ''] ?? '—'}</span>}</div></div>
-              <div data-prognose-tempo={ausblick?.prognose.status ?? ''}><div className="ge-eb">bei deinem Tempo</div><div style={{ fontSize: 13, fontWeight: 600 }}>
+            {/* Flex statt Raster: eine Rasterspalte waechst nicht mit „2.714 kcal · 170 g P" (nowrap) und der
+                Wert lief in die Spalte Phase. Als Flex-Kind ist die Mindestbreite der Text selbst. */}
+            <div data-steuerung-kennzahlen style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+              <div data-prognose-plan style={{ flex: '1 1 170px' }}><div className="ge-eb">nach Plan erreicht</div>
+                {ausblick === null ? <div style={{ fontSize: 13, fontWeight: 600 }}><Kommt punkt="G-650" /></div>
+                  : ausblick.prognose.plan_datum ? <div className="ge-num" style={{ fontSize: 15, fontWeight: 600 }}>{datumDe(ausblick.prognose.plan_datum)}</div>
+                    : <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--fg-muted)', whiteSpace: 'nowrap' }}>{PLAN_STATUS[ausblick.prognose.plan_status ?? ''] ?? '—'}</div>}</div>
+              <div data-prognose-tempo={ausblick?.prognose.status ?? ''} style={{ flex: '1 1 170px' }}><div className="ge-eb">bei deinem Tempo</div><div style={{ fontSize: 13, fontWeight: 600 }}>
                 {ausblick === null ? <Kommt punkt="G-650" /> : ausblick.prognose.status === 'datum' ? <span className="ge-num">{datumDe(ausblick.prognose.datum)}</span>
                   : <span style={{ color: 'var(--fg-muted)' }}>{PROGNOSE_GRUND[ausblick.prognose.grund ?? ''] ?? 'nicht absehbar'}</span>}</div></div>
-              <div data-steuerung-kcal><div className="ge-eb">Tagesziel</div>
+              <div data-steuerung-kcal style={{ flex: '1 1 170px' }}><div className="ge-eb">Tagesziel</div>
                 <div className="ge-num" style={{ fontSize: 15, fontWeight: 600, whiteSpace: 'nowrap' }}>{kcal !== null
                   ? `${zahl(kcal)} kcal${protein !== null ? ` · ${zahl(protein)} g P` : ''}` : '—'}</div></div>
-              <div data-steuerung-woche><div className="ge-eb">Phase</div><div style={{ fontSize: 13, fontWeight: 600 }}>{woche ?? '—'}</div></div>
+              <div data-steuerung-woche style={{ flex: '1 1 170px' }}><div className="ge-eb">Phase</div><div style={{ fontSize: 13, fontWeight: 600, whiteSpace: 'nowrap' }}>{woche ?? '—'}</div></div>
             </div>
             <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }} data-steuerung-module>
               {(['nutrition', 'training', 'recovery', 'supplements'] as const).map(m => <ModulPill key={m} m={m} />)}
@@ -511,7 +514,8 @@ function DieseWoche({ ziele, phasen, offenePhasen, woche, stichtag }: {
       {zeilen.map(z => (
         <div key={z.key} data-woche={z.key} style={{ display: 'grid', gridTemplateColumns: '28px 1fr 110px 80px', gap: 10, alignItems: 'center', padding: '6px 0', borderBottom: '1px solid var(--border)' }}>
           <div className={`ge-mi ${z.ton}`}>{z.ico}</div>
-          <span>{z.t}</span>
+          {/* Entwurf: der Titel steht in einer Zeile — lange Messziel-Titel enden auf „…" (ganz im title) */}
+          <span data-woche-titel title={z.t} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>{z.t}</span>
           <div className="ge-bar">{z.ist !== null && <>
             <div style={{ width: '100%', background: 'var(--border-strong)' }} />
             <div style={{ width: `${z.ist}%`, background: z.gut ? 'var(--pos)' : 'var(--warn)' }} />

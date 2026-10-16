@@ -26,6 +26,8 @@ export interface Planposition {
   zustand: Positionszustand
   /** G-645/2: „Woche x von y" aus der Phase — dieselbe Rechnung wie die Steuerungskarte. */
   woche: string | null
+  /** G-649: Wechselvorschlag der Phase (`goal_phases.recommended_next`) — steht unter „Als nächstes". */
+  empfohlen?: { next: string; grund: string | null } | null
 }
 export interface Plantermin { id: string; name: string; kind: Terminart; event_date: string }
 export interface Plan {
@@ -33,7 +35,7 @@ export interface Plan {
   goal_id: string
   name: string
   status: Planstatus
-  ziel: { title: string; status: string | null; target_value: number | null; target_date: string | null } | null
+  ziel: { title: string; status: string | null; target_value: number | null; target_date: string | null; start_value?: number | null; current_value?: number | null } | null
   positionen: Planposition[]
   termine: Plantermin[]
 }
@@ -75,25 +77,25 @@ export async function ladePlaene(userId: string, stichtag: string, laufendePhase
   const [pos, ter, ziele] = await Promise.all([
     db.from('goal_program_positions').select('*').in('program_id', ids).order('position', { ascending: true }),
     db.from('goal_program_events').select('id, program_id, name, kind, event_date').in('program_id', ids).order('event_date', { ascending: true }),
-    db.from('user_goals').select('id, title, status, target_value, target_date').in('id', zielIds),
+    db.from('user_goals').select('id, title, status, target_value, target_date, start_value, current_value').in('id', zielIds),
   ])
   for (const r of [pos, ter, ziele]) if (r.error) throw new Error(`Plan lesen: ${r.error.message}`)
   const phasenIds = ((pos.data ?? []) as Array<Record<string, unknown>>).map(p => text(p.goal_phase_id)).filter((x): x is string => !!x)
   const phasen = phasenIds.length
-    ? await db.from('goal_phases').select('id, gueltig_ab, projected_end_date, actual_end_date, zielrate_pct_kg_woche').in('id', phasenIds)
+    ? await db.from('goal_phases').select('id, gueltig_ab, projected_end_date, actual_end_date, zielrate_pct_kg_woche, recommended_next, transition_reason').in('id', phasenIds)
     : { data: [], error: null }
   if (phasen.error) throw new Error(`goal_phases: ${phasen.error.message}`)
   // `[read]` **Die Rate einer gestarteten Position steht in ihrer Phase** — Positionen
   // aus dem Backfill (G-625) tragen sie nicht; ohne diesen Rueckgriff stuende der
   // Katalogwert (z. B. -0,75) statt der gespeicherten Rate (-0,4) da.
-  const ende = new Map(((phasen.data ?? []) as Array<Record<string, unknown>>).map(p => [String(p.id), { gueltig_ab: text(p.gueltig_ab), projected_end_date: text(p.projected_end_date), actual_end_date: text(p.actual_end_date), zielrate: zahl(p.zielrate_pct_kg_woche) }]))
+  const ende = new Map(((phasen.data ?? []) as Array<Record<string, unknown>>).map(p => [String(p.id), { gueltig_ab: text(p.gueltig_ab), projected_end_date: text(p.projected_end_date), actual_end_date: text(p.actual_end_date), zielrate: zahl(p.zielrate_pct_kg_woche), next: text(p.recommended_next), grund: text(p.transition_reason) }]))
   const laufend = new Set(laufendePhasen)
 
   return (plaene ?? []).map(p => {
     const z = ((ziele.data ?? []) as Array<Record<string, unknown>>).find(g => g.id === p.goal_id)
     return {
       id: p.id as string, goal_id: p.goal_id as string, name: String(p.name), status: p.status as Planstatus,
-      ziel: z ? { title: String(z.title), status: text(z.status), target_value: zahl(z.target_value), target_date: text(z.target_date) } : null,
+      ziel: z ? { title: String(z.title), status: text(z.status), target_value: zahl(z.target_value), target_date: text(z.target_date), start_value: zahl(z.start_value), current_value: zahl(z.current_value) } : null,
       positionen: ((pos.data ?? []) as Array<Record<string, unknown>>).filter(x => x.program_id === p.id).map(x => {
         const phaseId = text(x.goal_phase_id)
         return {
@@ -105,6 +107,7 @@ export async function ladePlaene(userId: string, stichtag: string, laufendePhase
           confirmed_warnings: Array.isArray(x.confirmed_warnings) ? (x.confirmed_warnings as unknown[]).map(String) : [],
           zustand: positionszustand({ goal_phase_id: phaseId, gueltig_ab: text(x.gueltig_ab) }, phaseId ? ende.get(phaseId) ?? null : null, laufend, stichtag),
           woche: phaseId && ende.get(phaseId) ? wocheText(phasenLauf(ende.get(phaseId)!, stichtag)) : null,
+          empfohlen: phaseId && ende.get(phaseId)?.next ? { next: ende.get(phaseId)!.next!, grund: ende.get(phaseId)!.grund } : null,
         }
       }),
       termine: ((ter.data ?? []) as Array<Record<string, unknown>>).filter(t => t.program_id === p.id)

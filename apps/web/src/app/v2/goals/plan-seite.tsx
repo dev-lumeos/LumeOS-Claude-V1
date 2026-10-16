@@ -20,6 +20,7 @@ import * as React from 'react'
 
 import { Befunde } from './befunde'
 import { zielPruefenAktion } from './ziel-aktionen'
+import { phaseBeendenAktion } from './phase-aktionen'
 import {
   planAktivierenAktion, planAlsVorlageAktion, planAnlegenAktion, planAnlegenAusAktion, planBeendenAktion, planLoeschenAktion,
   planPausierenAktion, planUmbenennenAktion, positionAendernAbAktion, positionLoeschenAktion, positionSpeichernAktion,
@@ -147,6 +148,7 @@ function Achse({ plan, stichtag, strategien }: { plan: Plan; stichtag: string; s
   )
 }
 
+const kg1 = (n: number) => n.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 const vzKg = (n: number | null) => (n === null ? '—' : `${n > 0 ? '+' : n < 0 ? '−' : '±'}${Math.abs(n).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`)
 
 function Details({ plan, strategien, alsNaechstes, ausblick }: { plan: Plan; strategien: Strategie[]; alsNaechstes: React.ReactNode; ausblick: Ausblick | null }) {
@@ -315,7 +317,8 @@ function Terminzeile({ t }: { t: Plan['termine'][number] & { plan_id: string } }
   const sichern = async (n: string, kind: string, datum: string) => setR(await terminSpeichernAktion(t.plan_id, t.id, n, kind, datum))
   return (
     <>
-      <div data-termin={t.id} style={{ display: 'grid', gridTemplateColumns: 'minmax(0,2fr) minmax(0,1.3fr) minmax(0,1fr) 36px', gap: 8, alignItems: 'center' }}>
+      {/* die Art braucht ihren ganzen Text („Wettkampf A · Hauptwettkampf") — sonst schneidet die Auswahl ab */}
+      <div data-termin={t.id} style={{ display: 'grid', gridTemplateColumns: 'minmax(0,2fr) minmax(260px,1.3fr) minmax(150px,1fr) 36px', gap: 8, alignItems: 'center' }}>
         <input className="ge-inp" aria-label="Name des Termins" value={name} onChange={e => setName(e.target.value)}
                onBlur={() => { if (name.trim() && name !== t.name) void sichern(name.trim(), t.kind, t.event_date) }} />
         <select className="ge-inp" aria-label="Art" data-termin-feld="art" value={t.kind} onChange={e => { void sichern(t.name, e.target.value, t.event_date) }}>
@@ -330,6 +333,31 @@ function Terminzeile({ t }: { t: Plan['termine'][number] & { plan_id: string } }
   )
 }
 
+/** G-649 (aus `PhaseBeenden`, G-645): die laufende Phase mit Grund beenden — `goal_phase_end` weist einen leeren Grund ab. */
+function PhaseBeendenFormular({ phaseId, stichtag, ab, onFertig, melde }: {
+  phaseId: string; stichtag: string; ab: string | null; onFertig: () => void; melde: (s: string) => void
+}) {
+  const [grund, setGrund] = React.useState('')
+  const [ende, setEnde] = React.useState(stichtag)
+  const [fehler, setFehler] = React.useState('')
+  const [laeuft, setLaeuft] = React.useState(false)
+  return (
+    <div data-phase-beenden-formular style={{ display: 'grid', gridTemplateColumns: 'minmax(0,2fr) minmax(0,1fr) auto auto', gap: 8, alignItems: 'center' }}>
+      <input className="ge-inp" aria-label="Grund" data-phasenfeld="grund" placeholder="Grund, z. B. Zielgewicht erreicht" value={grund} onChange={e => setGrund(e.target.value)} />
+      <input type="date" className="ge-inp ge-num" aria-label="Endet am" data-phasenfeld="endedatum" value={ende} min={ab ?? undefined} onChange={e => setEnde(e.target.value)} />
+      <button type="button" className="ge-btn ge-btn-p" data-phase-beenden disabled={laeuft || !grund.trim()}
+              onClick={async () => {
+                setLaeuft(true); setFehler('')
+                const r = await phaseBeendenAktion(phaseId, grund.trim(), ende)
+                setLaeuft(false)
+                if (r.ok) { melde('Phase beendet.'); onFertig() } else setFehler(r.text)
+              }}>Phase beenden</button>
+      <button type="button" className="ge-btn" onClick={onFertig}>Abbrechen</button>
+      {fehler && <span style={{ gridColumn: '1 / -1', fontSize: 11.5, color: 'var(--neg)' }}>{fehler}</span>}
+    </div>
+  )
+}
+
 function Bearbeiten({ plan, strategien, startKg, stichtag, vorlagenLive, onFertig, melde }: {
   plan: Plan; strategien: Strategie[]; startKg: number | null; stichtag: string; vorlagenLive: boolean
   onFertig: () => void; melde: (s: string) => void
@@ -337,6 +365,7 @@ function Bearbeiten({ plan, strategien, startKg, stichtag, vorlagenLive, onFerti
   const [name, setName] = React.useState(plan.name)
   const [formular, setFormular] = React.useState<{ art: 'neu' | 'aendern'; position?: Planposition } | null>(null)
   const [frage, setFrage] = React.useState(false)
+  const [beenden, setBeenden] = React.useState(false)
   const [r, setR] = React.useState<Planergebnis | null>(null)
   const geplant = plan.positionen.filter(p => p.zustand === 'geplant')
   const aus = (x: Planergebnis, satz: string, schliessen = true) => { setR(x); if (x.ok) { melde(satz); if (schliessen) onFertig() } }
@@ -365,11 +394,12 @@ function Bearbeiten({ plan, strategien, startKg, stichtag, vorlagenLive, onFerti
         <span className="ge-lbl" style={{ margin: 0 }}>Phasen</span>
         {plan.positionen.map(p => (
           <div key={p.id} data-bearbeiten-position={p.zustand} style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '8px 10px', display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,2fr) auto minmax(0,1.5fr) auto', gap: 8, alignItems: 'center' }}>
-              <b style={{ fontSize: 13 }}>{phasenname(p, strategien)}</b>
+            {/* Flex mit Umbruch: an der laufenden Phase stehen zwei Knoepfe — im Raster brach dort das Datum um */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
+              <b style={{ fontSize: 13, flex: '1 1 140px' }}>{phasenname(p, strategien)}</b>
               <span className="ge-num" style={{ minWidth: 56, textAlign: 'center' }}>{p.duration_weeks ? `${p.duration_weeks} Wo` : 'offen'}</span>
-              <span className="ge-num" style={{ fontSize: 12, color: 'var(--fg-muted)' }}>{dstr(p.gueltig_ab)} – {dstr(p.projected_end_date)} · {STATUS_ZEILE[p.zustand]}</span>
-              <span style={{ display: 'inline-flex', gap: 2 }}>
+              <span className="ge-num" data-position-zeitraum style={{ fontSize: 12, color: 'var(--fg-muted)', whiteSpace: 'nowrap' }}>{dstr(p.gueltig_ab)} – {dstr(p.projected_end_date)} · {STATUS_ZEILE[p.zustand]}</span>
+              <span style={{ display: 'inline-flex', gap: 2, marginLeft: 'auto' }}>
                 {p.zustand === 'geplant' && <>
                   <button type="button" className="ge-btn ge-btn-g ge-ico" data-position-hoch={p.id} aria-label="früher"
                           disabled={p.position <= Math.min(...geplant.map(x => x.position))}
@@ -382,11 +412,15 @@ function Bearbeiten({ plan, strategien, startKg, stichtag, vorlagenLive, onFerti
                               onClick={async () => setR(await positionLoeschenAktion(p.id))}>✕</button>
                     : <Kommt was="Entfernen" punkt="G-644" />}
                 </>}
-                {p.zustand === 'laufend' && plan.status === 'aktiv' && (
+                {p.zustand === 'laufend' && plan.status === 'aktiv' && <>
                   <button type="button" className="ge-btn" data-position-aendern={p.id} onClick={() => setFormular({ art: 'aendern', position: p })}>ab Stichtag ändern</button>
-                )}
+                  {p.goal_phase_id && <button type="button" className="ge-btn" data-phase-beenden-oeffnen={p.id} onClick={() => setBeenden(b => !b)}>Phase beenden</button>}
+                </>}
               </span>
             </div>
+            {beenden && p.zustand === 'laufend' && p.goal_phase_id && (
+              <PhaseBeendenFormular phaseId={p.goal_phase_id} stichtag={stichtag} ab={p.gueltig_ab} onFertig={() => setBeenden(false)} melde={melde} />
+            )}
             <Werte p={p} strategien={strategien} />
           </div>
         ))}
@@ -600,7 +634,9 @@ function FertigerPlan({ plan, strategien, vorlagenLive, melde }: { plan: Plan; s
         <span className={`ge-chip${erreicht ? ' ge-lage-voraus' : ' ge-grau'}`}>{erreicht ? '✓ erreicht' : 'beendet'}</span>
       </div>
       <div style={{ fontWeight: 600 }}>{plan.name}</div>
-      <div className="ge-num" style={{ fontSize: 11.5, color: 'var(--fg-subtle)' }}>{dstr(beginn(plan))} – {dstr(ende(plan))} · {wochen(plan)} Wochen</div>
+      {/* Entwurf: „06.01.–25.03.2026 · 88,6 → 84,0 kg" — Start und Stand des Ziels (`user_goals`), ohne beide die Wochen */}
+      <div className="ge-num" data-plan-ergebnis style={{ fontSize: 11.5, color: 'var(--fg-subtle)' }}>{dstr(beginn(plan))} – {dstr(ende(plan))} · {plan.ziel?.start_value != null && plan.ziel.current_value != null
+        ? `${kg1(plan.ziel.start_value)} → ${kg1(plan.ziel.current_value)} kg` : `${wochen(plan)} Wochen`}</div>
       <div style={{ opacity: 0.7 }}><Segmente plan={plan} hoehe={8} /></div>
       {offen && <div data-plan-details={plan.id} style={{ fontSize: 12.5, background: 'var(--surface)', borderRadius: 8, padding: '8px 10px' }}>
         {plan.positionen.map(p => `${phasenname(p, strategien)} ${p.duration_weeks ?? '–'} Wo`).join(' · ')}{plan.ziel ? ` · Ziel „${plan.ziel.title}“` : ''}</div>}
@@ -640,13 +676,13 @@ function Vorlagen({ vorlagen }: { vorlagen: Vorlage[] | null }) {
   )
 }
 
-export function PlanSeite({ plaene, neu: neuVonAussen, onNeu, vorlagen = null, ausblick = null, strategien, grad, ziele, stichtag, startKg, onZuGoals, vomTermin, werkzeuge }: {
+export function PlanSeite({ plaene, neu: neuVonAussen, onNeu, vorlagen = null, ausblick = null, strategien, grad, ziele, stichtag, startKg, onZuGoals, vomTermin }: {
   /** Tom 16.10.: „+ Neuer Plan" steht im Kopf der Seite — dann steuert der Kopf den Dialog. */
   neu?: boolean; onNeu?: (offen: boolean) => void
   plaene: Plan[]; vorlagen?: Vorlage[] | null; ausblick?: Ausblick | null; strategien: Strategie[]; grad: string | null; ziele: ZielFortschritt[]
   stichtag: string; startKg: number | null; onZuGoals: () => void
-  /** G-645/3: was die alten Bauteile konnten und der Planer nicht — als Einschub, nicht daneben. */
-  vomTermin?: React.ReactNode; werkzeuge?: React.ReactNode
+  /** G-645/3: „vom Termin aus" als Einschub, solange `goal_plan_templates` fehlt. */
+  vomTermin?: React.ReactNode
 }) {
   const [bearbeitet, setBearbeitet] = React.useState<string | null>(null)
   const [neuIntern, setNeuIntern] = React.useState(false)
@@ -715,7 +751,10 @@ export function PlanSeite({ plaene, neu: neuVonAussen, onNeu, vorlagen = null, a
           </div>
           <Achse plan={aktiv} stichtag={stichtag} strategien={strategien} />
           {details && <Details plan={aktiv} strategien={strategien} ausblick={ausblick} alsNaechstes={
-            naechste ? <>Nächste Phase laut Plan: <b>{phasenname(naechste, strategien)}</b> ab {dstr(naechste.gueltig_ab)}.</>
+            // G-649: der Wechselvorschlag der laufenden Phase (vorher die Kachel `PhaseVorschlag`)
+            laufend?.empfohlen ? <span data-plan-empfohlen>Empfohlen{laufend.projected_end_date ? ` ab ${dstr(laufend.projected_end_date)}` : ''}: <b>{phasenname({ strategie_code: laufend.empfohlen.next, phase_type: laufend.empfohlen.next, sub_phase_code: null, eigene_werte: null }, strategien)}</b>.
+              {laufend.empfohlen.grund && <> Grund: {laufend.empfohlen.grund}.</>} Übernehmen = Phase im Plan ergänzen (✎).</span>
+            : naechste ? <>Nächste Phase laut Plan: <b>{phasenname(naechste, strategien)}</b> ab {dstr(naechste.gueltig_ab)}.</>
               : danach.length ? <span data-plan-danach>Danach empfohlen: {danach.join(' · ')}. Übernehmen = Phase im Plan ergänzen (✎).</span>
                 : <>Keine weitere Phase geplant.</>} />}
         </section>
@@ -727,7 +766,6 @@ export function PlanSeite({ plaene, neu: neuVonAussen, onNeu, vorlagen = null, a
       )}
       {/* Tom 16.10.: „Bearbeiten" steht unter dem jeweiligen Plan */}
       {aktiv && imBearbeiten?.id === aktiv.id && bearbeiten(aktiv)}
-      {werkzeuge}
       <section aria-label="Weitere Pläne" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <span className="ge-eb">Weitere Pläne · Entwürfe und pausierte · immer nur einer aktiv</span>
         {weitere.length === 0 ? <span style={{ fontSize: 12, color: 'var(--fg-subtle)' }}>Keine weiteren Pläne.</span> : (
