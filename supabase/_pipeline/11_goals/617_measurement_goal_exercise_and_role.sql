@@ -45,7 +45,8 @@ BEGIN
     AND goal_role = 'measurement'
     AND goal_type = 'performance'
     AND subtype = 'strength'
-    AND title IN ('Bankdruecken stabilisieren', '120 kg Bankdruecken bis Juli');
+    AND title IN ('Bankdrücken stabilisieren', '120 kg Bankdrücken bis Juli',
+      'Bankdruecken stabilisieren', '120 kg Bankdruecken bis Juli');
 END;
 $g617_backfill$;
 
