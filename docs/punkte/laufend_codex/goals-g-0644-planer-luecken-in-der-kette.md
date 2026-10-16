@@ -4,6 +4,8 @@ typ: aufgabe
 modul: goals
 schwere: hoch
 angelegt: 2026-10-10
+agent: codex
+beauftragt: 2026-10-16
 
 braucht: []
 kind_von: G-629
@@ -53,3 +55,32 @@ Ausgangspunkte laut Entwurf (Zeile 362):
 - Vom Coach (kommt)
 
 Gibt der Katalog weitere sinnvolle Vorlagen her, kommen sie dazu (Tom).
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - G-650 Korrektur + G-644 Teil 1: Neuer Plan nach Entwurf
+    Bereich: supabase/_pipeline/ (Kette). Live erst nach Freigabe.
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-16, HEAD d8c2e924
+
+## Teil 1 committet - 2026-10-16, Commit `107da592` (nicht live)
+
+`[read]` Fünf Dateien unter 11_goals/644_* und 650_plan_position_outlook.sql, dazu 2 Proben.
+- `goal_programs_one_per_goal` entfällt. Es bleibt genau ein aktiver Plan je Nutzer.
+- `goal_plan_create(uuid,text,text,date)` kommt neu dazu, ohne Vorgabewerte. Der Aufruf mit zwei Argumenten bleibt, die App läuft also weiter.
+- Die Vorlagen `goal_plan_templates` entsprechen dem Entwurf (PhaseEngine.dc.html Z. 362/364):
+  - Contest Prep 16 W: early 6, mid 7, late 2, Peak Week 1, Anker A
+  - Expert BB Jahreszyklus: 8/20/4/12/8
+  - Mini-Cut 4
+  - Leerer Plan: Halten 4
+- `early`, `mid` und `late` sind vorhandene Unterphasen von contest_prep. Codex hat keinen Katalogcode erfunden.
+`[read]` Codex schlägt diese weiteren Vorlagen vor (Entscheidung offen):
+- Lean Bulk → Mini Cut → Halten
+- Conservative Cut → Reverse Diet → Halten
+- Body Recomp → Halten
+`[read]` Codex: G-644-Proben 15/15, Sabotage rot. Kette 409 grün, Turbo 21/21.
+Offen:
+- Live zusammen mit G-650 (Tom hat freigegeben, 16.10.)
+- App-Anschluss in G-649 (Claude Code)
+- Wachen, Wochenanpassung (G-627), Coach-Freigabe
+

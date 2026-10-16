@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 283 |
-| `laufend_codex` | 1 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 700 |
-| **gesamt** | **987** |
+| **gesamt** | **988** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 120
+## goals — 121
 
-### beauftragbar — 114
+### beauftragbar — 115
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -680,7 +680,7 @@
 | `G-614` | fehler | hoch | [Der Strategiekatalog kennt seine Karte und seinen Mindestgrad](erledigt/goals-g-0614-der-strategiekatalog-kennt-karte-und-mindestgrad.md) | erledigt | — | G-616 |
 | `G-615` | fehler | hoch | [Der Planer legt Plaene vom Termin rueckwaerts an](erledigt/goals-g-0615-der-planer-legt-plaene-vom-termin-rueckwaerts-an.md) | erledigt | — | G-623, G-624, G-629 |
 | `G-616` | fehler | mittel | [Der G-536-Test ist rot und steht nicht in der Kette](todos/goals-g-0616-der-g536-test-ist-rot-und-steht-nicht-in-der-kette.md) | offen | — | — |
-| `G-617` | fehler | hoch | [Ein Kraftziel findet seine Uebung nur ueber den Titel](erledigt/goals-g-0617-ein-kraftziel-findet-seine-uebung-nur-ueber-den-titel.md) | erledigt | — | G-618, G-620, G-621, G-625 |
+| `G-617` | fehler | hoch | [Ein Kraftziel findet seine Uebung nur ueber den Titel](erledigt/goals-g-0617-ein-kraftziel-findet-seine-uebung-nur-ueber-den-titel.md) | erledigt | — | G-618, G-620, G-621, G-625, G-651 |
 | `G-618` | aufgabe | mittel | [Der Reiter Goals trennt das steuernde Ziel von den messenden](erledigt/goals-g-0618-der-reiter-goals-trennt-steuerndes-und-messende-ziele.md) | erledigt | — | G-639, G-648, G-649, G-650 |
 | `G-619` | fehler | niedrig | [Das Tempo im Anlegemodal kennt nur Prozent Koerpergewicht](todos/goals-g-0619-das-tempo-im-anlegemodal-kennt-nur-prozent.md) | offen | — | — |
 | `G-620` | fehler | niedrig | [Zeit- und Pace-Ziele messen in die falsche Richtung](todos/goals-g-0620-zeit-und-pace-ziele-messen-in-die-falsche-richtung.md) | offen | — | — |
@@ -705,13 +705,14 @@
 | `G-640` | aufgabe | hoch | [Die App liest den wirksamen Zielzustand](erledigt/goals-g-0640-app-liest-den-wirksamen-zielzustand.md) | erledigt | — | G-643 |
 | `G-642` | fehler | niedrig | [Ältere Goals-Schritte schreiben Nutzertexte ohne Umlaute](erledigt/goals-g-0642-aeltere-goals-schritte-ohne-umlaute.md) | erledigt | — | G-647 |
 | `G-643` | aufgabe | mittel | [Lage "voraus / im Plan / hinterher" für einmalige Messziele](todos/goals-g-0643-lage-fuer-einmalige-messziele.md) | offen | — | — |
-| `G-644` | aufgabe | hoch | [Planer: Lücken in der Kette](todos/goals-g-0644-planer-luecken-in-der-kette.md) | offen | — | — |
+| `G-644` | aufgabe | hoch | [Planer: Lücken in der Kette](laufend_codex/goals-g-0644-planer-luecken-in-der-kette.md) | laeuft (codex) | — | — |
 | `G-645` | fehler | mittel | [Goals und Phase Engine: Befunde am Schirm (dev, 10.10.)](todos/goals-g-0645-goals-reiter-befunde-am-schirm.md) | offen | — | — |
 | `G-646` | aufgabe | mittel | [Trendgewicht einbinden](todos/goals-g-0646-trendgewicht-einbinden.md) | offen | — | — |
 | `G-647` | fehler | niedrig | [Der Satz aus 622 steht noch ohne Umlaute](todos/goals-g-0647-622-satz-mit-umlauten.md) | offen | — | — |
 | `G-648` | fehler | hoch | [Reiter Goals weicht vom freigegebenen Entwurf ab](laufend_claudecode/goals-g-0648-reiter-goals-weicht-vom-entwurf-ab.md) | laeuft (claudecode) | — | — |
 | `G-649` | fehler | hoch | [Phase Engine weicht vom freigegebenen Entwurf ab](laufend_claudecode/goals-g-0649-phase-engine-weicht-vom-entwurf-ab.md) | laeuft (claudecode) | — | — |
 | `G-650` | aufgabe | hoch | [Leser für Verlauf, Prognose und Wochenwerte des steuernden Ziels](laufend_codex/goals-g-0650-leser-fuer-verlauf-prognose-wochen.md) | laeuft (codex) | — | — |
+| `G-651` | befund | mittel | [Probe hängt am Datum: Tageskettenlauf 16.10. rot](todos/goals-g-0651-g617-probe-haengt-am-datum.md) | offen | — | — |
 
 ### wartet auf Blocker — 6
 
