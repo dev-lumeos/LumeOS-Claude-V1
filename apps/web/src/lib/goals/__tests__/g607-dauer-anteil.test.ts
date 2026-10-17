@@ -107,11 +107,10 @@ describe('G-607 — vom Katalog zum Plan', () => {
   })
 })
 
-describe('G-607 — alle drei Leser rechnen aus dem Anteil', () => {
+describe('G-607 — die Leser rechnen aus dem Anteil', () => {
+  // G-656: Editor (phasen-editor-echt.tsx) und Zeitachse (phasen-zeitachse.tsx) sind
+  // geloescht; die Stufenwochen des Plans rechnet seit G-644 die Kette (goal_plan_create).
   for (const [datei, aufruf] of [
-    // G-608: ueber `stufenplan` — Programm vor Vorschlag, der Vorschlag aus dem Anteil.
-    ['phasen-editor-echt.tsx', /stufenplan\(strategie\.sub_phases, gesamt, zahlen\)/],
-    ['phasen-zeitachse.tsx', /stufenplan\(z\.strategie\.sub_phases, gesamtdauer\(/],
     ['strategie-vorschau.tsx', /stufenwochen\(s\.max_duration_weeks/],
   ] as const) {
     it(datei, () => {
@@ -120,11 +119,4 @@ describe('G-607 — alle drei Leser rechnen aus dem Anteil', () => {
       assert.ok(!/\.weeks\b/.test(q), `${datei} liest noch weeks`)
     })
   }
-
-  it('Editor und Zeitachse nehmen dieselbe Gesamtdauer', () => {
-    assert.match(lies(join(GOALS, 'phasen-editor-echt.tsx')),
-      /gesamtdauer\(entwurf\.max_duration_weeks, strategie\.max_duration_weeks\)/)
-    assert.match(lies(join(GOALS, 'phasen-zeitachse.tsx')),
-      /gesamtdauer\(\s*z\.phase\?\.parameters\.max_duration_weeks, z\.strategie\.max_duration_weeks\)/)
-  })
 })

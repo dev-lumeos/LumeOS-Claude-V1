@@ -39,19 +39,22 @@ function ohneKommentare(q: string): string {
     .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
 }
 
-const SETZEN = () => ohneKommentare(lies(join(GOALS, 'phase-setzen.tsx')))
+// G-656: phase-setzen.tsx ist geloescht; Beenden und Vorschlag stehen im Planer (G-649).
+const SETZEN = () => ohneKommentare(lies(join(GOALS, 'plan-seite.tsx')))
 const AKTIONEN = () => ohneKommentare(lies(join(GOALS, 'phase-aktionen.ts')))
 const WRITE = () => ohneKommentare(lies(join(LIB, 'phase-write.ts')))
 const ANSICHT = () => ohneKommentare(lies(join(GOALS, 'ansicht.tsx')))
 
 describe('G-513 — die Phase laesst sich setzen', () => {
   it('die Wurzelmarke stimmt — sonst misst der Rest nichts', () => {
-    assert.ok(SETZEN().length > 1000, 'phase-setzen.tsx nicht gefunden')
+    assert.ok(SETZEN().length > 1000, 'plan-seite.tsx nicht gefunden')
     assert.ok(WRITE().length > 1000, 'phase-write.ts nicht gefunden')
   })
 
   // ── 1 · Die Funktionen werden gerufen ────────────────────────────
-  for (const fn of ['goal_phase_start', 'goal_phase_end', 'phase_transition_respond']) {
+  // G-656: `phase_transition_respond` faellt heraus — Annehmen/Ablehnen hat der
+  // Entwurf nicht (G-649, gemeldet), der Schreibweg ist geloescht.
+  for (const fn of ['goal_phase_start', 'goal_phase_end']) {
     it(`${fn} hat einen Aufrufer`, () => {
       assert.match(WRITE(), new RegExp(`rpc\\(\\s*'${fn}'`),
         `${fn} wird nicht gerufen — der Schreibweg ist wieder tot`)
@@ -64,7 +67,7 @@ describe('G-513 — die Phase laesst sich setzen', () => {
     // (und ins Anlegemodal, G-610) — beide ueber phasenzielAnlegenAktion.
     assert.match(lies(join(GOALS, 'planer.tsx')), /phasenzielAnlegenAktion\(/,
       'der Planer legt nicht an')
-    for (const a of ['phaseBeendenAktion', 'vorschlagBeantwortenAktion']) {
+    for (const a of ['phaseBeendenAktion']) {
       assert.match(s, new RegExp(`\\b${a}\\b`), `${a} wird nicht benutzt`)
     }
   })
@@ -85,8 +88,7 @@ describe('G-513 — die Phase laesst sich setzen', () => {
 
   // ── 2 · Nur die Serveraktion ueberquert die Grenze ───────────────
   it('die Client-Datei importiert den Schreibweg NICHT als Wert', () => {
-    const roh = lies(join(GOALS, 'phase-setzen.tsx'))
-    assert.doesNotMatch(roh, /^import\s+\{[^}]*\}\s+from\s+'[^']*goals\/phase-write'/m,
+    for (const roh of [lies(join(GOALS, 'plan-seite.tsx')), lies(join(GOALS, 'planer.tsx'))]) assert.doesNotMatch(roh, /^import\s+\{[^}]*\}\s+from\s+'[^']*goals\/phase-write'/m,
       'Wertimport aus phase-write — das zieht next/headers ins '
       + 'Browserbuendel (A-30 / G-412)')
   })
@@ -101,7 +103,7 @@ describe('G-513 — die Phase laesst sich setzen', () => {
     // Hier stand: „eine laufende Phase sperrt das Raster" (23505). Das
     // Raster ist weg — begonnen wird mit Ziel (Anlegemodal, Planer).
     const s = SETZEN()
-    assert.ok(!/export function (PhaseBeginnen|PhaseWechseln)/.test(s),
+    assert.ok(s.length > 1000 && !/function (PhaseBeginnen|PhaseWechseln)/.test(s + ANSICHT()),
       'das Raster aus G-513/G-534 ist zurueck')
   })
 
@@ -131,23 +133,19 @@ describe('G-513 — die Phase laesst sich setzen', () => {
     }
   })
 
-  // ── 6 · Die Antwort behauptet keinen Wechsel ─────────────────────
-  it('nach dem Annehmen steht NICHT, dass gewechselt wurde', () => {
-    const s = SETZEN()
-    // `[cmd]` **`phase_transition_respond` schreibt nur die Antwort**
-    // (`422_…sql:53-60`). `[read]` **Ein „gewechselt" waere eine
-    // Falschaussage.**
-    assert.doesNotMatch(s, /gewechselt['"\s]*\}/,
-      'die Kachel behauptet einen Wechsel, den die Funktion nicht tut')
-    assert.match(s, /Gewechselt ist damit/,
-      'der Satz fehlt, der sagt, dass noch nichts gewechselt ist')
+  // ── 6 · (G-656) „nach dem Annehmen kein ‚gewechselt'" ist entfallen:
+  //        es gibt kein Annehmen mehr; der Vorschlag ist eine Anzeige unter
+  //        „Als nächstes", Uebernehmen heisst Phase im Plan ergaenzen.
+  it('der Vorschlag behauptet keinen Wechsel', () => {
+    assert.match(SETZEN(), /Übernehmen = Phase im Plan ergänzen/)
+    assert.doesNotMatch(SETZEN(), /gewechselt/)
   })
 
   // ── 7 · Die Leseseite schreibt nicht ─────────────────────────────
   it('phase_transition_recommendation wird NICHT beim Anzeigen gerufen', () => {
     // `[cmd]` **Die Funktion macht ein `UPDATE`** (`422_…sql:50`) —
     // **eine Leseseite darf nicht schreiben.**
-    for (const [name, q] of [['ansicht', ANSICHT()], ['setzen', SETZEN()],
+    for (const [name, q] of [['ansicht', ANSICHT()], ['plan-seite', SETZEN()], ['plan-read', lies(join(LIB, 'plan-read.ts'))],
       ['write', WRITE()], ['aktionen', AKTIONEN()]] as const) {
       assert.doesNotMatch(q, /rpc\(\s*'phase_transition_recommendation'/,
         `${name} ruft die Empfehlungsfunktion — sie SCHREIBT`)
@@ -156,11 +154,9 @@ describe('G-513 — die Phase laesst sich setzen', () => {
 
   // ── 8 · Kein Leerfeld ohne Erklaerung ────────────────────────────
   it('ohne Vorschlag steht eine Erklaerung, kein leeres Feld', () => {
-    const s = SETZEN()
-    assert.match(s, /geplante Ende/,
-      'der Leersatz nennt die erste Bedingung nicht')
-    assert.match(s, /zwei Körpermessungen|zwei Koerpermessungen/,
-      'der Leersatz nennt die zweite Bedingung nicht')
+    // G-656: der Vorschlag steht unter „Als nächstes"; ohne Vorschlag, ohne
+    // Folgephase und ohne Empfehlung steht ein Satz — kein leeres Feld.
+    assert.match(SETZEN(), /: <>Keine weitere Phase geplant\.<\/>\} \/>\}/)
   })
 
   // ── 9 · parameters bleibt leer, und das steht da ─────────────────

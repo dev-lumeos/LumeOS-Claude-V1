@@ -19,6 +19,11 @@ export async function planAktivierenAktion(id: string) { return neu(await w.plan
 export async function planPausierenAktion(id: string) { return neu(await w.planPausieren(id)) }
 export async function planBeendenAktion(id: string) { return neu(await w.planBeenden(id)) }
 export async function planLoeschenAktion(id: string) { return neu(await w.planLoeschen(id)) }
+export async function planNeuStartenAktion(id: string, name: string, start: string) { return neu(await w.planNeuStarten(id, name, start)) }
+export async function positionNeuBerechnenAktion(id: string, code: string | null, eigene: Record<string, unknown> | null, wochen: number) {
+  return neu(await w.positionNeuBerechnen(id, code, eigene, wochen))
+}
+export async function planFertigLoeschenAktion(id: string) { return neu(await w.planFertigLoeschen(id)) }
 export async function positionSpeichernAktion(planId: string, positionId: string | null, d: Positionsdaten) {
   return neu(await w.positionSpeichern(planId, positionId, d))
 }

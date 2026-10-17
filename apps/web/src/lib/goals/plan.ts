@@ -335,3 +335,22 @@ export function monatsachse(von: string, bis: string) {
   const pos = (tag: string) => Math.max(0, Math.min(100, (Date.parse(`${tag}T00:00:00Z`) - a) / (b - a) * 100))
   return { monate, pos }
 }
+
+// ══ G-649: Segmentfarbe je Programm, wie `PhaseEngine.dc.html` (FARBE) ══
+//
+// `[read]` **Der Entwurf faerbt nach Programm**, nicht nach Zustand; der Zustand steht
+// in Deckkraft (vorbei .55) und Umriss (laufend). Unbenannte Programme nach Richtung.
+const PROGRAMMFARBE: Record<string, string> = {
+  'contest_prep:early': 'oklch(0.80 0.10 60)', 'contest_prep:mid': 'oklch(0.74 0.12 50)', 'contest_prep:late': 'oklch(0.68 0.14 40)',
+  peak_week: 'oklch(0.60 0.16 30)', lean_bulk: 'oklch(0.82 0.09 90)', clean_bulk: 'oklch(0.78 0.10 95)',
+  mini_cut: 'oklch(0.76 0.10 60)', moderate_cut: 'oklch(0.74 0.10 60)',
+  maintain: 'oklch(0.85 0.04 165)', maintenance_diet_break: 'oklch(0.85 0.04 165)', reverse_diet: 'oklch(0.80 0.06 165)',
+}
+const RICHTUNGSFARBE: Record<string, string> = { abnehmen: 'oklch(0.74 0.10 60)', aufbauen: 'oklch(0.82 0.09 90)', halten: 'oklch(0.85 0.04 165)' }
+/** Text auf den hellen Programmfarben — in beiden Modi dunkel, wie im Entwurf. */
+export const PROGRAMM_TEXT = 'oklch(0.25 0.005 270)'
+export function programmFarbe(p: { strategie_code: string | null; sub_phase_code: string | null; eigene_werte: unknown; richtung: string | null }): string {
+  if (p.eigene_werte) return 'oklch(0.80 0.08 300)'
+  const c = p.strategie_code ?? ''
+  return PROGRAMMFARBE[`${c}:${p.sub_phase_code ?? ''}`] ?? PROGRAMMFARBE[c] ?? RICHTUNGSFARBE[p.richtung ?? ''] ?? 'oklch(0.85 0.005 270)'
+}

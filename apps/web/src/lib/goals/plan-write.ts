@@ -56,6 +56,12 @@ export const planAktivieren = (id: string) => rufe('goal_plan_activate', { p_pla
 export const planPausieren = (id: string) => rufe('goal_plan_pause', { p_plan_id: id })
 export const planBeenden = (id: string) => rufe('goal_plan_complete', { p_plan_id: id })
 export const planLoeschen = (id: string) => rufe('goal_plan_delete', { p_plan_id: id })
+/** G-644 Teil 2: abgeschlossenen Plan als neuen Entwurf ab `start`; Loeschen nur bestaetigt. */
+export const planNeuStarten = (id: string, name: string, start: string) => rufe('goal_plan_restart', { p_plan_id: id, p_name: name, p_start_date: start })
+/** G-644 Teil 2: Programm/Dauer einer geplanten Position aendern; die Kette rechnet alle folgenden Daten neu. */
+export const positionNeuBerechnen = (id: string, code: string | null, eigene: Record<string, unknown> | null, wochen: number) =>
+  rufe('goal_plan_position_recalculate', { p_position_id: id, p_strategie_code: code, p_eigene_werte: code ? null : eigene, p_duration_weeks: wochen })
+export const planFertigLoeschen = (id: string) => rufe('goal_plan_delete_completed', { p_plan_id: id, p_confirm: true })
 
 export const positionSpeichern = (planId: string, positionId: string | null, d: Positionsdaten) => rufe('goal_plan_position_save', {
   p_plan_id: planId, p_position_id: positionId, p_position: d.position,

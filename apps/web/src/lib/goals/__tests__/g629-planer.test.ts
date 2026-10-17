@@ -95,9 +95,10 @@ describe('G-629 — gegen die Signaturen', () => {
     assert.match(lies('lib/goals/zielpruefung-read.ts'), /p_eigene_werte: e\.eigeneWerte \?\? null,/)
     assert.match(lies('app/v2/goals/plan-seite.tsx'), /zielPruefenAktion\(\{[\s\S]{0,300}eigeneWerte: d\.eigene_werte,/)
   })
-  it('phasen-zeitachse bewertet nicht selbst (kein berechnePace)', () => {
-    const z = lies('app/v2/goals/phasen-zeitachse.tsx')
-    assert.ok(!/berechnePace|lageVon|PACE_TEXT/.test(z))
+  // G-656: phasen-zeitachse.tsx ist geloescht — die Regel gilt fuer die Plan-Seite.
+  it('die Plan-Seite bewertet nicht selbst (kein berechnePace)', () => {
+    const z = lies('app/v2/goals/plan-seite.tsx')
+    assert.ok(z.length > 1000 && !/berechnePace|lageVon|PACE_TEXT/.test(z))
   })
 })
 
@@ -192,7 +193,11 @@ describe('G-629 — bis in die Anzeige', () => {
     const q = lies('app/v2/goals/plan-seite.tsx')
     assert.match(q, /z\.wert === null \? <i data-keine-vorgabe>keine Vorgabe<\/i>/)
     // G-649: „kommt" nennt den Punkt — Wachen/Neu berechnen/Coach G-644, Wochenwerte G-650, Anpassung G-627
-    for (const [was, punkt] of [['Regeln mit Stand', 'G-644'], ['Speichern und neu berechnen', 'G-644'], ['Freigabe durch den Coach', 'G-644'],
+    // G-644 Teil 2 (live 16.10.): „Speichern und neu berechnen" ruft goal_plan_position_recalculate
+    assert.match(q, /data-plan-neu-berechnen disabled=\{Object\.keys\(aend\)\.length === 0\}/)
+    assert.ok(!q.includes('<Kommt was="Speichern und neu berechnen"'), 'neu berechnen steht wieder als kommt')
+    assert.ok(!q.includes('<Kommt was="Regeln mit Stand"'), 'die Wachen stehen wieder als kommt')
+    for (const [was, punkt] of [['Freigabe durch den Coach', 'G-644'],
       ['Wochenwerte', 'G-650'], ['Anpassung mit Protokoll', 'G-627']])
       assert.match(q, new RegExp(`<Kommt was="${was}" punkt="${punkt}" />`), `kommt-Marke ${was} fehlt`)
   })

@@ -196,50 +196,6 @@ export async function phaseBeenden(
   return data as string
 }
 
-/**
- * Auf einen Wechselvorschlag antworten.
- *
- * `[cmd]` **`phase_transition_respond` SCHREIBT NUR DIE ANTWORT**
- * (`422_…sql:53-60`) — **sie wechselt die Phase nicht.** `[read]`
- * **Auch `accepted` beendet nichts:** die Zeile landet in
- * `phase_transition_responses`, und der Wechsel bleibt zwei
- * getrennte Handgriffe.
- *
- * `[read]` **Deshalb sagt die Oberflaeche nach einem Ja nicht
- * *,,gewechselt"*** — sie fuehrt zum Beenden.
- */
-export async function vorschlagBeantworten(
-  phaseId: string, antwort: 'accepted' | 'rejected', grund?: string,
-): Promise<string> {
-  await sitzung()
-
-  // `[cmd]` **Der CHECK erlaubt genau zwei Werte**
-  // (`phase_transition_responses_response_check`). `[read]` **Die
-  // Typangabe deckt den Compiler, nicht einen Aufruf von aussen.**
-  if (antwort !== 'accepted' && antwort !== 'rejected') {
-    throw new PhaseFehler('VALIDATION_FAILED',
-      'Nur „accepted" oder „rejected".')
-  }
-
-  const { data, error } = await db().rpc('phase_transition_respond', {
-    p_phase_id: phaseId,
-    p_response: antwort,
-    ...(grund?.trim() ? { p_reason: grund.trim() } : {}),
-  })
-
-  if (error) {
-    if (/nicht gefunden/.test(error.message)) {
-      throw new PhaseFehler('NOT_FOUND',
-        'Diese Phase gehoert nicht zu dieser Sitzung.')
-    }
-    if (/Anmeldung erforderlich/.test(error.message)) {
-      throw new PhaseFehler('NO_SESSION', error.message)
-    }
-    throw new PhaseFehler('WRITE_FAILED', error.message)
-  }
-  return data as string
-}
-
 export { PHASENARTEN }
 export type { Phasenstart }
 

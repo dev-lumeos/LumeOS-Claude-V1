@@ -26,12 +26,12 @@ import { useRouter } from 'next/navigation'
 import { KeinZielWarnung } from '../kein-ziel-warnung'
 import { verlaufAktion, zielSpeichern } from './ziel-aktionen'
 import {
-  ABSCHLUSS, KATEGORIE_NAME, KATEGORIE_REIHE, MODUL_NAME,
+  ABSCHLUSS, KATEGORIE_NAME, KATEGORIE_REIHE, LAGE_TEXT, MODUL_NAME,
   engpass, istAbgeschlossen, kalenderwoche, kategorieVon, lageVon,
   modulSchnitt, moduleVon, quelleLesbar, steuerZustand, steuerziel, wertMitEinheit,
   type Modul,
 } from '../../../lib/goals/reiter'
-import { MESSARTEN, type Kategorie } from '../../../lib/goals/messziel'
+import { MESSARTEN, einheitLesbar, type Kategorie } from '../../../lib/goals/messziel'
 import { phasenLauf, wocheText } from '../../../lib/goals/plan'
 import { PHASENARTEN } from '../../../lib/goals/phase-regeln'
 import { GRUND_TEXT, aktionen } from '../../../lib/goals/zustand'
@@ -41,7 +41,7 @@ import type { Koerpermessung, Meilenstein, Phase, ZielFortschritt, Zielphase } f
 import type { Strategie } from '../../../lib/goals/strategie-read'
 import type { Plan } from '../../../lib/goals/plan-read'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
-import type { Ausblick, Verlauf, Wochendaten } from '../../../lib/goals/reiter-read'
+import type { Ausblick, Messwoche, Verlauf, Wochendaten } from '../../../lib/goals/reiter-read'
 
 /** `prognose.plan_status` ohne Datum (G-653) — je Schluessel ein Satz. */
 export const PLAN_STATUS: Record<string, string> = {
@@ -194,6 +194,7 @@ function Steuerung(p: SteuerProps) {
   const trend = p.woche.trend.heute
   // G-648 Rest: Prognose, Tempo, Soll und Wochen aus `controlling_goal_outlook` (G-650)
   const ausblick = p.woche.ausblick ?? null
+  const lage = p.woche.lage?.lage ?? null
   const pausiert = zustand === 'pausiert'
   const eis = zustand === 'eingefroren'
   const grund = p.zielwerte?.eingefroren?.grund ?? z.zustand.grund
@@ -213,8 +214,10 @@ function Steuerung(p: SteuerProps) {
         <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
             {typ}
-            {/* Eine Lage des Steuerziels liefert auch G-650 nicht — keine Pille ohne Quelle (Befund G-648). */}
             {chip && <span className={`ge-chip ${chip.k}`} data-steuerung-chip>{chip.t}</span>}
+            {/* G-654: Lage aus `controlling_goal_lage_at` (Toleranz 10 % des Zielwegs); ohne Lage keine Pille. */}
+            {!chip && lage && <span className={`ge-chip ge-lage-${lage}`} data-steuerung-lage={lage}
+                                    title={p.woche.lage?.abweichung_kg != null ? `${vz(p.woche.lage.abweichung_kg, 1)} kg gegen Plan` : undefined}>{LAGE_TEXT[lage]}</span>}
             <span className="ge-num" style={{ marginLeft: 'auto', fontSize: 10.5, color: 'var(--fg-subtle)' }}>
               {z.target_date ? `Frist ${datumDe(z.target_date)}${rest !== null ? ` · ${rest >= 0 ? `noch ${rest} Tage` : `${-rest} Tage vorbei`}` : ''}` : 'ohne Frist'}
             </span>
@@ -489,11 +492,20 @@ function DieseWoche({ ziele, phasen, offenePhasen, woche, stichtag }: {
   const quote = (ist: number | null, ziel: number | null) => (ist !== null && ziel ? Math.max(0, Math.min(100, (ist / ziel) * 100)) : null)
   // ganze Prozent: 84,86 − 84,7 ist in Gleitkomma 0,1599… — ohne Runden hiesse genau erreicht 99,99 %, also verfehlt
   const gewichtQuote = delta !== null && soll ? Math.max(0, Math.min(100, Math.round((delta / soll) * 100))) : null
+  // G-654: Bewegung der Woche je Messziel (`measurement_goal_week_at`); ohne Soll kein Balken, keine Wertung.
+  const messZeile = (g: ZielFortschritt, key: string, t: string, ico: React.ReactNode, ton: string): Z => {
+    const w = woche.messwochen?.[g.goal_id] ?? null
+    const d = w?.delta_woche ?? null, s = w?.soll_delta_woche ?? null
+    const q = d !== null && s ? Math.max(0, Math.min(100, Math.round((d / s) * 100))) : null
+    const e = einheitLesbar(g.target_unit)
+    return { key, t, ico, ton, ist: q, gut: q === null ? null : q >= 100,
+      v: d !== null ? `${vz(d)}${e ? ` ${e}` : ''}` : <span className="ge-kommt">keine Messung vor dieser Woche</span> }
+  }
   const zeilen: Z[] = [
     { key: 'gewicht', t: 'Gewicht (Trend)', ico: I.waage, ton: 'ge-ton-goals', ist: gewichtQuote, gut: gewichtQuote === null ? null : gewichtQuote >= 100,
       v: delta !== null ? `${vz(delta)} kg` : <span className="ge-kommt">{heute === null ? 'noch kein Trend' : 'keine Messung vor dieser Woche'}</span> },
-    ...kraft.map(g => ({ key: `kraft-${g.goal_id}`, t: g.title, ico: I.kraft, ton: 'ge-ton-train', ist: null, gut: null, v: <Kommt punkt="offen" /> })),
-    ...fett.map(g => ({ key: `fett-${g.goal_id}`, t: 'Körperfett', ico: I.koerper, ton: 'ge-ton-goals', ist: null, gut: null, v: <Kommt punkt="offen" /> })),
+    ...kraft.map(g => messZeile(g, `kraft-${g.goal_id}`, g.title, I.kraft, 'ge-ton-train')),
+    ...fett.map(g => messZeile(g, `fett-${g.goal_id}`, 'Körperfett', I.koerper, 'ge-ton-goals')),
     {
       key: 'trainings', t: 'Training', ico: I.gew, ton: 'ge-ton-recov',
       ist: quote(woche.trainings, trainingsSoll), gut: trainingsSoll ? (woche.trainings ?? 0) >= trainingsSoll : null,
@@ -593,7 +605,16 @@ function useVerlauf(g: ZielFortschritt, stichtag: string, an: boolean) {
   return { v, fehler }
 }
 
-function MessDetails({ g, stichtag }: { g: ZielFortschritt; stichtag: string }) {
+/** Monat wie im Entwurf: „Feb 2027". */
+const monatDe = (iso: string) => `${['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'][Number(iso.slice(5, 7)) - 1]} ${iso.slice(0, 4)}`
+/** G-654: „+3,9 kg/Wo"; ohne Woche (abgeschlossen) oder ohne Tempo „—". */
+export const messTempo = (mw: Messwoche | null | undefined, einheit: string | null) =>
+  mw?.tempo_pro_woche != null ? `${vz(mw.tempo_pro_woche)}${einheitLesbar(einheit) ? ` ${einheitLesbar(einheit)}` : ''}/Wo` : '—'
+/** G-654: Monat der Prognose, sonst „nicht absehbar"; ohne Woche „—". */
+export const messPrognose = (mw: Messwoche | null | undefined) =>
+  mw?.prognose_status === 'datum' && mw.prognose_datum ? monatDe(mw.prognose_datum) : mw ? 'nicht absehbar' : '—'
+
+function MessDetails({ g, stichtag, mw }: { g: ZielFortschritt; stichtag: string; mw?: Messwoche | null }) {
   const { v, fehler } = useVerlauf(g, stichtag, true)
   const woechentlich = g.measurement_rhythm === 'weekly'
   const kat = kategorieVon(g)
@@ -613,7 +634,9 @@ function MessDetails({ g, stichtag }: { g: ZielFortschritt; stichtag: string }) 
       { l: 'längste Serie', v: `${Math.max(0, ...v.wochen.map(w => w.serie))} Wochen` },
       { l: 'Ø pro Woche', v: wo.some(w => w.wert !== null) ? zahl(wo.reduce((a, w) => a + (w.wert ?? 0), 0) / wo.length, 1) : '—' },
     ]
-    : [{ l: 'Start', v: wertMitEinheit(g.start_value, g.target_unit) }, { l: 'Tempo 4 Wo', v: <Kommt punkt="offen" /> }, { l: 'voraussichtlich', v: <Kommt punkt="offen" /> }]
+    // G-654: Tempo der letzten 28 Tage und die Prognose daraus (`measurement_goal_week_at`)
+    : [{ l: 'Start', v: wertMitEinheit(g.start_value, g.target_unit) },
+      { l: 'Tempo 4 Wo', v: messTempo(mw, g.target_unit) }, { l: 'voraussichtlich', v: messPrognose(mw) }]
   return (
     <div className="ge-kasten" data-details={g.goal_id}>
       {pkt.length === 0 ? <div style={{ fontSize: 11, color: 'var(--fg-subtle)' }}>Noch keine Datenpunkte.</div> : (
@@ -689,7 +712,7 @@ function MessBearbeiten({ g, onLoeschen, onFertig }: { g: ZielFortschritt; onLoe
   )
 }
 
-function MesszielKachel({ g, stichtag }: { g: ZielFortschritt; stichtag: string }) {
+function MesszielKachel({ g, stichtag, mw }: { g: ZielFortschritt; stichtag: string; mw: Messwoche | null }) {
   const [offen, setOffen] = React.useState(false)
   const [edit, setEdit] = React.useState(false)
   const [loeschen, setLoeschen] = React.useState(false)
@@ -745,14 +768,14 @@ function MesszielKachel({ g, stichtag }: { g: ZielFortschritt; stichtag: string 
           </div>
         </div>
       </div>
-      {offen && <MessDetails g={g} stichtag={stichtag} />}
+      {offen && <MessDetails g={g} stichtag={stichtag} mw={mw} />}
       {edit && <MessBearbeiten g={g} onLoeschen={() => setLoeschen(true)} onFertig={() => setEdit(false)} />}
       {loeschen && <LoeschenFrage ziel={g} art="mess" onZu={() => setLoeschen(false)} />}
     </div>
   )
 }
 
-function Messziele({ ziele, stichtag, onMessziel }: { ziele: ZielFortschritt[]; stichtag: string; onMessziel: () => void }) {
+function Messziele({ ziele, stichtag, onMessziel, messwochen }: { ziele: ZielFortschritt[]; stichtag: string; onMessziel: () => void; messwochen?: Record<string, Messwoche> }) {
   const offen = ziele.filter(g => g.goal_role !== 'controlling' && !istAbgeschlossen(g))
   return (
     <section aria-label="Messziele" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -768,7 +791,7 @@ function Messziele({ ziele, stichtag, onMessziel }: { ziele: ZielFortschritt[]; 
           <div key={k} data-messziel-gruppe={k} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--fg-muted)' }}>{KATEGORIE_NAME[k]}</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(460px,100%),1fr))', gap: 14, alignItems: 'start' }}>
-              {liste.map(g => <MesszielKachel key={g.goal_id} g={g} stichtag={stichtag} />)}
+              {liste.map(g => <MesszielKachel key={g.goal_id} g={g} stichtag={stichtag} mw={messwochen?.[g.goal_id] ?? null} />)}
             </div>
           </div>
         )
@@ -849,7 +872,7 @@ export function ReiterGoals(p: {
         <DieseWoche ziele={p.ziele} phasen={p.phasen} offenePhasen={p.offenePhasen} woche={p.woche} stichtag={p.stichtag} />
         <Module ziele={p.ziele} woche={p.woche} onCrossModule={p.onCrossModule ?? (() => {})} />
       </div>
-      <Messziele ziele={p.ziele} stichtag={p.stichtag} onMessziel={p.onMessziel} />
+      <Messziele ziele={p.ziele} stichtag={p.stichtag} onMessziel={p.onMessziel} messwochen={p.woche.messwochen} />
       <Abgeschlossen ziele={p.ziele} stichtag={p.stichtag} />
     </div>
   )

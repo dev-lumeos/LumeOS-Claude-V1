@@ -44,7 +44,8 @@ function sichtbar(datei: string): string {
     .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
 }
 
-const REITER = ['phase-echt.tsx', 'phase-setzen.tsx'] as const
+// G-656: phase-echt.tsx und phase-setzen.tsx sind geloescht; der Reiter ist jetzt die Plan-Seite (G-649).
+const REITER = ['plan-seite.tsx'] as const
 
 /**
  * Begriffe, die nur wir kennen.
@@ -123,36 +124,22 @@ describe('G-534/A1 — kein Schema auf dem Schirm', () => {
 })
 
 describe('G-534/A3 — die ueberzogene Phase ist ein Posten', () => {
-  it('es gibt einen eigenen Kasten, nicht nur eine Kennzahl', () => {
-    const q = sichtbar('phase-echt.tsx')
-    assert.match(q, /data-phase-ueberzogen/,
-      'kein eigener Posten — „73 Tage ueberzogen" steht nur als Zahl '
-      + 'in der Kennzahlenreihe')
+  // G-656: der eigene Kasten (`data-phase-ueberzogen` in phase-echt.tsx) ist mit der
+  // Datei geloescht — der Entwurf hat keinen. Die Ueberziehung steht seit G-645/2 in
+  // der Wochenzeile (`wocheText`), Beenden im Bearbeiten an der laufenden Phase.
+  const plan = readFileSync(join(GOALS, '..', '..', '..', 'lib', 'goals', 'plan.ts'), 'utf8')
+  const zeile = plan.slice(plan.indexOf('export function wocheText'), plan.indexOf('export function wocheText') + 600)
+
+  it('die Wochenzeile nennt die Ueberziehung in Tagen', () => {
+    assert.match(zeile, /l\.tageRest >= 0 \? `Woche \$\{l\.woche\} von \$\{l\.wochenGesamt\}` : `Woche \$\{l\.woche\} · \$\{Math\.abs\(l\.tageRest\)\} Tage über das geplante Ende`/)
   })
 
-  it('er nennt den Weg daneben', () => {
-    const q = sichtbar('phase-echt.tsx')
-    assert.match(q, /Beende sie/, 'kein Weg zum Beenden genannt')
-    assert.match(q, /geplante Ende/, 'kein Weg zum Verschieben genannt')
+  it('der Weg daneben: Beenden an der laufenden Phase', () => {
+    assert.match(sichtbar('plan-seite.tsx'), /p\.zustand === 'laufend' && plan\.status === 'aktiv'[\s\S]{0,400}data-phase-beenden-oeffnen/)
   })
 
-  it('er erscheint NUR bei einer laufenden, ueberzogenen Phase', () => {
-    const q = sichtbar('phase-echt.tsx')
-    assert.match(q, /lauf\.tageRest < 0 && !lauf\.beendet/,
-      'der Posten erscheint auch bei einer beendeten oder einer '
-      + 'Phase im Plan')
-  })
-
-  it('er bewertet den Nutzer nicht', () => {
-    // `[cmd]` **C-108/F-02: nennen ja, bewerten nein.** `[read]`
-    // **Es ist eine Aussage ueber die PHASE.**
-    const q = sichtbar('phase-echt.tsx')
-    const kasten = q.slice(q.indexOf('data-phase-ueberzogen'),
-      q.indexOf('data-phase-ueberzogen') + 700)
-    for (const wort of ['zu lange', 'versaeumt', 'du solltest',
-      'vergessen', 'schlecht']) {
-      assert.ok(!kasten.toLowerCase().includes(wort),
-        `der Posten enthaelt „${wort}" — das bewertet den Nutzer`)
-    }
+  it('sie bewertet den Nutzer nicht', () => {
+    for (const wort of ['zu lange', 'versaeumt', 'du solltest', 'vergessen', 'schlecht'])
+      assert.ok(!zeile.toLowerCase().includes(wort), `die Wochenzeile enthaelt „${wort}"`)
   })
 })

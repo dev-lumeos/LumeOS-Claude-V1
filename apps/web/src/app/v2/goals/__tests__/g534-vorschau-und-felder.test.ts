@@ -66,7 +66,8 @@ describe('G-534/A4 — der Umweg ist weg', () => {
 })
 
 describe('G-534/A2 — feste Felder statt JSON-Inhalt', () => {
-  const ECHT = () => lies(join(GOALS, 'phase-echt.tsx'))
+  // G-656: phase-echt.tsx ist geloescht; die Werte zeigt der Planer (`Werte` in plan-seite.tsx).
+  const ECHT = () => lies(join(GOALS, 'plan-seite.tsx'))
 
   // `[cmd]` **G-645/3: Anlass ersetzt, Regel behalten.** Hier standen
   // Hoechstdauer und Protein als Strich in `phase-echt.tsx` — Grund damals:
@@ -75,7 +76,7 @@ describe('G-534/A2 — feste Felder statt JSON-Inhalt', () => {
   // Details, und der Strich daneben widersprach ihnen. Die drei Felder stehen
   // jetzt im Planer: Tempo aus `katalogwerte`, die Rate mit Einheit hier.
   it('die drei Felder aus PHASE_MODELS.md stehen da', () => {
-    assert.ok(ECHT().includes('Zielrate'), 'das Feld „Zielrate" fehlt')
+    assert.match(ECHT(), /return s \? katalogwerte\(s, p\.zielrate_pct_kg_woche\) : \[\]/, 'der Planer zeigt nicht die Katalogwerte mit der Zielrate')
     const labels = katalogwerte({ weight_change_target_percent: -0.5, protein_per_kg: 2, fat_percent: null, fett_g_kg: null,
       cardio_pro_woche: null, refeed_pro_woche: null, max_duration_weeks: 12, refeeds: null }, null).map(z => z.label)
     for (const feld of ['Tempo', 'Höchstdauer', 'Protein']) {
@@ -87,7 +88,7 @@ describe('G-534/A2 — feste Felder statt JSON-Inhalt', () => {
     const q = ECHT()
     // `[cmd]` **Hier stand `params.map(([k, v]) => <Row …>)`** — und
     // zeigte „Source GO-07 testdata · Calorie surplus kcal 250".
-    assert.ok(!/params\.map\(/.test(q),
+    assert.ok(q.length > 1000 && !/(params|parameters)\??\.map\(|JSON\.stringify\((p|plan|x)\.(parameters|eigene_werte)\)/.test(q),
       'die Kachel zeigt wieder die Rohform aus `parameters`')
   })
 
@@ -99,11 +100,11 @@ describe('G-534/A2 — feste Felder statt JSON-Inhalt', () => {
     assert.equal(z.find(x => x.label === 'Höchstdauer')?.wert, null)
     assert.match(lies(join(GOALS, 'plan-seite.tsx')), /data-keine-vorgabe>keine Vorgabe</)
     assert.ok(!/label="H(oe|ö)chstdauer"|label="Protein"/.test(ECHT()),
-      'phase-echt.tsx zeigt wieder einen eigenen Strich neben dem Katalogwert')
+      'plan-seite.tsx zeigt wieder einen eigenen Strich neben dem Katalogwert')
   })
 
   it('die Rate kommt aus der Spalte, nicht aus parameters', () => {
-    assert.match(ECHT(), /phase\.zielrate_pct_kg_woche/,
+    assert.match(lies(join(LIB, 'plan-read.ts')), /zielrate_pct_kg_woche: zahl\(x\.zielrate_pct_kg_woche\) \?\?/,
       'die Rate wird nicht aus ihrer eigenen Spalte gelesen')
   })
 
@@ -123,16 +124,16 @@ describe('G-534/A2 — feste Felder statt JSON-Inhalt', () => {
 describe('G-615 — kein Vorschaupanel, kein Wechselraster', () => {
   it('phase-vorschau.tsx ist weg und wird nirgends importiert', () => {
     assert.ok(!existsSync(join(GOALS, 'phase-vorschau.tsx')), 'phase-vorschau.tsx ist zurueck')
-    assert.ok(!/phase-vorschau'/.test(lies(join(GOALS, 'phase-setzen.tsx'))))
+    assert.ok(!/phase-vorschau'/.test(lies(join(GOALS, 'plan-seite.tsx'))))
     assert.ok(!/phase-vorschau'/.test(lies(join(GOALS, 'ansicht.tsx'))))
   })
 })
 
 describe('G-534 — die Kachel „Phasenwechsel" zeigt sich nur mit Inhalt', () => {
   it('drei Striche sind kein Posten', () => {
-    const q = lies(join(GOALS, 'phase-echt.tsx'))
-    assert.match(q,
-      /\(phase\.transitioned_from \|\| phase\.recommended_next[\s\S]{0,60}\) && \(/,
-      'die Kachel erscheint auch, wenn alle drei Felder leer sind')
+    // G-656: die Kachel ist mit phase-echt.tsx geloescht; der Vorschlag steht unter
+    // „Als nächstes" — und nur, wenn `recommended_next` einen Wert hat.
+    assert.match(lies(join(LIB, 'plan-read.ts')), /empfohlen: phaseId && ende\.get\(phaseId\)\?\.next \? \{/,
+      'der Vorschlag erscheint auch ohne recommended_next')
   })
 })

@@ -14,7 +14,7 @@
 import { revalidatePath } from 'next/cache'
 
 import {
-  phaseStarten, phaseBeenden, vorschlagBeantworten, phasenOverrideSetzen,
+  phaseStarten, phaseBeenden, phasenOverrideSetzen,
   PhaseFehler, type PhaseFehlerCode,
 } from '../../../lib/goals/phase-write'
 import type { Phasenstart } from '../../../lib/goals/phase-regeln'
@@ -59,18 +59,6 @@ export async function phaseBeendenAktion(
     const id = await phaseBeenden(phaseId, grund, ende)
     revalidatePath('/v2/goals')
     return { ok: true, phaseId: id }
-  } catch (f) {
-    return alsFehler(f)
-  }
-}
-
-export async function vorschlagBeantwortenAktion(
-  phaseId: string, antwort: 'accepted' | 'rejected', grund?: string,
-): Promise<PhaseErgebnis> {
-  try {
-    await vorschlagBeantworten(phaseId, antwort, grund)
-    revalidatePath('/v2/goals')
-    return { ok: true, phaseId }
   } catch (f) {
     return alsFehler(f)
   }

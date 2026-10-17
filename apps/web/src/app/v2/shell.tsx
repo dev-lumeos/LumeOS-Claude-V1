@@ -17,6 +17,7 @@ import { Sprachwahl } from '../../components/shell/sprachwahl'
 // Modulen, die einen Tag fuehren.
 import { Tageswechsler } from './tageswechsler'
 import { MODE_COOKIE } from '../../styles/themes/registry'
+import { speichereKontextOffen } from './kontextleiste'
 
 /**
  * Der Abmeldeknopf der Nutzerzeile — G-411/A2.
@@ -83,7 +84,7 @@ function V2Link({ href, ...rest }: { href: string } & Record<string, unknown>) {
   return <Link href={mitDatum(href, datum) as Route} {...rest} />
 }
 
-export function V2Shell({ children }: { children: React.ReactNode }) {
+export function V2Shell({ children, kontextOffen }: { children: React.ReactNode, kontextOffen: boolean }) {
   const pathname = usePathname()
   const [mode, setMode] = React.useState<'light' | 'dark'>('dark')
 
@@ -137,6 +138,10 @@ export function V2Shell({ children }: { children: React.ReactNode }) {
       onModeChange={wechsleModus}
       // A-14: die Sprachwahl sitzt neben Nachtmodus und Kontext.
       topbarActions={<Sprachwahl />}
+      // G-657: eingeklappt als Grundzustand, die Wahl liegt beim Nutzer.
+      // ponytail: Speicherfehler verwirft nur die Merkung, die Leiste bleibt wie geklickt.
+      contextDefaultOpen={kontextOffen}
+      onContextOpenChange={offen => { speichereKontextOffen(offen).catch(() => {}) }}
       // Die Kontextspalte zeigt hier bewusst KEINE echten Inhalte:
       // Schnellaktionen und Erkenntnisse sind Moduldaten (G-03/G-06),
       // Buddys Text braeuchte einen Modellaufruf. Was die Vorlage dort

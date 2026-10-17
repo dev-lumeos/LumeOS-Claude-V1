@@ -7,7 +7,7 @@
  */
 import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 import * as React from 'react'
@@ -41,7 +41,7 @@ describe('G-645/2 — „Woche x von y" aus EINER Rechnung', () => {
   it('Steuerungskarte und Planer rufen dieselbe Funktion — keine zweite Formel', () => {
     assert.match(sichtbar('reiter-goals.tsx'), /const woche = ph \? wocheText\(phasenLauf\(ph, p\.stichtag\), variante\?\.max_duration_weeks \?\? null\) : null/)
     assert.match(readFileSync(join(HIER, '..', 'plan-read.ts'), 'utf8'), /woche: phaseId && ende\.get\(phaseId\) \? wocheText\(phasenLauf\(ende\.get\(phaseId\)!, stichtag\)\)/)
-    for (const f of ['reiter-goals.tsx', 'plan-seite.tsx', 'phase-echt.tsx'])
+    for (const f of ['reiter-goals.tsx', 'plan-seite.tsx'])  // G-656: phase-echt.tsx geloescht
       assert.ok(!/7 \* 86_?400_?000|\/ 7\)/.test(sichtbar(f)), `${f} rechnet Wochen selbst`)
   })
 })
@@ -74,14 +74,13 @@ describe('G-645/3 — die alten Phasen-Bauteile sind im Planer', () => {
     assert.match(a, /<PlanSeite vomTermin=\{<Planer /)
   })
   it('doppelt Gezeigtes ist weg: Kopf, Start/Ende, Strich-Werte, Zustandsanzeige', () => {
-    const e = sichtbar('phase-echt.tsx')
-    for (const weg of ['Phase parameters', "'Start'", "'Geplantes Ende'", 'Hoechstdauer', 'noch nicht hinterlegt', 'Woche ${'])
-      assert.ok(!e.includes(weg), `phase-echt.tsx zeigt wieder „${weg}"`)
+    // G-656: phase-echt.tsx ist geloescht — damit ist auch alles doppelt Gezeigte darin weg.
+    assert.ok(!existsSync(join(GOALS, 'phase-echt.tsx')), 'phase-echt.tsx ist zurueck')
     assert.ok(!/export function PhasenZustand/.test(roh('planer.tsx')))
   })
   it('deutsch, mit Umlauten — in allem, was der Planer jetzt traegt', () => {
     const ersatz = /\b(Hoechstdauer|Koerpergewicht|[Rr]ueckwaerts|fuer|fuehrt|moeglich|laesst|Waechter|ueberfaellig|[Uu]ebernehmen|Uebernommen|Aenderung|waehlst|haette|Verhaeltnis|laenger|primaeres|naechsten|zurueckzurechnen|Zurueck)\b|Phase parameters|Phase state machine/
-    for (const f of ['plan-seite.tsx', 'phase-echt.tsx', 'planer.tsx', 'phase-setzen.tsx', 'phasen-zeitachse.tsx', 'phasen-editor-echt.tsx']) {
+    for (const f of ['plan-seite.tsx', 'planer.tsx', 'reiter-goals.tsx']) {  // G-656: die drei alten Dateien sind geloescht
       const m = ersatz.exec(sichtbar(f))
       assert.equal(m, null, `${f}: „${m?.[0]}" steht sichtbar ohne Umlaut / englisch`)
     }

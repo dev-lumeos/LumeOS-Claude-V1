@@ -212,29 +212,13 @@ describe('G-565/A1 — eine Groesse, zwei Einheiten', () => {
   })
 
   // ── Je Stelle: EIN Zustand, die Rate ────────────────────────────
-  it('das Eingabefeld rechnet auf die Rate zurueck', () => {
-    // G-615: das Ratenfeld in phase-setzen.tsx gehoerte zu PhaseBeginnen —
-    // entfernt. Der Editor traegt die Einheit weiter.
-    for (const datei of ['phasen-editor-echt.tsx']) {
-      const q = lies(join(GOALS, datei))
-      assert.match(q, /ausEinheit\(/,
-        `${datei}: die Eingabe wird nicht auf die Rate zurueckgerechnet`)
-      assert.match(q, /<EinheitenSchalter/,
-        `${datei}: es gibt keinen Umschalter`)
-    }
-  })
-
-  it('die Anzeige rechnet in die gewaehlte Einheit', () => {
-    const q = lies(join(GOALS, 'phase-echt.tsx'))
-    assert.match(q, /inEinheit\(phase\.zielrate_pct_kg_woche, gewichtKg, gewaehlt\)/,
-      'die Phasenkachel zeigt immer Prozent')
-  })
-
+  // G-656: „das Eingabefeld rechnet auf die Rate zurueck" (phasen-editor-echt.tsx) und
+  // „die Anzeige rechnet in die gewaehlte Einheit" (phase-echt.tsx) sind mit ihren
+  // Dateien weggefallen — die Einheitenwahl hat im Entwurf keinen Ort (gemeldet).
   it('keine Stelle rechnet selbst mit 11', () => {
     // `[read]` **A2: „Die Umrechnung liegt server-frei in
     // `lib/goals/` und wird nicht in der Komponente wiederholt."**
-    for (const datei of ['phase-setzen.tsx', 'phasen-editor-echt.tsx',
-      'phase-echt.tsx', 'einheiten-schalter.tsx']) {
+    for (const datei of ['plan-seite.tsx', 'reiter-goals.tsx', 'einheiten-schalter.tsx']) {
       const q = lies(join(GOALS, datei))
       assert.ok(!/11 \* |\* 11\b/.test(q),
         `${datei} rechnet selbst mit dem Faktor 11 — zwei Rechnungen `

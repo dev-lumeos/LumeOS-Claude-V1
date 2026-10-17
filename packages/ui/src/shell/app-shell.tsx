@@ -51,6 +51,13 @@ export type AppShellProps = {
    * das Raster wird zweispaltig.
    */
   context?: Omit<ContextPanelProps, 'label'> & { label?: string }
+  /**
+   * Ob die Kontextspalte beim ersten Anstrich offen ist — G-657.
+   * Ohne Angabe offen, wie bisher (apps/coach).
+   */
+  contextDefaultOpen?: boolean
+  /** Meldet jedes Umschalten, damit die Anwendung die Wahl merken kann. */
+  onContextOpenChange?: (open: boolean) => void
   /** Dichte der Karten: compact | default | comfortable. */
   density?: 'compact' | 'default' | 'comfortable'
   /** Zusaetzliche Bedienelemente in der Kopfzeile (A-14: Sprachwahl). */
@@ -61,9 +68,14 @@ export function AppShell({
   pathname, linkAs, children,
   userName, userStatus, userInitials, userMenu, version,
   syncState, mode, onModeChange, context, density = 'default', topbarActions,
-  gruppen, marke, ohneSuche, bereich,
+  gruppen, marke, ohneSuche, bereich, contextDefaultOpen = true, onContextOpenChange,
 }: AppShellProps) {
-  const [kontextOffen, setKontextOffen] = React.useState(true)
+  const [kontextOffen, setKontextOffen] = React.useState(contextDefaultOpen)
+  const umschalten = () => {
+    const neu = !kontextOffen
+    setKontextOffen(neu)
+    onContextOpenChange?.(neu)
+  }
 
   const aktiv = resolveNav(pathname)
   const eintrag = aktiv.sub ?? aktiv.entry
@@ -102,7 +114,7 @@ export function AppShell({
           syncState={syncState}
           mode={mode}
           onModeChange={onModeChange}
-          onToggleContext={context ? () => setKontextOffen(o => !o) : undefined}
+          onToggleContext={context ? umschalten : undefined}
           contextOpen={zeigeKontext}
           actions={topbarActions}
         />

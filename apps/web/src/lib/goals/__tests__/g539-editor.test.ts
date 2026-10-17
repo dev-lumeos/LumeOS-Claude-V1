@@ -17,7 +17,6 @@ import {
   zyklusmittel, pruefeJahresplan, nurAbweichung, geltenderWert,
   abweichungszahl, schwelleAusText, JAHRESMONATE,
 } from '../editor-rechnungen'
-import { monateAusSpanne } from '../../../app/v2/goals/phasen-editor-echt'
 
 const HIER = dirname(fileURLToPath(import.meta.url))
 const GOALS = join(HIER, '..', '..', '..', 'app', 'v2', 'goals')
@@ -26,7 +25,11 @@ const ohneKommentare = (q: string) => q
   .replace(/\/\*[\s\S]*?\*\//g, '')
   .replace(/^[ \t]*\/\/.*$/gm, '')
 const lies = (p: string) => ohneKommentare(readFileSync(p, 'utf8'))
-const E = () => lies(join(GOALS, 'phasen-editor-echt.tsx'))
+// G-656: phasen-editor-echt.tsx (der Override-Editor) ist geloescht — der Entwurf hat ihn
+// nicht; Programmwahl und eigene Werte stehen im Plan-Bearbeiten (G-649). Weggefallen sind
+// die Pruefungen seines Quelltexts (Reiter aus editor_modes, Platzhalter, Grundsatz, Anwenden,
+// FreieForm, Ankerreiter) und `monateAusSpanne`. Die Rechnungen und der Schreibweg bleiben.
+const E = () => lies(join(GOALS, 'plan-seite.tsx'))
 
 // ════════════════════════════════════════════════════════════════
 // Die drei Rechnungen — je eine Zahl aus dem Entwurf
@@ -136,23 +139,6 @@ describe('G-539 — annual: die Monatssumme', () => {
   })
 
   // ── Die Spannen aus der Spalte ──────────────────────────────────
-  it('die echten Spannen des Katalogs ergeben 12', () => {
-    // `[cmd]` **`expert_bb_annual.annual`, wortwoertlich aus der
-    // Datenbank** (gemessen 2026-09-30): `1–4`, `5–6`, `7–10`, `11`,
-    // `12`. **Trenner ist U+2013**, wie in `sub_phases`.
-    const spannen = ['1–4', '5–6', '7–10', '11', '12']
-    const monate = spannen.map(monateAusSpanne)
-    assert.deepEqual(monate, [4, 2, 4, 1, 1],
-      'die Spannen werden falsch gezaehlt')
-    assert.equal(monate.reduce((a, b) => a + b, 0), 12)
-  })
-
-  it('eine Spanne zaehlt beide Enden mit', () => {
-    // `[read]` **`1–4` sind VIER Monate** (1, 2, 3, 4), nicht drei.
-    assert.equal(monateAusSpanne('1–4'), 4)
-    assert.equal(monateAusSpanne('11'), 1)
-    assert.equal(monateAusSpanne('kaputt'), 0)
-  })
 })
 
 // ════════════════════════════════════════════════════════════════
@@ -231,65 +217,6 @@ describe('G-539 — der Override ist eine Differenz', () => {
 // ════════════════════════════════════════════════════════════════
 
 describe('G-539 — die Reiter kommen aus der Tabelle', () => {
-  it('kein switch ueber Strategiecodes', () => {
-    // `[read]` **Der Auftrag, Punkt 2: „Welche Reiter erscheinen,
-    // entscheidet `PE_MODES` AUS DER TABELLE, nicht eine Liste im
-    // Browser."**
-    const q = E()
-    assert.match(q, /strategie\.editor_modes/,
-      'die Reiter kommen nicht aus der Spalte')
-    // `[cmd]` **Die 17 Codes, gemessen** — keiner darf den Aufbau
-    // steuern.
-    for (const code of ['fat_loss', 'lean_bulk', 'maintenance', 'recomp',
-      'contest_prep', 'reverse_diet', 'expert_bb_annual', 'aggressive_cut',
-      'moderate_cut', 'mini_cut']) {
-      assert.ok(!new RegExp(`(===|case)\\s*'${code}'`).test(q),
-        `der Editor entscheidet anhand von „${code}" — eine achtzehnte `
-        + 'Katalogzeile braechte ihre Reiter nicht mit')
-    }
-  })
-
-  it('ohne Spalte faellt er auf „params" zurueck, wie der Entwurf', () => {
-    // `[cmd]` **`module-goals-editor.jsx:57`:**
-    // `PE_MODES[phaseId] || ["params"]`.
-    assert.match(E(), /\['params'\]/,
-      'ohne editor_modes gibt es keinen Reiter — dann ist der Editor leer')
-  })
-
-  it('der Grundsatz aus Zeile 56 steht im Kopf', () => {
-    const q = E()
-    assert.match(q, /data-editor-grundsatz/,
-      'der Satz „die Auslieferung bleibt" fehlt — dann sieht es aus, '
-      + 'als aendere der Editor den Katalog')
-    assert.match(q, /Auslieferung bleibt/)
-  })
-
-  it('der Editor schreibt nur die Abweichung', () => {
-    const q = E()
-    assert.match(q, /nurAbweichung\(katalog, entwurf\)/,
-      'der Editor rechnet die Differenz nicht')
-    assert.match(q, /onAnwenden\(abweichung\)/,
-      'der Knopf uebergibt den ganzen Entwurf statt der Abweichung')
-  })
-
-  it('leere Felder zeigen den Katalogwert, ohne ihn zu schreiben', () => {
-    // `[read]` **Der Platzhalter sagt, was gilt** — er ist kein Wert.
-    const q = E()
-    assert.match(q, /placeholder=\{katalog !== null \? String\(katalog\) : 'nicht hinterlegt'\}/,
-      'ein Feld ohne Katalogwert behauptet einen — oder zeigt keinen')
-  })
-
-  it('die Ankerrechnung wird BENUTZT, nicht nachgebaut', () => {
-    // `[read]` **Der Auftrag: „`lib/goals/anker.ts` aus G-544 ist
-    // server-frei und geprueft — wiederverwenden, nicht neu
-    // rechnen."**
-    const q = E()
-    assert.match(q, /from '\.\.\/\.\.\/\.\.\/lib\/goals\/anker'/,
-      'der Editor rechnet den Anker selbst — zwei Rechnungen fuer '
-      + 'dasselbe gehen auseinander')
-    assert.ok(!/86400000|\* 7 \*/.test(q),
-      'der Editor rechnet mit Tagen — die Rechnung steht in anker.ts')
-  })
 
   it('die drei Rechnungen stehen server-frei in lib/goals', () => {
     const q = lies(join(HIER, '..', 'editor-rechnungen.ts'))
@@ -297,22 +224,6 @@ describe('G-539 — die Reiter kommen aus der Tabelle', () => {
       'editor-rechnungen.ts zieht den Server-Baum (A-30)')
     assert.ok(!/Date\.now\(\)/.test(q),
       'die Rechnungen holen sich die Zeit selbst')
-  })
-})
-
-describe('G-539/4 — „Save as my template" bleibt aus', () => {
-  it('es gibt keinen Vorlagenknopf', () => {
-    // `[read]` **Der Auftrag: „braucht G-540 und bleibt bis dahin
-    // aus — kein Knopf, der nichts tut."**
-    const q = E()
-    assert.ok(!/Save as my template|Als Vorlage sichern|vorlage/i.test(q),
-      'der Editor verspricht eigene Vorlagen — die gibt es erst mit '
-      + 'G-540')
-  })
-
-  it('„Apply to my plan" gibt es', () => {
-    assert.match(E(), /data-editor-anwenden/,
-      'der Editor hat keinen Weg, die Aenderung zu uebernehmen')
   })
 })
 
@@ -342,8 +253,8 @@ describe('G-539/5 — die Schwellen sind ein Befund, kein Schieber', () => {
     assert.ok(!/type="range"/.test(q),
       'der Editor zeigt einen Schwellwert-Schieber — er haette keine '
       + 'Wirkung, die Waechter rechnen mit festen Grenzen')
-    assert.match(q, /data-editor-schwellen-befund/,
-      'es steht nicht da, warum die Schwellen fest sind')
+    // G-656: der Befundsatz stand im geloeschten Editor; der Planer bietet keine Schwelle an.
+    assert.ok(q.length > 1000, 'plan-seite.tsx nicht gefunden')
   })
 
   it('die Waechter nehmen wirklich keine Schwelle entgegen', () => {
@@ -422,39 +333,5 @@ describe('G-539 — die Form von G-545 faellt nicht still durch', () => {
       'die Teilphase traegt ihre Rohform nicht — dann fallen die '
       + 'Felder von G-545 still weg')
     assert.match(q, /roh: o,/, 'die Rohform wird nicht befuellt')
-  })
-
-  it('der Editor zeigt die echten Schluessel', () => {
-    const q = E()
-    assert.match(q, /<FreieForm werte=\{s\.roh\}/,
-      'der subphases-Reiter zeigt ein festes Formular — dann steht '
-      + 'da ein Gedankenstrich, wo ein Wert ist')
-  })
-
-  it('ein Objekt wird lesbar, nicht [object Object]', () => {
-    // `[cmd]` **`cardio` ist `{type, minutes, sessions_per_week}`.**
-    const q = E()
-    assert.match(q, /function alsText/,
-      'verschachtelte Werte werden mit String\(\) gerendert — das '
-      + 'gaebe [object Object]')
-    assert.ok(!/\{typeof v === 'boolean' \? \(v \? 'ja' : 'nein'\) : String\(v\)\}/.test(q),
-      'der alte String\(\)-Weg steht noch')
-  })
-
-  it('der Ankerreiter nennt den WAHREN Grund', () => {
-    // `[read]` **„Diese Strategie fuehrt keine Teilphasen" waere
-    // falsch** — sie fuehrt drei, nur ohne Wochenangabe.
-    const q = E()
-    assert.match(q, /strategie\.sub_phases\.length === 0/,
-      'der Leersatz unterscheidet die zwei Faelle nicht')
-    // `[cmd]` **G-607: was fehlt, ist seit G-562 nicht mehr `weeks`,
-    // sondern `dauer_anteil`** — die Wochen rechnen sich aus dem
-    // Verhaeltnis (E-85). Die Regel bleibt: der Satz nennt, WAS fehlt.
-    // `[read]` **Der Satz ist ueber zwei Zeilen umgebrochen** — ein
-    // Muster auf die zusammengesetzte Form faende nichts.
-    assert.match(q, /Dauer-Anteil/,
-      'der Satz nennt nicht, WAS fehlt')
-    assert.ok(!/Wochenangabe/.test(q),
-      'der Satz nennt noch die alte Ursache (weeks, G-545)')
   })
 })

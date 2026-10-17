@@ -16,10 +16,10 @@ import * as React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { AppRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
-import { SAETZE_644, cardioText, defizitText, monatsachse, phasenname, planFehler } from '../plan'
-import { PlanSeite } from '../../../app/v2/goals/plan-seite'
+import { PROGRAMM_TEXT, SAETZE_644, cardioText, programmFarbe, defizitText, monatsachse, phasenname, planFehler } from '../plan'
+import { PlanSeite, wacheZeile } from '../../../app/v2/goals/plan-seite'
 import type { Plan, Vorlage } from '../plan-read'
-import type { Ausblick } from '../reiter-read'
+import type { Ausblick, Wache } from '../reiter-read'
 import type { Strategie } from '../strategie-read'
 import { zustandAusStatus } from '../zustand'
 import type { ZielFortschritt } from '../lesen'
@@ -66,7 +66,18 @@ describe('G-649 — gegen die Kette', () => {
     for (const f of ['plan_datum', 'status', 'datum', 'grund', 'tempo_4w_kg_pro_woche', 'soll_kg_pro_woche', 'verbleibend_kg', 'veraenderung_gesamt_kg',
       'trend_kg', 'soll_kg', 'trend_delta_kg', 'soll_delta_kg', 'durchschnitt_kcal', 'logtage', 'woche_ab', 'woche_bis', 'vollstaendig'])
       assert.match(t, new RegExp(`'${f}',`), `Feld ${f} fehlt in der Kette`)
-    assert.match(lies('lib/goals/reiter-read.ts'), /rpc\('controlling_goal_outlook', \{ p_goal_id: goalId, p_stichtag: stichtag \}\)/)
+    const r = lies('lib/goals/reiter-read.ts')
+    assert.match(r, /kette<Ausblick>\('controlling_goal_outlook', steuerzielId, stichtag\)/)
+    assert.match(r, /\.rpc\(fn, \{ p_goal_id: goalId, p_stichtag: stichtag \}\)/)
+  })
+  it('G-654: die gelesenen Felder liefern die Funktionen', () => {
+    const t = kette('654_goal_lage_measurement_week.sql')
+    for (const f of ['lage', 'abweichung_kg', 'toleranz_kg', 'delta_woche', 'soll_delta_woche', 'tempo_pro_woche', 'prognose_status', 'prognose_datum'])
+      assert.match(t, new RegExp(`'${f}',`), `Feld ${f} fehlt in der Kette`)
+    for (const w of ["'voraus'", "'hinterher'", "'im_plan'", "'datum'"]) assert.ok(t.includes(`THEN ${w}`) || t.includes(`ELSE ${w}`), `Wert ${w} fehlt`)
+    const r = lies('lib/goals/reiter-read.ts')
+    assert.match(r, /kette<Record<string, unknown>>\('controlling_goal_lage_at', steuerzielId, stichtag\)/)
+    assert.match(r, /kette<Record<string, unknown>>\('measurement_goal_week_at', id, stichtag\)/)
   })
 })
 
@@ -166,7 +177,8 @@ const seite = (o: { vorlagen?: Vorlage[] | null; ausblick?: Ausblick | null; pla
 describe('G-649 — die Abschnitte des Entwurfs', () => {
   it('Aktiver Plan: Kopf, Zeitraum, Monatsachse, Phasentabelle mit Defizit und Cardio', () => {
     const h = seite()
-    assert.match(h, /<span class="ge-typ">Aktiver Plan · 1 Phase<\/span><span class="ge-chip ge-lage-voraus">● läuft<\/span>/)
+    // ohne `typ` (vor G-644 Teil 2) die Phasenzahl
+    assert.match(h, /<span class="ge-typ" data-plan-typ="true">Aktiver Plan · 1 Phase<\/span><span class="ge-chip ge-lage-voraus">● läuft<\/span>/)
     assert.match(h, /data-plan-zeitraum="true"[^>]*>12\.06\.26 – 29\.10\.26 · 20 Wochen/)
     assert.match(h, /data-plan-monate="6"[^>]*><span>Jun<\/span><span>Jul<\/span><span>Aug<\/span><span>Sep<\/span><span>Okt<\/span><span>Nov<\/span><\/div>/, 'Jun bis Nov: Plan 12.06.–29.10., Achse bis heute + 4 Wochen')
     assert.match(h, /<th>Phase<\/th><th>Wochen<\/th><th>Beginn<\/th><th>Ende<\/th><th>Defizit \/ Überschuss<\/th><th>Cardio<\/th><th>Status<\/th>/)
@@ -224,5 +236,82 @@ describe('G-649 — die Abschnitte des Entwurfs', () => {
     const h = seite()
     assert.match(h, /data-vorlagen="3"[\s\S]*?Contest Prep 16 Wochen[\s\S]*?16 Wochen[\s\S]*?Mini-Cut-Block[\s\S]*?Meine Off-Season[\s\S]*?kommt mit dem Coach-Modul/)
     assert.match(seite({ vorlagen: null }), /data-vorlagen="kommt"[\s\S]*?kommt \(G-644\)/)
+  })
+})
+
+describe('G-644 Teil 2 angebunden: Plantyp, Neu starten, Löschen, neu berechnen, Programmfarben', () => {
+  it('der Plantyp steht an allen drei Kachelarten', () => {
+    const h = seite({ plaene: [{ ...AKTIV, typ: 'Einfacher Plan · aus Goals' }, { ...ENTWURF, typ: 'Contest Prep 16 Wochen' }, { ...FERTIG, typ: 'Contest Prep 16 Wochen' }] })
+    assert.match(h, /data-plan-typ="true">Aktiver Plan · Einfacher Plan · aus Goals</)
+    assert.equal((h.match(/data-plan-typ="true">Contest Prep 16 Wochen</g) ?? []).length, 2)
+    assert.match(lies('lib/goals/plan-read.ts'), /\.select\('id, goal_id, name, status, ausgangspunkt_name'\)/)
+    assert.match(kette('644_plan_editor_part2.sql'), /ADD COLUMN ausgangspunkt_name text NOT NULL/)
+  })
+  it('abgeschlossen: Neu starten und Löschen statt „kommt"', () => {
+    const h = seite()
+    assert.match(h, /data-plan-neu-starten="pf"/)
+    assert.match(h, /data-plan-fertig-loeschen="pf"/)
+    assert.ok(!h.includes('Neu starten, Löschen — kommt'), 'noch „kommt"')
+    // der zweite Klick ist die Bestaetigung — vorher keine Endgueltig-Frage
+    assert.ok(!h.includes('data-plan-fertig-loeschen-ja'))
+    // offene Dauer: die Kette weist den Neustart ab — der Knopf sagt es vorher
+    assert.ok(!/data-plan-neu-starten="pf" disabled/.test(h), 'mit Dauer gesperrt')
+    const offen = seite({ plaene: [AKTIV, { ...FERTIG, positionen: [POS('f1', { zustand: 'abgeschlossen', goal_phase_id: 'x', duration_weeks: null })] }] })
+    assert.match(offen, /data-plan-neu-starten="pf" disabled="" title="Zum Neustart braucht jede Phase eine Dauer in Wochen\."/)
+  })
+  it('die Schreibwege treffen die Signaturen der Kette', () => {
+    const w = lies('lib/goals/plan-write.ts'), t = kette('644_plan_editor_part2.sql')
+    assert.match(t, /goal_plan_restart\(\s*p_plan_id uuid,p_name text,p_start_date date/)
+    assert.match(w, /rufe\('goal_plan_restart', \{ p_plan_id: id, p_name: name, p_start_date: start \}\)/)
+    assert.match(t, /goal_plan_delete_completed\(\s*p_plan_id uuid,p_confirm boolean/)
+    assert.match(w, /rufe\('goal_plan_delete_completed', \{ p_plan_id: id, p_confirm: true \}\)/)
+    assert.match(t, /goal_plan_position_recalculate\(\s*p_position_id uuid,p_strategie_code text,p_eigene_werte jsonb,\s*p_duration_weeks smallint/)
+    assert.match(w, /rufe\('goal_plan_position_recalculate', \{ p_position_id: id, p_strategie_code: code, p_eigene_werte: code \? null : eigene, p_duration_weeks: wochen \}\)/)
+  })
+  it('neu berechnen: Programmwahl und Wochen nur an geplanten Phasen', () => {
+    const q = lies('app/v2/goals/plan-seite.tsx')
+    assert.match(q, /\{p\.zustand === 'geplant' && !p\.eigene_werte \? \(\s*<select className="ge-inp" aria-label="Programm" data-position-programm/)
+    assert.match(q, /\{p\.zustand === 'geplant' \? \(\s*<span style=\{\{ display: 'inline-flex', gap: 4, alignItems: 'center' \}\}>\s*<button type="button" className="ge-btn ge-ico" aria-label="Woche weniger"/)
+  })
+  it('Segmente nach Programm wie im Entwurf, Zustand als Deckkraft', () => {
+    const P = (o: Partial<{ strategie_code: string | null; sub_phase_code: string | null; eigene_werte: unknown; richtung: string | null }>) =>
+      programmFarbe({ strategie_code: null, sub_phase_code: null, eigene_werte: null, richtung: null, ...o })
+    assert.equal(P({ strategie_code: 'lean_bulk' }), 'oklch(0.82 0.09 90)')
+    assert.equal(P({ strategie_code: 'contest_prep', sub_phase_code: 'late' }), 'oklch(0.68 0.14 40)')
+    assert.equal(P({ strategie_code: 'peak_week' }), 'oklch(0.60 0.16 30)')
+    assert.equal(P({ strategie_code: 'maintain' }), 'oklch(0.85 0.04 165)')
+    assert.equal(P({ eigene_werte: { k: 1 }, strategie_code: 'lean_bulk' }), 'oklch(0.80 0.08 300)')
+    assert.equal(P({ strategie_code: 'aggressive_cut', richtung: 'abnehmen' }), 'oklch(0.74 0.10 60)', 'unbenannt: nach Richtung')
+    const h = seite()
+    assert.match(h, /data-segment="laufend"[^>]*background:oklch\(0\.82 0\.09 90\)/)
+    assert.ok(h.includes(`color:${PROGRAMM_TEXT}`))
+    assert.match(h, /data-plan-kachel="abgeschlossen"[\s\S]*?<span style="flex:20;background:oklch\(0\.82 0\.09 90\);opacity:0\.55"/)
+  })
+})
+
+describe('G-644 Teil 2: Wachen der aktuellen Phase', () => {
+  const W = (o: Partial<Wache>): Wache => ({ key: 'kraftverlust_4w', status: 'ok', stand_am: '2026-10-11', ...o })
+  it('je Wache die Zeile des Entwurfs', () => {
+    assert.deepEqual(wacheZeile(W({ wert_pct: 2, grenze_pct: 10 })), { t: 'Kraftverlust > 10 % in 4 Wochen → Defizit senken / Überschuss erhöhen', s: 'ok · −2 %' })
+    assert.equal(wacheZeile(W({ wert_pct: -2.9, grenze_pct: 10 })).s, 'ok · +2,9 %', 'Zuwachs ist kein Verlust')
+    assert.deepEqual(wacheZeile(W({ key: 'trend_3w', status: 'ausgeloest', grenze_wochen: 3, wochen_neben_soll: 3 })), { t: 'Trend 3 Wochen neben Soll → ±100 kcal', s: 'ausgelöst KW 41' })
+    assert.equal(wacheZeile(W({ key: 'trend_3w', status: 'ok', grenze_wochen: 3, wochen_neben_soll: 1 })).s, 'ok · 1 von 3')
+    assert.deepEqual(wacheZeile(W({ key: 'koerperfett_grenze', richtung: 'max', wert_pct: 16.18, grenze_pct: 18 })), { t: 'Körperfett > 18 % → Mini Cut vorschlagen', s: 'ok · 16,2 %' })
+    assert.equal(wacheZeile(W({ key: 'koerperfett_grenze', status: 'keine_daten', richtung: 'max', grenze_pct: 18 })).s, 'keine Daten')
+  })
+  it('im Plan: drei Zeilen, nicht anwendbare fallen weg, ohne Phase ein Satz', () => {
+    const offen = (wachen: Wache[] | null) => renderToStaticMarkup(
+      React.createElement(AppRouterContext.Provider, { value: ROUTER as never }, React.createElement(PlanSeite, {
+        plaene: [AKTIV], vorlagen: VORLAGEN, ausblick: null, wachen, strategien: [ST], grad: 'pro', ziele: [ZIEL], stichtag: '2026-10-16', startKg: 84.8, onZuGoals: () => {},
+      })))
+    // Details sind zu — die Wachen stehen im Quelltext der Details; gezaehlt wird am Aufruf
+    const q = lies('app/v2/goals/plan-seite.tsx')
+    assert.match(q, /wachen\.filter\(w => w\.status !== 'nicht_anwendbar'\)\.map\(/)
+    assert.match(q, /wachen === null \? <div[^>]*data-wachen-leer>keine laufende Phase<\/div>/)
+    assert.ok(!q.includes('<Kommt was="Regeln mit Stand"'))
+    assert.match(lies('lib/goals/reiter-read.ts'), /kette<Wache\[\]>\('goal_phase_guards_at', steuerzielId, stichtag\)/)
+    assert.match(kette('644_plan_guards_target_cap.sql'), /CREATE FUNCTION goals\.goal_phase_guards_at\(\s*p_goal_id uuid,p_stichtag date/)
+    for (const k of ["'kraftverlust_4w'", "'trend_3w'", "'koerperfett_grenze'", "'nicht_anwendbar'", "'keine_daten'", "'ausgeloest'"]) assert.ok(kette('644_plan_guards_target_cap.sql').includes(k), k)
+    assert.ok(offen(null).length > 0)
   })
 })

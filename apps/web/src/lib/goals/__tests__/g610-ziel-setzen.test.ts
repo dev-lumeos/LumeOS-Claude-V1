@@ -146,7 +146,8 @@ describe('G-610 — Verdrahtung', () => {
     // Steuerungskarte des Entwurfs (`Main.dc.html`) fuehrt es nicht.
     assert.match(lies(join(GOALS, 'plan-seite.tsx')), /data-plan-danach[^>]*>Danach empfohlen:/)
   })
-  it('die Zeitachse rechnet das Ende ueber planende', () => {
-    assert.match(lies(join(GOALS, 'phasen-zeitachse.tsx')), /planende\(g\.gueltig_ab, g\.target_date, stufen\.summe\)/)
+  // G-656: die Zeitachse ist geloescht; das Ende ueber `planende` rechnet die Planvorschau.
+  it('die Planvorschau rechnet das Ende ueber planende', () => {
+    assert.match(readFileSync(join(GOALS, '..', '..', '..', 'lib', 'goals', 'planer.ts'), 'utf8'), /const \{ ende, verschoben \} = planende\(zielbeginn, termin, summe\)/)
   })
 })

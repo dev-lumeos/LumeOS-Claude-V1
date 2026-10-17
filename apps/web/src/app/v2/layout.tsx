@@ -13,11 +13,14 @@ import '@lumeos/ui/styles.css'
 // den Platz stellt (`data-tageswechsler`).
 import './kopf.css'
 import { V2Shell } from './shell'
+import { ladeKontextOffen } from './kontextleiste'
 
-export default function V2Layout({
+export default async function V2Layout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return <V2Shell>{children}</V2Shell>
+  // G-657: serverseitig gelesen, damit die Leiste nicht erst nach dem
+  // ersten Anstrich auf- oder zuspringt.
+  return <V2Shell kontextOffen={await ladeKontextOffen()}>{children}</V2Shell>
 }

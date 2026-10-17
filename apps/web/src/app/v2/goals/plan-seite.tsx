@@ -22,19 +22,19 @@ import { Befunde } from './befunde'
 import { zielPruefenAktion } from './ziel-aktionen'
 import { phaseBeendenAktion } from './phase-aktionen'
 import {
-  planAktivierenAktion, planAlsVorlageAktion, planAnlegenAktion, planAnlegenAusAktion, planBeendenAktion, planLoeschenAktion,
+  planAktivierenAktion, planAlsVorlageAktion, planAnlegenAktion, planAnlegenAusAktion, planBeendenAktion, planFertigLoeschenAktion, planLoeschenAktion, planNeuStartenAktion, positionNeuBerechnenAktion,
   planPausierenAktion, planUmbenennenAktion, positionAendernAbAktion, positionLoeschenAktion, positionSpeichernAktion,
   positionVerschiebenAktion, terminLoeschenAktion, terminSpeichernAktion,
 } from './plan-aktionen'
 import {
-  EIGENE_WERTE, PLAN_STATUS_TEXT, TERMIN_ART, abPro, cardioText, defizitText, eigeneWerte, katalogwerte, monatsachse,
-  naechstePosition, phasenname, richtungFuer, zeitachse, type Positionszustand, type Terminart, type Wertzeile,
+  EIGENE_WERTE, PLAN_STATUS_TEXT, PROGRAMM_TEXT, SAETZE_644, TERMIN_ART, abPro, cardioText, defizitText, eigeneWerte, katalogwerte, monatsachse,
+  naechstePosition, phasenname, programmFarbe, richtungFuer, zeitachse, type Positionszustand, type Terminart, type Wertzeile,
 } from '../../../lib/goals/plan'
 import { bestaetigteSchluessel, waechterSatz, weiterErlaubt, type Pruefung } from '../../../lib/goals/zielpruefung'
 import { phasenartFuerStrategie } from '../../../lib/goals/strategie-regeln'
 import { naechsteNamen } from '../../../lib/goals/zielwahl'
 import type { Plan, Planposition, Vorlage } from '../../../lib/goals/plan-read'
-import type { Ausblick } from '../../../lib/goals/reiter-read'
+import type { Ausblick, Wache } from '../../../lib/goals/reiter-read'
 import { kalenderwoche } from '../../../lib/goals/reiter'
 import type { Planergebnis } from '../../../lib/goals/plan-write'
 import type { Strategie } from '../../../lib/goals/strategie-read'
@@ -47,19 +47,30 @@ const tagPlus = (tag: string, n: number) => {
   const d = new Date(Date.UTC(j!, m! - 1, t! + n))
   return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`
 }
-/** Balkenfarbe je Zustand — Gelb der Goals-Toene statt der festen Programmfarben des Entwurfs. */
-const FARBE: Record<Positionszustand, string> = {
-  abgeschlossen: 'color-mix(in oklab, var(--acc-goals) 25%, var(--surface-2))',
-  laufend: 'color-mix(in oklab, var(--acc-goals) 55%, var(--surface))',
-  ruht: 'color-mix(in oklab, var(--acc-goals) 35%, var(--surface-2))',
-  geplant: 'color-mix(in oklab, var(--acc-goals) 18%, var(--surface))',
-}
 const STATUS_ZEILE: Record<Positionszustand, string> = { laufend: '● läuft', abgeschlossen: 'vorbei', geplant: 'geplant', ruht: 'ruht' }
 const KALENDER = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" aria-hidden="true">
     <rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18M8 3v4M16 3v4" />
   </svg>
 )
+
+/** G-644 Teil 2: eine Wache als Zeile des Entwurfs — „Regel → Folge" links, Stand rechts. */
+export function wacheZeile(w: Wache): { t: string; s: string } {
+  const pz = (n: number | null | undefined) => n == null ? '–' : `${n.toLocaleString('de-DE', { maximumFractionDigits: 1 })} %`
+  const st = w.status === 'keine_daten' ? 'keine Daten' : w.status === 'ausgeloest' ? 'ausgelöst' : 'ok'
+  if (w.key === 'kraftverlust_4w')
+    // `wert_pct` ist der Verlust (prior − recent) / prior — der Entwurf zeigt die Veraenderung („ok · −2 %")
+    return { t: `Kraftverlust > ${pz(w.grenze_pct)} in 4 Wochen → Defizit senken / Überschuss erhöhen`,
+      s: w.wert_pct == null ? st : `${st} · ${w.wert_pct > 0 ? '−' : w.wert_pct < 0 ? '+' : '±'}${pz(Math.abs(w.wert_pct))}` }
+  if (w.key === 'trend_3w')
+    return { t: `Trend ${w.grenze_wochen ?? 3} Wochen neben Soll → ±100 kcal`,
+      s: w.status === 'ausgeloest' ? `ausgelöst KW ${kalenderwoche(w.stand_am)}` : w.status === 'ok' ? `ok · ${w.wochen_neben_soll ?? 0} von ${w.grenze_wochen ?? 3}` : st }
+  return { t: w.richtung === 'min' ? `Körperfett < ${pz(w.grenze_pct)}` : `Körperfett > ${pz(w.grenze_pct)} → Mini Cut vorschlagen`,
+    s: w.wert_pct == null ? st : `${st} · ${pz(w.wert_pct)}` }
+}
+
+/** G-644 Teil 2: der Plantyp aus `ausgangspunkt_name`; ohne ihn (vor der Kette) die Phasenzahl. */
+const planTyp = (p: Plan) => p.typ ?? `${p.positionen.length} ${p.positionen.length === 1 ? 'Phase' : 'Phasen'}`
 
 function Kommt({ was, punkt }: { was?: string; punkt: string }) {
   return <span className="ge-kommt" data-kommt={punkt}>{was ? `${was} — ` : ''}kommt ({punkt})</span>
@@ -106,7 +117,7 @@ const aTermin = (p: Plan) => p.termine.filter(t => t.kind === 'A').map(t => t.ev
 function Segmente({ plan, hoehe }: { plan: Plan; hoehe: number }) {
   return (
     <div data-plan-segmente={plan.id} style={{ display: 'flex', height: hoehe, borderRadius: 999, overflow: 'hidden', gap: 2 }}>
-      {plan.positionen.map(p => <span key={p.id} style={{ flex: p.duration_weeks ?? 4, background: FARBE[p.zustand] }} />)}
+      {plan.positionen.map(p => <span key={p.id} style={{ flex: p.duration_weeks ?? 4, background: programmFarbe(p), opacity: p.zustand === 'abgeschlossen' ? 0.55 : 1 }} />)}
     </div>
   )
 }
@@ -130,7 +141,7 @@ function Achse({ plan, stichtag, strategien }: { plan: Plan; stichtag: string; s
             return (
               <div key={p.id} data-segment={p.zustand} style={{ position: 'absolute', top: 6, left: `${l}%`, width: `${Math.max(1, r - l)}%`, height: 28,
                 borderRadius: 6, fontSize: 11, fontWeight: 600, padding: '0 6px', display: 'flex', alignItems: 'center', whiteSpace: 'nowrap', overflow: 'hidden',
-                boxSizing: 'border-box', background: FARBE[p.zustand], color: 'var(--fg)',
+                boxSizing: 'border-box', background: programmFarbe(p), color: PROGRAMM_TEXT,
                 outline: p === laufend ? '2px solid var(--fg)' : undefined, opacity: p.zustand === 'abgeschlossen' ? 0.55 : 1 }}>
                 {phasenname(p, strategien)}{p.duration_weeks ? ` · ${p.duration_weeks} Wo` : ''}
               </div>
@@ -151,7 +162,7 @@ function Achse({ plan, stichtag, strategien }: { plan: Plan; stichtag: string; s
 const kg1 = (n: number) => n.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 const vzKg = (n: number | null) => (n === null ? '—' : `${n > 0 ? '+' : n < 0 ? '−' : '±'}${Math.abs(n).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`)
 
-function Details({ plan, strategien, alsNaechstes, ausblick }: { plan: Plan; strategien: Strategie[]; alsNaechstes: React.ReactNode; ausblick: Ausblick | null }) {
+function Details({ plan, strategien, alsNaechstes, ausblick, wachen }: { plan: Plan; strategien: Strategie[]; alsNaechstes: React.ReactNode; ausblick: Ausblick | null; wachen: Wache[] | null }) {
   return (
     <div data-plan-details={plan.id} style={{ borderTop: '1px solid var(--border)', paddingTop: 14, display: 'flex', flexDirection: 'column', gap: 16 }}>
       <div style={{ overflowX: 'auto' }}><div className="ge-eb" style={{ marginBottom: 4 }}>Phasen</div>
@@ -171,8 +182,12 @@ function Details({ plan, strategien, alsNaechstes, ausblick }: { plan: Plan; str
         </table></div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 18 }}>
         <div style={{ flex: '1 1 340px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}><span className="ge-eb">Wachen der aktuellen Phase</span>
-          {/* G-644 Teil 4: kein Leser wertet die Regeln aus */}
-          <div style={{ fontSize: 12.5, padding: '4px 0', borderBottom: '1px solid var(--border)' }}><Kommt was="Regeln mit Stand" punkt="G-644" /></div></div>
+          {/* G-644 Teil 2: `goal_phase_guards_at` — Regel → Folge, rechts der Stand */}
+          {wachen === null ? <div style={{ fontSize: 12.5, padding: '4px 0', color: 'var(--fg-subtle)' }} data-wachen-leer>keine laufende Phase</div>
+            : wachen.filter(w => w.status !== 'nicht_anwendbar').map(w => { const z = wacheZeile(w); return (
+              <div key={w.key} data-wache={w.key} data-wache-status={w.status} style={{ display: 'flex', justifyContent: 'space-between', gap: 10, fontSize: 12.5, padding: '4px 0', borderBottom: '1px solid var(--border)' }}>
+                <span>{z.t}</span><span className="ge-num" style={{ whiteSpace: 'nowrap', color: w.status === 'ok' ? 'var(--pos)' : w.status === 'ausgeloest' ? 'var(--warn)' : 'var(--fg-subtle)' }}>{z.s}</span>
+              </div>) })}</div>
         <div style={{ flex: '1 1 300px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}><span className="ge-eb">Als nächstes</span>
           <div data-als-naechstes style={{ background: 'color-mix(in oklab, var(--acc-goals) 8%, var(--surface))', borderRadius: 8, padding: '10px 12px', fontSize: 12.5 }}>{alsNaechstes}</div></div>
       </div>
@@ -367,7 +382,19 @@ function Bearbeiten({ plan, strategien, startKg, stichtag, vorlagenLive, onFerti
   const [frage, setFrage] = React.useState(false)
   const [beenden, setBeenden] = React.useState(false)
   const [r, setR] = React.useState<Planergebnis | null>(null)
+  // G-644 Teil 2: Programm und Wochen geplanter Phasen, erst mit „Speichern und neu berechnen" geschrieben
+  const [aend, setAend] = React.useState<Record<string, { code: string | null; wo: number }>>({})
   const geplant = plan.positionen.filter(p => p.zustand === 'geplant')
+  const wahl = (p: Planposition) => aend[p.id] ?? { code: p.strategie_code, wo: p.duration_weeks ?? 4 }
+  const setze = (p: Planposition, x: Partial<{ code: string | null; wo: number }>) => setAend(a => ({ ...a, [p.id]: { ...wahl(p), ...x } }))
+  const programme = strategien.filter(x => !x.code.startsWith('eigene_werte') && x.code !== 'custom' && x.code !== 'expert_bb_annual')
+  const neuBerechnen = async () => {
+    for (const p of plan.positionen.filter(x => aend[x.id])) {
+      const x = await positionNeuBerechnenAktion(p.id, aend[p.id]!.code, p.eigene_werte, aend[p.id]!.wo)
+      if (!x.ok) { setR(x); return }
+    }
+    setAend({}); aus({ ok: true, id: plan.id }, `„${plan.name}“ neu berechnet.`)
+  }
   const aus = (x: Planergebnis, satz: string, schliessen = true) => { setR(x); if (x.ok) { melde(satz); if (schliessen) onFertig() } }
   const fehler = plan.termine.length === 0 && plan.positionen.some(p => p.strategie_code === 'contest_prep')
     ? 'Dieser Plan rechnet vom Hauptwettkampf rückwärts – lege einen Termin der Art „Wettkampf A“ an.' : ''
@@ -396,8 +423,20 @@ function Bearbeiten({ plan, strategien, startKg, stichtag, vorlagenLive, onFerti
           <div key={p.id} data-bearbeiten-position={p.zustand} style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '8px 10px', display: 'flex', flexDirection: 'column', gap: 8 }}>
             {/* Flex mit Umbruch: an der laufenden Phase stehen zwei Knoepfe — im Raster brach dort das Datum um */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
-              <b style={{ fontSize: 13, flex: '1 1 140px' }}>{phasenname(p, strategien)}</b>
-              <span className="ge-num" style={{ minWidth: 56, textAlign: 'center' }}>{p.duration_weeks ? `${p.duration_weeks} Wo` : 'offen'}</span>
+              {p.zustand === 'geplant' && !p.eigene_werte ? (
+                <select className="ge-inp" aria-label="Programm" data-position-programm={p.id} style={{ flex: '1 1 140px', maxWidth: 260 }}
+                        value={wahl(p).code ?? ''} onChange={e => setze(p, { code: e.target.value })}>
+                  {!programme.some(x => x.code === p.strategie_code) && <option value={p.strategie_code ?? ''}>{phasenname(p, strategien)}</option>}
+                  {programme.map(x => <option key={x.code} value={x.code}>{x.label}</option>)}
+                </select>
+              ) : <b style={{ fontSize: 13, flex: '1 1 140px' }}>{phasenname(p, strategien)}</b>}
+              {p.zustand === 'geplant' ? (
+                <span style={{ display: 'inline-flex', gap: 4, alignItems: 'center' }}>
+                  <button type="button" className="ge-btn ge-ico" aria-label="Woche weniger" data-position-minus={p.id} disabled={wahl(p).wo <= 1} onClick={() => setze(p, { wo: wahl(p).wo - 1 })}>−</button>
+                  <span className="ge-num" data-position-wochen={p.id} style={{ minWidth: 56, textAlign: 'center' }}>{wahl(p).wo} Wo</span>
+                  <button type="button" className="ge-btn ge-ico" aria-label="Woche mehr" data-position-plus={p.id} disabled={wahl(p).wo >= 520} onClick={() => setze(p, { wo: wahl(p).wo + 1 })}>+</button>
+                </span>
+              ) : <span className="ge-num" style={{ minWidth: 56, textAlign: 'center' }}>{p.duration_weeks ? `${p.duration_weeks} Wo` : 'offen'}</span>}
               <span className="ge-num" data-position-zeitraum style={{ fontSize: 12, color: 'var(--fg-muted)', whiteSpace: 'nowrap' }}>{dstr(p.gueltig_ab)} – {dstr(p.projected_end_date)} · {STATUS_ZEILE[p.zustand]}</span>
               <span style={{ display: 'inline-flex', gap: 2, marginLeft: 'auto' }}>
                 {p.zustand === 'geplant' && <>
@@ -438,7 +477,8 @@ function Bearbeiten({ plan, strategien, startKg, stichtag, vorlagenLive, onFerti
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
           <button type="button" className="ge-btn ge-btn-p" data-plan-speichern
                   onClick={async () => { if (name.trim() && name.trim() !== plan.name) aus(await planUmbenennenAktion(plan.id, name.trim()), `„${name.trim()}“ gespeichert.`); else onFertig() }}>Speichern</button>
-          <Kommt was="Speichern und neu berechnen" punkt="G-644" />
+          <button type="button" className="ge-btn" data-plan-neu-berechnen disabled={Object.keys(aend).length === 0}
+                  onClick={() => { void neuBerechnen() }}>Speichern und neu berechnen</button>
           {vorlagenLive
             ? <button type="button" className="ge-btn" data-plan-als-vorlage
                       onClick={async () => aus(await planAlsVorlageAktion(plan.id, plan.name), `„${plan.name}“ als eigene Vorlage gespeichert.`, false)}>Als Vorlage speichern</button>
@@ -573,7 +613,7 @@ function WeitererPlan({ plan, aktiv, strategien, onBearbeiten, melde }: {
         <div className="ge-sq ge-grau" style={{ border: '1px solid var(--border)' }}>{KALENDER}</div>
         <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-            <span className="ge-typ">{plan.positionen.length} {plan.positionen.length === 1 ? 'Phase' : 'Phasen'}</span>
+            <span className="ge-typ" data-plan-typ>{planTyp(plan)}</span>
             <span className="ge-chip">{PLAN_STATUS_TEXT[plan.status]}</span>
             <button type="button" className="ge-btn ge-btn-g ge-ico" style={{ marginLeft: 'auto' }} aria-label={`${plan.name} bearbeiten`} onClick={onBearbeiten}>✎</button>
           </div>
@@ -623,14 +663,16 @@ function WeitererPlan({ plan, aktiv, strategien, onBearbeiten, melde }: {
   )
 }
 
-function FertigerPlan({ plan, strategien, vorlagenLive, melde }: { plan: Plan; strategien: Strategie[]; vorlagenLive: boolean; melde: (s: string) => void }) {
+function FertigerPlan({ plan, strategien, vorlagenLive, melde, stichtag }: { plan: Plan; strategien: Strategie[]; vorlagenLive: boolean; melde: (s: string) => void; stichtag: string }) {
   const [offen, setOffen] = React.useState(false)
+  const [loeschen, setLoeschen] = React.useState(false)
   const [r, setR] = React.useState<Planergebnis | null>(null)
+  const ohneDauer = plan.positionen.some(p => p.duration_weeks == null)
   const erreicht = plan.ziel?.status === 'achieved'
   return (
     <div data-plan-kachel="abgeschlossen" className="ge-card" style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 8, background: 'var(--bg)' }}>
       <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-        <span className="ge-typ">{plan.positionen.length} {plan.positionen.length === 1 ? 'Phase' : 'Phasen'}</span>
+        <span className="ge-typ" data-plan-typ>{planTyp(plan)}</span>
         <span className={`ge-chip${erreicht ? ' ge-lage-voraus' : ' ge-grau'}`}>{erreicht ? '✓ erreicht' : 'beendet'}</span>
       </div>
       <div style={{ fontWeight: 600 }}>{plan.name}</div>
@@ -644,8 +686,23 @@ function FertigerPlan({ plan, strategien, vorlagenLive, melde }: { plan: Plan; s
         <button type="button" className="ge-btn" data-plan-kachel-details={plan.id} onClick={() => setOffen(o => !o)}>Details</button>
         {vorlagenLive && <button type="button" className="ge-btn" data-plan-als-vorlage={plan.id}
                                  onClick={async () => { const x = await planAlsVorlageAktion(plan.id, plan.name); setR(x); if (x.ok) melde(`„${plan.name}“ als eigene Vorlage gespeichert.`) }}>Als Vorlage</button>}
-        <Kommt was="Neu starten, Löschen" punkt="G-644" />
+        {/* Entwurf: „Name (neu)" als Entwurf ab naechster Woche (`goal_plan_restart`) */}
+        {/* `goal_plan_restart` braucht je Phase eine Dauer (G644_BLOCK:neustart_braucht_dauer) — vorher sperren, mit Grund */}
+        <button type="button" className="ge-btn" data-plan-neu-starten={plan.id} disabled={ohneDauer} title={ohneDauer ? SAETZE_644.neustart_braucht_dauer : undefined}
+                onClick={async () => { const x = await planNeuStartenAktion(plan.id, `${plan.name} (neu)`, tagPlus(stichtag, 7)); setR(x); if (x.ok) melde(`„${plan.name} (neu)“ liegt als Entwurf unter „Weitere Pläne“.`) }}>Neu starten</button>
+        <button type="button" className="ge-btn ge-btn-r" data-plan-fertig-loeschen={plan.id} onClick={() => setLoeschen(l => !l)}>Löschen</button>
       </div>
+      {/* `goal_plan_delete_completed` loescht nur bestaetigt — die Bestaetigung ist dieser zweite Klick */}
+      {loeschen && (
+        <div className="ge-hinweis-rot" style={{ padding: '10px 12px', display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center', justifyContent: 'space-between' }}>
+          <span>Abgeschlossenen Plan „{plan.name}“ endgültig löschen?</span>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button type="button" className="ge-btn" onClick={() => setLoeschen(false)}>Abbrechen</button>
+            <button type="button" className="ge-btn ge-btn-r" data-plan-fertig-loeschen-ja={plan.id}
+                    onClick={async () => { const x = await planFertigLoeschenAktion(plan.id); setR(x); if (x.ok) melde(`„${plan.name}“ gelöscht.`) }}>Endgültig löschen</button>
+          </div>
+        </div>
+      )}
       <Satz r={r} />
     </div>
   )
@@ -676,10 +733,10 @@ function Vorlagen({ vorlagen }: { vorlagen: Vorlage[] | null }) {
   )
 }
 
-export function PlanSeite({ plaene, neu: neuVonAussen, onNeu, vorlagen = null, ausblick = null, strategien, grad, ziele, stichtag, startKg, onZuGoals, vomTermin }: {
+export function PlanSeite({ plaene, neu: neuVonAussen, onNeu, vorlagen = null, ausblick = null, wachen = null, strategien, grad, ziele, stichtag, startKg, onZuGoals, vomTermin }: {
   /** Tom 16.10.: „+ Neuer Plan" steht im Kopf der Seite — dann steuert der Kopf den Dialog. */
   neu?: boolean; onNeu?: (offen: boolean) => void
-  plaene: Plan[]; vorlagen?: Vorlage[] | null; ausblick?: Ausblick | null; strategien: Strategie[]; grad: string | null; ziele: ZielFortschritt[]
+  plaene: Plan[]; vorlagen?: Vorlage[] | null; ausblick?: Ausblick | null; wachen?: Wache[] | null; strategien: Strategie[]; grad: string | null; ziele: ZielFortschritt[]
   stichtag: string; startKg: number | null; onZuGoals: () => void
   /** G-645/3: „vom Termin aus" als Einschub, solange `goal_plan_templates` fehlt. */
   vomTermin?: React.ReactNode
@@ -732,7 +789,7 @@ export function PlanSeite({ plaene, neu: neuVonAussen, onNeu, vorlagen = null, a
             <div className="ge-sq ge-ton-goals">{KALENDER}</div>
             <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
-                <span className="ge-typ">Aktiver Plan · {aktiv.positionen.length} {aktiv.positionen.length === 1 ? 'Phase' : 'Phasen'}</span>
+                <span className="ge-typ" data-plan-typ>Aktiver Plan · {planTyp(aktiv)}</span>
                 <span className="ge-chip ge-lage-voraus">● läuft</span>
                 <span className="ge-num" data-plan-zeitraum style={{ marginLeft: 'auto', fontSize: 10.5, color: 'var(--fg-subtle)' }}>
                   {dstr(beginn(aktiv))} – {dstr(ende(aktiv))} · {wochen(aktiv)} Wochen</span>
@@ -750,7 +807,7 @@ export function PlanSeite({ plaene, neu: neuVonAussen, onNeu, vorlagen = null, a
             </div>
           </div>
           <Achse plan={aktiv} stichtag={stichtag} strategien={strategien} />
-          {details && <Details plan={aktiv} strategien={strategien} ausblick={ausblick} alsNaechstes={
+          {details && <Details plan={aktiv} strategien={strategien} ausblick={ausblick} wachen={wachen} alsNaechstes={
             // G-649: der Wechselvorschlag der laufenden Phase (vorher die Kachel `PhaseVorschlag`)
             laufend?.empfohlen ? <span data-plan-empfohlen>Empfohlen{laufend.projected_end_date ? ` ab ${dstr(laufend.projected_end_date)}` : ''}: <b>{phasenname({ strategie_code: laufend.empfohlen.next, phase_type: laufend.empfohlen.next, sub_phase_code: null, eigene_werte: null }, strategien)}</b>.
               {laufend.empfohlen.grund && <> Grund: {laufend.empfohlen.grund}.</>} Übernehmen = Phase im Plan ergänzen (✎).</span>
@@ -782,7 +839,7 @@ export function PlanSeite({ plaene, neu: neuVonAussen, onNeu, vorlagen = null, a
       <section aria-label="Abgeschlossene Pläne" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <span className="ge-eb">Abgeschlossene Pläne · {fertig.length}</span>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(300px,100%),1fr))', gap: 14, alignItems: 'start' }}>
-          {fertig.map(p => <FertigerPlan key={p.id} plan={p} strategien={strategien} vorlagenLive={vorlagenLive} melde={setToast} />)}
+          {fertig.map(p => <FertigerPlan key={p.id} plan={p} strategien={strategien} vorlagenLive={vorlagenLive} melde={setToast} stichtag={stichtag} />)}
         </div>
       </section>
       <Vorlagen vorlagen={vorlagen} />

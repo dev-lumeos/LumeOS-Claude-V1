@@ -90,20 +90,12 @@ describe('G-608 — Lese- und Schreibweg', () => {
     assert.match(W(), /\.from\('goal_programs'\)\.delete\(\)\.eq\('goal_id', goalId\)/)
   })
 
-  it('die Seite laedt die Programme; die Zeitachse steht seit G-649 nicht mehr im Reiter', () => {
-    assert.match(lies(join(GOALS, 'page.tsx')), /ladeProgrammwochen\(\)/)
-    // Tom 16.10.: die alten Bauteile unter dem aktiven Plan fallen weg
+  // G-656: `ladeProgrammwochen` und die Zeitachse sind geloescht — die Stufenwochen
+  // liest der Planer je Plan aus `goal_program_positions` (plan-read.ts). Weggefallen:
+  // „anderes Programm wird nicht angewandt" und „Zeitachse und Editor sagen die Abweichung an".
+  it('die Seite laedt keine losen Programmwochen mehr, die Zeitachse steht nicht im Reiter', () => {
+    assert.ok(!/ladeProgrammwochen/.test(lies(join(GOALS, 'page.tsx'))), 'der tote Leseweg ist zurueck')
     assert.ok(!/<PhasenZeitachse[\s/>]/.test(lies(join(GOALS, 'ansicht.tsx'))), 'die Zeitachse steht wieder im Reiter')
-  })
-
-  it('ein Programm einer anderen Strategie wird nicht angewandt', () => {
-    assert.match(lies(join(GOALS, 'phasen-zeitachse.tsx')),
-      /pr && s && pr\.strategie_code === s\.code \? pr\.wochen : \{\}/)
-  })
-
-  it('Zeitachse und Editor sagen die Abweichung an', () => {
-    // G-610: die Zeitachse reicht zusaetzlich das verschobene Ende mit.
-    assert.match(lies(join(GOALS, 'phasen-zeitachse.tsx')), /<Abweichung stufen=\{stufen\}[^>]*\/>/)
-    assert.match(lies(join(GOALS, 'phasen-editor-echt.tsx')), /<Abweichung stufen=\{stufen\} \/>/)
+    assert.match(lies(join(HIER, '..', 'plan-read.ts')), /from\('goal_program_positions'\)\.select\('\*'\)/)
   })
 })

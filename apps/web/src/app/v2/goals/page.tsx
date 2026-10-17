@@ -32,8 +32,7 @@ import type { Metadata } from 'next'
 import { heute } from '../../../lib/datum'
 import {
   alterAm, angemeldeteNutzerin, ladeAdaptivenTdee, ladeKoerperzusammensetzung,
-  ladeFotosessions, ladeMeilensteine, ladeMessungen, ladeOffenePhasen, ladeProgrammwochen,
-  type Programmwochen,
+  ladeFotosessions, ladeMeilensteine, ladeMessungen, ladeOffenePhasen,
   ladePhasen, ladeProfil,
   ladeUmfaenge, ladeZiele,
   zaehleZukunftsmessungen,
@@ -107,7 +106,6 @@ export default async function V2GoalsPage({
   // G-538 erlaubt `uq_goal_phases_one_open` mehrere.
   // `phase_am()` kann sie nicht liefern (`LIMIT 1`).
   let offenePhasen: Zielphase[] = []
-  let programme: Record<string, Programmwochen> = {}
   // `[read]` **Eine Darstellung, kein Datum** — faellt sie aus,
   // gilt die Vorgabe, nicht ein Fehler.
   let einheit: Rateneinheit = 'prozent'
@@ -121,7 +119,7 @@ export default async function V2GoalsPage({
     const userId = await angemeldeteNutzerin()
     ;[ziele, meilensteine, phasen, navy, tdee, messungen, zukunftsmessungen, umfaenge,
       profil, fotosessions, strategien, strategieProfil, offenePhasen,
-      einheit, programme]
+      einheit]
       = await Promise.all([
         ladeZiele(userId, stichtag),
         ladeMeilensteine(userId, stichtag),
@@ -137,8 +135,6 @@ export default async function V2GoalsPage({
         ladeStrategieProfil(userId),
         ladeOffenePhasen(userId, stichtag),
         ladeEinheit(),
-        // G-608: die Stufenwochen des Nutzers (E-85).
-        ladeProgrammwochen(),
       ])
 
     // Die zwei Zielwert-Funktionen kommen aus dem bestehenden Lesepfad
@@ -155,7 +151,8 @@ export default async function V2GoalsPage({
     // raten zu lassen.** `[read]` **Bei genau einer offenen Phase
     // ist es deren Ziel; bei mehreren bleibt es offen**, und die
     // Datenbank meldet die Mehrdeutigkeit als Zustand (A4).
-    woche = await ladeWoche(userId, stichtag, steuerziel(ziele)?.goal_id ?? null)
+    woche = await ladeWoche(userId, stichtag, steuerziel(ziele)?.goal_id ?? null,
+      ziele.filter(g => g.goal_role === 'measurement' && g.zustand.zustand === 'active').map(g => g.goal_id))
     // G-629: laufend ist, was `phase_am` liefert (echt.phasen).
     ;[plaene, vorlagen] = await Promise.all([ladePlaene(userId, stichtag, phasen.map(p => p.phase_id)), ladeVorlagen()])
 
@@ -191,7 +188,6 @@ export default async function V2GoalsPage({
         strategien,
         strategieProfil,
         offenePhasen,
-        programme,
         einheit,
         ladefehler,
         woche,

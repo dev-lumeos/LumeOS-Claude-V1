@@ -16,8 +16,8 @@ import * as React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { AppRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
-import { PLAN_STATUS, PROGNOSE_GRUND, ReiterGoals } from '../../../app/v2/goals/reiter-goals'
-import type { Ausblick } from '../reiter-read'
+import { PLAN_STATUS, PROGNOSE_GRUND, ReiterGoals, messPrognose, messTempo } from '../../../app/v2/goals/reiter-goals'
+import type { Ausblick, Messwoche, Wochendaten } from '../reiter-read'
 import { phasenLauf, wocheText } from '../plan'
 import { phaseAnzeige } from '../phase-regeln'
 import { zustandAusListe, zustandAusStatus } from '../zustand'
@@ -260,16 +260,55 @@ describe('G-648 — Reste weg, Restbefunde', () => {
     const a = ohneKommentar(lies('app/v2/goals/ansicht.tsx'))
     // Tom 16.10.: keine Phasen-Pille im Kopf mehr; die Beenden-Kachel ist weg (G-649: Beenden im Bearbeiten)
     assert.ok(!/phase_type \?\? ''\)\.replace\(\/_\/g/.test(a), 'der Kopf zeigt wieder den Code')
-    const s = ohneKommentar(lies('app/v2/goals/phase-setzen.tsx'))
-    assert.ok(!/sub="aus phase_transition_recommendation"/.test(s), 'Funktionsname im Untertitel')
-    assert.match(s, /läuft seit \$\{phase\.gueltig_ab\.split\('-'\)\.reverse\(\)\.join\('\.'\)\}/)
+    // G-656: phase-setzen.tsx ist geloescht; der Planer nennt Phasen ueber `phasenname`, nie den Code.
+    const s = ohneKommentar(lies('app/v2/goals/plan-seite.tsx'))
+    assert.ok(!/phase_transition_recommendation|\.replace\(\/_\/g/.test(s), 'Funktionsname oder Code im Planer')
+    assert.match(s, /<b style=\{\{ fontSize: 13, flex: '1 1 140px' \}\}>\{phasenname\(p, strategien\)\}<\/b>/)
   })
-  it('Zeitachse: eingefrorene Ziele haben kein Zeitfenster', () => {
-    assert.match(lies('app/v2/goals/phasen-zeitachse.tsx'), /const zeilen: Zeile\[\] = ziele\.filter\(z => !istEingefroren\(z\.zustand\)\)\.map\(/)
-  })
+  // G-656: „Zeitachse: eingefrorene Ziele haben kein Zeitfenster" ist mit phasen-zeitachse.tsx
+  // weggefallen — der Planer zeigt Plaene, nicht Ziele; Fertiges steht unter „Abgeschlossene Pläne".
   it('Woche: eine Rechnung, mit Hoechstdauer bei offenem Ende', () => {
     const l = phasenLauf({ gueltig_ab: '2026-06-01', projected_end_date: null, actual_end_date: null }, '2026-10-16')
     assert.equal(wocheText(l, 52), 'Woche 20 von max 52')
     assert.equal(wocheText(l), 'Woche 20')
+  })
+})
+
+describe('G-654 angebunden: Lage, Woche je Messziel, Tempo', () => {
+  const MW = (o: Partial<Messwoche>): Messwoche => ({ delta_woche: null, soll_delta_woche: null, tempo_pro_woche: null, prognose_status: 'nicht_absehbar', prognose_datum: null, ...o })
+  const KB = Z({ goal_id: 'k1', title: 'Kniebeuge 1RM 160 kg', goal_role: 'measurement', is_primary: false, measurement_type: 'e1rm', target_unit: 'kg', target_value: 160 })
+  const KF = Z({ goal_id: 'f1', title: 'Körperfett 14 %', goal_role: 'measurement', is_primary: false, measurement_type: 'body_fat', target_unit: '%', target_value: 14 })
+  const mit = (woche: Partial<Wochendaten>) => renderToStaticMarkup(
+    React.createElement(AppRouterContext.Provider, { value: ROUTER as never }, React.createElement(ReiterGoals, {
+      ziele: [Z({}), KB, KF], phasen: [PH], offenePhasen: [OP], zielwerte: ZW({}), vorschlag: null, messungen: [], meilensteine: [], strategien: [ST, AUF], plaene: [],
+      woche: { trainings: 3, beitraege: [], trend: { heute: 84.7, vorwoche: 84.7 }, ...woche }, stichtag: '2026-10-16',
+      onZielSetzen: () => {}, onMessziel: () => {}, onPhaseEngine: () => {}, onCrossModule: () => {},
+    })))
+  it('Lage-Pille des Steuerziels nur mit Lage aus der Kette', () => {
+    assert.match(mit({ lage: { lage: 'hinterher', abweichung_kg: -3.176, toleranz_kg: 0.3 } }), /data-steuerung-lage="hinterher"[^>]*>hinterher</)
+    // ohne Lage keine Pille — gezaehlt an der Klasse, das Attribut faellt bei null ohnehin weg
+    for (const h of [mit({ lage: { lage: null, abweichung_kg: null, toleranz_kg: null } }), mit({})])
+      assert.doesNotMatch(h.slice(h.indexOf('aria-label="Steuerung"'), h.indexOf('data-steuerung-variante')), /ge-lage-/)
+  })
+  it('Diese Woche: Bewegung je Messziel mit Einheit, Wertung gegen das Soll, kein „kommt (offen)"', () => {
+    const h = mit({ messwochen: { k1: MW({ delta_woche: 3, soll_delta_woche: 0.942 }), f1: MW({ delta_woche: 0.93, soll_delta_woche: -0.062 }) } })
+    const woche = h.slice(h.indexOf('aria-label="Diese Woche"'), h.indexOf('aria-label="Module"'))
+    assert.ok(woche.length > 100 && !woche.includes('data-kommt'), 'in „Diese Woche" noch „kommt"')
+    const zeile = (k: string) => h.slice(h.indexOf(`data-woche="${k}"`), h.indexOf('data-woche=', h.indexOf(`data-woche="${k}"`) + 12))
+    assert.match(zeile('kraft-k1'), />\+3,0 kg</)
+    assert.match(zeile('kraft-k1'), /color:var\(--pos\)/)
+    assert.match(zeile('fett-f1'), />\+0,9 %</)
+    assert.match(zeile('fett-f1'), /width:0%;background:var\(--warn\)/)
+    assert.match(mit({ messwochen: {} }), /data-woche="kraft-k1"[\s\S]*?keine Messung vor dieser Woche/)
+  })
+  it('Tempo 4 Wo und voraussichtlich aus der Woche', () => {
+    assert.equal(messTempo(MW({ tempo_pro_woche: 3.92 }), 'kg'), '+3,9 kg/Wo')
+    assert.equal(messTempo(MW({ tempo_pro_woche: -0.2 }), '%'), '−0,2 %/Wo')
+    assert.equal(messTempo(MW({}), 'kg'), '—')
+    assert.equal(messTempo(undefined, 'kg'), '—')
+    assert.equal(messPrognose(MW({ prognose_status: 'datum', prognose_datum: '2027-02-03' })), 'Feb 2027')
+    assert.equal(messPrognose(MW({})), 'nicht absehbar')
+    assert.equal(messPrognose(MW({ prognose_status: 'nicht_absehbar', prognose_datum: '2027-02-03' })), 'nicht absehbar', 'der Status entscheidet, nicht das Feld')
+    assert.equal(messPrognose(null), '—')
   })
 })

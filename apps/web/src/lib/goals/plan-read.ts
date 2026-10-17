@@ -35,6 +35,8 @@ export interface Plan {
   goal_id: string
   name: string
   status: Planstatus
+  /** G-644 Teil 2: `goal_programs.ausgangspunkt_name` ("Einfacher Plan · aus Goals", "Contest Prep 16 Wochen"). */
+  typ?: string | null
   ziel: { title: string; status: string | null; target_value: number | null; target_date: string | null; start_value?: number | null; current_value?: number | null } | null
   positionen: Planposition[]
   termine: Plantermin[]
@@ -69,7 +71,7 @@ const text = (v: unknown) => (typeof v === 'string' && v !== '' ? v : null)
 export async function ladePlaene(userId: string, stichtag: string, laufendePhasen: string[]): Promise<Plan[]> {
   const db = createSessionClient().schema('goals')
   const { data: plaene, error } = await db.from('goal_programs')
-    .select('id, goal_id, name, status').eq('user_id', userId).order('created_at', { ascending: true })
+    .select('id, goal_id, name, status, ausgangspunkt_name').eq('user_id', userId).order('created_at', { ascending: true })
   if (error) throw new Error(`goal_programs: ${error.message}`)
   const ids = (plaene ?? []).map(p => p.id as string)
   if (ids.length === 0) return []
@@ -94,7 +96,7 @@ export async function ladePlaene(userId: string, stichtag: string, laufendePhase
   return (plaene ?? []).map(p => {
     const z = ((ziele.data ?? []) as Array<Record<string, unknown>>).find(g => g.id === p.goal_id)
     return {
-      id: p.id as string, goal_id: p.goal_id as string, name: String(p.name), status: p.status as Planstatus,
+      id: p.id as string, goal_id: p.goal_id as string, name: String(p.name), status: p.status as Planstatus, typ: text(p.ausgangspunkt_name),
       ziel: z ? { title: String(z.title), status: text(z.status), target_value: zahl(z.target_value), target_date: text(z.target_date), start_value: zahl(z.start_value), current_value: zahl(z.current_value) } : null,
       positionen: ((pos.data ?? []) as Array<Record<string, unknown>>).filter(x => x.program_id === p.id).map(x => {
         const phaseId = text(x.goal_phase_id)

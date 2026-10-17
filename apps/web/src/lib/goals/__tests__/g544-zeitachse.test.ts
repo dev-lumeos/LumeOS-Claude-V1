@@ -185,173 +185,83 @@ describe('G-544/A2 — rueckwaerts vom Ankerdatum', () => {
 // ════════════════════════════════════════════════════════════════
 
 describe('G-544/A1 — Ziele statt Phasentypen', () => {
-  const Z = () => lies(join(GOALS, 'phasen-zeitachse.tsx'))
+  // G-656: phasen-zeitachse.tsx ist geloescht; die Phase Engine ist seit G-649 die
+  // Plan-Seite (`plan-seite.tsx`), die Steuerung zeigt das Ziel (`reiter-goals.tsx`).
+  const Z = () => lies(join(GOALS, 'plan-seite.tsx'))
+  const R = () => lies(join(GOALS, 'reiter-goals.tsx'))
 
-  it('die Achse liest die ZIELE, nicht die Phasenarten', () => {
+  it('kein Raster aus Phasenarten', () => {
     const q = Z()
-    assert.match(q, /data-zielzeile=\{g\.goal_id\}/,
-      'es gibt keine Zeile je Ziel')
-    assert.ok(!/PHASENARTEN\.map/.test(q),
-      'die Achse baut wieder ein Raster aus Phasenarten')
+    assert.ok(q.length > 1000, 'plan-seite.tsx nicht gefunden')
+    assert.ok(!/PHASENARTEN\.map/.test(q) && !/PHASENARTEN\.map/.test(R()), 'es gibt wieder ein Raster aus Phasenarten')
   })
 
   it('mehrere offene Phasen werden je Ziel zugeordnet', () => {
-    // `[cmd]` **`uq_goal_phases_one_open` steht auf `goal_id`** —
-    // zwei Ziele mit je einer offenen Phase sind erlaubt.
-    const q = Z()
-    assert.match(q, /phasen\.find\(x => x\.goal_id === z\.goal_id\)/,
-      'die Phase wird nicht je Ziel zugeordnet — dann zeigten alle '
-      + 'Ziele dieselbe')
+    // `[cmd]` **`uq_goal_phases_one_open` steht auf `goal_id`** — die Steuerung
+    // nimmt die Phase IHRES Ziels, nicht die erste.
+    assert.match(R(), /phasen\.find\(x => x\.goal_id === goalId\)/,
+      'die Phase wird nicht je Ziel zugeordnet — dann zeigten alle Ziele dieselbe')
   })
 
   it('der Leseweg holt ALLE offenen Phasen, nicht eine', () => {
-    // `[cmd]` **`phase_am()` endet auf `LIMIT 1`** — gemessen an
-    // `prosrc`. `[read]` **Deshalb liest `ladeOffenePhasen` die
-    // Tabelle.**
     const q = lies(join(HIER, '..', 'lesen.ts'))
     const i = q.indexOf('export async function ladeOffenePhasen')
     assert.ok(i > 0, 'ladeOffenePhasen gibt es nicht')
     const rumpf = q.slice(i, i + 1200)
-    assert.match(rumpf, /\.from\('goal_phases'\)/,
-      'der Leseweg ruft eine Funktion statt die Tabelle')
-    assert.ok(!/phase_am/.test(rumpf),
-      'der Leseweg nutzt phase_am — die kann nur eine Phase liefern')
-    assert.match(rumpf, /\.is\('actual_end_date', null\)/,
-      'es werden auch beendete Phasen geholt — die sind Verlauf, '
-      + 'nicht Gegenwart')
+    assert.match(rumpf, /\.from\('goal_phases'\)/, 'der Leseweg ruft eine Funktion statt die Tabelle')
+    assert.ok(!/phase_am/.test(rumpf), 'der Leseweg nutzt phase_am — die kann nur eine Phase liefern')
+    assert.match(rumpf, /\.is\('actual_end_date', null\)/, 'es werden auch beendete Phasen geholt')
   })
 
-  it('kein Ziel ist kein leerer Reiter', () => {
-    // `[read]` **A1: „Kein Ziel ist kein leerer Reiter, sondern der
-    // Weg zum Anlegen (G-537)."**
-    //
-    // `[read]` **Dieser Waechter war zuerst blind.** Er suchte die
-    // MARKEN `data-zeitachse-leer` und `data-zeitachse-neu`
-    // irgendwo in der Datei — **die Sabotage ersetzte die
-    // Bedingung durch `false` und blieb gruen**, weil beide
-    // Marken im Quelltext stehen blieben, nur unerreichbar.
-    //
-    // `[read]` **Gemessen wird jetzt die BEDINGUNG**, an der der
-    // Leerfall haengt.
+  it('kein Plan ist kein leerer Reiter', () => {
+    // `[read]` **Gemessen wird die BEDINGUNG** (der Waechter war einmal blind,
+    // weil nur die Marke gesucht wurde).
     const q = Z()
-    assert.match(q, /\{zeilen\.length === 0 \? \(/,
-      'der Leerfall haengt nicht mehr an der Zahl der Ziele — dann '
-      + 'ist er entweder immer oder nie da')
-    const i = q.indexOf('zeilen.length === 0')
-    const zweig = q.slice(i, i + 900)
-    assert.match(zweig, /data-zeitachse-leer/,
-      'der Leerfall hat keine Marke')
-    assert.match(zweig, /data-zeitachse-neu/,
-      'der Leerfall bietet keinen Weg zum Anlegen')
-    assert.match(zweig, /onClick=\{onNeuesZiel\}/,
-      'der Knopf ruft nichts — ein Weg, der nirgends hinfuehrt')
+    const i = q.search(/\) : \(\s*<section data-kein-aktiver-plan/)
+    assert.ok(i > 0 && q.lastIndexOf('{aktiv ? (', i) > 0, 'der Leerfall haengt nicht mehr am aktiven Plan')
+    assert.match(q.slice(i, i + 600), /Aktiviere einen Plan unten, lege einen neuen an oder setze in Goals eine Richtung/,
+      'der Leerfall nennt keinen Weg')
   })
 
   it('ein Ziel ohne Phase sagt das', () => {
-    const q = Z()
-    assert.match(q, /keine laufende Phase/,
-      'ein Ziel ohne Phase sieht aus wie eines mit — der Unterschied '
-      + 'muss dastehen')
+    assert.match(R(), /herkunft="ziel_ohne_laufende_phase"/, 'ein Ziel ohne Phase sieht aus wie eines mit')
   })
 
-  it('die Achse rechnet gegen den Stichtag', () => {
+  it('die Seite rechnet gegen den Stichtag', () => {
     const q = Z()
-    assert.ok(!/Date\.now\(\)|new Date\(\)/.test(q),
-      'die Achse holt sich die Zeit selbst')
-    assert.match(q, /heute=\{echt\.stichtag\}|heute: string/,
-      'der Stichtag kommt nicht von aussen')
+    assert.ok(!/Date\.now\(\)|new Date\(\)/.test(q), 'die Seite holt sich die Zeit selbst')
+    assert.match(q, /stichtag: string/, 'der Stichtag kommt nicht von aussen')
   })
 })
 
 // ════════════════════════════════════════════════════════════════
-// A3 / A4 — Reihenfolge nennen, Editor nicht versprechen
+// A3 / A4 — Reihenfolge nennen, nichts selbst schreiben
 // ════════════════════════════════════════════════════════════════
 
 describe('G-544/A3 — planen heisst Reihenfolge', () => {
   it('die Folgephasen kommen aus next_codes', () => {
-    // `[cmd]` **8 der 17 Katalogzeilen fuehren `next_codes`** —
-    // gemessen 2026-09-30.
-    // `[read]` **Dieser Waechter war zuerst blind:** er suchte
-    // `next_codes` irgendwo in der Datei — **die Sabotage tippte die
-    // Codes daneben fest ein und blieb gruen**, weil der Bezeichner
-    // im Kommentar weiterstand.
-    //
-    // `[read]` **Gemessen wird die AUSGABE**, und dass kein Code als
-    // Literal danebensteht.
-    const q = lies(join(GOALS, 'phasen-zeitachse.tsx'))
-    // G-648: Namen statt Codes (Auftrag „Danach möglich — Waechter anpassen") —
-    // `naechsteNamen` liest dieselbe Katalogzeile (`next_codes`) und nennt Label/Phasenart.
-    assert.match(q, /\{naechsteNamen\(z\.strategie, strategien\)\.join\(/,
-      'die Folgephasen werden nicht aus der Katalogzeile ausgegeben')
-    assert.match(q, /data-zielfolge/, 'sie tragen keine Marke')
-    // `[cmd]` **Die 17 Codes, gemessen 2026-09-30** — keiner davon
-    // darf als Literal in der Achse stehen.
+    const q = lies(join(GOALS, 'plan-seite.tsx'))
+    assert.match(q, /const danach = variante \? naechsteNamen\(variante, strategien\) : \[\]/,
+      'die Folgephasen werden nicht aus der Katalogzeile genommen')
+    assert.match(q, /<span data-plan-danach>Danach empfohlen: \{danach\.join\(/, 'sie werden nicht ausgegeben')
     for (const code of ['lose', 'maintain', 'gain', 'aggressive_cut',
       'moderate_cut', 'conservative_cut', 'mini_cut', 'lean_bulk',
       'clean_bulk', 'aggressive_bulk', 'body_recomp', 'reverse_diet',
       'contest_prep', 'peak_week', 'expert_bb_annual',
       'maintenance_diet_break']) {
       assert.ok(!new RegExp(`[>\s]${code}[\s<·]`).test(q),
-        `„${code}" steht als Text in der Achse — dann haengt sie an `
-        + 'einer Zeile statt am Katalog')
+        `„${code}" steht als Text in der Seite — dann haengt sie an einer Zeile statt am Katalog`)
     }
   })
 })
 
-describe('G-544/A4 — was die Achse nicht kann, steht da', () => {
-  const Z = () => lies(join(GOALS, 'phasen-zeitachse.tsx'))
-
-  // ══ G-539 hat die Voraussetzung eingeloest ═════════════
-  //
-  // `[cmd]` Diese Pruefungen verboten einen Knopf in den Editor und
-  // jeden Schreibweg. **Ihre Begruendung war: „den gibt es erst mit
-  // G-539."**
-  //
-  // `[cmd]` **G-539 ist gebaut** (`phasen-editor-echt.tsx`).
-  // `[read]` **Die Begruendung ist damit hinfaellig, die REGEL
-  // nicht:** was es nicht gibt, wird nicht versprochen. **Gemessen
-  // wird jetzt, was WEITERHIN fehlt** — eigene Vorlagen (G-540).
-
-  it('der Editorknopf zeigt auf den Editor, den es gibt', () => {
-    const q = Z()
-    assert.match(q, /data-editor-auf=\{g\.goal_id\}/,
-      'es gibt keinen Weg in den Editor — G-539 ist gebaut, also '
-      + 'gehoert der Knopf an die Zielzeile')
-    // G-608: der Import traegt jetzt auch `Abweichung` — gemeint ist der Editor.
-    assert.match(q, /import \{[^}]*\bPhasenEditor\b[^}]*\} from '\.\/phasen-editor-echt'/,
-      'der Knopf zeigt auf nichts — der Editor wird nicht eingebunden')
-  })
-
-  it('der Knopf erscheint nur mit Strategie UND Phase', () => {
-    // `[read]` **Ohne Strategie kennt der Editor keine
-    // Auslieferungswerte und keine Reiter; ohne Phase gibt es keine
-    // Zeile, in die der Override geschrieben wuerde.**
-    assert.match(Z(), /\{z\.strategie && z\.phase && \(/,
-      'der Knopf erscheint auch ohne Strategie oder Phase — dann '
-      + 'oeffnet er einen Editor ohne Werte')
-  })
-
-  it('eigene Vorlagen werden NICHT versprochen', () => {
-    // `[cmd]` **Der Entwurf hat zwei Fussknoepfe**
-    // (`module-goals-editor.jsx:497-498`). `[read]` **„Save as my
-    // template" braucht G-540 und bleibt aus** — kein Knopf, der
-    // nichts tut.
-    const e = lies(join(GOALS, 'phasen-editor-echt.tsx'))
-    assert.ok(!/Save as my template|Als Vorlage|vorlageSpeichern/.test(e),
-      'der Editor verspricht eigene Vorlagen — die gibt es erst '
-      + 'mit G-540')
-    assert.match(Z(), /G-540/,
-      'die Achse sagt nicht mehr, was noch fehlt')
-  })
-
-  it('die Achse selbst schreibt keine Phase', () => {
-    // `[read]` **Die Achse zeigt und plant.** **Der Override geht
-    // ueber die Serveraktion**, nicht ueber einen eigenen Weg.
-    const q = Z()
-    assert.ok(!/goal_phase_start|phaseStarten\(/.test(q),
-      'die Achse startet Phasen — das ist das Anlegen (G-554)')
-    assert.match(q, /phasenOverrideAktion\(/,
-      'der Override laeuft nicht ueber die Serveraktion')
+describe('G-544/A4 — die Seite selbst startet keine Phase', () => {
+  // G-656: Editorknopf, „nur mit Strategie UND Phase" und „eigene Vorlagen nicht
+  // versprechen" hingen am geloeschten Override-Editor; Vorlagen gibt es seit G-644.
+  it('kein eigener Startweg', () => {
+    const q = lies(join(GOALS, 'plan-seite.tsx'))
+    assert.ok(q.length > 1000 && !/goal_phase_start|phaseStarten\(/.test(q),
+      'die Seite startet Phasen selbst — Phasen entstehen ueber den Plan (goal_plan_activate)')
   })
 })
 
