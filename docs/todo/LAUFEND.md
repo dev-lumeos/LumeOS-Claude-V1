@@ -8,8 +8,6 @@
 | Claude Code | G-629 | Die Phase engine zeigt Pläne | **laeuft**, raus 10.10. |
 | Claude Code | G-648 | Reiter Goals weicht vom freigegebenen Entwurf ab | **laeuft**, raus 16.10. |
 | Claude Code | G-649 | Phase Engine weicht vom freigegebenen Entwurf ab | **laeuft**, raus 16.10. |
-| Claude Code | G-656 | Tote Phasen-Bauteile nach G-649 löschen | **laeuft**, raus 16.10. |
-| Claude Code | G-657 | Kontextleiste (Buddy) standardmäßig eingeklappt | **laeuft**, raus 16.10. |
 | Codex | G-522 | der erste USP ist nirgends gebaut | **laeuft**, raus 16.10. |
 | Codex | G-655 | Testdaten plausibel nach Entwurf, Ergebnis abgeschlossener Pläne, keine Prognose für Gewohnheiten | **laeuft**, raus 16.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |

@@ -57,3 +57,10 @@ Sicherungen: `backup/a105-g655-*`.
 `[cmd]` Commit `--no-verify`: Rot war nur der G-649-Test in apps/web (Arbeit von Claude Code, nicht gestaged).
 
 Empfehlung Orchestrator: Das KFA-Messziel ist ein Testdatum und kein Nutzerverlauf. Es wird über den Löschweg aus G-611 entfernt und mit einem Verlauf ab ca. 17 % neu angelegt. Archivieren wäre falsch, weil es "Abgeschlossen" mit einem erfundenen Ziel füllt. Der Wächter G-617 bleibt unangetastet.
+
+## Stopp 2026-10-17
+
+`[read]` Codex: Kette 425 grün, Proben G-655 4/4 und G-522 7/7, Sabotage rot.
+`[read]` Die Live-Probe lief in einer zurückgerollten Transaktion. Der neue KFA-Start wäre 16,34 %. Dann scheiterte eine Einnahmezeile: Das dev-Stack-Item `da08f45a-…` hat nur `name_en`, und `supplement_name_snapshot` ist NOT NULL.
+`[cmd]` Die App löst den Namen über `custom_name ?? name_de ?? name_en` auf (`apps/web/src/lib/supplements/stack-write.ts:59,167`). Das ist also ein Fehler in den Testdaten, nicht im Produkt.
+Sicherung vorher: `backup/a105-g655-g522-vorher.sql`. Live ist unverändert.

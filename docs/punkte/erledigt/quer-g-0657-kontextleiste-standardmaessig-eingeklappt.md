@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-16
 agent: claudecode
 beauftragt: 2026-10-16
+erledigt: 2026-10-17
+commit: 64733c92
 
 braucht: []
 kind_von: G-648
@@ -45,3 +47,13 @@ Folgen in Goals:
     Fremd:   supabase/, docs/
     Stand:   2026-10-16, HEAD 9509ecc2
 
+## Erledigt - 2026-10-17, Commit `64733c92`
+
+`[read]` Claude Code:
+- Die Wahl wird in `public.user_display_preferences` gespeichert (shell.kontextleiste).
+- Auf dev bei 1.440 px ist die Inhaltsfläche 1.200 px breit.
+- Auf test-user übersteht die Wahl Neuladen und Modulwechsel.
+- Die Coach-App ist unverändert.
+- Gegenproben rot.
+
+`[cmd]` Gate grün beim Commit. Mein Bild von dev (`.git/o-goals3.png`) zeigt die Kontextleiste eingeklappt, die Kennzahlen in einer Zeile, die Messziel-Titel ungekürzt und 0 Attrappen.

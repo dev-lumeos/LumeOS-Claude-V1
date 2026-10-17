@@ -97,3 +97,15 @@ Das geht an Codex (G-654). Die Modulbeiträge gehören zu G-522.
 
 Grundursache für beides: Die Inhaltsfläche ist etwa 810 px breit, im Entwurf 1.240 px. Die Kontextleiste rechts (Buddy-Attrappe) belegt 340 px. Entscheidung bei Tom.
 Noch "kommt (offen)": Diese Woche je Messziel, Lage-Pille, Messziel-Kennzahlen. Der Leser ist jetzt live (G-654), die Anbindung folgt.
+
+## Stand 2026-10-17, Commit `64733c92`
+
+`[cmd]` Bild dev:
+- Lage-Pille "hinterher" ist da.
+- Diese Woche: Kniebeuge +2,0 kg, Kreuzheben +5,0 kg (ohne Frist, kein Soll), Körperfett +0,1 %, Training 3/4.
+- Prognose: "Plan endet vor dem Ziel", bei deinem Tempo 03.01.2028.
+
+Offen:
+- Modul-Kacheln "kommt (offen)", bis G-522 live ist
+- Körperfett "hinterher", bis das Testziel neu angelegt ist (G-655)
+- 1 Konsolenfehler laut schuss.mjs

@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 281 |
+| `todos` | 283 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 5 |
-| `erledigt` | 706 |
-| **gesamt** | **994** |
+| `laufend_claudecode` | 3 |
+| `erledigt` | 708 |
+| **gesamt** | **996** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 126
+## goals — 128
 
-### beauftragbar — 120
+### beauftragbar — 122
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -688,7 +688,7 @@
 | `G-622` | fehler | hoch | [Ohne aktives Ziel gibt es keine Tagesziele](erledigt/goals-g-0622-ohne-aktives-ziel-gibt-es-keine-tagesziele.md) | erledigt | — | G-630, G-637 |
 | `G-623` | aufgabe | mittel | [Im Planer laesst sich eine einzelne Phase nicht verschieben](todos/goals-g-0623-im-planer-laesst-sich-eine-phase-nicht-verschieben.md) | offen | — | — |
 | `G-624` | fehler | mittel | [Custom und Expert BB Jahreszyklus haben im Planer keine Vorschau](todos/goals-g-0624-custom-und-expert-bb-haben-keine-vorschau.md) | offen | — | — |
-| `G-625` | aufgabe | hoch | [Ein Plan ist der Inhalt des steuernden Ziels](erledigt/goals-g-0625-ein-plan-ist-der-inhalt-des-steuernden-ziels.md) | erledigt | — | G-627, G-638 |
+| `G-625` | aufgabe | hoch | [Ein Plan ist der Inhalt des steuernden Ziels](erledigt/goals-g-0625-ein-plan-ist-der-inhalt-des-steuernden-ziels.md) | erledigt | — | G-627, G-638, G-658 |
 | `G-626` | aufgabe | hoch | [Grenzen nach Erfahrungsgrad](erledigt/goals-g-0626-grenzen-nach-erfahrungsgrad.md) | erledigt | — | G-632, G-633 |
 | `G-627` | aufgabe | mittel | [Die wöchentliche Anpassung hat kein Protokoll](todos/goals-g-0627-die-woechentliche-anpassung-hat-kein-protokoll.md) | offen | — | — |
 | `G-628` | aufgabe | hoch | [Ziel setzen nach dem Entwurf](erledigt/goals-g-0628-ziel-setzen-nach-dem-entwurf.md) | erledigt | — | G-631, G-634, G-641 |
@@ -717,7 +717,9 @@
 | `G-653` | befund | hoch | ["Nach Plan erreicht" zeigt ein vergangenes Datum](erledigt/goals-g-0653-nach-plan-erreicht-liegt-in-der-vergangenheit.md) | erledigt | — | — |
 | `G-654` | aufgabe | hoch | [Leser für die Lage des Steuerziels und die Wochenwerte der Messziele](erledigt/goals-g-0654-leser-fuer-lage-und-messziel-woche.md) | erledigt | — | — |
 | `G-655` | aufgabe | mittel | [Testdaten plausibel nach Entwurf, Ergebnis abgeschlossener Pläne, keine Prognose für Gewohnheiten](laufend_codex/goals-g-0655-testdaten-plausibel-und-planergebnis.md) | laeuft (codex) | — | — |
-| `G-656` | aufgabe | niedrig | [Tote Phasen-Bauteile nach G-649 löschen](laufend_claudecode/goals-g-0656-tote-phasen-bauteile-loeschen.md) | laeuft (claudecode) | — | — |
+| `G-656` | aufgabe | niedrig | [Tote Phasen-Bauteile nach G-649 löschen](erledigt/goals-g-0656-tote-phasen-bauteile-loeschen.md) | erledigt | — | G-659 |
+| `G-658` | befund | mittel | [Tageskettenlauf vom 17.10. rot in der G-625-Probe](todos/goals-g-0658-tageskettenlauf-17-10-rot-in-g625.md) | offen | — | — |
+| `G-659` | aufgabe | mittel | [Einheit ohne Oberfläche und weitere Teile ohne Aufrufer](todos/goals-g-0659-einheit-ohne-oberflaeche-und-weitere-tote-teile.md) | offen | — | — |
 
 ### wartet auf Blocker — 6
 
@@ -1053,7 +1055,7 @@
 | `G-600` | fehler | hoch | [„Heute" ist an 32 Stellen der UTC-Vortag](erledigt/quer-g-0600-heute-ist-an-32-stellen-der-utc-vortag.md) | erledigt | — | — |
 | `G-635` | fehler | mittel | [Dev-Server liefert die Schrift mit falschem Hash](erledigt/quer-g-0635-dev-server-liefert-schrift-mit-falschem-hash.md) | erledigt | — | — |
 | `G-641` | fehler | niedrig | [Farbmischung in oklch färbt Flächen rosa](erledigt/quer-g-0641-farbmischung-oklch-faerbt-flaechen-rosa.md) | erledigt | — | — |
-| `G-657` | aufgabe | mittel | [Kontextleiste (Buddy) standardmäßig eingeklappt](laufend_claudecode/quer-g-0657-kontextleiste-standardmaessig-eingeklappt.md) | laeuft (claudecode) | — | — |
+| `G-657` | aufgabe | mittel | [Kontextleiste (Buddy) standardmäßig eingeklappt](erledigt/quer-g-0657-kontextleiste-standardmaessig-eingeklappt.md) | erledigt | — | — |
 
 ### wartet auf Blocker — 1
 
