@@ -4,6 +4,10 @@ typ: befund
 modul: goals
 schwere: mittel
 angelegt: 2026-10-17
+agent: codex
+beauftragt: 2026-10-17
+erledigt: 2026-10-17
+commit: c990485b
 
 braucht: []
 kind_von: G-627
@@ -30,3 +34,19 @@ beruehrt:
 - Die Lage (hinterher/voraus) bleibt an der Linie.
 - Die Wache "3 Wochen hinter Soll" prüfen: Sie soll gegen dieses Wochensoll laufen.
 - Das Protokoll für dev nachrechnen. Probe mit Sabotage.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - G-662 Wochensoll aus der laufenden Plan-Position
+    Bereich: supabase/_pipeline/ (Kette), Live dev/test-user nach A-105
+    Fremd:   apps/, packages/, tools/, docs/
+    Stand:   2026-10-17, HEAD 88f6307b
+
+## Erledigt - 2026-10-17, Commit `c990485b` (live)
+
+`[read]` Codex, dev:
+- Soll Δ je Woche: +0,229 (ab 21.09.), +0,229 (ab 28.09.), +0,212 (ab 05.10.)
+- Trend Δ dazu: +0,035, +0,033, +0,110
+
+Die Lage bleibt "hinterher". Bei test-user ist das Soll leer, weil keine Planrate vorliegt. 42 Wochenzeilen wurden aktualisiert, die Wiederholung ändert 0. Sicherungen: `backup/a105-g662-*`.
+`[cmd]` Gate grün beim Commit.

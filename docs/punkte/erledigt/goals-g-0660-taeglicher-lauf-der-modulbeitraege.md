@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-17
 agent: codex
 beauftragt: 2026-10-17
+erledigt: 2026-10-17
+commit: 7c200517
 
 braucht: []
 kind_von: G-522
@@ -58,3 +60,12 @@ Den Auslöser (geplanter Aufruf auf Toms Rechner) baut Claude Code in `tools/` a
 Sicherungen: `backup/a105-g660-*`.
 `[cmd]` Bild von dev: Ernährung 84,9 % kcal-Treue 7 Tage, Training 3 / 4, Recovery 66,9, Supplements 88,1 %, kein deutlicher Engpass. 0 Attrappen, 0 Konsolenfehler.
 Offen: Den Auslöser baut Claude Code in tools/. Der Aufruf als service_role in dieser Reihenfolge: `SELECT goals.run_goal_contribution_catchup();` und `SELECT goals.record_weekly_adjustments();`.
+
+## Erledigt - 2026-10-17, Commit `7c200517` (Auslöser, Gate grün)
+
+`[read]` Claude Code:
+- `tools/beitragslauf-taeglich.py` läuft über `dienst_rpc` in lauf.py, ohne Prozess und ohne Fenster.
+- Status landet in `backup/_manifests/beitragslauf-status.json`, der Prüfer heisst `--name beitragslauf`, Abfrage mit `pnpm beitrag:status`.
+- Live auf test-user: grün mit 0 Zeilen. Mit falschem Schlüssel: HTTP 401, Exit 1, Schritt 2 wird übersprungen.
+
+Offen bei Tom: die geplante Aufgabe einrichten (schtasks, 00:15).

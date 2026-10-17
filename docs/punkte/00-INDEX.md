@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 281 |
-| `laufend_codex` | 1 |
+| `todos` | 282 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 714 |
-| **gesamt** | **999** |
+| `erledigt` | 716 |
+| **gesamt** | **1001** |
 
 ## medical — 50
 
@@ -592,9 +591,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 131
+## goals — 133
 
-### beauftragbar — 125
+### beauftragbar — 127
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -674,7 +673,7 @@
 | `G-608` | fehler | hoch | [Die Stufenwochen sind im Programm editierbar - und am Schirm belegt](erledigt/goals-g-0608-die-stufenwochen-sind-im-programm-editierbar.md) | erledigt | — | G-609, G-610, G-611 |
 | `G-609` | fehler | hoch | [Die Strategie wird beim Phasenstart nicht durchgereicht](erledigt/goals-g-0609-die-strategie-wird-beim-phasenstart-nicht-durchgereicht.md) | erledigt | — | — |
 | `G-610` | fehler | mittel | [contest_prep ist in der App nicht anlegbar](erledigt/goals-g-0610-contest-prep-ist-in-der-app-nicht-anlegbar.md) | erledigt | — | G-612, G-619, G-626, G-628 |
-| `G-611` | fehler | mittel | [Ein Ziel laesst sich nicht loeschen](erledigt/goals-g-0611-ein-ziel-laesst-sich-nicht-loeschen.md) | erledigt | — | G-640 |
+| `G-611` | fehler | mittel | [Ein Ziel laesst sich nicht loeschen](erledigt/goals-g-0611-ein-ziel-laesst-sich-nicht-loeschen.md) | erledigt | — | G-640, G-663 |
 | `G-612` | entscheidung | hoch | [Drei Auswahlen auf einer Seite, und keine folgt dem Mockup](todos/goals-g-0612-drei-auswahlen-und-keine-ordnung.md) | offen | — | G-614, G-615 |
 | `G-613` | fehler | hoch | [Ein pausiertes Ziel laesst seine Phase laufen](erledigt/goals-g-0613-ein-pausiertes-ziel-laesst-seine-phase-laufen.md) | erledigt | — | G-622 |
 | `G-614` | fehler | hoch | [Der Strategiekatalog kennt seine Karte und seinen Mindestgrad](erledigt/goals-g-0614-der-strategiekatalog-kennt-karte-und-mindestgrad.md) | erledigt | — | G-616 |
@@ -716,13 +715,15 @@
 | `G-652` | aufgabe | hoch | [Testdaten nach Entwurf: Messziele, Pläne, Termine, Umlaute](erledigt/goals-g-0652-seeds-nach-entwurf.md) | erledigt | — | G-655 |
 | `G-653` | befund | hoch | ["Nach Plan erreicht" zeigt ein vergangenes Datum](erledigt/goals-g-0653-nach-plan-erreicht-liegt-in-der-vergangenheit.md) | erledigt | — | — |
 | `G-654` | aufgabe | hoch | [Leser für die Lage des Steuerziels und die Wochenwerte der Messziele](erledigt/goals-g-0654-leser-fuer-lage-und-messziel-woche.md) | erledigt | — | — |
-| `G-655` | aufgabe | mittel | [Testdaten plausibel nach Entwurf, Ergebnis abgeschlossener Pläne, keine Prognose für Gewohnheiten](erledigt/goals-g-0655-testdaten-plausibel-und-planergebnis.md) | erledigt | — | — |
+| `G-655` | aufgabe | mittel | [Testdaten plausibel nach Entwurf, Ergebnis abgeschlossener Pläne, keine Prognose für Gewohnheiten](erledigt/goals-g-0655-testdaten-plausibel-und-planergebnis.md) | erledigt | — | G-664 |
 | `G-656` | aufgabe | niedrig | [Tote Phasen-Bauteile nach G-649 löschen](erledigt/goals-g-0656-tote-phasen-bauteile-loeschen.md) | erledigt | — | G-659 |
 | `G-658` | befund | mittel | [Tageskettenlauf vom 17.10. rot in der G-625-Probe](erledigt/goals-g-0658-tageskettenlauf-17-10-rot-in-g625.md) | erledigt | — | — |
 | `G-659` | aufgabe | mittel | [Einheit ohne Oberfläche und weitere Teile ohne Aufrufer](erledigt/goals-g-0659-einheit-ohne-oberflaeche-und-weitere-tote-teile.md) | erledigt | — | — |
-| `G-660` | aufgabe | hoch | [Täglicher Lauf der Modulbeiträge](laufend_codex/goals-g-0660-taeglicher-lauf-der-modulbeitraege.md) | laeuft (codex) | — | — |
+| `G-660` | aufgabe | hoch | [Täglicher Lauf der Modulbeiträge](erledigt/goals-g-0660-taeglicher-lauf-der-modulbeitraege.md) | erledigt | — | — |
 | `G-661` | befund | hoch | [Doppelte Tagesgewichte blockieren das Tagesziel](erledigt/goals-g-0661-doppelte-tagesgewichte-blockieren-das-tagesziel.md) | erledigt | — | — |
-| `G-662` | befund | mittel | [Das Wochensoll ist 0, weil die Planlinie schon am Ziel gedeckelt ist](todos/goals-g-0662-wochensoll-null-weil-planlinie-gedeckelt.md) | offen | — | — |
+| `G-662` | befund | mittel | [Das Wochensoll ist 0, weil die Planlinie schon am Ziel gedeckelt ist](erledigt/goals-g-0662-wochensoll-null-weil-planlinie-gedeckelt.md) | erledigt | — | — |
+| `G-663` | befund | hoch | [Eine einzelne Messung friert das Steuerziel als "erreicht" ein](todos/goals-g-0663-eine-einzelne-messung-friert-das-ziel-als-erreicht-ein.md) | offen | — | — |
+| `G-664` | befund | mittel | [Testdaten mit Messungen in der Zukunft](todos/goals-g-0664-testdaten-mit-messungen-in-der-zukunft.md) | offen | — | — |
 
 ### wartet auf Blocker — 6
 
