@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 281 |
+| `todos` | 282 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 4 |
 | `erledigt` | 710 |
-| **gesamt** | **996** |
+| **gesamt** | **997** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 128
+## goals — 129
 
-### beauftragbar — 122
+### beauftragbar — 123
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -621,7 +621,7 @@
 | `G-519` | befund | hoch | [die Phasenansicht ist gegen die falsche Quelle gebaut](erledigt/goals-g-0519-phasen-nach-der-massgeblichen-quelle.md) | erledigt | — | G-520, G-521, G-534 |
 | `G-520` | feature | hoch | [der Anpassungsalgorithmus und die sieben Uebergangswaechter fehlen](erledigt/goals-g-0520-anpassungsalgorithmus-und-uebergangswaechter.md) | erledigt | — | G-574 |
 | `G-521` | feature | mittel | [wie modelliert man Ernaehrungsphasen, ihre Varianten und Parameter](todos/goals-g-0521-phasenmodellierung-tiefenrecherche.md) | offen | — | G-529, G-530 |
-| `G-522` | befund | hoch | [der erste USP ist nirgends gebaut](laufend_codex/goals-g-0522-cross-modul-beitraege-fehlen-vollstaendig.md) | laeuft (codex) | — | — |
+| `G-522` | befund | hoch | [der erste USP ist nirgends gebaut](laufend_codex/goals-g-0522-cross-modul-beitraege-fehlen-vollstaendig.md) | laeuft (codex) | — | G-660 |
 | `G-523` | fehler | hoch | [der adaptive TDEE glaettet nicht, er springt](erledigt/goals-g-0523-adaptive-tdee-glaettet-nicht.md) | erledigt | — | — |
 | `G-524` | befund | mittel | [vier der zehn Spec-Tabellen und beide Ansichten fehlen](erledigt/goals-g-0524-vier-tabellen-und-beide-ansichten-fehlen.md) | erledigt | — | — |
 | `G-525` | befund | mittel | [Meilensteine gibt es nur als Seed](todos/goals-g-0525-meilensteine-entstehen-nicht.md) | offen | — | — |
@@ -720,6 +720,7 @@
 | `G-656` | aufgabe | niedrig | [Tote Phasen-Bauteile nach G-649 löschen](erledigt/goals-g-0656-tote-phasen-bauteile-loeschen.md) | erledigt | — | G-659 |
 | `G-658` | befund | mittel | [Tageskettenlauf vom 17.10. rot in der G-625-Probe](erledigt/goals-g-0658-tageskettenlauf-17-10-rot-in-g625.md) | erledigt | — | — |
 | `G-659` | aufgabe | mittel | [Einheit ohne Oberfläche und weitere Teile ohne Aufrufer](laufend_claudecode/goals-g-0659-einheit-ohne-oberflaeche-und-weitere-tote-teile.md) | laeuft (claudecode) | — | — |
+| `G-660` | aufgabe | hoch | [Täglicher Lauf der Modulbeiträge](todos/goals-g-0660-taeglicher-lauf-der-modulbeitraege.md) | offen | — | — |
 
 ### wartet auf Blocker — 6
 
