@@ -4,6 +4,8 @@ typ: aufgabe
 modul: goals
 schwere: hoch
 angelegt: 2026-10-17
+agent: codex
+beauftragt: 2026-10-17
 
 braucht: []
 kind_von: G-522
@@ -39,4 +41,10 @@ Codex baut den Kettenteil:
 
 Den Auslöser (geplanter Aufruf auf Toms Rechner) baut Claude Code in `tools/` als eigenen Teil, nachdem der Kettenteil gemeldet ist.
 
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - G-660 Taeglicher Lauf der Modulbeitraege (Kettenteil), vorher doppelte Gewichtszeilen
+    Bereich: supabase/_pipeline/ (Kette), Live auf dev und test-user nach A-105
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-17, HEAD ea9f54f1
 

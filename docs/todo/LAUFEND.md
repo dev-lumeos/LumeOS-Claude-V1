@@ -10,6 +10,8 @@
 | Claude Code | G-649 | Phase Engine weicht vom freigegebenen Entwurf ab | **laeuft**, raus 16.10. |
 | Claude Code | G-659 | Einheit ohne Oberfläche und weitere Teile ohne Aufrufer | **laeuft**, raus 17.10. |
 | Codex | G-522 | der erste USP ist nirgends gebaut | **laeuft**, raus 16.10. |
+| Codex | G-627 | Die wöchentliche Anpassung hat kein Protokoll | **laeuft**, raus 17.10. |
+| Codex | G-660 | Täglicher Lauf der Modulbeiträge | **laeuft**, raus 17.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->

@@ -4,6 +4,8 @@ typ: aufgabe
 modul: goals
 schwere: mittel
 angelegt: 2026-10-08
+agent: codex
+beauftragt: 2026-10-17
 
 braucht: [G-625]
 kind_von: G-625
@@ -40,3 +42,11 @@ Messen, was die adaptive TDEE-Rechnung je Woche schon festhält; fehlt ein Proto
 `[cmd]` In `PHASE_MODELS.md` Z. 223-229 stehen leicht andere Werte (Lean Bulk 0,75 statt 0,8).
 Aus dem Entwurf kommen zwei weitere Regeln: mindestens 5 Logtage, sonst keine Anpassung, und die Wache "Trend 3 Wochen neben Soll → ±100 kcal".
 Entscheidung: SCORING §6 gilt als Rechenregel. Logtage und Wache gelten aus dem Entwurf. Widersprüche zu PHASE_MODELS werden gemeldet, nicht still aufgelöst.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - G-627 Woechentliche Anpassung mit Protokoll (Regeln SCORING.md 6)
+    Bereich: supabase/_pipeline/ (Kette), Live auf dev und test-user nach A-105
+    Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-17, HEAD ea9f54f1
+

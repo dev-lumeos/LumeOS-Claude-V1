@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 282 |
-| `laufend_codex` | 1 |
+| `todos` | 280 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 4 |
 | `erledigt` | 710 |
 | **gesamt** | **997** |
@@ -690,7 +690,7 @@
 | `G-624` | fehler | mittel | [Custom und Expert BB Jahreszyklus haben im Planer keine Vorschau](todos/goals-g-0624-custom-und-expert-bb-haben-keine-vorschau.md) | offen | — | — |
 | `G-625` | aufgabe | hoch | [Ein Plan ist der Inhalt des steuernden Ziels](erledigt/goals-g-0625-ein-plan-ist-der-inhalt-des-steuernden-ziels.md) | erledigt | — | G-627, G-638, G-658 |
 | `G-626` | aufgabe | hoch | [Grenzen nach Erfahrungsgrad](erledigt/goals-g-0626-grenzen-nach-erfahrungsgrad.md) | erledigt | — | G-632, G-633 |
-| `G-627` | aufgabe | mittel | [Die wöchentliche Anpassung hat kein Protokoll](todos/goals-g-0627-die-woechentliche-anpassung-hat-kein-protokoll.md) | offen | — | — |
+| `G-627` | aufgabe | mittel | [Die wöchentliche Anpassung hat kein Protokoll](laufend_codex/goals-g-0627-die-woechentliche-anpassung-hat-kein-protokoll.md) | laeuft (codex) | — | — |
 | `G-628` | aufgabe | hoch | [Ziel setzen nach dem Entwurf](erledigt/goals-g-0628-ziel-setzen-nach-dem-entwurf.md) | erledigt | — | G-631, G-634, G-641 |
 | `G-629` | aufgabe | hoch | [Die Phase engine zeigt Pläne](laufend_claudecode/goals-g-0629-die-phase-engine-zeigt-plaene.md) | laeuft (claudecode) | — | G-644, G-645 |
 | `G-630` | fehler | hoch | [Die Warnung ohne aktives Ziel ist unsichtbar](erledigt/goals-g-0630-die-warnung-ohne-aktives-ziel-ist-unsichtbar.md) | erledigt | — | G-636 |
@@ -720,7 +720,7 @@
 | `G-656` | aufgabe | niedrig | [Tote Phasen-Bauteile nach G-649 löschen](erledigt/goals-g-0656-tote-phasen-bauteile-loeschen.md) | erledigt | — | G-659 |
 | `G-658` | befund | mittel | [Tageskettenlauf vom 17.10. rot in der G-625-Probe](erledigt/goals-g-0658-tageskettenlauf-17-10-rot-in-g625.md) | erledigt | — | — |
 | `G-659` | aufgabe | mittel | [Einheit ohne Oberfläche und weitere Teile ohne Aufrufer](laufend_claudecode/goals-g-0659-einheit-ohne-oberflaeche-und-weitere-tote-teile.md) | laeuft (claudecode) | — | — |
-| `G-660` | aufgabe | hoch | [Täglicher Lauf der Modulbeiträge](todos/goals-g-0660-taeglicher-lauf-der-modulbeitraege.md) | offen | — | — |
+| `G-660` | aufgabe | hoch | [Täglicher Lauf der Modulbeiträge](laufend_codex/goals-g-0660-taeglicher-lauf-der-modulbeitraege.md) | laeuft (codex) | — | — |
 
 ### wartet auf Blocker — 6
 
