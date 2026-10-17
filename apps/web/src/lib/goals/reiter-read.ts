@@ -31,6 +31,22 @@ export interface Wochendaten {
   messwochen?: Record<string, Messwoche>
   /** G-644 Teil 2: `goals.goal_phase_guards_at` — die Wachen der laufenden Phase; `null` = keine laufende Phase. */
   wachen?: Wache[] | null
+  /** G-522: `goals.goal_module_cards_at` — vier Kacheln und der Engpass; `null` = kein Steuerziel oder Kette nicht live. */
+  kacheln?: Modulkacheln | null
+}
+
+/**
+ * Felder wie in `522_goal_module_cards.sql`. `[read]` **Die Kette rechnet Werte und Engpass**
+ * (`goal_bottleneck`, SCORING.md); die App zeigt nur. `grund` ist gesetzt, wenn `wert` fehlt.
+ */
+export interface Modulkacheln {
+  stand_am: string
+  nutrition: { wert: number | null; tage: number; grund: string | null }
+  training: { wert: number | null; wochenziel: number | null; score: number | null; grund: string | null }
+  recovery: { wert: number | null; tage: number; schlaf_stunden: number | null; grund: string | null }
+  supplements: { wert: number | null; tage: number; grund: string | null }
+  engpass: { module: string; grund: string } | null
+  engpass_grund: 'kein_deutlicher_engpass' | 'keine_modulwerte' | null
 }
 
 /** Eine Zeile aus `goal_phase_guards_at` — Felder wie in `644_plan_guards_target_cap.sql`. */
@@ -84,7 +100,7 @@ const tagMinus = (tag: string, n: number) => {
 export async function ladeWoche(userId: string, stichtag: string, steuerzielId: string | null, messzielIds: string[] = []): Promise<Wochendaten> {
   const db = createSessionClient()
   const trendAm = (tag: string) => db.schema('goals').rpc('trendgewicht_am', { p_user_id: userId, p_stichtag: tag })
-  const [t, b, th, tv, ausblick, routine, lage, mw, wachen] = await Promise.all([
+  const [t, b, th, tv, ausblick, routine, lage, mw, wachen, kacheln] = await Promise.all([
     db.schema('training').from('workout_sessions').select('id', { count: 'exact', head: true })
       .eq('user_id', userId).eq('status', 'completed')
       .gte('session_date', wochenStart(stichtag)).lte('session_date', stichtag),
@@ -99,6 +115,7 @@ export async function ladeWoche(userId: string, stichtag: string, steuerzielId: 
     steuerzielId ? kette<Record<string, unknown>>('controlling_goal_lage_at', steuerzielId, stichtag) : Promise.resolve(null),
     Promise.all(messzielIds.map(id => kette<Record<string, unknown>>('measurement_goal_week_at', id, stichtag).then(w => [id, w] as const))),
     steuerzielId ? kette<Wache[]>('goal_phase_guards_at', steuerzielId, stichtag) : Promise.resolve(null),
+    steuerzielId ? kette<Modulkacheln>('goal_module_cards_at', steuerzielId, stichtag) : Promise.resolve(null),
   ])
   const l = lage?.lage
   const messwochen: Record<string, Messwoche> = {}
@@ -119,6 +136,7 @@ export async function ladeWoche(userId: string, stichtag: string, steuerzielId: 
     lage: lage ? { lage: l === 'voraus' || l === 'im_plan' || l === 'hinterher' ? l : null, abweichung_kg: num(lage.abweichung_kg), toleranz_kg: num(lage.toleranz_kg) } : null,
     messwochen,
     wachen,
+    kacheln,
     trainingsSoll: routine.error || !routine.data?.[0] ? null : Number(routine.data[0].days_per_week),
     trainings: t.error ? null : t.count ?? 0,
     beitraege: ((b.data ?? []) as Array<Record<string, unknown>>).map(r => ({

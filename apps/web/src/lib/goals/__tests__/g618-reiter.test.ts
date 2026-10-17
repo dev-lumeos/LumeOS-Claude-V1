@@ -19,7 +19,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { AppRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 import {
-  ABSCHLUSS, engpass, gewichtWoche, kalenderwoche, kategorieVon, lageVon, modulSchnitt,
+  ABSCHLUSS, gewichtWoche, kalenderwoche, kategorieVon, lageVon,
   quelleLesbar, steuerZustand, wertMitEinheit, wochenStart, type ReiterZiel,
 } from '../reiter'
 import { MESSARTEN } from '../messziel'
@@ -166,16 +166,9 @@ describe('G-618 — die Bausteine', () => {
     assert.equal(gewichtWoche(m.slice(0, 1), '2026-10-09', null).grund, 'diese Woche noch nicht gewogen')
     assert.equal(gewichtWoche(m.slice(1, 2), '2026-10-09', null).grund, 'keine Messung vor dieser Woche')
   })
-  it('Module: ohne Zeile „kommt" (null), nicht 0; Engpass nur unter gemessenen', () => {
-    const s = modulSchnitt([
-      { module: 'recovery', contribution_score: 70, contribution_date: '2026-10-08' },
-      { module: 'recovery', contribution_score: 60, contribution_date: '2026-10-07' },
-      { module: 'supplements', contribution_score: 90, contribution_date: '2026-10-08' },
-    ], ['nutrition', 'recovery', 'supplements'])
-    assert.deepEqual(s.map(x => x.schnitt), [null, 65, 90])
-    assert.equal(engpass(s)?.module, 'recovery')
-    assert.equal(engpass(modulSchnitt([], ['nutrition'])), null)
-  })
+  // G-522 (17.10.): `modulSchnitt`/`engpass` sind weg — Schnitt und Engpass rechnet die Kette
+  // (`goal_module_cards_at`, `goal_bottleneck`). Die Regel „ohne Wert kein 0, Engpass nur unter
+  // gemessenen“ gilt weiter und ist nach g648-reiter-entwurf.test.ts (G-522) umgezogen.
   it('Lage: nur aus goal_progress_at — einmalig aus `lage` (G-643), Woche aus der Quote; ohne Istwert keine Pille', () => {
     const r = (o: Partial<ZielFortschritt>) => lageVon(Z(o) as ReiterZiel)
     const keine = { lage: null, text: null }
@@ -289,7 +282,7 @@ describe('G-618 — bis in die Anzeige', () => {
     assert.match(h, /keine Messung vor dieser Woche/, 'Trend ohne Vorwoche: Grund statt Zahl')
     assert.match(h, /data-kommt/)
     assert.equal((h.match(/data-modul="[a-z]+"/g) ?? []).length, 4)
-    assert.match(h, /noch keine Beiträge — kommt/)
+    assert.match(h, /Modulkacheln — kommt/)
     assert.ok(!/\d+ \/ 100/.test(h), 'eine Modulzahl ohne Beitrag')
   })
   it('Abgeschlossen: mit Zahl, offen wie im Entwurf', () => {

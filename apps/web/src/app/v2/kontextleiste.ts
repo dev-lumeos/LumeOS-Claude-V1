@@ -5,7 +5,7 @@
 //
 // `[cmd]` **Die Wahl liegt in `public.user_display_preferences`** — eine
 // Zeile je Nutzer und Schluessel, vier RLS-Regeln, dasselbe Muster wie
-// `lib/goals/einheit-speichern.ts`. Kein Cookie: die Wahl gehoert dem
+// `lib/nutrition/ansicht-speichern.ts`. Kein Cookie: die Wahl gehoert dem
 // Nutzer, nicht dem Browser.
 import { createSessionClient } from '@lumeos/shared/session'
 

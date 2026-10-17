@@ -149,23 +149,11 @@ export function schwelleUnterschritten(
 }
 
 /**
- * Der Satz zur Schwelle, in der gewaehlten Einheit.
+ * Der Satz zur Schwelle — in Prozent.
  *
- * `[cmd]` **A4: beide Einheiten, nach E-83** — und die
- * Kilogrammfassung nennt die Grenze **zum Gewicht des Nutzers**.
- *
- * @param einheit  Was der Nutzer gewaehlt hat (G-565).
+ * `[read]` **G-659 (Tom, 17.10., Variante b):** die Zielrate bleibt in Prozent wie im
+ * Entwurf; die zweite Fassung nach E-83 (Kilogramm zum Gewicht) ist mit der Wahl weg.
  */
-export function schwellenText(
-  name: Schwellenname, gewichtKg: number | null,
-  einheit: 'prozent' | 'kcal',
-): string {
-  const pct = SCHWELLE_PCT[name]
-  if (einheit === 'prozent') return `${pct} % KG/Woche`
-  const kg = schwelleInKg(name, gewichtKg)
-  // `[read]` **Ohne Gewicht keine Kilogrammgrenze** — dann steht die
-  // Prozentzahl da, statt einer erfundenen (E-72).
-  return kg === null
-    ? `${pct} % KG/Woche`
-    : `${kg} kg/Woche (${pct} % bei ${gewichtKg} kg)`
+export function schwellenText(name: Schwellenname): string {
+  return `${SCHWELLE_PCT[name]} % KG/Woche`
 }

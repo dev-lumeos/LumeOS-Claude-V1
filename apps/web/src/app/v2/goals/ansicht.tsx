@@ -154,7 +154,6 @@ import type { Wochendaten } from '../../../lib/goals/reiter-read'
 // `createSessionClient` und damit `next/headers`; ein Wert-Import
 // von hier aus beantwortete die Seite mit HTTP 500 (A-30, G-412).
 import type { Strategie } from '../../../lib/goals/strategie-read'
-import type { Rateneinheit } from '../../../lib/goals/zielrate-einheit'
 // G-544: die Zeitachse des Phase-Reiters.
 // `[cmd]` **G-553/A1: reine Funktionen, kein I/O** — sie duerfen aus
 // einer `'use client'`-Datei kommen (A-30).
@@ -263,12 +262,6 @@ export type EchteDaten = {
   plaene: Plan[]
   /** G-649: `null` = Kette G-644 noch nicht eingespielt. */
   vorlagen?: Vorlage[] | null
-  /**
-   * `[cmd]` **G-565/A4: die gewaehlte Einheit** — aus
-   * `user_display_preferences`, eine Einstellung des NUTZERS
-   * und keine Spalte in `goal_phases` (E-83).
-   */
-  einheit: Rateneinheit
   ladefehler: string | null
 }
 

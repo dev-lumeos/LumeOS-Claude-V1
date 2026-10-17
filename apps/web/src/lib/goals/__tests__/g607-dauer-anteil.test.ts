@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 import {
-  ankerplan, gesamtdauer, gesamtWochen, stufenwochen, teilphasenAusAnteil,
+  ankerplan, gesamtWochen, stufenwochen, teilphasenAusAnteil,
 } from '../anker'
 import { teilphasen } from '../strategie-read'
 
@@ -99,12 +99,8 @@ describe('G-607 — vom Katalog zum Plan', () => {
     assert.deepEqual(teilphasenAusAnteil(teilphasen(ohne), 16), [])
   })
 
-  it('das Override des Nutzers geht vor dem Katalog', () => {
-    assert.equal(gesamtdauer(20, 16), 20)
-    assert.equal(gesamtdauer(undefined, 16), 16)
-    assert.equal(gesamtdauer('20', 16), 16, 'Text ist kein Override')
-    assert.equal(gesamtdauer(null, null), null)
-  })
+  // G-659: „das Override des Nutzers geht vor dem Katalog“ (`gesamtdauer`) entfaellt — kein
+  // Aufrufer; die Dauer setzt jetzt `duration_weeks` der Planposition (G-649), kein Override.
 })
 
 describe('G-607 — die Leser rechnen aus dem Anteil', () => {

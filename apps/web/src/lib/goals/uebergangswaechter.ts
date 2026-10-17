@@ -124,15 +124,7 @@ export function koerperfettSatz(
  */
 export function pruefeWaechter(
   lage: Waechterlage, d: Wochendaten,
-  // ══ G-569/A4: die Texte in der gewaehlten Einheit ═════════════
-  //
-  // `[cmd]` **E-83: der Nutzer waehlt die Einheit**, geladen mit
-  // `ladeEinheit()` aus `user_display_preferences` (G-565).
-  //
-  // `[read]` **Die Vorgabe ist Prozent** — das ist die Groesse, in
-  // der der Katalog seine Schwellen fuehrt, und sie gilt ohne
-  // Gewicht.
-  einheit: 'prozent' | 'kcal' = 'prozent',
+  // G-659: die Texte stehen in Prozent — die %/kcal-Wahl aus E-83 ist weg (Tom, 17.10.).
 ): Waechterbefund[] {
   const raus: Waechterbefund[] = []
 
@@ -161,8 +153,7 @@ export function pruefeWaechter(
       kennung: 'verlust_zu_schnell', regel: 'PHASE_MODELS.md:223', greift,
       satz: greift
         ? `Der Verlust liegt bei ${d.weightTrend} kg/Woche. Die Spec `
-          + `sieht ab ${schwellenText('verlustZuSchnell',
-            d.gewichtAmStichtagKg, einheit)} eine Anhebung um `
+          + `sieht ab ${schwellenText('verlustZuSchnell')} eine Anhebung um `
           + '150 kcal vor.'
         : 'Das Verlusttempo liegt im vorgesehenen Rahmen.',
     })
@@ -294,8 +285,7 @@ export function pruefeWaechter(
       kennung: 'masse_zu_schnell', regel: 'PHASE_MODELS.md:229', greift,
       satz: greift
         ? `Die Zunahme liegt bei ${d.weightTrend} kg/Woche. Die Spec `
-          + `sieht ab ${schwellenText('zunahmeZuSchnell',
-            d.gewichtAmStichtagKg, einheit)} 100 kcal weniger vor.`
+          + `sieht ab ${schwellenText('zunahmeZuSchnell')} 100 kcal weniger vor.`
         : 'Das Zunahmetempo liegt im vorgesehenen Rahmen.',
     })
   }

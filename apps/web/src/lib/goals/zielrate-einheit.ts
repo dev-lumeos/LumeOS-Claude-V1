@@ -1,13 +1,11 @@
-// Die Zielrate in zwei Einheiten — G-565, E-83. **Server-frei.**
+// Zielrate und Kilokalorien — E-1, G-565. **Server-frei.**
 //
-// ══ WAS E-83 ENTSCHIEDEN HAT ═══════════════════════════════════════
+// ══ G-659: KEINE WAHL MEHR ════════════════════════════════════════
 //
-// **Tom, 2026-09-30, 17:45:** *„das soll doch ein user entscheiden,
-// manchmal ist es klarer mit prozenten zu arbeiten und manchmal
-// easier mit direkt kcal."*
-//
-// `[read]` **Es ist keine Entscheidung ueber DIE Einheit, sondern
-// ueber die Zustaendigkeit** — beide stehen offen, der Nutzer waehlt.
+// `[read]` **Tom, 2026-10-17 (Variante b):** die Zielrate bleibt in Prozent wie im
+// Entwurf; die %/kcal-Wahl aus E-83 faellt weg (Schalter, `inEinheit`/`ausEinheit`,
+// Rueckweg, Schreibweg). Die Umrechnung selbst bleibt — `kcalAusRate` und
+// `rateAusKcal` rechnen fuer Phasenregeln, Zielrechnung und Anpassung.
 //
 // `[cmd]` **Gespeichert wird die RATE**
 // (`goal_phases.zielrate_pct_kg_woche numeric(5,3)`), nicht der
@@ -43,10 +41,6 @@
 //
 // `[read]` **Deshalb rundet diese Datei wie die Datenbank**, und eine
 // Zusicherung haelt beide Wege gegeneinander.
-
-/** Die zwei Einheiten, zwischen denen der Nutzer waehlt. */
-export const EINHEITEN = ['prozent', 'kcal'] as const
-export type Rateneinheit = typeof EINHEITEN[number]
 
 /** `[cmd]` **Der Faktor aus E-1** — 7700 kcal/kg, auf die Woche. */
 export const E1_FAKTOR = 11
@@ -127,66 +121,8 @@ export function rateAusKcal(
   return rundeWieDb(kcal / (E1_FAKTOR * gewichtKg), RATE_STELLEN)
 }
 
-/**
- * Wie weit driftet ein Hin- und Rueckweg?
- *
- * `[read]` **Der Auftrag A3: „kcal eingeben, Rate lesen, wieder
- * anzeigen — dieselbe Kilokalorienzahl, kein Rundungsverlust, der
- * sich aufschaukelt."**
- *
- * `[cmd]` **Ein Verlust ist unvermeidlich** — `numeric(5,3)` kann
- * nicht jede Kilokalorienzahl darstellen. **Messbar ist, ob er
- * BEGRENZT bleibt:** eine Rate hat drei Stellen, ein Schritt von
- * `0,001` sind `11 × 0,001 × Gewicht` kcal. **Bei 80 kg: 0,88 kcal.**
- *
- * `[read]` **Deshalb ist die Grenze die halbe Schrittweite**, und
- * der zweite Durchgang aendert nichts mehr — das ist die eigentliche
- * Zusage.
- */
-export function kcalRueckweg(
-  kcal: number, gewichtKg: number,
-): { rate: number | null; zurueck: number | null; abweichung: number | null } {
-  const rate = rateAusKcal(kcal, gewichtKg)
-  const zurueck = kcalAusRate(rate, gewichtKg)
-  return {
-    rate,
-    zurueck,
-    abweichung: zurueck === null ? null : rundeWieDb(zurueck - kcal, 4),
-  }
-}
-
-/**
- * Die groesste Abweichung, die der Rueckweg haben kann.
- *
- * `[cmd]` **Eine halbe Rateneinheit, in kcal umgerechnet:**
- * `11 × 0,0005 × Gewicht`. `[read]` **Mehr waere ein Fehler, weniger
- * ist Glueck.**
- */
-export function maxAbweichungKcal(gewichtKg: number): number {
-  return rundeWieDb(E1_FAKTOR * 0.5 * 10 ** -RATE_STELLEN * gewichtKg, 4)
-}
-
-/** Der Wert in der gewaehlten Einheit — zum Anzeigen. */
-export function inEinheit(
-  rate: number | null, gewichtKg: number | null, einheit: Rateneinheit,
-): number | null {
-  return einheit === 'prozent' ? rate : kcalAusRate(rate, gewichtKg)
-}
-
-/** Was der Nutzer eingibt, zurueck auf die gespeicherte Rate. */
-export function ausEinheit(
-  wert: number | null, gewichtKg: number | null, einheit: Rateneinheit,
-): number | null {
-  if (einheit === 'prozent') {
-    return wert === null || !Number.isFinite(wert)
-      ? null
-      : rundeWieDb(wert, RATE_STELLEN)
-  }
-  return rateAusKcal(wert, gewichtKg)
-}
-
-/** Das Einheitenzeichen. */
-export const EINHEIT_ZEICHEN: Record<Rateneinheit, string> = {
-  prozent: '% KG/Woche',
-  kcal: 'kcal/Tag',
-}
+// ponytail: G-659 — nur noch fuer `einheiten-schalter.tsx` und `einheit-speichern.ts`, die beide
+// ohne Aufrufer sind und auf Toms Loeschung warten (Sperre). Faellt mit ihnen weg.
+export const EINHEITEN = ['prozent', 'kcal'] as const
+export type Rateneinheit = typeof EINHEITEN[number]
+export const EINHEIT_ZEICHEN: Record<Rateneinheit, string> = { prozent: '% KG/Woche', kcal: 'kcal/Tag' }

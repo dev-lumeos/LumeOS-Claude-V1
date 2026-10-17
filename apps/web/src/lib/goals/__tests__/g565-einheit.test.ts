@@ -11,13 +11,12 @@
  */
 import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
+import { readFileSync, readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 import {
-  kcalAusRate, rateAusKcal, rundeWieDb, kcalRueckweg, maxAbweichungKcal,
-  inEinheit, ausEinheit, E1_FAKTOR, RATE_STELLEN, KCAL_STELLEN, EINHEITEN,
+  kcalAusRate, rateAusKcal, rundeWieDb, E1_FAKTOR, RATE_STELLEN, KCAL_STELLEN,
 } from '../zielrate-einheit'
 
 const HIER = dirname(fileURLToPath(import.meta.url))
@@ -115,10 +114,6 @@ describe('G-565/A3 — kcal rein, Rate raus, kcal wieder raus', () => {
   it('das Beispiel von Hand', () => {
     assert.equal(rateAusKcal(230, 83.74), 0.25)
     assert.equal(kcalAusRate(0.25, 83.74), 230.3)
-    const w = kcalRueckweg(230, 83.74)
-    assert.equal(w.rate, 0.25)
-    assert.equal(w.zurueck, 230.3)
-    assert.equal(w.abweichung, 0.3)
   })
 
   it('die Abweichung bleibt unter der halben Rateneinheit', () => {
@@ -128,10 +123,13 @@ describe('G-565/A3 — kcal rein, Rate raus, kcal wieder raus', () => {
       [230, 83.74], [-400, 81.4], [250, 80], [1, 80],
       [-1526.3, 55.5], [500, 100], [-900, 120], [0, 80],
     ] as Array<[number, number]>) {
-      const w = kcalRueckweg(kcal, g)
-      const grenze = maxAbweichungKcal(g)
-      assert.ok(w.abweichung !== null && Math.abs(w.abweichung) <= grenze + 1e-9,
-        `${kcal} kcal bei ${g} kg weicht um ${w.abweichung} ab, `
+      // G-659: `kcalRueckweg`/`maxAbweichungKcal` sind mit der Einheitenwahl weg; die Regel gilt
+      // weiter fuer `rateAusKcal` -> `kcalAusRate` (Anpassung), also hier direkt gerechnet.
+      const zurueck = kcalAusRate(rateAusKcal(kcal, g), g)
+      const abweichung = zurueck === null ? null : zurueck - kcal
+      const grenze = E1_FAKTOR * 0.5 * 10 ** -RATE_STELLEN * g
+      assert.ok(abweichung !== null && Math.abs(abweichung) <= grenze + 1e-9,
+        `${kcal} kcal bei ${g} kg weicht um ${abweichung} ab, `
         + `erlaubt sind ${grenze}`)
     }
   })
@@ -171,46 +169,11 @@ describe('G-565/A3 — kcal rein, Rate raus, kcal wieder raus', () => {
 // A1 — ein Umschalter, kein zweites Feld
 // ════════════════════════════════════════════════════════════════
 
-describe('G-565/A1 — eine Groesse, zwei Einheiten', () => {
-  it('es gibt genau zwei Einheiten', () => {
-    assert.deepEqual([...EINHEITEN], ['prozent', 'kcal'])
-  })
-
-  it('hin und zurueck ist dieselbe Groesse', () => {
-    assert.equal(inEinheit(0.25, 83.74, 'prozent'), 0.25)
-    assert.equal(inEinheit(0.25, 83.74, 'kcal'), 230.3)
-    assert.equal(ausEinheit(0.25, 83.74, 'prozent'), 0.25)
-    assert.equal(ausEinheit(230.3, 83.74, 'kcal'), 0.25)
-  })
-
-  it('in Prozent braucht es kein Gewicht', () => {
-    // `[read]` **Die Rate gilt ohne Gewicht** — das ist der Grund,
-    // warum sie die gespeicherte Groesse ist (E-83).
-    assert.equal(inEinheit(0.25, null, 'prozent'), 0.25)
-    assert.equal(ausEinheit(0.25, null, 'prozent'), 0.25)
-    // `[read]` **In Kilokalorien schon.**
-    assert.equal(inEinheit(0.25, null, 'kcal'), null)
-  })
-
-  it('der Schalter ist EIN Knopfpaar, kein zweites Feld', () => {
-    // `[read]` **E-83: „Zwei Eingabefelder fuer dieselbe Groesse
-    // waere die Fehlerklasse aus G-529."**
-    const q = lies(join(GOALS, 'einheiten-schalter.tsx'))
-    assert.match(q, /data-einheit=\{e\}/, 'die Knoepfe tragen keine Marke')
-    assert.ok(!/<input/.test(q),
-      'der Schalter bringt ein eigenes Eingabefeld mit — zwei Felder '
-      + 'fuer eine Groesse laufen auseinander (G-529)')
-  })
-
-  it('ohne Gewicht ist der kcal-Knopf gesperrt, mit Grund', () => {
-    const q = lies(join(GOALS, 'einheiten-schalter.tsx'))
-    assert.match(q, /const gesperrt = e === 'kcal' && ohneGewicht/,
-      'ohne Gewicht laesst sich auf kcal schalten — dann stuende '
-      + 'dort eine erfundene Zahl')
-    assert.match(q, /Ohne Körpergewicht/,
-      'die Sperre nennt keinen Grund')
-  })
-
+describe('G-565/A1 — die Rate, eine Rechnung', () => {
+  // G-659 (Tom, 17.10., Variante b): die %/kcal-Wahl aus E-83 ist weg, die Zielrate bleibt in
+  // Prozent. Weggefallen mit Grund: „genau zwei Einheiten“, „hin und zurueck“, „in Prozent
+  // braucht es kein Gewicht“ (`inEinheit`/`ausEinheit`) und die zwei Schalterpruefungen
+  // (`einheiten-schalter.tsx`) — 5 Tests, ihre Regel hat keinen Gegenstand mehr.
   // ── Je Stelle: EIN Zustand, die Rate ────────────────────────────
   // G-656: „das Eingabefeld rechnet auf die Rate zurueck" (phasen-editor-echt.tsx) und
   // „die Anzeige rechnet in die gewaehlte Einheit" (phase-echt.tsx) sind mit ihren
@@ -218,7 +181,7 @@ describe('G-565/A1 — eine Groesse, zwei Einheiten', () => {
   it('keine Stelle rechnet selbst mit 11', () => {
     // `[read]` **A2: „Die Umrechnung liegt server-frei in
     // `lib/goals/` und wird nicht in der Komponente wiederholt."**
-    for (const datei of ['plan-seite.tsx', 'reiter-goals.tsx', 'einheiten-schalter.tsx']) {
+    for (const datei of ['plan-seite.tsx', 'reiter-goals.tsx']) {
       const q = lies(join(GOALS, datei))
       assert.ok(!/11 \* |\* 11\b/.test(q),
         `${datei} rechnet selbst mit dem Faktor 11 — zwei Rechnungen `
@@ -233,69 +196,9 @@ describe('G-565/A1 — eine Groesse, zwei Einheiten', () => {
   })
 })
 
-// ════════════════════════════════════════════════════════════════
-// A4 — die Wahl gehoert dem Nutzer
-// ════════════════════════════════════════════════════════════════
-
-describe('G-565/A4 — eine Einstellung, keine Spalte', () => {
-  const E = () => lies(join(HIER, '..', 'einheit-speichern.ts'))
-
-  it('sie liegt in user_display_preferences', () => {
-    // `[cmd]` **Den Ort gibt es seit C-161** — eine Zeile je Nutzer
-    // und Schluessel, `value jsonb`, vier RLS-Regeln (gemessen).
-    const q = E()
-    assert.match(q, /from\('user_display_preferences'\)/,
-      'die Einstellung liegt woanders')
-    assert.match(q, /onConflict: 'user_id,preference_key'/,
-      'es entsteht eine zweite Zeile je Nutzer statt eines Upserts')
-  })
-
-  it('der Schluessel traegt sein Modul', () => {
-    // `[read]` **Wie `nutrition.nutrient_tree`** — die zwei Zeilen,
-    // die heute live stehen.
-    assert.match(E(), /EINHEIT_SCHLUESSEL = 'goals\.zielrate_einheit'/,
-      'der Schluessel ist nicht abgegrenzt — dann kollidiert er')
-  })
-
-  it('sie steht NICHT an der Phase', () => {
-    // `[read]` **E-83: „eine Einstellung, keine Spalte in
-    // `goal_phases`."**
-    const q = E()
-    assert.ok(!/goal_phases/.test(q),
-      'die Einheit wird an die Phase geschrieben — sie gehoert dem '
-      + 'Nutzer, nicht der Phase')
-  })
-
-  it('der Schreibweg zaehlt seine Zeilen', () => {
-    // `[read]` **G-79** — ein vom Zeilenschutz gefiltertes Upsert
-    // kaeme sonst als Erfolg zurueck.
-    const q = E()
-    const i = q.indexOf('export async function speichereEinheit')
-    const rumpf = q.slice(i, i + 900)
-    assert.match(rumpf, /\.select\('preference_key'\)/,
-      'das Upsert zaehlt die Zeilen nicht (G-79)')
-    assert.match(rumpf, /data\.length === 0/,
-      'die Zeilenzahl wird nicht geprueft')
-  })
-
-  it('ein Lesefehler faellt auf die Vorgabe, nicht auf einen Fehler', () => {
-    // `[read]` **Die Einheit ist eine Darstellung, kein Datum** —
-    // sie darf die Seite nicht verhindern.
-    const q = E()
-    const i = q.indexOf('export async function ladeEinheit')
-    const rumpf = q.slice(i, i + 900)
-    assert.match(rumpf, /if \(error \|\| !data\) return EINHEIT_VORGABE/,
-      'ein Lesefehler wird geworfen — dann faellt die ganze Seite '
-      + 'wegen einer Anzeigeeinstellung')
-  })
-
-  it('die Vorgabe ist Prozent', () => {
-    // `[read]` **Die gespeicherte Groesse gilt ohne Gewicht** —
-    // kcal braucht eines, und das fehlt bei einem neuen Nutzer.
-    assert.match(E(), /EINHEIT_VORGABE: Rateneinheit = 'prozent'/,
-      'die Vorgabe braucht ein Gewicht, das es noch nicht gibt')
-  })
-})
+// G-659: „G-565/A4 — eine Einstellung, keine Spalte“ (6 Tests auf `einheit-speichern.ts`) faellt
+// weg — die Einstellung gibt es nicht mehr; die Zeilen in `user_display_preferences` bleiben
+// ungelesen stehen (Tom, 17.10.).
 
 // ════════════════════════════════════════════════════════════════
 // Was NICHT umgestellt wurde, und warum
@@ -312,9 +215,27 @@ describe('G-565 — der Katalog bleibt in Prozent', () => {
     // G-615: strategie-wahl.tsx ist weg; der Planer zeigt Katalogzeilen.
     for (const datei of ['strategie-vorschau.tsx', 'planer.tsx']) {
       const q = lies(join(GOALS, datei))
-      assert.ok(!/<EinheitenSchalter/.test(q),
-        `${datei} zeigt einen Einheitenschalter — der Katalog gilt `
+      // G-659: der Schalter ist weg; gefragt wird nach der Sache — eine Kilokalorienzahl.
+      assert.ok(!/kcalAusRate|<EinheitenSchalter/.test(q),
+        `${datei} rechnet die Rate in kcal um — der Katalog gilt `
         + 'fuer alle Nutzer, eine Kilokalorienzahl fuer einen (E-83)')
     }
+  })
+})
+
+describe('G-659 — die Zielrate-Einheit wird nicht mehr gewaehlt und nicht mehr gelesen', () => {
+  // Tom, 17.10. (Variante b): Prozent wie im Entwurf. Die Zeilen unter `goals.zielrate_einheit`
+  // bleiben ungelesen stehen. Gezaehlt wird jeder Import der zwei toten Dateien und jedes Lesen
+  // des Schluessels ausserhalb von ihnen — beide warten auf Toms Loeschung.
+  const SRC = join(HIER, '..', '..', '..')
+  const TOT = new Set(['einheit-speichern.ts', 'einheiten-schalter.tsx'])
+  const dateien = (d: string): string[] => readdirSync(d, { withFileTypes: true }).flatMap(e =>
+    e.isDirectory() ? (e.name === '__tests__' || e.name === 'node_modules' ? [] : dateien(join(d, e.name)))
+      : /\.tsx?$/.test(e.name) && !TOT.has(e.name) ? [join(d, e.name)] : [])
+  it('kein Import, kein Schluessel', () => {
+    const alle = dateien(SRC)
+    assert.ok(alle.length > 300, `nur ${alle.length} Dateien gefunden — falscher Wurzelpfad?`)
+    const treffer = alle.filter(f => /einheit-speichern|einheiten-schalter|zielrate_einheit|ladeEinheit|EinheitenSchalter/.test(lies(f)))
+    assert.deepEqual(treffer, [], 'die Einheitenwahl wird noch benutzt')
   })
 })

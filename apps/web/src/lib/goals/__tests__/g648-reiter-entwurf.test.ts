@@ -17,7 +17,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { AppRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 import { PLAN_STATUS, PROGNOSE_GRUND, ReiterGoals, messPrognose, messTempo } from '../../../app/v2/goals/reiter-goals'
-import type { Ausblick, Messwoche, Wochendaten } from '../reiter-read'
+import type { Ausblick, Messwoche, Modulkacheln, Wochendaten } from '../reiter-read'
 import { phasenLauf, wocheText } from '../plan'
 import { phaseAnzeige } from '../phase-regeln'
 import { zustandAusListe, zustandAusStatus } from '../zustand'
@@ -210,11 +210,12 @@ describe('G-648 — Diese Woche, Module, Messziele, Abgeschlossen', () => {
     assert.match(h, /data-woche="trainings"[\s\S]*?>3 \/ 4</)
     assert.match(h, /grau = Soll der Woche · Farbe = erreicht/)
   })
-  it('Module: vier Kacheln; ohne Beitrag „kommt (offen)", keine Null', () => {
-    // G-650 liefert keine Modulbeitraege (Befund G-648 Rest) — der Punkt ist offen
+  it('Module: vier Kacheln; ohne Kachel-Leser „kommt (G-522)", keine Null', () => {
+    // G-522: die Werte kommen aus `goal_module_cards_at`; ohne sie steht „kommt", keine Zahl.
     const h = reiter([Z({})])
     assert.equal((h.match(/data-modul="[a-z]+"/g) ?? []).length, 4)
-    assert.equal((h.match(/noch keine Beiträge — kommt \(offen\)/g) ?? []).length, 4)
+    assert.equal((h.match(/Modulkacheln — kommt \(G-522\)/g) ?? []).length, 4)
+    assert.equal((h.match(/data-modul-wert[^>]*>—</g) ?? []).length, 4, 'ohne Kachel-Leser steht eine Zahl statt „—“')
     assert.match(h, /<b>Engpass:<\/b> erst mit Beiträgen\./)
   })
   it('Messziel-Kacheln: Lage nur mit Istwert, Frist-Texte, Wochenziel „4× / Wo"', () => {
@@ -289,6 +290,45 @@ describe('G-654 angebunden: Lage, Woche je Messziel, Tempo', () => {
     // ohne Lage keine Pille — gezaehlt an der Klasse, das Attribut faellt bei null ohnehin weg
     for (const h of [mit({ lage: { lage: null, abweichung_kg: null, toleranz_kg: null } }), mit({})])
       assert.doesNotMatch(h.slice(h.indexOf('aria-label="Steuerung"'), h.indexOf('data-steuerung-variante')), /ge-lage-/)
+  })
+  // G-522: die vier Kacheln und der Engpass aus `goal_module_cards_at` — Werte wie dev am 17.10.
+  const KACHELN = (o: Partial<Modulkacheln> = {}): Modulkacheln => ({
+    stand_am: '2026-10-17',
+    nutrition: { wert: 84.9, tage: 7, grund: null },
+    training: { wert: 3, wochenziel: 4, score: 75, grund: null },
+    recovery: { wert: 66.9, tage: 7, schlaf_stunden: 7.8, grund: null },
+    supplements: { wert: 88.1, tage: 7, grund: null },
+    engpass: null, engpass_grund: 'kein_deutlicher_engpass', ...o,
+  })
+  const modul = (h: string, m: string) => { const i = h.indexOf(`data-modul="${m}"`); return h.slice(i, h.indexOf('data-modul=', i + 12) > 0 ? h.indexOf('data-modul=', i + 12) : h.indexOf('data-engpass')) }
+  it('G-522: Kacheln zeigen die Werte der Kette mit dem Untertitel des Entwurfs', () => {
+    const h = mit({ kacheln: KACHELN() })
+    assert.match(modul(h, 'nutrition'), /data-modul-wert[^>]*>84,9 %<\/div><div[^>]*>kcal-Treue 7 Tage</)
+    assert.match(modul(h, 'training'), /data-modul-wert[^>]*>3 \/ 4<\/div><div[^>]*>Einheiten diese Woche</)
+    assert.match(modul(h, 'recovery'), /data-modul-wert[^>]*>66,9<\/div><div[^>]*>Score Ø 7 Tage</)
+    assert.match(modul(h, 'supplements'), /data-modul-wert[^>]*>88,1 %<\/div><div[^>]*>Einnahme-Treue</)
+    assert.match(h, /data-engpass="kein_deutlicher_engpass"[^]*?<b>Engpass:<\/b> kein deutlicher Engpass\./)
+  })
+  it('G-522: der Engpass kommt aus der Kette, auch wenn die App ein anderes Modul waehlen wuerde', () => {
+    // Recovery 66,9 ist der niedrigste Wert — die Kette nennt trotzdem Ernaehrung; die App folgt ihr.
+    const h = mit({ kacheln: KACHELN({ engpass: { module: 'nutrition', grund: 'Kalorien-Treue Ø 84,9 %' }, engpass_grund: null }) })
+    assert.match(h, /data-engpass="nutrition"[^]*?<b>Engpass:<\/b> Ernährung – Kalorien-Treue Ø 84,9 %\./)
+    assert.match(mit({ kacheln: KACHELN({ engpass_grund: 'keine_modulwerte' }) }), /<b>Engpass:<\/b> erst mit Modulwerten\./)
+  })
+  it('G-522: fehlt ein Wert, steht der Grund der Kette, keine Null', () => {
+    const h = mit({ kacheln: KACHELN({ nutrition: { wert: null, tage: 0, grund: 'kein_kalorienlog' }, training: { wert: null, wochenziel: null, score: null, grund: 'kein_wochenziel' } }) })
+    assert.match(modul(h, 'nutrition'), /data-modul-wert[^>]*>—<\/div><div[^>]*>kein Kalorienlog</)
+    assert.match(modul(h, 'training'), /data-modul-wert[^>]*>—<\/div><div[^>]*>kein Wochenziel</)
+    assert.match(modul(mit({ kacheln: KACHELN({ nutrition: { wert: 78, tage: 1, grund: null } }) }), 'nutrition'), />kcal-Treue 1 Tag</)
+  })
+  it('G-522: die App rechnet keinen eigenen Engpass und keinen Modulschnitt', () => {
+    const q = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'app', 'v2', 'goals', 'reiter-goals.tsx'), 'utf8')
+    assert.ok(!/modulSchnitt|engpass\(|reduce\(\(a, b\) => \(b\.schnitt/.test(q), 'reiter-goals.tsx rechnet Schnitt oder Engpass selbst')
+    const rr = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'reiter-read.ts'), 'utf8')
+    assert.match(rr, /kette<Modulkacheln>\('goal_module_cards_at', steuerzielId, stichtag\)/)
+    // ladeWoche gibt den gelesenen Wert zurueck — nicht nur gelesen und liegen gelassen.
+    const rueck = rr.slice(rr.indexOf('  return {', rr.indexOf('export async function ladeWoche')))
+    assert.match(rueck.slice(0, rueck.indexOf('\n  }')), /\n\s+kacheln,\r?\n/, 'ladeWoche reicht die Kacheln nicht durch')
   })
   it('Diese Woche: Bewegung je Messziel mit Einheit, Wertung gegen das Soll, kein „kommt (offen)"', () => {
     const h = mit({ messwochen: { k1: MW({ delta_woche: 3, soll_delta_woche: 0.942 }), f1: MW({ delta_woche: 0.93, soll_delta_woche: -0.062 }) } })

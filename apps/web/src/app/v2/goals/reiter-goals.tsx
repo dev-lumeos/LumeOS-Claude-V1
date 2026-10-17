@@ -27,8 +27,8 @@ import { KeinZielWarnung } from '../kein-ziel-warnung'
 import { verlaufAktion, zielSpeichern } from './ziel-aktionen'
 import {
   ABSCHLUSS, KATEGORIE_NAME, KATEGORIE_REIHE, LAGE_TEXT, MODUL_NAME,
-  engpass, istAbgeschlossen, kalenderwoche, kategorieVon, lageVon,
-  modulSchnitt, moduleVon, quelleLesbar, steuerZustand, steuerziel, wertMitEinheit,
+  istAbgeschlossen, kalenderwoche, kategorieVon, lageVon,
+  moduleVon, quelleLesbar, steuerZustand, steuerziel, wertMitEinheit,
   type Modul,
 } from '../../../lib/goals/reiter'
 import { MESSARTEN, einheitLesbar, type Kategorie } from '../../../lib/goals/messziel'
@@ -41,7 +41,7 @@ import type { Koerpermessung, Meilenstein, Phase, ZielFortschritt, Zielphase } f
 import type { Strategie } from '../../../lib/goals/strategie-read'
 import type { Plan } from '../../../lib/goals/plan-read'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
-import type { Ausblick, Messwoche, Verlauf, Wochendaten } from '../../../lib/goals/reiter-read'
+import type { Ausblick, Messwoche, Modulkacheln, Verlauf, Wochendaten } from '../../../lib/goals/reiter-read'
 
 /** `prognose.plan_status` ohne Datum (G-653) — je Schluessel ein Satz. */
 export const PLAN_STATUS: Record<string, string> = {
@@ -545,10 +545,41 @@ const MODUL_TON: Record<typeof MODULE_DER_KETTE[number], string> = {
   nutrition: 'ge-ton-nutri', training: 'ge-ton-train', recovery: 'ge-ton-recov', supplements: 'ge-ton-suppl',
 }
 
+const KACHEL_GRUND: Record<string, string> = {
+  kein_kalorienlog: 'kein Kalorienlog', kein_wochenziel: 'kein Wochenziel',
+  kein_recovery_score: 'kein Recovery-Score', keine_entschiedene_einnahme: 'keine entschiedene Einnahme',
+}
+const tageText = (n: number) => `${n} ${n === 1 ? 'Tag' : 'Tage'}`
+
+/**
+ * G-522: eine Kachel aus `goal_module_cards_at` — Wert, Untertitel wie im Entwurf und die Zahl
+ * fuer den Ampelpunkt. `[read]` **Die App rechnet nichts nach**; fehlt der Wert, steht der Grund.
+ */
+export function kachelAnzeige(m: typeof MODULE_DER_KETTE[number], k: Modulkacheln): { v: string; s: string; ampel: number | null } {
+  const grund = (g: string | null) => KACHEL_GRUND[g ?? ''] ?? (g ? g.replace(/_/g, ' ') : 'kein Wert')
+  if (m === 'training') {
+    const t = k.training
+    return t.wert === null
+      ? { v: '—', s: grund(t.grund), ampel: null }
+      : { v: `${t.wert} / ${t.wochenziel !== null ? zahl(t.wochenziel) : '?'}`, s: 'Einheiten diese Woche', ampel: t.score }
+  }
+  const x = k[m]
+  if (x.wert === null) return { v: '—', s: grund(x.grund), ampel: null }
+  if (m === 'nutrition') return { v: `${zahl(x.wert, 1)} %`, s: `kcal-Treue ${tageText(x.tage)}`, ampel: x.wert }
+  if (m === 'recovery') return { v: zahl(x.wert, 1), s: `Score Ø ${tageText(x.tage)}`, ampel: x.wert }
+  return { v: `${zahl(x.wert, 1)} %`, s: 'Einnahme-Treue', ampel: x.wert }
+}
+
+/** G-522: der Engpass aus der Kette (`goal_bottleneck`) — kein eigener in der App. */
+export function engpassSatz(k: Modulkacheln | null | undefined): string {
+  if (!k) return 'erst mit Beiträgen.'
+  if (k.engpass) return `${MODUL_NAME[k.engpass.module as Modul] ?? k.engpass.module} – ${k.engpass.grund}.`
+  return k.engpass_grund === 'kein_deutlicher_engpass' ? 'kein deutlicher Engpass.' : 'erst mit Modulwerten.'
+}
+
 function Module({ ziele, woche, onCrossModule }: { ziele: ZielFortschritt[]; woche: Wochendaten; onCrossModule: () => void }) {
   const st = steuerziel(ziele)
-  const schnitte = modulSchnitt(woche.beitraege, [...MODULE_DER_KETTE])
-  const eng = engpass(schnitte)
+  const k = woche.kacheln ?? null
   return (
     <section aria-label="Module" className="ge-card" style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 10 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -557,11 +588,12 @@ function Module({ ziele, woche, onCrossModule }: { ziele: ZielFortschritt[]; woc
       </div>
       {!st && <div className="ge-kommt" data-module-leer>Ohne steuerndes Ziel gibt es keinen Beitrag.</div>}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: 10 }}>
-        {schnitte.map(s => {
-          const m = s.module as typeof MODULE_DER_KETTE[number]
+        {MODULE_DER_KETTE.map(m => {
+          const a = k ? kachelAnzeige(m, k) : { v: '—', s: '', ampel: null }
+          // Die Verlaufslinie zeigt die geschriebenen Tagesbeitraege — gezeichnet, nicht gerechnet.
           const reihe = woche.beitraege.filter(b => b.module === m && b.contribution_score !== null)
-            .sort((a, b) => a.contribution_date.localeCompare(b.contribution_date)).map(b => (b.contribution_score as number) / 100)
-          const punkt = s.schnitt === null ? 'var(--border-strong)' : s.schnitt >= 80 ? 'var(--pos)' : s.schnitt >= 60 ? 'var(--warn)' : 'var(--neg)'
+            .sort((x, y) => x.contribution_date.localeCompare(y.contribution_date)).map(b => (b.contribution_score as number) / 100)
+          const punkt = a.ampel === null ? 'var(--border-strong)' : a.ampel >= 80 ? 'var(--pos)' : a.ampel >= 60 ? 'var(--warn)' : 'var(--neg)'
           return (
             <div key={m} data-modul={m} style={{ border: '1px solid var(--border)', borderRadius: 8, padding: 10, display: 'flex', flexDirection: 'column', gap: 6 }}>
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -571,8 +603,8 @@ function Module({ ziele, woche, onCrossModule }: { ziele: ZielFortschritt[]; woc
               </div>
               <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 8 }}>
                 <div>
-                  <div className="ge-num" style={{ fontSize: 17, fontWeight: 600 }}>{s.schnitt === null ? '—' : `${s.schnitt}`}</div>
-                  <div style={{ fontSize: 11, color: 'var(--fg-subtle)' }}>{s.schnitt === null ? <Kommt was="noch keine Beiträge" punkt="offen" /> : `Beitrag Ø ${s.tage} Tage`}</div>
+                  <div className="ge-num" data-modul-wert style={{ fontSize: 17, fontWeight: 600 }}>{a.v}</div>
+                  <div style={{ fontSize: 11, color: 'var(--fg-subtle)' }}>{k ? a.s : <Kommt was="Modulkacheln" punkt="G-522" />}</div>
                 </div>
                 {reihe.length > 1 && (
                   <svg viewBox="0 0 70 24" width="70" height="24" aria-hidden="true">
@@ -584,9 +616,9 @@ function Module({ ziele, woche, onCrossModule }: { ziele: ZielFortschritt[]; woc
           )
         })}
       </div>
-      <div className="ge-hinweis-gelb" data-engpass style={{ fontSize: 12.5, padding: '8px 10px', display: 'flex', gap: 8, alignItems: 'center' }}>
+      <div className="ge-hinweis-gelb" data-engpass={k?.engpass?.module ?? k?.engpass_grund ?? ''} style={{ fontSize: 12.5, padding: '8px 10px', display: 'flex', gap: 8, alignItems: 'center' }}>
         <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--warn)', flexShrink: 0 }} />
-        <span>{eng ? <><b>Engpass:</b> {MODUL_NAME[eng.module as Modul]} – Ø {eng.schnitt} / 100.</> : <><b>Engpass:</b> erst mit Beiträgen.</>}</span>
+        <span><b>Engpass:</b> {engpassSatz(k)}</span>
       </div>
     </section>
   )

@@ -233,19 +233,4 @@ export function gewichtWoche(
 
 export type Beitrag = { module: string; contribution_score: number | null; contribution_date: string }
 
-/**
- * Der Schnitt je Modul ueber die uebergebenen Tage (`goal_contributions`,
- * Skala 0–100). `[read]` **Ein Modul ohne Zeile ist „kommt", nicht 0.**
- */
-export function modulSchnitt(beitraege: Beitrag[], module: string[]): Array<{ module: string; schnitt: number | null; tage: number }> {
-  return module.map(m => {
-    const w = beitraege.filter(b => b.module === m && b.contribution_score !== null).map(b => b.contribution_score as number)
-    return { module: m, schnitt: w.length ? Math.round(w.reduce((a, b) => a + b, 0) / w.length) : null, tage: w.length }
-  })
-}
-
-/** Der Engpass: das Modul mit dem niedrigsten Schnitt — nur unter gemessenen. */
-export function engpass(schnitte: Array<{ module: string; schnitt: number | null }>) {
-  const mit = schnitte.filter(s => s.schnitt !== null)
-  return mit.length ? mit.reduce((a, b) => (b.schnitt! < a.schnitt! ? b : a)) : null
-}
+// G-522: `modulSchnitt`/`engpass` sind weg — Schnitt und Engpass rechnet `goal_module_cards_at`.

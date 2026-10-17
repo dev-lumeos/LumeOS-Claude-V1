@@ -219,29 +219,15 @@ describe('G-569/A3 — die Randprobe, zwei Gewichte', () => {
 // A4 — die Texte in beiden Einheiten
 // ════════════════════════════════════════════════════════════════
 
-describe('G-569/A4 — der Text nennt die Grenze zum Gewicht', () => {
+describe('G-569/A4 — der Text nennt die Schwelle in Prozent', () => {
+  // G-659 (Tom, 17.10., Variante b): die %/kcal-Wahl aus E-83 ist weg, die Texte stehen in
+  // Prozent. Weggefallen mit Grund: „in Kilogramm steht die Grenze zu seinem Gewicht“ und
+  // „ohne Gewicht steht die Prozentzahl“ (2 Tests) — die Kilogrammfassung gibt es nicht mehr.
   it('in Prozent steht die Katalogzahl', () => {
-    assert.equal(schwellenText('verlustZuSchnell', 83.74, 'prozent'),
-      '1.194 % KG/Woche')
+    assert.equal(schwellenText('verlustZuSchnell'), '1.194 % KG/Woche')
   })
 
-  it('in Kilogramm steht die Grenze ZU SEINEM Gewicht', () => {
-    // `[read]` **A4: „nicht eine pauschale Zahl."**
-    const t = schwellenText('verlustZuSchnell', 60, 'kcal')
-    assert.match(t, /0\.716 kg\/Woche/,
-      'der Text nennt nicht die Grenze zum Gewicht des Nutzers')
-    assert.match(t, /1\.194 % bei 60 kg/,
-      'der Text nennt den Bezug nicht — dann ist die Zahl nicht '
-      + 'nachvollziehbar')
-  })
-
-  it('ohne Gewicht steht die Prozentzahl, keine erfundene', () => {
-    assert.equal(schwellenText('verlustZuSchnell', null, 'kcal'),
-      '1.194 % KG/Woche',
-      'ohne Gewicht wird eine Kilogrammgrenze behauptet')
-  })
-
-  it('der Waechtersatz nutzt die gewaehlte Einheit', () => {
+  it('der Waechtersatz nennt die Schwelle in Prozent', () => {
     const lage: Waechterlage = {
       art: 'fat_loss', wochen: 4, maxDauerWochen: null,
       koerperfettPct: 15, biologischesGeschlecht: 'male',
@@ -251,15 +237,10 @@ describe('G-569/A4 — der Text nennt die Grenze zum Gewicht', () => {
       weightTrend: -1.5, calorieAdherence: 90, gewichtAmStichtagKg: 60,
       strengthTrend: 0, hrv7d: 60, hrvBaseline: 60,
     }
-    const inProzent = pruefeWaechter(lage, d, 'prozent')
-      .find(b => b.kennung === 'verlust_zu_schnell')
-    const inKg = pruefeWaechter(lage, d, 'kcal')
-      .find(b => b.kennung === 'verlust_zu_schnell')
-    assert.equal(inProzent?.greift, true, '1,5 kg bei 60 kg sind 2,5 %')
-    assert.match(inProzent?.satz ?? '', /1\.194 % KG\/Woche/,
+    const b = pruefeWaechter(lage, d).find(x => x.kennung === 'verlust_zu_schnell')
+    assert.equal(b?.greift, true, '1,5 kg bei 60 kg sind 2,5 %')
+    assert.match(b?.satz ?? '', /1\.194 % KG\/Woche/,
       'der Prozentsatz nennt die Schwelle nicht')
-    assert.match(inKg?.satz ?? '', /0\.716 kg\/Woche/,
-      'die Kilogrammfassung nennt die Grenze nicht zum Gewicht')
   })
 })
 

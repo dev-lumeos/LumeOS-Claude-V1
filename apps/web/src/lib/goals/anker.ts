@@ -187,19 +187,6 @@ export function stufenwochen(gesamt: number, anteile: number[]): number[] | null
 }
 
 /**
- * Die Gesamtdauer: das Override des Nutzers, sonst der Katalog.
- *
- * `[cmd]` **Das Override ist `max_duration_weeks` in
- * `goal_phases.parameters`** — die App schreibt es seit G-659 nicht mehr
- * (`phasenOverrideSetzen` ist mit dem Override-Editor weg); Altzeilen gelten weiter.
- * `[read]` **Editor und Zeitachse fragen beide hier** — zwei
- * Rechnungen fuer dasselbe gehen auseinander.
- */
-export function gesamtdauer(override: unknown, katalog: number | null): number | null {
-  return typeof override === 'number' && Number.isFinite(override) ? override : katalog
-}
-
-/**
  * Die Teilphasen des Katalogs als Eingabe fuer `ankerplan`.
  *
  * `[read]` **`ankerplan` will je Stufe den ANFANG in Wochen vor dem
