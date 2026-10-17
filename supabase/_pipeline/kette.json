@@ -4190,6 +4190,20 @@
       "kind": "tsx",
       "creates": "G-627: SCORING-Schwellen, Logtage, Wache, Dienstlauf und Sabotage.",
       "depends_on": ["627_weekly_adjustment_protocol"]
+    },
+    {
+      "id": "662_weekly_position_target",
+      "path": "supabase/_pipeline/11_goals/662_weekly_position_target.sql",
+      "kind": "sql",
+      "creates": "G-662: Wochensoll aus der Planrate und Dreiwochen-Wache aus Wochenbewegungen.",
+      "depends_on": ["627_weekly_adjustment_probe"]
+    },
+    {
+      "id": "662_weekly_position_target_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g662-weekly-position-target.test.ts",
+      "kind": "tsx",
+      "creates": "G-662: Positionsrate trotz gedeckelter Linie, Erhaltung und Wochenwache mit Sabotage.",
+      "depends_on": ["662_weekly_position_target"]
     }
   ]
 }

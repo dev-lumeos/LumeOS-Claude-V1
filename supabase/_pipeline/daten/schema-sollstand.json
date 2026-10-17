@@ -6458,6 +6458,7 @@
     {"schema":"goals","name":"weekly_adjustment_rule_at","schritt":"627_weekly_adjustment_protocol"},
     {"schema":"goals","name":"record_weekly_adjustments","schritt":"627_weekly_adjustment_protocol"},
     {"schema":"goals","name":"goal_weekly_adjustments_at","schritt":"627_weekly_adjustment_protocol"},
+    {"schema":"goals","name":"weekly_delta_side","schritt":"662_weekly_position_target"},
     {
       "schema": "goals",
       "name": "berechne_zielwerte",
