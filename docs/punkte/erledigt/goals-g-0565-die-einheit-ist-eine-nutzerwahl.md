@@ -22,9 +22,7 @@ beruehrt:
     - goals.goal_phases
     - public.user_display_preferences
   dateien:
-    - apps/web/src/app/v2/goals/einheiten-schalter.tsx
     - apps/web/src/lib/goals/zielrate-einheit.ts
-    - apps/web/src/lib/goals/einheit-speichern.ts
     - apps/web/src/lib/goals/phase-regeln.ts
 ---
 
