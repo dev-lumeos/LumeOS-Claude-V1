@@ -111,16 +111,40 @@ BEGIN
     END LOOP;
   END LOOP;
 
+  -- G-655 Testdaten: acht woechentliche Navy-Messungen statt einer
+  -- taeglich aus GO-10 kopierten KFA. Die letzten vier Wochen ergeben
+  -- etwa -0,3 Prozentpunkte pro Woche.
+  FOR v_week IN 1..6 LOOP
+    v_day := CURRENT_DATE-(8-v_week)*7;
+    v_weight := (ARRAY[17.3,17.3,17.3,17.3,17.1,16.8])[v_week];
+    v_waist := round(41+2.54*power(10::numeric,
+      (v_weight+70.041*ln(v_height/2.54)/ln(10::numeric)-36.76)/86.010),1);
+    PERFORM goals.body_circumference_write(
+      p_measurement_date=>v_day,p_measurement_time=>time '08:30',
+      p_measurement_source=>'admin',p_source_detail=>'G-655 Navy-Wochentestdaten',
+      p_neck_cm=>41.0,p_waist_cm=>v_waist);
+    SELECT body_fat_pct INTO v_fat FROM goals.body_composition_navy(v_user,v_day);
+    IF abs(v_fat-v_weight)>0.08 THEN
+      RAISE EXCEPTION 'G655_STOP:navy_woche_%_abweichend % statt %',v_week,v_fat,v_weight;
+    END IF;
+    INSERT INTO goals.body_measurements
+      (user_id,measurement_date,measurement_time,weight_kg,body_fat_pct,
+        bf_method,measurement_source,source_detail,notes)
+    VALUES (v_user,v_day,time '08:35',v_body_weight,v_fat,
+      'navy','admin','G-655 Navy-Wochentestdaten',
+      'G-655 Testdaten · Navy-Woche '||v_week);
+  END LOOP;
+
   -- Der Navy-Startwert stammt aus Umfang und Gewicht, nicht aus dem Ziel.
   v_waist := round(41+2.54*power(10::numeric,
-    (17+70.041*ln(v_height/2.54)/ln(10::numeric)-36.76)/86.010),1);
+    (16.5+70.041*ln(v_height/2.54)/ln(10::numeric)-36.76)/86.010),1);
   PERFORM goals.body_circumference_write(
     p_measurement_date=>CURRENT_DATE-7,p_measurement_time=>time '08:30',
     p_measurement_source=>'admin',p_source_detail=>'G-652 Navy-Verlauf',
     p_neck_cm=>41.0,p_waist_cm=>v_waist);
   SELECT body_fat_pct INTO v_fat FROM goals.body_composition_navy(
     v_user,CURRENT_DATE-7);
-  IF round(v_fat,1)<>17.0 THEN
+  IF round(v_fat,1)<>16.5 THEN
     RAISE EXCEPTION 'G652_STOP:navy_start_abweichend %',v_fat;
   END IF;
   INSERT INTO goals.body_measurements
@@ -128,6 +152,26 @@ BEGIN
       bf_method,measurement_source,source_detail,notes)
   VALUES (v_user,CURRENT_DATE-7,time '08:35',v_body_weight,v_fat,
     'navy','admin','G-652 Navy-Verlauf','Navy-Messung · Start');
+
+  -- Der Zielstart am Wochenanfang muss seinen eigenen gemessenen Wert sehen.
+  v_waist := round(41+2.54*power(10::numeric,
+    (16.3+70.041*ln(v_height/2.54)/ln(10::numeric)-36.76)/86.010),1);
+  PERFORM goals.body_circumference_write(
+    p_measurement_date=>date_trunc('week',CURRENT_DATE)::date,
+    p_measurement_time=>time '23:58',
+    p_measurement_source=>'admin',p_source_detail=>'G-652 Navy-Verlauf',
+    p_neck_cm=>41.0,p_waist_cm=>v_waist);
+  SELECT body_fat_pct INTO v_fat FROM goals.body_composition_navy(
+    v_user,date_trunc('week',CURRENT_DATE)::date);
+  IF round(v_fat,1)<>16.3 THEN
+    RAISE EXCEPTION 'G652_STOP:navy_zielstart_abweichend %',v_fat;
+  END IF;
+  INSERT INTO goals.body_measurements
+    (user_id,measurement_date,measurement_time,weight_kg,body_fat_pct,
+      bf_method,measurement_source,source_detail,notes)
+  VALUES (v_user,date_trunc('week',CURRENT_DATE)::date,time '23:59',
+    v_body_weight,v_fat,'navy','admin','G-652 Navy-Verlauf',
+    'Navy-Messung · Zielstart');
 
   SELECT goals.measurement_goal_create(
     p_measurement_type=>'e1rm',p_title=>'Kniebeuge 1RM 160 kg',
@@ -270,6 +314,39 @@ BEGIN
   PERFORM goals.goal_plan_event_save(v_old_prep,v_event,
     'Wettkampf 2025 · Termin gehalten','A',date '2025-09-22');
   PERFORM goals.goal_plan_complete(v_old_prep);
+
+  -- Sieben Tage Einnahmen: sechs protokollierte Dosen je Tag.
+  -- Die vorhandene C-413-Dosis ergibt zusammen etwa 88 % Treue.
+  WITH items AS (
+    SELECT si.id,si.dose,si.dose_unit,
+      coalesce(nullif(btrim(si.custom_name),''),nullif(btrim(s.name_de),''),
+        nullif(btrim(s.name_en),'')) AS display_name,
+      row_number() OVER (ORDER BY si.sort_order,si.id) AS n
+    FROM supplements.stack_items si
+    JOIN supplements.user_stacks st ON st.id=si.stack_id
+    LEFT JOIN supplements.supplements s ON s.id=si.supplement_id
+    WHERE st.user_id=v_user AND si.is_active
+  )
+  INSERT INTO supplements.intake_logs (
+    user_id,stack_item_id,intake_date,intake_time,status,
+    supplement_name_snapshot,dose_snapshot,dose_unit_snapshot,
+    actual_dose,actual_dose_unit,notes,measurement_source,source_detail)
+  SELECT v_user,i.id,CURRENT_DATE-d,
+    (time '07:00'+i.n*interval '1 hour')::time,
+    CASE WHEN d BETWEEN 1 AND 5 AND i.n=6 THEN 'skipped' ELSE 'taken' END,
+    i.display_name,i.dose,i.dose_unit,
+    CASE WHEN d BETWEEN 1 AND 5 AND i.n=6 THEN NULL ELSE i.dose END,
+    CASE WHEN d BETWEEN 1 AND 5 AND i.n=6 THEN NULL ELSE i.dose_unit END,
+    'G-652 Entwurf · Einnahme','seed','G-652 Einnahmeverlauf'
+  FROM generate_series(0,6) AS d CROSS JOIN items i
+  WHERE i.display_name IS NOT NULL;
+  RAISE NOTICE 'G652_EINNAHMEN_OHNE_NAMEN: % Zeilen ausgelassen',
+    (SELECT count(*)*7 FROM supplements.stack_items si
+      JOIN supplements.user_stacks st ON st.id=si.stack_id
+      LEFT JOIN supplements.supplements s ON s.id=si.supplement_id
+      WHERE st.user_id=v_user AND si.is_active
+        AND coalesce(nullif(btrim(si.custom_name),''),
+          nullif(btrim(s.name_de),''),nullif(btrim(s.name_en),'')) IS NULL);
 END $seed$;
 
 COMMIT;

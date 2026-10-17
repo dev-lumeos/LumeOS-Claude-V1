@@ -495,13 +495,15 @@ WHERE ms.user_id = :'quelle'::uuid;
 
 -- 7. Koerpermessungen. Die Tabellen erlauben aktuell kein source='seed';
 -- deshalb bleibt measurement_source='manual' und die Kopie steht im Detail.
+-- GO-10 liefert hier den Gewichtsverlauf. KFA stammt nur aus den
+-- ausdruecklich markierten Navy-Testmessungen (G-652/G-655).
 INSERT INTO goals.body_measurements (
   id, user_id, measurement_date, measurement_time, weight_kg, body_fat_pct,
   bf_method, height_cm_snapshot, notes, measurement_source, source_detail
 )
 SELECT
   gen_random_uuid(), :'ziel'::uuid, measurement_date, measurement_time,
-  weight_kg, body_fat_pct, bf_method, height_cm_snapshot, notes,
+  weight_kg, NULL, NULL, height_cm_snapshot, notes,
   measurement_source,
   'Kopie aus tom.seed@example.com'
 FROM goals.body_measurements

@@ -13,6 +13,14 @@ function sql(query: string): string {
   ], { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }).trim()
 }
 
+function probeDates(): { start: string; end: string; reference: string } {
+  const shift = process.env.G625_PROBE_SHIFT_DAYS === '-1' ? -1 : 0
+  return JSON.parse(sql(`SELECT json_build_object(
+    'start',(CURRENT_DATE-2+${shift})::text,
+    'end',(CURRENT_DATE+19+${shift})::text,
+    'reference',(CURRENT_DATE+${shift})::text)`))
+}
+
 test('G-625: jedes bestehende Steuerziel hat genau einen Plan', () => {
   const result = sql(`
     SELECT count(*) || '/' || count(DISTINCT p.goal_id) || '/' ||
@@ -88,6 +96,7 @@ test('G-625: Plan-, Positions- und Terminaktionen sind vorhanden', () => {
 })
 
 test('G-625: eigene Werte laufen durch G-626 und in die Tagesreferenz', () => {
+  const dates = probeDates()
   const result = JSON.parse(sql(`
     BEGIN;
     CREATE TEMP TABLE g625_probe_event(message text) ON COMMIT DROP;
@@ -106,13 +115,13 @@ test('G-625: eigene Werte laufen durch G-626 und in die Tagesreferenz', () => {
       INSERT INTO goals.user_goals(id,user_id,goal_type,subtype,title,
         target_value,target_unit,start_value,gueltig_ab,target_date,status,priority)
       VALUES (v_goal,v_user,'body_composition','cut','G-625 Probe',
-        79,'kg',81.4,DATE '2026-10-08',DATE '2026-10-29','active',1);
+        79,'kg',81.4,DATE '${dates.start}',DATE '${dates.end}','active',1);
       INSERT INTO goals.goal_programs(id,goal_id,user_id,name,status)
       VALUES (v_plan,v_goal,v_user,'G-625 Probe','aktiv');
       v_position := goals.goal_plan_position_save(v_plan,NULL,1::smallint,NULL,
         '{"tempo_pct_kg_woche":1.2,"protein_g_kg":2.2,"fett_g_kg":0.3,
           "cardio_pro_woche":2,"refeed_pro_woche":1}'::jsonb,
-        'abnehmen','fat_loss',3::smallint,DATE '2026-10-08',DATE '2026-10-29');
+        'abnehmen','fat_loss',3::smallint,DATE '${dates.start}',DATE '${dates.end}');
       BEGIN
         PERFORM goals.goal_plan_position_start(v_position);
         RAISE EXCEPTION 'G-625: unbestaetigte Warnung wurde angenommen';
@@ -123,7 +132,7 @@ test('G-625: eigene Werte laufen durch G-626 und in die Tagesreferenz', () => {
       END;
       SELECT jsonb_agg(schluessel ORDER BY schluessel) INTO v_warn
       FROM goals.ziel_grenzen_pruefen('pro','abnehmen',81.4,79,
-        DATE '2026-10-08',DATE '2026-10-29',NULL,
+        DATE '${dates.start}',DATE '${dates.end}',NULL,
         '{"tempo_pct_kg_woche":1.2,"protein_g_kg":2.2,
           "fett_g_kg":0.3,"kcal":1679.1}'::jsonb,
         'male',182,2753.6) WHERE art='warnung';
@@ -138,12 +147,12 @@ test('G-625: eigene Werte laufen durch G-626 und in die Tagesreferenz', () => {
           AND goal_phase_id IS NOT NULL),
       'kcal',(SELECT kcal FROM goals.berechne_zielwerte(
         '20000000-0000-0000-0000-000000000901',
-        '62500000-0000-0000-0000-000000000111',DATE '2026-10-08')),
+        '62500000-0000-0000-0000-000000000111',DATE '${dates.start}')),
       'fat',(SELECT fat_g FROM goals.berechne_zielwerte(
         '20000000-0000-0000-0000-000000000901',
-        '62500000-0000-0000-0000-000000000111',DATE '2026-10-08')),
+        '62500000-0000-0000-0000-000000000111',DATE '${dates.start}')),
       'daily',(SELECT count(*) FROM nutrition.daily_reference_assessment(
-        '20000000-0000-0000-0000-000000000901',DATE '2026-10-10')
+        '20000000-0000-0000-0000-000000000901',DATE '${dates.reference}')
         WHERE nutrient_code='F18:2CN6' AND reference_kind='AI'
           AND reference_value_min IS NOT NULL)
     );
@@ -469,6 +478,7 @@ test('G-625: Zielaenderung einer aktiven Planphase bleibt unter G-626', () => {
 })
 
 test('G-625: eigene Planphase liefert Tagesreferenz aus ihren Werten', () => {
+  const dates = probeDates()
   const result = JSON.parse(sql(`
     BEGIN;
     DO $probe$
@@ -484,23 +494,23 @@ test('G-625: eigene Planphase liefert Tagesreferenz aus ihren Werten', () => {
       INSERT INTO goals.user_goals(id,user_id,goal_type,subtype,title,
         target_value,target_unit,start_value,gueltig_ab,target_date,status,priority)
       VALUES (v_goal,v_user,'body_composition','cut','Planphase',
-        80.5,'kg',81.4,DATE '2026-10-08',DATE '2026-10-29','active',1);
+        80.5,'kg',81.4,DATE '${dates.start}',DATE '${dates.end}','active',1);
       INSERT INTO goals.goal_programs(id,goal_id,user_id,name,status)
       VALUES (v_plan,v_goal,v_user,'Planphase','aktiv');
       v_position := goals.goal_plan_position_save(v_plan,NULL,1::smallint,NULL,
         '{"tempo_pct_kg_woche":0.5,"protein_g_kg":2.2,"fett_g_kg":0.8,
           "cardio_pro_woche":2,"refeed_pro_woche":0}'::jsonb,
         'abnehmen','contest_prep',3::smallint,
-        DATE '2026-10-08',DATE '2026-10-29');
+        DATE '${dates.start}',DATE '${dates.end}');
       PERFORM goals.goal_plan_position_start(v_position);
     END $probe$;
     SELECT json_build_object(
       'kcal',(SELECT kcal FROM goals.zielwerte_am(
-        '20000000-0000-0000-0000-000000000901',DATE '2026-10-08')),
+        '20000000-0000-0000-0000-000000000901',DATE '${dates.start}')),
       'fat',(SELECT fat_g FROM goals.zielwerte_am(
-        '20000000-0000-0000-0000-000000000901',DATE '2026-10-08')),
+        '20000000-0000-0000-0000-000000000901',DATE '${dates.start}')),
       'daily',(SELECT count(*) FROM nutrition.daily_reference_assessment(
-        '20000000-0000-0000-0000-000000000901',DATE '2026-10-10')
+        '20000000-0000-0000-0000-000000000901',DATE '${dates.reference}')
         WHERE nutrient_code='F18:2CN6' AND reference_value_min IS NOT NULL)
     );
     ROLLBACK;
