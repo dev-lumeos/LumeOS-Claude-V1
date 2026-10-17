@@ -4148,6 +4148,48 @@
       "kind": "tsx",
       "creates": "G-522: Stichtag, Freeze, Quellen, Nullgruende und Gewichtssabotage.",
       "depends_on": ["522_goal_module_cards"]
+    },
+    {
+      "id": "661_duplicate_daily_weight",
+      "path": "supabase/_pipeline/11_goals/661_duplicate_daily_weight.sql",
+      "kind": "sql",
+      "creates": "G-661: juengste Tageswiegung am Phasenstart und diagnostische Spannweite bei mehreren Zeilen.",
+      "depends_on": ["522_goal_contributions_probe"]
+    },
+    {
+      "id": "661_duplicate_daily_weight_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g661-duplicate-weight.test.ts",
+      "kind": "tsx",
+      "creates": "G-661: doppelte Tageswiegung liefert kcal und eine messbare Abweichung.",
+      "depends_on": ["661_duplicate_daily_weight"]
+    },
+    {
+      "id": "660_goal_contribution_catchup",
+      "path": "supabase/_pipeline/11_goals/660_goal_contribution_catchup.sql",
+      "kind": "sql",
+      "creates": "G-660: Erfolgsdatum je Konto und wiederholbarer Dienstlauf mit drei Tagen Ueberlappung.",
+      "depends_on": ["661_duplicate_daily_weight_probe"]
+    },
+    {
+      "id": "660_goal_contribution_catchup_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g660-contribution-catchup.test.ts",
+      "kind": "tsx",
+      "creates": "G-660: Ausfall, Idempotenz, Nachtrag, Freeze und Dienstrolle.",
+      "depends_on": ["660_goal_contribution_catchup"]
+    },
+    {
+      "id": "627_weekly_adjustment_protocol",
+      "path": "supabase/_pipeline/11_goals/627_weekly_adjustment_protocol.sql",
+      "kind": "sql",
+      "creates": "G-627: Quellengebundene Wochenregeln, Empfehlungen und Protokoll je Plan.",
+      "depends_on": ["660_goal_contribution_catchup_probe"]
+    },
+    {
+      "id": "627_weekly_adjustment_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g627-weekly-adjustment.test.ts",
+      "kind": "tsx",
+      "creates": "G-627: SCORING-Schwellen, Logtage, Wache, Dienstlauf und Sabotage.",
+      "depends_on": ["627_weekly_adjustment_protocol"]
     }
   ]
 }

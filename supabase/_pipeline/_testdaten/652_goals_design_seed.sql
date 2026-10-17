@@ -1,5 +1,5 @@
 -- G-652: Entwurfsdaten fuer das Pro-Nachweiskonto, live fuer dev.
--- Quellmessungen sind neue Zeilen; Ziele und Plaene gehen durch ihre RPCs.
+-- Navy-Werte nutzen vorhandene Tageszeilen; Ziele und Plaene gehen durch RPCs.
 BEGIN;
 
 DO $konto$
@@ -64,7 +64,8 @@ BEGIN
     OR EXISTS (SELECT 1 FROM training.workout_sessions
       WHERE user_id=v_user AND notes='G-652 Entwurfsverlauf')
     OR EXISTS (SELECT 1 FROM goals.body_measurements
-      WHERE user_id=v_user AND source_detail='G-652 Navy-Verlauf') THEN
+      WHERE user_id=v_user AND (source_detail='G-652 Navy-Verlauf'
+        OR notes LIKE '%G-652 Navy-Verlauf%')) THEN
     RAISE EXCEPTION 'G652_STOP:seed_schon_vorhanden';
   END IF;
   IF NOT EXISTS (SELECT 1 FROM training.exercises WHERE id=v_squat)
@@ -127,12 +128,21 @@ BEGIN
     IF abs(v_fat-v_weight)>0.08 THEN
       RAISE EXCEPTION 'G655_STOP:navy_woche_%_abweichend % statt %',v_week,v_fat,v_weight;
     END IF;
-    INSERT INTO goals.body_measurements
-      (user_id,measurement_date,measurement_time,weight_kg,body_fat_pct,
-        bf_method,measurement_source,source_detail,notes)
-    VALUES (v_user,v_day,time '08:35',v_body_weight,v_fat,
-      'navy','admin','G-655 Navy-Wochentestdaten',
-      'G-655 Testdaten · Navy-Woche '||v_week);
+    UPDATE goals.body_measurements SET body_fat_pct=v_fat,bf_method='navy',
+      notes=concat_ws(' · ',nullif(notes,''),
+        'G-655 Navy-Wochentestdaten · Navy-Woche '||v_week),
+      updated_at=now()
+    WHERE id=(SELECT id FROM goals.body_measurements
+      WHERE user_id=v_user AND measurement_date=v_day
+      ORDER BY measurement_time DESC,created_at DESC,id DESC LIMIT 1);
+    IF NOT FOUND THEN
+      INSERT INTO goals.body_measurements
+        (user_id,measurement_date,measurement_time,weight_kg,body_fat_pct,
+          bf_method,measurement_source,source_detail,notes)
+      VALUES (v_user,v_day,time '08:35',v_body_weight,v_fat,
+        'navy','admin','G-655 Navy-Wochentestdaten',
+        'G-655 Testdaten · Navy-Woche '||v_week);
+    END IF;
   END LOOP;
 
   -- Der Navy-Startwert stammt aus Umfang und Gewicht, nicht aus dem Ziel.
@@ -147,11 +157,19 @@ BEGIN
   IF round(v_fat,1)<>16.5 THEN
     RAISE EXCEPTION 'G652_STOP:navy_start_abweichend %',v_fat;
   END IF;
-  INSERT INTO goals.body_measurements
-    (user_id,measurement_date,measurement_time,weight_kg,body_fat_pct,
-      bf_method,measurement_source,source_detail,notes)
-  VALUES (v_user,CURRENT_DATE-7,time '08:35',v_body_weight,v_fat,
-    'navy','admin','G-652 Navy-Verlauf','Navy-Messung · Start');
+  UPDATE goals.body_measurements SET body_fat_pct=v_fat,bf_method='navy',
+    notes=concat_ws(' · ',nullif(notes,''),
+      'G-652 Navy-Verlauf · Navy-Messung Start'),updated_at=now()
+  WHERE id=(SELECT id FROM goals.body_measurements
+    WHERE user_id=v_user AND measurement_date=CURRENT_DATE-7
+    ORDER BY measurement_time DESC,created_at DESC,id DESC LIMIT 1);
+  IF NOT FOUND THEN
+    INSERT INTO goals.body_measurements
+      (user_id,measurement_date,measurement_time,weight_kg,body_fat_pct,
+        bf_method,measurement_source,source_detail,notes)
+    VALUES (v_user,CURRENT_DATE-7,time '08:35',v_body_weight,v_fat,
+      'navy','admin','G-652 Navy-Verlauf','Navy-Messung · Start');
+  END IF;
 
   -- Der Zielstart am Wochenanfang muss seinen eigenen gemessenen Wert sehen.
   v_waist := round(41+2.54*power(10::numeric,
@@ -166,12 +184,21 @@ BEGIN
   IF round(v_fat,1)<>16.3 THEN
     RAISE EXCEPTION 'G652_STOP:navy_zielstart_abweichend %',v_fat;
   END IF;
-  INSERT INTO goals.body_measurements
-    (user_id,measurement_date,measurement_time,weight_kg,body_fat_pct,
-      bf_method,measurement_source,source_detail,notes)
-  VALUES (v_user,date_trunc('week',CURRENT_DATE)::date,time '23:59',
-    v_body_weight,v_fat,'navy','admin','G-652 Navy-Verlauf',
-    'Navy-Messung · Zielstart');
+  UPDATE goals.body_measurements SET body_fat_pct=v_fat,bf_method='navy',
+    notes=concat_ws(' · ',nullif(notes,''),
+      'G-652 Navy-Verlauf · Navy-Messung Zielstart'),updated_at=now()
+  WHERE id=(SELECT id FROM goals.body_measurements
+    WHERE user_id=v_user
+      AND measurement_date=date_trunc('week',CURRENT_DATE)::date
+    ORDER BY measurement_time DESC,created_at DESC,id DESC LIMIT 1);
+  IF NOT FOUND THEN
+    INSERT INTO goals.body_measurements
+      (user_id,measurement_date,measurement_time,weight_kg,body_fat_pct,
+        bf_method,measurement_source,source_detail,notes)
+    VALUES (v_user,date_trunc('week',CURRENT_DATE)::date,time '23:59',
+      v_body_weight,v_fat,'navy','admin','G-652 Navy-Verlauf',
+      'Navy-Messung · Zielstart');
+  END IF;
 
   SELECT goals.measurement_goal_create(
     p_measurement_type=>'e1rm',p_title=>'Kniebeuge 1RM 160 kg',
@@ -238,11 +265,19 @@ BEGIN
   IF round(v_fat,1)<>16.2 THEN
     RAISE EXCEPTION 'G652_STOP:navy_ist_abweichend %',v_fat;
   END IF;
-  INSERT INTO goals.body_measurements
-    (user_id,measurement_date,measurement_time,weight_kg,body_fat_pct,
-      bf_method,measurement_source,source_detail,notes)
-  VALUES (v_user,CURRENT_DATE,time '08:35',v_body_weight,v_fat,
-    'navy','admin','G-652 Navy-Verlauf','Navy-Messung · aktuell');
+  UPDATE goals.body_measurements SET body_fat_pct=v_fat,bf_method='navy',
+    notes=concat_ws(' · ',nullif(notes,''),
+      'G-652 Navy-Verlauf · Navy-Messung aktuell'),updated_at=now()
+  WHERE id=(SELECT id FROM goals.body_measurements
+    WHERE user_id=v_user AND measurement_date=CURRENT_DATE
+    ORDER BY measurement_time DESC,created_at DESC,id DESC LIMIT 1);
+  IF NOT FOUND THEN
+    INSERT INTO goals.body_measurements
+      (user_id,measurement_date,measurement_time,weight_kg,body_fat_pct,
+        bf_method,measurement_source,source_detail,notes)
+    VALUES (v_user,CURRENT_DATE,time '08:35',v_body_weight,v_fat,
+      'navy','admin','G-652 Navy-Verlauf','Navy-Messung · aktuell');
+  END IF;
 
   -- Zwei Entwürfe am bestehenden steuernden Ziel.
   SELECT goals.goal_plan_create(v_control,'Contest Prep 2027',
