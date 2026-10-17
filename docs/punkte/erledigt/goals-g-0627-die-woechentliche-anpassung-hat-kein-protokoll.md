@@ -18,7 +18,8 @@ quellen:
 
 beruehrt:
   tabellen: []
-  dateien: []
+  dateien:
+    - supabase/_pipeline/11_goals/627_weekly_adjustment_protocol.sql
 ---
 
 # Die wöchentliche Anpassung hat kein Protokoll
