@@ -4,6 +4,8 @@ typ: aufgabe
 modul: goals
 schwere: mittel
 angelegt: 2026-10-17
+agent: claudecode
+beauftragt: 2026-10-17
 
 braucht: []
 kind_von: G-656
@@ -34,3 +36,11 @@ Die Werte, die sie schreiben, werden weiter gelesen. Die Einheit (kg/lb) lässt 
 - **Einheit:** Die Wahl gehört in die Einstellungen, weil sie für die ganze App gilt und nicht nur für Goals. Dort mit dem vorhandenen Schreibweg anbinden. Hat Settings dafür keinen Ort, melden.
 - **Der Rest ohne Aufrufer:** wie in G-656 vorgehen. Aufrufer belegen, löschen, gültige Regeln umziehen. Das Löschen führt der Orchestrator aus, falls die Sperre greift.
 - Das Gate bleibt grün.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER claudecode - G-659 Einheit in Settings, Teile ohne Aufrufer, Konsolenfehler
+    Bereich: apps/web
+    Fremd:   docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-17, HEAD 52b3f1bf
+

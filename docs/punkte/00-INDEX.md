@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 283 |
-| `laufend_codex` | 2 |
-| `laufend_claudecode` | 3 |
+| `todos` | 281 |
+| `laufend_codex` | 3 |
+| `laufend_claudecode` | 4 |
 | `erledigt` | 708 |
 | **gesamt** | **996** |
 
@@ -718,8 +718,8 @@
 | `G-654` | aufgabe | hoch | [Leser für die Lage des Steuerziels und die Wochenwerte der Messziele](erledigt/goals-g-0654-leser-fuer-lage-und-messziel-woche.md) | erledigt | — | — |
 | `G-655` | aufgabe | mittel | [Testdaten plausibel nach Entwurf, Ergebnis abgeschlossener Pläne, keine Prognose für Gewohnheiten](laufend_codex/goals-g-0655-testdaten-plausibel-und-planergebnis.md) | laeuft (codex) | — | — |
 | `G-656` | aufgabe | niedrig | [Tote Phasen-Bauteile nach G-649 löschen](erledigt/goals-g-0656-tote-phasen-bauteile-loeschen.md) | erledigt | — | G-659 |
-| `G-658` | befund | mittel | [Tageskettenlauf vom 17.10. rot in der G-625-Probe](todos/goals-g-0658-tageskettenlauf-17-10-rot-in-g625.md) | offen | — | — |
-| `G-659` | aufgabe | mittel | [Einheit ohne Oberfläche und weitere Teile ohne Aufrufer](todos/goals-g-0659-einheit-ohne-oberflaeche-und-weitere-tote-teile.md) | offen | — | — |
+| `G-658` | befund | mittel | [Tageskettenlauf vom 17.10. rot in der G-625-Probe](laufend_codex/goals-g-0658-tageskettenlauf-17-10-rot-in-g625.md) | laeuft (codex) | — | — |
+| `G-659` | aufgabe | mittel | [Einheit ohne Oberfläche und weitere Teile ohne Aufrufer](laufend_claudecode/goals-g-0659-einheit-ohne-oberflaeche-und-weitere-tote-teile.md) | laeuft (claudecode) | — | — |
 
 ### wartet auf Blocker — 6
 

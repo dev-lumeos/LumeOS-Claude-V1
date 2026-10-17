@@ -4,6 +4,8 @@ typ: befund
 modul: goals
 schwere: mittel
 angelegt: 2026-10-17
+agent: codex
+beauftragt: 2026-10-17
 
 braucht: []
 kind_von: G-625
@@ -31,3 +33,11 @@ beruehrt:
 - Gegenprobe: Mit verschobenem Datum bleibt die Probe grün, mit eingebautem Fehler wird sie rot.
 - Danach die Wegwerf-Datenbank verwerfen.
 - Prüfen, ob weitere Goals-Proben am heutigen Datum hängen.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - G-658 Tageskettenlauf rot in G-625 (nach G-655/G-522 live)
+    Bereich: supabase/_pipeline/_validierung/
+    Fremd:   docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-17, HEAD 52b3f1bf
+
