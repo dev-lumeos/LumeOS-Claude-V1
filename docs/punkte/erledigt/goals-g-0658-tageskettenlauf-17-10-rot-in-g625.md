@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-17
 agent: codex
 beauftragt: 2026-10-17
+erledigt: 2026-10-17
+commit: 1c9ad54a
 
 braucht: []
 kind_von: G-625
@@ -41,3 +43,6 @@ beruehrt:
     Fremd:   docs/ gehoert dem Orchestrator.
     Stand:   2026-10-17, HEAD 52b3f1bf
 
+## Erledigt - 2026-10-17, Commit `1c9ad54a`
+
+`[read]` Codex: Die zwei G-625-Schreibproben nutzen jetzt einen gemeinsamen Stichtag. 14/14 grün, auch mit einem Tag Verschiebung. Eine zu kurze Frist macht 2 Proben rot. Dieselbe Datumsgrenze in G-655 ist mit abgedeckt. Die Wegwerf-Datenbank ist verworfen.

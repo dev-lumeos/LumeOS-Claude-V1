@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-16
 agent: codex
 beauftragt: 2026-10-16
+erledigt: 2026-10-17
+commit: 1c9ad54a
 
 braucht: []
 kind_von: G-652
@@ -64,3 +66,11 @@ Empfehlung Orchestrator: Das KFA-Messziel ist ein Testdatum und kein Nutzerverla
 `[read]` Die Live-Probe lief in einer zurückgerollten Transaktion. Der neue KFA-Start wäre 16,34 %. Dann scheiterte eine Einnahmezeile: Das dev-Stack-Item `da08f45a-…` hat nur `name_en`, und `supplement_name_snapshot` ist NOT NULL.
 `[cmd]` Die App löst den Namen über `custom_name ?? name_de ?? name_en` auf (`apps/web/src/lib/supplements/stack-write.ts:59,167`). Das ist also ein Fehler in den Testdaten, nicht im Produkt.
 Sicherung vorher: `backup/a105-g655-g522-vorher.sql`. Live ist unverändert.
+
+## Erledigt - 2026-10-17, Commit `1c9ad54a` (live)
+
+`[read]` Codex: Die KFA-Kopie von 15,33 % stammt aus der täglichen Kopie der tom.seed-Messreihe. Ab jetzt wird nur noch das Gewicht kopiert. Live sind bei 181 markierten Kopien die KFA-Werte entfernt.
+`[read]` Codex: Dazu kommen acht markierte Navy-Testmessungen (29.08. 17,33 % bis 17.10. 16,18 %). Das KFA-Testziel wurde über `goal_delete` gelöscht und neu angelegt: Start 16,340, Tempo −0,288/Wo, Lage "im Plan". Die Sabotageprobe kippt das Ergebnis auf "voraus".
+`[cmd]` Live sind 37 Einnahmen "taken" und 5 "skipped" (dev, letzter Tag).
+`[cmd]` Mein Bild von dev (`.git/o-goals4.png`): Körperfett −0,3 % grün in "Diese Woche".
+Sicherungen: `backup/a105-g655-kfa-*-20261017.sql`.

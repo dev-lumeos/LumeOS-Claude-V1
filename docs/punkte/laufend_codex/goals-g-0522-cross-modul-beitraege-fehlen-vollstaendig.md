@@ -411,3 +411,16 @@ Den täglichen Lauf übernimmt der vorhandene Ablauf; pg_cron fehlt. Wo er angeh
 - 125 Zeilen aus G-514 nach dem Freeze bleiben unberührt; live stehen 892 Beiträge
 
 Täglicher Lauf, Vorschlag Codex: ein eigener geplanter Service-Role-Aufruf nach den Modulrechnungen, der seit dem letzten erfolgreichen Tag nachholt. `tools/kettenlauf-taeglich.mjs` ist dafür kein Weg.
+
+## Live - 2026-10-17, Commit `1c9ad54a`
+
+`[cmd]` In `goal_contributions` stehen jetzt: dev 1.163, test-user 608, tom.seed 445.
+`[read]` Codex, Kacheln dev:
+- Ernährung 84,9 %
+- Training 3 von 4
+- Recovery 66,9
+- Supplements 88,1 %
+
+Ergebnis: kein deutlicher Engpass.
+`[cmd]` Abweichung im Bild von dev: Die App zeigt die rohen Beitragswerte (78 / 46 / 67 / 88, "Beitrag Ø 7 Tage", Ernährung "Ø 1 Tage") und einen eigenen Engpass ("Training Ø 46/100"). Den Kachel-Leser von Codex (522_goal_module_cards) nutzt sie nicht. Das geht an Claude Code.
+Offen: Täglicher Lauf. Codex schlägt einen externen Dienstauftrag mit Erfolgsdatum je Konto vor. Dafür gibt es noch keinen Punkt und keine Entscheidung.
