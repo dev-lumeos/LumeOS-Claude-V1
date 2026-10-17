@@ -424,3 +424,11 @@ Täglicher Lauf, Vorschlag Codex: ein eigener geplanter Service-Role-Aufruf nach
 Ergebnis: kein deutlicher Engpass.
 `[cmd]` Abweichung im Bild von dev: Die App zeigt die rohen Beitragswerte (78 / 46 / 67 / 88, "Beitrag Ø 7 Tage", Ernährung "Ø 1 Tage") und einen eigenen Engpass ("Training Ø 46/100"). Den Kachel-Leser von Codex (522_goal_module_cards) nutzt sie nicht. Das geht an Claude Code.
 Offen: Täglicher Lauf. Codex schlägt einen externen Dienstauftrag mit Erfolgsdatum je Konto vor. Dafür gibt es noch keinen Punkt und keine Entscheidung.
+
+## Folgebefund 2026-10-17 13:40 - doppelte Gewichtszeilen
+
+`[cmd]` dev hat 12 Tage mit zwei Gewichtszeilen (manual vom 23.08. und admin). Die admin-Zeilen tragen den Stempel 16.10. bzw. 17.10. 04:28. Das sind die Testmessungen aus G-652/G-655. Sie gehören zu denselben Tagen wie die markierten Navy-Messungen.
+`[read]` Claude Code: `goals.berechne_zielwerte` verlangt genau eine Messung am letzten Messtag. Sonst liefert sie kcal null mit dem Grund profil_unvollstaendig. Folgen: Tagesziel "—", Ernährungs-Kachel nur mit 1 Tageswert.
+Bewertung Orchestrator: Das sind zwei Fehler.
+1. Ein Fehler in den Testdaten: Die Navy-Messung gehört in die vorhandene Tageszeile oder bleibt ohne Gewicht.
+2. Ein Fehler im Produkt: Wer am selben Tag zweimal wiegt, verliert sein Tagesziel. Die Funktion muss mehrere Zeilen an einem Tag vertragen.

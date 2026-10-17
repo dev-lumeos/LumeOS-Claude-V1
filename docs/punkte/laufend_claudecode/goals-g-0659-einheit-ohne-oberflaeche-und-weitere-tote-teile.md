@@ -55,3 +55,12 @@ Die Werte, die sie schreiben, werden weiter gelesen. Die Einheit (kg/lb) lässt 
 
 Die Zielrate bleibt in Prozent, wie im Entwurf. Die Wahl aus E-83 (%/kcal) fällt weg: Schalter, Umrechnung, Schreibweg und das Lesen in page.tsx. Die Einträge in `user_display_preferences` lässt Claude Code stehen, sie werden nicht mehr gelesen. Dazu kommt `gesamtdauer` in anker.ts, das keinen Aufrufer hat.
 
+## Stand 2026-10-17 13:40, Commit `a5de146b` (Gate grün)
+
+`[read]` Claude Code:
+- Die Zielrate-Einheit ist entfernt, die App rechnet nur noch in Prozent.
+- Die Modul-Kacheln lesen jetzt `goals.goal_module_cards_at`. Die App rechnet keinen eigenen Engpass mehr.
+
+Offen:
+- `einheiten-schalter.tsx` und `einheit-speichern.ts` muss Tom löschen, weil die Sperre greift. Danach werden die markierten Exporte in zielrate-einheit.ts entfernt.
+- Das Tagesziel "—" ist ein Datenfehler (siehe G-522 Nachtrag).

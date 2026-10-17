@@ -38,3 +38,5 @@ Codex baut den Kettenteil:
 - Proben mit Sabotage
 
 Den Auslöser (geplanter Aufruf auf Toms Rechner) baut Claude Code in `tools/` als eigenen Teil, nachdem der Kettenteil gemeldet ist.
+
+
