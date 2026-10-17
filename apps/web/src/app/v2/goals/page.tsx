@@ -26,7 +26,7 @@
 // docs/ssot/116-goals-anbindung.md.
 import { ladeWoche, type Wochendaten } from '../../../lib/goals/reiter-read'
 import { ladePlaene, ladeVorlagen, type Plan, type Vorlage } from '../../../lib/goals/plan-read'
-import { steuerziel } from '../../../lib/goals/reiter'
+import { gezeigtesSteuerziel } from '../../../lib/goals/reiter'
 import type { Metadata } from 'next'
 
 import { heute } from '../../../lib/datum'
@@ -142,7 +142,7 @@ export default async function V2GoalsPage({
     // raten zu lassen.** `[read]` **Bei genau einer offenen Phase
     // ist es deren Ziel; bei mehreren bleibt es offen**, und die
     // Datenbank meldet die Mehrdeutigkeit als Zustand (A4).
-    woche = await ladeWoche(userId, stichtag, steuerziel(ziele)?.goal_id ?? null,
+    woche = await ladeWoche(userId, stichtag, gezeigtesSteuerziel(ziele)?.goal_id ?? null,
       ziele.filter(g => g.goal_role === 'measurement' && g.zustand.zustand === 'active').map(g => g.goal_id))
     // G-629: laufend ist, was `phase_am` liefert (echt.phasen).
     ;[plaene, vorlagen] = await Promise.all([ladePlaene(userId, stichtag, phasen.map(p => p.phase_id)), ladeVorlagen()])

@@ -321,6 +321,15 @@ describe('G-654 angebunden: Lage, Woche je Messziel, Tempo', () => {
     assert.match(modul(h, 'training'), /data-modul-wert[^>]*>—<\/div><div[^>]*>kein Wochenziel</)
     assert.match(modul(mit({ kacheln: KACHELN({ nutrition: { wert: 78, tage: 1, grund: null } }) }), 'nutrition'), />kcal-Treue 1 Tag</)
   })
+  it('G-648 Abnahme: ohne aktives Steuerziel, aber mit Kacheln (eingefroren) zeigt Module die Werte', () => {
+    const h = renderToStaticMarkup(React.createElement(AppRouterContext.Provider, { value: ROUTER as never }, React.createElement(ReiterGoals, {
+      ziele: [Z({ zustand: zustandAusStatus('achieved') }), KB, KF], phasen: [], offenePhasen: [], zielwerte: ZW({}), vorschlag: null, messungen: [], meilensteine: [], strategien: [ST, AUF], plaene: [],
+      woche: { trainings: 3, beitraege: [], trend: { heute: 84.7, vorwoche: 84.7 }, kacheln: KACHELN() }, stichtag: '2026-10-16',
+      onZielSetzen: () => {}, onMessziel: () => {}, onPhaseEngine: () => {}, onCrossModule: () => {},
+    })))
+    assert.ok(!/data-module-leer/.test(h), 'mit Kacheln steht trotzdem „Ohne steuerndes Ziel“')
+    assert.match(modul(h, 'recovery'), />66,9</)
+  })
   it('G-522: die App rechnet keinen eigenen Engpass und keinen Modulschnitt', () => {
     const q = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'app', 'v2', 'goals', 'reiter-goals.tsx'), 'utf8')
     assert.ok(!/modulSchnitt|engpass\(|reduce\(\(a, b\) => \(b\.schnitt/.test(q), 'reiter-goals.tsx rechnet Schnitt oder Engpass selbst')

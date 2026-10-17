@@ -17,7 +17,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { AppRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 import { PROGRAMM_TEXT, SAETZE_644, cardioText, programmFarbe, defizitText, monatsachse, phasenname, planFehler } from '../plan'
-import { PlanSeite, wacheZeile } from '../../../app/v2/goals/plan-seite'
+import { PlanSeite, anpassungZeile, wacheZeile } from '../../../app/v2/goals/plan-seite'
 import type { Plan, Vorlage } from '../plan-read'
 import type { Ausblick, Wache } from '../reiter-read'
 import type { Strategie } from '../strategie-read'
@@ -184,12 +184,37 @@ describe('G-649 — die Abschnitte des Entwurfs', () => {
     assert.match(h, /<th>Phase<\/th><th>Wochen<\/th><th>Beginn<\/th><th>Ende<\/th><th>Defizit \/ Überschuss<\/th><th>Cardio<\/th><th>Status<\/th>/)
     assert.match(h, /data-defizit="true">\+10 %<\/td><td class="ge-num" data-cardio="true">–<\/td><td>● läuft</)
   })
-  it('Wochenanpassung: Trend Δ, Soll Δ, Logtage aus der Kette — Anpassung „kommt (G-627)"', () => {
+  it('Wochenanpassung: Trend Δ, Soll Δ, Logtage aus der Kette — ohne Protokoll „kommt (G-627)"', () => {
     const h = seite({ ausblick: AUSBLICK })
     assert.equal((h.match(/data-anpassung-woche=/g) ?? []).length, 2)
-    assert.match(h, /data-anpassung-woche="2026-10-12"><td>KW 42<\/td><td class="ge-num">\+0,03<\/td><td class="ge-num">\+0,16<\/td><td class="ge-num">5\/7<\/td>[\s\S]*?kommt \(G-627\)/)
+    assert.match(h, /data-anpassung-woche="2026-10-12"[^>]*><td>KW 42<\/td><td class="ge-num">\+0,03<\/td><td class="ge-num">\+0,16<\/td><td class="ge-num">5\/7<\/td>[\s\S]*?kommt \(G-627\)/)
     assert.ok(!/data-anpassung-kommt/.test(h), 'mit Kette steht trotzdem „kommt (G-650)"')
     assert.match(seite({ ausblick: null }), /data-anpassung-kommt="true"/)
+  })
+  it('G-627: Anpassung und Grund aus dem Wochenprotokoll des aktiven Plans', () => {
+    const MIT: Plan = { ...AKTIV, anpassungen: [
+      { week_start: '2026-10-05', kcal_delta: 100, protein_delta_g: 0, reason: 'Wache: 3 Wochen hinter Soll', rule_key: 'wache_lean_bulk_hinterher' },
+      { week_start: '2026-09-28', kcal_delta: 0, protein_delta_g: 0, reason: 'Auf Kurs', rule_key: 'auf_kurs' }] }
+    const h = seite({ ausblick: AUSBLICK, plaene: [MIT, ENTWURF, FERTIG] })
+    assert.match(h, /data-anpassung-woche="2026-10-05" data-anpassung-regel="wache_lean_bulk_hinterher"><td>KW 41<\/td>[\s\S]*?7\/7<\/td><td class="ge-num" style="font-weight:600">\+100 kcal<\/td><td>Wache: 3 Wochen hinter Soll<\/td>/)
+    // die laufende Woche hat noch keine Zeile — kein „kommt", sondern der Grund
+    assert.match(h, /data-anpassung-woche="2026-10-12" data-anpassung-regel=""><td>KW 42<\/td>[\s\S]*?font-weight:600">—<\/td><td>Woche läuft noch<\/td>/)
+    assert.ok(!/kommt \(G-627\)/.test(h), 'mit Protokoll steht trotzdem „kommt (G-627)"')
+  })
+  it('G-627: anpassungZeile — keine, kcal, Protein, fehlende Woche', () => {
+    const z = (kcal: number, prot: number) => [{ week_start: 'w', kcal_delta: kcal, protein_delta_g: prot, reason: 'r', rule_key: 'k' }]
+    assert.equal(anpassungZeile(z(0, 0), 'w', true).anp, 'keine')
+    assert.equal(anpassungZeile(z(-100, 0), 'w', true).anp, '−100 kcal')
+    assert.equal(anpassungZeile(z(0, 20), 'w', true).anp, '+20 g Protein')
+    assert.equal(anpassungZeile(z(150, 20), 'w', true).anp, '+150 kcal · +20 g Protein')
+    assert.deepEqual(anpassungZeile(z(0, 0), 'x', true), { anp: '—', grund: 'kein Protokoll für diese Woche', regel: null })
+    assert.equal(anpassungZeile(null, 'w', true).anp, null)
+  })
+  it('G-627: plan-read liest das Protokoll je aktivem Plan', () => {
+    const q = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'plan-read.ts'), 'utf8')
+    assert.match(q, /rpc\('goal_weekly_adjustments_at', \{ p_program_id: programId \}\)/)
+    assert.match(q, /\.filter\(p => p\.status === 'aktiv'\)\s*\.map\(async p => \[p\.id as string, await ladeAnpassungen\(p\.id as string\)\]/)
+    assert.match(q, /anpassungen: protokolle\.get\(p\.id as string\)/, 'das gelesene Protokoll kommt nicht am Plan an')
   })
   it('Neuer Plan: Ausgangspunkte aus goal_plan_templates, eigene, Vom Coach gesperrt', () => {
     // Der Dialog oeffnet per Klick — hier die Bausteine, die er rendert

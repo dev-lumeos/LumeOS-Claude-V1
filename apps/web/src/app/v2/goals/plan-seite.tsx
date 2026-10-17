@@ -33,7 +33,7 @@ import {
 import { bestaetigteSchluessel, waechterSatz, weiterErlaubt, type Pruefung } from '../../../lib/goals/zielpruefung'
 import { phasenartFuerStrategie } from '../../../lib/goals/strategie-regeln'
 import { naechsteNamen } from '../../../lib/goals/zielwahl'
-import type { Plan, Planposition, Vorlage } from '../../../lib/goals/plan-read'
+import type { Anpassungswoche, Plan, Planposition, Vorlage } from '../../../lib/goals/plan-read'
 import type { Ausblick, Wache } from '../../../lib/goals/reiter-read'
 import { kalenderwoche } from '../../../lib/goals/reiter'
 import type { Planergebnis } from '../../../lib/goals/plan-write'
@@ -67,6 +67,19 @@ export function wacheZeile(w: Wache): { t: string; s: string } {
       s: w.status === 'ausgeloest' ? `ausgelöst KW ${kalenderwoche(w.stand_am)}` : w.status === 'ok' ? `ok · ${w.wochen_neben_soll ?? 0} von ${w.grenze_wochen ?? 3}` : st }
   return { t: w.richtung === 'min' ? `Körperfett < ${pz(w.grenze_pct)}` : `Körperfett > ${pz(w.grenze_pct)} → Mini Cut vorschlagen`,
     s: w.wert_pct == null ? st : `${st} · ${pz(w.wert_pct)}` }
+}
+
+/**
+ * G-627: Anpassung und Grund einer Woche aus dem Protokoll (`goal_weekly_adjustments_at`).
+ * `anp: null` heisst „kommt" — die Kette ist nicht live. Eine laufende Woche hat noch keine Zeile.
+ */
+export function anpassungZeile(protokoll: Anpassungswoche[] | null | undefined, wocheAb: string, vollstaendig: boolean): { anp: string | null; grund: string; regel: string | null } {
+  if (!protokoll) return { anp: null, grund: '–', regel: null }
+  const z = protokoll.find(x => x.week_start === wocheAb)
+  if (!z) return vollstaendig ? { anp: '—', grund: 'kein Protokoll für diese Woche', regel: null } : { anp: '—', grund: 'Woche läuft noch', regel: null }
+  const vz = (n: number) => `${n > 0 ? '+' : '−'}${Math.abs(n)}`
+  const teile = [z.kcal_delta !== 0 ? `${vz(z.kcal_delta)} kcal` : null, z.protein_delta_g !== 0 ? `${vz(z.protein_delta_g)} g Protein` : null].filter(Boolean)
+  return { anp: teile.length ? teile.join(' · ') : 'keine', grund: z.reason, regel: z.rule_key }
 }
 
 /** G-644 Teil 2: der Plantyp aus `ausgangspunkt_name`; ohne ihn (vor der Kette) die Phasenzahl. */
@@ -195,14 +208,17 @@ function Details({ plan, strategien, alsNaechstes, ausblick, wachen }: { plan: P
         <table className="ge-tbl" style={{ minWidth: 600 }}>
           <thead><tr><th>Woche</th><th>Trend Δ</th><th>Soll Δ</th><th>Logtage</th><th>Anpassung</th><th>Grund</th></tr></thead>
           <tbody>
-            {ausblick === null && <tr data-anpassung-kommt><td colSpan={6}><Kommt was="Wochenwerte" punkt="G-650" /> · <Kommt was="Anpassung mit Protokoll" punkt="G-627" /></td></tr>}
-            {/* Trend Δ, Soll Δ, Logtage aus `controlling_goal_outlook` (G-650); Anpassung und Grund erst mit G-627 */}
-            {[...(ausblick?.wochen ?? [])].reverse().slice(0, 3).map(w => (
-              <tr key={w.woche_ab} data-anpassung-woche={w.woche_ab}>
-                <td>KW {kalenderwoche(w.woche_ab)}</td><td className="ge-num">{vzKg(w.trend_delta_kg)}</td><td className="ge-num">{vzKg(w.soll_delta_kg)}</td>
-                <td className="ge-num">{w.logtage}/7</td><td className="ge-num" style={{ fontWeight: 600 }}><Kommt punkt="G-627" /></td><td>–</td>
-              </tr>
-            ))}
+            {ausblick === null && <tr data-anpassung-kommt><td colSpan={6}><Kommt was="Wochenwerte" punkt="G-650" /></td></tr>}
+            {/* Trend Δ, Soll Δ, Logtage aus `controlling_goal_outlook` (G-650); Anpassung und Grund aus dem Protokoll (G-627) */}
+            {[...(ausblick?.wochen ?? [])].reverse().slice(0, 3).map(w => {
+              const a = anpassungZeile(plan.anpassungen, w.woche_ab, w.vollstaendig)
+              return (
+                <tr key={w.woche_ab} data-anpassung-woche={w.woche_ab} data-anpassung-regel={a.regel ?? ''}>
+                  <td>KW {kalenderwoche(w.woche_ab)}</td><td className="ge-num">{vzKg(w.trend_delta_kg)}</td><td className="ge-num">{vzKg(w.soll_delta_kg)}</td>
+                  <td className="ge-num">{w.logtage}/7</td><td className="ge-num" style={{ fontWeight: 600 }}>{a.anp ?? <Kommt punkt="G-627" />}</td><td>{a.grund}</td>
+                </tr>
+              )
+            })}
           </tbody>
         </table></div>
     </div>

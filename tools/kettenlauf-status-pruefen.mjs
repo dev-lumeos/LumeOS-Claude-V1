@@ -15,9 +15,11 @@ function option(name) {
 }
 
 const statusPath = resolve(option('--status') ?? DEFAULT_STATUS)
+// G-660: derselbe Waechter liest auch den Beitragslauf (`--name beitragslauf`).
+const name = option('--name') ?? 'kettenlauf'
 
 function rot(message) {
-  console.error(`[kettenlauf] ROT: ${message}`)
+  console.error(`[${name}] ROT: ${message}`)
   process.exit(1)
 }
 
@@ -37,7 +39,8 @@ if (report?.version !== 1 || typeof report.finished_at !== 'string') {
 }
 
 if (report.status !== 'passed') {
-  rot(`letzter Lauf ${report.status === 'aborted' ? 'abgebrochen, Nachlauf startet nicht' : 'fehlgeschlagen'} (DB ${report.database ?? 'unbekannt'}, Exit ${report.exit_code ?? 'unbekannt'}): ${statusPath}`)
+  const gefallen = Array.isArray(report.schritte) ? report.schritte.find(x => x.status === 'failed') : null
+  rot(`letzter Lauf ${report.status === 'aborted' ? 'abgebrochen, Nachlauf startet nicht' : 'fehlgeschlagen'} (${gefallen ? `Schritt ${gefallen.funktion}: ${String(gefallen.fehler ?? '').slice(0, 200)}` : `DB ${report.database ?? 'unbekannt'}`}, Exit ${report.exit_code ?? 'unbekannt'}): ${statusPath}`)
 }
 
 const finishedAt = new Date(report.finished_at)
@@ -50,4 +53,4 @@ if (ageHours > MAX_AGE_HOURS) {
   rot(`letzter gruener Lauf vor ${Math.floor(ageHours)}h, faellig nach ${MAX_AGE_HOURS}h: ${statusPath}`)
 }
 
-console.log(`[kettenlauf] gruen: letzter Lauf vor ${Math.max(0, Math.floor(ageHours))}h (${report.duration_seconds ?? '?'}s)`)
+console.log(`[${name}] gruen: letzter Lauf vor ${Math.max(0, Math.floor(ageHours))}h (${report.duration_seconds ?? '?'}s)`)

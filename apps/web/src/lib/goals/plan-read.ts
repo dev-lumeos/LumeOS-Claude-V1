@@ -40,6 +40,26 @@ export interface Plan {
   ziel: { title: string; status: string | null; target_value: number | null; target_date: string | null; start_value?: number | null; current_value?: number | null } | null
   positionen: Planposition[]
   termine: Plantermin[]
+  /** G-627: das Wochenprotokoll (`goal_weekly_adjustments_at`) — nur fuer den aktiven Plan; `null` = Kette nicht live. */
+  anpassungen?: Anpassungswoche[] | null
+}
+
+/** Eine Zeile aus `goal_weekly_adjustments_at` — Felder wie in `627_weekly_adjustment_protocol.sql`. */
+export interface Anpassungswoche {
+  week_start: string; kcal_delta: number; protein_delta_g: number; reason: string; rule_key: string
+}
+
+/** G-627: das Protokoll eines Plans, juengste Woche zuerst. Fehlt die Funktion (PGRST202), `null`. */
+async function ladeAnpassungen(programId: string): Promise<Anpassungswoche[] | null> {
+  const { data, error } = await createSessionClient().schema('goals').rpc('goal_weekly_adjustments_at', { p_program_id: programId })
+  if (error) {
+    if (error.code === 'PGRST202') return null
+    throw new Error(`goal_weekly_adjustments_at: ${error.message}`)
+  }
+  return ((data ?? []) as Array<Record<string, unknown>>).map(a => ({
+    week_start: String(a.week_start), kcal_delta: Number(a.kcal_delta), protein_delta_g: Number(a.protein_delta_g),
+    reason: String(a.reason), rule_key: String(a.rule_key),
+  }))
 }
 
 /** G-649: eine Zeile aus `goals.goal_plan_templates` (Kette G-644). */
@@ -93,9 +113,13 @@ export async function ladePlaene(userId: string, stichtag: string, laufendePhase
   const ende = new Map(((phasen.data ?? []) as Array<Record<string, unknown>>).map(p => [String(p.id), { gueltig_ab: text(p.gueltig_ab), projected_end_date: text(p.projected_end_date), actual_end_date: text(p.actual_end_date), zielrate: zahl(p.zielrate_pct_kg_woche), next: text(p.recommended_next), grund: text(p.transition_reason) }]))
   const laufend = new Set(laufendePhasen)
 
+  // G-627: das Protokoll nur fuer den aktiven Plan — die Wochentabelle steht nur dort (Details).
+  const protokolle = new Map(await Promise.all((plaene ?? []).filter(p => p.status === 'aktiv')
+    .map(async p => [p.id as string, await ladeAnpassungen(p.id as string)] as const)))
   return (plaene ?? []).map(p => {
     const z = ((ziele.data ?? []) as Array<Record<string, unknown>>).find(g => g.id === p.goal_id)
     return {
+      ...(protokolle.has(p.id as string) ? { anpassungen: protokolle.get(p.id as string) } : {}),
       id: p.id as string, goal_id: p.goal_id as string, name: String(p.name), status: p.status as Planstatus, typ: text(p.ausgangspunkt_name),
       ziel: z ? { title: String(z.title), status: text(z.status), target_value: zahl(z.target_value), target_date: text(z.target_date), start_value: zahl(z.start_value), current_value: zahl(z.current_value) } : null,
       positionen: ((pos.data ?? []) as Array<Record<string, unknown>>).filter(x => x.program_id === p.id).map(x => {

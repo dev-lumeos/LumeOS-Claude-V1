@@ -20,7 +20,7 @@ import { AppRouterContext } from 'next/dist/shared/lib/app-router-context.shared
 
 import {
   ABSCHLUSS, gewichtWoche, kalenderwoche, kategorieVon, lageVon,
-  quelleLesbar, steuerZustand, wertMitEinheit, wochenStart, type ReiterZiel,
+  gezeigtesSteuerziel, quelleLesbar, steuerZustand, wertMitEinheit, wochenStart, type ReiterZiel,
 } from '../reiter'
 import { MESSARTEN } from '../messziel'
 import { zustandAusStatus } from '../zustand'
@@ -165,6 +165,19 @@ describe('G-618 — die Bausteine', () => {
     assert.equal(r.soll, -0.41)
     assert.equal(gewichtWoche(m.slice(0, 1), '2026-10-09', null).grund, 'diese Woche noch nicht gewogen')
     assert.equal(gewichtWoche(m.slice(1, 2), '2026-10-09', null).grund, 'keine Messung vor dieser Woche')
+  })
+  it('G-648 Abnahme: gelesen wird fuer das Ziel der Karte — aktiv, sonst eingefroren und gespeichert aktiv', () => {
+    const z = (id: string, role: 'controlling' | 'measurement', status: string, wirksam: string) =>
+      ({ goal_id: id, goal_role: role, status, zustand: { zustand: wirksam } }) as unknown as ZielFortschritt
+    const erreicht = z('e', 'controlling', 'achieved', 'achieved')
+    const eingefroren = z('f', 'controlling', 'active', 'eingefroren')
+    assert.equal(gezeigtesSteuerziel([erreicht, eingefroren])?.goal_id, 'f', 'das eingefrorene, noch aktive Ziel')
+    assert.equal(gezeigtesSteuerziel([eingefroren, z('a', 'controlling', 'active', 'active')])?.goal_id, 'a', 'das aktive geht vor')
+    assert.equal(gezeigtesSteuerziel([erreicht, z('m', 'measurement', 'active', 'eingefroren')]), null, 'nur steuernde, nur gespeichert aktive')
+    const altFrost = z('x', 'controlling', 'achieved', 'eingefroren')
+    assert.equal(gezeigtesSteuerziel([altFrost, eingefroren])?.goal_id, 'f', 'ein gespeichert erreichtes Ziel ist nicht das der Karte')
+    assert.equal(gezeigtesSteuerziel([altFrost]), null)
+    assert.match(lies('app/v2/goals/page.tsx'), /ladeWoche\(userId, stichtag, gezeigtesSteuerziel\(ziele\)\?\.goal_id \?\? null,/, 'page.tsx liest nicht fuer das Ziel der Karte')
   })
   // G-522 (17.10.): `modulSchnitt`/`engpass` sind weg — Schnitt und Engpass rechnet die Kette
   // (`goal_module_cards_at`, `goal_bottleneck`). Die Regel „ohne Wert kein 0, Engpass nur unter

@@ -228,3 +228,52 @@ def schreib(pfad, text, versuche=12, pause=0.8):
             if tmp and os.path.exists(tmp):
                 os.unlink(tmp)
     return False
+
+
+def _umgebung(name):
+    """Ein Wert aus der Umgebung, sonst aus der Wurzel-`.env` (git-ignoriert, nie im Repo)."""
+    if os.environ.get(name):
+        return os.environ[name]
+    try:
+        with open(os.path.join(REPO, ".env"), encoding="utf-8") as f:
+            for zeile in f:
+                k, _, v = zeile.strip().partition("=")
+                if k == name and v:
+                    return v.strip().strip('"')
+    except OSError:
+        pass
+    return None
+
+
+def dienst_rpc(schema, funktion, argumente=None, zeitlimit=600):
+    """Eine Datenbankfunktion als service_role ueber PostgREST rufen — G-660.
+
+    `[read]` **Kein Unterprozess, also kein Fenster.** Schluessel und Adresse kommen aus
+    `SUPABASE_SERVICE_ROLE_KEY` / `SUPABASE_URL` (Umgebung, sonst Wurzel-`.env`).
+
+    Gibt ``(ok, antwort)`` zurueck und wirft nicht: ``ok`` ist True nur bei HTTP 2xx;
+    ``antwort`` ist das gelesene JSON oder der Fehlertext. Der Aufrufer prueft ``ok``.
+    """
+    import json
+    import urllib.request
+    import urllib.error
+    url, schluessel = _umgebung("SUPABASE_URL"), _umgebung("SUPABASE_SERVICE_ROLE_KEY")
+    if not url or not schluessel:
+        return False, "SUPABASE_URL oder SUPABASE_SERVICE_ROLE_KEY fehlt in Umgebung und .env"
+    anfrage = urllib.request.Request(
+        f"{url.rstrip('/')}/rest/v1/rpc/{funktion}",
+        data=json.dumps(argumente or {}).encode("utf-8"), method="POST",
+        headers={"apikey": schluessel, "Authorization": f"Bearer {schluessel}",
+                 "Content-Type": "application/json", "Content-Profile": schema,
+                 "Accept-Profile": schema})
+    try:
+        with urllib.request.urlopen(anfrage, timeout=zeitlimit) as r:
+            roh = r.read().decode("utf-8", "replace")
+            try:
+                return True, json.loads(roh) if roh else None
+            except ValueError:
+                return True, roh
+    except urllib.error.HTTPError as e:
+        return False, f"HTTP {e.code}: {e.read().decode('utf-8', 'replace')[:500]}"
+    except (urllib.error.URLError, OSError) as e:
+        return False, f"nicht erreichbar: {e}"

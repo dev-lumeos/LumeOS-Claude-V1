@@ -566,6 +566,23 @@ if (kettenlauf.stdout) process.stdout.write(kettenlauf.stdout)
 if (kettenlauf.stderr) process.stderr.write(kettenlauf.stderr)
 const kettenlaufGruen = kettenlauf.status === 0
 
+// G-660: der taegliche Beitragslauf (`tools/beitragslauf-taeglich.py`) — derselbe Waechter,
+// derselbe Umgang: gemeldet, haelt aber nichts an.
+const beitragslauf = spawnSync(process.execPath, ['tools/kettenlauf-status-pruefen.mjs',
+  '--status', 'backup/_manifests/beitragslauf-status.json', '--name', 'beitragslauf'], {
+  cwd: WURZEL,
+  encoding: 'utf8',
+  env: process.env,
+})
+if (beitragslauf.stdout) process.stdout.write(beitragslauf.stdout)
+if (beitragslauf.stderr) process.stderr.write(beitragslauf.stderr)
+if (beitragslauf.status !== 0) {
+  console.error('')
+  console.error('[punkte] HINWEIS: der taegliche Beitragslauf (G-660) ist fehlgeschlagen')
+  console.error('         oder ueberfaellig. Das haelt diesen Lauf NICHT an.')
+  console.error('         Mit Abbruch: pnpm beitrag:status')
+}
+
 if (!kettenlaufGruen) {
   console.error('')
   console.error('[punkte] HINWEIS: der taegliche Kettenlauf ist fehlgeschlagen')

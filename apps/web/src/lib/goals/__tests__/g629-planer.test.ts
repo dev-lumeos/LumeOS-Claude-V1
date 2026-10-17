@@ -197,8 +197,10 @@ describe('G-629 — bis in die Anzeige', () => {
     assert.match(q, /data-plan-neu-berechnen disabled=\{Object\.keys\(aend\)\.length === 0\}/)
     assert.ok(!q.includes('<Kommt was="Speichern und neu berechnen"'), 'neu berechnen steht wieder als kommt')
     assert.ok(!q.includes('<Kommt was="Regeln mit Stand"'), 'die Wachen stehen wieder als kommt')
-    for (const [was, punkt] of [['Freigabe durch den Coach', 'G-644'],
-      ['Wochenwerte', 'G-650'], ['Anpassung mit Protokoll', 'G-627']])
+    for (const [was, punkt] of [['Freigabe durch den Coach', 'G-644'], ['Wochenwerte', 'G-650']])
       assert.match(q, new RegExp(`<Kommt was="${was}" punkt="${punkt}" />`), `kommt-Marke ${was} fehlt`)
+    // G-627 (live 17.10.): Anpassung und Grund kommen aus dem Protokoll — die Sammelmarke ist weg
+    assert.ok(!q.includes('<Kommt was="Anpassung mit Protokoll"'), 'die Anpassung steht wieder als kommt')
+    assert.match(q, /anpassungZeile\(plan\.anpassungen, w\.woche_ab, w\.vollstaendig\)/)
   })
 })

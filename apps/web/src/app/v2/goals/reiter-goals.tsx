@@ -586,7 +586,7 @@ function Module({ ziele, woche, onCrossModule }: { ziele: ZielFortschritt[]; woc
         <span className="ge-eb">Module · Beitrag zum steuernden Ziel</span>
         <button type="button" className="ge-link" style={{ fontSize: 11.5 }} onClick={onCrossModule}>Cross-module →</button>
       </div>
-      {!st && <div className="ge-kommt" data-module-leer>Ohne steuerndes Ziel gibt es keinen Beitrag.</div>}
+      {!st && !k && <div className="ge-kommt" data-module-leer>Ohne steuerndes Ziel gibt es keinen Beitrag.</div>}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: 10 }}>
         {MODULE_DER_KETTE.map(m => {
           const a = k ? kachelAnzeige(m, k) : { v: '—', s: '', ampel: null }

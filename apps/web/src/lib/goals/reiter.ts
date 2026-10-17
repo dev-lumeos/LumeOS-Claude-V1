@@ -76,6 +76,16 @@ export function steuerZustand(e: {
 export const steuerziel = <T extends Pick<ReiterZiel, 'goal_role' | 'zustand'>>(ziele: T[]): T | null =>
   ziele.find(g => g.goal_role === 'controlling' && g.zustand.zustand === 'active') ?? null
 
+/**
+ * Das Ziel, dessen Kettenwerte die Seite liest (Ausblick, Kacheln, Wachen): das wirksam aktive,
+ * sonst das eingefrorene, das gespeichert noch `active` ist (erreicht oder Frist abgelaufen) —
+ * die Steuerungskarte zeigt es weiter. `[cmd]` **17.10., dev:** die Kette liefert fuer ein
+ * eingefrorenes Ziel Plandatum und Kacheln bis zum Einfriertag; ohne diese Wahl stand
+ * „kommt (G-650)" — eine Falschaussage. `uq_user_goals_one_active_controlling` laesst nur eines zu.
+ */
+export const gezeigtesSteuerziel = <T extends Pick<ReiterZiel, 'goal_role' | 'zustand'> & { status: string | null }>(ziele: T[]): T | null =>
+  steuerziel(ziele) ?? ziele.find(g => g.goal_role === 'controlling' && g.status === 'active' && g.zustand.zustand === 'eingefroren') ?? null
+
 // ── Messziele ────────────────────────────────────────────────────
 
 export const KATEGORIE_NAME: Record<Kategorie, string> = {
