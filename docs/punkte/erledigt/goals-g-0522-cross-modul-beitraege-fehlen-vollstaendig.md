@@ -11,6 +11,8 @@ quellen:
   - apps/web/src/app/v2/goals/daten.ts:378
 agent: codex
 beauftragt: 2026-10-16
+erledigt: 2026-10-17
+commit: 342f78c7
 
 beruehrt:
   tabellen:

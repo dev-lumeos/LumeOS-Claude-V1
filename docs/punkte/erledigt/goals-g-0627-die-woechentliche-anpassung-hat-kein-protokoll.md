@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-08
 agent: codex
 beauftragt: 2026-10-17
+erledigt: 2026-10-17
+commit: 342f78c7
 
 braucht: [G-625]
 kind_von: G-625
@@ -50,3 +52,18 @@ Entscheidung: SCORING §6 gilt als Rechenregel. Logtage und Wache gelten aus dem
     Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
     Stand:   2026-10-17, HEAD ea9f54f1
 
+## Erledigt - 2026-10-17, Commit `342f78c7` (live)
+
+`[read]` Codex:
+- `goals.record_weekly_adjustments()` mit 15 Regelzeilen samt Quelle, 42 Wochen für zwei Pläne.
+- Die Wiederholung ändert 0.
+- dev, Woche ab 05.10.: Trend +0,110 kg, Soll 0,000, 7 Logtage, Treue 82,84 %, Empfehlung +100 kcal (Wache "3 Wochen hinter Soll").
+- Die Empfehlung ist nur protokolliert, sie wird nicht auf die Phase geschrieben.
+
+Sicherungen: `backup/a105-g627-*`.
+Gemeldete Widersprüche:
+- PHASE_MODELS nennt für Lean Bulk 0,75 statt 0,8 und für langsamen Fettverlust 0,1 statt 0,05.
+- Der Entwurf zeigt +50, SCORING verlangt +100.
+
+Es gilt SCORING.md §6, wie am 17.10. entschieden.
+Folgebefund G-662: Das Soll Δ von 0,000 ist falsch.

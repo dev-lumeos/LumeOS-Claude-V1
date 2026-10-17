@@ -48,3 +48,13 @@ Den Auslöser (geplanter Aufruf auf Toms Rechner) baut Claude Code in `tools/` a
     Fremd:   apps/, packages/, tools/. docs/ gehoert dem Orchestrator.
     Stand:   2026-10-17, HEAD ea9f54f1
 
+## Kettenteil erledigt - 2026-10-17, Commit `342f78c7` (live)
+
+`[read]` Codex:
+- `goals.run_goal_contribution_catchup()` ist nur für service_role.
+- Nachgerechnet bis 16.10.: 25 Zeilen geändert, die Wiederholung ändert 0 (Hash gleich).
+- dev kcal-Treue 84,9 % an 7/7 Tagen.
+
+Sicherungen: `backup/a105-g660-*`.
+`[cmd]` Bild von dev: Ernährung 84,9 % kcal-Treue 7 Tage, Training 3 / 4, Recovery 66,9, Supplements 88,1 %, kein deutlicher Engpass. 0 Attrappen, 0 Konsolenfehler.
+Offen: Den Auslöser baut Claude Code in tools/. Der Aufruf als service_role in dieser Reihenfolge: `SELECT goals.run_goal_contribution_catchup();` und `SELECT goals.record_weekly_adjustments();`.

@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-17
 agent: claudecode
 beauftragt: 2026-10-17
+erledigt: 2026-10-17
+commit: 23e5d9fc
 
 braucht: []
 kind_von: G-656
@@ -64,3 +66,9 @@ Die Zielrate bleibt in Prozent, wie im Entwurf. Die Wahl aus E-83 (%/kcal) fäll
 Offen:
 - `einheiten-schalter.tsx` und `einheit-speichern.ts` muss Tom löschen, weil die Sperre greift. Danach werden die markierten Exporte in zielrate-einheit.ts entfernt.
 - Das Tagesziel "—" ist ein Datenfehler (siehe G-522 Nachtrag).
+
+## Erledigt - 2026-10-17, Commit `23e5d9fc` (Gate grün)
+
+`[cmd]` Tom hat `einheiten-schalter.tsx` und `einheit-speichern.ts` gelöscht. Die Rest-Exporte sind entfernt, und der g565-Wächter prüft jetzt ganz src/.
+`[read]` Claude Code: 2 von 2 Gegenproben werden rot.
+`[cmd]` Bild von dev: 0 Konsolenfehler.
