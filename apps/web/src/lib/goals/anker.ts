@@ -190,7 +190,8 @@ export function stufenwochen(gesamt: number, anteile: number[]): number[] | null
  * Die Gesamtdauer: das Override des Nutzers, sonst der Katalog.
  *
  * `[cmd]` **Das Override ist `max_duration_weeks` in
- * `goal_phases.parameters`** — geschrieben von `phasenOverrideSetzen`.
+ * `goal_phases.parameters`** — die App schreibt es seit G-659 nicht mehr
+ * (`phasenOverrideSetzen` ist mit dem Override-Editor weg); Altzeilen gelten weiter.
  * `[read]` **Editor und Zeitachse fragen beide hier** — zwei
  * Rechnungen fuer dasselbe gehen auseinander.
  */

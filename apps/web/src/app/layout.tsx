@@ -105,12 +105,16 @@ export default async function RootLayout({
   // geladenen Schriftfamilie. `lume.css` reicht sie an `--font-sans`
   // weiter — die Tokens bleiben an einer Stelle, `v2.css` muss nichts
   // wissen.
+  // G-659: ohne Modus-Cookie setzt MODE_BOOTSTRAP `data-mode` vor der Hydration — gewollt.
+  // `suppressHydrationWarning` gilt nur fuer die Attribute dieses Elements, nicht fuer Kinder;
+  // ohne ihn meldete jede Seite einen Konsolenfehler (,,Extra attributes … data-mode").
   return (
     <html
       lang={sprache}
       className={`${inter.variable} ${jetbrainsMono.variable}`}
       data-theme={theme}
       data-mode={mode}
+      suppressHydrationWarning
     >
       <body>
         <script dangerouslySetInnerHTML={{ __html: MODE_BOOTSTRAP }} />
