@@ -20,7 +20,6 @@ beruehrt:
   tabellen:
     - goals.goal_phases
   dateien:
-    - apps/web/src/app/v2/goals/phase-echt.tsx
     - docs/spezifikation/10-plattform/design-system/theme-v1/module-goals-editor.jsx
 
 zahlen:

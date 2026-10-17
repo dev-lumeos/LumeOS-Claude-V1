@@ -16,7 +16,6 @@ beruehrt:
   dateien:
     - apps/web/src/lib/goals/uebergangswaechter.ts
     - apps/web/src/lib/goals/anpassung.ts
-    - apps/web/src/app/v2/goals/phasen-editor-echt.tsx
 ---
 
 # Die Waechter rechnen, und niemand sieht sie

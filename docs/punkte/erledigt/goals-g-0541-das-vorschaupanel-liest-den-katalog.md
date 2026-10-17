@@ -20,7 +20,6 @@ beruehrt:
   tabellen:
     - goals.goal_strategies
   dateien:
-    - apps/web/src/app/v2/goals/phase-echt.tsx
     - apps/web/src/app/v2/goals/ansicht.tsx
     - referenz/lumeos-2026/src/modules/goals/components/nutrition/GoalSelector.tsx
 

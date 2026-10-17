@@ -11,7 +11,7 @@ braucht: []
 kind_von: G-649
 
 quellen:
-  - apps/web/src/app/v2/goals/phase-echt.tsx
+  - apps/web/src/app/v2/goals
 
 beruehrt:
   tabellen: []

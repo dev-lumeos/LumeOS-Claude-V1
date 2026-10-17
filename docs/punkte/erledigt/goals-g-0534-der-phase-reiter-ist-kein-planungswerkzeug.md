@@ -22,8 +22,6 @@ beruehrt:
   tabellen:
     - goals.goal_phases
   dateien:
-    - apps/web/src/app/v2/goals/phase-echt.tsx
-    - apps/web/src/app/v2/goals/phase-setzen.tsx
     - apps/web/src/app/v2/goals/ansicht.tsx
 
 zahlen:

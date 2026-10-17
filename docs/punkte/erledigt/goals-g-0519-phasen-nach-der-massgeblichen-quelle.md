@@ -19,8 +19,6 @@ beruehrt:
     - goals.nutrition_targets
   dateien:
     - apps/web/src/app/v2/goals/tab-phase.tsx
-    - apps/web/src/app/v2/goals/phase-echt.tsx
-    - apps/web/src/app/v2/goals/phase-setzen.tsx
     - apps/web/src/app/v2/goals/phase-editor.tsx
     - apps/web/src/app/v2/goals/phase-aktionen.ts
     - apps/web/src/lib/goals/phase-write.ts

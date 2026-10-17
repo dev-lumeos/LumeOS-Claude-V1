@@ -23,8 +23,6 @@ beruehrt:
     - goals.user_goals
   dateien:
     - supabase/_pipeline/11_goals/111_goals_ziele_phasen.sql
-    - apps/web/src/app/v2/goals/phase-echt.tsx
-    - apps/web/src/app/v2/goals/phase-setzen.tsx
 
 zahlen:
   gemessen: 2026-09-29
