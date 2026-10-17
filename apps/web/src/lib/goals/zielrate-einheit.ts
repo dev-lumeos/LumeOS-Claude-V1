@@ -120,9 +120,3 @@ export function rateAusKcal(
       || !Number.isFinite(gewichtKg) || gewichtKg <= 0) return null
   return rundeWieDb(kcal / (E1_FAKTOR * gewichtKg), RATE_STELLEN)
 }
-
-// ponytail: G-659 — nur noch fuer `einheiten-schalter.tsx` und `einheit-speichern.ts`, die beide
-// ohne Aufrufer sind und auf Toms Loeschung warten (Sperre). Faellt mit ihnen weg.
-export const EINHEITEN = ['prozent', 'kcal'] as const
-export type Rateneinheit = typeof EINHEITEN[number]
-export const EINHEIT_ZEICHEN: Record<Rateneinheit, string> = { prozent: '% KG/Woche', kcal: 'kcal/Tag' }

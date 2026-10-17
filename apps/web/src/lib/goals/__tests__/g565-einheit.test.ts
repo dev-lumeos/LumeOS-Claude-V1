@@ -225,17 +225,16 @@ describe('G-565 — der Katalog bleibt in Prozent', () => {
 
 describe('G-659 — die Zielrate-Einheit wird nicht mehr gewaehlt und nicht mehr gelesen', () => {
   // Tom, 17.10. (Variante b): Prozent wie im Entwurf. Die Zeilen unter `goals.zielrate_einheit`
-  // bleiben ungelesen stehen. Gezaehlt wird jeder Import der zwei toten Dateien und jedes Lesen
-  // des Schluessels ausserhalb von ihnen — beide warten auf Toms Loeschung.
+  // bleiben ungelesen stehen. `einheiten-schalter.tsx` und `einheit-speichern.ts` hat Tom am 17.10.
+  // geloescht; gezaehlt wird jede Spur der Wahl in src/ (ohne Tests).
   const SRC = join(HIER, '..', '..', '..')
-  const TOT = new Set(['einheit-speichern.ts', 'einheiten-schalter.tsx'])
   const dateien = (d: string): string[] => readdirSync(d, { withFileTypes: true }).flatMap(e =>
     e.isDirectory() ? (e.name === '__tests__' || e.name === 'node_modules' ? [] : dateien(join(d, e.name)))
-      : /\.tsx?$/.test(e.name) && !TOT.has(e.name) ? [join(d, e.name)] : [])
+      : /\.tsx?$/.test(e.name) ? [join(d, e.name)] : [])
   it('kein Import, kein Schluessel', () => {
     const alle = dateien(SRC)
     assert.ok(alle.length > 300, `nur ${alle.length} Dateien gefunden — falscher Wurzelpfad?`)
-    const treffer = alle.filter(f => /einheit-speichern|einheiten-schalter|zielrate_einheit|ladeEinheit|EinheitenSchalter/.test(lies(f)))
+    const treffer = alle.filter(f => /einheit-speichern|einheiten-schalter|zielrate_einheit|ladeEinheit|EinheitenSchalter|Rateneinheit|EINHEIT_ZEICHEN/.test(lies(f)))
     assert.deepEqual(treffer, [], 'die Einheitenwahl wird noch benutzt')
   })
 })
