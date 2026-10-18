@@ -61,19 +61,23 @@ test('C-503: ein ausschlussrelevanter Tag ohne food_tags wird nicht vorgeschlage
   assert.deepEqual(result, { untagged: 0 })
 })
 
-test('C-503: kanonische Codes validieren Katalogbezug und melden die Medikamentenluecke', () => {
+test('C-503: kanonische Codes validieren Katalogbezug und Penicillin ist prüfbar', () => {
   const available = availability()
   assert.equal(available.validator, true)
   if (!available.validator || !available.suggestions) return
 
-  const result = one<{ lactoseCode: boolean; madeUpCode: boolean; medicationNotice: number }>(`
+  const result = one<{ lactoseCode: boolean; madeUpCode: boolean; medicationMatches: number; medicationNotice: number }>(`
     SELECT json_build_object(
       'lactoseCode', public.allergy_catalog_code_is_valid('nahrung', 'nutrition:contains_lactose'),
       'madeUpCode', public.allergy_catalog_code_is_valid('nahrung', 'nutrition:does_not_exist'),
+      'medicationMatches', (SELECT count(*) FROM public.allergy_catalog_suggestions('medikament', 'penicillin', 10) WHERE catalog_code IS NOT NULL AND product_check_available),
       'medicationNotice', (SELECT count(*) FROM public.allergy_catalog_suggestions('medikament', 'penicillin', 10) WHERE catalog_code IS NULL AND product_check_available = false)
     );
   `)
-  assert.deepEqual(result, { lactoseCode: true, madeUpCode: false, medicationNotice: 1 })
+  assert.equal(result.lactoseCode, true)
+  assert.equal(result.madeUpCode, false)
+  assert.ok(result.medicationMatches > 0)
+  assert.equal(result.medicationNotice, 0)
 })
 
 test('C-503: die drei kanonisch angebundenen Allergien liefern Katalogtreffer', () => {

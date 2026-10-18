@@ -138,10 +138,10 @@ test('C-349: kompakte Flag-Antwort hat dieselben zehn Zähler wie die Tagesreihe
     { nutrient_code: 'CLD', reference_direction: 'target', triggered_day_count: 15, assessed_day_count: 25, incomplete_day_count: 65 },
     { nutrient_code: 'F18:2CN6', reference_direction: 'target', triggered_day_count: 84, assessed_day_count: 90, incomplete_day_count: 0 },
     { nutrient_code: 'F18:3CN3', reference_direction: 'target', triggered_day_count: 55, assessed_day_count: 90, incomplete_day_count: 0 },
-    { nutrient_code: 'MG', reference_direction: 'upper_limit', triggered_day_count: 88, assessed_day_count: 88, incomplete_day_count: 2 },
-    { nutrient_code: 'NA', reference_direction: 'target', triggered_day_count: 61, assessed_day_count: 71, incomplete_day_count: 19 },
+    { nutrient_code: 'MG', reference_direction: 'upper_limit', triggered_day_count: 90, assessed_day_count: 90, incomplete_day_count: 0 },
+    { nutrient_code: 'NA', reference_direction: 'target', triggered_day_count: 78, assessed_day_count: 90, incomplete_day_count: 0 },
     { nutrient_code: 'NACL', reference_direction: 'target', triggered_day_count: 78, assessed_day_count: 90, incomplete_day_count: 0 },
-    { nutrient_code: 'NIA', reference_direction: 'upper_limit', triggered_day_count: 51, assessed_day_count: 73, incomplete_day_count: 17 },
+    { nutrient_code: 'NIA', reference_direction: 'upper_limit', triggered_day_count: 68, assessed_day_count: 90, incomplete_day_count: 0 },
     { nutrient_code: 'VITD', reference_direction: 'target', triggered_day_count: 56, assessed_day_count: 90, incomplete_day_count: 0 },
     { nutrient_code: 'WATER', reference_direction: 'target', triggered_day_count: 88, assessed_day_count: 88, incomplete_day_count: 2 },
   ])

@@ -7,7 +7,7 @@ import test from 'node:test'
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE
 if (!DB || DB === 'postgres') throw new Error('A-88: nutrition-c324-nrf93-score.test.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
-const USER_ID = 'd15fb34f-62e6-43e5-9d1c-ec8bab6ae1a6'
+const USER_ID = '10000000-0000-0000-0000-000000000101'
 
 function one<T>(sql: string): T {
   return JSON.parse(execFileSync('docker', [

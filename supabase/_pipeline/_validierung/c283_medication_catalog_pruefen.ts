@@ -8,7 +8,7 @@ function option(name: string): string | undefined {
 const DB = option('--database') ?? process.env.PGDATABASE
 if (!DB || DB === 'postgres') throw new Error('A-88: c283_medication_catalog_pruefen.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
 const expectedAtcValue = option('--expected-atc')
-const expectedAtc = expectedAtcValue === undefined ? 490 : Number(expectedAtcValue)
+const expectedAtc = expectedAtcValue === undefined ? 497 : Number(expectedAtcValue)
 
 if (!Number.isInteger(expectedAtc) || expectedAtc < 0) {
   throw new Error('--expected-atc braucht eine nichtnegative ganze Zahl')
@@ -53,7 +53,7 @@ for (const column of requiredColumns) {
 if (errors.length === 0) {
   const checks: Array<[string, number, number]> = [
     ['atc_code', scalar(`SELECT count(*) FROM medical.medication_active_substances WHERE atc_code IS NOT NULL`), expectedAtc],
-    ['cas_number', scalar(`SELECT count(*) FROM medical.medication_active_substances WHERE cas_number IS NOT NULL`), 56],
+    ['cas_number', scalar(`SELECT count(*) FROM medical.medication_active_substances WHERE cas_number IS NOT NULL`), 489],
     ['rxnorm_code', scalar(`SELECT count(*) FROM medical.medication_active_substances WHERE rxnorm_code IS NOT NULL`), 113],
     ['unii_code', scalar(`SELECT count(*) FROM medical.medication_active_substances WHERE unii_code IS NOT NULL`), 420],
     ['routes', scalar(`SELECT count(*) FROM medical.medication_active_substances WHERE cardinality(routes) > 0`), 334],

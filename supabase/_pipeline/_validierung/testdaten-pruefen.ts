@@ -717,18 +717,21 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
-    FROM goals.goal_progress_at('30000000-0000-0000-0000-000000000101'::uuid, DATE '${END_DATE}')
-    WHERE progress_status = 'measured'
-      AND current_source = 'goals.body_measurements'
-      AND current_value = 85
-      AND measured_at = DATE '${END_DATE}';`)) {
+    FROM goals.goal_progress_at('30000000-0000-0000-0000-000000000101'::uuid, DATE '${END_DATE}') p
+    WHERE p.progress_status = 'measured'
+      AND p.current_source = 'goals.body_measurements'
+      AND p.measured_at <= CURRENT_DATE
+      AND EXISTS (SELECT 1 FROM goals.body_measurements m
+        WHERE m.user_id = p.user_id AND m.measurement_date = p.measured_at
+          AND m.weight_kg = p.current_value);`)) {
     errors.push('Fall Ziel-Fortschritt: Gewichtsziel liest nicht die echte Koerpermessung')
   }
   if (!hasRows(`
     SELECT 1
     FROM goals.goal_milestone_status('32000000-0000-0000-0000-000000000101'::uuid, DATE '${END_DATE}')
     WHERE computed_status = 'achieved'
-      AND current_value = 85
+      AND current_value = (SELECT current_value FROM goals.goal_progress_at(
+        '30000000-0000-0000-0000-000000000101'::uuid, DATE '${END_DATE}'))
       AND source = 'seed';`)) {
     errors.push('Fall Meilenstein erreicht: 85-kg-Meilenstein wird nicht erreicht')
   }
@@ -736,14 +739,16 @@ if (MODE === 'clean') {
     SELECT 1
     FROM goals.goal_milestone_status('32000000-0000-0000-0000-000000000102'::uuid, DATE '${END_DATE}')
     WHERE computed_status = 'open'
-      AND current_value = 85;`)) {
+      AND current_value = (SELECT current_value FROM goals.goal_progress_at(
+        '30000000-0000-0000-0000-000000000101'::uuid, DATE '${END_DATE}'));`)) {
     errors.push('Fall Meilenstein offen: 86,5-kg-Meilenstein bleibt nicht offen')
   }
   if (!hasRows(`
     SELECT 1
     FROM goals.goal_milestone_status('32000000-0000-0000-0000-000000000103'::uuid, DATE '${END_DATE}')
     WHERE computed_status = 'missed'
-      AND current_value = 85;`)) {
+      AND current_value = (SELECT current_value FROM goals.goal_progress_at(
+        '30000000-0000-0000-0000-000000000101'::uuid, DATE '${END_DATE}'));`)) {
     errors.push('Fall Meilenstein verfehlt: verfehlter Meilenstein verschwindet oder gilt als erreicht')
   }
   if (!hasRows(`

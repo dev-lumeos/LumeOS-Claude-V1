@@ -26,7 +26,7 @@ test('C-396: ein selbst erstellter Plan behaelt seine Slotkopie nach einer spaet
   }>(`
     BEGIN;
     CREATE TEMP TABLE c396_account ON COMMIT DROP AS
-      SELECT id FROM auth.users WHERE email = 'dev@lumeos.app';
+      SELECT id FROM auth.users WHERE email = 'tom.seed@example.com';
     INSERT INTO nutrition.meal_slots(user_id, position, name, planned_time)
       SELECT id, 99, 'C396 Quelle', TIME '06:45' FROM c396_account
       ON CONFLICT (user_id, position) DO UPDATE

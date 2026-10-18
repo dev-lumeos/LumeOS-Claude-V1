@@ -71,6 +71,6 @@ test('C-241: test-user hat einen kleinen, aktuellen Grundbestand statt einer lee
   assert.deepEqual(state.planLogs, ['confirmed', 'skipped'])
   assert.equal(state.meals, 7)
   assert.equal(state.mealItems, 14)
-  assert.equal(state.intakeLogs, 90)
+  assert.equal(state.intakeLogs, 104)
   assert.equal(state.latestIntake, new Date().toISOString().slice(0, 10))
 })

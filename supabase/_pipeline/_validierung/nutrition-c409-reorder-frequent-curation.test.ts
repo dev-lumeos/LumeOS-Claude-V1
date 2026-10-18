@@ -26,7 +26,7 @@ test('C-409: nutrition_reorder ist ein erlaubter, referenzfreier Listenursprung'
   const result = one<{ sourceCheck: boolean; targetCheck: boolean; createdSource: string }>(`
     BEGIN;
     CREATE TEMP TABLE c409_reorder_context ON COMMIT DROP AS
-      SELECT id AS user_id FROM auth.users WHERE email = 'dev@lumeos.app';
+      SELECT id AS user_id FROM auth.users WHERE email = 'tom.seed@example.com';
     INSERT INTO nutrition.shopping_lists (user_id, name, source_type, measurement_source)
       SELECT user_id, 'C409 Gegenprobe', 'nutrition_reorder', 'manual'
       FROM c409_reorder_context;

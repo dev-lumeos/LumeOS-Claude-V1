@@ -24,16 +24,27 @@ function probe(): {
 } {
   const sql = `
     BEGIN;
+    INSERT INTO auth.users(id,email,raw_app_meta_data,created_at) VALUES
+      ('${GENERAL_USER}'::uuid,'c347-general@example.test','{}',now()),
+      ('${ALLERGY_USER}'::uuid,'c347-allergy@example.test','{}',now()),
+      ('${CLEAN_USER}'::uuid,'c347-clean@example.test','{}',now())
+    ON CONFLICT (id) DO NOTHING;
     DELETE FROM nutrition.food_preference_search_targets
     WHERE user_id IN ('${GENERAL_USER}'::uuid, '${ALLERGY_USER}'::uuid, '${CLEAN_USER}'::uuid);
     DELETE FROM nutrition.food_preferences
     WHERE user_id IN ('${GENERAL_USER}'::uuid, '${ALLERGY_USER}'::uuid, '${CLEAN_USER}'::uuid);
+    DELETE FROM public.user_allergies
+    WHERE user_id IN ('${GENERAL_USER}'::uuid, '${ALLERGY_USER}'::uuid, '${CLEAN_USER}'::uuid);
 
-    INSERT INTO nutrition.food_preferences (user_id, allergies, general_exclusions)
+    INSERT INTO nutrition.food_preferences (user_id, general_exclusions)
     VALUES
-      ('${GENERAL_USER}'::uuid, '{}'::text[], ARRAY['ultra_processed', 'contains_nuts']),
-      ('${ALLERGY_USER}'::uuid, ARRAY['tree_nuts'], '{}'::text[]),
-      ('${CLEAN_USER}'::uuid, '{}'::text[], '{}'::text[]);
+      ('${GENERAL_USER}'::uuid, ARRAY['ultra_processed', 'contains_nuts']),
+      ('${ALLERGY_USER}'::uuid, '{}'::text[]),
+      ('${CLEAN_USER}'::uuid, '{}'::text[]);
+    INSERT INTO public.user_allergies
+      (user_id,stoff_code,stoff_text,art,schwere,quelle)
+    VALUES ('${ALLERGY_USER}'::uuid,'nutrition:contains_nuts',
+      'Tree nuts','nahrung','allergie','c347-test');
 
     SELECT nutrition.refresh_food_preference_search_targets('${GENERAL_USER}'::uuid);
     SELECT nutrition.refresh_food_preference_search_targets('${ALLERGY_USER}'::uuid);

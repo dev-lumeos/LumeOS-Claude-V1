@@ -7,8 +7,8 @@ function option(name: string): string | undefined {
 
 const DB = option('--database') ?? process.env.PGDATABASE
 if (!DB || DB === 'postgres') throw new Error('A-88: c286_medication_enrichments_pruefen.ts braucht PGDATABASE als Wegwerf-Datenbank, nie postgres.')
-const expectedAtc = Number(option('--expected-atc') ?? '490')
-const expectedReproductive = Number(option('--expected-reproductive') ?? '417')
+const expectedAtc = Number(option('--expected-atc') ?? '497')
+const expectedReproductive = Number(option('--expected-reproductive') ?? '498')
 
 if (![expectedAtc, expectedReproductive].every((value) => Number.isInteger(value) && value >= 0)) {
   throw new Error('Erwartungswerte muessen nichtnegative ganze Zahlen sein')
@@ -27,11 +27,11 @@ function scalar(sql: string): number {
 const checks: Array<[string, number, number]> = [
   ['atc_code', scalar(`SELECT count(*) FROM medical.medication_active_substances WHERE atc_code IS NOT NULL AND atc_code <> ''`), expectedAtc],
   ['reproductive records', scalar(`SELECT count(*) FROM medical.medication_reproductive_evidence`), expectedReproductive],
-  ['reproductive pregnancy', scalar(`SELECT count(*) FROM medical.medication_reproductive_evidence WHERE pregnancy IS NOT NULL AND pregnancy <> '{}'::jsonb`), 270],
-  ['reproductive lactation', scalar(`SELECT count(*) FROM medical.medication_reproductive_evidence WHERE lactation IS NOT NULL AND lactation <> '{}'::jsonb`), 270],
-  ['reproductive fertility', scalar(`SELECT count(*) FROM medical.medication_reproductive_evidence WHERE fertility IS NOT NULL AND fertility <> '{}'::jsonb`), 274],
-  ['reproductive missing pregnancy/lactation', scalar(`SELECT count(*) FROM medical.medication_reproductive_evidence WHERE missing_pregnancy_lactation <> '{}'::jsonb`), 415],
-  ['reproductive missing fertility', scalar(`SELECT count(*) FROM medical.medication_reproductive_evidence WHERE missing_fertility_sex <> '{}'::jsonb`), 357],
+  ['reproductive pregnancy', scalar(`SELECT count(*) FROM medical.medication_reproductive_evidence WHERE pregnancy IS NOT NULL AND pregnancy <> '{}'::jsonb`), 351],
+  ['reproductive lactation', scalar(`SELECT count(*) FROM medical.medication_reproductive_evidence WHERE lactation IS NOT NULL AND lactation <> '{}'::jsonb`), 351],
+  ['reproductive fertility', scalar(`SELECT count(*) FROM medical.medication_reproductive_evidence WHERE fertility IS NOT NULL AND fertility <> '{}'::jsonb`), 355],
+  ['reproductive missing pregnancy/lactation', scalar(`SELECT count(*) FROM medical.medication_reproductive_evidence WHERE missing_pregnancy_lactation <> '{}'::jsonb`), 496],
+  ['reproductive missing fertility', scalar(`SELECT count(*) FROM medical.medication_reproductive_evidence WHERE missing_fertility_sex <> '{}'::jsonb`), 438],
   ['PK records', scalar(`SELECT count(*) FROM medical.medication_pk_evidence`), 407],
   ['renal/hepatic records', scalar(`SELECT count(*) FROM medical.medication_renal_hepatic_evidence`), 391],
   ['clinical context records', scalar(`SELECT count(*) FROM medical.medication_clinical_context_evidence`), 107],

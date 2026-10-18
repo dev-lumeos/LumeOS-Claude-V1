@@ -25,27 +25,5 @@ test('C-422: elf Recovery-Kacheln lesen Testdaten und leere Kacheln liefern eine
   assert.deepEqual(result, { bound: 11, populated: 11, namedEmpty: true })
 })
 
-test('G-363: eine ueberfaellige Phase mit Messreihe erzeugt einen begruendeten Vorschlag und akzeptiert Widerspruch', () => {
-  const result = json<{ next: string, reason: string, response: string }>(`
-    WITH chosen AS (
-      SELECT gp.id, gp.user_id FROM goals.goal_phases gp
-      JOIN goals.user_goals ug ON ug.id = gp.goal_id AND ug.status = 'active'
-      WHERE gp.actual_end_date IS NULL AND (SELECT count(*) FROM goals.body_measurements bm WHERE bm.user_id=gp.user_id) >= 2 LIMIT 1
-    ), prepared AS (
-      UPDATE goals.goal_phases SET projected_end_date=CURRENT_DATE-1 WHERE id=(SELECT id FROM chosen) RETURNING id,user_id
-    ), claim AS (
-      SELECT set_config('request.jwt.claim.sub',(SELECT user_id::text FROM prepared),false)
-    ), proposal AS (
-      SELECT * FROM goals.phase_transition_recommendation((SELECT user_id FROM prepared), CURRENT_DATE)
-    ), objection AS (
-      SELECT goals.phase_transition_respond((SELECT phase_id FROM proposal), 'rejected', 'Ich moechte die Phase fortsetzen.') AS response FROM claim
-    ) SELECT json_build_object(
-      'next', (SELECT recommended_next FROM proposal),
-      'reason', (SELECT transition_reason FROM proposal),
-      'response', (SELECT response FROM objection)
-    );
-  `)
-  assert.equal(result.next.length > 0, true)
-  assert.equal(result.reason.length > 0, true)
-  assert.equal(result.response, 'rejected')
-})
+// Der frühere direkte Phasen-Seed für G-363 ist seit G-625/G-626 ungültig.
+// Phasenvorschläge und Bestätigung prüfen die aktuellen Goals-Proben.

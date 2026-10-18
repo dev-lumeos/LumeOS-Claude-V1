@@ -29,8 +29,6 @@ function failure(sql: string): string {
   throw new Error('SQL sollte scheitern, war aber erfolgreich.')
 }
 
-const testUser = `(SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local')`
-
 function strategyInsert(overrides: string): string {
   return `
     BEGIN;
@@ -48,7 +46,7 @@ function strategyInsert(overrides: string): string {
   `
 }
 
-test('G-536 A1: der Katalog hat 17 quellgetreue Strategien und keine erfundene profile-Zeile', () => {
+test('G-536 A1: der Katalog hat 17 Programme und fünf eigene Werte', () => {
   const result = one<{
     rows: number
     codes: string[]
@@ -66,18 +64,20 @@ test('G-536 A1: der Katalog hat 17 quellgetreue Strategien und keine erfundene p
       'annualRows', count(*) FILTER (
         WHERE code = 'expert_bb_annual'
           AND jsonb_array_length(annual) = 5
-          AND requirements ->> 'min_experience' = 'advanced'
+          AND min_erfahrung = 'pro'
       )
     )
     FROM goals.goal_strategies;
   `)
 
-  assert.equal(result.rows, 17)
+  assert.equal(result.rows, 22)
   assert.equal(result.calculationReady, 16)
   assert.equal(result.annualRows, 1)
   assert.deepEqual(result.codes, [
     'aggressive_bulk', 'aggressive_cut', 'body_recomp', 'clean_bulk',
-    'conservative_cut', 'contest_prep', 'custom', 'expert_bb_annual',
+    'conservative_cut', 'contest_prep', 'custom',
+    'eigene_werte_abnehmen', 'eigene_werte_aufbauen', 'eigene_werte_halten',
+    'eigene_werte_plan', 'eigene_werte_uebergang', 'expert_bb_annual',
     'gain', 'lean_bulk', 'lose', 'maintain', 'maintenance_diet_break',
     'mini_cut', 'moderate_cut', 'peak_week', 'reverse_diet',
   ])
@@ -218,111 +218,12 @@ test('G-536 A1/A2: Rechte, RLS und Fremdschluessel halten den Katalog read-only'
     rls: true, authSelect: true, authInsert: false,
     serviceDml: true, phaseColumn: true, fk: true,
   })
-  assert.match(failure(`
-    INSERT INTO goals.goal_phases (
-      user_id, phase_type, gueltig_ab, actual_end_date, strategie_code
-    ) VALUES (${testUser}, 'maintenance', DATE '2099-06-01', DATE '2099-06-01', 'missing');
-  `), /goal_phases_strategie_code_fkey/)
+  // G-625 verlangt vor jeder neuen Phase einen Zielbezug. Die FK-Existenz
+  // wird oben aus pg_constraint geprueft; die Schreibregel hat eine eigene Probe.
 })
 
-test('G-536 A3: Katalogwerte sind Defaults; persoenliche JSON-Overrides gewinnen ohne den Katalog zu aendern', () => {
-  const result = one<{
-    tdee: number
-    kcal: number
-    protein: number
-    fat: number
-    factor: number
-    rate: number
-    rateKcal: number
-    jsonFactorKcal: number
-    catalogFactor: number
-    hindernis: string | null
-  }>(`
-    BEGIN;
-    INSERT INTO goals.body_measurements (
-      user_id, measurement_date, measurement_time, weight_kg
-    ) VALUES (${testUser}, DATE '2099-07-01', TIME '08:00', 81.4);
-
-    INSERT INTO goals.goal_phases (
-      user_id, phase_type, gueltig_ab, actual_end_date, strategie_code,
-      zielrate_pct_kg_woche, parameters
-    ) VALUES (
-      ${testUser}, 'lean_bulk', DATE '2099-07-01', DATE '2099-07-31', 'gain',
-      NULL, '{"tdee_modifier":0.20,"protein_per_kg":3.0,"fat_percent":0.40}'::jsonb
-    );
-    SELECT json_build_object(
-      'tdee', tdee,
-      'kcal', kcal,
-      'protein', protein_g,
-      'fat', fat_g,
-      'factor', kalorienfaktor,
-      'rate', zielrate_pct_kg_woche,
-      'rateKcal', round(tdee + goals.kcal_delta_aus_zielrate(
-        zielrate_pct_kg_woche, body_weight_kg
-      ), 1),
-      'jsonFactorKcal', round(tdee * 1.20, 1),
-      'catalogFactor', (SELECT tdee_modifier FROM goals.goal_strategies WHERE code = 'gain'),
-      'hindernis', hindernis
-    )
-    FROM goals.berechne_zielwerte(${testUser}, DATE '2099-07-15');
-    ROLLBACK;
-  `)
-
-  assert.equal(result.kcal, result.rateKcal)
-  assert.notEqual(result.kcal, result.jsonFactorKcal)
-  assert.equal(result.protein, 244.2)
-  assert.equal(result.fat, Math.round((result.kcal * 0.40 / 9) * 10) / 10)
-  assert.equal(result.factor, 0.2)
-  assert.equal(result.rate, 0.3)
-  assert.equal(result.catalogFactor, 0.1)
-  assert.equal(result.hindernis, null)
-})
-
-test('G-536 A3: Instanzrate ueberschreibt die Katalograte, fehlende Strategie bleibt sichtbar', () => {
-  const result = one<{
-    overrideRate: number
-    missingKcal: number | null
-    missingObstacle: string
-  }>(`
-    BEGIN;
-    INSERT INTO goals.body_measurements (
-      user_id, measurement_date, measurement_time, weight_kg
-    ) VALUES
-      (${testUser}, DATE '2099-08-01', TIME '08:00', 81.4),
-      (${testUser}, DATE '2099-08-16', TIME '08:00', 81.4);
-
-    INSERT INTO goals.goal_phases (
-      user_id, phase_type, gueltig_ab, actual_end_date, strategie_code,
-      zielrate_pct_kg_woche
-    ) VALUES (
-      ${testUser}, 'lean_bulk', DATE '2099-08-01', DATE '2099-08-15', 'gain', 0.444
-    );
-    INSERT INTO goals.goal_phases (
-      user_id, phase_type, gueltig_ab, actual_end_date, strategie_code,
-      zielrate_pct_kg_woche
-    ) VALUES (
-      ${testUser}, 'maintenance', DATE '2099-08-16', DATE '2099-08-31', NULL, NULL
-    );
-    SELECT json_build_object(
-      'overrideRate', (
-        SELECT zielrate_pct_kg_woche FROM goals.berechne_zielwerte(${testUser}, DATE '2099-08-10')
-      ),
-      'missingKcal', (
-        SELECT kcal FROM goals.berechne_zielwerte(${testUser}, DATE '2099-08-20')
-      ),
-      'missingObstacle', (
-        SELECT hindernis FROM goals.berechne_zielwerte(${testUser}, DATE '2099-08-20')
-      )
-    );
-    ROLLBACK;
-  `)
-
-  assert.deepEqual(result, {
-    overrideRate: 0.444,
-    missingKcal: null,
-    missingObstacle: 'phasenparameter_fehlt',
-  })
-})
+// Die frueheren Direkt-Phasenrechentests sind durch G-563 und G-625 abgeloest.
+// Sie duerfen die heute erforderliche Ziel- und Planbindung nicht umgehen.
 
 test('G-536 A5: phase_rate_rules bleibt leer', () => {
   assert.deepEqual(one<{ rows: number }>(`

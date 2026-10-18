@@ -23,7 +23,11 @@ type Ausgabe = {
   sicher: boolean
 }
 
-const [eingabePfad, ausgabePfad, probePfad] = process.argv.slice(2)
+const [
+  eingabePfad = 'supabase/_pipeline/daten/anzeigenamen-eingabe.jsonl',
+  ausgabePfad = 'supabase/_pipeline/daten/anzeigenamen.jsonl',
+  probePfad = 'supabase/_pipeline/daten/anzeigenamen-probe.jsonl',
+] = process.argv.slice(2)
 if (!eingabePfad || !ausgabePfad) {
   console.error('Aufruf: pnpm exec tsx supabase/_pipeline/_validierung/anzeigenamen-pruefen.ts <eingabe.jsonl> <ausgabe.jsonl>')
   process.exit(2)

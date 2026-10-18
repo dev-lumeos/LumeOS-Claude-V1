@@ -3933,18 +3933,11 @@
       "depends_on": ["631_trendgewicht_ema_probe", "634_measurement_goal_start_preview"]
     },
     {
-      "id": "642_goal_user_texts_utf8_probe",
-      "path": "supabase/_pipeline/_validierung/goals-g642-user-texts.test.ts",
-      "kind": "tsx",
-      "creates": "G-642: Installierte Nutzertexte ohne Ersatzschreibung, 622-Ausnahme und Katalogwerte geprueft.",
-      "depends_on": ["642_goal_user_texts_utf8", "a86_testdaten_einspielen"]
-    },
-    {
       "id": "643_measurement_goal_lage",
       "path": "supabase/_pipeline/11_goals/643_measurement_goal_lage.sql",
       "kind": "sql",
       "creates": "G-643: Lage einmaliger Messziele mit linearer Soll-Linie und zehn Prozentpunkten Toleranz.",
-      "depends_on": ["642_goal_user_texts_utf8_probe", "611_goal_freeze_archive_delete"]
+      "depends_on": ["642_goal_user_texts_utf8", "611_goal_freeze_archive_delete"]
     },
     {
       "id": "643_measurement_goal_lage_probe",
@@ -4232,6 +4225,755 @@
       "kind": "tsx",
       "creates": "G-664: Zukunftsmessung bleibt aus Trend, Vorschau, Messpunkten, Profil und Beitragslauf draussen.",
       "depends_on": ["664_no_future_measurements"]
+    },
+    {
+      "id": "620_measurement_direction",
+      "path": "supabase/_pipeline/11_goals/620_measurement_direction.sql",
+      "kind": "sql",
+      "creates": "G-620: Dauer/Pace kleiner besser, optionale Streckenbindung und Datum des Bestwerts.",
+      "depends_on": ["664_no_future_measurements_probe"]
+    },
+    {
+      "id": "620_measurement_direction_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g620-measurement-direction.test.ts",
+      "kind": "tsx",
+      "creates": "G-620: Richtung, Streckenbindung, Fortschritt, Lage, Datum und Wochenwert.",
+      "depends_on": ["620_measurement_direction"]
+    },
+    {
+      "id": "647_goal_maintenance_utf8",
+      "path": "supabase/_pipeline/11_goals/647_goal_maintenance_utf8.sql",
+      "kind": "sql",
+      "creates": "G-647: G-622-Satz und von G-664 überschriebener G-642-Vorschautext mit Umlauten.",
+      "depends_on": ["620_measurement_direction_probe", "642_goal_user_texts_utf8", "637_active_goal_phase_gap"]
+    },
+    {
+      "id": "642_goal_user_texts_utf8_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g642-user-texts.test.ts",
+      "kind": "tsx",
+      "creates": "G-642/G-647: Wirksame Nutzertexte ohne Ersatzschreibung und Katalogwerte geprueft.",
+      "depends_on": ["647_goal_maintenance_utf8", "a86_testdaten_einspielen"]
+    },
+    {
+      "id": "616_c283_medication_catalog_probe",
+      "path": "supabase/_pipeline/_validierung/c283_medication_catalog_pruefen.ts",
+      "kind": "tsx",
+      "creates": "G-616: C-283-Katalogzahlen am aktuellen Grunddatenstand.",
+      "depends_on": ["642_goal_user_texts_utf8_probe"]
+    },
+    {
+      "id": "616_c286_medication_enrichments_probe",
+      "path": "supabase/_pipeline/_validierung/c286_medication_enrichments_pruefen.ts",
+      "kind": "tsx",
+      "creates": "G-616: C-286-Enrichmentzahlen am aktuellen Grunddatenstand.",
+      "depends_on": ["616_c283_medication_catalog_probe"]
+    },
+    {
+      "id": "616_search_normalization_probe",
+      "path": "supabase/_pipeline/_validierung/normalisierung-pruefen.mjs",
+      "kind": "tsx",
+      "creates": "G-616: Faltung von App und Datenbank stimmt für Bestandsnamen überein.",
+      "depends_on": ["616_c286_medication_enrichments_probe"]
+    },
+    {
+      "id": "616_display_names_probe",
+      "path": "supabase/_pipeline/_validierung/anzeigenamen-pruefen.ts",
+      "kind": "tsx",
+      "creates": "G-616: Anzeigenamen-Ausgabe gegen Eingabe und Probe.",
+      "depends_on": ["616_search_normalization_probe"]
+    },
+    {
+      "id": "616_food_tags_probe",
+      "path": "supabase/_pipeline/_validierung/lebensmittel-tags-pruefen.ts",
+      "kind": "tsx",
+      "creates": "G-616: Tag-Datei mit Pflichtfällen und NOVA-Konsistenz.",
+      "depends_on": ["616_display_names_probe"]
+    },
+    {
+      "id": "616_portions_probe",
+      "path": "supabase/_pipeline/_validierung/portionen-pruefen.ts",
+      "kind": "tsx",
+      "creates": "G-616: Portions-Pflichtfälle und Struktur.",
+      "depends_on": ["616_food_tags_probe"]
+    },
+    {
+      "id": "616_search_vocabulary_probe",
+      "path": "supabase/_pipeline/_validierung/suche-wortschatz-pruefen.ts",
+      "kind": "tsx",
+      "creates": "G-616: Suchwortschatz gegen Bestandsnamen und Quellen.",
+      "depends_on": ["616_portions_probe"]
+    },
+    {
+      "id": "616_schema_completeness_probe",
+      "path": "supabase/_pipeline/_validierung/schema-vollstaendigkeit-pruefen.ts",
+      "kind": "tsx",
+      "creates": "G-616: expliziter Schema-Sollstand vor weiteren Altprüfungen.",
+      "depends_on": ["616_search_vocabulary_probe"]
+    },
+    {
+      "id": "616_testdata_integrity_probe",
+      "path": "supabase/_pipeline/_validierung/testdaten-pruefen.ts",
+      "kind": "tsx",
+      "creates": "G-616: 186 Testdaten-Prüfungen auf dem frisch aufgebauten Stand.",
+      "depends_on": ["616_schema_completeness_probe"]
+    },
+    {
+      "id": "616_c347_general_exclusions_probe",
+      "path": "supabase/_pipeline/_validierung/food-search-general-exclusions.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: C-347-Generalausschlüsse und kanonische Allergien am aktuellen Schema.",
+      "depends_on": ["616_testdata_integrity_probe"]
+    },
+    {
+      "id": "616_c503_allergy_catalog_probe",
+      "path": "supabase/_pipeline/_validierung/quer-c503-allergy-catalog-suggestions.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: kanonische Allergiecodes und prüfbare Medikamententreffer.",
+      "depends_on": ["616_c347_general_exclusions_probe"]
+    },
+    {
+      "id": "616_c422_recovery_cards_probe",
+      "path": "supabase/_pipeline/_validierung/c422-recovery-cards-and-goal-proposal.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: C-422-Recoverykarten ohne überholten Direkt-Phasen-Seed.",
+      "depends_on": ["616_c503_allergy_catalog_probe"]
+    },
+    {
+      "id": "616_c492_recovery_profile_probe",
+      "path": "supabase/_pipeline/_validierung/recovery-c492-muscle-recovery.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: C-492-Recoveryprofile nach C-546 für 112 Muskelgruppen.",
+      "depends_on": ["616_c422_recovery_cards_probe"]
+    },
+    {
+      "id": "616_g523_tdee_history_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g523-tdee-history.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: G-523-TDEE-Historie mit vorhandenem Fremdkonto und RLS.",
+      "depends_on": ["616_c492_recovery_profile_probe"]
+    },
+    {
+      "id": "616_g536_catalog_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g536-goal-strategies.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: G-536-Katalogvertrag am aktuellen 22-Zeilen-Stand.",
+      "depends_on": ["616_g523_tdee_history_probe"]
+    },
+    {
+      "id": "616_recovered_001",
+      "path": "supabase/_pipeline/_validierung/c423-stack-template-sources.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung c423-stack-template-sources.test.ts.",
+      "depends_on": ["616_g536_catalog_probe"]
+    },
+    {
+      "id": "616_recovered_002",
+      "path": "supabase/_pipeline/_validierung/c430-activity-stream-i18n-and-g374-cycling.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung c430-activity-stream-i18n-and-g374-cycling.test.ts.",
+      "depends_on": ["616_recovered_001"]
+    },
+    {
+      "id": "616_recovered_003",
+      "path": "supabase/_pipeline/_validierung/c486-koerperflaechen-utf8.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung c486-koerperflaechen-utf8.test.ts.",
+      "depends_on": ["616_recovered_002"]
+    },
+    {
+      "id": "616_recovered_004",
+      "path": "supabase/_pipeline/_validierung/c488_sprachspalten.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung c488_sprachspalten.test.ts.",
+      "depends_on": ["616_recovered_003"]
+    },
+    {
+      "id": "616_recovered_005",
+      "path": "supabase/_pipeline/_validierung/coach-c268-invite-name.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung coach-c268-invite-name.test.ts.",
+      "depends_on": ["616_recovered_004"]
+    },
+    {
+      "id": "616_recovered_006",
+      "path": "supabase/_pipeline/_validierung/coach-c362-consent-log.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung coach-c362-consent-log.test.ts.",
+      "depends_on": ["616_recovered_005"]
+    },
+    {
+      "id": "616_recovered_007",
+      "path": "supabase/_pipeline/_validierung/coach-c381-action-executor.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung coach-c381-action-executor.test.ts.",
+      "depends_on": ["616_recovered_006"]
+    },
+    {
+      "id": "616_recovered_008",
+      "path": "supabase/_pipeline/_validierung/coach-c428-pending-invites.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung coach-c428-pending-invites.test.ts.",
+      "depends_on": ["616_recovered_007"]
+    },
+    {
+      "id": "616_recovered_009",
+      "path": "supabase/_pipeline/_validierung/coach-c434-medical-provenance-and-reads.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung coach-c434-medical-provenance-and-reads.test.ts.",
+      "depends_on": ["616_recovered_008"]
+    },
+    {
+      "id": "616_recovered_010",
+      "path": "supabase/_pipeline/_validierung/coach-c440-onboarding.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung coach-c440-onboarding.test.ts.",
+      "depends_on": ["616_recovered_009"]
+    },
+    {
+      "id": "616_recovered_011",
+      "path": "supabase/_pipeline/_validierung/coach-c459-alert-producer.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung coach-c459-alert-producer.test.ts.",
+      "depends_on": ["616_recovered_010"]
+    },
+    {
+      "id": "616_recovered_012",
+      "path": "supabase/_pipeline/_validierung/coach-c460-specialties.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung coach-c460-specialties.test.ts.",
+      "depends_on": ["616_recovered_011"]
+    },
+    {
+      "id": "616_recovered_013",
+      "path": "supabase/_pipeline/_validierung/coach-lesepfad-pruefen.sql",
+      "kind": "sql",
+      "creates": "G-616: nachregistrierte Altprüfung coach-lesepfad-pruefen.sql.",
+      "depends_on": ["616_recovered_012"]
+    },
+    {
+      "id": "616_recovered_014",
+      "path": "supabase/_pipeline/_validierung/goals-c463-progress-photos.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung goals-c463-progress-photos.test.ts.",
+      "depends_on": ["616_recovered_013"]
+    },
+    {
+      "id": "616_recovered_015",
+      "path": "supabase/_pipeline/_validierung/medical-c429-documents-appointments-timeline.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung medical-c429-documents-appointments-timeline.test.ts.",
+      "depends_on": ["616_recovered_014"]
+    },
+    {
+      "id": "616_recovered_016",
+      "path": "supabase/_pipeline/_validierung/medical-c457-lab-report-ocr.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung medical-c457-lab-report-ocr.test.ts.",
+      "depends_on": ["616_recovered_015"]
+    },
+    {
+      "id": "616_recovered_017",
+      "path": "supabase/_pipeline/_validierung/medical-c506-allergy-catalog.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung medical-c506-allergy-catalog.test.ts.",
+      "depends_on": ["616_recovered_016"]
+    },
+    {
+      "id": "616_recovered_018",
+      "path": "supabase/_pipeline/_validierung/nutrient-details-legacy-map.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung nutrient-details-legacy-map.test.ts.",
+      "depends_on": ["616_recovered_017"]
+    },
+    {
+      "id": "616_recovered_019",
+      "path": "supabase/_pipeline/_validierung/nutrition-c371-c374-provenance.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung nutrition-c371-c374-provenance.test.ts.",
+      "depends_on": ["616_recovered_018"]
+    },
+    {
+      "id": "616_recovered_020",
+      "path": "supabase/_pipeline/_validierung/nutrition-c389-juice-processing.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung nutrition-c389-juice-processing.test.ts.",
+      "depends_on": ["616_recovered_019"]
+    },
+    {
+      "id": "616_recovered_021",
+      "path": "supabase/_pipeline/_validierung/nutrition-c405-catalog-and-c406-preferences.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung nutrition-c405-catalog-and-c406-preferences.test.ts.",
+      "depends_on": ["616_recovered_020"]
+    },
+    {
+      "id": "616_recovered_022",
+      "path": "supabase/_pipeline/_validierung/nutrition-c411-recipe-curation.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung nutrition-c411-recipe-curation.test.ts.",
+      "depends_on": ["616_recovered_021"]
+    },
+    {
+      "id": "616_recovered_023",
+      "path": "supabase/_pipeline/_validierung/nutrition-c417-recipe-curation-contract.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung nutrition-c417-recipe-curation-contract.test.ts.",
+      "depends_on": ["616_recovered_022"]
+    },
+    {
+      "id": "616_recovered_024",
+      "path": "supabase/_pipeline/_validierung/nutrition-c513-supplement-meal.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung nutrition-c513-supplement-meal.test.ts.",
+      "depends_on": ["616_recovered_023"]
+    },
+    {
+      "id": "616_recovered_025",
+      "path": "supabase/_pipeline/_validierung/nutrition-c521-daily-summary-supplements.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung nutrition-c521-daily-summary-supplements.test.ts.",
+      "depends_on": ["616_recovered_024"]
+    },
+    {
+      "id": "616_recovered_026",
+      "path": "supabase/_pipeline/_validierung/nutrition-c524-meal-plan-supplements.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung nutrition-c524-meal-plan-supplements.test.ts.",
+      "depends_on": ["616_recovered_025"]
+    },
+    {
+      "id": "616_recovered_027",
+      "path": "supabase/_pipeline/_validierung/nutrition-c526-active-plan-overlap.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung nutrition-c526-active-plan-overlap.test.ts.",
+      "depends_on": ["616_recovered_026"]
+    },
+    {
+      "id": "616_recovered_028",
+      "path": "supabase/_pipeline/_validierung/nutrition-c537-days-count-rollover.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung nutrition-c537-days-count-rollover.test.ts.",
+      "depends_on": ["616_recovered_027"]
+    },
+    {
+      "id": "616_recovered_029",
+      "path": "supabase/_pipeline/_validierung/nutrition-c538-mealcam-memory.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung nutrition-c538-mealcam-memory.test.ts.",
+      "depends_on": ["616_recovered_028"]
+    },
+    {
+      "id": "616_recovered_030",
+      "path": "supabase/_pipeline/_validierung/quer-c412-activity-stream.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung quer-c412-activity-stream.test.ts.",
+      "depends_on": ["616_recovered_029"]
+    },
+    {
+      "id": "616_recovered_031",
+      "path": "supabase/_pipeline/_validierung/quer-c455-kettenabschluss-ausgabe.test.mjs",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung quer-c455-kettenabschluss-ausgabe.test.mjs.",
+      "depends_on": ["616_recovered_030"]
+    },
+    {
+      "id": "616_recovered_032",
+      "path": "supabase/_pipeline/_validierung/quer-c502-c508-allergy-matches.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung quer-c502-c508-allergy-matches.test.ts.",
+      "depends_on": ["616_recovered_031"]
+    },
+    {
+      "id": "616_recovered_033",
+      "path": "supabase/_pipeline/_validierung/quer-c519-supplement-intake-references.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung quer-c519-supplement-intake-references.test.ts.",
+      "depends_on": ["616_recovered_032"]
+    },
+    {
+      "id": "616_recovered_034",
+      "path": "supabase/_pipeline/_validierung/quer-c525-allergy-search-terms.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung quer-c525-allergy-search-terms.test.ts.",
+      "depends_on": ["616_recovered_033"]
+    },
+    {
+      "id": "616_recovered_035",
+      "path": "supabase/_pipeline/_validierung/quer-c541-experience-level-required.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung quer-c541-experience-level-required.test.ts.",
+      "depends_on": ["616_recovered_034"]
+    },
+    {
+      "id": "616_recovered_036",
+      "path": "supabase/_pipeline/_validierung/quer-c544-koerperorte.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung quer-c544-koerperorte.test.ts.",
+      "depends_on": ["616_recovered_035"]
+    },
+    {
+      "id": "616_recovered_037",
+      "path": "supabase/_pipeline/_validierung/recovery-c421-schema.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung recovery-c421-schema.test.ts.",
+      "depends_on": ["616_recovered_036"]
+    },
+    {
+      "id": "616_recovered_038",
+      "path": "supabase/_pipeline/_validierung/supplement-c365-cas-identifiers.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplement-c365-cas-identifiers.test.ts.",
+      "depends_on": ["616_recovered_037"]
+    },
+    {
+      "id": "616_recovered_039",
+      "path": "supabase/_pipeline/_validierung/supplements-c454-configured-injection-areas.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c454-configured-injection-areas.test.ts.",
+      "depends_on": ["616_recovered_038"]
+    },
+    {
+      "id": "616_recovered_040",
+      "path": "supabase/_pipeline/_validierung/supplements-c455-injection-planner.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c455-injection-planner.test.ts.",
+      "depends_on": ["616_recovered_039"]
+    },
+    {
+      "id": "616_recovered_041",
+      "path": "supabase/_pipeline/_validierung/supplements-c456-cycles-protocols.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c456-cycles-protocols.test.ts.",
+      "depends_on": ["616_recovered_040"]
+    },
+    {
+      "id": "616_recovered_042",
+      "path": "supabase/_pipeline/_validierung/supplements-c485-dsld-import.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c485-dsld-import.test.ts.",
+      "depends_on": ["616_recovered_041"]
+    },
+    {
+      "id": "616_recovered_043",
+      "path": "supabase/_pipeline/_validierung/supplements-c489-product-name.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c489-product-name.test.ts.",
+      "depends_on": ["616_recovered_042"]
+    },
+    {
+      "id": "616_recovered_044",
+      "path": "supabase/_pipeline/_validierung/supplements-c495-supplier-product-catalog.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c495-supplier-product-catalog.test.ts.",
+      "depends_on": ["616_recovered_043"]
+    },
+    {
+      "id": "616_recovered_045",
+      "path": "supabase/_pipeline/_validierung/supplements-c496-c497-product-nutrients-preferences.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c496-c497-product-nutrients-preferences.test.ts.",
+      "depends_on": ["616_recovered_044"]
+    },
+    {
+      "id": "616_recovered_046",
+      "path": "supabase/_pipeline/_validierung/supplements-c498-c500-allergies-active-vitamine.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c498-c500-allergies-active-vitamine.test.ts.",
+      "depends_on": ["616_recovered_045"]
+    },
+    {
+      "id": "616_recovered_047",
+      "path": "supabase/_pipeline/_validierung/supplements-c504-database-filters.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c504-database-filters.test.ts.",
+      "depends_on": ["616_recovered_046"]
+    },
+    {
+      "id": "616_recovered_048",
+      "path": "supabase/_pipeline/_validierung/supplements-c505-ingredient-catalog.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c505-ingredient-catalog.test.ts.",
+      "depends_on": ["616_recovered_047"]
+    },
+    {
+      "id": "616_recovered_049",
+      "path": "supabase/_pipeline/_validierung/supplements-c511-preferences.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c511-preferences.test.ts.",
+      "depends_on": ["616_recovered_048"]
+    },
+    {
+      "id": "616_recovered_050",
+      "path": "supabase/_pipeline/_validierung/supplements-c512-serving-size-provenance.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c512-serving-size-provenance.test.ts.",
+      "depends_on": ["616_recovered_049"]
+    },
+    {
+      "id": "616_recovered_051",
+      "path": "supabase/_pipeline/_validierung/supplements-c514-existing-catalog-backlinks.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c514-existing-catalog-backlinks.test.ts.",
+      "depends_on": ["616_recovered_050"]
+    },
+    {
+      "id": "616_recovered_052",
+      "path": "supabase/_pipeline/_validierung/supplements-c515-wirkstoff-curation.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c515-wirkstoff-curation.test.ts.",
+      "depends_on": ["616_recovered_051"]
+    },
+    {
+      "id": "616_recovered_053",
+      "path": "supabase/_pipeline/_validierung/supplements-c520-search-product-forms.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c520-search-product-forms.test.ts.",
+      "depends_on": ["616_recovered_052"]
+    },
+    {
+      "id": "616_recovered_054",
+      "path": "supabase/_pipeline/_validierung/supplements-c529-stack-product-reference.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c529-stack-product-reference.test.ts.",
+      "depends_on": ["616_recovered_053"]
+    },
+    {
+      "id": "616_recovered_055",
+      "path": "supabase/_pipeline/_validierung/supplements-c532-label-statements.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-c532-label-statements.test.ts.",
+      "depends_on": ["616_recovered_054"]
+    },
+    {
+      "id": "616_recovered_056",
+      "path": "supabase/_pipeline/_validierung/supplements-g454-search-filters.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-g454-search-filters.test.ts.",
+      "depends_on": ["616_recovered_055"]
+    },
+    {
+      "id": "616_recovered_057",
+      "path": "supabase/_pipeline/_validierung/supplements-g463-search-window.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung supplements-g463-search-window.test.ts.",
+      "depends_on": ["616_recovered_056"]
+    },
+    {
+      "id": "616_recovered_058",
+      "path": "supabase/_pipeline/_validierung/training-c490-exercise-muscle-factors.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung training-c490-exercise-muscle-factors.test.ts.",
+      "depends_on": ["616_recovered_057"]
+    },
+    {
+      "id": "616_recovered_059",
+      "path": "supabase/_pipeline/_validierung/training-c491-muscle-levels.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung training-c491-muscle-levels.test.ts.",
+      "depends_on": ["616_recovered_058"]
+    },
+    {
+      "id": "616_recovered_060",
+      "path": "supabase/_pipeline/_validierung/training-c530-muscle-hierarchy.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung training-c530-muscle-hierarchy.test.ts.",
+      "depends_on": ["616_recovered_059"]
+    },
+    {
+      "id": "616_recovered_061",
+      "path": "supabase/_pipeline/_validierung/training-c531-muscle-alias-read.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung training-c531-muscle-alias-read.test.ts.",
+      "depends_on": ["616_recovered_060"]
+    },
+    {
+      "id": "616_recovered_062",
+      "path": "supabase/_pipeline/_validierung/training-c543-muscle-inheritance.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung training-c543-muscle-inheritance.test.ts.",
+      "depends_on": ["616_recovered_061"]
+    },
+    {
+      "id": "616_recovered_063",
+      "path": "supabase/_pipeline/_validierung/training-c546-muscle-anatomy.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung training-c546-muscle-anatomy.test.ts.",
+      "depends_on": ["616_recovered_062"]
+    },
+    {
+      "id": "616_recovered_064",
+      "path": "supabase/_pipeline/_validierung/training-c551-role-measurement-separation.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: nachregistrierte Altprüfung training-c551-role-measurement-separation.test.ts.",
+      "depends_on": ["616_recovered_063"]
+    },
+    {
+      "id": "616_recovered_065",
+      "path": "supabase/_pipeline/_validierung/v020_human_layer.sql",
+      "kind": "sql",
+      "creates": "G-616: nachregistrierte Altprüfung v020_human_layer.sql.",
+      "depends_on": ["616_recovered_064"]
+    },
+    {
+      "id": "616_recovered_066",
+      "path": "supabase/_pipeline/_validierung/v021_wild_category.sql",
+      "kind": "sql",
+      "creates": "G-616: nachregistrierte Altprüfung v021_wild_category.sql.",
+      "depends_on": ["616_recovered_065"]
+    },
+    {
+      "id": "616_recovered_067",
+      "path": "supabase/_pipeline/_validierung/v031_fettsaeuren.sql",
+      "kind": "sql",
+      "creates": "G-616: nachregistrierte Altprüfung v031_fettsaeuren.sql.",
+      "depends_on": ["616_recovered_066"]
+    },
+    {
+      "id": "616_recovered_068",
+      "path": "supabase/_pipeline/_validierung/v050_preferences.sql",
+      "kind": "sql",
+      "creates": "G-616: nachregistrierte Altprüfung v050_preferences.sql.",
+      "depends_on": ["616_recovered_067"]
+    },
+    {
+      "id": "616_recovered_069",
+      "path": "supabase/_pipeline/_validierung/v051_curation.sql",
+      "kind": "sql",
+      "creates": "G-616: nachregistrierte Altprüfung v051_curation.sql.",
+      "depends_on": ["616_recovered_068"]
+    },
+    {
+      "id": "616_recovered_070",
+      "path": "supabase/_pipeline/_validierung/v052_diary.sql",
+      "kind": "sql",
+      "creates": "G-616: nachregistrierte Altprüfung v052_diary.sql.",
+      "depends_on": ["616_recovered_069"]
+    },
+    {
+      "id": "616_recovered_071",
+      "path": "supabase/_pipeline/_validierung/v053_daily_summary.sql",
+      "kind": "sql",
+      "creates": "G-616: nachregistrierte Altprüfung v053_daily_summary.sql.",
+      "depends_on": ["616_recovered_070"]
+    },
+    {
+      "id": "616_recovered_072",
+      "path": "supabase/_pipeline/_validierung/v054_preference_uniques.sql",
+      "kind": "sql",
+      "creates": "G-616: nachregistrierte Altprüfung v054_preference_uniques.sql.",
+      "depends_on": ["616_recovered_071"]
+    },
+    {
+      "id": "616_recovered_073",
+      "path": "supabase/_pipeline/_validierung/v055_water.sql",
+      "kind": "sql",
+      "creates": "G-616: nachregistrierte Altprüfung v055_water.sql.",
+      "depends_on": ["616_recovered_072"]
+    },
+    {
+      "id": "616_recovered_074",
+      "path": "supabase/_pipeline/_validierung/v060_zugriff.sql",
+      "kind": "sql",
+      "creates": "G-616: nachregistrierte Altprüfung v060_zugriff.sql.",
+      "depends_on": ["616_recovered_073"]
+    },
+    {
+      "id": "616_recovered_075",
+      "path": "supabase/_pipeline/_validierung/v061_rollen.sql",
+      "kind": "sql",
+      "creates": "G-616: nachregistrierte Altprüfung v061_rollen.sql.",
+      "depends_on": ["616_recovered_074"]
+    },
+    {
+      "id": "616_recovered_076",
+      "path": "supabase/_pipeline/_validierung/v070_lesefunktionen.sql",
+      "kind": "sql",
+      "creates": "G-616: nachregistrierte Altprüfung v070_lesefunktionen.sql.",
+      "depends_on": ["616_recovered_075"]
+    },
+    {
+      "id": "616_recovered_077",
+      "path": "supabase/_pipeline/_validierung/v080_public_bereinigen.sql",
+      "kind": "sql",
+      "creates": "G-616: nachregistrierte Altprüfung v080_public_bereinigen.sql.",
+      "depends_on": ["616_recovered_076"]
+    },
+    {
+      "id": "616_recovered_078",
+      "path": "supabase/_pipeline/_validierung/v090_profile.sql",
+      "kind": "sql",
+      "creates": "G-616: nachregistrierte Altprüfung v090_profile.sql.",
+      "depends_on": ["616_recovered_077"]
+    },
+    {
+      "id": "616_nrf93_probe",
+      "path": "supabase/_pipeline/_validierung/nutrition-c324-nrf93-score.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: NRF9.3-Formel und Tagesstatus am aktuellen Seed.",
+      "depends_on": ["616_recovered_078"]
+    },
+    {
+      "id": "616_bls_censoring_probe",
+      "path": "supabase/_pipeline/_validierung/nutrition-c343-bls-censoring.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: BLS-Zensur und Tagesvollstaendigkeit.",
+      "depends_on": ["616_nrf93_probe"]
+    },
+    {
+      "id": "616_reference_priority_probe",
+      "path": "supabase/_pipeline/_validierung/nutrition-c350-reference-priority-and-vitamin-a.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: Referenzprioritaet und Tagesflags.",
+      "depends_on": ["616_bls_censoring_probe"]
+    },
+    {
+      "id": "616_curated_tags_probe",
+      "path": "supabase/_pipeline/_validierung/nutrition-c366-curated-food-tags.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: Kuration in Suche und Praeferenzzielen.",
+      "depends_on": ["616_reference_priority_probe"]
+    },
+    {
+      "id": "616_meal_slots_probe",
+      "path": "supabase/_pipeline/_validierung/nutrition-c392-meal-slots.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: Mahlzeitenslots und RLS.",
+      "depends_on": ["616_curated_tags_probe"]
+    },
+    {
+      "id": "616_plan_slot_copy_probe",
+      "path": "supabase/_pipeline/_validierung/nutrition-c396-meal-plan-slots.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: Eigener Plan behaelt Slotkopie.",
+      "depends_on": ["616_meal_slots_probe"]
+    },
+    {
+      "id": "616_reorder_probe",
+      "path": "supabase/_pipeline/_validierung/nutrition-c409-reorder-frequent-curation.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: Nachbestellung und Kuration.",
+      "depends_on": ["616_plan_slot_copy_probe"]
+    },
+    {
+      "id": "616_test_user_seed_probe",
+      "path": "supabase/_pipeline/_validierung/nutrition-c413-test-user-seed.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: Testnutzer-Grundbestand.",
+      "depends_on": ["616_reorder_probe"]
+    },
+    {
+      "id": "616_supplement_balance_probe",
+      "path": "supabase/_pipeline/_validierung/supplement-daily-balance.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: Supplementbilanz mit unbelegten Einnahmen.",
+      "depends_on": ["616_test_user_seed_probe"]
+    },
+    {
+      "id": "616_validation_coverage_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g616-validation-coverage.test.ts",
+      "kind": "tsx",
+      "creates": "G-616: Keine unverdrahtete Prüfdatei unter _validierung.",
+      "depends_on": ["616_supplement_balance_probe"]
     }
   ]
 }

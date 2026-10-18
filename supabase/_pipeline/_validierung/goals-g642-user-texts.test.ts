@@ -59,13 +59,12 @@ test('G-642-Wächter: wirksame Goals-Nutzertexte enthalten keine Ersatzschreibwe
       'fuer dieses Ziel laeuft bereits eine Phase',
     )
   }
-  const stale = /\b(?:ungueltig|Prioritaeten|muessen|gehoert|gehoeren|Plaetze|ueber|Koerpermessungen|Koerperstellen|waehlen|Koerpereinheit|Uebung|ueberschritten|fuer|Uebergang|ausschliesslich)\b/i
+  const stale = /\b(?:ungueltig|Gueltigkeitstag|Prioritaeten|muessen|gehoert|gehoeren|Plaetze|ueber|Koerpermessungen|Koerperstellen|waehlen|Koerpereinheit|Uebung|ueberschritten|fuer|Uebergang|ausschliesslich)\b/i
   const findings: string[] = []
   for (const { name, body } of definitions) {
     const literals = body.matchAll(/(?:RAISE EXCEPTION|format)\s*\(?\s*'((?:''|[^'])*)'/gi)
     for (const match of literals) {
       const phrase = match[1]
-      if (phrase === 'nutrition_targets: mehrere aktive Phasen am Gueltigkeitstag; Zielbezug fehlt') continue
       if (stale.test(phrase)) findings.push(`${name}: ${phrase}`)
     }
   }
@@ -74,4 +73,19 @@ test('G-642-Wächter: wirksame Goals-Nutzertexte enthalten keine Ersatzschreibwe
     if (stale.test(description)) findings.push(`goal_strategies: ${description}`)
   }
   assert.deepEqual(findings, [])
+})
+
+test('G-647: der letzte Satz ist UTF-8 und die Ersatzschreibung fehlt', () => {
+  const body = sql(`SELECT pg_get_functiondef(
+    'goals.berechne_zielwerte_g637_basis(uuid,date)'::regprocedure)`)
+  const checkedBody = process.env.G647_SABOTAGE === '1'
+    ? body.replace('am Gültigkeitstag', 'am Gueltigkeitstag') : body
+  assert.ok(checkedBody.includes('nutrition_targets: mehrere aktive Phasen am Gültigkeitstag; Zielbezug fehlt'))
+  assert.ok(!checkedBody.includes('am Gueltigkeitstag'))
+  const assignment = sql(`SELECT pg_get_functiondef(
+    'goals.nutrition_target_assign_phase()'::regprocedure)`)
+  assert.equal(assignment.match(/am Gültigkeitstag/g)?.length, 3)
+  assert.ok(!assignment.includes('Gueltigkeitstag'))
+  assert.equal(sql(`SELECT encode(convert_to('Diät','UTF8'),'hex')`), '4469c3a474')
+  assert.equal(sql(`SELECT encode(convert_to('Gültigkeitstag','UTF8'),'hex')`), '47c3bc6c7469676b65697473746167')
 })

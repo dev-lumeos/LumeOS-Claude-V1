@@ -97,7 +97,7 @@ test('C-410: eine gesetzte Kuration wirkt zugleich in food_search und im Prefere
     BEGIN;
     CREATE TEMP TABLE c410_probe ON COMMIT DROP AS
       SELECT
-        (SELECT id FROM auth.users WHERE email = 'dev@lumeos.app') AS user_id,
+        (SELECT id FROM auth.users WHERE email = 'tom.seed@example.com') AS user_id,
         (SELECT f.id
          FROM nutrition.foods f
          WHERE NOT EXISTS (

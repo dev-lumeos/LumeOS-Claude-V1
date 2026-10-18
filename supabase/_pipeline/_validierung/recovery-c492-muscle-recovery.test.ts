@@ -58,8 +58,9 @@ test('C-492: Basisprofil und Failure-Faktor sind getrennt, nachvollziehbar und r
     );
   `)
 
-  assert.equal(result.profiles, 105)
-  assert.deepEqual(result.profile_classes, { C: 105 })
+  // C-546 hat sieben Muskelgruppen samt Profilen ergänzt.
+  assert.equal(result.profiles, 112)
+  assert.deepEqual(result.profile_classes, { C: 112 })
   assert.ok(result.documented_sets >= 0)
   assert.equal(result.failure_factor, 1.37)
   assert.equal(result.biceps_hours, 36)

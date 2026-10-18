@@ -1389,6 +1389,7 @@
     },
     {"schema":"goals","tabelle":"user_goals","name":"b617_measurement_goal_snapshot","schritt":"617_measurement_goal_expansion"},
     {"schema":"goals","tabelle":"user_goals","name":"c617_measurement_snapshot_immutable","schritt":"617_measurement_goal_expansion"},
+    {"schema":"goals","tabelle":"user_goals","name":"g620_measurement_distance_immutable","schritt":"620_measurement_direction"},
     {"schema":"goals","tabelle":"manual_goal_values","name":"g617_manual_value_guard","schritt":"617_measurement_goal_expansion"},
     {"schema":"goals","tabelle":"manual_goal_values","name":"g617_manual_value_progress","schritt":"617_measurement_goal_expansion"},
     {"schema":"goals","tabelle":"body_circumferences","name":"g617_circumference_progress","schritt":"617_measurement_goal_expansion"},
@@ -2499,7 +2500,8 @@
         "start_source",
         "start_source_id",
         "start_measured_at",
-        "archived_at"
+        "archived_at",
+        "measurement_distance_m"
       ]
     },
     {"schema":"goals","name":"manual_goal_values","schritt":"617_measurement_goal_expansion","rls":true,"policies":["SELECT","INSERT","UPDATE","DELETE"],"grants":{"authenticated":["SELECT","INSERT","UPDATE","DELETE"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"G-617: nur eigene Handwerte an eigenen Zielen der Messart custom.","zeilenschutzart":"eigene_zeilen","spalten":["id","goal_id","user_id","measured_on","value","recorded_at"]},
@@ -6574,6 +6576,8 @@
     {"schema":"goals","name":"measurement_goal_create","schritt":"617_measurement_goal_expansion"},
     {"schema":"goals","name":"g617_measurement_goal_snapshot","schritt":"617_measurement_goal_expansion"},
     {"schema":"goals","name":"g617_measurement_snapshot_immutable","schritt":"617_measurement_goal_expansion"},
+    {"schema":"goals","name":"measurement_better_direction","schritt":"620_measurement_direction"},
+    {"schema":"goals","name":"g620_measurement_distance_immutable","schritt":"620_measurement_direction"},
     {"schema":"goals","name":"g617_manual_value_guard","schritt":"617_measurement_goal_expansion"},
     {"schema":"goals","name":"g617_refresh_from_measurement_source","schritt":"617_measurement_goal_expansion"},
     {

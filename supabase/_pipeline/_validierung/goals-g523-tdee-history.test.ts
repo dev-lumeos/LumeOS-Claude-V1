@@ -93,7 +93,7 @@ test('G-524/G-523: test-user nutzt Historie, Fremdzeilen bleiben unsichtbar', ()
     WITH users AS (
       SELECT
         (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local') AS test_id,
-        (SELECT id FROM auth.users WHERE email = 'dev@lumeos.app') AS other_id
+        (SELECT id FROM auth.users WHERE email = 'tom.seed@example.com') AS other_id
     )
     INSERT INTO goals.tdee_history (
       user_id, stichtag, window_days, complete_intake_days,
