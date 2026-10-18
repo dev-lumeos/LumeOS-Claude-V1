@@ -7,6 +7,8 @@ angelegt: 2026-09-27
 quellen:
   - docs/specs/Goals/FEATURES.md
   - docs/specs/Goals/DATABASE.md
+agent: codex
+beauftragt: 2026-10-18
 
 beruehrt:
   tabellen:
@@ -88,3 +90,11 @@ einer Funktion belegt ihren Lauf nicht.
 ## Bestandsprüfung - 2026-10-18 (Codex)
 
 `[read]` Fehlt: 13 Meilensteine aus den Testdaten, 0 automatisch erzeugt, 0 prozentual (25/50/75 %). Laut Claude Code legt das System Meilensteine selbst an. Das stimmt live nicht.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - Goals-Rest aus der Abnahme (Sammelauftrag 18.10.: G-667/668/669/670/646/525)
+    Bereich: supabase/_pipeline/ (Kette, Testdaten), Live dev nach A-105
+    Fremd:   docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-18, HEAD 4f45fd2d
+

@@ -4,6 +4,8 @@ typ: befund
 modul: goals
 schwere: mittel
 angelegt: 2026-10-18
+agent: codex
+beauftragt: 2026-10-18
 
 braucht: []
 kind_von: G-648
@@ -26,3 +28,11 @@ beruehrt:
 
 - Ein Leser für die Empfehlung nach der laufenden Phase: Startdatum (Ende der laufenden Position), Programm, Dauer und Grund aus den vorhandenen Regeln (Wachen, Übergangsregeln).
 - Ohne Regel keine Empfehlung, also nichts raten.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - Goals-Rest aus der Abnahme (Sammelauftrag 18.10.: G-667/668/669/670/646/525)
+    Bereich: supabase/_pipeline/ (Kette, Testdaten), Live dev nach A-105
+    Fremd:   docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-18, HEAD 4f45fd2d
+

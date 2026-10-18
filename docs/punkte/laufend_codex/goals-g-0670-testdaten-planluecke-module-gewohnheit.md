@@ -4,6 +4,8 @@ typ: befund
 modul: goals
 schwere: mittel
 angelegt: 2026-10-18
+agent: codex
+beauftragt: 2026-10-18
 
 braucht: []
 kind_von: G-648
@@ -31,3 +33,11 @@ beruehrt:
 - linked_modules wie im Entwurf: Kniebeuge mit Training, Ernährung und Recovery; Körperfett mit Messungen und Ernährung.
 - Gewohnheit mit 12 Wochen Verlauf.
 - Live auf dev nach A-105.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - Goals-Rest aus der Abnahme (Sammelauftrag 18.10.: G-667/668/669/670/646/525)
+    Bereich: supabase/_pipeline/ (Kette, Testdaten), Live dev nach A-105
+    Fremd:   docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-18, HEAD 4f45fd2d
+

@@ -4,6 +4,8 @@ typ: befund
 modul: goals
 schwere: mittel
 angelegt: 2026-10-18
+agent: claudecode
+beauftragt: 2026-10-18
 
 braucht: []
 kind_von: G-648
@@ -27,3 +29,11 @@ Entscheidung des Orchestrators wie bei G-666: Der Entwurf ist verbindlich, also 
 
 - Die drei Abschnitte entfernen und die Aufrufer per `rg` belegen. Was danach keinen Aufrufer mehr hat, mit entfernen.
 - Fehlende Mockup-Titel melden. Den Eintrag macht der Orchestrator, Tom hat dafür am 18.10. freigegeben.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER claudecode - G-671 Mockup-Reste unter der Phase Engine
+    Bereich: apps/web
+    Fremd:   docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-18, HEAD 4f45fd2d
+

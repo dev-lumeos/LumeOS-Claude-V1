@@ -4,6 +4,8 @@ typ: aufgabe
 modul: goals
 schwere: mittel
 angelegt: 2026-10-16
+agent: codex
+beauftragt: 2026-10-18
 
 braucht: [G-631]
 kind_von: G-631
@@ -29,3 +31,11 @@ beruehrt:
 ## Bestandsprüfung - 2026-10-18 (Codex)
 
 `[read]` Fehlt noch im Startwert-Leser: Der dev-Trend ist 84,762 kg, die Vorschau zeigt weiterhin die Rohmessung 84,73 kg.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - Goals-Rest aus der Abnahme (Sammelauftrag 18.10.: G-667/668/669/670/646/525)
+    Bereich: supabase/_pipeline/ (Kette, Testdaten), Live dev nach A-105
+    Fremd:   docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-18, HEAD 4f45fd2d
+
