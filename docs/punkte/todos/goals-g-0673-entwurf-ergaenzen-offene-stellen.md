@@ -34,3 +34,16 @@ beruehrt:
 
 - Die fünf Stellen im Design-Artefakt ergänzen. Das ist der Prototyp TsYCzByHS8Rpus6sfcgU7u, die Repo-Kopie liegt unter `entwurf/`.
 - Tom legt die Ergänzungen vor. Erst nach seiner Freigabe werden Aufträge an Codex und Claude Code daraus.
+
+## Ergebnis (18.10.)
+
+`[read]` Im Artefakt stehen jetzt die Versionen 55 bis 57. Die Repo-Kopie ist nachgezogen.
+1. Vorschau: Der Block "Neue Rechnung" zeigt bisher → neu für Tagesziel, Tempo, "nach Plan erreicht" und Phase, dazu die Grenzen.
+2. Phasen: Vergangene sind gesperrt. In der laufenden gibt es nur ± Wochen und "Hier beenden". Geplante sind frei.
+3. Aktiver Plan: Er darf in den Papierkorb, danach gilt Erhaltung mit Warnung.
+4. Datenpunkt: Er klappt die Einheit bzw. Messung auf, mit einem Link ins Modul.
+5. Coach-Freigabe: Sie stand schon im Entwurf. Sie kommt mit dem Coach-Modul.
+
+`[read]` Tom hat 13:10 die vier Stellen freigegeben. Dazu kam ein Papierkorb statt endgültigem Löschen.
+Um 13:16 hat er entschieden: Der Papierkorb gilt über alle Module, ohne automatisches Entfernen.
+Daraus sind G-674 (UI), G-675 (Kette Goals) und G-676 (Papierkorb plattformweit) entstanden.

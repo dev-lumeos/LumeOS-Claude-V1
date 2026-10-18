@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 277 |
+| `todos` | 280 |
 | `laufend_codex` | 6 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 725 |
-| **gesamt** | **1010** |
+| **gesamt** | **1013** |
 
 ## medical — 50
 
@@ -592,7 +592,7 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 142
+## goals — 144
 
 ### beauftragbar — 135
 
@@ -732,9 +732,9 @@
 | `G-669` | befund | mittel | ["Als nächstes" ohne Datum, Dauer und Grund](laufend_codex/goals-g-0669-als-naechstes-ohne-datum-dauer-grund.md) | laeuft (codex) | — | — |
 | `G-670` | befund | mittel | [Testdaten: Planlücke, leere linked_modules, Gewohnheitsserie](laufend_codex/goals-g-0670-testdaten-planluecke-module-gewohnheit.md) | laeuft (codex) | — | — |
 | `G-671` | befund | mittel | [Reste der Mockup-Referenz unter der Phase Engine](laufend_claudecode/goals-g-0671-mockup-reste-unter-der-phase-engine.md) | laeuft (claudecode) | — | — |
-| `G-673` | aufgabe | mittel | [Entwurf ergänzen: fünf offene Stellen aus der Abnahme](todos/goals-g-0673-entwurf-ergaenzen-offene-stellen.md) | offen | — | — |
+| `G-673` | aufgabe | mittel | [Entwurf ergänzen: fünf offene Stellen aus der Abnahme](todos/goals-g-0673-entwurf-ergaenzen-offene-stellen.md) | offen | — | G-674, G-675, G-676 |
 
-### wartet auf Blocker — 7
+### wartet auf Blocker — 9
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -745,6 +745,8 @@
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
 | `G-672` | idee | niedrig | [Meilensteine von Hand setzen (mögliches Add-on)](todos/goals-g-0672-meilensteine-von-hand-setzen.md) | offen | G-525 | — |
+| `G-674` | aufgabe | mittel | [UI: die Ergänzungen aus dem Entwurf (Vorschau, Datenpunkt, Phasensperre, Papierkorb)](todos/goals-g-0674-ui-entwurfsergaenzungen.md) | offen | G-675 | — |
+| `G-675` | aufgabe | hoch | [Kette: Vorschau beim Bearbeiten, Phasensperre, Papierkorb für Goals und die Phase Engine](todos/goals-g-0675-kette-vorschau-phasensperre-papierkorb.md) | offen | G-676 | — |
 
 ## coach — 58
 
@@ -1096,6 +1098,12 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-465` | feature | hoch | [die Auslieferung bauen](erledigt/marketplace-c-0465-die-auslieferung-bauen.md) | erledigt | — | — |
+
+## plattform — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-676` | aufgabe | hoch | [Papierkorb über alle Module](todos/plattform-g-0676-papierkorb-ueber-alle-module.md) | offen | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

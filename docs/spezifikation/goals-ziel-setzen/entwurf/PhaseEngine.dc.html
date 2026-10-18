@@ -157,16 +157,33 @@ a{color:oklch(0.50 0.13 90)}a:hover{color:oklch(0.40 0.13 90)}
 <span class="lbl" style="margin:0">Phasen</span>
 <sc-for list="{{ed.phasen}}" as="p" hint-placeholder-count="3">
 <div style="border:1px solid oklch(0.92 0.003 270);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:8px">
+<sc-if value="{{p.vorbei}}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;grid-template-columns:minmax(0,2fr) auto minmax(0,1.5fr) auto;gap:8px;align-items:center;color:oklch(0.45 0.005 270)">
+<span style="font-weight:600">{{p.prog}}</span><span class="num">{{p.wo}} Wo</span><span class="num" style="font-size:12px">{{p.zeit}}</span><span class="chip" style="background:oklch(0.96 0.003 270)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>vorbei · nur ansehen</span>
+</div>
+<div style="font-size:11.5px;color:oklch(0.50 0.005 270)">Vergangene Phasen sind Verlauf: Tagesziele und Wochenprotokoll beziehen sich auf sie. Ändern geht nicht; „Als Vorlage speichern“ übernimmt sie trotzdem.</div>
+</sc-if>
+<sc-if value="{{p.laeuft}}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;grid-template-columns:minmax(0,2fr) auto minmax(0,1.5fr) auto;gap:8px;align-items:center">
+<span style="font-weight:600">{{p.prog}} <span class="chip" style="margin-left:6px;color:oklch(0.42 0.09 165);border-color:oklch(0.82 0.06 165)">● läuft</span></span>
+<div style="display:flex;gap:4px;align-items:center"><button class="btn ico" aria-label="Woche weniger" onClick="{{p.minus}}">−</button><span class="num" style="min-width:56px;text-align:center">{{p.wo}} Wo</span><button class="btn ico" aria-label="Woche mehr" onClick="{{p.plus}}">+</button></div>
+<span class="num" style="font-size:12px;color:oklch(0.45 0.005 270)">{{p.zeit}}</span>
+<button class="btn" onClick="{{p.beendenHier}}">Hier beenden</button>
+</div>
+<div style="font-size:11.5px;color:oklch(0.50 0.005 270)">Laufende Phase: Länge änderbar, nie vor heute. Programm wechseln = „Hier beenden“ und danach eine neue Phase anfügen; der Beginn bleibt.</div>
+</sc-if>
+<sc-if value="{{p.geplant}}" hint-placeholder-val="{{ true }}">
 <div style="display:grid;grid-template-columns:minmax(0,2fr) auto minmax(0,1.5fr) 36px;gap:8px;align-items:center">
 <select class="inp" aria-label="Programm" value="{{p.prog}}" onChange="{{p.setProg}}"><option>early</option><option>mid</option><option>late</option><option>Peak Week</option><option>Lean Bulk</option><option>Clean Bulk</option><option>Mini Cut</option><option>Moderate Cut</option><option>Halten</option><option>Diet Break</option><option>Reverse Diet</option><option>Eigene Werte</option></select>
 <div style="display:flex;gap:4px;align-items:center"><button class="btn ico" aria-label="Woche weniger" onClick="{{p.minus}}">−</button><span class="num" style="min-width:56px;text-align:center">{{p.wo}} Wo</span><button class="btn ico" aria-label="Woche mehr" onClick="{{p.plus}}">+</button></div>
 <span class="num" style="font-size:12px;color:oklch(0.45 0.005 270)">{{p.zeit}}</span>
 <button class="btn btn-g ico" aria-label="Phase entfernen" onClick="{{p.del}}">✕</button>
 </div>
-<sc-if value="{{p.normal}}" hint-placeholder-val="{{ true }}">
+</sc-if>
+<sc-if value="{{p.normalOffen}}" hint-placeholder-val="{{ true }}">
 <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><span style="font-size:11px;color:oklch(0.50 0.005 270)">Werte des Programms:</span><sc-for list="{{p.werte}}" as="w" hint-placeholder-count="5"><span class="chip" style="background:oklch(0.98 0.002 270)"><span style="color:oklch(0.55 0.005 270)">{{w.l}}</span> <b class="num">{{w.v}}</b></span></sc-for></div>
 </sc-if>
-<sc-if value="{{p.custom}}" hint-placeholder-val="{{ false }}">
+<sc-if value="{{p.customOffen}}" hint-placeholder-val="{{ false }}">
 <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px">
 <sc-for list="{{p.felder}}" as="f" hint-placeholder-count="5"><div><label class="lbl" for="pf-{{p.id}}-{{f.k}}">{{f.l}}</label><input id="pf-{{p.id}}-{{f.k}}" class="inp num" style="width:100%" value="{{f.v}}" onChange="{{f.set}}"></div></sc-for>
 </div>
@@ -182,7 +199,7 @@ a{color:oklch(0.50 0.13 90)}a:hover{color:oklch(0.40 0.13 90)}
 <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-p" disabled="{{ed.gesperrt}}" onClick="{{closeEdit}}">Speichern</button><button class="btn" disabled="{{ed.gesperrt}}" onClick="{{closeEdit}}">Speichern und neu berechnen</button><button class="btn" onClick="{{ed.vorlage}}">Als Vorlage speichern</button></div>
 <div style="display:flex;gap:8px;flex-wrap:wrap"><sc-if value="{{ed.istAktiv}}" hint-placeholder-val="{{ true }}"><button class="btn" onClick="{{ed.pausieren}}">Pausieren</button><button class="btn" onClick="{{ed.beenden}}">Beenden</button></sc-if><button class="btn btn-r" onClick="{{ed.askDel}}">Löschen</button></div>
 </div>
-<sc-if value="{{ed.confirm}}" hint-placeholder-val="{{ false }}"><div style="border:1px solid oklch(0.80 0.08 25);background:oklch(0.97 0.02 25);border-radius:8px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><span>Plan „{{ed.name}}“ mit allen Phasen endgültig löschen?</span><div style="display:flex;gap:8px"><button class="btn" onClick="{{ed.askDel}}">Abbrechen</button><button class="btn btn-r" onClick="{{ed.del}}">Endgültig löschen</button></div></div></sc-if>
+<sc-if value="{{ed.confirm}}" hint-placeholder-val="{{ false }}"><div style="border:1px solid oklch(0.80 0.08 25);background:oklch(0.97 0.02 25);border-radius:8px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><span><sc-if value="{{ed.istAktiv}}" hint-placeholder-val="{{ false }}"><b>Aktiven Plan „{{ed.name}}“ in den Papierkorb legen?</b> Dein Ziel bleibt, läuft aber ohne Plan auf Erhaltung (2.650 kcal) mit Warnung, bis du einen anderen Plan aktivierst. Im Papierkorb bleibt er mit allen Phasen und dem Wochenprotokoll; zurück kommt er als Entwurf. „Beenden“ legt ihn stattdessen unter „Abgeschlossene Pläne“ ab.</sc-if><sc-if value="{{ed.nichtAktiv}}" hint-placeholder-val="{{ true }}">Plan „{{ed.name}}“ in den Papierkorb legen? Jederzeit zurückholbar.</sc-if></span><div style="display:flex;gap:8px"><button class="btn" onClick="{{ed.askDel}}">Abbrechen</button><button class="btn btn-r" onClick="{{ed.del}}">In den Papierkorb</button></div></div></sc-if>
 </section>
 </sc-if>
 
@@ -235,6 +252,26 @@ a{color:oklch(0.50 0.13 90)}a:hover{color:oklch(0.40 0.13 90)}
 </div>
 </section>
 
+
+<!-- PAPIERKORB -->
+<section aria-label="Papierkorb" class="card" style="padding:14px 18px;display:flex;flex-direction:column;gap:6px">
+<button onClick="{{pk.toggle}}" style="display:flex;justify-content:space-between;align-items:center;min-height:36px;background:none;border:0;font:inherit;cursor:pointer;text-align:left;padding:0">
+<span class="eb">Papierkorb · {{pk.count}}</span><span>{{pk.pfeil}}</span>
+</button>
+<sc-if value="{{pk.offen}}" hint-placeholder-val="{{ true }}">
+<sc-if value="{{pk.leer}}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px;color:oklch(0.50 0.005 270)">Leer. Gelöschtes landet hier und bleibt, bis du es endgültig löschst. Nichts wird automatisch entfernt.</div></sc-if>
+<sc-for list="{{pk.items}}" as="k" hint-placeholder-count="2">
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:8px 10px;background:oklch(0.99 0.002 270);border:1px dashed oklch(0.85 0.004 270);border-radius:6px;margin-top:6px">
+<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="oklch(0.50 0.005 270)" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"></path></svg>
+<div style="flex:1 1 240px;min-width:0"><div style="font-weight:600;font-size:12.5px">{{k.titel}}</div><div class="num" style="font-size:10.5px;color:oklch(0.50 0.005 270)">{{k.art}} · gelöscht {{k.wann}}</div></div>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-p" onClick="{{k.zurueck}}">Wiederherstellen</button><button class="btn btn-r" onClick="{{k.askWeg}}">Endgültig löschen</button></div>
+<sc-if value="{{k.confirm}}" hint-placeholder-val="{{ false }}"><div style="flex-basis:100%;border:1px solid oklch(0.80 0.08 25);background:oklch(0.97 0.02 25);border-radius:8px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><span><b>Endgültig löschen?</b> Das lässt sich nicht rückgängig machen.</span><div style="display:flex;gap:8px"><button class="btn" onClick="{{k.cancel}}">Abbrechen</button><button class="btn btn-r" onClick="{{k.weg}}">Endgültig löschen</button></div></div></sc-if>
+</div>
+</sc-for>
+<div style="font-size:11.5px;color:oklch(0.50 0.005 270);margin-top:4px">{{pk.hinweis}}</div>
+</sc-if>
+</section>
+
 <!-- VORLAGEN -->
 <section aria-label="Vorlagen" class="card" style="padding:18px;display:flex;flex-direction:column;gap:10px">
 <span class="eb">Vorlagen</span>
@@ -255,15 +292,17 @@ a{color:oklch(0.50 0.13 90)}a:hover{color:oklch(0.40 0.13 90)}
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
 class Component extends DCLogic {
   constructor(p){ super(p); this.state = this.start(); }
-  start(){ return { grad:'pro', coach:true, det:true, edit:null, confirmDel:false, neu:false, neuName:'Neuer Plan', neuQuelle:'prep', akt:null, wahl:null, userOk:false, coachOk:false, toast:'', offenFertig:null, eigene:[],
+  start(){ return { grad:'pro', coach:true, det:true, edit:null, confirmDel:false, neu:false, neuName:'Neuer Plan', neuQuelle:'prep', akt:null, wahl:null, userOk:false, coachOk:false, toast:'', offenFertig:null, eigene:[], pkOpen:true, pkConfirm:null,
     plans: [
-      { id:'lean', name:'Lean Bulk bis Dezember', typ:'Einfacher Plan · aus Goals', status:'aktiv', anker:'start', start:'2026-06-12', termine:[], phasen:[{id:'p1',prog:'Lean Bulk',wo:27}] },
+      { id:'lean', name:'Lean Bulk bis Dezember', typ:'Einfacher Plan · aus Goals', status:'aktiv', anker:'start', start:'2026-05-29', termine:[], phasen:[{id:'p0',prog:'Halten',wo:2},{id:'p1',prog:'Lean Bulk',wo:27}] },
       { id:'prep', name:'Contest Prep 2027', typ:'Contest Prep', status:'entwurf', anker:'A', termine:[{id:'t1',name:'NPC Classic Bangkok',art:'A',datum:'2027-02-04'},{id:'t2',name:'Samui Open',art:'B',datum:'2027-03-04'},{id:'t3',name:'Urlaub Familie',art:'S',datum:'2026-12-20'}], phasen:[{id:'q1',prog:'early',wo:6},{id:'q2',prog:'mid',wo:7},{id:'q3',prog:'late',wo:2},{id:'q4',prog:'Peak Week',wo:1}] },
       { id:'off', name:'Off-Season 2027', typ:'Expert BB Jahreszyklus', status:'entwurf', anker:'start', start:'2027-03-15', termine:[], phasen:[{id:'o1',prog:'Reverse Diet',wo:8},{id:'o2',prog:'Lean Bulk',wo:20},{id:'o5',prog:'Eigene Werte',wo:6,cv:{kcal:'−10',prot:'2,6',fett:'0,7',cardio:'4',refeed:'2'}},{id:'o3',prog:'Mini Cut',wo:4},{id:'o4',prog:'Lean Bulk',wo:12}] },
       { id:'f1', name:'Frühjahrs-Cut 2026', typ:'Einfacher Plan · aus Goals', status:'fertig', ergebnis:'erreicht', info:'06.01.–25.03.2026 · 88,6 → 84,0 kg', detail:'Moderate Cut, 11 Wochen, Ziel 84,0 kg am 25.03. erreicht.', phasen:[{prog:'Moderate Cut',wo:11}] },
-      { id:'f2', name:'Contest Prep 2025', typ:'Contest Prep', status:'fertig', ergebnis:'Termin gehalten', info:'02.06.–22.09.2025 · Bühnengewicht 79,4 kg', detail:'16 Wochen, 4 Stufen, eine Diätpause. Reverse Diet danach 10 Wochen.', phasen:[{prog:'early',wo:6},{prog:'mid',wo:7},{prog:'late',wo:2},{prog:'Peak Week',wo:1}] }
+      { id:'f2', name:'Contest Prep 2025', typ:'Contest Prep', status:'fertig', ergebnis:'Termin gehalten', info:'02.06.–22.09.2025 · Bühnengewicht 79,4 kg', detail:'16 Wochen, 4 Stufen, eine Diätpause. Reverse Diet danach 10 Wochen.', phasen:[{prog:'early',wo:6},{prog:'mid',wo:7},{prog:'late',wo:2},{prog:'Peak Week',wo:1}] },
+      { id:'alt', name:'Mini Cut August', typ:'Mini-Cut-Block', status:'papierkorb', vorStatus:'entwurf', wann:'vor 12 Tagen', anker:'start', start:'2026-08-03', termine:[], phasen:[{id:'m1',prog:'Mini Cut',wo:4}] }
     ] }; }
   set(o){ this.setState(o); }
+  wegLegen(p, toast){ this.set({ edit:null, confirmDel:false, toast, plans: this.state.plans.map(x => x.id===p.id ? Object.assign({}, x, { status:'papierkorb', vorStatus: x.status, wann:'heute' }) : x) }); }
   upd(id, f){ this.set({ plans: this.state.plans.map(p => p.id===id ? f(Object.assign({}, p)) : p) }); }
   renderVals() {
     const s = this.state;
@@ -314,7 +353,7 @@ class Component extends DCLogic {
       let fehler = '';
       if (ep.anker==='A' && !r.A) fehler = 'Dieser Plan rechnet vom Hauptwettkampf rückwärts – lege einen Termin der Art „Wettkampf A“ an.';
       else if (ep.anker==='A' && ep.status!=='aktiv' && r.start < HEUTE) fehler = 'Termin zu nah: die Phasen brauchen '+r.total+' Wochen, der erste A-Termin ist in '+((r.A-HEUTE)/86400000/7).toFixed(1).replace('.',',')+' Wochen. Phasen kürzen oder Termin verschieben.';
-      ed = { name: ep.name, status: ep.status==='aktiv'?'aktiver Plan':ep.status, istAktiv: ep.status==='aktiv', fehler, gesperrt: !!fehler, confirm: s.confirmDel,
+      ed = { name: ep.name, status: ep.status==='aktiv'?'aktiver Plan':ep.status, istAktiv: ep.status==='aktiv', nichtAktiv: ep.status!=='aktiv', fehler, gesperrt: !!fehler, confirm: s.confirmDel,
         setName: e => this.upd(ep.id, p => (p.name = e.target.value, p)),
         termine: (ep.termine||[]).map(t => ({ name:t.name, art:t.art, datum:t.datum,
           setName: e => this.upd(ep.id, p => (p.termine = p.termine.map(x => x.id===t.id ? Object.assign({}, x, {name:e.target.value}) : x), p)),
@@ -322,20 +361,22 @@ class Component extends DCLogic {
           setDatum: e => this.upd(ep.id, p => (p.termine = p.termine.map(x => x.id===t.id ? Object.assign({}, x, {datum:e.target.value}) : x), p)),
           del: () => this.upd(ep.id, p => (p.termine = p.termine.filter(x => x.id!==t.id), p)) })),
         addTermin: () => this.upd(ep.id, p => (p.termine = (p.termine||[]).concat([{ id:'t'+Date.now(), name:'Neuer Termin', art:'X', datum:iso(plusW(HEUTE,8)) }]), p)),
-        phasen: r.phasen.map(x => ({ id:x.id, prog:x.prog, wo:x.wo, zeit: dstr(x.a)+' – '+dstr(x.e),
-          custom: x.prog==='Eigene Werte', normal: x.prog!=='Eigene Werte',
+        phasen: r.phasen.map(x => { const vorbei = ep.status==='aktiv' && x.e <= HEUTE, laeuft = ep.status==='aktiv' && x.a <= HEUTE && HEUTE < x.e, geplant = !vorbei && !laeuft; return ({ id:x.id, prog:x.prog, wo:x.wo, zeit: dstr(x.a)+' – '+dstr(x.e),
+          vorbei, laeuft, geplant,
+          custom: x.prog==='Eigene Werte', normal: x.prog!=='Eigene Werte', customOffen: geplant && x.prog==='Eigene Werte', normalOffen: !vorbei && x.prog!=='Eigene Werte',
+          beendenHier: () => this.upd(ep.id, p => (p.phasen = p.phasen.map(y => y.id===x.id ? Object.assign({}, y, {wo: Math.max(1, Math.ceil((HEUTE - x.a)/86400000/7))}) : y), p)),
           werte: (WERTE[x.prog]||[]).map((v,i) => ({ l:['kcal','Protein','Fett','Cardio','Refeed'][i], v })),
           felder: [['kcal','kcal % zu Erhaltung'],['prot','Protein g/kg'],['fett','Fett g/kg'],['cardio','Cardio/Wo'],['refeed','Refeed/Wo']].map(([k,l]) => ({ k, l, v: ((x.cv||{})[k]) || '', set: e => this.upd(ep.id, p => (p.phasen = p.phasen.map(y => y.id===x.id ? Object.assign({}, y, { cv: Object.assign({}, y.cv||{}, { [k]: e.target.value }) }) : y), p)) })),
           setProg: e => this.upd(ep.id, p => (p.phasen = p.phasen.map(y => y.id===x.id ? Object.assign({}, y, {prog:e.target.value}) : y), p)),
           plus: () => this.upd(ep.id, p => (p.phasen = p.phasen.map(y => y.id===x.id ? Object.assign({}, y, {wo:y.wo+1}) : y), p)),
           minus: () => this.upd(ep.id, p => (p.phasen = p.phasen.map(y => y.id===x.id ? Object.assign({}, y, {wo:Math.max(1,y.wo-1)}) : y), p)),
-          del: () => this.upd(ep.id, p => (p.phasen = p.phasen.filter(y => y.id!==x.id), p)) })),
+          del: () => this.upd(ep.id, p => (p.phasen = p.phasen.filter(y => y.id!==x.id), p)) }); }),
         addPhase: () => this.upd(ep.id, p => (p.phasen = p.phasen.concat([{ id:'n'+Date.now(), prog:'Halten', wo:4 }]), p)),
         vorlage: () => this.set({ eigene: s.eigene.concat([ep.name]), toast:'„'+ep.name+'“ als eigene Vorlage gespeichert.' }),
         pausieren: () => { this.upd(ep.id, p => (p.status='pausiert', p)); this.set({ edit:null, toast:'Plan pausiert. Kein Plan aktiv – Erhaltung mit Warnung.' }); },
         beenden: () => { this.upd(ep.id, p => (p.status='fertig', p.ergebnis='beendet', p.info='beendet am 08.10.2026', p.detail='Von dir beendet.', p)); this.set({ edit:null, toast:'Plan beendet und unter „Abgeschlossene Pläne“ abgelegt.' }); },
         askDel: () => this.set({ confirmDel: !s.confirmDel }),
-        del: () => this.set({ plans: s.plans.filter(p => p.id!==ep.id), edit:null, confirmDel:false, toast:'Plan „'+ep.name+'“ gelöscht.' }) };
+        del: () => this.wegLegen(ep, ep.status==='aktiv' ? 'Aktiver Plan „'+ep.name+'“ liegt im Papierkorb. Kein Plan aktiv – Erhaltung mit Warnung.' : 'Plan „'+ep.name+'“ liegt im Papierkorb.') };
     }
     // Weitere
     const weitere = s.plans.filter(p => p.status==='entwurf' || p.status==='pausiert').map(p => {
@@ -345,7 +386,7 @@ class Component extends DCLogic {
       const gesperrt = !!fehler || (aktiv && !s.wahl) || (mitBest && (!s.userOk || (s.coach && !s.coachOk)));
       return { name:p.name, typ:p.typ, status: p.status==='entwurf'?'Entwurf':'pausiert',
         info: (r.A ? 'A '+dstr(r.A)+' · ' : '')+'Start '+dstr(r.start)+' · '+r.total+' Wochen', segmente: segmente(p),
-        edit: () => this.set({ edit:p.id, confirmDel:false }), del: () => this.set({ plans: s.plans.filter(x=>x.id!==p.id), toast:'Plan „'+p.name+'“ gelöscht.' }),
+        edit: () => this.set({ edit:p.id, confirmDel:false }), del: () => this.wegLegen(p, 'Plan „'+p.name+'“ liegt im Papierkorb.'),
         aktivieren: () => this.set({ akt: frage?null:p.id, wahl:null, userOk:false, coachOk:false }), frage, mitAktiv: !!aktiv, mitBest, fehler, gesperrt,
         wahl: [['pausiert','pausieren'],['fertig','beenden']].map(([v,label]) => ({ label, style: s.wahl===v?sel:'', pick: () => this.set({ wahl:v }) })),
         userOk: s.userOk, toggleUser: () => this.set({ userOk: !s.userOk }), coachOffen: s.coach && !s.coachOk, coachStatus: s.coachOk?'hat freigegeben ✓':'Freigabe angefragt …', coachOk: () => this.set({ coachOk:true }),
@@ -358,7 +399,14 @@ class Component extends DCLogic {
       toggle: () => this.set({ offenFertig: s.offenFertig===p.id?null:p.id }),
       vorlage: () => this.set({ eigene: s.eigene.concat([p.name]), toast:'„'+p.name+'“ als eigene Vorlage gespeichert.' }),
       neu: () => this.set({ plans: s.plans.concat([{ id:'n'+Date.now(), name:p.name+' (neu)', typ:p.typ, status:'entwurf', anker: p.typ==='Contest Prep'?'A':'start', start:iso(plusW(HEUTE,1)), termine: p.typ==='Contest Prep'?[{id:'ta',name:'Hauptwettkampf',art:'A',datum:iso(plusW(HEUTE,18))}]:[], phasen: p.phasen.map((x,i)=>Object.assign({id:'c'+i}, x)) }]), toast:'Neuer Entwurf aus „'+p.name+'“ unter „Weitere Pläne“.' }),
-      del: () => this.set({ plans: s.plans.filter(x=>x.id!==p.id), toast:'„'+p.name+'“ gelöscht.' }) }));
+      del: () => this.wegLegen(p, '„'+p.name+'“ liegt im Papierkorb.') }));
+    const pkPl = s.plans.filter(p => p.status==='papierkorb');
+    const pk = { count: pkPl.length, leer: !pkPl.length, offen: s.pkOpen, pfeil: s.pkOpen?'▴':'▾', toggle: () => this.set({ pkOpen: !s.pkOpen }),
+      hinweis: 'Ein Plan, der beim Löschen aktiv war, kommt als Entwurf zurück und muss neu aktiviert werden. Abgeschlossene und Entwürfe kommen an ihren alten Platz. Hier stehen nur die Einträge dieses Bereichs; alles Gelöschte aus allen Modulen zeigt der zentrale Papierkorb unter Einstellungen.',
+      items: pkPl.map(p => ({ titel: p.name, art: p.typ+' · war '+({aktiv:'aktiv',entwurf:'Entwurf',pausiert:'pausiert',fertig:'abgeschlossen'}[p.vorStatus]||p.vorStatus), wann: p.wann, confirm: s.pkConfirm===p.id,
+        zurueck: () => this.set({ pkConfirm:null, toast: p.vorStatus==='aktiv' ? '„'+p.name+'“ ist zurück als Entwurf unter „Weitere Pläne“.' : '„'+p.name+'“ wiederhergestellt.', plans: s.plans.map(x => x.id===p.id ? Object.assign({}, x, { status: x.vorStatus==='aktiv' ? 'entwurf' : x.vorStatus }) : x) }),
+        askWeg: () => this.set({ pkConfirm:p.id }), cancel: () => this.set({ pkConfirm:null }),
+        weg: () => this.set({ pkConfirm:null, plans: s.plans.filter(x => x.id!==p.id), toast:'„'+p.name+'“ endgültig gelöscht.' }) })) };
     const Q = [ ['prep','Contest Prep 16 Wochen','LumeOS-Standard · 4 Stufen, rückwärts vom Wettkampf',false], ['annual','Expert BB Jahreszyklus','LumeOS-Standard · 52 Wochen, Blöcke',false], ['mini','Mini-Cut-Block','LumeOS-Standard · 4 Wochen',false], ['leer','Leerer Plan','Phasen selbst zusammenstellen',false], ['eigen','Eigene Vorlage', s.eigene.length? s.eigene.join(', ') : 'noch keine gespeichert', !s.eigene.length], ['coach','Vom Coach','kommt mit dem Coach-Modul', true] ];
     const neuQuellen = Q.map(([id,n,i,aus]) => ({ n, i, aus, style: aus?'opacity:.5;cursor:not-allowed':(s.neuQuelle===id?'border:2px solid oklch(0.62 0.13 90);background:oklch(0.985 0.02 90)':''), pick: () => { if(!aus) this.set({ neuQuelle:id }); } }));
     const TPL = { prep:{typ:'Contest Prep',anker:'A',termine:[{id:'ta',name:'Hauptwettkampf',art:'A',datum:iso(plusW(HEUTE,20))}],phasen:[['early',6],['mid',7],['late',2],['Peak Week',1]]}, annual:{typ:'Expert BB Jahreszyklus',anker:'start',phasen:[['Reverse Diet',8],['Lean Bulk',20],['Mini Cut',4],['Lean Bulk',12],['Halten',8]]}, mini:{typ:'Mini-Cut-Block',anker:'start',phasen:[['Mini Cut',4]]}, leer:{typ:'Eigener Plan',anker:'start',phasen:[['Halten',4]]}, eigen:{typ:'aus eigener Vorlage',anker:'start',phasen:[['Lean Bulk',12]]} };
@@ -373,7 +421,7 @@ class Component extends DCLogic {
       hatAktiv: !!ak, keinAktiver: !ak, ak: ak || {}, aktivName: aktiv ? aktiv.name : '', monate, heuteL: pos(HEUTE).toFixed(2),
       detOffen: s.det, detPfeil: s.det?'▴':'▾', toggleDetails: () => this.set({ det: !s.det }),
       editOffen: !!ep, closeEdit: () => this.set({ edit:null, confirmDel:false }), ed,
-      weitere, fertig, fertigCount: fertig.length, vorlagen, wachen, anpassung };
+      weitere, fertig, fertigCount: fertig.length, vorlagen, wachen, anpassung, pk };
   }
 }
 </script>

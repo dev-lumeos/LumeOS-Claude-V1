@@ -24,6 +24,18 @@
       "element": "Expert BB annual",
       "grund": "ersetzt durch die Vorlage Expert BB Jahreszyklus (PhaseEngine.dc.html, G-644, G-666)",
       "freigabe": "Tom, 2026-10-18"
+    },
+    {
+      "modul": "goals",
+      "element": "Phase state machine",
+      "grund": "ersetzt durch Aktiver Plan und Phasen bearbeiten (PhaseEngine.dc.html, G-649, G-671)",
+      "freigabe": "Tom, 2026-10-18"
+    },
+    {
+      "modul": "goals",
+      "element": "Phase parameters",
+      "grund": "ersetzt durch die Programmwerte je Phase im Planer (PhaseEngine.dc.html, G-649, G-671)",
+      "freigabe": "Tom, 2026-10-18"
     }
   ]
 }
