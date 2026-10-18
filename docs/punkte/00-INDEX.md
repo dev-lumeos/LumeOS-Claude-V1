@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 280 |
+| `todos` | 279 |
 | `laufend_codex` | 6 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 725 |
+| `erledigt` | 726 |
 | **gesamt** | **1013** |
 
 ## medical — 50
@@ -732,7 +732,7 @@
 | `G-669` | befund | mittel | ["Als nächstes" ohne Datum, Dauer und Grund](laufend_codex/goals-g-0669-als-naechstes-ohne-datum-dauer-grund.md) | laeuft (codex) | — | — |
 | `G-670` | befund | mittel | [Testdaten: Planlücke, leere linked_modules, Gewohnheitsserie](laufend_codex/goals-g-0670-testdaten-planluecke-module-gewohnheit.md) | laeuft (codex) | — | — |
 | `G-671` | befund | mittel | [Reste der Mockup-Referenz unter der Phase Engine](laufend_claudecode/goals-g-0671-mockup-reste-unter-der-phase-engine.md) | laeuft (claudecode) | — | — |
-| `G-673` | aufgabe | mittel | [Entwurf ergänzen: fünf offene Stellen aus der Abnahme](todos/goals-g-0673-entwurf-ergaenzen-offene-stellen.md) | offen | — | G-674, G-675, G-676 |
+| `G-673` | aufgabe | mittel | [Entwurf ergänzen: fünf offene Stellen aus der Abnahme](erledigt/goals-g-0673-entwurf-ergaenzen-offene-stellen.md) | erledigt | — | G-674, G-675, G-676 |
 
 ### wartet auf Blocker — 9
 

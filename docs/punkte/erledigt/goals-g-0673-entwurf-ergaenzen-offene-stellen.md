@@ -4,6 +4,9 @@ typ: aufgabe
 modul: goals
 schwere: mittel
 angelegt: 2026-10-18
+agent: orchestrator
+erledigt: 2026-10-18
+commit: 672066c6
 
 braucht: []
 kind_von: G-648
