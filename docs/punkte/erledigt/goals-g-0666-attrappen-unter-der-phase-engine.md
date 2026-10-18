@@ -4,6 +4,10 @@ typ: aufgabe
 modul: goals
 schwere: mittel
 angelegt: 2026-10-18
+agent: claudecode
+beauftragt: 2026-10-18
+erledigt: 2026-10-18
+commit: d19da5b5
 
 braucht: []
 kind_von: G-649
@@ -49,3 +53,16 @@ Nicht anbinden, sondern entfernen. Die drei Abschnitte fallen weg. Eine zweite D
 ## Freigabe Tom - 2026-10-18 09:55
 
 [read] Tom erlaubt dem Orchestrator, fuer die entfernten Phase-Engine-Attrappen die Eintraege in mockup-verworfen.json zu machen. Die genauen Kacheltitel meldet Claude Code.
+
+## Erledigt - 2026-10-18, Commit `d19da5b5`
+
+`[read]` Claude Code: FehlendePhaseKacheln, die Kennzahlen, "Weekly auto-adjustment" und "Expert BB annual" sind entfernt, dazu die Felder in PHASE_STATE ohne Leser. Bild: `backup/g666-ist-phase-seite.png`.
+`[cmd]` mockup-verworfen: 2 Einträge mit Toms Freigabe (`a93a35b3`). Gate grün.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER claudecode - G-666 Attrappen unter der Phase Engine (Nachtrag 18.10.)
+    Bereich: apps/web
+    Fremd:   supabase/, docs/
+    Stand:   2026-10-18, HEAD aa684f6c
+

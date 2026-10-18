@@ -111,3 +111,16 @@ Offen:
 - Modul-Kacheln "kommt (offen)", bis G-522 live ist
 - Körperfett "hinterher", bis das Testziel neu angelegt ist (G-655)
 - 1 Konsolenfehler laut schuss.mjs
+
+## Abnahme - 2026-10-18, Commit `d19da5b5`
+
+`[read]` Claude Code hat 19 Ist-Bilder (`backup/abnahme4-*`) gegen g648/g649-soll gelegt und 14 Abweichungen behoben.
+Die übrigen Abweichungen stehen als eigene Punkte:
+- G-667: Kraftpunkte je Satz statt je Einheit
+- G-668: Planlinie und Soll Δ widersprechen sich
+- G-669: "Als nächstes" ohne Datum, Dauer und Grund
+- G-670: Testdaten (Planlücke, linked_modules, Gewohnheitsserie)
+- G-671: Reste der Mockup-Referenz unter der Phase Engine
+
+Bei Tom liegen noch: die Vorschau "neue Rechnung" (G-628), vergangene Phasen bearbeiten, Löschen beim aktiven Plan, Link vom Datenpunkt zur Einheit, Coach-Freigabe.
+`[cmd]` Gate grün beim Commit. Der Punkt ist mit dieser Abnahme geschlossen.

@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 278 |
+| `todos` | 282 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 724 |
-| **gesamt** | **1003** |
+| `erledigt` | 725 |
+| **gesamt** | **1008** |
 
 ## medical — 50
 
@@ -591,9 +591,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 135
+## goals — 140
 
-### beauftragbar — 129
+### beauftragbar — 134
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -708,7 +708,7 @@
 | `G-645` | fehler | mittel | [Goals und Phase Engine: Befunde am Schirm (dev, 10.10.)](todos/goals-g-0645-goals-reiter-befunde-am-schirm.md) | offen | — | — |
 | `G-646` | aufgabe | mittel | [Trendgewicht einbinden](todos/goals-g-0646-trendgewicht-einbinden.md) | offen | — | — |
 | `G-647` | fehler | niedrig | [Der Satz aus 622 steht noch ohne Umlaute](erledigt/goals-g-0647-622-satz-mit-umlauten.md) | erledigt | — | — |
-| `G-648` | fehler | hoch | [Reiter Goals weicht vom freigegebenen Entwurf ab](erledigt/goals-g-0648-reiter-goals-weicht-vom-entwurf-ab.md) | erledigt | — | G-652, G-657 |
+| `G-648` | fehler | hoch | [Reiter Goals weicht vom freigegebenen Entwurf ab](erledigt/goals-g-0648-reiter-goals-weicht-vom-entwurf-ab.md) | erledigt | — | G-652, G-657, G-667, G-668, G-669, G-670, G-671 |
 | `G-649` | fehler | hoch | [Phase Engine weicht vom freigegebenen Entwurf ab](erledigt/goals-g-0649-phase-engine-weicht-vom-entwurf-ab.md) | erledigt | — | G-656, G-666 |
 | `G-650` | aufgabe | hoch | [Leser für Verlauf, Prognose und Wochenwerte des steuernden Ziels](erledigt/goals-g-0650-leser-fuer-verlauf-prognose-wochen.md) | erledigt | — | G-653, G-654 |
 | `G-651` | befund | mittel | [Probe hängt am Datum: Tageskettenlauf 16.10. rot](erledigt/goals-g-0651-g617-probe-haengt-am-datum.md) | erledigt | — | — |
@@ -725,7 +725,12 @@
 | `G-663` | befund | hoch | [Eine einzelne Messung friert das Steuerziel als "erreicht" ein](erledigt/goals-g-0663-eine-einzelne-messung-friert-das-ziel-als-erreicht-ein.md) | erledigt | — | G-665 |
 | `G-664` | befund | mittel | [Testdaten mit Messungen in der Zukunft](erledigt/goals-g-0664-testdaten-mit-messungen-in-der-zukunft.md) | erledigt | — | — |
 | `G-665` | befund | hoch | [Meilenstein setzen verlangt ein Gewicht und schreibt es als Messung](erledigt/goals-g-0665-meilenstein-setzen-verlangt-und-schreibt-ein-gewicht.md) | erledigt | — | — |
-| `G-666` | aufgabe | mittel | [Attrappen unter der Phase Engine: Weekly auto-adjustment, Kennzahlen, Expert BB annual](todos/goals-g-0666-attrappen-unter-der-phase-engine.md) | offen | — | — |
+| `G-666` | aufgabe | mittel | [Attrappen unter der Phase Engine: Weekly auto-adjustment, Kennzahlen, Expert BB annual](erledigt/goals-g-0666-attrappen-unter-der-phase-engine.md) | erledigt | — | — |
+| `G-667` | befund | mittel | [Kraft-Messpunkte je Satz statt je Einheit](todos/goals-g-0667-kraftpunkte-je-satz-statt-je-einheit.md) | offen | — | — |
+| `G-668` | befund | mittel | [Planlinie steht bei 88,0, das Wochensoll meldet weiter +0,21](todos/goals-g-0668-planlinie-und-wochensoll-widersprechen-sich.md) | offen | — | — |
+| `G-669` | befund | mittel | ["Als nächstes" ohne Datum, Dauer und Grund](todos/goals-g-0669-als-naechstes-ohne-datum-dauer-grund.md) | offen | — | — |
+| `G-670` | befund | mittel | [Testdaten: Planlücke, leere linked_modules, Gewohnheitsserie](todos/goals-g-0670-testdaten-planluecke-module-gewohnheit.md) | offen | — | — |
+| `G-671` | befund | mittel | [Reste der Mockup-Referenz unter der Phase Engine](todos/goals-g-0671-mockup-reste-unter-der-phase-engine.md) | offen | — | — |
 
 ### wartet auf Blocker — 6
 
