@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: niedrig
 angelegt: 2026-10-08
+agent: codex
+beauftragt: 2026-10-18
 
 braucht: [G-617]
 kind_von: G-617
@@ -36,3 +38,11 @@ Datum des besten Werts.
 Vor dem Cardio-Modul: Richtung je Messart (hoeher/niedriger besser) festlegen,
 Dauer optional an Distanz binden, Fortschritt bei ,niedriger besser" pruefen,
 measured_at = Datum des gezaehlten Werts.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - G-620 Richtung je Messart (Sammelauftrag 18.10. mit G-616/G-620/G-647 + Bestandspruefung G-643/G-646/G-525)
+    Bereich: supabase/_pipeline/ (Kette), Live dev nach A-105 nur wo noetig
+    Fremd:   apps/, packages/, tools/, docs/
+    Stand:   2026-10-18, HEAD 2510f992
+
