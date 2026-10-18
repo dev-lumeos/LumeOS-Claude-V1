@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 278 |
-| `laufend_codex` | 6 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 726 |
-| **gesamt** | **1013** |
+| `erledigt` | 732 |
+| **gesamt** | **1014** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 144
+## goals — 145
 
-### beauftragbar — 135
+### beauftragbar — 137
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -624,7 +624,7 @@
 | `G-522` | befund | hoch | [der erste USP ist nirgends gebaut](erledigt/goals-g-0522-cross-modul-beitraege-fehlen-vollstaendig.md) | erledigt | — | G-660, G-661 |
 | `G-523` | fehler | hoch | [der adaptive TDEE glaettet nicht, er springt](erledigt/goals-g-0523-adaptive-tdee-glaettet-nicht.md) | erledigt | — | — |
 | `G-524` | befund | mittel | [vier der zehn Spec-Tabellen und beide Ansichten fehlen](erledigt/goals-g-0524-vier-tabellen-und-beide-ansichten-fehlen.md) | erledigt | — | — |
-| `G-525` | befund | mittel | [Meilensteine gibt es nur als Seed](laufend_codex/goals-g-0525-meilensteine-entstehen-nicht.md) | laeuft (codex) | — | — |
+| `G-525` | befund | mittel | [Meilensteine gibt es nur als Seed](erledigt/goals-g-0525-meilensteine-entstehen-nicht.md) | erledigt | — | — |
 | `G-526` | fehler | hoch | [Protein, Fett und Faser kennen die Phase nicht](todos/goals-g-0526-protein-und-fett-kennen-die-phase-nicht.md) | offen | — | — |
 | `G-527` | fehler | mittel | [der Schreibweg kennt die neuen Hindernisse nicht](erledigt/goals-g-0527-der-schreibweg-kennt-die-neuen-hindernisse-nicht.md) | erledigt | — | — |
 | `G-531` | fehler | hoch | [`goal_phase_start` kann drei der neun Phasenarten nicht anlegen](erledigt/goals-g-0531-goal-phase-start-kennt-die-rate-nicht.md) | erledigt | — | G-535 |
@@ -707,7 +707,7 @@
 | `G-643` | aufgabe | mittel | [Lage "voraus / im Plan / hinterher" für einmalige Messziele](todos/goals-g-0643-lage-fuer-einmalige-messziele.md) | offen | — | — |
 | `G-644` | aufgabe | hoch | [Planer: Lücken in der Kette](erledigt/goals-g-0644-planer-luecken-in-der-kette.md) | erledigt | — | — |
 | `G-645` | fehler | mittel | [Goals und Phase Engine: Befunde am Schirm (dev, 10.10.)](todos/goals-g-0645-goals-reiter-befunde-am-schirm.md) | offen | — | — |
-| `G-646` | aufgabe | mittel | [Trendgewicht einbinden](laufend_codex/goals-g-0646-trendgewicht-einbinden.md) | laeuft (codex) | — | — |
+| `G-646` | aufgabe | mittel | [Trendgewicht einbinden](erledigt/goals-g-0646-trendgewicht-einbinden.md) | erledigt | — | — |
 | `G-647` | fehler | niedrig | [Der Satz aus 622 steht noch ohne Umlaute](erledigt/goals-g-0647-622-satz-mit-umlauten.md) | erledigt | — | — |
 | `G-648` | fehler | hoch | [Reiter Goals weicht vom freigegebenen Entwurf ab](erledigt/goals-g-0648-reiter-goals-weicht-vom-entwurf-ab.md) | erledigt | — | G-652, G-657, G-667, G-668, G-669, G-670, G-671, G-673 |
 | `G-649` | fehler | hoch | [Phase Engine weicht vom freigegebenen Entwurf ab](erledigt/goals-g-0649-phase-engine-weicht-vom-entwurf-ab.md) | erledigt | — | G-656, G-666 |
@@ -727,14 +727,16 @@
 | `G-664` | befund | mittel | [Testdaten mit Messungen in der Zukunft](erledigt/goals-g-0664-testdaten-mit-messungen-in-der-zukunft.md) | erledigt | — | — |
 | `G-665` | befund | hoch | [Meilenstein setzen verlangt ein Gewicht und schreibt es als Messung](erledigt/goals-g-0665-meilenstein-setzen-verlangt-und-schreibt-ein-gewicht.md) | erledigt | — | G-672 |
 | `G-666` | aufgabe | mittel | [Attrappen unter der Phase Engine: Weekly auto-adjustment, Kennzahlen, Expert BB annual](erledigt/goals-g-0666-attrappen-unter-der-phase-engine.md) | erledigt | — | — |
-| `G-667` | befund | mittel | [Kraft-Messpunkte je Satz statt je Einheit](laufend_codex/goals-g-0667-kraftpunkte-je-satz-statt-je-einheit.md) | laeuft (codex) | — | — |
-| `G-668` | befund | mittel | [Planlinie steht bei 88,0, das Wochensoll meldet weiter +0,21](laufend_codex/goals-g-0668-planlinie-und-wochensoll-widersprechen-sich.md) | laeuft (codex) | — | — |
-| `G-669` | befund | mittel | ["Als nächstes" ohne Datum, Dauer und Grund](laufend_codex/goals-g-0669-als-naechstes-ohne-datum-dauer-grund.md) | laeuft (codex) | — | — |
-| `G-670` | befund | mittel | [Testdaten: Planlücke, leere linked_modules, Gewohnheitsserie](laufend_codex/goals-g-0670-testdaten-planluecke-module-gewohnheit.md) | laeuft (codex) | — | — |
+| `G-667` | befund | mittel | [Kraft-Messpunkte je Satz statt je Einheit](erledigt/goals-g-0667-kraftpunkte-je-satz-statt-je-einheit.md) | erledigt | — | — |
+| `G-668` | befund | mittel | [Planlinie steht bei 88,0, das Wochensoll meldet weiter +0,21](erledigt/goals-g-0668-planlinie-und-wochensoll-widersprechen-sich.md) | erledigt | — | — |
+| `G-669` | befund | mittel | ["Als nächstes" ohne Datum, Dauer und Grund](erledigt/goals-g-0669-als-naechstes-ohne-datum-dauer-grund.md) | erledigt | — | G-677 |
+| `G-670` | befund | mittel | [Testdaten: Planlücke, leere linked_modules, Gewohnheitsserie](erledigt/goals-g-0670-testdaten-planluecke-module-gewohnheit.md) | erledigt | — | — |
 | `G-671` | befund | mittel | [Reste der Mockup-Referenz unter der Phase Engine](laufend_claudecode/goals-g-0671-mockup-reste-unter-der-phase-engine.md) | laeuft (claudecode) | — | — |
+| `G-672` | idee | niedrig | [Meilensteine von Hand setzen (mögliches Add-on)](todos/goals-g-0672-meilensteine-von-hand-setzen.md) | offen | — | — |
 | `G-673` | aufgabe | mittel | [Entwurf ergänzen: fünf offene Stellen aus der Abnahme](erledigt/goals-g-0673-entwurf-ergaenzen-offene-stellen.md) | erledigt | — | G-674, G-675, G-676 |
+| `G-677` | befund | mittel | ["Als nächstes" bleibt leer, wenn der Plan keine Folgephase hat](todos/goals-g-0677-als-naechstes-bleibt-leer.md) | offen | — | — |
 
-### wartet auf Blocker — 9
+### wartet auf Blocker — 8
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -744,7 +746,6 @@
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
-| `G-672` | idee | niedrig | [Meilensteine von Hand setzen (mögliches Add-on)](todos/goals-g-0672-meilensteine-von-hand-setzen.md) | offen | G-525 | — |
 | `G-674` | aufgabe | mittel | [UI: die Ergänzungen aus dem Entwurf (Vorschau, Datenpunkt, Phasensperre, Papierkorb)](laufend_claudecode/goals-g-0674-ui-entwurfsergaenzungen.md) | laeuft (claudecode) | G-675 | — |
 | `G-675` | aufgabe | hoch | [Kette: Vorschau beim Bearbeiten, Phasensperre, Papierkorb für Goals und die Phase Engine](todos/goals-g-0675-kette-vorschau-phasensperre-papierkorb.md) | offen | G-676 | — |
 
@@ -1103,7 +1104,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-676` | aufgabe | hoch | [Papierkorb über alle Module](todos/plattform-g-0676-papierkorb-ueber-alle-module.md) | offen | — | — |
+| `G-676` | aufgabe | hoch | [Papierkorb über alle Module](laufend_codex/plattform-g-0676-papierkorb-ueber-alle-module.md) | vorbereitet (codex) | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

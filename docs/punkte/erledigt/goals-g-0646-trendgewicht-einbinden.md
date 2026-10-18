@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-16
 agent: codex
 beauftragt: 2026-10-18
+erledigt: 2026-10-18
+commit: 07f91713
 
 braucht: [G-631]
 kind_von: G-631
@@ -39,3 +41,9 @@ beruehrt:
     Fremd:   docs/ gehoert dem Orchestrator.
     Stand:   2026-10-18, HEAD 4f45fd2d
 
+
+## Abnahme - 2026-10-18 (Orchestrator, commit 07f91713)
+
+`[read]` measurement_goal_start_preview liefert den EMA-Trend 84,762 kg statt des Rohwerts 84,73 (Codex). Kette 550 Schritte gruen, sechs Sabotageproben je rot.
+
+Gate gruen beim Commit; Sicherung vorher 5.076.337 / nachher 5.088.755 Byte.

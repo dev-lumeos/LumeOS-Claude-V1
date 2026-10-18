@@ -9,6 +9,8 @@ quellen:
   - docs/specs/Goals/DATABASE.md
 agent: codex
 beauftragt: 2026-10-18
+erledigt: 2026-10-18
+commit: 07f91713
 
 beruehrt:
   tabellen:
@@ -98,3 +100,9 @@ einer Funktion belegt ihren Lauf nicht.
     Fremd:   docs/ gehoert dem Orchestrator.
     Stand:   2026-10-18, HEAD 4f45fd2d
 
+
+## Abnahme - 2026-10-18 (Orchestrator, commit 07f91713)
+
+`[cmd]` Der Trigger g525_create_milestones haengt AFTER INSERT an goals.user_goals. goals.goal_milestones hat 13 Zeilen, unveraendert. `[read]` Eine zurueckgerollte Probe erzeugte 25/50/75 %/Ziel (Codex). Bestehende Ziele bekommen keine nachgetragen.
+
+Gate gruen beim Commit; Sicherung vorher 5.076.337 / nachher 5.088.755 Byte.

@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-18
 agent: codex
 beauftragt: 2026-10-18
+erledigt: 2026-10-18
+commit: 07f91713
 
 braucht: []
 kind_von: G-648
@@ -41,3 +43,9 @@ beruehrt:
     Fremd:   docs/ gehoert dem Orchestrator.
     Stand:   2026-10-18, HEAD 4f45fd2d
 
+
+## Abnahme - 2026-10-18 (Orchestrator, commit 07f91713)
+
+`[cmd]` Der aktive Plan auf dev hat 4 Positionen (Halteposition 19.07.-09.10. eingefuegt). linked_modules ist bei den 4 Entwurfs-Messzielen gesetzt. Bei Lean Bulk und Bankdruecken ist es leer. `[read]` Gewohnheit 12 Wochen, Serie 6 (Codex, nicht nachgemessen).
+
+Gate gruen beim Commit; Sicherung vorher 5.076.337 / nachher 5.088.755 Byte.

@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-18
 agent: codex
 beauftragt: 2026-10-18
+erledigt: 2026-10-18
+commit: 07f91713
 
 braucht: []
 kind_von: G-648
@@ -37,3 +39,9 @@ beruehrt:
     Fremd:   docs/ gehoert dem Orchestrator.
     Stand:   2026-10-18, HEAD 4f45fd2d
 
+
+## Abnahme - 2026-10-18 (Orchestrator, commit 07f91713)
+
+`[cmd]` goals.planlinien_am(Lean Bulk, 25.10.) als dev: vorwaerts 84,974 kg ab Trend, historisch 86,987 kg, Rate 0,250 %/Wo.
+
+Gate gruen beim Commit; Sicherung vorher 5.076.337 / nachher 5.088.755 Byte.
