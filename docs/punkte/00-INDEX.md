@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 283 |
+| `todos` | 280 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 716 |
+| `erledigt` | 719 |
 | **gesamt** | **1002** |
 
 ## medical — 50
@@ -722,9 +722,9 @@
 | `G-660` | aufgabe | hoch | [Täglicher Lauf der Modulbeiträge](erledigt/goals-g-0660-taeglicher-lauf-der-modulbeitraege.md) | erledigt | — | — |
 | `G-661` | befund | hoch | [Doppelte Tagesgewichte blockieren das Tagesziel](erledigt/goals-g-0661-doppelte-tagesgewichte-blockieren-das-tagesziel.md) | erledigt | — | — |
 | `G-662` | befund | mittel | [Das Wochensoll ist 0, weil die Planlinie schon am Ziel gedeckelt ist](erledigt/goals-g-0662-wochensoll-null-weil-planlinie-gedeckelt.md) | erledigt | — | — |
-| `G-663` | befund | hoch | [Eine einzelne Messung friert das Steuerziel als "erreicht" ein](todos/goals-g-0663-eine-einzelne-messung-friert-das-ziel-als-erreicht-ein.md) | offen | — | G-665 |
-| `G-664` | befund | mittel | [Testdaten mit Messungen in der Zukunft](todos/goals-g-0664-testdaten-mit-messungen-in-der-zukunft.md) | offen | — | — |
-| `G-665` | befund | hoch | [Meilenstein setzen verlangt ein Gewicht und schreibt es als Messung](todos/goals-g-0665-meilenstein-setzen-verlangt-und-schreibt-ein-gewicht.md) | offen | — | — |
+| `G-663` | befund | hoch | [Eine einzelne Messung friert das Steuerziel als "erreicht" ein](erledigt/goals-g-0663-eine-einzelne-messung-friert-das-ziel-als-erreicht-ein.md) | erledigt | — | G-665 |
+| `G-664` | befund | mittel | [Testdaten mit Messungen in der Zukunft](erledigt/goals-g-0664-testdaten-mit-messungen-in-der-zukunft.md) | erledigt | — | — |
+| `G-665` | befund | hoch | [Meilenstein setzen verlangt ein Gewicht und schreibt es als Messung](erledigt/goals-g-0665-meilenstein-setzen-verlangt-und-schreibt-ein-gewicht.md) | erledigt | — | — |
 
 ### wartet auf Blocker — 6
 

@@ -4,6 +4,10 @@ typ: befund
 modul: goals
 schwere: hoch
 angelegt: 2026-10-17
+agent: codex
+beauftragt: 2026-10-18
+erledigt: 2026-10-18
+commit: 9b173777
 
 braucht: []
 kind_von: G-611
@@ -40,4 +44,21 @@ Zwei Teile:
 
 `[read]` Tom hat die 88-kg-Messung selbst eingetragen, als er Tobias gezeigt hat, wie man Meilensteine setzt. Dabei hat die App verlangt, dass ein Gewicht eingegeben wird. Die Zeile kann gelöscht werden (Teil 1 freigegeben).
 Folgebefund G-665: Beim Setzen eines Meilensteins schreibt die App eine Körpermessung.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - G-663 erreicht am Trend + 88-kg-Zeile loeschen
+    Bereich: siehe Auftrag vom 18.10.
+    Fremd:   docs/ gehoert dem Orchestrator.
+    Stand:   2026-10-18, HEAD b2594c1f
+
+## Erledigt - 2026-10-18, Commit `9b173777`
+
+`[read]` Codex:
+- Steuernde kg-Ziele gelten erst als erreicht, wenn der EMA-Trend das Ziel erreicht. Messziele ohne Trend werden weiter am Rohwert geprüft.
+- Die Proben belegen: Ein einzelner Ausreisser friert nicht ein, ein erreichter Trend schon.
+- dev: Lean Bulk ist wieder aktiv, mit laufender Phase, Lage "hinterher". Trend 84,762 kg, Tagesziel 2.714 kcal.
+
+Sicherungen: `backup/a105-g663-*`.
+`[cmd]` dev: Zeilen mit 88,00 kg am 17.10.: 0. Gate grün beim Commit.
 
