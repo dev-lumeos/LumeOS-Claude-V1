@@ -127,7 +127,7 @@ import {
   GoalsTdeeReferenz, GoalsCrossReferenz,
 } from './mockup-referenz'
 import {
-  FehlendePhaseKacheln, FehlendeMetrikKacheln,
+  FehlendeMetrikKacheln,
   FehlendeMessKacheln, FehlendePhysiqueKacheln,
 } from './fehlende-kacheln'
 import { GoalsPhysiqueView, GoalsPosesView } from './tab-physique'
@@ -483,7 +483,6 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                            startKg={echt.messungen.filter(m => m.weight_kg !== null && m.measurement_date <= echt.stichtag).at(-1)?.weight_kg ?? null}
                            onZuGoals={() => setTab('goals')} />
               )}
-              {proFrei && <FehlendePhaseKacheln />}
               {/* `[cmd]` G-365: die Linie stand unter `echt.phase &&`.
                   Sabotageprobe 2026-09-07 — `phase` auf `null`: die
                   Linie verschwand, und `GoalsPhaseView` stand
@@ -561,7 +560,7 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                    strategien={echt.strategien}
                    erfahrung={echt.strategieProfil.experience}
                    ziele={echt.ziele} phasen={echt.offenePhasen}
-                   messungen={echt.messungen} heute={echt.stichtag}
+                   messungen={echt.messungen} heute={echt.stichtag} trend={echt.woche.trend.heute}
                    tdee={echt.tdee?.adaptive_tdee_kcal ?? echt.tdee?.formula_tdee_kcal ?? null} />
     </GoalsKontext.Provider>
   )

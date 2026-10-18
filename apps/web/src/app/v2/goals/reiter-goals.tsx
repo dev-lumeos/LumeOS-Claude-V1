@@ -39,7 +39,8 @@ import { ArchivierenKnopf, LoeschenFrage, NeuStartenFluss } from './lebenszyklus
 import { richtungen } from '../../../lib/goals/zielwahl'
 import type { Koerpermessung, Meilenstein, Phase, ZielFortschritt, Zielphase } from '../../../lib/goals/lesen'
 import type { Strategie } from '../../../lib/goals/strategie-read'
-import type { Plan } from '../../../lib/goals/plan-read'
+import type { Anpassungswoche, Plan } from '../../../lib/goals/plan-read'
+import { anpassungZeile } from './plan-seite'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
 import type { Ausblick, Messwoche, Modulkacheln, Verlauf, Wochendaten } from '../../../lib/goals/reiter-read'
 
@@ -285,7 +286,7 @@ function Steuerung(p: SteuerProps) {
               <span><span style={{ color: 'var(--fg-subtle)' }}>Ziel </span><span className="ge-num" style={{ fontWeight: 600, color: 'var(--acc-goals)' }}>{wertKg(z.target_value, z.target_unit)}</span></span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }} data-steuerung-fortschritt={pct ?? ''}>
-              <div className="ge-bar" style={{ flex: 1, height: 8 }}><div style={{ width: `${pct ?? 0}%`, background: 'var(--acc-goals)' }} /></div>
+              <div className="ge-bar" style={{ flex: 1, height: 8 }}><div style={{ width: pct === null ? 0 : `${Math.max(2, pct)}%`, background: 'var(--acc-goals)' }} /></div>
               <span className="ge-num" style={{ fontSize: 13, fontWeight: 600, color: 'var(--acc-goals)', width: 44, textAlign: 'right' }}>{pct !== null ? `${zahl(pct)} %` : '—'}</span>
             </div>
             {/* Flex statt Raster: eine Rasterspalte waechst nicht mit „2.714 kcal · 170 g P" (nowrap) und der
@@ -297,7 +298,10 @@ function Steuerung(p: SteuerProps) {
                     : <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--fg-muted)', whiteSpace: 'nowrap' }}>{PLAN_STATUS[ausblick.prognose.plan_status ?? ''] ?? '—'}</div>}</div>
               <div data-prognose-tempo={ausblick?.prognose.status ?? ''} style={{ flex: '1 1 170px' }}><div className="ge-eb">bei deinem Tempo</div><div style={{ fontSize: 13, fontWeight: 600 }}>
                 {ausblick === null ? <Kommt punkt="G-650" /> : ausblick.prognose.status === 'datum' ? <span className="ge-num">{datumDe(ausblick.prognose.datum)}</span>
-                  : <span style={{ color: 'var(--fg-muted)' }}>{PROGNOSE_GRUND[ausblick.prognose.grund ?? ''] ?? 'nicht absehbar'}</span>}</div></div>
+                  : <span style={{ color: 'var(--warn)' }}>{PROGNOSE_GRUND[ausblick.prognose.grund ?? ''] ?? 'nicht absehbar'}</span>}
+                {/* Entwurf: „nicht absehbar · −0,1 kg/Wo" — das Tempo der letzten 4 Wochen; zwei Stellen wie „Tempo 4 Wochen" in den Details */}
+                {ausblick?.kennzahlen.tempo_4w_kg_pro_woche != null && <span className="ge-num" data-prognose-tempo-wert
+                  style={{ color: ausblick.prognose.status === 'datum' ? undefined : 'var(--warn)' }}> · {vz(ausblick.kennzahlen.tempo_4w_kg_pro_woche, 2)} kg/Wo</span>}</div></div>
               <div data-steuerung-kcal style={{ flex: '1 1 170px' }}><div className="ge-eb">Tagesziel</div>
                 <div className="ge-num" style={{ fontSize: 15, fontWeight: 600, whiteSpace: 'nowrap' }}>{kcal !== null
                   ? `${zahl(kcal)} kcal${protein !== null ? ` · ${zahl(protein)} g P` : ''}` : '—'}</div></div>
@@ -311,7 +315,7 @@ function Steuerung(p: SteuerProps) {
       </div>
 
       {offen && <SteuerDetails z={z} ausblick={ausblick} trend={trend} messungen={p.messungen} meilensteine={p.meilensteine}
-                                stichtag={p.stichtag} onPhaseEngine={p.onPhaseEngine} />}
+                                anpassungen={plan?.anpassungen} stichtag={p.stichtag} onPhaseEngine={p.onPhaseEngine} />}
       {edit && <SteuerBearbeiten z={z} variante={variante?.label ?? art} onZielSetzen={p.onZielSetzen}
                                  onLoeschen={() => setLoeschen(true)} onFertig={() => setEdit(false)} />}
       {loeschen && <LoeschenFrage ziel={z} art="steuer" verlaufWochen={verlaufWochen} onZu={() => setLoeschen(false)} />}
@@ -323,15 +327,33 @@ function Steuerung(p: SteuerProps) {
 const ZEITRAUM = [['4w', '4 Wochen', 28], ['3m', '3 Monate', 91], ['all', 'alles', null]] as const
 const MONAT = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
 
-function SteuerDetails({ z, ausblick, trend, messungen, meilensteine, stichtag, onPhaseEngine }: {
+/** Prognoselinie bis zur Prognose, hoechstens bis zum Achsenende — dort auf der Geraden zum Ziel. */
+export function prognoseEnde(vonTag: string, vonKg: number, prognose: string, zielKg: number, bis: string): { tag: string; kg: number } {
+  if (prognose <= bis) return { tag: prognose, kg: zielKg }
+  const t = (d: string) => Date.parse(`${d}T12:00:00Z`)
+  const f = (t(bis) - t(vonTag)) / ((t(prognose) - t(vonTag)) || 1)
+  return { tag: bis, kg: vonKg + (zielKg - vonKg) * f }
+}
+
+/** Anpassung wie im Entwurf: „+100 kcal", „keine (Logtage < 5)", „läuft"; der Grund steht im Titel. */
+export function AnpassungZelle({ a }: { a: ReturnType<typeof anpassungZeile> }) {
+  if (a.anp === null) return <td><Kommt punkt="G-627" /></td>
+  const text = a.grund === 'Woche läuft noch' || a.grund === 'Protokoll folgt nach dem Tageslauf' ? 'läuft' : a.anp === 'keine' && a.grund && a.grund !== '–' ? `keine (${a.grund})` : a.anp
+  return <td title={a.grund} data-steuerung-anpassung={a.regel ?? ''}>{text}</td>
+}
+
+function SteuerDetails({ z, ausblick, trend, messungen, meilensteine, anpassungen, stichtag, onPhaseEngine }: {
   z: ZielFortschritt; ausblick: Ausblick | null; trend: number | null; messungen: Koerpermessung[]; meilensteine: Meilenstein[]
+  /** G-627: Wochenprotokoll des laufenden Plans (`goal_weekly_adjustments_at`). */
+  anpassungen?: Anpassungswoche[] | null
   stichtag: string; onPhaseEngine: () => void
 }) {
   const [bereich, setBereich] = React.useState<typeof ZEITRAUM[number][0]>('3m')
   const tage = ZEITRAUM.find(r => r[0] === bereich)![2]
   const von = tage ? tagMinus(stichtag, tage) : (z.gueltig_ab ?? messungen[0]?.measurement_date ?? stichtag)
   const prognose = ausblick?.prognose.status === 'datum' ? ausblick.prognose.datum : null
-  const bis = [stichtag, z.target_date, prognose].filter((d): d is string => !!d).sort().at(-1)!
+  // Entwurf: die Achse endet an der Frist; eine spaetere Prognose wird am Rand abgeschnitten (sonst 2028 auf 3 Monate)
+  const bis = [stichtag, z.target_date ?? prognose].filter((d): d is string => !!d).sort().at(-1)!
   // Trend (Wochenende) und Soll nach Plan je Woche — aus der Kette (G-650)
   const wochen = (ausblick?.wochen ?? []).filter(w => w.woche_bis >= von)
   const roh = messungen.filter(m => m.weight_kg !== null && m.measurement_date >= von && m.measurement_date <= stichtag)
@@ -377,9 +399,10 @@ function SteuerDetails({ z, ausblick, trend, messungen, meilensteine, stichtag, 
           {wochen.some(w => w.trend_kg !== null) && (
             <polyline points={wochen.filter(w => w.trend_kg !== null).map(w => `${x(w.woche_bis)},${y(w.trend_kg!)}`).join(' ')} fill="none" stroke="var(--acc-goals)" strokeWidth="2" data-trend-linie />
           )}
-          {letzte && prognose && z.target_value !== null && (
-            <line x1={x(letzte.woche_bis)} y1={y(letzte.trend_kg!)} x2={x(prognose)} y2={y(z.target_value)} stroke="var(--acc-goals)" strokeDasharray="3 3" data-prognose-linie />
-          )}
+          {letzte && prognose && z.target_value !== null && (() => {
+            const ende = prognoseEnde(letzte.woche_bis, letzte.trend_kg!, prognose, z.target_value, bis)
+            return <line x1={x(letzte.woche_bis)} y1={y(letzte.trend_kg!)} x2={x(ende.tag)} y2={y(ende.kg)} stroke="var(--acc-goals)" strokeDasharray="3 3" data-prognose-linie />
+          })()}
           {z.target_value !== null && <text x="600" y={y(z.target_value) - 6} fontSize="10" fill="var(--acc-goals)">Ziel</text>}
           {monate.filter((_, i) => i % schritt === 0).map(m => <text key={m.x} x={m.x + 4} y="172" fontSize="10" fill="var(--fg-muted)">{m.t}</text>)}
         </svg>
@@ -401,11 +424,11 @@ function SteuerDetails({ z, ausblick, trend, messungen, meilensteine, stichtag, 
               {[...(ausblick?.wochen ?? [])].reverse().slice(0, 6).map(w => (
                 <tr key={w.woche_ab} data-steuerung-woche-zeile={w.woche_ab}>
                   <td>KW {kalenderwoche(w.woche_ab)}{w.vollstaendig ? '' : ' (läuft)'}</td>
-                  <td className="ge-num">{w.trend_kg !== null ? zahl(w.trend_kg, 1) : '—'}</td>
+                  <td className="ge-num">{w.trend_kg !== null ? zahl(w.trend_kg, 2) : '—'}</td>
                   <td className="ge-num">{w.trend_delta_kg !== null ? vz(w.trend_delta_kg, 2) : '—'}</td>
                   <td className="ge-num">{w.soll_delta_kg !== null ? vz(w.soll_delta_kg, 2) : '—'}</td>
                   <td className="ge-num">{w.durchschnitt_kcal !== null ? zahl(Math.round(w.durchschnitt_kcal)) : '—'}</td>
-                  <td><Kommt punkt="G-627" /></td>
+                  <AnpassungZelle a={anpassungZeile(anpassungen, w.woche_ab, w.vollstaendig, w.woche_ab === ausblick?.wochen.at(-1)?.woche_ab)} />
                 </tr>
               ))}
             </tbody>
@@ -433,7 +456,8 @@ function SteuerBearbeiten({ z, variante, onZielSetzen, onLoeschen, onFertig }: {
 }) {
   const router = useRouter()
   const [titel, setTitel] = React.useState(z.title)
-  const [ziel, setZiel] = React.useState(z.target_value !== null ? String(z.target_value) : '')
+  // Entwurf: „88,0“ — eine Stelle, Komma; das Speichern liest Komma wie Punkt
+  const [ziel, setZiel] = React.useState(z.target_value !== null ? zahl(z.target_value, 1) : '')
   const [datum, setDatum] = React.useState(z.target_date ?? '')
   const [laeuft, setLaeuft] = React.useState(false)
   const [fehler, setFehler] = React.useState<string | null>(null)
@@ -471,6 +495,12 @@ function SteuerBearbeiten({ z, variante, onZielSetzen, onLoeschen, onFertig }: {
 
 // ── Diese Woche + Module ─────────────────────────────────────────
 
+/** Balkenbreiten je Zeile: der groessere von Soll (100) und Erreicht fuellt die Spur. */
+export function balken(istPct: number): { soll: number; ist: number } {
+  const m = Math.max(100, istPct)
+  return { soll: Math.round(10000 / m), ist: Math.round((istPct * 100) / m) }
+}
+
 function DieseWoche({ ziele, phasen, offenePhasen, woche, stichtag }: {
   ziele: ZielFortschritt[]; phasen: Phase[]; offenePhasen: Zielphase[]; woche: Wochendaten; stichtag: string
 }) {
@@ -489,14 +519,15 @@ function DieseWoche({ ziele, phasen, offenePhasen, woche, stichtag }: {
   // Soll: das Wochenziel, sonst die aktive Routine (Tom 16.10.: Balken und „x / 4")
   const trainingsSoll = trainingsZiel?.target_value ?? woche.trainingsSoll ?? null
   type Z = { key: string; t: string; ico: React.ReactNode; ton: string; v: React.ReactNode; ist: number | null; gut: boolean | null }
-  const quote = (ist: number | null, ziel: number | null) => (ist !== null && ziel ? Math.max(0, Math.min(100, (ist / ziel) * 100)) : null)
+  // Erreicht in % des Solls, nach oben offen — der Balken zeigt ein Ueberschiessen (Entwurf: Kniebeuge Soll 40, erreicht 70)
+  const quote = (ist: number | null, ziel: number | null) => (ist !== null && ziel ? Math.max(0, (ist / ziel) * 100) : null)
   // ganze Prozent: 84,86 − 84,7 ist in Gleitkomma 0,1599… — ohne Runden hiesse genau erreicht 99,99 %, also verfehlt
-  const gewichtQuote = delta !== null && soll ? Math.max(0, Math.min(100, Math.round((delta / soll) * 100))) : null
+  const gewichtQuote = delta !== null && soll ? Math.max(0, Math.round((delta / soll) * 100)) : null
   // G-654: Bewegung der Woche je Messziel (`measurement_goal_week_at`); ohne Soll kein Balken, keine Wertung.
   const messZeile = (g: ZielFortschritt, key: string, t: string, ico: React.ReactNode, ton: string): Z => {
     const w = woche.messwochen?.[g.goal_id] ?? null
     const d = w?.delta_woche ?? null, s = w?.soll_delta_woche ?? null
-    const q = d !== null && s ? Math.max(0, Math.min(100, Math.round((d / s) * 100))) : null
+    const q = d !== null && s ? Math.max(0, Math.round((d / s) * 100)) : null
     const e = einheitLesbar(g.target_unit)
     return { key, t, ico, ton, ist: q, gut: q === null ? null : q >= 100,
       v: d !== null ? `${vz(d)}${e ? ` ${e}` : ''}` : <span className="ge-kommt">keine Messung vor dieser Woche</span> }
@@ -529,8 +560,8 @@ function DieseWoche({ ziele, phasen, offenePhasen, woche, stichtag }: {
           {/* Entwurf: der Titel steht in einer Zeile — lange Messziel-Titel enden auf „…" (ganz im title) */}
           <span data-woche-titel title={z.t} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>{z.t}</span>
           <div className="ge-bar">{z.ist !== null && <>
-            <div style={{ width: '100%', background: 'var(--border-strong)' }} />
-            <div style={{ width: `${z.ist}%`, background: z.gut ? 'var(--pos)' : 'var(--warn)' }} />
+            <div data-woche-soll-breite={balken(z.ist).soll} style={{ width: `${balken(z.ist).soll}%`, background: 'var(--border-strong)' }} />
+            <div data-woche-ist-breite={balken(z.ist).ist} style={{ width: `${balken(z.ist).ist}%`, background: z.gut ? 'var(--pos)' : 'var(--warn)' }} />
           </>}</div>
           <span className="ge-num" style={{ textAlign: 'right', fontWeight: 600, color: z.gut === null ? undefined : z.gut ? 'var(--pos)' : 'var(--warn)' }}>{z.v}</span>
         </div>
@@ -646,7 +677,14 @@ export const messTempo = (mw: Messwoche | null | undefined, einheit: string | nu
 export const messPrognose = (mw: Messwoche | null | undefined) =>
   mw?.prognose_status === 'datum' && mw.prognose_datum ? monatDe(mw.prognose_datum) : mw ? 'nicht absehbar' : '—'
 
-function MessDetails({ g, stichtag, mw }: { g: ZielFortschritt; stichtag: string; mw?: Messwoche | null }) {
+/** Der beste Datenpunkt in Richtung des Ziels (Ziel unter dem Start: der kleinste). */
+export function besterPunkt<P extends { tag: string; wert: number }>(pkt: P[], g: Pick<ZielFortschritt, 'start_value' | 'target_value'>): P | null {
+  if (!pkt.length) return null
+  const runter = g.target_value !== null && g.start_value !== null && g.target_value < g.start_value
+  return pkt.reduce((b, p) => (runter ? p.wert < b.wert : p.wert > b.wert) ? p : b)
+}
+
+function MessDetails({ g, stichtag, mw, bester = false }: { g: ZielFortschritt; stichtag: string; mw?: Messwoche | null; bester?: boolean }) {
   const { v, fehler } = useVerlauf(g, stichtag, true)
   const woechentlich = g.measurement_rhythm === 'weekly'
   const kat = kategorieVon(g)
@@ -657,7 +695,13 @@ function MessDetails({ g, stichtag, mw }: { g: ZielFortschritt; stichtag: string
   const pkt = v.punkte
   const werte = pkt.map(p => p.wert).concat(g.target_value !== null ? [g.target_value] : [])
   const lo = Math.min(...werte, 1e9), hi = Math.max(...werte, -1e9), sp = hi - lo || 1
-  const x = (i: number) => 30 + (pkt.length <= 1 ? 190 : (i / (pkt.length - 1)) * 380)
+  // Zeitachse wie im Entwurf: bis zur Frist, sonst bis zur Prognose; die Prognose gestrichelt (`measurement_goal_week_at`)
+  const prog = mw?.prognose_status === 'datum' ? mw.prognose_datum : null
+  const erst = pkt[0]?.tag ?? stichtag, letzt = pkt.at(-1) ?? null
+  const ende = [letzt?.tag ?? stichtag, g.target_date ?? prog].filter((d): d is string => !!d).sort().at(-1)!
+  const tz = (d: string) => Date.parse(`${d}T12:00:00Z`)
+  const x = (tag: string) => 30 + (tz(ende) === tz(erst) ? 190 : ((tz(tag) - tz(erst)) / (tz(ende) - tz(erst))) * 380)
+  const prognoseBis = letzt && prog && g.target_value !== null ? prognoseEnde(letzt.tag, letzt.wert, prog, g.target_value, ende) : null
   const y = (w: number) => 110 - ((w - lo) / sp) * 90
   const wo = v.wochen.slice(-12)
   const kz = woechentlich
@@ -667,16 +711,19 @@ function MessDetails({ g, stichtag, mw }: { g: ZielFortschritt; stichtag: string
       { l: 'Ø pro Woche', v: wo.some(w => w.wert !== null) ? zahl(wo.reduce((a, w) => a + (w.wert ?? 0), 0) / wo.length, 1) : '—' },
     ]
     // G-654: Tempo der letzten 28 Tage und die Prognose daraus (`measurement_goal_week_at`)
-    : [{ l: 'Start', v: wertMitEinheit(g.start_value, g.target_unit) },
+    : [{ l: 'Start', v: messWert(g.start_value, { ...g, measurement_reps: null }) },
       { l: 'Tempo 4 Wo', v: messTempo(mw, g.target_unit) }, { l: 'voraussichtlich', v: messPrognose(mw) }]
   return (
     <div className="ge-kasten" data-details={g.goal_id}>
+      {/* Entwurf (abgeschlossen): „Bester Wert 24.06. 104,0 kg" — in Richtung des Ziels */}
+      {bester && besterPunkt(pkt, g) && <div data-bester-wert style={{ fontSize: 12.5 }}>Bester Wert {kurzDe(besterPunkt(pkt, g)!.tag)} {messWert(besterPunkt(pkt, g)!.wert, g)}.</div>}
       {pkt.length === 0 ? <div style={{ fontSize: 11, color: 'var(--fg-subtle)' }}>Noch keine Datenpunkte.</div> : (
-        <svg viewBox="0 0 420 130" width="100%" style={{ display: 'block' }} role="img" aria-label="Verlauf" data-verlauf-bild={pkt.length}>
+        <svg viewBox="0 0 420 130" width="100%" style={{ display: 'block', maxWidth: 640 }} role="img" aria-label="Verlauf" data-verlauf-bild={pkt.length}>
           {g.target_value !== null && <line x1="30" x2="410" y1={y(g.target_value)} y2={y(g.target_value)} stroke="var(--acc-goals)" strokeDasharray="2 3" />}
-          <polyline points={pkt.map((p, i) => `${x(i)},${y(p.wert)}`).join(' ')} fill="none" stroke={KAT[kat].farbe} strokeWidth="2" />
+          <polyline points={pkt.map(p => `${x(p.tag)},${y(p.wert)}`).join(' ')} fill="none" stroke={KAT[kat].farbe} strokeWidth="2" />
+          {letzt && prognoseBis && <line x1={x(letzt.tag)} y1={y(letzt.wert)} x2={x(prognoseBis.tag)} y2={y(prognoseBis.kg)} stroke={KAT[kat].farbe} strokeDasharray="3 3" data-messziel-prognose />}
           {/* ein einzelner Punkt ist als Linie unsichtbar */}
-          {pkt.length === 1 && <circle cx={x(0)} cy={y(pkt[0]!.wert)} r="3" fill={KAT[kat].farbe} />}
+          {pkt.length === 1 && <circle cx={x(pkt[0]!.tag)} cy={y(pkt[0]!.wert)} r="3" fill={KAT[kat].farbe} />}
           {g.target_value !== null && <text x="406" y={y(g.target_value) + (y(g.target_value) < 20 ? 14 : -6)} fontSize="10" textAnchor="end" fill="var(--acc-goals)">Ziel {wertMitEinheit(g.target_value, g.target_unit)}</text>}
         </svg>
       )}
@@ -690,8 +737,10 @@ function MessDetails({ g, stichtag, mw }: { g: ZielFortschritt; stichtag: string
           <tbody>
             {pkt.length === 0 && <tr><td colSpan={3} style={{ color: 'var(--fg-subtle)' }}>noch keine</td></tr>}
             {pkt.slice(-8).reverse().map((p, i) => (
-              <tr key={i}><td className="ge-num">{kurzDe(p.tag)}</td><td className="ge-num">{wertMitEinheit(p.wert, punktEinheit)}</td>
-                <td>{quelleLesbar(p.quelle) ?? 'Quelle unbekannt'}</td></tr>
+              <tr key={i}><td className="ge-num">{kurzDe(p.tag)}</td>
+                {/* Entwurf: „140,0" — kg und % mit einer Stelle, ohne Einheit (sie steht im Kopf) */}
+                <td className="ge-num">{punktEinheit === 'kg' || punktEinheit === '%' ? zahl(p.wert, 1) : wertMitEinheit(p.wert, punktEinheit)}</td>
+                <td data-punkt-einheit={p.einheit ?? ''}>{p.einheit ?? quelleLesbar(p.quelle) ?? 'Quelle unbekannt'}</td></tr>
             ))}
           </tbody>
         </table>
@@ -710,7 +759,8 @@ function MessBearbeiten({ g, onLoeschen, onFertig }: { g: ZielFortschritt; onLoe
   const [fehler, setFehler] = React.useState<string | null>(null)
   const art = g.measurement_type && g.measurement_type in MESSARTEN ? MESSARTEN[g.measurement_type as keyof typeof MESSARTEN].name : KATEGORIE_NAME[kat]
   const quelle = quelleLesbar(g.current_source)
-  const fest = kat === 'kraft' ? { l: 'Übung · Messart', v: `${quelle ?? '—'} · ${art}` }
+  // Entwurf: „Back Squat · 1RM · fest“
+  const fest = kat === 'kraft' ? { l: 'Übung · Messart', v: `${g.uebung ?? quelle ?? '—'} · ${messArtKurz(g) ?? art}` }
     : kat === 'koerper' ? { l: 'Messgröße', v: art } : kat === 'gewohnheit' ? { l: 'Quelle', v: quelle ?? art } : { l: 'Messart', v: art }
   const woechentlich = g.measurement_rhythm === 'weekly'
   const schreib = async (a: Parameters<typeof zielSpeichern>[1]) => {
@@ -744,6 +794,22 @@ function MessBearbeiten({ g, onLoeschen, onFertig }: { g: ZielFortschritt; onLoe
   )
 }
 
+/** Kopfzeile wie im Entwurf: „Kraft · 1RM", „Kraft · 5 Wdh.", „Gewohnheit · wöchentlich". */
+export function messArtKurz(g: Pick<ZielFortschritt, 'measurement_type' | 'measurement_rhythm' | 'measurement_reps'>): string | null {
+  if (g.measurement_type === 'e1rm') return '1RM'
+  if (g.measurement_type === 'weight_reps') return g.measurement_reps ? `${zahl(g.measurement_reps)} Wdh.` : 'Gewicht × Wdh.'
+  if (g.measurement_rhythm === 'weekly') return 'wöchentlich'
+  return g.measurement_type && g.measurement_type in MESSARTEN ? MESSARTEN[g.measurement_type as keyof typeof MESSARTEN].name : null
+}
+
+/** Aktueller Wert wie im Entwurf: kg und % mit einer Stelle („140,0 kg", „16,2 %"), bei Gewicht × Wdh. „× 5". */
+export function messWert(n: number | null, g: Pick<ZielFortschritt, 'target_unit' | 'measurement_type' | 'measurement_reps'>): string {
+  if (n === null) return '—'
+  const e = einheitLesbar(g.target_unit)
+  const w = e === 'kg' || e === '%' ? `${zahl(n, 1)} ${e}` : wertMitEinheit(n, g.target_unit)
+  return g.measurement_type === 'weight_reps' && g.measurement_reps ? `${w} × ${zahl(g.measurement_reps)}` : w
+}
+
 function MesszielKachel({ g, stichtag, mw }: { g: ZielFortschritt; stichtag: string; mw: Messwoche | null }) {
   const [offen, setOffen] = React.useState(false)
   const [edit, setEdit] = React.useState(false)
@@ -754,7 +820,7 @@ function MesszielKachel({ g, stichtag, mw }: { g: ZielFortschritt; stichtag: str
   const { lage, text: lageText } = lageVon(g)
   const quelle = quelleLesbar(g.current_source)
   const pct = g.progress_status === 'measured' && g.progress_pct !== null ? Math.max(0, Math.min(100, g.progress_pct)) : null
-  const art = g.measurement_type && g.measurement_type in MESSARTEN ? MESSARTEN[g.measurement_type as keyof typeof MESSARTEN].name : null
+  const art = messArtKurz(g)
   const rest = tageBis(g.target_date, stichtag)
   const frist = woechentlich ? 'wiederkehrend' : g.target_date ? `bis ${datumDe(g.target_date)}${rest !== null && rest >= 0 ? ` · ${rest} Tage` : ''}` : 'ohne Frist'
   const wo = v?.wochen.slice(-12) ?? []
@@ -777,7 +843,7 @@ function MesszielKachel({ g, stichtag, mw }: { g: ZielFortschritt; stichtag: str
           </div>
           <div style={{ fontSize: 15, fontWeight: 600, letterSpacing: '-.01em' }}>{g.title}</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, fontSize: 12, flexWrap: 'wrap' }} data-messziel-werte>
-            <span><span style={{ color: 'var(--fg-subtle)' }}>aktuell </span><span className="ge-num" style={{ fontWeight: 500 }}>{woechentlich ? (g.current_value !== null ? `${wertMitEinheit(g.current_value, g.target_unit === 'sessions_per_week' ? null : g.target_unit)} diese Woche` : '—') : wertMitEinheit(g.current_value, g.target_unit)}</span></span>
+            <span><span style={{ color: 'var(--fg-subtle)' }}>aktuell </span><span className="ge-num" style={{ fontWeight: 500 }}>{woechentlich ? (g.current_value !== null ? `${wertMitEinheit(g.current_value, g.target_unit === 'sessions_per_week' ? null : g.target_unit)} diese Woche` : '—') : messWert(g.current_value, g)}</span></span>
             <span style={{ color: 'var(--fg-dim)' }}>→</span>
             <span><span style={{ color: 'var(--fg-subtle)' }}>Ziel </span><span className="ge-num" style={{ fontWeight: 600, color: KAT[kat].farbe }}>{g.target_unit === 'sessions_per_week' && g.target_value !== null ? `${zahl(g.target_value)}× / Wo` : wertMitEinheit(g.target_value, g.target_unit)}</span></span>
           </div>
@@ -795,7 +861,7 @@ function MesszielKachel({ g, stichtag, mw }: { g: ZielFortschritt; stichtag: str
           <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
             {moduleVon(g).map(m => <ModulPill key={m} m={m} name={m === 'koerper' ? 'Messungen' : undefined} />)}
             <span style={{ fontSize: 11, color: 'var(--fg-subtle)', alignSelf: 'center', marginLeft: 4 }} data-messziel-quelle>
-              {quelle ?? (g.progress_status === 'measured' ? 'Quelle unbekannt' : 'noch kein Messwert')}
+              {g.uebung ?? quelle ?? (g.progress_status === 'measured' ? 'Quelle unbekannt' : 'noch kein Messwert')}
             </span>
           </div>
         </div>
@@ -850,8 +916,10 @@ function Abgeschlossen({ ziele, stichtag }: { ziele: ZielFortschritt[]; stichtag
         const grund = g.zustand.grund
         const darf = aktionen(g.zustand)
         const kat = g.goal_role === 'controlling' ? null : kategorieVon(g)
-        const wert = g.target_value !== null ? `${wertMitEinheit(g.current_value, null)} von ${wertMitEinheit(g.target_value, g.target_unit)}` : null
-        const info = grund === 'erreicht' ? `erreicht ${datumDe(am)}${g.current_value !== null ? ` · ${wertMitEinheit(g.current_value, g.target_unit)}` : ''}`
+        // Entwurf: „99,3 von 120 kg“, „erreicht 25.03.2026 · 84,0 kg“ — eine Stelle
+        const eine = (n: number | null) => (n === null ? '—' : zahl(n, 1))
+        const wert = g.target_value !== null ? `${eine(g.current_value)} von ${wertMitEinheit(g.target_value, g.target_unit)}` : null
+        const info = grund === 'erreicht' ? `erreicht ${datumDe(am)}${g.current_value !== null ? ` · ${messWert(g.current_value, { ...g, measurement_reps: null })}` : ''}`
           : grund === 'beendet' ? `beendet ${datumDe(am)}`
             : `Frist ${datumDe(g.target_date ?? am)}${wert ? ` · ${wert}` : ''} · eingefroren`
         const pct = g.target_value !== null && g.start_value !== null && g.current_value !== null && g.target_value !== g.start_value
@@ -877,9 +945,9 @@ function Abgeschlossen({ ziele, stichtag }: { ziele: ZielFortschritt[]; stichtag
             {loeschen === g.goal_id && <LoeschenFrage ziel={g} art="abgeschlossen" onZu={() => setLoeschen(null)} />}
             {details === g.goal_id && (
               <div style={{ flexBasis: '100%', background: 'var(--surface)', borderRadius: 8, padding: '10px 12px', fontSize: 12.5, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <span data-abgeschlossen-text>Start {wertMitEinheit(g.start_value, g.target_unit)}{g.gueltig_ab ? ` (${kurzDe(g.gueltig_ab)})` : ''}
-                  {' · '}Stand bei {grund === 'erreicht' ? 'Erreichen' : grund === 'beendet' ? 'Ende' : 'Frist'} {wertMitEinheit(g.current_value, g.target_unit)}{pct !== null ? ` · ${pct} %` : ''}.</span>
-                {g.goal_role !== 'controlling' && <MessDetails g={g} stichtag={stichtag} />}
+                <span data-abgeschlossen-text>Start {messWert(g.start_value, { ...g, measurement_reps: null })}{g.gueltig_ab ? ` (${kurzDe(g.gueltig_ab)})` : ''}
+                  {' · '}Stand bei {grund === 'erreicht' ? 'Erreichen' : grund === 'beendet' ? 'Ende' : 'Frist'} {messWert(g.current_value, { ...g, measurement_reps: null })}{pct !== null ? ` · ${pct} %` : ''}.</span>
+                {g.goal_role !== 'controlling' && <MessDetails g={g} stichtag={stichtag} bester />}
               </div>
             )}
           </div>

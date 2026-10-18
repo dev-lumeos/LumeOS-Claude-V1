@@ -242,8 +242,8 @@ describe('G-649 — die Abschnitte des Entwurfs', () => {
   })
   it('Feinschliff 7: Abgeschlossene zeigen Start → Stand des Ziels; ohne beide die Wochen', () => {
     const mit: Plan = { ...FERTIG, ziel: { ...FERTIG.ziel!, start_value: 88.6, current_value: 84 } }
-    assert.match(seite({ plaene: [mit] }), /data-plan-ergebnis="true"[^>]*>12\.06\.26 – 29\.10\.26 · 88,6 → 84,0 kg</)
-    assert.match(seite(), /data-plan-ergebnis="true"[^>]*>12\.06\.26 – 29\.10\.26 · 20 Wochen</)
+    assert.match(seite({ plaene: [mit] }), /data-plan-ergebnis="true"[^>]*>12\.06\.–29\.10\.2026 · 88,6 → 84,0 kg</, 'Zeitraum wie im Entwurf (Abnahme 18.10.)')
+    assert.match(seite(), /data-plan-ergebnis="true"[^>]*>12\.06\.–29\.10\.2026 · 20 Wochen</)
     assert.match(lies('lib/goals/plan-read.ts'), /select\('id, title, status, target_value, target_date, start_value, current_value'\)/)
   })
   it('Feinschliff 7: Termin-Art und Zeitraum der Phase brechen nicht um', () => {

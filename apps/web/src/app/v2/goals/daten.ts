@@ -291,15 +291,8 @@ export const PHASE_STATE = {
   week: 9,
   maxWeeks: 20,
   adherence: 94,
-  weightTrend: -0.18,
-  strengthTrend: +4.2,
-  bfTrend: -0.12,
+  // G-666: weightTrend/strengthTrend/bfTrend und recommendation sind mit ihren Kacheln entfernt
   experience: 'advanced',
-  recommendation: {
-    action: 'no_change',
-    reason: 'On track — BF ↓, strength ↑, weight stable. Textbook recomp response.',
-    confidence: 0.88,
-  },
   suggestedTransition: {
     to: 'lean_bulk',
     inWeeks: 4,

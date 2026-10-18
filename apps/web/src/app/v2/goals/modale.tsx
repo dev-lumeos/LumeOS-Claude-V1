@@ -179,7 +179,7 @@ export function GInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
 // ── Die Verteilung ──────────────────────────────────────────────
 export function GoalsModale({
   modal, onClose, strategien = [], erfahrung = null,
-  ziele = [], phasen = [], messungen = [], tdee = null, heute = tagIso(),
+  ziele = [], phasen = [], messungen = [], tdee = null, heute = tagIso(), trend = null,
 }: {
   modal: ModalZustand | null
   onClose: () => void
@@ -198,13 +198,15 @@ export function GoalsModale({
   messungen?: Koerpermessung[]
   tdee?: number | null
   heute?: string
+  /** G-665: Trendgewicht am Stichtag (`trendgewicht_am`) fuer die A1-Zeile. */
+  trend?: number | null
 }) {
   if (!modal) return null
   switch (modal.typ) {
     // G-628: „Ziel setzen" ersetzt „New goal" vollstaendig.
     case 'newGoal': return (
       <ZielSetzen onClose={onClose} strategien={strategien} erfahrung={erfahrung}
-                  ziele={ziele} phasen={phasen} messungen={messungen} tdee={tdee}
+                  ziele={ziele} phasen={phasen} messungen={messungen} tdee={tdee} trend={trend}
                   heute={heute} start={modal.start} />
     )
     case 'goalDet': return <GoalDetailModal g={modal.ziel} onClose={onClose} />

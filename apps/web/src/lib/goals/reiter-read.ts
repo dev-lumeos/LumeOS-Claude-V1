@@ -148,7 +148,8 @@ export async function ladeWoche(userId: string, stichtag: string, steuerzielId: 
 }
 
 export interface Verlauf {
-  punkte: Array<{ tag: string; wert: number; quelle: string }>
+  /** `einheit`: Name der Trainingseinheit, wenn der Punkt aus einem Satz stammt (Entwurf: „Training Push/Legs“). */
+  punkte: Array<{ tag: string; wert: number; quelle: string; einheit?: string | null }>
   wochen: Array<{ woche: string; wert: number | null; quote: number | null; serie: number; erreicht: boolean }>
 }
 
@@ -162,9 +163,21 @@ export async function ladeVerlauf(goalId: string, stichtag: string, woechentlich
   if (p.error) throw new Error(`measurement_points: ${p.error.message}`)
   if (w.error) throw new Error(`measurement_weeks: ${w.error.message}`)
   const zahl = (v: unknown) => (v === null || v === undefined ? null : Number(v))
+  const zeilen = (p.data ?? []) as Array<Record<string, unknown>>
+  // G-648 Abnahme: Satz → Übung → Einheit, ein Zugriff fuer alle Punkte aus `training.workout_sets`
+  const satzIds = zeilen.filter(r => String(r.source_name).startsWith('training.workout_sets') && r.source_id).map(r => String(r.source_id))
+  const einheiten = new Map<string, string>()
+  if (satzIds.length) {
+    const { data } = await createSessionClient().schema('training').from('workout_sets')
+      .select('id, workout_exercises(workout_sessions(name))').in('id', satzIds)
+    for (const s of (data ?? []) as unknown as Array<{ id: string; workout_exercises: { workout_sessions: { name: string | null } | null } | null }>) {
+      const n = s.workout_exercises?.workout_sessions?.name
+      if (n) einheiten.set(s.id, n)
+    }
+  }
   return {
-    punkte: ((p.data ?? []) as Array<Record<string, unknown>>)
-      .map(r => ({ tag: String(r.measured_on), wert: Number(r.value), quelle: String(r.source_name) }))
+    punkte: zeilen
+      .map(r => ({ tag: String(r.measured_on), wert: Number(r.value), quelle: String(r.source_name), einheit: einheiten.get(String(r.source_id)) ?? null }))
       .sort((a, b) => a.tag.localeCompare(b.tag)),
     wochen: ((w.data ?? []) as Array<Record<string, unknown>>).map(r => ({
       woche: String(r.week_start), wert: zahl(r.observed_value), quote: zahl(r.quota_pct),

@@ -757,7 +757,9 @@ test('das Goals-Modul kennzeichnet jede Kachel', () => {
     [GOALS, 1],
     // `[cmd]` **Gemessen 2026-09-07: 14.** Die 15 stammt aus der Zeit
     // vor der TDEE-Anbindung — die Kachel nahm die anliegende Prop.
-    [path.join(process.cwd(), 'src/app/v2/goals/tab-phase.tsx'), 14],
+    // `[cmd]` **12 seit G-666** (Tom 18.10.): „Weekly auto-adjustment" und „Expert BB annual"
+    // sind entfernt — nicht in `PhaseEngine.dc.html`, echt an den Entwurfsstellen.
+    [path.join(process.cwd(), 'src/app/v2/goals/tab-phase.tsx'), 12],
     [path.join(process.cwd(), 'src/app/v2/goals/tab-physique.tsx'), 7],
     // `[cmd]` **G-365: die Mockup-Reiter der vier angebundenen
     // Goals-Reiter** — `goals`, `metrics`, `measure`, `comp` aus
@@ -802,7 +804,9 @@ test('das Goals-Modul kennzeichnet jede Kachel', () => {
     // gefallen — Tom (E-69): Anzeige statt Auswahl; sie steht echt als
     // `PhasenZustand` in `planer.tsx` (aktive Phase des steuernden Ziels,
     // empfohlen aus `next_codes`).
-    [path.join(process.cwd(), 'src/app/v2/goals/fehlende-kacheln.tsx'), 6],
+    // `[cmd]` **3 seit G-666:** `FehlendePhaseKacheln` (Kennzahlen, Weekly auto-adjustment,
+    // Expert BB annual — drei Marken) ist entfernt, nicht angebunden.
+    [path.join(process.cwd(), 'src/app/v2/goals/fehlende-kacheln.tsx'), 3],
     // `[cmd]` **Dieselbe Hilfskomponenten-Bauform wie in training:**
     // 2 Marken im Quelltext, 9 Kacheln am Schirm (cost).
     [path.join(process.cwd(), 'src/app/v2/supplements/fehlende-kacheln.tsx'), 12],

@@ -45,10 +45,22 @@ import type { Koerpermessung, ZielFortschritt, Zielphase } from '../../../lib/go
 type Schritt = 's0' | 'A1' | 'A2' | 'A3' | 'B1' | 'fertig'
 
 const datumDe = (iso: string | null) => iso ? iso.split('-').reverse().join('.') : '–'
+/**
+ * G-665: die A1-Zeile wie im Entwurf (`ZielSetzen.dc.html` A1) — Datum ohne Jahr, dazu das
+ * Trendgewicht am Stichtag (`trendgewicht_am`); ohne Trend nur die Messung.
+ */
+export function LetzteMessung({ kg, datum, trend }: { kg: number; datum: string; trend: number | null }) {
+  return (
+    <div data-ziel-start style={{ background: 'var(--surface-2)', borderRadius: 8, padding: '10px 12px', fontSize: 12.5 }}>
+      Letzte Gewichtsmessung: <b className="v2-num">{fmt(kg, 2)} kg</b> am {datumDe(datum).slice(0, 6)}
+      {trend !== null && <> – Trend <b className="v2-num" data-ziel-trend>{fmt(trend)} kg</b>.</>}
+    </div>
+  )
+}
 const zahlAus = (s: string) => { const n = Number(s.replace(',', '.')); return s.trim() !== '' && Number.isFinite(n) ? n : null }
 
 
-export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, messungen, tdee, heute, start }: {
+export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, messungen, tdee, heute, start, trend = null }: {
   onClose: () => void
   strategien: Strategie[]
   erfahrung: string | null
@@ -57,6 +69,8 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
   messungen: Koerpermessung[]
   tdee: number | null
   heute: string
+  /** G-665: Trendgewicht am Stichtag. */
+  trend?: number | null
   /** „+ Messziel" springt direkt zu B1. */
   start?: 'B1'
 }) {
@@ -325,9 +339,7 @@ export function ZielSetzen({ onClose, strategien, erfahrung, ziele, phasen, mess
               })}
             </div>
             {letzte ? (
-              <div className="v2-dim" data-ziel-start style={{ fontSize: 11.5 }}>
-                Letzte Gewichtsmessung: {fmt(letzte.weight_kg!)} kg am {datumDe(letzte.measurement_date)}.
-              </div>
+              <LetzteMessung kg={letzte.weight_kg!} datum={letzte.measurement_date} trend={trend} />
             ) : gemessen !== null ? (
               <div className="v2-dim" data-ziel-start style={{ fontSize: 11.5 }}>
                 Gewicht heute gespeichert: {fmt(gemessen)} kg.

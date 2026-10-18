@@ -69,57 +69,6 @@ export function GoalsPhaseView() {
               <Meter value={PHASE_STATE.week} max={PHASE_STATE.maxWeeks} color={p.color} tall />
             </div>
           </div>
-          <div className="v2-grid v2-g-cols-4" style={{ gap: 8 }}>
-            {([
-              ['Weight trend', `${PHASE_STATE.weightTrend} kg/wk`, 'var(--pos)'],
-              ['Strength', `+${PHASE_STATE.strengthTrend}%`, 'var(--pos)'],
-              ['Body fat', `${PHASE_STATE.bfTrend} %/wk`, 'var(--pos)'],
-              ['Adherence', `${PHASE_STATE.adherence}%`, undefined],
-            ] as Array<[string, string, string | undefined]>).map(([l, v, c]) => (
-              <Card key={l} className="v2-card-tight" style={{ padding: 10 }}>
-                <div className="v2-eyebrow">{l}</div>
-                <div className="v2-num" style={{ fontSize: 15, color: c }}>{v}</div>
-              </Card>
-            ))}
-          </div>
-        </Card>
-
-        {/* Kachel 2: woechentliche Anpassung */}
-        <Card title="Weekly auto-adjustment" sub="deterministic rules · no AI" attrappe={ATTRAPPE}>
-          <div style={{
-            padding: 12, borderRadius: 7,
-            background: 'color-mix(in oklch, var(--pos) 6%, var(--surface))',
-            border: '1px solid color-mix(in oklch, var(--pos) 25%, var(--border))',
-            marginBottom: 12,
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
-              <Icon name="check" className="v2-ic v2-ic-sm" style={{ color: 'var(--pos)' }} />
-              <span style={{ fontSize: 13, fontWeight: 600 }}>No change this week</span>
-              <span className="v2-dim v2-mono" style={{ marginLeft: 'auto', fontSize: 10 }}>
-                confidence {Math.round(PHASE_STATE.recommendation.confidence * 100)}%
-              </span>
-            </div>
-            <div className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.5 }}>
-              {PHASE_STATE.recommendation.reason}
-            </div>
-          </div>
-          <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Active guards</div>
-          <div className="v2-col-gap" style={{ gap: 4 }}>
-            {(p.guards || [
-              'Calorie cycling per training/rest day',
-              'Protein floor 2.0 g/kg',
-              'Weekly average ≈ maintenance',
-            ]).map(g => (
-              <div key={g} style={{
-                display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px',
-                background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 5,
-                fontSize: 11.5, fontFamily: 'var(--font-mono)',
-              }}>
-                <span style={{ width: 6, height: 6, borderRadius: 999, background: 'var(--pos)', flexShrink: 0 }} />
-                {g}
-              </div>
-            ))}
-          </div>
         </Card>
 
         {/* Kachel 3: der Zustandsautomat */}
@@ -234,35 +183,6 @@ export function GoalsPhaseView() {
           )}
         </Card>
 
-        <Card
-          title="Expert BB annual" sub="12-month cycle · advanced only"
-          attrappe={attrappeAus('theme-v1/module-goals-pro.jsx',
-            'expert_bb_annual steht im phase_type-CHECK — '
-            + 'es fehlt der Schreibweg (G-357)')}
-          actions={
-            <button type="button" className="v2-btn v2-btn-sm" onClick={() => setEditing('expert_bb_annual')}>
-              <Icon name="edit" className="v2-ic v2-ic-sm" />Customize
-            </button>
-          }
-        >
-          <div className="v2-col-gap" style={{ gap: 4 }}>
-            {GOAL_PHASES.expert_bb_annual.annual?.map(a => (
-              <div key={a.months} style={{
-                display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px',
-                background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 5, fontSize: 11.5,
-              }}>
-                <span className="v2-num v2-dim" style={{ width: 40, fontSize: 10, flexShrink: 0 }}>M{a.months}</span>
-                <span style={{ fontWeight: 500 }}>{a.phase}</span>
-                <span className="v2-dim" style={{ marginLeft: 'auto', fontSize: 10.5 }}>{a.focus}</span>
-              </div>
-            ))}
-          </div>
-          <div className="v2-divider" />
-          <button type="button" className="v2-btn v2-btn-ghost" style={{ width: '100%' }}
-                  onClick={() => setEditing('expert_bb_annual')}>
-            Open annual cycle editor
-          </button>
-        </Card>
       </div>
 
       {editing && <PhaseEditorModal phaseId={editing} onClose={() => setEditing(null)} />}

@@ -225,6 +225,10 @@ export type ZielFortschritt = {
   measurement_rhythm: string | null
   measurement_site: string | null
   achievement_date: string | null
+  /** G-648 Abnahme: Wiederholungen eines Kraftziels „Gewicht × Wdh." (Entwurf: „Kraft · 5 Wdh."). */
+  measurement_reps?: number | null
+  /** G-648 Abnahme: der Name der Übung (`training.exercises.name`) — der Entwurf nennt ihn als Quelle. */
+  uebung?: string | null
   /**
    * `[cmd]` **G-640: der wirksame Zustand** — aus `goal_list_at` (G-611) oder,
    * solange die Funktion fehlt, aus dem gespeicherten Status (`quelle`).
@@ -254,7 +258,7 @@ export async function ladeZiele(userId: string, stichtag: string): Promise<ZielF
     .select('id, goal_type, subtype, title, target_value, target_unit, start_value, '
       + 'current_value, target_date, gueltig_ab, linked_modules, status, '
       + 'is_primary, priority, progress_pct, goal_role, measurement_type, '
-      + 'measurement_rhythm, measurement_site, achievement_date')
+      + 'measurement_rhythm, measurement_site, achievement_date, exercise_id, measurement_reps')
     .eq('user_id', userId)
     // G-618: keine Rangfolge mehr — gruppiert wird nach Rolle und Kategorie.
     .order('created_at', { ascending: true })
@@ -279,6 +283,14 @@ export async function ladeZiele(userId: string, stichtag: string): Promise<ZielF
   }
   const zeilen = zustaende ? alle.filter(z => zustaende!.has(z.id as string)) : alle
   if (zeilen.length === 0) return []
+
+  // G-648 Abnahme: Übungsnamen der Kraftziele in einem Zugriff
+  const uebungIds = Array.from(new Set(zeilen.map(z => text(z.exercise_id)).filter((x): x is string => !!x)))
+  const uebungen = new Map<string, string>()
+  if (uebungIds.length) {
+    const { data } = await createSessionClient().schema('training').from('exercises').select('id, name').in('id', uebungIds)
+    for (const u of (data ?? []) as Array<{ id: string; name: string | null }>) if (u.name) uebungen.set(u.id, u.name)
+  }
 
   const fortschritte = await Promise.all(zeilen.map(async z => {
     const { data } = await db.rpc('goal_progress_at', {
@@ -317,6 +329,8 @@ export async function ladeZiele(userId: string, stichtag: string): Promise<ZielF
       measurement_rhythm: text(z.measurement_rhythm),
       measurement_site: text(z.measurement_site),
       achievement_date: text(z.achievement_date),
+      measurement_reps: zahl(z.measurement_reps),
+      uebung: uebungen.get(text(z.exercise_id) ?? '') ?? null,
       zustand: zustaende?.get(z.id as string) ?? zustandAusStatus(text(z.status)),
     }
   })

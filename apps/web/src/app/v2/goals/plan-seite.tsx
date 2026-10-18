@@ -41,6 +41,12 @@ import type { Strategie } from '../../../lib/goals/strategie-read'
 import type { ZielFortschritt } from '../../../lib/goals/lesen'
 
 /** Datum wie im Entwurf: „08.10.26". */
+/** Entwurf: „06.01.–25.03.2026" im selben Jahr, sonst beide Daten mit Jahr. */
+export const zeitraumDe = (von: string | null, bis: string | null) => {
+  if (!von || !bis) return `${dstr(von)} – ${dstr(bis)}`
+  const t = (d: string) => `${d.slice(8, 10)}.${d.slice(5, 7)}.`
+  return von.slice(0, 4) === bis.slice(0, 4) ? `${t(von)}–${t(bis)}${bis.slice(0, 4)}` : `${t(von)}${von.slice(0, 4)}–${t(bis)}${bis.slice(0, 4)}`
+}
 const dstr = (iso: string | null) => (iso ? `${iso.slice(8, 10)}.${iso.slice(5, 7)}.${iso.slice(2, 4)}` : '—')
 const tagPlus = (tag: string, n: number) => {
   const [j, m, t] = tag.split('-').map(Number)
@@ -73,9 +79,11 @@ export function wacheZeile(w: Wache): { t: string; s: string } {
  * G-627: Anpassung und Grund einer Woche aus dem Protokoll (`goal_weekly_adjustments_at`).
  * `anp: null` heisst „kommt" — die Kette ist nicht live. Eine laufende Woche hat noch keine Zeile.
  */
-export function anpassungZeile(protokoll: Anpassungswoche[] | null | undefined, wocheAb: string, vollstaendig: boolean): { anp: string | null; grund: string; regel: string | null } {
+export function anpassungZeile(protokoll: Anpassungswoche[] | null | undefined, wocheAb: string, vollstaendig: boolean, juengste = false): { anp: string | null; grund: string; regel: string | null } {
   if (!protokoll) return { anp: null, grund: '–', regel: null }
   const z = protokoll.find(x => x.week_start === wocheAb)
+  // Die juengste Woche endet am Stichtag: der Tageslauf (G-660) schreibt sie erst nach Mitternacht
+  if (!z && vollstaendig && juengste) return { anp: '—', grund: 'Protokoll folgt nach dem Tageslauf', regel: null }
   if (!z) return vollstaendig ? { anp: '—', grund: 'kein Protokoll für diese Woche', regel: null } : { anp: '—', grund: 'Woche läuft noch', regel: null }
   const vz = (n: number) => `${n > 0 ? '+' : '−'}${Math.abs(n)}`
   const teile = [z.kcal_delta !== 0 ? `${vz(z.kcal_delta)} kcal` : null, z.protein_delta_g !== 0 ? `${vz(z.protein_delta_g)} g Protein` : null].filter(Boolean)
@@ -211,7 +219,7 @@ function Details({ plan, strategien, alsNaechstes, ausblick, wachen }: { plan: P
             {ausblick === null && <tr data-anpassung-kommt><td colSpan={6}><Kommt was="Wochenwerte" punkt="G-650" /></td></tr>}
             {/* Trend Δ, Soll Δ, Logtage aus `controlling_goal_outlook` (G-650); Anpassung und Grund aus dem Protokoll (G-627) */}
             {[...(ausblick?.wochen ?? [])].reverse().slice(0, 3).map(w => {
-              const a = anpassungZeile(plan.anpassungen, w.woche_ab, w.vollstaendig)
+              const a = anpassungZeile(plan.anpassungen, w.woche_ab, w.vollstaendig, w.woche_ab === ausblick?.wochen.at(-1)?.woche_ab)
               return (
                 <tr key={w.woche_ab} data-anpassung-woche={w.woche_ab} data-anpassung-regel={a.regel ?? ''}>
                   <td>KW {kalenderwoche(w.woche_ab)}</td><td className="ge-num">{vzKg(w.trend_delta_kg)}</td><td className="ge-num">{vzKg(w.soll_delta_kg)}</td>
@@ -685,15 +693,19 @@ function FertigerPlan({ plan, strategien, vorlagenLive, melde, stichtag }: { pla
   const [r, setR] = React.useState<Planergebnis | null>(null)
   const ohneDauer = plan.positionen.some(p => p.duration_weeks == null)
   const erreicht = plan.ziel?.status === 'achieved'
+  // Entwurf: ein Plan mit A-Termin, der bis dahin endete, zeigt „✓ Termin gehalten" und das Bühnengewicht
+  const termin = aTermin(plan)
+  const gehalten = !!termin && !!ende(plan) && ende(plan)! <= termin
   return (
     <div data-plan-kachel="abgeschlossen" className="ge-card" style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 8, background: 'var(--bg)' }}>
       <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
         <span className="ge-typ" data-plan-typ>{planTyp(plan)}</span>
-        <span className={`ge-chip${erreicht ? ' ge-lage-voraus' : ' ge-grau'}`}>{erreicht ? '✓ erreicht' : 'beendet'}</span>
+        <span className={`ge-chip${erreicht || gehalten ? ' ge-lage-voraus' : ' ge-grau'}`} data-plan-abschluss={gehalten ? 'termin' : erreicht ? 'erreicht' : 'beendet'}>{gehalten ? '✓ Termin gehalten' : erreicht ? '✓ erreicht' : 'beendet'}</span>
       </div>
       <div style={{ fontWeight: 600 }}>{plan.name}</div>
       {/* Entwurf: „06.01.–25.03.2026 · 88,6 → 84,0 kg" — Start und Stand des Ziels (`user_goals`), ohne beide die Wochen */}
-      <div className="ge-num" data-plan-ergebnis style={{ fontSize: 11.5, color: 'var(--fg-subtle)' }}>{dstr(beginn(plan))} – {dstr(ende(plan))} · {plan.ziel?.start_value != null && plan.ziel.current_value != null
+      <div className="ge-num" data-plan-ergebnis style={{ fontSize: 11.5, color: 'var(--fg-subtle)' }}>{zeitraumDe(beginn(plan), ende(plan))} · {gehalten && plan.ziel?.current_value != null ? `Bühnengewicht ${kg1(plan.ziel.current_value)} kg`
+        : plan.ziel?.start_value != null && plan.ziel.current_value != null
         ? `${kg1(plan.ziel.start_value)} → ${kg1(plan.ziel.current_value)} kg` : `${wochen(plan)} Wochen`}</div>
       <div style={{ opacity: 0.7 }}><Segmente plan={plan} hoehe={8} /></div>
       {offen && <div data-plan-details={plan.id} style={{ fontSize: 12.5, background: 'var(--surface)', borderRadius: 8, padding: '8px 10px' }}>

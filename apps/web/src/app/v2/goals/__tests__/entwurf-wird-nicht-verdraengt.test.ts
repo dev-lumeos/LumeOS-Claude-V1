@@ -117,8 +117,8 @@ describe('G-359 — der Entwurf bleibt sichtbar (E-68)', () => {
     const t = lies(join(GOALS, 'tab-phase.tsx'))
     // `[cmd]` **Nicht die Zahl der Marken zaehlen** — die war schon
     // hoch (G-355: 69). **Sondern: nennen DIESE drei den Grund?**
-    for (const kachel of ['Phase state machine', 'Phase parameters',
-      'Expert BB annual']) {
+    // G-666 (Tom 18.10.): „Expert BB annual" ist entfernt — nicht in PhaseEngine.dc.html
+    for (const kachel of ['Phase state machine', 'Phase parameters']) {
       const i = t.indexOf(kachel)
       assert.ok(i > 0, `Kachel \`${kachel}\` fehlt`)
       const block = t.slice(i, i + 420)
@@ -132,7 +132,8 @@ describe('G-359 — der Entwurf bleibt sichtbar (E-68)', () => {
     // `[read]` **Kein `s`-Flag** — es braucht ES2018, das Ziel liegt
     // darunter (TS1501). `[\s\S]` tut dasselbe ohne Flag.
     const gruende = t.match(/attrappeAus\([\s\S]{0,240}?\)\)?\}/g) ?? []
-    assert.ok(gruende.length >= 3, `nur ${gruende.length} Gruende`)
+    // G-666: zwei Kacheln mit Grund — die dritte (Expert BB annual) ist entfernt
+    assert.ok(gruende.length >= 2, `nur ${gruende.length} Gruende`)
     for (const g of gruende) {
       assert.ok(/G-\d{2,3}|unbekannt, nie untersucht/.test(g),
         `ein Grund nennt weder Punkt noch „unbekannt": ${g.slice(0, 70)}`)

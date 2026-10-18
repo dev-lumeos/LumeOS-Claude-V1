@@ -201,6 +201,7 @@ describe('G-629 — bis in die Anzeige', () => {
       assert.match(q, new RegExp(`<Kommt was="${was}" punkt="${punkt}" />`), `kommt-Marke ${was} fehlt`)
     // G-627 (live 17.10.): Anpassung und Grund kommen aus dem Protokoll — die Sammelmarke ist weg
     assert.ok(!q.includes('<Kommt was="Anpassung mit Protokoll"'), 'die Anpassung steht wieder als kommt')
-    assert.match(q, /anpassungZeile\(plan\.anpassungen, w\.woche_ab, w\.vollstaendig\)/)
+    // Abnahme 18.10.: die juengste Woche (bis Stichtag) ist als vierter Wert dabei
+    assert.match(q, /anpassungZeile\(plan\.anpassungen, w\.woche_ab, w\.vollstaendig, w\.woche_ab === ausblick\?\.wochen\.at\(-1\)\?\.woche_ab\)/)
   })
 })

@@ -31,8 +31,8 @@
 //
 //     goals     fehlen  This week · Cross-module health
 //     metrics   fehlen  Body fat trend · Lean mass · 30 days
-//     phase     fehlen  4 Kennzahlen · Weekly auto-adjustment ·
-//                       Expert BB annual (Phase state machine: G-615 echt)
+//     phase     (G-666, Tom 18.10.: Kennzahlen, Weekly auto-adjustment und
+//                       Expert BB annual entfernt — nicht in PhaseEngine.dc.html)
 //
 // **Jede traegt den Grund, warum sie nicht angebunden ist** — E-68.
 //
@@ -42,9 +42,7 @@
 import * as React from 'react'
 import { Card, Pill, Icon, LineChart } from '@lumeos/ui'
 
-import {
-  PHASE_STATE, GOAL_PHASES, BODY_METRICS,
-} from './daten'
+import { BODY_METRICS } from './daten'
 import { useGoals } from './kontext'
 // `[read]` **Nur der TYP** — `lesen.ts` ist serverseitig, ein
 // Wert-Import zoege den Server-Baum ueber die `'use client'`-Grenze
@@ -82,123 +80,6 @@ const FFMI_BAENDER: Array<[string, string]> = [
 /** E-68: Quelle UND Grund. */
 function marke(wartet: string): string {
   return `Attrappe — ${QUELLE} · wartet auf: ${wartet}`
-}
-
-/**
- * Die sechs Mockup-Kacheln des Phase-Reiters, die oben fehlen.
- *
- * `[read]` Sie stehen ueber der Linie, weil sie zum Soll-Bestand des
- * Reiters gehoeren — nicht darunter, wo der Vergleich steht.
- */
-export function FehlendePhaseKacheln() {
-  const p = GOAL_PHASES[PHASE_STATE.current]
-  return (
-    <>
-      {/* [cmd] module-goals-pro.jsx:227-230 — die vier Kennzahlen im
-          Phasenkopf. `PhaseEcht` baut den Kopf ohne sie. */}
-      <div className="v2-grid v2-g-cols-4" style={{ gap: 8 }}>
-        {([
-          ['Weight trend', `${PHASE_STATE.weightTrend} kg/wk`,
-            // G-534/A1: hier stand der Spaltenname. Die Marke nennt,
-            // WAS fehlt — nicht, wo es fehlt.
-            'einen gespeicherten Gewichtstrend je Phase'],
-          ['Strength', `+${PHASE_STATE.strengthTrend}%`,
-            'Kraftzuwachs je Phase braucht training.sets über den Phasenzeitraum'],
-          ['Body fat', `${PHASE_STATE.bfTrend} %/wk`,
-            'Körperfett je Woche braucht body_composition_navy im Phasenfenster'],
-          ['Adherence', `${PHASE_STATE.adherence}%`,
-            'Einhaltung ist nirgends gespeichert — kein Feld, keine Ableitung'],
-        ] as Array<[string, string, string]>).map(([l, v, w]) => (
-          <Card key={l} className="v2-card-tight" style={{ padding: 10 }}
-                attrappe={marke(w)}>
-            <div className="v2-eyebrow">{l}</div>
-            <div className="v2-num" style={{ fontSize: 15 }}>{v}</div>
-          </Card>
-        ))}
-      </div>
-
-      {/* [cmd] module-goals-pro.jsx:235-259 */}
-      <Card title="Weekly auto-adjustment" sub="deterministic rules · no AI"
-            attrappe={marke(
-              'eine Regelauswertung je Woche — es gibt weder Regeln in der '
-              + 'Datenbank noch einen Lauf, der sie anwendet')}>
-        <div style={{
-          padding: 12, borderRadius: 7,
-          background: 'color-mix(in oklch, var(--pos) 6%, var(--surface))',
-          border: '1px solid color-mix(in oklch, var(--pos) 25%, var(--border))',
-          marginBottom: 12,
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-            <Icon name="check" className="v2-ic v2-ic-sm" style={{ color: 'var(--pos)' }} />
-            <span style={{ fontSize: 13, fontWeight: 600 }}>No change this week</span>
-            <span className="v2-dim v2-mono" style={{ marginLeft: 'auto', fontSize: 10 }}>
-              confidence {Math.round(PHASE_STATE.recommendation.confidence * 100)}%
-            </span>
-          </div>
-          <div className="v2-muted" style={{ fontSize: 12, lineHeight: 1.5 }}>
-            {PHASE_STATE.recommendation.reason}
-          </div>
-        </div>
-        <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Active guards</div>
-        <div className="v2-col-gap" style={{ gap: 4 }}>
-          {(p?.guards ?? [
-            'Calorie cycling per training/rest day',
-            'Protein floor 2.0 g/kg',
-            'Weekly average ≈ maintenance',
-          ]).map(g => (
-            <div key={g} style={{
-              display: 'flex', alignItems: 'center', gap: 8,
-              padding: '7px 10px', background: 'var(--surface)',
-              border: '1px solid var(--border)', borderRadius: 5,
-              fontSize: 11.5, fontFamily: 'var(--font-mono)',
-            }}>
-              <span style={{
-                width: 6, height: 6, borderRadius: 999,
-                background: 'var(--pos)', flexShrink: 0,
-              }} />
-              {g}
-            </div>
-          ))}
-        </div>
-      </Card>
-
-      {/* ══ G-615: „Phase state machine" ist keine Attrappe mehr ══
-          `[cmd]` **Hier stand die Mockup-Kachel** (sieben Phasen zum
-          Umschalten). **Tom, G-615: Anzeige statt Auswahl** — sie steht
-          jetzt echt als `PhasenZustand` (`planer.tsx`). */}
-      {/* [cmd] module-goals-pro.jsx:470-489 */}
-      <Card title="Expert BB annual" sub="12-month cycle · advanced only"
-            attrappe={marke(
-              // G-534/A1: der Tabellenname ist raus. Was fehlt, ist
-              // der Jahresplan — nicht eine Spalte.
-              'einen Jahresplan je Nutzer — gespeichert wird immer '
-              + 'nur die laufende Phase')}>
-        <div className="v2-col-gap" style={{ gap: 4 }}>
-          {(GOAL_PHASES.expert_bb_annual?.annual ?? []).map(a => (
-            <div key={a.months} style={{
-              display: 'flex', alignItems: 'center', gap: 8,
-              padding: '7px 10px', background: 'var(--surface)',
-              border: '1px solid var(--border)', borderRadius: 5,
-              fontSize: 11.5,
-            }}>
-              <span className="v2-num v2-dim" style={{ width: 44, fontSize: 10 }}>
-                M{a.months}
-              </span>
-              <span style={{ fontWeight: 500, fontSize: 11 }}>{a.phase}</span>
-              <span className="v2-dim" style={{ marginLeft: 'auto', fontSize: 10.5 }}>
-                {a.focus}
-              </span>
-            </div>
-          ))}
-        </div>
-        <div className="v2-divider" />
-        <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.5 }}>
-          Sichtbar nur fuer Erfahrungsgrad „advanced&ldquo; und hoeher. Er
-          steht in `PHASE_STATE`, nicht in der Datenbank.
-        </div>
-      </Card>
-    </>
-  )
 }
 
 /**

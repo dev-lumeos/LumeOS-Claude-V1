@@ -39,3 +39,21 @@ test('G-665: mit der jüngsten Messung braucht A1 kein „Gewicht heute"', () =>
   assert.equal(letzteGewichtsmessung(tage.slice(0, 120), '2026-10-17'), null, 'alter Weg: älteste 120 — keine Messung gefunden')
   assert.equal(letzteGewichtsmessung(tage.slice(-120), '2026-10-17')?.measurement_date, '2026-10-17')
 })
+
+test('G-665: A1-Zeile wie im Entwurf — Datum ohne Jahr, Trend aus trendgewicht_am', async () => {
+  const React = await import('react')
+  const { renderToStaticMarkup } = await import('react-dom/server')
+  const { LetzteMessung } = await import('../../../app/v2/goals/ziel-setzen')
+  const text = (trend: number | null) => renderToStaticMarkup(React.createElement(LetzteMessung, { kg: 84.66, datum: '2026-10-08', trend }))
+    .replace(/<[^>]+>/g, '')
+  assert.equal(text(84.7), 'Letzte Gewichtsmessung: 84,66 kg am 08.10. – Trend 84,7 kg.')
+  assert.equal(text(84.6649), 'Letzte Gewichtsmessung: 84,66 kg am 08.10. – Trend 84,7 kg.')
+  assert.equal(text(null), 'Letzte Gewichtsmessung: 84,66 kg am 08.10.', 'ohne Trend: der Punkt des Datums schliesst den Satz')
+})
+
+test('G-665: der Trend kommt von der Seite bis in A1', () => {
+  const quelle = (p: string) => readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'app', 'v2', 'goals', p), 'utf8')
+  assert.match(quelle('ansicht.tsx'), /<GoalsModale[\s\S]*?trend=\{echt\.woche\.trend\.heute\}/)
+  assert.match(quelle('modale.tsx'), /<ZielSetzen[\s\S]*?trend=\{trend\}/)
+  assert.match(quelle('ziel-setzen.tsx'), /<LetzteMessung kg=\{letzte\.weight_kg!\} datum=\{letzte\.measurement_date\} trend=\{trend\} \/>/)
+})
