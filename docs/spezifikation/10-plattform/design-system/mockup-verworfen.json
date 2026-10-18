@@ -12,6 +12,18 @@
       "element": "Recently closed",
       "grund": "ersetzt durch Abgeschlossen (Main.dc.html, G-648)",
       "freigabe": "Tom, 2026-10-16"
+    },
+    {
+      "modul": "goals",
+      "element": "Weekly auto-adjustment",
+      "grund": "ersetzt durch die Wochentabelle Woechentliche Anpassung (PhaseEngine.dc.html, G-627/G-662, G-666)",
+      "freigabe": "Tom, 2026-10-18"
+    },
+    {
+      "modul": "goals",
+      "element": "Expert BB annual",
+      "grund": "ersetzt durch die Vorlage Expert BB Jahreszyklus (PhaseEngine.dc.html, G-644, G-666)",
+      "freigabe": "Tom, 2026-10-18"
     }
   ]
 }
