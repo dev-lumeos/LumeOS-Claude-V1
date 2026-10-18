@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 279 |
+| `todos` | 278 |
 | `laufend_codex` | 6 |
-| `laufend_claudecode` | 2 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 726 |
 | **gesamt** | **1013** |
 
@@ -745,7 +745,7 @@
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
 | `G-672` | idee | niedrig | [Meilensteine von Hand setzen (mögliches Add-on)](todos/goals-g-0672-meilensteine-von-hand-setzen.md) | offen | G-525 | — |
-| `G-674` | aufgabe | mittel | [UI: die Ergänzungen aus dem Entwurf (Vorschau, Datenpunkt, Phasensperre, Papierkorb)](todos/goals-g-0674-ui-entwurfsergaenzungen.md) | offen | G-675 | — |
+| `G-674` | aufgabe | mittel | [UI: die Ergänzungen aus dem Entwurf (Vorschau, Datenpunkt, Phasensperre, Papierkorb)](laufend_claudecode/goals-g-0674-ui-entwurfsergaenzungen.md) | laeuft (claudecode) | G-675 | — |
 | `G-675` | aufgabe | hoch | [Kette: Vorschau beim Bearbeiten, Phasensperre, Papierkorb für Goals und die Phase Engine](todos/goals-g-0675-kette-vorschau-phasensperre-papierkorb.md) | offen | G-676 | — |
 
 ## coach — 58

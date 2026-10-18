@@ -4,6 +4,8 @@ typ: aufgabe
 modul: goals
 schwere: mittel
 angelegt: 2026-10-18
+agent: claudecode
+beauftragt: 2026-10-18
 
 braucht: [G-675]
 kind_von: G-673

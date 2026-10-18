@@ -33,9 +33,11 @@ Nichts wird automatisch entfernt. Weg ist ein Eintrag erst, wenn der Nutzer im P
 `[cmd]` Bestand am 18.10.: In `apps/web/src` gibt es 16 Aufrufe von `.delete()` in 15 Dateien (nutrition, supplements, medical, goals, allergien).
 In `supabase/_pipeline` enthalten 34 SQL-Dateien `DELETE FROM`. Darin sind Seeds, Wartung und Tests mitgezählt. Welche davon Löschpfade für Nutzer sind, ist nicht gemessen.
 
-## Offen (Tom)
+## Entschieden (Tom, 18.10. 13:23)
 
-- Einzelbuchungen wie Mahlzeit-Eintrag, Wasser, Satz oder Einnahme-Haken: Kommen auch sie in den Papierkorb, oder reicht dort ein "Rückgängig" direkt nach dem Löschen? Der Orchestrator empfiehlt "Rückgängig".
+- In den Papierkorb kommen nur Objekte mit eigenem Namen oder Verlauf: Ziele, Plaene, Programme, Rezepte, Stacks, Einheiten, Befunde und Aehnliches.
+- Einzelbuchungen (Mahlzeit-Eintrag, Wasser, Satz, Einnahme-Haken) bekommen kein Papierkorb-Eintrag. Statt dessen gibt es direkt nach dem Loeschen ein "Rueckgaengig" in der Meldung.
+- "Konto loeschen" entfernt auch den Papierkorb restlos.
 
 ## Was zu tun ist
 

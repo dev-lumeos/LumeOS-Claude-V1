@@ -7,6 +7,7 @@
 |---|---|---|---|
 | Claude Code | G-629 | Die Phase engine zeigt Pläne | **laeuft**, raus 10.10. |
 | Claude Code | G-671 | Reste der Mockup-Referenz unter der Phase Engine | **laeuft**, raus 18.10. |
+| Claude Code | G-674 | UI: die Ergänzungen aus dem Entwurf (Vorschau, Datenpunkt, Phasensperre, Papierkorb) | **laeuft**, raus 18.10. |
 | Codex | G-525 | Meilensteine gibt es nur als Seed | **laeuft**, raus 18.10. |
 | Codex | G-646 | Trendgewicht einbinden | **laeuft**, raus 18.10. |
 | Codex | G-667 | Kraft-Messpunkte je Satz statt je Einheit | **laeuft**, raus 18.10. |
