@@ -4204,6 +4204,34 @@
       "kind": "tsx",
       "creates": "G-662: Positionsrate trotz gedeckelter Linie, Erhaltung und Wochenwache mit Sabotage.",
       "depends_on": ["662_weekly_position_target"]
+    },
+    {
+      "id": "663_goal_weight_trend_freeze",
+      "path": "supabase/_pipeline/11_goals/663_goal_weight_trend_freeze.sql",
+      "kind": "sql",
+      "creates": "G-663: Steuernde Gewichtsziele frieren erst bei erreichtem EMA-Trend ein.",
+      "depends_on": ["662_weekly_position_target_probe"]
+    },
+    {
+      "id": "663_goal_weight_trend_freeze_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g663-weight-trend-freeze.test.ts",
+      "kind": "tsx",
+      "creates": "G-663: Einzelner Ausreisser bleibt aktiv, erreichter Trend friert ein, Rohwert-Messziel bleibt erhalten.",
+      "depends_on": ["663_goal_weight_trend_freeze"]
+    },
+    {
+      "id": "664_no_future_measurements",
+      "path": "supabase/_pipeline/11_goals/664_no_future_measurements.sql",
+      "kind": "sql",
+      "creates": "G-664: Messleser, Vorschau, Navy, Phasenstart und Profilgewicht schliessen Zukunft aus.",
+      "depends_on": ["663_goal_weight_trend_freeze_probe"]
+    },
+    {
+      "id": "664_no_future_measurements_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g664-no-future-measurements.test.ts",
+      "kind": "tsx",
+      "creates": "G-664: Zukunftsmessung bleibt aus Trend, Vorschau, Messpunkten, Profil und Beitragslauf draussen.",
+      "depends_on": ["664_no_future_measurements"]
     }
   ]
 }

@@ -507,7 +507,8 @@ SELECT
   measurement_source,
   'Kopie aus tom.seed@example.com'
 FROM goals.body_measurements
-WHERE user_id = :'quelle'::uuid;
+WHERE user_id = :'quelle'::uuid
+  AND measurement_date <= CURRENT_DATE;
 
 INSERT INTO goals.body_circumferences (
   id, user_id, measurement_date, measurement_time, neck_cm, shoulders_cm,
@@ -522,7 +523,8 @@ SELECT
   thigh_right_cm, calf_left_cm, calf_right_cm, notes, measurement_source,
   'Kopie aus tom.seed@example.com'
 FROM goals.body_circumferences
-WHERE user_id = :'quelle'::uuid;
+WHERE user_id = :'quelle'::uuid
+  AND measurement_date <= CURRENT_DATE;
 
 -- 8. Recovery.
 INSERT INTO recovery.checkins (
