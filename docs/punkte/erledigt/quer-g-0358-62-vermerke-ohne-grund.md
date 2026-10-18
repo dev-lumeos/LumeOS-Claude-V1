@@ -13,7 +13,7 @@ erledigt: 2026-09-07
 commit: a880e92b
 beruehrt:
   dateien:
-    - apps/web/src/app/v2/goals/phase-editor.tsx
+    - apps/web/src/app/v2/goals
 zahlen:
   gemessen: 2026-09-07
   vermerke: 69
