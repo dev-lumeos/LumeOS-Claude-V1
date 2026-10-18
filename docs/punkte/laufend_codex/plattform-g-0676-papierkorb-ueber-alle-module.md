@@ -4,6 +4,8 @@ typ: aufgabe
 modul: plattform
 schwere: hoch
 angelegt: 2026-10-18
+agent: codex
+beauftragt: 2026-10-18
 
 braucht: []
 kind_von: G-673

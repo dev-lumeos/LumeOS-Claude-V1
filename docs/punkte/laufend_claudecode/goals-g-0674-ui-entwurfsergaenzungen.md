@@ -49,3 +49,12 @@ beruehrt:
     Bereich: apps/web
     Fremd:   supabase/_pipeline gehoert Codex, docs/ dem Orchestrator.
     Stand:   2026-10-18, HEAD 5815dba3
+
+## Stand - 2026-10-18 14:20 (Orchestrator)
+
+Stelle 2 ist erledigt (commit d6efd946):
+- `[read]` Die Quelle ist ein Knopf. Der Link fuehrt auf Training History (?tab=history&einheit=, &woche=) bzw. auf Goals Measurements (?am=), von dort zurueck zu Goals.
+- `[cmd]` Bilder g674-ist-einheit-auf und -ziel geprueft, sie entsprechen Main.dc.html V57.
+- `[cmd]` test-user hat wieder 2 Ziele, 0 Meilensteine, 0 Probeziele.
+
+Stellen 1, 3 und 4 warten auf G-675.

@@ -8,8 +8,8 @@
 | `todos` | 278 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 732 |
-| **gesamt** | **1014** |
+| `erledigt` | 733 |
+| **gesamt** | **1015** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 145
+## goals — 146
 
-### beauftragbar — 137
+### beauftragbar — 138
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -709,7 +709,7 @@
 | `G-645` | fehler | mittel | [Goals und Phase Engine: Befunde am Schirm (dev, 10.10.)](todos/goals-g-0645-goals-reiter-befunde-am-schirm.md) | offen | — | — |
 | `G-646` | aufgabe | mittel | [Trendgewicht einbinden](erledigt/goals-g-0646-trendgewicht-einbinden.md) | erledigt | — | — |
 | `G-647` | fehler | niedrig | [Der Satz aus 622 steht noch ohne Umlaute](erledigt/goals-g-0647-622-satz-mit-umlauten.md) | erledigt | — | — |
-| `G-648` | fehler | hoch | [Reiter Goals weicht vom freigegebenen Entwurf ab](erledigt/goals-g-0648-reiter-goals-weicht-vom-entwurf-ab.md) | erledigt | — | G-652, G-657, G-667, G-668, G-669, G-670, G-671, G-673 |
+| `G-648` | fehler | hoch | [Reiter Goals weicht vom freigegebenen Entwurf ab](erledigt/goals-g-0648-reiter-goals-weicht-vom-entwurf-ab.md) | erledigt | — | G-652, G-657, G-667, G-668, G-669, G-670, G-671, G-673, G-678 |
 | `G-649` | fehler | hoch | [Phase Engine weicht vom freigegebenen Entwurf ab](erledigt/goals-g-0649-phase-engine-weicht-vom-entwurf-ab.md) | erledigt | — | G-656, G-666 |
 | `G-650` | aufgabe | hoch | [Leser für Verlauf, Prognose und Wochenwerte des steuernden Ziels](erledigt/goals-g-0650-leser-fuer-verlauf-prognose-wochen.md) | erledigt | — | G-653, G-654 |
 | `G-651` | befund | mittel | [Probe hängt am Datum: Tageskettenlauf 16.10. rot](erledigt/goals-g-0651-g617-probe-haengt-am-datum.md) | erledigt | — | — |
@@ -731,10 +731,11 @@
 | `G-668` | befund | mittel | [Planlinie steht bei 88,0, das Wochensoll meldet weiter +0,21](erledigt/goals-g-0668-planlinie-und-wochensoll-widersprechen-sich.md) | erledigt | — | — |
 | `G-669` | befund | mittel | ["Als nächstes" ohne Datum, Dauer und Grund](erledigt/goals-g-0669-als-naechstes-ohne-datum-dauer-grund.md) | erledigt | — | G-677 |
 | `G-670` | befund | mittel | [Testdaten: Planlücke, leere linked_modules, Gewohnheitsserie](erledigt/goals-g-0670-testdaten-planluecke-module-gewohnheit.md) | erledigt | — | — |
-| `G-671` | befund | mittel | [Reste der Mockup-Referenz unter der Phase Engine](laufend_claudecode/goals-g-0671-mockup-reste-unter-der-phase-engine.md) | laeuft (claudecode) | — | — |
+| `G-671` | befund | mittel | [Reste der Mockup-Referenz unter der Phase Engine](erledigt/goals-g-0671-mockup-reste-unter-der-phase-engine.md) | erledigt | — | — |
 | `G-672` | idee | niedrig | [Meilensteine von Hand setzen (mögliches Add-on)](todos/goals-g-0672-meilensteine-von-hand-setzen.md) | offen | — | — |
 | `G-673` | aufgabe | mittel | [Entwurf ergänzen: fünf offene Stellen aus der Abnahme](erledigt/goals-g-0673-entwurf-ergaenzen-offene-stellen.md) | erledigt | — | G-674, G-675, G-676 |
 | `G-677` | befund | mittel | ["Als nächstes" bleibt leer, wenn der Plan keine Folgephase hat](todos/goals-g-0677-als-naechstes-bleibt-leer.md) | offen | — | — |
+| `G-678` | aufgabe | mittel | [Kraftkurve, Sollinie und "Als nächstes" an die neuen Leser binden](laufend_claudecode/goals-g-0678-kraftkurve-sollinie-als-naechstes-anbinden.md) | laeuft (claudecode) | — | — |
 
 ### wartet auf Blocker — 8
 
@@ -1104,7 +1105,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-676` | aufgabe | hoch | [Papierkorb über alle Module](laufend_codex/plattform-g-0676-papierkorb-ueber-alle-module.md) | vorbereitet (codex) | — | — |
+| `G-676` | aufgabe | hoch | [Papierkorb über alle Module](laufend_codex/plattform-g-0676-papierkorb-ueber-alle-module.md) | laeuft (codex) | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

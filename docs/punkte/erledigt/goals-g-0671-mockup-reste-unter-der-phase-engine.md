@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-18
 agent: claudecode
 beauftragt: 2026-10-18
+erledigt: 2026-10-18
+commit: d6efd946
 
 braucht: []
 kind_von: G-648
@@ -37,3 +39,7 @@ Entscheidung des Orchestrators wie bei G-666: Der Entwurf ist verbindlich, also 
     Fremd:   docs/ gehoert dem Orchestrator.
     Stand:   2026-10-18, HEAD 4f45fd2d
 
+
+## Abnahme - 2026-10-18 (Orchestrator, commit d6efd946)
+
+`[cmd]` rg zeigt GoalsPhaseView, PHASE_STATE, PhaseEditorModal und PhaseTemplateLibrary nur noch in Kommentaren. phase-editor.tsx ist geloescht (Tom). `[cmd]` mockup-deckung ist fuer goals gruen, 5 Eintraege verworfen. `[read]` 8 Waechter mit Toms Freigabe 18.10. 13:23 nachgezogen, Gegenproben 4/4 rot. `[cmd]` Gate gruen beim Commit.
