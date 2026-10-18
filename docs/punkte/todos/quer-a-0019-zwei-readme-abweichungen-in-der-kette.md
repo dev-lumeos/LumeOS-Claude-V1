@@ -10,7 +10,7 @@ kinder: []
 entscheidung: null
 beruehrt:
   tabellen: []
-  dateien: ["supabase/_pipeline/_validierung/kette-readme-pruefen.ts", "supabase/README.md"]
+  dateien: ["supabase/_pipeline/_manuelle_validierung/kette-readme-pruefen.ts", "supabase/README.md"]
 zahlen: null
 ---
 
