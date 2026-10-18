@@ -65,28 +65,6 @@
   .v2-goals-gantt { grid-template-columns: 1fr; gap: 4px; }
 }
 
-/* --- Der Kopf der laufenden Phase -------------------------------
- * [cmd] module-goals-pro.jsx:209. */
-.v2-goals-phase-kopf {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 14px;
-}
-@media (max-width: 620px) {
-  .v2-goals-phase-kopf { flex-wrap: wrap; gap: 12px; }
-}
-
-/* --- Die sieben Phasenkacheln -----------------------------------
- * [cmd] module-goals-pro.jsx:262 — vier Spalten. */
-.v2-goals-phasen {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-}
-@media (max-width: 900px) { .v2-goals-phasen { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 560px) { .v2-goals-phasen { grid-template-columns: repeat(2, 1fr); } }
-
 /* --- Der TDEE-Kopf mit senkrechtem Trenner ----------------------
  * [cmd] module-goals-pro.jsx:497. */
 .v2-goals-tdee-kopf {

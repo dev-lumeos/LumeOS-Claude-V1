@@ -114,12 +114,12 @@ describe('G-534/A1 — kein Schema auf dem Schirm', () => {
       'die Attrappenmarken sind verschwunden — E-68 verlangt sie')
   })
 
-  it('der Referenztrenner und die Entwurfsansicht bleiben', () => {
+  // G-671 (Freigabe Tom 18.10.): Trenner und `GoalsPhaseView` unter dem Planer sind entfernt —
+  // PhaseEngine.dc.html kennt sie nicht. Die Gegenrichtung prueft `g666-phase-attrappen.test.ts`.
+  it('der Referenztrenner und die Entwurfsansicht sind weg (G-671)', () => {
     const a = sichtbar('ansicht.tsx')
-    assert.match(a, /<ReferenzTrenner reiter="Phase engine"/,
-      'der Trenner ist weg')
-    assert.match(a, /<GoalsPhaseView \/>/,
-      'die Entwurfsansicht unter der Linie ist weg')
+    assert.ok(!/<ReferenzTrenner reiter="Phase engine"/.test(a), 'der Trenner steht wieder da')
+    assert.ok(!/<GoalsPhaseView \/>/.test(a), 'die Referenz unter dem Planer steht wieder da')
   })
 })
 

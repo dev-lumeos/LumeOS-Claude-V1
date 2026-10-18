@@ -30,7 +30,8 @@ const lies = (p: string) => readFileSync(p, 'utf8')
 
 /** Die Entwurfsansichten, die verdraengt werden koennten. */
 const ENTWUERFE = [
-  'GoalsPhaseView', 'GoalsPhysiqueView', 'TimelineTab',
+  // G-671 (Tom 18.10.): `GoalsPhaseView` ist entfernt — nicht in PhaseEngine.dc.html
+  'GoalsPhysiqueView', 'TimelineTab',
   'GoalsCrossModuleView', 'GoalsPosesView', 'GoalsTDEEView',
 ]
 
@@ -63,7 +64,6 @@ describe('G-359 — der Entwurf bleibt sichtbar (E-68)', () => {
 
   // ── 2 · Die drei Reiter rendern beides ───────────────────────────
   for (const [reiter, entwurf] of [
-    ['phase', 'GoalsPhaseView'],
     ['physique', 'GoalsPhysiqueView'],
     ['timeline', 'TimelineTab'],
   ] as const) {
@@ -113,38 +113,14 @@ describe('G-359 — der Entwurf bleibt sichtbar (E-68)', () => {
     assert.match(s, /wartet auf:/, 'der Grund fehlt')
   })
 
-  it('die drei tragenden Kacheln nennen einen Grund', () => {
-    const t = lies(join(GOALS, 'tab-phase.tsx'))
-    // `[cmd]` **Nicht die Zahl der Marken zaehlen** — die war schon
-    // hoch (G-355: 69). **Sondern: nennen DIESE drei den Grund?**
-    // G-666 (Tom 18.10.): „Expert BB annual" ist entfernt — nicht in PhaseEngine.dc.html
-    for (const kachel of ['Phase state machine', 'Phase parameters']) {
-      const i = t.indexOf(kachel)
-      assert.ok(i > 0, `Kachel \`${kachel}\` fehlt`)
-      const block = t.slice(i, i + 420)
-      assert.ok(block.includes('attrappeAus('),
-        `\`${kachel}\` traegt die alte Marke ohne Grund (E-68)`)
-    }
-  })
-
-  it('und der Grund nennt einen Punkt, nicht nur „noch nicht"', () => {
-    const t = lies(join(GOALS, 'tab-phase.tsx'))
-    // `[read]` **Kein `s`-Flag** — es braucht ES2018, das Ziel liegt
-    // darunter (TS1501). `[\s\S]` tut dasselbe ohne Flag.
-    const gruende = t.match(/attrappeAus\([\s\S]{0,240}?\)\)?\}/g) ?? []
-    // G-666: zwei Kacheln mit Grund — die dritte (Expert BB annual) ist entfernt
-    assert.ok(gruende.length >= 2, `nur ${gruende.length} Gruende`)
-    for (const g of gruende) {
-      assert.ok(/G-\d{2,3}|unbekannt, nie untersucht/.test(g),
-        `ein Grund nennt weder Punkt noch „unbekannt": ${g.slice(0, 70)}`)
-    }
-  })
+  // G-671 (Freigabe Tom 18.10.): die Kacheln mit Grund („Phase state machine", „Phase
+  // parameters") sind mit `GoalsPhaseView` entfernt; ihre Pruefung faellt mit ihnen.
 
   // ── 4 · Die Entwurfsdateien sind noch da ─────────────────────────
   it('kein Entwurf wurde geloescht', () => {
     const da = readdirSync(GOALS)
-    for (const f of ['tab-phase.tsx', 'tab-physique.tsx',
-      'tab-timeline.tsx', 'phase-editor.tsx']) {
+    // G-671 (Freigabe Tom 18.10.): `phase-editor.tsx` hatte keinen Aufrufer mehr, Tom hat es geloescht
+    for (const f of ['tab-phase.tsx', 'tab-physique.tsx', 'tab-timeline.tsx']) {
       assert.ok(da.includes(f), `${f} fehlt — E-68: nichts verschwindet`)
     }
   })

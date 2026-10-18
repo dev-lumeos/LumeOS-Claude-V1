@@ -28,6 +28,7 @@
 // `Intermediate`, `Elite` ein — das kommt nicht mit, siehe
 // `kraftVerhaeltnis` in `lib/training/auswertung.ts`.
 import * as React from 'react'
+import Link from 'next/link'
 import { Card, Pill, LineChart, Meter, Row, Sparkline } from '@lumeos/ui'
 
 import type {
@@ -35,6 +36,7 @@ import type {
 } from '../../../lib/training/auswertung'
 import { kraftVerhaeltnis } from '../../../lib/training/auswertung'
 import type { Sitzung, SitzungsUebung } from '../../../lib/training/sitzungen-read'
+import type { Auswahl } from '../../../lib/training/auswahl'
 
 export type VerlaufDaten = {
   stichtag: string
@@ -57,6 +59,9 @@ export type VerlaufDaten = {
    * Today-Karte eine Entwurfsliste unter einem echten Kopf.
    */
   uebungen: SitzungsUebung[]
+  /** G-674/2: `?einheit=` / `?woche=` aus den Datenpunkten eines Messziels. */
+  auswahl?: Auswahl | null
+  vonGoals?: boolean
 }
 
 function z(n: number | null | undefined, stellen = 1): string {
@@ -77,6 +82,34 @@ function ZustandsPille({ s }: { s: Sitzung }) {
 
 // ═══ HISTORY ══════════════════════════════════════════════════════
 
+const tagDe = (iso: string) => `${['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][new Date(`${iso}T12:00:00Z`).getUTCDay()]} ${iso.slice(8, 10)}.${iso.slice(5, 7)}.`
+
+/** G-674/2 — die gewaehlte Einheit bzw. Woche aus den Datenpunkten eines Messziels; „Zurück" fuehrt auf Goals. */
+export function AuswahlKarte({ a, vonGoals }: { a: Auswahl; vonGoals: boolean }) {
+  const titel = a.art === 'einheit'
+    ? `Einheit ${a.einheiten[0] ? tagDe(a.einheiten[0].datum) : ''}`.trim()
+    : `Woche ab ${tagDe(a.woche!)} · ${a.einheiten.length} ${a.einheiten.length === 1 ? 'Einheit' : 'Einheiten'}`
+  return (
+    <Card title={titel} className="v2-span-2"
+          actions={vonGoals ? <Link href="/v2/goals" className="v2-btn v2-btn-sm" data-zurueck-goals>← Zurück zu Goals</Link> : undefined}>
+      {/* Marke am div: Card reicht data-* nicht durch */}
+      <div data-history-auswahl={a.art}>
+      {a.einheiten.length === 0
+        ? <div className="v2-dim" style={{ fontSize: 11.5 }}>{a.art === 'einheit' ? 'Diese Einheit gibt es nicht (mehr).' : 'In dieser Woche ist keine Einheit abgeschlossen.'}</div>
+        : a.einheiten.map(e => (
+          <div key={e.id} data-auswahl-einheit={e.id} style={{ padding: '6px 0', borderBottom: '1px solid var(--border)' }}>
+            <div style={{ fontSize: 12.5, fontWeight: 600 }}>{[tagDe(e.datum), e.name, e.minuten !== null ? `${e.minuten} min` : null].filter(Boolean).join(' · ')}</div>
+            {e.uebungen.length === 0 && <div className="v2-dim" style={{ fontSize: 11.5 }}>keine Übungen erfasst</div>}
+            {e.uebungen.map((u, i) => (
+              <div key={i} className="v2-num v2-muted" style={{ fontSize: 11.5 }}>{[u.name, ...u.saetze].join(' · ')}</div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </Card>
+  )
+}
+
 export function TrainingVerlauf({ d }: { d: VerlaufDaten }) {
   const k = d.kennzahlen
   const absolvierte = d.sitzungen.filter(s => s.absolviert)
@@ -90,6 +123,7 @@ export function TrainingVerlauf({ d }: { d: VerlaufDaten }) {
 
   return (
     <div className="v2-grid-15">
+      {d.auswahl && <AuswahlKarte a={d.auswahl} vonGoals={d.vonGoals ?? false} />}
       <Card
         title="Volumen je Sitzung"
         sub={`${k.sitzungen_absolviert} absolviert · ${k.saetze} Saetze · ${tonnen(k.volumen_kg)} gesamt`}

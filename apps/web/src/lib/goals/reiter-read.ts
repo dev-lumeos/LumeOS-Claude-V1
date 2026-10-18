@@ -9,6 +9,7 @@ import { createSessionClient } from '@lumeos/shared/session'
 import { utcTagIso } from '@lumeos/shared/datum'
 
 import { wochenStart, type Beitrag } from './reiter'
+import { einheitDetail, messungDetail, umfangDetail, UMFANG_NAME, type Punktdetail } from './datenpunkt'
 
 export interface Wochendaten {
   /** Abgeschlossene Trainingseinheiten Mo–Stichtag; `null` = nicht lesbar. */
@@ -148,12 +149,18 @@ export async function ladeWoche(userId: string, stichtag: string, steuerzielId: 
 }
 
 export interface Verlauf {
-  /** `einheit`: Name der Trainingseinheit, wenn der Punkt aus einem Satz stammt (Entwurf: „Training Push/Legs“). */
-  punkte: Array<{ tag: string; wert: number; quelle: string; einheit?: string | null }>
+  /**
+   * `einheit`: Name der Trainingseinheit (Entwurf: „Training Push/Legs“). `detail`: die aufklappbare
+   * Zeile (G-674/2) — nur fuer die juengsten `DETAIL_PUNKTE` Punkte, die die Tabelle zeigt.
+   */
+  punkte: Array<{ tag: string; wert: number; quelle: string; einheit?: string | null; detail?: Punktdetail | null }>
   wochen: Array<{ woche: string; wert: number | null; quote: number | null; serie: number; erreicht: boolean }>
 }
 
 /** Details je Ziel: Datenpunkte (einmalig) oder Wochenraster (woechentlich). */
+/** So viele juengste Punkte bekommen ihre aufklappbare Zeile (G-674/2). */
+export const DETAIL_PUNKTE = 60
+
 export async function ladeVerlauf(goalId: string, stichtag: string, woechentlich: boolean): Promise<Verlauf> {
   const db = createSessionClient().schema('goals')
   const [p, w] = await Promise.all([
@@ -164,21 +171,55 @@ export async function ladeVerlauf(goalId: string, stichtag: string, woechentlich
   if (w.error) throw new Error(`measurement_weeks: ${w.error.message}`)
   const zahl = (v: unknown) => (v === null || v === undefined ? null : Number(v))
   const zeilen = (p.data ?? []) as Array<Record<string, unknown>>
-  // G-648 Abnahme: Satz → Übung → Einheit, ein Zugriff fuer alle Punkte aus `training.workout_sets`
-  const satzIds = zeilen.filter(r => String(r.source_name).startsWith('training.workout_sets') && r.source_id).map(r => String(r.source_id))
-  const einheiten = new Map<string, string>()
-  if (satzIds.length) {
-    const { data } = await createSessionClient().schema('training').from('workout_sets')
-      .select('id, workout_exercises(workout_sessions(name))').in('id', satzIds)
-    for (const s of (data ?? []) as unknown as Array<{ id: string; workout_exercises: { workout_sessions: { name: string | null } | null } | null }>) {
-      const n = s.workout_exercises?.workout_sessions?.name
-      if (n) einheiten.set(s.id, n)
+  // G-667: ein Punkt je Einheit (`training.workout_sessions`, `source_id` = Einheit), nicht je Satz.
+  // G-674/2: Kopf, Inhalt und Link der juengsten Punkte — je Quelle ein Zugriff.
+  const punkte = zeilen
+    .map(r => ({ tag: String(r.measured_on), wert: Number(r.value), quelle: String(r.source_name), id: String(r.source_id ?? ''), einheit: null as string | null, detail: null as Punktdetail | null }))
+    .sort((a, b) => a.tag.localeCompare(b.tag))
+  // ponytail: die juengsten 60 reichen fuer 8 Tabellenzeilen bzw. 12 Wochen; mehr, wenn die Tabelle blaettert
+  const juengste = punkte.slice(-DETAIL_PUNKTE)
+  const ids = (vorn: string) => Array.from(new Set(juengste.filter(p => p.quelle.startsWith(vorn) && p.id).map(p => p.id)))
+  const training = createSessionClient().schema('training'), goals = createSessionClient().schema('goals')
+  const einheitIds = ids('training.workout_sessions'), messIds = ids('goals.body_measurements'), umfangIds = ids('goals.body_circumferences.')
+  const [es, ziel, ms, us] = await Promise.all([
+    einheitIds.length ? training.from('workout_sessions').select('id, session_date, name, duration_minutes').in('id', einheitIds) : null,
+    einheitIds.length ? goals.from('user_goals').select('exercise_id').eq('id', goalId).maybeSingle() : null,
+    messIds.length ? goals.from('body_measurements').select('id, measurement_date, weight_kg, body_fat_pct, bf_method, height_cm_snapshot').in('id', messIds) : null,
+    umfangIds.length ? goals.from('body_circumferences').select(`id, measurement_date, ${Object.keys(UMFANG_NAME).join(', ')}`).in('id', umfangIds) : null,
+  ])
+  const uebungId = (ziel?.data as { exercise_id: string | null } | null)?.exercise_id ?? null
+  const ue = uebungId && einheitIds.length
+    ? await training.from('workout_exercises').select('workout_session_id, exercise_name, workout_sets(set_number, weight_kg, reps, duration_seconds, distance_meters)')
+      .in('workout_session_id', einheitIds).eq('exercise_id', uebungId)
+    : null
+  type Satz = { set_number: number | null; weight_kg: number | null; reps: number | null; duration_seconds: number | null; distance_meters: number | null }
+  const uebungJe = new Map<string, { name: string; saetze: Satz[] }>()
+  for (const u of (ue?.data ?? []) as unknown as Array<{ workout_session_id: string; exercise_name: string | null; workout_sets: Satz[] }>) {
+    const alt = uebungJe.get(u.workout_session_id)
+    const saetze = (alt?.saetze ?? []).concat(u.workout_sets.map(x => ({ ...x, weight_kg: zahl(x.weight_kg), distance_meters: zahl(x.distance_meters) })))
+    uebungJe.set(u.workout_session_id, { name: u.exercise_name ?? 'Übung', saetze: saetze.sort((a, b) => (a.set_number ?? 0) - (b.set_number ?? 0)) })
+  }
+  const einheitJe = new Map(((es?.data ?? []) as Array<Record<string, unknown>>).map(e => [String(e.id), e]))
+  const messJe = new Map(((ms?.data ?? []) as Array<Record<string, unknown>>).map(m => [String(m.id), m]))
+  const umfangJe = new Map(((us?.data ?? []) as unknown as Array<Record<string, unknown>>).map(u => [String(u.id), u]))
+  // Hals und Bauch zur KFA-Messung desselben Tages (Navy rechnet aus ihnen)
+  const tageKfa = Array.from(new Set(Array.from(messJe.values()).filter(m => m.bf_method === 'navy').map(m => String(m.measurement_date))))
+  const navy = tageKfa.length ? await goals.from('body_circumferences').select('measurement_date, neck_cm, waist_cm').in('measurement_date', tageKfa) : null
+  const umfangAm = new Map(((navy?.data ?? []) as Array<Record<string, unknown>>).map(u => [String(u.measurement_date), { neck_cm: zahl(u.neck_cm), waist_cm: zahl(u.waist_cm) }]))
+  for (const p of juengste) {
+    const e = einheitJe.get(p.id), m = messJe.get(p.id), u = umfangJe.get(p.id)
+    if (e) {
+      p.einheit = (e.name as string | null) ?? null
+      p.detail = einheitDetail({ id: p.id, datum: String(e.session_date), name: p.einheit, minuten: zahl(e.duration_minutes) }, uebungJe.get(p.id) ?? null)
+    } else if (m) {
+      p.detail = messungDetail({ datum: String(m.measurement_date), weight_kg: zahl(m.weight_kg), body_fat_pct: zahl(m.body_fat_pct), bf_method: (m.bf_method as string | null) ?? null, height_cm: zahl(m.height_cm_snapshot) },
+        umfangAm.get(String(m.measurement_date)) ?? null, p.quelle.endsWith('.body_fat_pct'))
+    } else if (u) {
+      p.detail = umfangDetail(String(u.measurement_date), Object.fromEntries(Object.keys(UMFANG_NAME).map(k => [k, zahl(u[k])])))
     }
   }
   return {
-    punkte: zeilen
-      .map(r => ({ tag: String(r.measured_on), wert: Number(r.value), quelle: String(r.source_name), einheit: einheiten.get(String(r.source_id)) ?? null }))
-      .sort((a, b) => a.tag.localeCompare(b.tag)),
+    punkte: punkte.map(({ id: _id, ...p }) => p),
     wochen: ((w.data ?? []) as Array<Record<string, unknown>>).map(r => ({
       woche: String(r.week_start), wert: zahl(r.observed_value), quote: zahl(r.quota_pct),
       serie: Number(r.streak_weeks ?? 0), erreicht: r.target_met === true,

@@ -32,6 +32,7 @@ import { ladeReadiness } from '../../../lib/training/readiness-read'
 import type { ReadinessStand } from '../../../lib/training/readiness-read'
 import { TrainingAnsicht } from './ansicht'
 import type { VerlaufDaten } from './tab-verlauf'
+import { historyAuswahl } from '../../../lib/training/auswahl'
 
 export const metadata: Metadata = {
   title: 'Training · LumeOS',
@@ -42,7 +43,7 @@ export const dynamic = 'force-dynamic'
 export default async function V2TrainingPage({
   searchParams,
 }: {
-  searchParams?: { datum?: string }
+  searchParams?: { datum?: string; einheit?: string; woche?: string; von?: string }
 }) {
   // Vier getrennte Abfragen, vier getrennte `try` — faellt die
   // Muskelauswahl aus, bleibt die Tabelle gueltig. Dieselbe Linie wie
@@ -122,6 +123,9 @@ export default async function V2TrainingPage({
         // G-366: die Uebungen waren geladen und wurden nur fuer die
         // Auswertung benutzt — die Today-Karte kam nicht an sie heran.
         uebungen,
+        // G-674/2: die Auswahl aus den Datenpunkten eines Messziels (Goals)
+        auswahl: historyAuswahl(sitzungen, uebungen, saetze, { einheit: searchParams?.einheit, woche: searchParams?.woche }),
+        vonGoals: searchParams?.von === 'goals',
       }
     }
   } catch {

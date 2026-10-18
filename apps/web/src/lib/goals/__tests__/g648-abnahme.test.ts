@@ -127,7 +127,7 @@ describe('Messziele', () => {
     const l = lies('lib/goals/lesen.ts')
     assert.match(l, /achievement_date, exercise_id, measurement_reps'\)/)
     assert.match(l, /\.schema\('training'\)\.from\('exercises'\)\.select\('id, name'\)\.in\('id', uebungIds\)/)
-    assert.match(lies('lib/goals/reiter-read.ts'), /\.select\('id, workout_exercises\(workout_sessions\(name\)\)'\)\.in\('id', satzIds\)/)
+    // G-667: ein Punkt je Einheit — die Satz-Aufloesung entfaellt; die Einheit prueft g674-datenpunkt.test.ts
   })
 })
 

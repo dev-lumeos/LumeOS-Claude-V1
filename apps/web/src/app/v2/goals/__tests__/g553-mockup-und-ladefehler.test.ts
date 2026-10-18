@@ -57,8 +57,9 @@ const KACHEL = () => lies(join(GOALS, '..', '..', '..',
  */
 // `[cmd]` **G-648: `goals` hat keine Referenz mehr** — Tom 16.10.: „Mockup-Referenz
 // und Reste entfernen"; die Vorlage des Reiters ist `entwurf/Main.dc.html` selbst.
+// G-671 (Freigabe Tom 18.10.): `phase` hat keine Referenz mehr — PhaseEngine.dc.html kennt
+// Phasenkopf, „Phase state machine" und „Phase parameters" nicht; die Vorlage ist der Entwurf.
 const REITER: Array<[string, string]> = [
-  ['phase', 'GoalsPhaseView'],
   ['tdee', 'GoalsTdeeReferenz'],
   ['cross', 'GoalsCrossReferenz'],
   ['timeline', 'TimelineTab'],
@@ -85,8 +86,8 @@ describe('G-553/A2 — jeder Reiter zeigt seinen Mockup-Teil', () => {
     // G-422).
     const ids = (block.match(/id: '[a-z]+'/g) ?? [])
       .map(t => t.slice(5, -1))
-    // G-648: `goals` steht in tabs(), hat aber keine Referenz mehr (siehe REITER)
-    assert.deepEqual(ids.sort(), REITER.map(([r]) => r).concat(['goals']).sort(),
+    // G-648/G-671: `goals` und `phase` stehen in tabs(), haben aber keine Referenz mehr (siehe REITER)
+    assert.deepEqual(ids.sort(), REITER.map(([r]) => r).concat(['goals', 'phase']).sort(),
       'die Reiterliste weicht von dieser Pruefung ab')
   })
 
@@ -100,16 +101,16 @@ describe('G-553/A2 — jeder Reiter zeigt seinen Mockup-Teil', () => {
   })
 
   it('je Reiter steht ein Trennstrich', () => {
-    // `[cmd]` **Vier Reiter tragen ihn direkt** (`phase`, `physique`,
-    // `timeline`), **die uebrigen in ihrem `…Referenz`-Bauteil** —
+    // `[cmd]` **Zwei Reiter tragen ihn direkt** (`physique`, `timeline`; `phase` seit
+    // G-671 nicht mehr), **die uebrigen in ihrem `…Referenz`-Bauteil** —
     // deshalb wird BEIDES gezaehlt.
     const q = A()
     const m = lies(join(GOALS, 'mockup-referenz.tsx'))
     const direkt = (q.match(/<ReferenzTrenner/g) ?? []).length
     const inReferenz = (m.match(/<ReferenzTrenner/g) ?? []).length
-    assert.ok(direkt >= 3,
+    assert.ok(direkt >= 2,
       `nur ${direkt} Trennstriche direkt in der Ansicht — `
-      + 'phase, physique und timeline brauchen je einen')
+      + 'physique und timeline brauchen je einen')
     assert.ok(inReferenz >= 6,
       `nur ${inReferenz} Trennstriche in den Referenz-Bauteilen — `
       + 'jedes traegt seinen eigenen')

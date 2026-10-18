@@ -115,7 +115,7 @@ import { Card, Pill, Icon, Tabs, type TabItem } from '@lumeos/ui'
 import { ACTIVE_GOALS, COMPLETED_GOALS } from './daten'
 import { GoalsKontext, type ModalZustand } from './kontext'
 import { GoalsModale } from './modale'
-import { GoalsPhaseView, GoalsTDEEView, GoalsCrossModuleView } from './tab-phase'
+import { GoalsTDEEView, GoalsCrossModuleView } from './tab-phase'
 // G-79: die echte Zeitachse.
 import { TimelineTab as ZeitachseTab } from './tab-timeline'
 import { ReferenzTrenner } from '../../../components/shell/referenz-trenner'
@@ -138,7 +138,7 @@ import { Planer } from './planer'
 const QUELLE = 'theme-v1/module-goals-pro.jsx'
 import { PhysiqueEcht } from './physique-echt'
 import { CompositionTab, type CompDaten } from './tab-composition'
-import { KoerperMetriken, KoerperUmfaenge } from './tab-koerper'
+import { KoerperMetriken, KoerperUmfaenge, MessungAm } from './tab-koerper'
 import type {
   AdaptiverTdee, Fotosession, Koerpermessung, Koerperzusammensetzung,
   Meilenstein, Phase, ProfilEingaben, Umfangssatz, ZielFortschritt,
@@ -430,6 +430,7 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
             <>
               {!echtAus && (
                 <>
+                  <MessungAm messungen={echt.messungen} umfaenge={echt.umfaenge} />
                   <KoerperUmfaenge saetze={echt.umfaenge} stichtag={echt.stichtag} />
                   <FehlendeMessKacheln sessions={echt.fotosessions} />
                 </>
@@ -483,15 +484,10 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                            startKg={echt.messungen.filter(m => m.weight_kg !== null && m.measurement_date <= echt.stichtag).at(-1)?.weight_kg ?? null}
                            onZuGoals={() => setTab('goals')} />
               )}
-              {/* `[cmd]` G-365: die Linie stand unter `echt.phase &&`.
-                  Sabotageprobe 2026-09-07 — `phase` auf `null`: die
-                  Linie verschwand, und `GoalsPhaseView` stand
-                  ununterscheidbar da wie eine echte Ansicht.
-
-                  `[read]` Die Linie beschriftet, was DARUNTER steht,
-                  und das steht unbedingt. */}
-              <ReferenzTrenner reiter="Phase engine" quelle={QUELLE} />
-              <GoalsPhaseView />
+              {/* G-671 (Tom 18.10.): die Mockup-Referenz darunter — Phasenkopf
+                  „Recomposition", „Phase state machine", „Phase parameters" — ist
+                  entfernt; PhaseEngine.dc.html kennt sie nicht, mit ihr fallen
+                  Trennlinie, Phasen-Editor und Vorlagensammlung. */}
             </>
           )}
 

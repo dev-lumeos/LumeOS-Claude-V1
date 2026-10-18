@@ -22,6 +22,8 @@
 // aus dem Entwurf.
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import type { Route } from 'next'
 
 import { KeinZielWarnung } from '../kein-ziel-warnung'
 import { verlaufAktion, zielSpeichern } from './ziel-aktionen'
@@ -43,6 +45,7 @@ import type { Anpassungswoche, Plan } from '../../../lib/goals/plan-read'
 import { anpassungZeile } from './plan-seite'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
 import type { Ausblick, Messwoche, Modulkacheln, Verlauf, Wochendaten } from '../../../lib/goals/reiter-read'
+import { wochenZeilen, type Punktdetail } from '../../../lib/goals/datenpunkt'
 
 /** `prognose.plan_status` ohne Datum (G-653) — je Schluessel ein Satz. */
 export const PLAN_STATUS: Record<string, string> = {
@@ -688,8 +691,6 @@ function MessDetails({ g, stichtag, mw, bester = false }: { g: ZielFortschritt; 
   const { v, fehler } = useVerlauf(g, stichtag, true)
   const woechentlich = g.measurement_rhythm === 'weekly'
   const kat = kategorieVon(g)
-  // Ein Datenpunkt einer Zaehl-Gewohnheit ist EINE Einheit — „1 pro Woche" waere falsch.
-  const punktEinheit = g.target_unit === 'sessions_per_week' ? null : g.target_unit
   if (fehler) return <div data-details-fehler style={{ fontSize: 11.5, color: 'var(--neg)' }}>{fehler}</div>
   if (!v) return <div className="ge-kasten" style={{ fontSize: 11 }}>lädt …</div>
   const pkt = v.punkte
@@ -730,21 +731,58 @@ function MessDetails({ g, stichtag, mw, bester = false }: { g: ZielFortschritt; 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 8 }}>
         {kz.map(k => <div key={k.l}><div className="ge-eb">{k.l}</div><div className="ge-num" style={{ fontWeight: 600 }}>{k.v}</div></div>)}
       </div>
-      <div style={{ overflowX: 'auto' }}>
-        <div className="ge-eb" style={{ marginBottom: 4 }}>Datenpunkte</div>
-        <table className="ge-tbl" data-details-punkte={pkt.length}>
-          <thead><tr><th>Datum</th><th>Wert</th><th>Quelle</th></tr></thead>
-          <tbody>
-            {pkt.length === 0 && <tr><td colSpan={3} style={{ color: 'var(--fg-subtle)' }}>noch keine</td></tr>}
-            {pkt.slice(-8).reverse().map((p, i) => (
-              <tr key={i}><td className="ge-num">{kurzDe(p.tag)}</td>
-                {/* Entwurf: „140,0" — kg und % mit einer Stelle, ohne Einheit (sie steht im Kopf) */}
-                <td className="ge-num">{punktEinheit === 'kg' || punktEinheit === '%' ? zahl(p.wert, 1) : wertMitEinheit(p.wert, punktEinheit)}</td>
-                <td data-punkt-einheit={p.einheit ?? ''}>{p.einheit ?? quelleLesbar(p.quelle) ?? 'Quelle unbekannt'}</td></tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <Datenpunkte pkt={pkt} g={g} />
+    </div>
+  )
+}
+
+/**
+ * G-674/2 — Entwurf V57, Tabelle „Datenpunkte": die Quelle ist ein Knopf und klappt eine Zeile auf
+ * (Kopf, Inhalt, Link ins Modul). Zaehl-Gewohnheiten zeigen je Woche eine Zeile („KW 40 · 4").
+ */
+export function Datenpunkte({ pkt, g }: { pkt: Verlauf['punkte']; g: Pick<ZielFortschritt, 'target_unit'> }) {
+  const [offen, setOffen] = React.useState<string | null>(null)
+  const zaehl = g.target_unit === 'sessions_per_week'
+  const u = g.target_unit
+  const zeilen: Array<{ key: string; dt: string; v: string; q: string; detail: Punktdetail | null }> = zaehl
+    ? wochenZeilen(pkt).slice(-8).reverse().map(w => ({ key: w.woche, dt: `KW ${w.kw}`, v: String(w.anzahl), q: `${w.anzahl} ${w.anzahl === 1 ? 'Training' : 'Trainings'}`, detail: w.detail }))
+    : pkt.slice(-8).reverse().map((p, i) => ({
+      key: `${p.tag}-${i}`, dt: kurzDe(p.tag),
+      // Entwurf: „140,0" — kg und % mit einer Stelle, ohne Einheit (sie steht im Kopf)
+      v: u === 'kg' || u === '%' ? zahl(p.wert, 1) : wertMitEinheit(p.wert, u),
+      q: p.einheit ? `Training ${p.einheit}` : quelleLesbar(p.quelle) ?? 'Quelle unbekannt', detail: p.detail ?? null,
+    }))
+  return (
+    <div style={{ overflowX: 'auto' }}>
+      <div className="ge-eb" style={{ marginBottom: 4 }}>Datenpunkte</div>
+      <table className="ge-tbl" data-details-punkte={zeilen.length}>
+        <thead><tr><th>Datum</th><th>Wert</th><th>Quelle</th></tr></thead>
+        <tbody>
+          {zeilen.length === 0 && <tr><td colSpan={3} style={{ color: 'var(--fg-subtle)' }}>noch keine</td></tr>}
+          {zeilen.map(z => (
+            <React.Fragment key={z.key}>
+              <tr><td className="ge-num">{z.dt}</td><td className="ge-num">{z.v}</td>
+                <td>{z.detail
+                  ? <button type="button" className="ge-btn ge-btn-g" data-punkt-quelle aria-expanded={offen === z.key}
+                            style={{ minHeight: 28, padding: '0 6px', color: 'var(--acc-goals)', textDecoration: 'underline' }}
+                            onClick={() => setOffen(offen === z.key ? null : z.key)}>{z.q} {offen === z.key ? '▴' : '▾'}</button>
+                  : <span data-punkt-quelle-text>{z.q}</span>}</td></tr>
+              {offen === z.key && z.detail && (
+                <tr data-punkt-detail><td colSpan={3} style={{ background: 'var(--surface)' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '4px 2px' }}>
+                    <div style={{ fontWeight: 600, fontSize: 12.5 }}>{z.detail.kopf}</div>
+                    <div className="ge-num" style={{ fontSize: 12, color: 'var(--fg-muted)' }}>{z.detail.inhalt}</div>
+                    <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                      <Link href={z.detail.link.href as Route} data-punkt-link>{z.detail.link.text} →</Link>
+                      <span style={{ fontSize: 11, color: 'var(--fg-subtle)' }}>öffnet den Eintrag im Modul; zurück führt hierher</span>
+                    </div>
+                  </div>
+                </td></tr>
+              )}
+            </React.Fragment>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }

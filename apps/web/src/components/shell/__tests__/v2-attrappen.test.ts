@@ -759,7 +759,9 @@ test('das Goals-Modul kennzeichnet jede Kachel', () => {
     // vor der TDEE-Anbindung — die Kachel nahm die anliegende Prop.
     // `[cmd]` **12 seit G-666** (Tom 18.10.): „Weekly auto-adjustment" und „Expert BB annual"
     // sind entfernt — nicht in `PhaseEngine.dc.html`, echt an den Entwurfsstellen.
-    [path.join(process.cwd(), 'src/app/v2/goals/tab-phase.tsx'), 12],
+    // `[cmd]` **9 seit G-671** (Freigabe Tom 18.10.): `GoalsPhaseView` (Phasenkopf, „Phase state
+    // machine", „Phase parameters") ist entfernt — nicht in `PhaseEngine.dc.html`.
+    [path.join(process.cwd(), 'src/app/v2/goals/tab-phase.tsx'), 9],
     [path.join(process.cwd(), 'src/app/v2/goals/tab-physique.tsx'), 7],
     // `[cmd]` **G-365: die Mockup-Reiter der vier angebundenen
     // Goals-Reiter** — `goals`, `metrics`, `measure`, `comp` aus
@@ -899,13 +901,13 @@ test('das Goals-Modul kennzeichnet jede Kachel', () => {
   }
 })
 
-test('die fuenf Ansichten aus -pro.jsx stehen da', () => {
-  // [cmd] module-goals.jsx:191-195 zeigt genau diese fuenf ueber
-  // `window.Goals*View` an; definiert sind sie in -pro.jsx. Ohne sie
-  // waeren fuenf von zehn Tabs leer — derselbe Aufbau wie bei Training.
+test('die vier Ansichten aus -pro.jsx stehen da', () => {
+  // [cmd] module-goals.jsx:191-195 zeigt fuenf ueber `window.Goals*View` an; definiert sind
+  // sie in -pro.jsx. G-671 (Freigabe Tom 18.10.): `GoalsPhaseView` ist entfernt — der Reiter
+  // Phase engine ist die Plan-Seite nach `PhaseEngine.dc.html`, ohne Referenz darunter.
   const phase = fs.readFileSync(path.join(process.cwd(), 'src/app/v2/goals/tab-phase.tsx'), 'utf8')
   const phys = fs.readFileSync(path.join(process.cwd(), 'src/app/v2/goals/tab-physique.tsx'), 'utf8')
-  for (const view of ['GoalsPhaseView', 'GoalsTDEEView', 'GoalsCrossModuleView']) {
+  for (const view of ['GoalsTDEEView', 'GoalsCrossModuleView']) {
     assert.ok(phase.includes(`export function ${view}`), `${view} fehlt.`)
   }
   for (const view of ['GoalsPhysiqueView', 'GoalsPosesView']) {
@@ -913,15 +915,11 @@ test('die fuenf Ansichten aus -pro.jsx stehen da', () => {
   }
 })
 
-test('Goals fuehrt die sieben Phasen und 13 Umfaenge der Vorlage', () => {
-  // [cmd] module-goals-pro.jsx:5-68 (sieben Phasen) und :164-178
-  // (13 Umfaenge). Wer eine Phase kuerzt, laesst eine Kachel im
-  // Zustandsautomaten verschwinden.
+test('Goals fuehrt die 13 Umfaenge der Vorlage', () => {
+  // [cmd] module-goals-pro.jsx:164-178 (13 Umfaenge). G-671 (Freigabe Tom 18.10.): die sieben
+  // Phasen (`GOAL_PHASES`, :5-68) sind mit dem Zustandsautomaten entfernt — ohne Leser.
   const q = fs.readFileSync(GOALS_DATEN, 'utf8')
-  for (const p of ['fat_loss', 'lean_bulk', 'maintenance', 'recomp',
-                   'contest_prep', 'reverse_diet', 'expert_bb_annual']) {
-    assert.ok(q.includes(`${p}: {`), `Die Phase "${p}" fehlt.`)
-  }
+  assert.ok(!q.includes('export const GOAL_PHASES'), 'GOAL_PHASES steht wieder da — ohne Leser')
   // Nur der CIRCUMFERENCES-Block: `MEASUREMENTS` hat dieselbe
   // Zeilenform, aber sechs statt zwei Zahlenfeldern.
   const block = q.slice(q.indexOf('export const CIRCUMFERENCES'))

@@ -20,11 +20,14 @@
 // eine Aussage über einen Menschen. Hier steht die Änderung als Zahl
 // mit Richtung; was sie bedeutet, sagt die Anzeige nicht.
 import * as React from 'react'
+import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { Card, Icon, Row, Sparkline } from '@lumeos/ui'
 // G-606: der Bearbeiten-Griff oeffnet das Messungs-Modal.
 import { useGoals } from './kontext'
 
 import type { Koerpermessung, Umfangssatz } from '../../../lib/goals/lesen'
+import { tagDe, UMFANG_NAME } from '../../../lib/goals/datenpunkt'
 
 function z(n: number | null | undefined, stellen = 1): string {
   return n == null ? '—' : n.toFixed(stellen)
@@ -185,6 +188,34 @@ export function KoerperMetriken({ messungen, zukunft, stichtag }: {
         )}
       </Card>
     </div>
+  )
+}
+
+/**
+ * G-674/2 — `?am=<Datum>` aus den Datenpunkten eines Messziels: die Messungen dieses Tages
+ * (Waage/Körperfett und Umfänge). „Zurück" führt auf Goals.
+ */
+export function MessungAm({ messungen, umfaenge }: { messungen: Koerpermessung[]; umfaenge: Umfangssatz[] }) {
+  const am = useSearchParams()?.get('am') ?? ''
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(am)) return null
+  const ms = messungen.filter(m => m.measurement_date === am)
+  const us = umfaenge.filter(u => u.measurement_date === am)
+  const de = (n: number) => n.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+  return (
+    <Card title={`Messung ${tagDe(am)}`} actions={<Link href="/v2/goals" className="v2-btn v2-btn-sm" data-zurueck-goals>← Zurück zu Goals</Link>}>
+      <div data-messung-am={am} style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 12 }}>
+        {ms.length + us.length === 0 && <div className="v2-dim">An diesem Tag ist keine Messung geladen.</div>}
+        {ms.map(m => (
+          <div key={m.id} data-messung-waage>{[m.weight_kg !== null ? `Gewicht ${de(m.weight_kg)} kg` : null,
+            m.body_fat_pct !== null ? `Körperfett ${de(m.body_fat_pct)} %${m.bf_method ? ` (${m.bf_method})` : ''}` : null,
+            m.height_cm_snapshot !== null ? `Größe ${m.height_cm_snapshot} cm` : null].filter(Boolean).join(' · ') || 'ohne Werte'}</div>
+        ))}
+        {us.map((u, i) => (
+          <div key={i} data-messung-umfang>{Object.keys(UMFANG_NAME).filter(k => u[k as keyof Umfangssatz] != null)
+            .map(k => `${UMFANG_NAME[k]} ${de(u[k as keyof Umfangssatz] as number)} cm`).join(' · ') || 'keine Stelle gemessen'}</div>
+        ))}
+      </div>
+    </Card>
   )
 }
 
