@@ -600,13 +600,16 @@ export async function ladeMessungen(
       + 'notes, height_cm_snapshot, lean_mass_kg, fat_mass_kg, bmi, ffmi')
     .eq('user_id', userId)
     .lte('measurement_date', bis)
-    .order('measurement_date', { ascending: true })
+    // G-665: die JUENGSTEN `limit` Zeilen — aufsteigend gelesen endete die Reihe auf dev
+    // (152 Zeilen) am 16.09.; „Ziel setzen" sah keine Messung der letzten 14 Tage und
+    // verlangte „Gewicht heute". Absteigend lesen, dann umdrehen.
+    .order('measurement_date', { ascending: false })
     // G-606: zwei Messungen am selben Tag — die Uhrzeit ordnet.
-    .order('measurement_time', { ascending: true })
+    .order('measurement_time', { ascending: false })
     .limit(limit)
   if (error) throw new GoalsLeseFehler('READ_FAILED', `body_measurements: ${error.message}`)
 
-  return ((data ?? []) as unknown as Array<Record<string, unknown>>).map(z => ({
+  return ((data ?? []) as unknown as Array<Record<string, unknown>>).reverse().map(z => ({
     id: text(z.id) ?? '',
     measurement_time: text(z.measurement_time),
     bf_method: text(z.bf_method),
