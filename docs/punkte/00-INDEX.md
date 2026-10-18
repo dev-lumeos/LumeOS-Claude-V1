@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 282 |
+| `todos` | 283 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 716 |
-| **gesamt** | **1001** |
+| **gesamt** | **1002** |
 
 ## medical — 50
 
@@ -591,9 +591,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 133
+## goals — 134
 
-### beauftragbar — 127
+### beauftragbar — 128
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -722,8 +722,9 @@
 | `G-660` | aufgabe | hoch | [Täglicher Lauf der Modulbeiträge](erledigt/goals-g-0660-taeglicher-lauf-der-modulbeitraege.md) | erledigt | — | — |
 | `G-661` | befund | hoch | [Doppelte Tagesgewichte blockieren das Tagesziel](erledigt/goals-g-0661-doppelte-tagesgewichte-blockieren-das-tagesziel.md) | erledigt | — | — |
 | `G-662` | befund | mittel | [Das Wochensoll ist 0, weil die Planlinie schon am Ziel gedeckelt ist](erledigt/goals-g-0662-wochensoll-null-weil-planlinie-gedeckelt.md) | erledigt | — | — |
-| `G-663` | befund | hoch | [Eine einzelne Messung friert das Steuerziel als "erreicht" ein](todos/goals-g-0663-eine-einzelne-messung-friert-das-ziel-als-erreicht-ein.md) | offen | — | — |
+| `G-663` | befund | hoch | [Eine einzelne Messung friert das Steuerziel als "erreicht" ein](todos/goals-g-0663-eine-einzelne-messung-friert-das-ziel-als-erreicht-ein.md) | offen | — | G-665 |
 | `G-664` | befund | mittel | [Testdaten mit Messungen in der Zukunft](todos/goals-g-0664-testdaten-mit-messungen-in-der-zukunft.md) | offen | — | — |
+| `G-665` | befund | hoch | [Meilenstein setzen verlangt ein Gewicht und schreibt es als Messung](todos/goals-g-0665-meilenstein-setzen-verlangt-und-schreibt-ein-gewicht.md) | offen | — | — |
 
 ### wartet auf Blocker — 6
 

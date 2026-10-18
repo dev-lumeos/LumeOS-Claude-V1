@@ -35,3 +35,9 @@ Zwei Teile:
 - Teil 2: `goal_state_at` bzw. die Erreicht-Prüfung für Gewichtsziele mit Trendgewicht (`trendgewicht_am`). Für Messziele ohne Trend bleibt der Rohwert, das wird benannt.
 - Probe: Ein einzelner Ausreisser friert nicht ein, ein erreichter Trend friert ein, Sabotage wird rot.
 - Teil 1 erst nach Toms Antwort.
+
+## Antwort Tom - 2026-10-18 07:23
+
+`[read]` Tom hat die 88-kg-Messung selbst eingetragen, als er Tobias gezeigt hat, wie man Meilensteine setzt. Dabei hat die App verlangt, dass ein Gewicht eingegeben wird. Die Zeile kann gelöscht werden (Teil 1 freigegeben).
+Folgebefund G-665: Beim Setzen eines Meilensteins schreibt die App eine Körpermessung.
+
