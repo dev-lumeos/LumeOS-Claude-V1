@@ -45,3 +45,7 @@ Nicht anbinden, sondern entfernen. Die drei Abschnitte fallen weg. Eine zweite D
 - Die Abschnitte und `PHASE_STATE` entfernen. Aufrufer per `rg` belegen. Was danach keinen Aufrufer mehr hat, wird mitgelöscht (wie in G-656).
 - Meldet `mockup-deckung` fehlende Titel: die Liste melden. Den Eintrag in `mockup-verworfen.json` macht Tom bzw. der Orchestrator mit Toms Freigabe.
 - Bildpaar der ganzen Phase-Engine-Seite gegen den Entwurf.
+
+## Freigabe Tom - 2026-10-18 09:55
+
+[read] Tom erlaubt dem Orchestrator, fuer die entfernten Phase-Engine-Attrappen die Eintraege in mockup-verworfen.json zu machen. Die genauen Kacheltitel meldet Claude Code.
