@@ -6,6 +6,8 @@ schwere: niedrig
 angelegt: 2026-10-08
 agent: codex
 beauftragt: 2026-10-18
+erledigt: 2026-10-18
+commit: 8469173b
 
 braucht: [G-617]
 kind_von: G-617
@@ -46,3 +48,6 @@ measured_at = Datum des gezaehlten Werts.
     Fremd:   apps/, packages/, tools/, docs/
     Stand:   2026-10-18, HEAD 2510f992
 
+## Erledigt - 2026-10-18, Commit `8469173b` (live)
+
+`[read]` Codex: Dauer und Pace werten jetzt den kürzesten Satz über die gebundene Strecke, kleiner ist besser. Probe "5 km unter 25 min": 1.500 statt 1.200 s, 50 %, im_plan, measured_at 08.10. Die Sabotage wird rot. Live gibt es 0 Dauer- und Pace-Ziele, der Ziel-Hash ist unverändert.

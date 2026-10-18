@@ -31,3 +31,7 @@ beruehrt:
 
 - Codex: `goal_progress_at` liefert für einmalige Ziele ein Feld `lage` (voraus | im_plan | hinterher | offen). Grundlage ist eine Soll-Linie vom Startwert (Snapshot) zum Zielwert über die Laufzeit. Die Toleranz liegt als Wert in der Kette und wird begründet. Ohne Istwert ist die Lage "offen". Eingefrorene Ziele bekommen keine Lage.
 - Claude Code: das Feld anzeigen, ohne eigene Rechnung.
+
+## Bestandsprüfung - 2026-10-18 (Codex)
+
+`[read]` Live erfüllt. dev Kniebeuge: 140 kg, Lage `im_plan`. Gebaut in G-643 (live seit 16.10.).

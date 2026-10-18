@@ -6,9 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 278 |
-| `laufend_codex` | 3 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 719 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 724 |
 | **gesamt** | **1003** |
 
 ## medical — 50
@@ -679,11 +678,11 @@
 | `G-613` | fehler | hoch | [Ein pausiertes Ziel laesst seine Phase laufen](erledigt/goals-g-0613-ein-pausiertes-ziel-laesst-seine-phase-laufen.md) | erledigt | — | G-622 |
 | `G-614` | fehler | hoch | [Der Strategiekatalog kennt seine Karte und seinen Mindestgrad](erledigt/goals-g-0614-der-strategiekatalog-kennt-karte-und-mindestgrad.md) | erledigt | — | G-616 |
 | `G-615` | fehler | hoch | [Der Planer legt Plaene vom Termin rueckwaerts an](erledigt/goals-g-0615-der-planer-legt-plaene-vom-termin-rueckwaerts-an.md) | erledigt | — | G-623, G-624, G-629 |
-| `G-616` | fehler | mittel | [Der G-536-Test ist rot und steht nicht in der Kette](laufend_codex/goals-g-0616-der-g536-test-ist-rot-und-steht-nicht-in-der-kette.md) | laeuft (codex) | — | — |
+| `G-616` | fehler | mittel | [Der G-536-Test ist rot und steht nicht in der Kette](erledigt/goals-g-0616-der-g536-test-ist-rot-und-steht-nicht-in-der-kette.md) | erledigt | — | — |
 | `G-617` | fehler | hoch | [Ein Kraftziel findet seine Uebung nur ueber den Titel](erledigt/goals-g-0617-ein-kraftziel-findet-seine-uebung-nur-ueber-den-titel.md) | erledigt | — | G-618, G-620, G-621, G-625, G-651 |
 | `G-618` | aufgabe | mittel | [Der Reiter Goals trennt das steuernde Ziel von den messenden](erledigt/goals-g-0618-der-reiter-goals-trennt-steuerndes-und-messende-ziele.md) | erledigt | — | G-639, G-648, G-649, G-650 |
 | `G-619` | fehler | niedrig | [Das Tempo im Anlegemodal kennt nur Prozent Koerpergewicht](todos/goals-g-0619-das-tempo-im-anlegemodal-kennt-nur-prozent.md) | offen | — | — |
-| `G-620` | fehler | niedrig | [Zeit- und Pace-Ziele messen in die falsche Richtung](laufend_codex/goals-g-0620-zeit-und-pace-ziele-messen-in-die-falsche-richtung.md) | laeuft (codex) | — | — |
+| `G-620` | fehler | niedrig | [Zeit- und Pace-Ziele messen in die falsche Richtung](erledigt/goals-g-0620-zeit-und-pace-ziele-messen-in-die-falsche-richtung.md) | erledigt | — | — |
 | `G-621` | aufgabe | mittel | [Ein Messziel kann der Richtung widersprechen, ohne dass es jemand sagt](todos/goals-g-0621-ein-messziel-kann-der-richtung-widersprechen.md) | offen | — | — |
 | `G-622` | fehler | hoch | [Ohne aktives Ziel gibt es keine Tagesziele](erledigt/goals-g-0622-ohne-aktives-ziel-gibt-es-keine-tagesziele.md) | erledigt | — | G-630, G-637 |
 | `G-623` | aufgabe | mittel | [Im Planer laesst sich eine einzelne Phase nicht verschieben](todos/goals-g-0623-im-planer-laesst-sich-eine-phase-nicht-verschieben.md) | offen | — | — |
@@ -708,9 +707,9 @@
 | `G-644` | aufgabe | hoch | [Planer: Lücken in der Kette](erledigt/goals-g-0644-planer-luecken-in-der-kette.md) | erledigt | — | — |
 | `G-645` | fehler | mittel | [Goals und Phase Engine: Befunde am Schirm (dev, 10.10.)](todos/goals-g-0645-goals-reiter-befunde-am-schirm.md) | offen | — | — |
 | `G-646` | aufgabe | mittel | [Trendgewicht einbinden](todos/goals-g-0646-trendgewicht-einbinden.md) | offen | — | — |
-| `G-647` | fehler | niedrig | [Der Satz aus 622 steht noch ohne Umlaute](laufend_codex/goals-g-0647-622-satz-mit-umlauten.md) | laeuft (codex) | — | — |
-| `G-648` | fehler | hoch | [Reiter Goals weicht vom freigegebenen Entwurf ab](laufend_claudecode/goals-g-0648-reiter-goals-weicht-vom-entwurf-ab.md) | laeuft (claudecode) | — | G-652, G-657 |
-| `G-649` | fehler | hoch | [Phase Engine weicht vom freigegebenen Entwurf ab](laufend_claudecode/goals-g-0649-phase-engine-weicht-vom-entwurf-ab.md) | laeuft (claudecode) | — | G-656, G-666 |
+| `G-647` | fehler | niedrig | [Der Satz aus 622 steht noch ohne Umlaute](erledigt/goals-g-0647-622-satz-mit-umlauten.md) | erledigt | — | — |
+| `G-648` | fehler | hoch | [Reiter Goals weicht vom freigegebenen Entwurf ab](erledigt/goals-g-0648-reiter-goals-weicht-vom-entwurf-ab.md) | erledigt | — | G-652, G-657 |
+| `G-649` | fehler | hoch | [Phase Engine weicht vom freigegebenen Entwurf ab](erledigt/goals-g-0649-phase-engine-weicht-vom-entwurf-ab.md) | erledigt | — | G-656, G-666 |
 | `G-650` | aufgabe | hoch | [Leser für Verlauf, Prognose und Wochenwerte des steuernden Ziels](erledigt/goals-g-0650-leser-fuer-verlauf-prognose-wochen.md) | erledigt | — | G-653, G-654 |
 | `G-651` | befund | mittel | [Probe hängt am Datum: Tageskettenlauf 16.10. rot](erledigt/goals-g-0651-g617-probe-haengt-am-datum.md) | erledigt | — | — |
 | `G-652` | aufgabe | hoch | [Testdaten nach Entwurf: Messziele, Pläne, Termine, Umlaute](erledigt/goals-g-0652-seeds-nach-entwurf.md) | erledigt | — | G-655 |

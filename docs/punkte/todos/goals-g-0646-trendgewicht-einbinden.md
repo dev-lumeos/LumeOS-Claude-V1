@@ -25,3 +25,7 @@ beruehrt:
 `goals.trendgewicht_am` ist seit 16.10. live, aber noch nicht eingebunden.
 - Codex: Startwert für Körperziele (Gewicht) und `ziel_grenzen_pruefen`/Wächter nehmen den Trend statt der letzten Messung, Quelle mitliefern.
 - Claude Code: "Ziel setzen", Steuerungskarte und Messziel-Vorschau zeigen "Trend 84,7 kg (aus n Messungen)" bzw. "letzte Messung am …".
+
+## Bestandsprüfung - 2026-10-18 (Codex)
+
+`[read]` Fehlt noch im Startwert-Leser: Der dev-Trend ist 84,762 kg, die Vorschau zeigt weiterhin die Rohmessung 84,73 kg.

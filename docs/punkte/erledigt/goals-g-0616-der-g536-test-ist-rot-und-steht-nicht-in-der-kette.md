@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-07
 agent: codex
 beauftragt: 2026-10-18
+erledigt: 2026-10-18
+commit: 8469173b
 
 braucht: []
 kind_von: G-614
@@ -42,3 +44,7 @@ Ein Waechter, der eine Pruefdatei ohne Kettenschritt meldet.
     Fremd:   apps/, packages/, tools/, docs/
     Stand:   2026-10-18, HEAD 2510f992
 
+## Erledigt - 2026-10-18, Commit `8469173b`
+
+`[read]` Codex: Von 135 losen Prüfdateien sind 102 als Kettenproben registriert und 16 begründet entfernt (`backup/g616-deleted.md`). 17 manuelle Messskripte liegen jetzt in `_manuelle_validierung` (`backup/g616-manual.md`). Der Wächter meldet 0 lose Dateien, eine eingefügte Datei macht ihn rot. Die Kette hat 543 Schritte und ist grün.
+`[cmd]` Der Verweis in A-19 auf das verschobene `kette-readme-pruefen.ts` ist nachgezogen (`afc7e906`). Gate grün beim Commit.

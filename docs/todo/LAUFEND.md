@@ -6,13 +6,7 @@
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
 | Claude Code | G-629 | Die Phase engine zeigt Pläne | **laeuft**, raus 10.10. |
-| Claude Code | G-648 | Reiter Goals weicht vom freigegebenen Entwurf ab | **laeuft**, raus 16.10. |
-| Claude Code | G-649 | Phase Engine weicht vom freigegebenen Entwurf ab | **laeuft**, raus 16.10. |
-| Codex | G-616 | Der G-536-Test ist rot und steht nicht in der Kette | **laeuft**, raus 18.10. |
-| Codex | G-620 | Zeit- und Pace-Ziele messen in die falsche Richtung | **laeuft**, raus 18.10. |
-| Codex | G-647 | Der Satz aus 622 steht noch ohne Umlaute | **laeuft**, raus 18.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
-| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 ## Plan ab 06.10. - von Tom freigegeben, 17:03

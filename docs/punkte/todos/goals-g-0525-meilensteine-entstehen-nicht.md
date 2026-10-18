@@ -84,3 +84,7 @@ einer Funktion belegt ihren Lauf nicht.
 25er-Meilenstein muss kippen, der 50er nicht.
 
 **A5** — Nachweise auf `test-user@lumeos.local`.
+
+## Bestandsprüfung - 2026-10-18 (Codex)
+
+`[read]` Fehlt: 13 Meilensteine aus den Testdaten, 0 automatisch erzeugt, 0 prozentual (25/50/75 %). Laut Claude Code legt das System Meilensteine selbst an. Das stimmt live nicht.
