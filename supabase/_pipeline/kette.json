@@ -4974,6 +4974,55 @@
       "kind": "tsx",
       "creates": "G-616: Keine unverdrahtete Prüfdatei unter _validierung.",
       "depends_on": ["616_supplement_balance_probe"]
+    },
+    {
+      "id": "667_strength_points_per_session",
+      "path": "supabase/_pipeline/11_goals/667_strength_points_per_session.sql",
+      "kind": "sql",
+      "creates": "G-667: ein bester Kraftwert je Trainingseinheit und Tag.",
+      "depends_on": ["616_validation_coverage_probe"]
+    },
+    {
+      "id": "668_forward_plan_line",
+      "path": "supabase/_pipeline/11_goals/668_forward_plan_line.sql",
+      "kind": "sql",
+      "creates": "G-668: vorwärts gerichtete Soll-Linie ab heutigem Trend neben historischem Soll.",
+      "depends_on": ["667_strength_points_per_session"]
+    },
+    {
+      "id": "669_next_phase_reader",
+      "path": "supabase/_pipeline/11_goals/669_next_phase_reader.sql",
+      "kind": "sql",
+      "creates": "G-669: Empfehlung mit Datum, Programm, Dauer und begründetem Regelbezug.",
+      "depends_on": ["668_forward_plan_line"]
+    },
+    {
+      "id": "670_goals_design_completion",
+      "path": "supabase/_pipeline/_testdaten/670_goals_design_completion.sql",
+      "kind": "sql",
+      "creates": "G-670: Halteposition, Modulbezüge und zwölf Trainingswochen auf dev.",
+      "depends_on": ["669_next_phase_reader"]
+    },
+    {
+      "id": "646_trend_start_preview",
+      "path": "supabase/_pipeline/11_goals/646_trend_start_preview.sql",
+      "kind": "sql",
+      "creates": "G-646: gemeinsamer Startwertleser für Gewicht aus trendgewicht_am.",
+      "depends_on": ["670_goals_design_completion"]
+    },
+    {
+      "id": "525_automatic_percentage_milestones",
+      "path": "supabase/_pipeline/11_goals/525_automatic_percentage_milestones.sql",
+      "kind": "sql",
+      "creates": "G-525: vier automatische Meilensteine für neue Ziele und Trendprüfung für kg.",
+      "depends_on": ["646_trend_start_preview"]
+    },
+    {
+      "id": "667_668_669_670_646_525_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g667-g668-g669-g670-g646-g525.test.ts",
+      "kind": "tsx",
+      "creates": "Proben und Sabotage-Haken für alle sechs Goals-Abnahmepunkte.",
+      "depends_on": ["525_automatic_percentage_milestones"]
     }
   ]
 }
