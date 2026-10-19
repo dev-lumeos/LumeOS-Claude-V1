@@ -41,3 +41,7 @@ Jede Wegwerf-Datenbank stellt deshalb erst den Dump wieder her und fährt dann d
 4. Für Sabotageproben wird nur die betroffene Probe wiederholt, auf derselben Datenbank. Danach wird die Datenbank verworfen.
 5. Gemessen wird die Dauer: Kopie, Schritte, Proben, gegen den heutigen Aufbau.
 6. Danach zieht der Orchestrator 00-LIESMICH und die Auftragsvorlage nach.
+
+## Ergaenzung - 2026-10-19 08:12 (Orchestrator)
+
+7. Erzwingen statt beschreiben: `kette-ausfuehren.ts` bricht ausserhalb des Nachtlaufs ab, wenn es ueber die Kette aufbauen soll, und verweist auf die Kopie aus `lumeos_basis`. Ausnahme ist ein ausdruecklicher Schalter mit Begruendung im Bericht. Die Gegenprobe ist ein Aufbau tagsueber ohne Schalter: Er muss abbrechen.

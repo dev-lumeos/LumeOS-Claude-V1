@@ -416,6 +416,22 @@ Kettenlauf verlangt. `[read]` **Eine Regel, die nirgends nachgezaehlt
 wird, wird zur Empfehlung** — das steht in LAUFEND, und es ist hier zum
 dritten Mal eingetreten.
 
+### Nachtrag 2026-10-19: Auch die Wegwerf-Datenbank ist eine halbe Kette
+
+**Tom, 2026-10-19, 08:12:** *„deine fehler kosten meine tokens und meine zeit. wieviele male muessen wir das noch diskutieren ?"*
+
+`[cmd]` **Die Regel vom 01.10. hat nur den Wortlaut verboten, nicht die Kosten.** Der Orchestrator hat statt „voller Kettenlauf" „gegen eine Wegwerf-Datenbank" verlangt. Diese Datenbank baut `kette-ausfuehren.ts` aber aus Dump plus **293 Schritten (172 tsx-Proben)**. Bei mehreren Sabotage-Laeufen geschieht das je Auftrag mehrfach. Die Kosten sind also dieselben, nur unter neuem Namen (G-682).
+
+**Ab sofort gilt, bis G-682 steht:**
+
+    je Auftrag    hoechstens EIN Aufbau mit --keep-database
+    Sabotage      Fehler einbauen, nur die betroffene Probe auf derselben
+                  Datenbank wiederholen, zuruecksetzen; kein Neuaufbau
+    Bericht       Laufzeit von Aufbau, Proben und Sabotage
+    danach        die Datenbank verwerfen
+
+**Nach G-682 gilt:** Die Wegwerf-Datenbank ist eine Kopie der Basis vom Nachtlauf (`CREATE DATABASE … TEMPLATE`). Gefahren werden nur die geaenderten Schritte. `kette-ausfuehren.ts` verweigert tagsueber den Aufbau ueber die Kette. Erst dieser Zwang macht die Regel zur Regel, ein Satz in dieser Datei tut es nicht.
+
 ## Der Waechter arbeitet mit Sollstand je Art
 
 `[cmd]` **Muster wie C-313b:** der Waechter zaehlt Befunde gegen einen
