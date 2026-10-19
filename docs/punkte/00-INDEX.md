@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 279 |
-| `laufend_codex` | 1 |
+| `todos` | 278 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 736 |
 | **gesamt** | **1018** |
@@ -737,7 +737,7 @@
 | `G-675` | aufgabe | hoch | [Kette: Vorschau beim Bearbeiten, Phasensperre, Papierkorb für Goals und die Phase Engine](laufend_codex/goals-g-0675-kette-vorschau-phasensperre-papierkorb.md) | laeuft (codex) | — | — |
 | `G-677` | befund | mittel | ["Als nächstes" bleibt leer, wenn der Plan keine Folgephase hat](erledigt/goals-g-0677-als-naechstes-bleibt-leer.md) | erledigt | — | — |
 | `G-678` | aufgabe | mittel | [Kraftkurve, Sollinie und "Als nächstes" an die neuen Leser binden](erledigt/goals-g-0678-kraftkurve-sollinie-als-naechstes-anbinden.md) | erledigt | — | — |
-| `G-681` | befund | mittel | [Die Gewichtsdaten sind ein gleichmässiger Sägezahn statt eines realistischen Verlaufs](todos/goals-g-0681-gewichtsdaten-saegezahn-statt-realistisch.md) | offen | — | — |
+| `G-681` | befund | mittel | [Die Gewichtsdaten sind ein gleichmässiger Sägezahn statt eines realistischen Verlaufs](laufend_codex/goals-g-0681-gewichtsdaten-saegezahn-statt-realistisch.md) | vorbereitet (codex) | — | — |
 
 ### wartet auf Blocker — 7
 

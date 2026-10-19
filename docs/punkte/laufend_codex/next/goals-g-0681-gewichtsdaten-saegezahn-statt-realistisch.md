@@ -37,3 +37,14 @@ Der Sägezahn ist zu regelmässig und zu flach. Trend, Lage und Anpassung lassen
 - Den Gewichts-Seed deterministisch mit realistischem Rauschen erzeugen: fester Zufallsstartwert, Tagesrauschen, gelegentliche Ausreisser, Lücken. Der Trend folgt der Phase.
 - Danach `trendgewicht_am`, das Wochenprotokoll und die Lage auf dem neuen Seed nachmessen.
 - dev nur mit Toms Freigabe neu befüllen, nach A-105.
+
+## Entschieden - 2026-10-19 08:04, Tom
+
+Auf dev liegen bisher nur Seed-Daten. Die duerfen angepasst werden, damit sie realistischer sind. Es gilt A-105: Sicherung vorher und nachher.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - G-681 realistische Gewichtsdaten
+    Bereich: supabase/_pipeline/_testdaten, Live dev und test-user (A-105)
+    Fremd:   apps/ gehoert Claude Code, docs/ dem Orchestrator.
+    Stand:   2026-10-19, nach G-675
