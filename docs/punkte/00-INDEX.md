@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 278 |
+| `todos` | 280 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 736 |
-| **gesamt** | **1018** |
+| **gesamt** | **1020** |
 
 ## medical — 50
 
@@ -66,7 +66,7 @@
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 | `G-578` | fehler | hoch | [Der Laborimport hat drei Datenbankfunktionen und keine Oberflaeche](erledigt/medical-g-0578-der-laborimport-hat-keine-oberflaeche.md) | erledigt | — | — |
 
-## nutrition — 269
+## nutrition — 270
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -338,6 +338,7 @@
 | `G-592` | fehler | mittel | [Die Hydration-Zusammenfassung ist ein ZWEITER Leseweg, keine fehlende Anzeige](erledigt/nutrition-g-0592-die-hydration-zusammenfassung-hat-keinen-leser.md) | erledigt | — | A-102, G-603, G-605 |
 | `G-603` | fehler | mittel | [Ein leerer Wassertag ist nicht „0 getrunken"](erledigt/nutrition-g-0603-ein-leerer-wassertag-ist-nicht-null-getrunken.md) | erledigt | — | — |
 | `G-605` | fehler | niedrig | [Der 14-Tage-Schnitt ohne Eintraege ist nicht ,0 ml"](erledigt/nutrition-g-0605-der-14-tage-schnitt-ohne-eintraege-ist-nicht-null.md) | erledigt | — | — |
+| `G-683` | befund | mittel | [Der Nachtlauf vom 19.10. ist rot, weil ein Test das UTC-Datum nimmt](todos/nutrition-g-0683-nachtlauf-rot-utc-datum-im-test.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 131
@@ -814,9 +815,9 @@
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 | `G-582` | fehler | mittel | [Der Coach-Alarm hat keinen Aufrufer](erledigt/coach-g-0582-der-coach-alarm-hat-keinen-aufrufer.md) | erledigt | — | — |
 
-## quer — 256
+## quer — 257
 
-### beauftragbar — 255
+### beauftragbar — 256
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -1075,6 +1076,7 @@
 | `G-635` | fehler | mittel | [Dev-Server liefert die Schrift mit falschem Hash](erledigt/quer-g-0635-dev-server-liefert-schrift-mit-falschem-hash.md) | erledigt | — | — |
 | `G-641` | fehler | niedrig | [Farbmischung in oklch färbt Flächen rosa](erledigt/quer-g-0641-farbmischung-oklch-faerbt-flaechen-rosa.md) | erledigt | — | — |
 | `G-657` | aufgabe | mittel | [Kontextleiste (Buddy) standardmäßig eingeklappt](erledigt/quer-g-0657-kontextleiste-standardmaessig-eingeklappt.md) | erledigt | — | — |
+| `G-682` | befund | hoch | [Jeder Datenbankauftrag baut seine Wegwerf-Datenbank über die halbe Kette](todos/quer-g-0682-wegwerf-datenbank-aus-basis-statt-kette.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
 
