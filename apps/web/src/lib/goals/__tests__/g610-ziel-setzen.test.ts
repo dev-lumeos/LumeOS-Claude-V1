@@ -142,9 +142,9 @@ describe('G-610 — Verdrahtung', () => {
     assert.match(q, /strategie_code: o\?\.strategie_code \?\? null/)
     assert.match(q, /const variante = ph\?\.strategie_code \? p\.strategien\.find\(s => s\.code === ph\.strategie_code\)/)
     assert.match(q, /data-ziel-richtung/)
-    // „danach empfohlen" steht seit G-645 im aktiven Plan der Phase engine — die
-    // Steuerungskarte des Entwurfs (`Main.dc.html`) fuehrt es nicht.
-    assert.match(lies(join(GOALS, 'plan-seite.tsx')), /data-plan-danach[^>]*>Danach empfohlen:/)
+    // „danach empfohlen" stand seit G-645 im aktiven Plan der Phase engine; seit G-669 (Nachtrag 18.10.)
+    // kommt die Empfehlung aus `goal_als_naechstes`. Die Steuerungskarte des Entwurfs fuehrt sie nicht.
+    assert.match(lies(join(GOALS, 'plan-seite.tsx')), /<span data-plan-empfohlen>Empfohlen ab/)
   })
   // G-656: die Zeitachse ist geloescht; das Ende ueber `planende` rechnet die Planvorschau.
   it('die Planvorschau rechnet das Ende ueber planende', () => {

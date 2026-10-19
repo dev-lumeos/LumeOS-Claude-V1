@@ -103,3 +103,23 @@ export function wochenZeilen(punkte: Array<{ tag: string; einheit?: string | nul
     },
   }))
 }
+
+/**
+ * G-667/G-678: Kraftkurve — je Zeile aus `goals.measurement_points` genau ein Punkt (eine Einheit, eine Messung),
+ * nach Tag sortiert. Hier wird nichts zusammengefasst und nichts in Saetze zerlegt; zwei Einheiten am selben Tag
+ * sind zwei Punkte.
+ */
+export function punkteAusKette(zeilen: Array<Record<string, unknown>>) {
+  return zeilen
+    .map(r => ({ tag: String(r.measured_on), wert: Number(r.value), quelle: String(r.source_name), id: String(r.source_id ?? ''), einheit: null as string | null, detail: null as Punktdetail | null }))
+    .sort((a, b) => a.tag.localeCompare(b.tag))
+}
+
+/**
+ * G-678 (Nachtrag 19.10.): die graue Planlinie ist der Sollweg seit Zielbeginn — `planlinien_am.historisch_kg`.
+ * `vorwaerts_kg` (ab heutigem Trend) ist keine Planlinie.
+ */
+export function sollwegKg(antwort: Record<string, unknown> | null): number | null {
+  const v = antwort?.historisch_kg
+  return v === null || v === undefined ? null : Number(v)
+}

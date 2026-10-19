@@ -85,7 +85,8 @@ describe('G-615 — der Reiter', () => {
   it('der Planer und die Zustandsanzeige stehen im Reiter', () => {
     assert.match(A(), /vomTermin=\{<Planer strategien=\{echt\.strategien\}/)
     assert.ok(!/<PhasenZustand/.test(A()), 'die zweite Zustandsanzeige ist zurueck')
-    assert.match(lies(join(GOALS, 'plan-seite.tsx')), /data-plan-danach[^>]*>Danach empfohlen: \{danach\.join/)
+    // G-669 (Nachtrag 18.10.): statt „Danach empfohlen: …" aus next_codes die Empfehlung der Kette
+    assert.match(lies(join(GOALS, 'plan-seite.tsx')), /<span data-plan-empfohlen>Empfohlen ab/)
   })
   it('die Attrappe „Phase state machine" ist gefallen', () => {
     assert.ok(!/title="Phase state machine"/.test(lies(join(GOALS, 'fehlende-kacheln.tsx'))))
@@ -105,12 +106,13 @@ describe('G-615 — der Reiter', () => {
     assert.match(q, /data-plan=\{p\.code\} disabled=\{zu\}/)
     assert.match(q, /\{zu && <span data-plan-sperre/)
   })
-  it('die Zustandsanzeige liest den aktiven Plan und next_codes', () => {
+  it('die Zustandsanzeige liest den aktiven Plan (next_codes seit G-669 nicht mehr)', () => {
     // `[cmd]` **G-618: steuernd heisst `goal_role`, nicht `is_primary`.**
     // G-645/3: der aktive Plan (`goal_programs`, einer je Nutzer aktiv)
     // traegt das Steuerziel — seine laufende Position nennt die Variante.
     const q = lies(join(GOALS, 'plan-seite.tsx'))
     assert.match(q, /const laufend = aktiv\?\.positionen\.find\(p => p\.zustand === 'laufend'\)/)
-    assert.match(q, /naechsteNamen\(variante, strategien\)/)
+    // G-669: die Folgeprogramme kommen aus `goal_als_naechstes`, nicht aus next_codes der Variante
+    assert.ok(!/naechsteNamen\(/.test(q), 'next_codes stehen wieder unter „Als nächstes"')
   })
 })

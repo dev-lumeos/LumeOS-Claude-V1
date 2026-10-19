@@ -239,11 +239,12 @@ describe('G-544/A1 — Ziele statt Phasentypen', () => {
 // ════════════════════════════════════════════════════════════════
 
 describe('G-544/A3 — planen heisst Reihenfolge', () => {
-  it('die Folgephasen kommen aus next_codes', () => {
+  it('die Empfehlung kommt aus der Kette, nicht aus einer Liste (G-669)', () => {
     const q = lies(join(GOALS, 'plan-seite.tsx'))
-    assert.match(q, /const danach = variante \? naechsteNamen\(variante, strategien\) : \[\]/,
-      'die Folgephasen werden nicht aus der Katalogzeile genommen')
-    assert.match(q, /<span data-plan-danach>Danach empfohlen: \{danach\.join\(/, 'sie werden nicht ausgegeben')
+    // Vorher: „Danach empfohlen: …" aus `next_codes`. Nachtrag 18.10.: die Liste der moeglichen Programme ist
+    // keine Empfehlung — Programm, Datum, Dauer und Grund liefert `goal_als_naechstes`.
+    assert.ok(!/naechsteNamen|data-plan-danach/.test(q), 'die Liste aus next_codes steht wieder unter „Als nächstes"')
+    assert.match(q, /phasenname\(\{ strategie_code: alsNaechstes\.programm/, 'das Programm wird nicht ueber den Katalog benannt')
     for (const code of ['lose', 'maintain', 'gain', 'aggressive_cut',
       'moderate_cut', 'conservative_cut', 'mini_cut', 'lean_bulk',
       'clean_bulk', 'aggressive_bulk', 'body_recomp', 'reverse_diet',

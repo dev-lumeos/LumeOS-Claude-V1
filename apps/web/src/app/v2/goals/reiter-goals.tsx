@@ -318,7 +318,7 @@ function Steuerung(p: SteuerProps) {
       </div>
 
       {offen && <SteuerDetails z={z} ausblick={ausblick} trend={trend} messungen={p.messungen} meilensteine={p.meilensteine}
-                                anpassungen={plan?.anpassungen} stichtag={p.stichtag} onPhaseEngine={p.onPhaseEngine} />}
+                                anpassungen={plan?.anpassungen} planHistorisch={p.woche.planHistorisch} stichtag={p.stichtag} onPhaseEngine={p.onPhaseEngine} />}
       {edit && <SteuerBearbeiten z={z} variante={variante?.label ?? art} onZielSetzen={p.onZielSetzen}
                                  onLoeschen={() => setLoeschen(true)} onFertig={() => setEdit(false)} />}
       {loeschen && <LoeschenFrage ziel={z} art="steuer" verlaufWochen={verlaufWochen} onZu={() => setLoeschen(false)} />}
@@ -345,10 +345,12 @@ export function AnpassungZelle({ a }: { a: ReturnType<typeof anpassungZeile> }) 
   return <td title={a.grund} data-steuerung-anpassung={a.regel ?? ''}>{text}</td>
 }
 
-function SteuerDetails({ z, ausblick, trend, messungen, meilensteine, anpassungen, stichtag, onPhaseEngine }: {
+export function SteuerDetails({ z, ausblick, trend, messungen, meilensteine, anpassungen, planHistorisch = [], stichtag, onPhaseEngine }: {
   z: ZielFortschritt; ausblick: Ausblick | null; trend: number | null; messungen: Koerpermessung[]; meilensteine: Meilenstein[]
   /** G-627: Wochenprotokoll des laufenden Plans (`goal_weekly_adjustments_at`). */
   anpassungen?: Anpassungswoche[] | null
+  /** G-678: Sollweg vom Zielstart bis zur Frist (`planlinien_am.historisch_kg`). */
+  planHistorisch?: Array<{ tag: string; kg: number }>
   stichtag: string; onPhaseEngine: () => void
 }) {
   const [bereich, setBereich] = React.useState<typeof ZEITRAUM[number][0]>('3m')
@@ -361,7 +363,7 @@ function SteuerDetails({ z, ausblick, trend, messungen, meilensteine, anpassunge
   const wochen = (ausblick?.wochen ?? []).filter(w => w.woche_bis >= von)
   const roh = messungen.filter(m => m.weight_kg !== null && m.measurement_date >= von && m.measurement_date <= stichtag)
     .sort((a, b) => a.measurement_date.localeCompare(b.measurement_date))
-  const werte = roh.map(m => m.weight_kg as number).concat([z.start_value, z.target_value, trend, ...wochen.flatMap(w => [w.trend_kg, w.soll_kg])].filter((x): x is number => x !== null))
+  const werte = roh.map(m => m.weight_kg as number).concat([z.start_value, z.target_value, trend, ...wochen.map(w => w.trend_kg), ...planHistorisch.filter(v => v.tag >= von && v.tag <= bis).map(v => v.kg)].filter((x): x is number => x !== null))
   const lo = Math.floor(Math.min(...werte, 1e9) * 2) / 2, hi = Math.ceil(Math.max(...werte, -1e9) * 2) / 2
   const sp = hi - lo || 1
   const t0 = Date.parse(`${von}T12:00:00Z`), t1 = Date.parse(`${bis}T12:00:00Z`)
@@ -394,9 +396,11 @@ function SteuerDetails({ z, ausblick, trend, messungen, meilensteine, anpassunge
             </g>
           ))}
           {z.target_value !== null && <line x1="40" x2="630" y1={y(z.target_value)} y2={y(z.target_value)} stroke="var(--acc-goals)" strokeDasharray="2 3" />}
-          {/* Plan: Soll nach den Plan-Positionen je Wochenende (G-650 `plan_soll_am`) */}
-          {wochen.some(w => w.soll_kg !== null) && (
-            <polyline points={wochen.filter(w => w.soll_kg !== null).map(w => `${x(w.woche_bis)},${y(w.soll_kg!)}`).join(' ')} fill="none" stroke="var(--fg-dim)" strokeDasharray="5 4" data-plan-linie />
+          {/* G-678 (Nachtrag 19.10.): der Entwurf (Main.dc.html, Verlauf) zeigt EINE graue Planlinie vom Zielstart bis
+              zum Ziel — der Sollweg `planlinien_am.historisch_kg`. Der Abstand zum Trend ist die Lage, nicht zu glaetten.
+              `vorwaerts_kg` ist keine Planlinie; die Prognose ab heute zeichnet die gelbe gepunktete Linie. */}
+          {planHistorisch.filter(v => v.tag >= von && v.tag <= bis).length >= 2 && (
+            <polyline points={planHistorisch.filter(v => v.tag >= von && v.tag <= bis).map(v => `${x(v.tag)},${y(v.kg)}`).join(' ')} fill="none" stroke="var(--fg-dim)" strokeDasharray="5 4" data-plan-linie={planHistorisch.length} />
           )}
           {roh.length > 0 && <polyline points={roh.map(m => `${x(m.measurement_date)},${y(m.weight_kg as number)}`).join(' ')} fill="none" stroke="var(--border-strong)" strokeWidth="1" data-waage-linie />}
           {wochen.some(w => w.trend_kg !== null) && (

@@ -72,7 +72,7 @@ describe('Steuerung', () => {
   })
   it('Wochen in den Details: Anpassung aus dem Protokoll, Trend mit zwei Stellen', () => {
     const q = lies('app/v2/goals/reiter-goals.tsx')
-    assert.match(q, /anpassungen=\{plan\?\.anpassungen\} stichtag=\{p\.stichtag\}/)
+    assert.match(q, /anpassungen=\{plan\?\.anpassungen\} planHistorisch=\{p\.woche\.planHistorisch\} stichtag=\{p\.stichtag\}/)
     assert.match(q, /<AnpassungZelle a=\{anpassungZeile\(anpassungen, w\.woche_ab, w\.vollstaendig, w\.woche_ab === ausblick\?\.wochen\.at\(-1\)\?\.woche_ab\)\} \/>/)
     assert.match(q, /\{w\.trend_kg !== null \? zahl\(w\.trend_kg, 2\) : '—'\}/)
     const zelle = (a: ReturnType<typeof anpassungZeile>) => renderToStaticMarkup(React.createElement('table', null, React.createElement('tbody', null, React.createElement('tr', null, React.createElement(AnpassungZelle, { a })))))

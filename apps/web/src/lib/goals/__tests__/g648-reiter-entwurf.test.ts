@@ -193,7 +193,8 @@ describe('G-648 Rest — Werte aus controlling_goal_outlook statt „kommt (G-65
   })
   it('Details: Trend- und Planlinie, Tempo 4 Wochen, Wochenzeilen (Quelltext — Details oeffnen per Klick)', () => {
     const q = ohneKommentar(lies('app/v2/goals/reiter-goals.tsx'))
-    assert.match(q, /wochen\.filter\(w => w\.soll_kg !== null\)\.map\(w => `\$\{x\(w\.woche_bis\)\},\$\{y\(w\.soll_kg!\)\}`\)/)
+    // G-678 (Nachtrag 19.10.): EINE graue Planlinie — der Sollweg seit Zielbeginn (`planlinien_am.historisch_kg`)
+    assert.match(q, /planHistorisch\.filter\(v => v\.tag >= von && v\.tag <= bis\)\.map\(v => `\$\{x\(v\.tag\)\},\$\{y\(v\.kg\)\}`\)/)
     assert.match(q, /data-trend-linie/)
     assert.match(q, /k\.tempo_4w_kg_pro_woche !== null \? `\$\{vz\(k\.tempo_4w_kg_pro_woche, 2\)\} kg\/Wo`/)
     assert.match(q, /\[\.\.\.\(ausblick\?\.wochen \?\? \[\]\)\]\.reverse\(\)\.slice\(0, 6\)/)

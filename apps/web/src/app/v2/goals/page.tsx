@@ -143,7 +143,8 @@ export default async function V2GoalsPage({
     // ist es deren Ziel; bei mehreren bleibt es offen**, und die
     // Datenbank meldet die Mehrdeutigkeit als Zustand (A4).
     woche = await ladeWoche(userId, stichtag, gezeigtesSteuerziel(ziele)?.goal_id ?? null,
-      ziele.filter(g => g.goal_role === 'measurement' && g.zustand.zustand === 'active').map(g => g.goal_id))
+      ziele.filter(g => g.goal_role === 'measurement' && g.zustand.zustand === 'active').map(g => g.goal_id),
+      gezeigtesSteuerziel(ziele)?.target_date ?? null, gezeigtesSteuerziel(ziele)?.gueltig_ab ?? null)
     // G-629: laufend ist, was `phase_am` liefert (echt.phasen).
     ;[plaene, vorlagen] = await Promise.all([ladePlaene(userId, stichtag, phasen.map(p => p.phase_id)), ladeVorlagen()])
 

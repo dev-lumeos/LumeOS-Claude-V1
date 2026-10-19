@@ -479,7 +479,7 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
               {!echtAus && (
                 <PlanSeite vomTermin={<Planer strategien={echt.strategien} erfahrung={echt.strategieProfil.experience}
                                               ziele={echt.ziele} heute={echt.stichtag} />}
-                           plaene={echt.plaene} neu={neuerPlan} onNeu={setNeuerPlan} vorlagen={echt.vorlagen ?? null} ausblick={echt.woche.ausblick ?? null} wachen={echt.woche.wachen ?? null} strategien={echt.strategien} grad={echt.strategieProfil.experience}
+                           plaene={echt.plaene} neu={neuerPlan} onNeu={setNeuerPlan} vorlagen={echt.vorlagen ?? null} ausblick={echt.woche.ausblick ?? null} wachen={echt.woche.wachen ?? null} alsNaechstes={echt.woche.alsNaechstes ?? null} strategien={echt.strategien} grad={echt.strategieProfil.experience}
                            ziele={echt.ziele} stichtag={echt.stichtag}
                            startKg={echt.messungen.filter(m => m.weight_kg !== null && m.measurement_date <= echt.stichtag).at(-1)?.weight_kg ?? null}
                            onZuGoals={() => setTab('goals')} />

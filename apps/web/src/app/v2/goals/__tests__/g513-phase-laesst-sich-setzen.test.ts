@@ -83,7 +83,8 @@ describe('G-513 — die Phase laesst sich setzen', () => {
     assert.match(p, /<PhaseBeendenFormular phaseId=\{p\.goal_phase_id\}/, 'Phase beenden ist im Planer unerreichbar')
     assert.match(p, /await phaseBeendenAktion\(phaseId, grund\.trim\(\), ende\)/)
     assert.match(p, /data-phase-beenden disabled=\{laeuft \|\| !grund\.trim\(\)\}/, 'ohne Grund laesst sich beenden')
-    assert.match(p, /laufend\?\.empfohlen \? <span data-plan-empfohlen>/, 'der Wechselvorschlag fehlt unter „Als nächstes"')
+    // G-669 (Nachtrag 18.10.): der Vorschlag kommt aus `goal_als_naechstes`, nicht mehr aus `laufend.empfohlen`
+    assert.match(p, /alsNaechstes \? <span data-plan-empfohlen>Empfohlen ab \{dstr\(alsNaechstes\.startdatum\)\}/, 'der Wechselvorschlag fehlt unter „Als nächstes"')
   })
 
   // ── 2 · Nur die Serveraktion ueberquert die Grenze ───────────────
@@ -153,10 +154,11 @@ describe('G-513 — die Phase laesst sich setzen', () => {
   })
 
   // ── 8 · Kein Leerfeld ohne Erklaerung ────────────────────────────
-  it('ohne Vorschlag steht eine Erklaerung, kein leeres Feld', () => {
-    // G-656: der Vorschlag steht unter „Als nächstes"; ohne Vorschlag, ohne
-    // Folgephase und ohne Empfehlung steht ein Satz — kein leeres Feld.
-    assert.match(SETZEN(), /: <>Keine weitere Phase geplant\.<\/>\} \/>\}/)
+  it('ohne Vorschlag steht ein Satz, kein leeres Feld (G-656, Text G-677)', () => {
+    // G-656 verlangte hier einen Satz statt eines leeren Felds. G-677 (Tom 19.10.) gibt ihn vor: ohne Leser und
+    // ohne Folgephase „Nach Planende ohne Folgephase: Erhaltung. Phase ergänzen (✎)".
+    assert.match(SETZEN(), /: <span data-plan-ohne-folge>Nach Planende ohne Folgephase: Erhaltung\. Phase ergänzen \(<button/)
+    assert.match(SETZEN(), /\{alsNaechstes && <div[^\n]*<span className="ge-eb">Als nächstes<\/span>/)
   })
 
   // ── 9 · parameters bleibt leer, und das steht da ─────────────────

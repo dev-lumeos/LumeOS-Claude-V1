@@ -114,7 +114,9 @@ describe('G-618 — die Lesewege gegen ihre Signaturen', () => {
     }
     // die gelesenen Rueckgabespalten stehen in der Signatur
     assert.match(g617, /RETURNS TABLE\(measured_on date, value numeric, source_name text,/)
-    assert.match(read, /r\.measured_on[\s\S]{0,40}r\.value[\s\S]{0,60}r\.source_name/)
+    // G-678: die Zeilen bildet `punkteAusKette` in datenpunkt.ts ab (reiter-read ruft sie)
+    assert.match(read, /punkteAusKette\(zeilen\)/)
+    assert.match(lies('lib/goals/datenpunkt.ts'), /r\.measured_on[\s\S]{0,40}r\.value[\s\S]{0,60}r\.source_name/)
     assert.match(g617, /RETURNS TABLE\(week_start date, observed_value numeric, quota_pct numeric,\s*streak_weeks integer, target_met boolean\)/)
   })
   it('goal_contributions: Spalten und Module wie in G-514', () => {

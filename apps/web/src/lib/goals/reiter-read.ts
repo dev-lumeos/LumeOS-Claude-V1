@@ -8,8 +8,9 @@
 import { createSessionClient } from '@lumeos/shared/session'
 import { utcTagIso } from '@lumeos/shared/datum'
 
+
 import { wochenStart, type Beitrag } from './reiter'
-import { einheitDetail, messungDetail, umfangDetail, UMFANG_NAME, type Punktdetail } from './datenpunkt'
+import { einheitDetail, messungDetail, punkteAusKette, sollwegKg, umfangDetail, UMFANG_NAME, type Punktdetail } from './datenpunkt'
 
 export interface Wochendaten {
   /** Abgeschlossene Trainingseinheiten Mo–Stichtag; `null` = nicht lesbar. */
@@ -34,6 +35,14 @@ export interface Wochendaten {
   wachen?: Wache[] | null
   /** G-522: `goals.goal_module_cards_at` — vier Kacheln und der Engpass; `null` = kein Steuerziel oder Kette nicht live. */
   kacheln?: Modulkacheln | null
+  /**
+   * G-678 (Nachtrag 19.10.): `goals.planlinien_am(goal, tag).historisch_kg` — der Sollweg vom Zielstart bis
+   * zur Frist (Entwurf Main.dc.html: graue Planlinie 85 → 88 kg). Der Abstand zum Trend ist die Lage.
+   * `vorwaerts_kg` wird nicht gezeichnet; das Wochensoll kommt aus `controlling_goal_outlook` (gleiche Rate).
+   */
+  planHistorisch?: Array<{ tag: string; kg: number }>
+  /** G-669: `goals.goal_als_naechstes` — die gespeicherte Empfehlung; `null` = keine (G-677 regelt den Text). */
+  alsNaechstes?: { startdatum: string; programm: string; dauer_wochen: number; grund: string } | null
 }
 
 /**
@@ -98,10 +107,10 @@ const tagMinus = (tag: string, n: number) => {
   const d = new Date(`${tag}T12:00:00Z`); d.setUTCDate(d.getUTCDate() - n); return utcTagIso(d)
 }
 
-export async function ladeWoche(userId: string, stichtag: string, steuerzielId: string | null, messzielIds: string[] = []): Promise<Wochendaten> {
+export async function ladeWoche(userId: string, stichtag: string, steuerzielId: string | null, messzielIds: string[] = [], zielDatum: string | null = null, zielStart: string | null = null): Promise<Wochendaten> {
   const db = createSessionClient()
   const trendAm = (tag: string) => db.schema('goals').rpc('trendgewicht_am', { p_user_id: userId, p_stichtag: tag })
-  const [t, b, th, tv, ausblick, routine, lage, mw, wachen, kacheln] = await Promise.all([
+  const [t, b, th, tv, ausblick, routine, lage, mw, wachen, kacheln, naechstes] = await Promise.all([
     db.schema('training').from('workout_sessions').select('id', { count: 'exact', head: true })
       .eq('user_id', userId).eq('status', 'completed')
       .gte('session_date', wochenStart(stichtag)).lte('session_date', stichtag),
@@ -117,7 +126,18 @@ export async function ladeWoche(userId: string, stichtag: string, steuerzielId: 
     Promise.all(messzielIds.map(id => kette<Record<string, unknown>>('measurement_goal_week_at', id, stichtag).then(w => [id, w] as const))),
     steuerzielId ? kette<Wache[]>('goal_phase_guards_at', steuerzielId, stichtag) : Promise.resolve(null),
     steuerzielId ? kette<Modulkacheln>('goal_module_cards_at', steuerzielId, stichtag) : Promise.resolve(null),
+    steuerzielId ? kette<Record<string, unknown>>('goal_als_naechstes', steuerzielId, stichtag) : Promise.resolve(null),
   ])
+  // G-678: Sollweg vom Zielstart bis zur Achse (Frist, sonst Prognose) — je Woche; ponytail: ab 80 Wochen groebere Schritte
+  const achse = zielDatum ?? (ausblick?.prognose.status === 'datum' ? ausblick.prognose.datum : null)
+  const tage: string[] = []
+  if (steuerzielId && zielStart && achse && zielStart < achse) {
+    const schritt = 7 * Math.max(1, Math.ceil((Date.parse(achse) - Date.parse(zielStart)) / (80 * 7 * 86400000)))
+    for (let d = zielStart; d < achse; d = tagMinus(d, -schritt)) tage.push(d)
+    tage.push(achse)
+  }
+  const linien = await Promise.all(tage.map(tag => db.schema('goals').rpc('planlinien_am', { p_goal_id: steuerzielId!, p_tag: tag })
+    .then(r => { if (r.error && r.error.code !== 'PGRST202') throw new Error(`planlinien_am: ${r.error.message}`); return { tag, kg: sollwegKg(r.data as Record<string, unknown> | null) } })))
   const l = lage?.lage
   const messwochen: Record<string, Messwoche> = {}
   for (const [id, w] of mw) {
@@ -138,6 +158,11 @@ export async function ladeWoche(userId: string, stichtag: string, steuerzielId: 
     messwochen,
     wachen,
     kacheln,
+    planHistorisch: linien.filter((p): p is { tag: string; kg: number } => p.kg !== null),
+    alsNaechstes: naechstes && naechstes.programm ? {
+      startdatum: String(naechstes.startdatum), programm: String(naechstes.programm),
+      dauer_wochen: Number(naechstes.dauer_wochen), grund: String(naechstes.grund),
+    } : null,
     trainingsSoll: routine.error || !routine.data?.[0] ? null : Number(routine.data[0].days_per_week),
     trainings: t.error ? null : t.count ?? 0,
     beitraege: ((b.data ?? []) as Array<Record<string, unknown>>).map(r => ({
@@ -173,9 +198,7 @@ export async function ladeVerlauf(goalId: string, stichtag: string, woechentlich
   const zeilen = (p.data ?? []) as Array<Record<string, unknown>>
   // G-667: ein Punkt je Einheit (`training.workout_sessions`, `source_id` = Einheit), nicht je Satz.
   // G-674/2: Kopf, Inhalt und Link der juengsten Punkte — je Quelle ein Zugriff.
-  const punkte = zeilen
-    .map(r => ({ tag: String(r.measured_on), wert: Number(r.value), quelle: String(r.source_name), id: String(r.source_id ?? ''), einheit: null as string | null, detail: null as Punktdetail | null }))
-    .sort((a, b) => a.tag.localeCompare(b.tag))
+  const punkte = punkteAusKette(zeilen)
   // ponytail: die juengsten 60 reichen fuer 8 Tabellenzeilen bzw. 12 Wochen; mehr, wenn die Tabelle blaettert
   const juengste = punkte.slice(-DETAIL_PUNKTE)
   const ids = (vorn: string) => Array.from(new Set(juengste.filter(p => p.quelle.startsWith(vorn) && p.id).map(p => p.id)))

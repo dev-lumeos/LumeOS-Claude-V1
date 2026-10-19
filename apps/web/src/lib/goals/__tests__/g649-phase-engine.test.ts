@@ -168,9 +168,9 @@ const AUSBLICK: Ausblick = {
 }
 const ZIEL = { goal_id: 'g1', title: 'Lean Bulk auf 88 kg', goal_role: 'controlling', zustand: zustandAusStatus('active') } as unknown as ZielFortschritt
 const ROUTER = { push() {}, replace() {}, refresh() {}, back() {}, forward() {}, prefetch() {} }
-const seite = (o: { vorlagen?: Vorlage[] | null; ausblick?: Ausblick | null; plaene?: Plan[] } = {}) => renderToStaticMarkup(
+const seite = (o: { vorlagen?: Vorlage[] | null; ausblick?: Ausblick | null; plaene?: Plan[]; alsNaechstes?: { startdatum: string; programm: string; dauer_wochen: number; grund: string } | null } = {}) => renderToStaticMarkup(
   React.createElement(AppRouterContext.Provider, { value: ROUTER as never }, React.createElement(PlanSeite, {
-    plaene: o.plaene ?? [AKTIV, ENTWURF, FERTIG], vorlagen: o.vorlagen === undefined ? VORLAGEN : o.vorlagen, ausblick: o.ausblick ?? null,
+    plaene: o.plaene ?? [AKTIV, ENTWURF, FERTIG], vorlagen: o.vorlagen === undefined ? VORLAGEN : o.vorlagen, ausblick: o.ausblick ?? null, alsNaechstes: o.alsNaechstes ?? null,
     strategien: [ST], grad: 'pro', ziele: [ZIEL], stichtag: '2026-10-16', startKg: 84.8, onZuGoals: () => {},
   })))
 
@@ -234,10 +234,18 @@ describe('G-649 — die Abschnitte des Entwurfs', () => {
     assert.match(seite(), /Abgeschlossene Pläne · 1[\s\S]*?✓ erreicht[\s\S]*?Frühjahrs-Cut[\s\S]*?data-plan-als-vorlage="pf"/)
     assert.ok(!/data-plan-als-vorlage="pf"/.test(seite({ vorlagen: null })))
   })
-  it('Feinschliff 5: Wechselvorschlag der laufenden Phase unter „Als nächstes" (vorher Kachel PhaseVorschlag)', () => {
-    const mit: Plan = { ...AKTIV, positionen: [POS('a1', { goal_phase_id: 'ph', zustand: 'laufend', empfohlen: { next: 'lean_bulk', grund: 'Körperfett steigt' } })] }
-    assert.match(seite({ plaene: [mit] }), /data-als-naechstes="true"[^>]*><span data-plan-empfohlen="true">Empfohlen ab 29\.10\.26: <b>Lean Bulk<\/b>\. Grund: Körperfett steigt\. Übernehmen = Phase im Plan ergänzen \(✎\)\.<\/span>/)
-    assert.ok(!/data-plan-empfohlen/.test(seite()), 'ohne recommended_next steht ein Vorschlag')
+  it('G-669/G-678: „Als nächstes" — Leser zuerst (Datum, Programm, Dauer, Grund), sonst Stufe laut Plan, sonst G-677', () => {
+    const mit: Plan = { ...AKTIV, positionen: [POS('a1', { goal_phase_id: 'ph', zustand: 'laufend' })] }
+    const n = { startdatum: '2026-12-18', programm: 'lean_bulk', dauer_wochen: 4, grund: 'Körperfett steigt im Überschuss auf ~17 %' }
+    assert.match(seite({ plaene: [mit], alsNaechstes: n }), /data-als-naechstes="true"[^>]*><span data-plan-empfohlen="true">Empfohlen ab 18\.12\.26: <b>Lean Bulk<\/b> 4 Wochen\. Grund: Körperfett steigt im Überschuss auf ~17 %\. Übernehmen = Phase im Plan ergänzen \(✎\)\.<\/span>/)
+    // G-678/G-677 (Tom 19.10.): der Leser liefert nichts (dev) und der Plan hat keine Folgephase — der Satz, keine Liste
+    assert.match(seite({ plaene: [mit] }), /data-plan-ohne-folge="true">Nach Planende ohne Folgephase: Erhaltung\. Phase ergänzen \(<button/)
+    assert.ok(!/Danach empfohlen|data-plan-empfohlen/.test(seite({ plaene: [mit] })))
+    // Folgephase laut Plan nur NACH dem Stichtag (16.10.) — dev 18.10.: „Halten ab 19.07." stand als nächste da
+    const alt: Plan = { ...AKTIV, positionen: [POS('v', { zustand: 'geplant', gueltig_ab: '2026-07-19' }), POS('a1', { zustand: 'laufend', gueltig_ab: '2026-10-10' })] }
+    assert.ok(!/data-plan-naechste/.test(seite({ plaene: [alt] })), 'eine vergangene „geplant"-Position steht als nächste Stufe da')
+    const neu: Plan = { ...alt, positionen: [...alt.positionen, POS('n', { zustand: 'geplant', gueltig_ab: '2027-01-18' })] }
+    assert.match(seite({ plaene: [neu] }), /data-plan-naechste="true">Nächste Stufe laut Plan: <b>[^<]+<\/b>\.<\/span>/)
     assert.match(lies('lib/goals/plan-read.ts'), /select\('id, gueltig_ab, projected_end_date, actual_end_date, zielrate_pct_kg_woche, recommended_next, transition_reason'\)/)
   })
   it('Feinschliff 7: Abgeschlossene zeigen Start → Stand des Ziels; ohne beide die Wochen', () => {

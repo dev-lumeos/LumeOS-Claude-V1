@@ -32,9 +32,8 @@ import {
 } from '../../../lib/goals/plan'
 import { bestaetigteSchluessel, waechterSatz, weiterErlaubt, type Pruefung } from '../../../lib/goals/zielpruefung'
 import { phasenartFuerStrategie } from '../../../lib/goals/strategie-regeln'
-import { naechsteNamen } from '../../../lib/goals/zielwahl'
 import type { Anpassungswoche, Plan, Planposition, Vorlage } from '../../../lib/goals/plan-read'
-import type { Ausblick, Wache } from '../../../lib/goals/reiter-read'
+import type { Ausblick, Wochendaten, Wache } from '../../../lib/goals/reiter-read'
 import { kalenderwoche } from '../../../lib/goals/reiter'
 import type { Planergebnis } from '../../../lib/goals/plan-write'
 import type { Strategie } from '../../../lib/goals/strategie-read'
@@ -183,7 +182,7 @@ function Achse({ plan, stichtag, strategien }: { plan: Plan; stichtag: string; s
 const kg1 = (n: number) => n.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 const vzKg = (n: number | null) => (n === null ? '—' : `${n > 0 ? '+' : n < 0 ? '−' : '±'}${Math.abs(n).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`)
 
-function Details({ plan, strategien, alsNaechstes, ausblick, wachen }: { plan: Plan; strategien: Strategie[]; alsNaechstes: React.ReactNode; ausblick: Ausblick | null; wachen: Wache[] | null }) {
+function Details({ plan, strategien, alsNaechstes, ausblick, wachen }: { plan: Plan; strategien: Strategie[]; alsNaechstes: React.ReactNode | null; ausblick: Ausblick | null; wachen: Wache[] | null }) {
   return (
     <div data-plan-details={plan.id} style={{ borderTop: '1px solid var(--border)', paddingTop: 14, display: 'flex', flexDirection: 'column', gap: 16 }}>
       <div style={{ overflowX: 'auto' }}><div className="ge-eb" style={{ marginBottom: 4 }}>Phasen</div>
@@ -209,8 +208,8 @@ function Details({ plan, strategien, alsNaechstes, ausblick, wachen }: { plan: P
               <div key={w.key} data-wache={w.key} data-wache-status={w.status} style={{ display: 'flex', justifyContent: 'space-between', gap: 10, fontSize: 12.5, padding: '4px 0', borderBottom: '1px solid var(--border)' }}>
                 <span>{z.t}</span><span className="ge-num" style={{ whiteSpace: 'nowrap', color: w.status === 'ok' ? 'var(--pos)' : w.status === 'ausgeloest' ? 'var(--warn)' : 'var(--fg-subtle)' }}>{z.s}</span>
               </div>) })}</div>
-        <div style={{ flex: '1 1 300px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}><span className="ge-eb">Als nächstes</span>
-          <div data-als-naechstes style={{ background: 'color-mix(in oklab, var(--acc-goals) 8%, var(--surface))', borderRadius: 8, padding: '10px 12px', fontSize: 12.5 }}>{alsNaechstes}</div></div>
+        {alsNaechstes && <div style={{ flex: '1 1 300px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}><span className="ge-eb">Als nächstes</span>
+          <div data-als-naechstes style={{ background: 'color-mix(in oklab, var(--acc-goals) 8%, var(--surface))', borderRadius: 8, padding: '10px 12px', fontSize: 12.5 }}>{alsNaechstes}</div></div>}
       </div>
       <div style={{ overflowX: 'auto' }}><div className="ge-eb" style={{ marginBottom: 4 }}>Wöchentliche Anpassung · feste Regeln, keine KI</div>
         <table className="ge-tbl" style={{ minWidth: 600 }}>
@@ -761,11 +760,13 @@ function Vorlagen({ vorlagen }: { vorlagen: Vorlage[] | null }) {
   )
 }
 
-export function PlanSeite({ plaene, neu: neuVonAussen, onNeu, vorlagen = null, ausblick = null, wachen = null, strategien, grad, ziele, stichtag, startKg, onZuGoals, vomTermin }: {
+export function PlanSeite({ plaene, neu: neuVonAussen, onNeu, vorlagen = null, ausblick = null, wachen = null, alsNaechstes = null, strategien, grad, ziele, stichtag, startKg, onZuGoals, vomTermin }: {
   /** Tom 16.10.: „+ Neuer Plan" steht im Kopf der Seite — dann steuert der Kopf den Dialog. */
   neu?: boolean; onNeu?: (offen: boolean) => void
   plaene: Plan[]; vorlagen?: Vorlage[] | null; ausblick?: Ausblick | null; wachen?: Wache[] | null; strategien: Strategie[]; grad: string | null; ziele: ZielFortschritt[]
   stichtag: string; startKg: number | null; onZuGoals: () => void
+  /** G-669: `goal_als_naechstes` — die gespeicherte Empfehlung; `null` = keine. */
+  alsNaechstes?: Wochendaten['alsNaechstes']
   /** G-645/3: „vom Termin aus" als Einschub, solange `goal_plan_templates` fehlt. */
   vomTermin?: React.ReactNode
 }) {
@@ -791,10 +792,10 @@ export function PlanSeite({ plaene, neu: neuVonAussen, onNeu, vorlagen = null, a
   }
   const aktiv = plaene.find(p => p.status === 'aktiv') ?? null
   const laufend = aktiv?.positionen.find(p => p.zustand === 'laufend') ?? null
-  const variante = laufend?.strategie_code ? strategien.find(s => s.code === laufend.strategie_code) ?? null : null
-  // G-645/3: aus `PhasenZustand` uebernommen — `next_codes` mit Namen (Strategie oder Phasenart)
-  const danach = variante ? naechsteNamen(variante, strategien) : []
-  const naechste = aktiv?.positionen.find(p => p.zustand === 'geplant') ?? null
+  // Die naechste Phase liegt NACH dem Stichtag — eine vergangene Position mit Zustand „geplant" (dev 18.10.: Halten
+  // 19.07.–09.10.) ist keine Folgephase
+  const naechste = aktiv?.positionen.filter(p => p.zustand === 'geplant' && (p.gueltig_ab ?? '') > stichtag)
+    .sort((a, b) => (a.gueltig_ab ?? '').localeCompare(b.gueltig_ab ?? ''))[0] ?? null
   const weitere = plaene.filter(p => p.status === 'entwurf' || p.status === 'pausiert')
   const fertig = plaene.filter(p => p.status === 'abgeschlossen')
   const imBearbeiten = plaene.find(p => p.id === bearbeitet) ?? null
@@ -836,12 +837,12 @@ export function PlanSeite({ plaene, neu: neuVonAussen, onNeu, vorlagen = null, a
           </div>
           <Achse plan={aktiv} stichtag={stichtag} strategien={strategien} />
           {details && <Details plan={aktiv} strategien={strategien} ausblick={ausblick} wachen={wachen} alsNaechstes={
-            // G-649: der Wechselvorschlag der laufenden Phase (vorher die Kachel `PhaseVorschlag`)
-            laufend?.empfohlen ? <span data-plan-empfohlen>Empfohlen{laufend.projected_end_date ? ` ab ${dstr(laufend.projected_end_date)}` : ''}: <b>{phasenname({ strategie_code: laufend.empfohlen.next, phase_type: laufend.empfohlen.next, sub_phase_code: null, eigene_werte: null }, strategien)}</b>.
-              {laufend.empfohlen.grund && <> Grund: {laufend.empfohlen.grund}.</>} Übernehmen = Phase im Plan ergänzen (✎).</span>
-            : naechste ? <>Nächste Phase laut Plan: <b>{phasenname(naechste, strategien)}</b> ab {dstr(naechste.gueltig_ab)}.</>
-              : danach.length ? <span data-plan-danach>Danach empfohlen: {danach.join(' · ')}. Übernehmen = Phase im Plan ergänzen (✎).</span>
-                : <>Keine weitere Phase geplant.</>} />}
+            // Entwurf PhaseEngine.dc.html (`naechstes`): liefert `goal_als_naechstes` etwas, steht die Empfehlung da
+            // (G-669: Datum, Programm, Dauer, Grund); sonst die naechste Stufe laut Plan; hat der Plan keine
+            // Folgephase, der Satz aus G-677 (Tom 19.10.) — der Stift oeffnet das Bearbeiten. Keine eigene Empfehlung.
+            alsNaechstes ? <span data-plan-empfohlen>Empfohlen ab {dstr(alsNaechstes.startdatum)}: <b>{phasenname({ strategie_code: alsNaechstes.programm, phase_type: alsNaechstes.programm, sub_phase_code: null, eigene_werte: null }, strategien)}</b> {alsNaechstes.dauer_wochen} Wochen. Grund: {alsNaechstes.grund}. Übernehmen = Phase im Plan ergänzen (✎).</span>
+            : naechste ? <span data-plan-naechste>Nächste Stufe laut Plan: <b>{phasenname(naechste, strategien)}</b>.</span>
+              : <span data-plan-ohne-folge>Nach Planende ohne Folgephase: Erhaltung. Phase ergänzen (<button type="button" data-als-naechstes-bearbeiten aria-label="Plan bearbeiten" onClick={() => setBearbeitet(aktiv.id)} style={{ border: 0, background: 'none', padding: 0, font: 'inherit', color: 'var(--acc-goals)', cursor: 'pointer' }}>✎</button>)</span>} />}
         </section>
       ) : (
         <section data-kein-aktiver-plan className="ge-card" style={{ padding: 20, border: '2px solid color-mix(in oklab, var(--neg) 55%, var(--border))', display: 'flex', flexDirection: 'column', gap: 8 }}>
