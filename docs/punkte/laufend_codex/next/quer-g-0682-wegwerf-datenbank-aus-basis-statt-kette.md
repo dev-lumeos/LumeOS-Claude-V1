@@ -45,3 +45,10 @@ Jede Wegwerf-Datenbank stellt deshalb erst den Dump wieder her und fährt dann d
 ## Ergaenzung - 2026-10-19 08:12 (Orchestrator)
 
 7. Erzwingen statt beschreiben: `kette-ausfuehren.ts` bricht ausserhalb des Nachtlaufs ab, wenn es ueber die Kette aufbauen soll, und verweist auf die Kopie aus `lumeos_basis`. Ausnahme ist ein ausdruecklicher Schalter mit Begruendung im Bericht. Die Gegenprobe ist ein Aufbau tagsueber ohne Schalter: Er muss abbrechen.
+
+## Auftrag - Kopf
+
+    AUFTRAG FUER codex - G-682 Wegwerf-Datenbank aus der Basis statt ueber die Kette
+    Bereich: supabase/_pipeline, tools/kettenlauf-taeglich.mjs (Ausnahme, mit Claude Code abgestimmt)
+    Fremd:   apps/ gehoert Claude Code, docs/ dem Orchestrator.
+    Stand:   2026-10-19, HEAD 55817b18
