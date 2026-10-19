@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-18
 agent: codex
 beauftragt: 2026-10-18
+erledigt: 2026-10-19
+commit: b08ac6a2
 
 braucht: []
 kind_von: G-673

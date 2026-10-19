@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 278 |
+| `todos` | 279 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 733 |
-| **gesamt** | **1015** |
+| `erledigt` | 734 |
+| **gesamt** | **1017** |
 
 ## medical — 50
 
@@ -594,7 +594,7 @@
 
 ## goals — 146
 
-### beauftragbar — 138
+### beauftragbar — 139
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -734,10 +734,11 @@
 | `G-671` | befund | mittel | [Reste der Mockup-Referenz unter der Phase Engine](erledigt/goals-g-0671-mockup-reste-unter-der-phase-engine.md) | erledigt | — | — |
 | `G-672` | idee | niedrig | [Meilensteine von Hand setzen (mögliches Add-on)](todos/goals-g-0672-meilensteine-von-hand-setzen.md) | offen | — | — |
 | `G-673` | aufgabe | mittel | [Entwurf ergänzen: fünf offene Stellen aus der Abnahme](erledigt/goals-g-0673-entwurf-ergaenzen-offene-stellen.md) | erledigt | — | G-674, G-675, G-676 |
+| `G-675` | aufgabe | hoch | [Kette: Vorschau beim Bearbeiten, Phasensperre, Papierkorb für Goals und die Phase Engine](laufend_codex/goals-g-0675-kette-vorschau-phasensperre-papierkorb.md) | vorbereitet (codex) | — | — |
 | `G-677` | befund | mittel | ["Als nächstes" bleibt leer, wenn der Plan keine Folgephase hat](todos/goals-g-0677-als-naechstes-bleibt-leer.md) | offen | — | — |
 | `G-678` | aufgabe | mittel | [Kraftkurve, Sollinie und "Als nächstes" an die neuen Leser binden](laufend_claudecode/goals-g-0678-kraftkurve-sollinie-als-naechstes-anbinden.md) | laeuft (claudecode) | — | — |
 
-### wartet auf Blocker — 8
+### wartet auf Blocker — 7
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -748,7 +749,6 @@
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
 | `G-674` | aufgabe | mittel | [UI: die Ergänzungen aus dem Entwurf (Vorschau, Datenpunkt, Phasensperre, Papierkorb)](laufend_claudecode/goals-g-0674-ui-entwurfsergaenzungen.md) | laeuft (claudecode) | G-675 | — |
-| `G-675` | aufgabe | hoch | [Kette: Vorschau beim Bearbeiten, Phasensperre, Papierkorb für Goals und die Phase Engine](todos/goals-g-0675-kette-vorschau-phasensperre-papierkorb.md) | offen | G-676 | — |
 
 ## coach — 58
 
@@ -1101,11 +1101,20 @@
 |---|---|---|---|---|---|---|
 | `C-465` | feature | hoch | [die Auslieferung bauen](erledigt/marketplace-c-0465-die-auslieferung-bauen.md) | erledigt | — | — |
 
-## plattform — 1
+## plattform — 3
+
+### beauftragbar — 2
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-676` | aufgabe | hoch | [Papierkorb über alle Module](laufend_codex/plattform-g-0676-papierkorb-ueber-alle-module.md) | laeuft (codex) | — | — |
+| `G-676` | aufgabe | hoch | [Papierkorb über alle Module](erledigt/plattform-g-0676-papierkorb-ueber-alle-module.md) | erledigt | — | G-679, G-680 |
+| `G-680` | befund | hoch | [Es gibt keinen Weg "Konto löschen"](todos/plattform-g-0680-konto-loeschen-fehlt.md) | offen | — | — |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-679` | aufgabe | mittel | [Zentraler Papierkorb unter Einstellungen und Ausrollen in die übrigen Module](todos/plattform-g-0679-zentraler-papierkorb-entwurf-und-rollout.md) | offen | G-675 | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 
