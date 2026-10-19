@@ -58,3 +58,7 @@ Stelle 2 ist erledigt (commit d6efd946):
 - `[cmd]` test-user hat wieder 2 Ziele, 0 Meilensteine, 0 Probeziele.
 
 Stellen 1, 3 und 4 warten auf G-675.
+
+## Stand - 2026-10-19 08:20 (Orchestrator)
+
+G-675 ist live (55817b18). Damit sind die Stellen 1, 3 und 4 entsperrt.

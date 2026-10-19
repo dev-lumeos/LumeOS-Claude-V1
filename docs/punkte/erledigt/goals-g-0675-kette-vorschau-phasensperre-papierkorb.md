@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-18
 agent: codex
 beauftragt: 2026-10-19
+erledigt: 2026-10-19
+commit: 55817b18
 
 braucht: [G-676]
 kind_von: G-673
@@ -52,3 +54,13 @@ beruehrt:
     Bereich: supabase/_pipeline
     Fremd:   apps/ gehoert Claude Code, docs/ dem Orchestrator.
     Stand:   2026-10-18, HEAD 5815dba3
+
+## Abnahme - 2026-10-19 (Orchestrator, commit 55817b18)
+
+- `[cmd]` deleted_at an user_goals, goal_programs und goal_program_events. 0 Zeilen geloescht.
+- `[cmd]` goals hat 11 restriktive Policies.
+- `[cmd]` Ziele, Plaene, Termine, Phasen und Positionen: 19/8/5/8/23, unveraendert.
+- `[cmd]` Die Funktionen goal_trash, goal_restore, goal_plan_trash, goal_plan_restore, goal_plan_event_trash und goal_plan_event_restore sind vorhanden, ebenso goal_trash_list, controlling_goal_edit_preview und g675_phase_edit_guard.
+- `[cmd]` Sicherungen 2.547.308 / 2.587.263 Byte. Gate gruen.
+- `[read]` Probe 12/12 gruen, Laufzeit je Probe 142 bis 330 ms. 4 Sabotagen je rot, dafuer wurde nur die Probe wiederholt. Ein voller Lauf ist nicht belegt (abgebrochen nach 185 Schritten, 313 s), das macht der Nachtlauf.
+- Neue Befunde in G-684.

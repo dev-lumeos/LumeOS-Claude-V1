@@ -8,8 +8,8 @@
 | `todos` | 280 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 736 |
-| **gesamt** | **1020** |
+| `erledigt` | 737 |
+| **gesamt** | **1021** |
 
 ## medical — 50
 
@@ -593,9 +593,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 147
+## goals — 148
 
-### beauftragbar — 140
+### beauftragbar — 142
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -735,12 +735,14 @@
 | `G-671` | befund | mittel | [Reste der Mockup-Referenz unter der Phase Engine](erledigt/goals-g-0671-mockup-reste-unter-der-phase-engine.md) | erledigt | — | — |
 | `G-672` | idee | niedrig | [Meilensteine von Hand setzen (mögliches Add-on)](todos/goals-g-0672-meilensteine-von-hand-setzen.md) | offen | — | — |
 | `G-673` | aufgabe | mittel | [Entwurf ergänzen: fünf offene Stellen aus der Abnahme](erledigt/goals-g-0673-entwurf-ergaenzen-offene-stellen.md) | erledigt | — | G-674, G-675, G-676 |
-| `G-675` | aufgabe | hoch | [Kette: Vorschau beim Bearbeiten, Phasensperre, Papierkorb für Goals und die Phase Engine](laufend_codex/goals-g-0675-kette-vorschau-phasensperre-papierkorb.md) | laeuft (codex) | — | — |
+| `G-674` | aufgabe | mittel | [UI: die Ergänzungen aus dem Entwurf (Vorschau, Datenpunkt, Phasensperre, Papierkorb)](laufend_claudecode/goals-g-0674-ui-entwurfsergaenzungen.md) | laeuft (claudecode) | — | — |
+| `G-675` | aufgabe | hoch | [Kette: Vorschau beim Bearbeiten, Phasensperre, Papierkorb für Goals und die Phase Engine](erledigt/goals-g-0675-kette-vorschau-phasensperre-papierkorb.md) | erledigt | — | G-684 |
 | `G-677` | befund | mittel | ["Als nächstes" bleibt leer, wenn der Plan keine Folgephase hat](erledigt/goals-g-0677-als-naechstes-bleibt-leer.md) | erledigt | — | — |
 | `G-678` | aufgabe | mittel | [Kraftkurve, Sollinie und "Als nächstes" an die neuen Leser binden](erledigt/goals-g-0678-kraftkurve-sollinie-als-naechstes-anbinden.md) | erledigt | — | — |
 | `G-681` | befund | mittel | [Die Gewichtsdaten sind ein gleichmässiger Sägezahn statt eines realistischen Verlaufs](laufend_codex/goals-g-0681-gewichtsdaten-saegezahn-statt-realistisch.md) | vorbereitet (codex) | — | — |
+| `G-684` | befund | mittel | [Der Tageswert auf dev nennt das abgeschlossene Ziel, und die Vorschau sperrt das aktive Ziel](todos/goals-g-0684-tageswert-zeigt-abgeschlossenes-ziel.md) | offen | — | — |
 
-### wartet auf Blocker — 7
+### wartet auf Blocker — 6
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -750,7 +752,6 @@
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
-| `G-674` | aufgabe | mittel | [UI: die Ergänzungen aus dem Entwurf (Vorschau, Datenpunkt, Phasensperre, Papierkorb)](laufend_claudecode/goals-g-0674-ui-entwurfsergaenzungen.md) | laeuft (claudecode) | G-675 | — |
 
 ## coach — 58
 
@@ -1076,7 +1077,7 @@
 | `G-635` | fehler | mittel | [Dev-Server liefert die Schrift mit falschem Hash](erledigt/quer-g-0635-dev-server-liefert-schrift-mit-falschem-hash.md) | erledigt | — | — |
 | `G-641` | fehler | niedrig | [Farbmischung in oklch färbt Flächen rosa](erledigt/quer-g-0641-farbmischung-oklch-faerbt-flaechen-rosa.md) | erledigt | — | — |
 | `G-657` | aufgabe | mittel | [Kontextleiste (Buddy) standardmäßig eingeklappt](erledigt/quer-g-0657-kontextleiste-standardmaessig-eingeklappt.md) | erledigt | — | — |
-| `G-682` | befund | hoch | [Jeder Datenbankauftrag baut seine Wegwerf-Datenbank über die halbe Kette](todos/quer-g-0682-wegwerf-datenbank-aus-basis-statt-kette.md) | offen | — | — |
+| `G-682` | befund | hoch | [Jeder Datenbankauftrag baut seine Wegwerf-Datenbank über die halbe Kette](laufend_codex/quer-g-0682-wegwerf-datenbank-aus-basis-statt-kette.md) | vorbereitet (codex) | — | — |
 
 ### wartet auf Blocker — 1
 
@@ -1106,18 +1107,11 @@
 
 ## plattform — 3
 
-### beauftragbar — 2
-
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `G-676` | aufgabe | hoch | [Papierkorb über alle Module](erledigt/plattform-g-0676-papierkorb-ueber-alle-module.md) | erledigt | — | G-679, G-680 |
+| `G-679` | aufgabe | mittel | [Zentraler Papierkorb unter Einstellungen und Ausrollen in die übrigen Module](todos/plattform-g-0679-zentraler-papierkorb-entwurf-und-rollout.md) | offen | — | — |
 | `G-680` | befund | hoch | [Es gibt keinen Weg "Konto löschen"](todos/plattform-g-0680-konto-loeschen-fehlt.md) | offen | — | — |
-
-### wartet auf Blocker — 1
-
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `G-679` | aufgabe | mittel | [Zentraler Papierkorb unter Einstellungen und Ausrollen in die übrigen Module](todos/plattform-g-0679-zentraler-papierkorb-entwurf-und-rollout.md) | offen | G-675 | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

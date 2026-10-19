@@ -7,9 +7,9 @@
 |---|---|---|---|
 | Claude Code | G-629 | Die Phase engine zeigt Pläne | **laeuft**, raus 10.10. |
 | Claude Code | G-674 | UI: die Ergänzungen aus dem Entwurf (Vorschau, Datenpunkt, Phasensperre, Papierkorb) | **laeuft**, raus 18.10. |
-| Codex | G-675 | Kette: Vorschau beim Bearbeiten, Phasensperre, Papierkorb für Goals und die Phase Engine | **laeuft**, raus 19.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | G-681 | Die Gewichtsdaten sind ein gleichmässiger Sägezahn statt eines realistischen Verlaufs | **bereit in `next/`** |
+| Codex | G-682 | Jeder Datenbankauftrag baut seine Wegwerf-Datenbank über die halbe Kette | **bereit in `next/`** |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 ## Plan ab 06.10. - von Tom freigegeben, 17:03
