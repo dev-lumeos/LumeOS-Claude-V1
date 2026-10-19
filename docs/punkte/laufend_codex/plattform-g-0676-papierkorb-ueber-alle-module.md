@@ -53,3 +53,22 @@ In `supabase/_pipeline` enthalten 34 SQL-Dateien `DELETE FROM`. Darin sind Seeds
     Bereich: supabase/_pipeline (nur lesen), apps/web/src (nur lesen)
     Fremd:   docs/ gehoert dem Orchestrator.
     Stand:   2026-10-18, HEAD 5815dba3
+
+## Ergebnis Codex - 2026-10-19 (Inventar und Mechanik, nur gelesen)
+
+- `[cmd]` nachgemessen: 17 Aufrufe von .delete() in 15 App-Dateien. Die Punktdatei nannte 16, die 17 enthalten Ersetzen und Rueckbau. 34 SQL-Dateien enthalten DELETE FROM: 9 Laufzeit, 19 Katalogpflege, 6 Testdaten.
+- Echte Loeschwege fuer Nutzer:
+  - Papierkorb: Goals Ziel, Plan, Termin; Supplements Stack-Position (mit Namen oder Verlauf); Medical Befund-Anhang mit Storage-Datei.
+  - Rueckgaengig: Mahlzeit-Position, Wasser, Plan-Eintrag, Einkaufsposten, Allergie, Vorliebe, Einnahme-Haken, Injektionsflaeche, geplante Plan-Position.
+  - Kein Loeschen heute, nur Status: Einkaufsliste archivieren, Trainingssitzung verwerfen, Einladung oder Stack-Vorlage zurueckziehen.
+- `[read]` Befund: Wird eine Stack-Position hart geloescht, verlieren Einnahmen und Injektionslogs ihren Bezug (SET NULL). Wird ein Befund-Original entfernt, ist die Storage-Datei sofort weg.
+- Mechanik, vom Orchestrator uebernommen:
+  - deleted_at, deleted_by und der vorige Status am jeweiligen Wurzelobjekt.
+  - Kinder werden ueber den Elterndatensatz ausgeblendet.
+  - Restriktive SELECT-Policy mit deleted_at IS NULL. SECURITY DEFINER-Funktionen, Views und App-Abfragen filtern gleich.
+  - Ein Katalog-Waechter ueber alle Papierkorbtabellen und ihre Leser, dazu Proben je Leseweg.
+  - Endgueltig loeschen ist eine eigene bestaetigte Funktion. Kein automatischer Ablauf.
+- Wiederherstellen:
+  - Ein Ziel kommt pausiert zurueck, ein Plan als Entwurf. Liegt das Ziel ebenfalls im Papierkorb, kommt es mit.
+  - Ist ein Name, Slot oder Zeitfenster inzwischen belegt, meldet das System einen Konflikt und der Nutzer entscheidet.
+- `[cmd]` nachgemessen: Ein Weg "Konto loeschen" existiert in apps/web/src nicht (0 Treffer). `[read]` 30 Tabellen mit user_id haben keinen FK auf auth.users. Bei einigen Tabellen steht RESTRICT. storage.objects hat keinen FK. Daraus wird G-680.

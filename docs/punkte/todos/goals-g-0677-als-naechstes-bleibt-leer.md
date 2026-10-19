@@ -31,3 +31,8 @@ beruehrt:
 ## Offen (Tom)
 
 Was steht da, wenn keine Regel greift? Vorschlag des Orchestrators: "Nach Planende ohne Folgephase: Erhaltung. Phase ergänzen (✎)". Eine erfundene Empfehlung gibt es nicht.
+
+## Entschieden - 2026-10-19 07:05, Tom
+
+Der Vorschlag gilt. Wenn der Leser nichts liefert und der Plan keine Folgephase hat, steht dort: "Nach Planende ohne Folgephase: Erhaltung. Phase ergänzen (✎)". Eine Empfehlung ohne Regel wird nicht erfunden.
+Claude Code setzt das in G-678 um. Dieser Punkt schliesst mit der Abnahme von G-678.

@@ -43,3 +43,7 @@ Die UI zeigt noch den alten Stand.
     Bereich: apps/web
     Fremd:   supabase/_pipeline gehoert Codex, docs/ dem Orchestrator.
     Stand:   2026-10-18, HEAD cdacb9d6 (Nachtrag 13:25)
+
+## Nachtrag - 2026-10-19 (G-677, Entscheid Tom)
+
+Wenn goals.goal_als_naechstes nichts liefert und der Plan keine Folgephase hat, steht dort: "Nach Planende ohne Folgephase: Erhaltung. Phase ergänzen (✎)". Der Stift öffnet das Bearbeiten des Plans.
