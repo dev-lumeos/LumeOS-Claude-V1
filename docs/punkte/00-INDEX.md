@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 279 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 734 |
-| **gesamt** | **1017** |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 736 |
+| **gesamt** | **1018** |
 
 ## medical — 50
 
@@ -592,9 +592,9 @@
 | `G-598` | fehler | mittel | [Der Entwurf steht noch an drei Stellen, obwohl die Tabelle daneben liegt](erledigt/recovery-g-0598-der-entwurf-steht-noch-an-drei-stellen.md) | erledigt | — | G-601 |
 | `G-601` | fehler | mittel | [„Nicht geladen" steht da, wo die Daten nur leer sind](erledigt/recovery-g-0601-nicht-geladen-heisst-hier-leer.md) | erledigt | — | — |
 
-## goals — 146
+## goals — 147
 
-### beauftragbar — 139
+### beauftragbar — 140
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -730,13 +730,14 @@
 | `G-667` | befund | mittel | [Kraft-Messpunkte je Satz statt je Einheit](erledigt/goals-g-0667-kraftpunkte-je-satz-statt-je-einheit.md) | erledigt | — | — |
 | `G-668` | befund | mittel | [Planlinie steht bei 88,0, das Wochensoll meldet weiter +0,21](erledigt/goals-g-0668-planlinie-und-wochensoll-widersprechen-sich.md) | erledigt | — | — |
 | `G-669` | befund | mittel | ["Als nächstes" ohne Datum, Dauer und Grund](erledigt/goals-g-0669-als-naechstes-ohne-datum-dauer-grund.md) | erledigt | — | G-677 |
-| `G-670` | befund | mittel | [Testdaten: Planlücke, leere linked_modules, Gewohnheitsserie](erledigt/goals-g-0670-testdaten-planluecke-module-gewohnheit.md) | erledigt | — | — |
+| `G-670` | befund | mittel | [Testdaten: Planlücke, leere linked_modules, Gewohnheitsserie](erledigt/goals-g-0670-testdaten-planluecke-module-gewohnheit.md) | erledigt | — | G-681 |
 | `G-671` | befund | mittel | [Reste der Mockup-Referenz unter der Phase Engine](erledigt/goals-g-0671-mockup-reste-unter-der-phase-engine.md) | erledigt | — | — |
 | `G-672` | idee | niedrig | [Meilensteine von Hand setzen (mögliches Add-on)](todos/goals-g-0672-meilensteine-von-hand-setzen.md) | offen | — | — |
 | `G-673` | aufgabe | mittel | [Entwurf ergänzen: fünf offene Stellen aus der Abnahme](erledigt/goals-g-0673-entwurf-ergaenzen-offene-stellen.md) | erledigt | — | G-674, G-675, G-676 |
 | `G-675` | aufgabe | hoch | [Kette: Vorschau beim Bearbeiten, Phasensperre, Papierkorb für Goals und die Phase Engine](laufend_codex/goals-g-0675-kette-vorschau-phasensperre-papierkorb.md) | laeuft (codex) | — | — |
-| `G-677` | befund | mittel | ["Als nächstes" bleibt leer, wenn der Plan keine Folgephase hat](todos/goals-g-0677-als-naechstes-bleibt-leer.md) | offen | — | — |
-| `G-678` | aufgabe | mittel | [Kraftkurve, Sollinie und "Als nächstes" an die neuen Leser binden](laufend_claudecode/goals-g-0678-kraftkurve-sollinie-als-naechstes-anbinden.md) | laeuft (claudecode) | — | — |
+| `G-677` | befund | mittel | ["Als nächstes" bleibt leer, wenn der Plan keine Folgephase hat](erledigt/goals-g-0677-als-naechstes-bleibt-leer.md) | erledigt | — | — |
+| `G-678` | aufgabe | mittel | [Kraftkurve, Sollinie und "Als nächstes" an die neuen Leser binden](erledigt/goals-g-0678-kraftkurve-sollinie-als-naechstes-anbinden.md) | erledigt | — | — |
+| `G-681` | befund | mittel | [Die Gewichtsdaten sind ein gleichmässiger Sägezahn statt eines realistischen Verlaufs](todos/goals-g-0681-gewichtsdaten-saegezahn-statt-realistisch.md) | offen | — | — |
 
 ### wartet auf Blocker — 7
 

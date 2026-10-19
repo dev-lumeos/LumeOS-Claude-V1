@@ -7,7 +7,6 @@
 |---|---|---|---|
 | Claude Code | G-629 | Die Phase engine zeigt Pläne | **laeuft**, raus 10.10. |
 | Claude Code | G-674 | UI: die Ergänzungen aus dem Entwurf (Vorschau, Datenpunkt, Phasensperre, Papierkorb) | **laeuft**, raus 18.10. |
-| Claude Code | G-678 | Kraftkurve, Sollinie und "Als nächstes" an die neuen Leser binden | **laeuft**, raus 18.10. |
 | Codex | G-675 | Kette: Vorschau beim Bearbeiten, Phasensperre, Papierkorb für Goals und die Phase Engine | **laeuft**, raus 19.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |

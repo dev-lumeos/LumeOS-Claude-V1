@@ -4,6 +4,9 @@ typ: befund
 modul: goals
 schwere: mittel
 angelegt: 2026-10-18
+agent: claudecode
+erledigt: 2026-10-19
+commit: 79a502df
 
 braucht: []
 kind_von: G-669

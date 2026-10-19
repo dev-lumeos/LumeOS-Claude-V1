@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-18
 agent: claudecode
 beauftragt: 2026-10-18
+erledigt: 2026-10-19
+commit: 79a502df
 
 braucht: []
 kind_von: G-648
@@ -47,3 +49,10 @@ Die UI zeigt noch den alten Stand.
 ## Nachtrag - 2026-10-19 (G-677, Entscheid Tom)
 
 Wenn goals.goal_als_naechstes nichts liefert und der Plan keine Folgephase hat, steht dort: "Nach Planende ohne Folgephase: Erhaltung. Phase ergänzen (✎)". Der Stift öffnet das Bearbeiten des Plans.
+
+## Abnahme - 2026-10-19 (Orchestrator, commit 79a502df)
+
+- `[cmd]` Bildpaare g678-paar-als-naechstes und g678-dev-sollinie-v2 gegen V57 geprueft. Die graue Linie auf dev laeuft von 85,0 (21.05.) bis 88,0 kg und ist von 19.07. bis 09.10. flach (Halteposition G-670). Heute steht sie bei 86,8, der Trend bei 84,7.
+- `[read]` Das Wochensoll kommt aus controlling_goal_outlook, mit derselben Rate wie vorwaerts_kg (dev +0,212, test-user −0,321). Bleibt so.
+- `[cmd]` Gate gruen beim Commit.
+- Nebenbefund: Die Rohwerte auf dev bilden einen Saegezahn und sind kein realer Verlauf, daraus wird G-681.
