@@ -22,3 +22,17 @@ logs/
 # "du nimmst ab und entscheidest ok, dann werden die backups
 #  nicht mehr gebraucht und koennen in mein backuplaufwerk"
 schema/*.sql
+
+# Orchestrator, 2026-10-19 (Tom: sauber pushen koennen).
+# _temp/ entsorgt Tom - der Inhalt wird nie versioniert.
+_temp/*
+!_temp/00-LIESMICH.md
+# A-105-Sicherungen enthalten Live-Daten aus dev und duerfen nie auf GitHub.
+a105-*.sql
+# Lose Nachweise und Abzuege direkt unter backup/ sind Wegwerfgut,
+# die Abnahmen zitieren die Zahlen. Getrackte Dateien bleiben unberuehrt.
+/*.png
+/*.sql
+/*.json
+# Status des taeglichen Beitragslaufs (G-660), wie kettenlauf-status.json.
+_manifests/beitragslauf-status.json
