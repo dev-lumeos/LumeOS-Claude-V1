@@ -327,6 +327,7 @@ function runStep(db: string, step: PipelineStep): void {
       ...process.env,
       PGDATABASE: db,
       LUMEOS_DB_CONTAINER: CONTAINER,
+      LUMEOS_KETTE_STEP: step.id,
     },
   })
 }

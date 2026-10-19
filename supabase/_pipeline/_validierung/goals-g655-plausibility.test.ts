@@ -110,14 +110,15 @@ test('G-655: Einnahmen tragen die App-Namen der vorhandenen Stack-Eintraege', ()
 })
 
 test('G-655: Gewohnheiten haben Wochenstand und Serie ohne Tempo oder Prognose', () => {
-  const got = read(`'week', (SELECT goals.measurement_goal_week_at(g.id,CURRENT_DATE)
+  const got = read(`'weekday', extract(isodow FROM CURRENT_DATE)::integer,
+    'week', (SELECT goals.measurement_goal_week_at(g.id,CURRENT_DATE)
     FROM goals.user_goals g WHERE g.user_id=auth.uid()
       AND g.title='Training 4× pro Woche')`)
   const week = got.week as Record<string, unknown>
   assert.equal(week.tempo_pro_woche, null)
   assert.equal(week.prognose_datum, null)
   assert.equal(week.prognose_status, null)
-  assert.equal(week.wochenstand, 3)
+  assert.equal(week.wochenstand, Math.min(3, Number(got.weekday)))
   assert.equal(week.wochenziel, 4)
   assert.equal(week.serie, 0)
 })

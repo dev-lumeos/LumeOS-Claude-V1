@@ -76,7 +76,10 @@ BEGIN
   -- Fill only missing days. The existing sessions remain the source of truth.
   FOR v_offset IN -11..0 LOOP
     v_week:=date_trunc('week',CURRENT_DATE)::date+v_offset*7;
-    v_target:=CASE WHEN v_offset>=-5 THEN 4 ELSE 2 END;
+    -- The current week has only elapsed days; never require future sessions.
+    v_target:=CASE WHEN v_offset=0 THEN
+      least(4,extract(isodow FROM CURRENT_DATE)::integer)
+      WHEN v_offset>=-5 THEN 4 ELSE 2 END;
     SELECT count(*) INTO v_count FROM training.workout_sessions
     WHERE user_id=v_user AND status='completed'
       AND session_date BETWEEN v_week AND least(v_week+6,CURRENT_DATE);

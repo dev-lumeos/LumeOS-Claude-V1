@@ -5023,6 +5023,48 @@
       "kind": "tsx",
       "creates": "Proben und Sabotage-Haken für alle sechs Goals-Abnahmepunkte.",
       "depends_on": ["525_automatic_percentage_milestones"]
+    },
+    {
+      "id": "675_controlling_edit_preview",
+      "path": "supabase/_pipeline/11_goals/675_controlling_edit_preview.sql",
+      "kind": "sql",
+      "creates": "G-675: lesende Vorher-/Nachher-Vorschau für bestehende Steuerziele.",
+      "depends_on": ["667_668_669_670_646_525_probe"]
+    },
+    {
+      "id": "675_phase_edit_guard",
+      "path": "supabase/_pipeline/11_goals/675_phase_edit_guard.sql",
+      "kind": "sql",
+      "creates": "G-675: vergangene Phasen sperren und laufende nur in der Länge ändern.",
+      "depends_on": ["675_controlling_edit_preview"]
+    },
+    {
+      "id": "675_goal_trash",
+      "path": "supabase/_pipeline/11_goals/675_goal_trash.sql",
+      "kind": "sql",
+      "creates": "G-675: Papierkorb für Ziele, Pläne und Termine mit Wiederherstellung und endgültigem Löschen.",
+      "depends_on": ["675_phase_edit_guard"]
+    },
+    {
+      "id": "675_trash_readers",
+      "path": "supabase/_pipeline/11_goals/675_trash_readers.sql",
+      "kind": "sql",
+      "creates": "G-675: Leser und Tageslauf schließen Papierkorbobjekte aus.",
+      "depends_on": ["675_goal_trash"]
+    },
+    {
+      "id": "675_trash_contract",
+      "path": "supabase/_pipeline/11_goals/675_trash_contract.sql",
+      "kind": "sql",
+      "creates": "G-675: erweiterbarer Katalogwächter für Papierkorbtabellen und Leser.",
+      "depends_on": ["675_trash_readers"]
+    },
+    {
+      "id": "675_trash_phase_preview_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g675-trash-phase-preview.test.ts",
+      "kind": "tsx",
+      "creates": "G-675: Vorschau, Phasensperre, Papierkorb, Leser, Kaskade und Sabotage.",
+      "depends_on": ["675_trash_contract"]
     }
   ]
 }

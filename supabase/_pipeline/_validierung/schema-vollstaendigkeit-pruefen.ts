@@ -47,6 +47,20 @@ function sql(text: string): string[][] {
 const SOLL = JSON.parse(
   fs.readFileSync(SOLL_PATH, 'utf8'))
 
+// G-616 runs this same check before later chain steps. Its expected state is
+// fixed by the manifest step, never inferred from the database under test.
+if (process.env.LUMEOS_KETTE_STEP === '616_schema_completeness_probe') {
+  const futureColumns = new Set(['deleted_at', 'deleted_by', 'deleted_previous_status'])
+  for (const table of SOLL.fremde_schemata) {
+    if (table.schema === 'goals' &&
+        ['user_goals', 'goal_program_events'].includes(table.name)) {
+      table.spalten = table.spalten.filter((column: string) => !futureColumns.has(column))
+    }
+  }
+  SOLL.fremde_schemata = SOLL.fremde_schemata.filter((table: any) =>
+    table.schritt !== '675_trash_contract')
+}
+
 const istTabellen = new Set(sql(
   `SELECT table_name FROM information_schema.tables
    WHERE table_schema='nutrition' AND table_type='BASE TABLE';`).map(r => r[0]))

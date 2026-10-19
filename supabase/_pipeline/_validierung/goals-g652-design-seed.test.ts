@@ -30,6 +30,7 @@ test('G-652: vier Messziele lesen Istwerte aus Trainingssaetzen und Navy-Messung
       WHERE g.user_id=auth.uid() AND g.title IN
         ('Kniebeuge 1RM 160 kg','Kreuzheben 150 kg × 5',
          'Körperfett 14 %','Training 4× pro Woche')),
+    'weekday', extract(isodow FROM CURRENT_DATE)::integer,
     'sessions', (SELECT count(*) FROM training.workout_sessions
       WHERE user_id=auth.uid() AND notes='G-652 Entwurfsverlauf'),
     'navy', (SELECT body_fat_pct FROM goals.body_composition_navy(
@@ -51,13 +52,15 @@ test('G-652: vier Messziele lesen Istwerte aus Trainingssaetzen und Navy-Messung
   assert.equal(goals['Körperfett 14 %']?.source,
     'goals.body_measurements.body_fat_pct')
   assert.equal(goals['Körperfett 14 %']?.deadline, '2027-03-01')
-  assert.equal(goals['Training 4× pro Woche']?.current, 3)
-  assert.equal(got.sessions, 15)
+  const currentWeekSessions = Math.min(3, Number(got.weekday))
+  assert.equal(goals['Training 4× pro Woche']?.current, currentWeekSessions)
+  assert.equal(got.sessions, 12 + currentWeekSessions)
   assert.equal(Math.round(Number(got.navy) * 10) / 10, 16.2)
 })
 
 test('G-652: Wochenserie und vier Planbeispiele haben echte Positionen und Termine', () => {
   const got = read(`
+    'weekday', extract(isodow FROM CURRENT_DATE)::integer,
     'weeks', (SELECT json_agg(json_build_object('value',w.observed_value,
       'streak',w.streak_weeks) ORDER BY w.week_start)
       FROM goals.user_goals g
@@ -80,7 +83,7 @@ test('G-652: Wochenserie und vier Planbeispiele haben echte Positionen und Termi
       JOIN goals.goal_programs p ON p.id=e.program_id
       WHERE p.user_id=auth.uid() AND p.name='Contest Prep 2027')`)
   const weeks = got.weeks as Array<{ value: number; streak: number }>
-  assert.deepEqual(weeks.map(w => w.value), [4, 4, 4, 3])
+  assert.deepEqual(weeks.map(w => w.value), [4, 4, 4, Math.min(3, Number(got.weekday))])
   assert.deepEqual(weeks.map(w => w.streak), [1, 2, 3, 0])
   const plans = got.plans as Record<string, {
     status: string; positions: number; events: number; custom: number

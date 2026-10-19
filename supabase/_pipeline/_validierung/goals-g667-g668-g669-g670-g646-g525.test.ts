@@ -145,7 +145,9 @@ test('G-670: Halteposition, Modulbezüge und zwölf Gewohnheitswochen', () => {
   assert.deepEqual(modules['Kreuzheben 150 kg × 5'],['training','recovery'])
   assert.deepEqual(modules['Körperfett 14 %'],['measurements','nutrition'])
   assert.equal(weeks.length, 12)
-  assert.equal(weeks.at(-1)?.streak, 6)
+  assert.equal(weeks.at(-2)?.streak, 5)
+  assert.equal(weeks.at(-1)?.streak,
+    (weeks.at(-1)?.value ?? 0) >= 4 ? 6 : 0)
 })
 
 test('G-646: Vorschau und Snapshot beziehen Gewicht aus dem Trend', () => {

@@ -2501,7 +2501,10 @@
         "start_source_id",
         "start_measured_at",
         "archived_at",
-        "measurement_distance_m"
+        "measurement_distance_m",
+        "deleted_at",
+        "deleted_by",
+        "deleted_previous_status"
       ]
     },
     {"schema":"goals","name":"manual_goal_values","schritt":"617_measurement_goal_expansion","rls":true,"policies":["SELECT","INSERT","UPDATE","DELETE"],"grants":{"authenticated":["SELECT","INSERT","UPDATE","DELETE"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"G-617: nur eigene Handwerte an eigenen Zielen der Messart custom.","zeilenschutzart":"eigene_zeilen","spalten":["id","goal_id","user_id","measured_on","value","recorded_at"]},
@@ -2614,7 +2617,7 @@
       },
       "grants_herkunft": "625_goal_plan_model.sql vergibt authenticated DML und service_role ALL explizit.",
       "zeilenschutzart": "eigene_zeilen",
-      "spalten": ["id", "program_id", "name", "kind", "event_date", "created_at", "updated_at"]
+      "spalten": ["id", "program_id", "name", "kind", "event_date", "created_at", "updated_at", "deleted_at", "deleted_by", "deleted_previous_status"]
     },
     {
       "schema": "goals",
@@ -6446,6 +6449,8 @@
     {"schema":"goals","name":"goal_contribution_run_state","schritt":"660_goal_contribution_catchup","rls":true,"policies":["ALL"],"grants":{"service_role":["SELECT","INSERT","UPDATE"]},"grants_herkunft":"G-660: nur die Dienstrolle liest und schreibt das Erfolgsdatum je Konto.","zeilenschutzart":"dienst","spalten":["user_id","successful_through","completed_at"]},
     {"schema":"goals","name":"weekly_adjustment_rules","schritt":"627_weekly_adjustment_protocol","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT"]},"grants_herkunft":"G-627: belegte Regeln sind lesbare Daten; Schreibrecht bleibt beim Eigentuemer.","zeilenschutzart":"katalog","spalten":["rule_key","phase_type","priority","condition_type","threshold","adherence_threshold","kcal_delta","protein_delta_g","reason","source_ref"]},
     {"schema":"goals","name":"goal_weekly_adjustments","schritt":"627_weekly_adjustment_protocol","rls":true,"policies":["SELECT","ALL"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE"]},"grants_herkunft":"G-627: eigene Wochenprotokolle lesbar, nur Dienst schreibt.","zeilenschutzart":"eigene_zeilen","spalten":["id","program_id","goal_id","user_id","week_start","week_end","phase_type","trend_delta_kg","soll_delta_kg","log_days","adherence_pct","strength_loss_pct","three_week_side","rule_key","kcal_delta","protein_delta_g","reason","source_data","calculated_at"]},
+    {"schema":"goals","name":"trash_contract_tables","schritt":"675_trash_contract","rls":false,"policies":[],"grants":{"service_role":["SELECT"]},"grants_herkunft":"G-675: nur der Dienst liest den registrierten Papierkorbvertrag.","zeilenschutzart":"dienst","spalten":["root_table","select_policy","registered_at"]},
+    {"schema":"goals","name":"trash_contract_readers","schritt":"675_trash_contract","rls":false,"policies":[],"grants":{"service_role":["SELECT"]},"grants_herkunft":"G-675: nur der Dienst liest die registrierten Leser.","zeilenschutzart":"dienst","spalten":["reader","required_token","registered_at"]},
     {"schema":"training","name":"muscle_role_volume_rules","schritt":"551_role_measurement_separation_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE"]},"grants_herkunft":"C-551: Rollenregeln sind fuer authenticated lesbar und ausschliesslich durch service_role pflegbar.","zeilenschutzart":"oeffentlich","spalten":["role","weekly_volume_factor","source_id","source_locator","updated_at"]},
     {"schema":"training","name":"anatomy_sources","schritt":"546_muscle_anatomy_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE"]},"grants_herkunft":"C-546: Anatomiequellen sind global lesbar und nur durch service_role pflegbar.","zeilenschutzart":"oeffentlich","spalten":["id","name","url","source_kind","citation","published_year"]},
     {"schema":"training","name":"muscle_origins","schritt":"546_muscle_anatomy_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE"]},"grants_herkunft":"C-546: belegte Koerperfakten sind global lesbar und nur durch service_role pflegbar.","zeilenschutzart":"oeffentlich","spalten":["id","muscle_group_id","attachment_site","source_id","note","created_at"]},

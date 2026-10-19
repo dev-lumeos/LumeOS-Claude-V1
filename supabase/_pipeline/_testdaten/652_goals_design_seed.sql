@@ -195,7 +195,7 @@ BEGIN
     INSERT INTO goals.body_measurements
       (user_id,measurement_date,measurement_time,weight_kg,body_fat_pct,
         bf_method,measurement_source,source_detail,notes)
-    VALUES (v_user,date_trunc('week',CURRENT_DATE)::date,time '23:59',
+    VALUES (v_user,date_trunc('week',CURRENT_DATE)::date,time '23:58',
       v_body_weight,v_fat,'navy','admin','G-652 Navy-Verlauf',
       'Navy-Messung · Zielstart');
   END IF;
@@ -257,7 +257,10 @@ BEGIN
   v_waist := round(41+2.54*power(10::numeric,
     (16.2+70.041*ln(v_height/2.54)/ln(10::numeric)-36.76)/86.010),1);
   PERFORM goals.body_circumference_write(
-    p_measurement_date=>CURRENT_DATE,p_measurement_time=>time '08:30',
+    -- On Monday the week-start Navy row is also today at 23:58.
+    -- The current measurement must be later so the Navy reader selects it.
+    -- Keep 23:59 free for the G-654 opposite-tempo probe.
+    p_measurement_date=>CURRENT_DATE,p_measurement_time=>time '23:58:30',
     p_measurement_source=>'admin',p_source_detail=>'G-652 Navy-Verlauf',
     p_neck_cm=>41.0,p_waist_cm=>v_waist);
   SELECT body_fat_pct INTO v_fat FROM goals.body_composition_navy(
