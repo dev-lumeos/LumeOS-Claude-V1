@@ -734,7 +734,7 @@
 | `G-671` | befund | mittel | [Reste der Mockup-Referenz unter der Phase Engine](erledigt/goals-g-0671-mockup-reste-unter-der-phase-engine.md) | erledigt | — | — |
 | `G-672` | idee | niedrig | [Meilensteine von Hand setzen (mögliches Add-on)](todos/goals-g-0672-meilensteine-von-hand-setzen.md) | offen | — | — |
 | `G-673` | aufgabe | mittel | [Entwurf ergänzen: fünf offene Stellen aus der Abnahme](erledigt/goals-g-0673-entwurf-ergaenzen-offene-stellen.md) | erledigt | — | G-674, G-675, G-676 |
-| `G-675` | aufgabe | hoch | [Kette: Vorschau beim Bearbeiten, Phasensperre, Papierkorb für Goals und die Phase Engine](laufend_codex/goals-g-0675-kette-vorschau-phasensperre-papierkorb.md) | vorbereitet (codex) | — | — |
+| `G-675` | aufgabe | hoch | [Kette: Vorschau beim Bearbeiten, Phasensperre, Papierkorb für Goals und die Phase Engine](laufend_codex/goals-g-0675-kette-vorschau-phasensperre-papierkorb.md) | laeuft (codex) | — | — |
 | `G-677` | befund | mittel | ["Als nächstes" bleibt leer, wenn der Plan keine Folgephase hat](todos/goals-g-0677-als-naechstes-bleibt-leer.md) | offen | — | — |
 | `G-678` | aufgabe | mittel | [Kraftkurve, Sollinie und "Als nächstes" an die neuen Leser binden](laufend_claudecode/goals-g-0678-kraftkurve-sollinie-als-naechstes-anbinden.md) | laeuft (claudecode) | — | — |
 
